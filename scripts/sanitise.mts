@@ -11,11 +11,18 @@ const sanitisedData = data.map(row => {
     const sanitisedRow: Dictionary = {};
 
     headers.forEach(header => {
-
         let value = (row[header] ?? '').trim();
 
-        if (eval(`typeof sanitise_${header} === 'function'`)) {
-            value = eval(`sanitise_${header}(value)`);
+        switch (header) {
+            case 'amount_awarded':
+            case 'amount_awarded_converted_to_usd':
+                value = sanitizeMonetaryValue(value);
+                break;
+
+            case 'start_date':
+            case 'end_date':
+                value = sanitiseDateValue(value);
+                break;
         }
 
         sanitisedRow[header] = value;
@@ -27,22 +34,6 @@ const sanitisedData = data.map(row => {
 fs.ensureDirSync('./data/dist');
 
 fs.writeJsonSync('./data/dist/data.json', sanitisedData);
-
-function sanitise_amount_awarded(value: string): string {
-    return sanitizeMonetaryValue(value);
-}
-
-function sanitise_amount_awarded_converted_to_usd(value: string): string {
-    return sanitizeMonetaryValue(value);
-}
-
-function sanitise_start_date(value: string): string {
-    return sanitiseDateValue(value);
-}
-
-function sanitise_end_date(value: string): string {
-    return sanitiseDateValue(value);
-}
 
 function sanitizeMonetaryValue(value: string): string {
     // Remove any non-numeric characters (e.g. commas, currency symbols) except for the decimal point
