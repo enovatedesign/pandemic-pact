@@ -7,11 +7,13 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "download": "node scripts/download/main.mjs",
-        "sanitise": "node scripts/sanitise/main.mjs",
-        "analyse-and-dump": "node scripts/analyse-and-dump/main.mjs"
+        "download": "ts-node --esm scripts/download.mts",
+        "sanitise": "ts-node --esm scripts/sanitise.mts",
+        "analyse-and-dump": "ts-node --esm scripts/analyse-and-dump.mts"
     },
     "dependencies": {
+        "@types/fs-extra": "^11.0.1",
+        "@types/lodash": "^4.14.195",
         "@types/node": "20.3.3",
         "@types/react": "18.2.14",
         "@types/react-dom": "18.2.6",
@@ -29,6 +31,7 @@
         "react-dom": "18.2.0",
         "slugify": "^1.6.6",
         "tailwindcss": "3.3.2",
+        "ts-node": "^10.9.1",
         "typescript": "5.1.6"
     }
 }

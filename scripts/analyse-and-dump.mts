@@ -1,13 +1,12 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import type {Dictionary} from './types/Dictionary';
 
-const data = fs.readJsonSync('./data/download/data.json');
+const data: Array<Dictionary> = fs.readJsonSync('./data/download/data.json');
 
 const dumpDir = './data/dump';
 
-const headerToSnakeCaseHeaderMapping = fs.readJsonSync(`${dumpDir}/headers.json`);
-
-const originalHeaders = Object.keys(headerToSnakeCaseHeaderMapping);
+const headerToSnakeCaseHeaderMapping: {[index: string]: string} = fs.readJsonSync(`${dumpDir}/headers.json`);
 
 const snakeCasedHeaders = Object.values(headerToSnakeCaseHeaderMapping);
 
@@ -18,48 +17,48 @@ snakeCasedHeaders.forEach(header => {
 
     const sorted = dataForThisHeader.sort();
 
-    const unique = [...new Set(sorted)];
+    const unique = Array.from(new Set(sorted));
 
     fs.writeJsonSync(
         `${dumpDir}/${header}.json`,
         dataForThisHeader,
-        { spaces: 2 }
+        {spaces: 2}
     );
 
     fs.writeJsonSync(
         `${dumpDir}/${header}-sorted.json`,
         sorted,
-        { spaces: 2 }
+        {spaces: 2}
     );
 
     fs.writeJsonSync(
         `${dumpDir}/${header}-unique.json`,
         unique,
-        { spaces: 2 }
+        {spaces: 2}
     );
 
-    const uniqueCommaSeperated = [...new Set(unique.map(item => item.split(',')).flat(1))];
+    const uniqueCommaSeparated = Array.from(new Set(unique.map(item => item.split(',')).flat(1)));
 
     fs.writeJsonSync(
-        `${dumpDir}/${header}-unique-comma-seperated.json`,
-        uniqueCommaSeperated,
-        { spaces: 2 }
+        `${dumpDir}/${header}-unique-comma-separated.json`,
+        uniqueCommaSeparated,
+        {spaces: 2}
     );
 
-    const uniqueSemicolonSeperated = [...new Set(unique.map(item => item.split(';')).flat(1))];
+    const uniqueSemicolonSeparated = Array.from(new Set(unique.map(item => item.split(';')).flat(1)));
 
     fs.writeJsonSync(
-        `${dumpDir}/${header}-unique-semicolon-seperated.json`,
-        uniqueSemicolonSeperated,
-        { spaces: 2 }
+        `${dumpDir}/${header}-unique-semicolon-separated.json`,
+        uniqueSemicolonSeparated,
+        {spaces: 2}
     );
 
-    const uniqueNewlineSeperated = [...new Set(unique.map(item => item.split('\n')).flat(1))];
+    const uniqueNewlineSeparated = Array.from(new Set(unique.map(item => item.split('\n')).flat(1)));
 
     fs.writeJsonSync(
-        `${dumpDir}/${header}-unique-newline-seperated.json`,
-        uniqueNewlineSeperated,
-        { spaces: 2 }
+        `${dumpDir}/${header}-unique-newline-separated.json`,
+        uniqueNewlineSeparated,
+        {spaces: 2}
     );
 
     const hasNewlines = dataForThisHeader.some(item => item.includes('\n'));
@@ -93,7 +92,7 @@ snakeCasedHeaders.forEach(header => {
 
     const biggestLength = dataForThisHeader.reduce((acc, item) => {
         const length = item.length;
-        
+
         if (length > acc) {
             return length;
         }
@@ -105,9 +104,9 @@ snakeCasedHeaders.forEach(header => {
     console.log(`  snake case version: ${header}`);
     console.log(`  total items: ${dataForThisHeader.length}`);
     console.log(`  unique items: ${unique.length}`);
-    console.log(`  unique comma seperated items: ${uniqueCommaSeperated.length}`);
-    console.log(`  unique semicolon seperated items: ${uniqueSemicolonSeperated.length}`);
-    console.log(`  unique newline seperated items: ${uniqueNewlineSeperated.length}`);
+    console.log(`  unique comma separated items: ${uniqueCommaSeparated.length}`);
+    console.log(`  unique semicolon separated items: ${uniqueSemicolonSeparated.length}`);
+    console.log(`  unique newline separated items: ${uniqueNewlineSeparated.length}`);
     console.log(`  has newlines: ${hasNewlines}`);
     console.log(`  has commas: ${hasCommas}`);
     console.log(`  has semicolons: ${hasSemicolons}`);
