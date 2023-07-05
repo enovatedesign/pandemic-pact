@@ -68,4 +68,4 @@ const doughnutChartData: DoughnutChartData = {
 
 fs.ensureDir('./data/dist/charts');
 
-fs.writeJsonSync('./data/dist/charts/top-ten-funders-by-total-awarded.json', doughnutChartData);
+fs.writeJsonSync('./data/dist/charts/topTenFundersByTotalAwarded.json', doughnutChartData);
