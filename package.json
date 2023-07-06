@@ -10,7 +10,8 @@
         "download": "ts-node --esm scripts/download.mts",
         "sanitise": "ts-node --esm scripts/sanitise.mts",
         "analyse-and-dump": "ts-node --esm scripts/analyse-and-dump.mts",
-        "generate": "ts-node --esm scripts/generate/main.mts"
+        "generate": "ts-node --esm scripts/generate/main.mts",
+        "setup": "npm run download && npm run sanitise && npm run generate"
     },
     "dependencies": {
         "@types/fs-extra": "^11.0.1",
