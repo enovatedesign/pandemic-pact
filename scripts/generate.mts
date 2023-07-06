@@ -2,42 +2,15 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import type {StringDictionary} from './types/Dictionaries'
 
-const data: Array<StringDictionary> = fs.readJsonSync('./data/dist/data.json');
-
 interface FundersAndAmountAwarded {
     funders: string;
     amount_awarded_converted_to_usd: number
 };
 
-const moreData: Array<FundersAndAmountAwarded> = data
-    .filter(
-        d => d.amount_awarded_converted_to_usd)
-    .map(
-        d => _.pick(
-            d,
-            ['funders', 'amount_awarded_converted_to_usd']
-        )
-    )
-    .map(d => ({
-        funders: d.funders,
-        amount_awarded_converted_to_usd: parseFloat(d.amount_awarded_converted_to_usd)
-    }));
-
-const grouped = _.groupBy(moreData, 'funders');
-
 interface FundersAndTotalAwarded {
     funders: string;
     total: number
 };
-
-const topTenFundersByTotalAwarded: Array<FundersAndTotalAwarded> = _.map(grouped, (group, funders) => {
-    const total = _.sumBy(group, 'amount_awarded_converted_to_usd');
-
-    return {
-        funders,
-        total,
-    }
-}).sort((a, b) => b.total - a.total).slice(0, 10);
 
 interface DoughnutChartData {
     labels: Array<string>;
@@ -47,10 +20,37 @@ interface DoughnutChartData {
     }>
 };
 
+const data: Array<StringDictionary> = fs.readJsonSync('./data/dist/data.json');
+
+const fundersAndAmountsAwarded: Array<FundersAndAmountAwarded> = data
+    .filter(
+        datum => datum.amount_awarded_converted_to_usd)
+    .map(
+        datum => _.pick(
+            datum,
+            ['funders', 'amount_awarded_converted_to_usd']
+        )
+    )
+    .map(datum => ({
+        funders: datum.funders,
+        amount_awarded_converted_to_usd: parseFloat(datum.amount_awarded_converted_to_usd)
+    }));
+
+const groupedFundersAndAmountsAwarded = _.groupBy(fundersAndAmountsAwarded, 'funders');
+
+const topTenFundersByTotalAwarded: Array<FundersAndTotalAwarded> = _.map(groupedFundersAndAmountsAwarded, (group, funders) => {
+    const total = _.sumBy(group, 'amount_awarded_converted_to_usd');
+
+    return {
+        funders,
+        total,
+    }
+}).sort((a, b) => b.total - a.total).slice(0, 10);
+
 const doughnutChartData: DoughnutChartData = {
-    labels: topTenFundersByTotalAwarded.map(d => d.funders),
+    labels: topTenFundersByTotalAwarded.map(datum => datum.funders),
     datasets: [{
-        data: topTenFundersByTotalAwarded.map(d => d.total),
+        data: topTenFundersByTotalAwarded.map(datum => datum.total),
         backgroundColor: [
             '#FF6384',
             '#36A2EB',
