@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import type {Dictionary} from './types/Dictionary';
+import type {StringDictionary} from './types/Dictionary';
 
-const data: Array<Dictionary> = fs.readJsonSync('./data/download/data.json');
+const data: Array<StringDictionary> = fs.readJsonSync('./data/download/data.json');
 
 const dumpDir = './data/dump';
 

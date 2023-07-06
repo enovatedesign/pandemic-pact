@@ -1,17 +1,20 @@
 import fs from 'fs-extra'
-import slugify from 'slugify'
 import dayjs from 'dayjs'
-import type {Dictionary} from './types/Dictionary'
+import type {Dictionary, StringDictionary} from './types/Dictionary'
 
-const data: Array<Dictionary> = fs.readJsonSync('./data/download/data.json');
+type SanitisedValue = string | string[] | number;
+
+type SanitisedData = Dictionary<SanitisedValue>;
+
+const data: Array<StringDictionary> = fs.readJsonSync('./data/download/data.json');
 
 const headers = Object.keys(data[0]);
 
 const sanitisedData = data.map(row => {
-    const sanitisedRow: Dictionary = {};
+    const sanitisedRow: SanitisedData = {};
 
     headers.forEach(header => {
-        let value = (row[header] ?? '').trim();
+        let value: SanitisedValue = (row[header] ?? '').trim();
 
         switch (header) {
             case 'amount_awarded':
@@ -22,6 +25,10 @@ const sanitisedData = data.map(row => {
             case 'start_date':
             case 'end_date':
                 value = sanitiseDateValue(value);
+                break;
+
+            case 'country_countries_research_is_being_are_conducted':
+                value = sanitiseCommaSeparateValues(value);
                 break;
         }
 
@@ -54,4 +61,12 @@ function sanitiseDateValue(value: string): string {
     }
 
     return d.format('YYYY-MM-DD');
+}
+
+function sanitiseCommaSeparateValues(value: string): string[] {
+    return value.split(',').map(
+        item => item.trim()
+    ).filter(
+        item => item !== ''
+    );
 }

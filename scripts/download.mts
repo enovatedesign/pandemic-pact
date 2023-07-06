@@ -3,7 +3,7 @@ import {GoogleSpreadsheet} from 'google-spreadsheet';
 import fs from 'fs-extra';
 import slugify from 'slugify'
 
-import type {Dictionary} from './types/Dictionary';
+import type {StringDictionary} from './types/Dictionary';
 
 main();
 
@@ -34,7 +34,7 @@ async function main() {
 
     const headers = Object.keys(data[0]);
 
-    const snakeCasedHeaders: Dictionary = {};
+    const snakeCasedHeaders: StringDictionary = {};
 
     headers.forEach(header => {
         snakeCasedHeaders[header] = slugify(header, {
@@ -45,7 +45,7 @@ async function main() {
     });
 
     const dataWithSnakeCasedHeaders = data.map(row => {
-        const rowWithSnakeCasedHeaders: Dictionary = {};
+        const rowWithSnakeCasedHeaders: StringDictionary = {};
 
         Object.keys(snakeCasedHeaders).forEach(header => {
             const snakeCasedHeader = snakeCasedHeaders[header];
