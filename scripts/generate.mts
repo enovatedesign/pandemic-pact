@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import type {Dictionary} from './types/Dictionary'
+import type {StringDictionary} from './types/Dictionaries'
 
-const data: Array<Dictionary> = fs.readJsonSync('./data/dist/data.json');
+const data: Array<StringDictionary> = fs.readJsonSync('./data/dist/data.json');
 
 interface FundersAndAmountAwarded {
     funders: string;

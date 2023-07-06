@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import dayjs from 'dayjs'
-import type {Dictionary, StringDictionary} from './types/Dictionary'
+import type {Dictionary, StringDictionary} from './types/Dictionaries'
 
 type SanitisedValue = string | string[] | number;
 

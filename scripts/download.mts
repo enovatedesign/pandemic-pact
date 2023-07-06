@@ -3,7 +3,7 @@ import {GoogleSpreadsheet} from 'google-spreadsheet';
 import fs from 'fs-extra';
 import slugify from 'slugify'
 
-import type {StringDictionary} from './types/Dictionary';
+import type {StringDictionary} from './types/Dictionaries';
 
 main();
 
