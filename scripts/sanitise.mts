@@ -4,14 +4,14 @@ import type {Dictionary, StringDictionary} from './types/Dictionaries'
 
 type SanitisedValue = string | string[] | number;
 
-type SanitisedData = Dictionary<SanitisedValue>;
+type SanitisedRow = Dictionary<SanitisedValue>;
 
 const data: Array<StringDictionary> = fs.readJsonSync('./data/download/data.json');
 
 const headers = Object.keys(data[0]);
 
 const sanitisedData = data.map(row => {
-    const sanitisedRow: SanitisedData = {};
+    const sanitisedRow: SanitisedRow = {};
 
     headers.forEach(header => {
         let value: SanitisedValue = (row[header] ?? '').trim();
