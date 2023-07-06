@@ -18,7 +18,6 @@ const options = {
     },
 };
 
-
 export default function TopTenFundersByTotalAwardedDoughnutChart() {
     return <Doughnut data={data} options={options} />
 }
