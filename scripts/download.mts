@@ -22,6 +22,8 @@ async function main() {
         throw new Error('GOOGLE_API_KEY is not defined in .env.local');
     }
 
+    console.log(`Downloading data from Google Sheet ${sheetId}}`);
+
     const doc = new GoogleSpreadsheet(sheetId, {apiKey});
 
     await doc.loadInfo();
@@ -60,15 +62,20 @@ async function main() {
 
     await fs.ensureDir(dir);
 
-    await fs.writeJson(`${dir}/data.json`, dataWithSnakeCasedHeaders);
+    const dataPathname = `${dir}/data.json`;
+
+    await fs.writeJson(dataPathname, dataWithSnakeCasedHeaders);
+
+    console.log(`Raw data downloaded to ${dataPathname}`);
 
     // Dump mapping of headers to snake cased headers
     const dumpDir = './data/dump';
 
     fs.ensureDirSync(dumpDir);
 
-    fs.writeJsonSync(
-        `${dumpDir}/headers.json`,
-        snakeCasedHeaders,
-    );
+    const headersPathname = `${dumpDir}/headers.json`;
+
+    fs.writeJsonSync(headersPathname, snakeCasedHeaders);
+
+    console.log(`Header map downloaded to ${headersPathname}`);
 }

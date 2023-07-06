@@ -6,7 +6,11 @@ type SanitisedValue = string | string[] | number;
 
 type SanitisedRow = Dictionary<SanitisedValue>;
 
-const data: Array<StringDictionary> = fs.readJsonSync('./data/download/data.json');
+const rawDataPathname = './data/download/data.json';
+
+console.log(`Sanitising data from ${rawDataPathname}`);
+
+const data: Array<StringDictionary> = fs.readJsonSync(rawDataPathname);
 
 const headers = Object.keys(data[0]);
 
@@ -38,9 +42,15 @@ const sanitisedData = data.map(row => {
     return sanitisedRow;
 });
 
-fs.ensureDirSync('./data/dist');
+const distDir = './data/dist';
 
-fs.writeJsonSync('./data/dist/data.json', sanitisedData);
+fs.ensureDirSync(distDir);
+
+const sanitisedDataPathname = `${distDir}/data.json`;
+
+fs.writeJsonSync(sanitisedDataPathname, sanitisedData);
+
+console.log(`Sanitised data written to ${sanitisedDataPathname}`);
 
 function sanitizeMonetaryValue(value: string): string {
     // Remove any non-numeric characters (e.g. commas, currency symbols) except for the decimal point
