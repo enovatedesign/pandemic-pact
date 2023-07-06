@@ -2,7 +2,7 @@ import TopTenFundersByTotalAwardedDoughnutChart from './components/charts/TopTen
 
 export default function Home() {
     return (
-        <div className="p-16">
+        <div className="pt-8 p-4">
             <div className="container mx-auto grid grid-cols-2 gap-4">
                 <div className="col-span-1">
                     <TopTenFundersByTotalAwardedDoughnutChart />
