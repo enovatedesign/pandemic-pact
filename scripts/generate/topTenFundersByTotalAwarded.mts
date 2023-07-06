@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import type {StringDictionary} from './types/Dictionaries'
+import type {StringDictionary} from '../types/Dictionaries'
 
 interface FundersAndAmountAwarded {
     funders: string;
@@ -69,3 +69,5 @@ const doughnutChartData: DoughnutChartData = {
 fs.ensureDir('./data/dist/charts');
 
 fs.writeJsonSync('./data/dist/charts/topTenFundersByTotalAwarded.json', doughnutChartData);
+
+console.log('topTenFundersByTotalAwarded.json written to ./data/dist/charts');
