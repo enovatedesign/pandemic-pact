@@ -1,18 +1,19 @@
 "use client"
 
 import {Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip, TooltipItem} from 'chart.js';
+import type {StaticImageData} from "next/image"
 import {Line} from "react-chartjs-2";
 import {millify} from "millify";
 
-import gbFlagSvg from "svg-country-flags/svg/gb.svg";
-import usFlagSvg from "svg-country-flags/svg/us.svg";
-import deFlagSvg from "svg-country-flags/svg/de.svg";
+import gbFlagSvg from "../../../public/country-flags/gb.svg";
+import usFlagSvg from "../../../public/country-flags/us.svg";
+import deFlagSvg from "../../../public/country-flags/de.svg";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip);
 
 const createImageFromSVG = (svg: StaticImageData) => {
     const aspectRatio = svg.width / svg.height;
-    const width = 30;
+    const width = 15;
     const height = width / aspectRatio;
 
     const image = new Image(width, height);
