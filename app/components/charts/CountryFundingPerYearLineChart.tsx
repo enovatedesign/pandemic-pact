@@ -7,6 +7,8 @@ import {millify} from "millify";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip);
 
+const pointSize = 18;
+
 export default function CountryFundingPerYearLineChart() {
     const data = {
         labels: [
@@ -17,8 +19,8 @@ export default function CountryFundingPerYearLineChart() {
         datasets: [
             {
                 label: 'United States',
-                borderColor: 'red',
-                borderWidth: 3,
+                iso2Code: 'us',
+                borderColor: 'rgba(0, 0, 255, 0.5)',
                 data: [
                     Math.random() * 1000000000,
                     Math.random() * 1000000000,
@@ -27,8 +29,8 @@ export default function CountryFundingPerYearLineChart() {
             },
             {
                 label: 'United Kingdom',
-                borderColor: 'darkblue',
-                borderWidth: 3,
+                iso2Code: 'gb',
+                borderColor: 'rgba(255, 0, 0, 0.5)',
                 data: [
                     Math.random() * 1000000000,
                     Math.random() * 1000000000,
@@ -37,8 +39,8 @@ export default function CountryFundingPerYearLineChart() {
             },
             {
                 label: 'Germany',
-                borderColor: 'black',
-                borderWidth: 3,
+                iso2Code: 'de',
+                borderColor: 'rgba(0, 0, 0, 0.5)',
                 data: [
                     Math.random() * 1000000000,
                     Math.random() * 1000000000,
@@ -49,6 +51,10 @@ export default function CountryFundingPerYearLineChart() {
     };
 
     const options = {
+        borderWidth: 2,
+        borderDash: [5, 5],
+        cubicInterpolationMode: 'monotone',
+        tension: 0.1,
         plugins: {
             legend: {
                 labels: {
@@ -80,20 +86,11 @@ export default function CountryFundingPerYearLineChart() {
             return;
         }
 
-        const pointImageWidth = 15;
-
-        const gbFlag = new Image(pointImageWidth, pointImageWidth);
-        gbFlag.src = '/country-flags/gb.svg';
-
-        const usFlag = new Image(pointImageWidth, pointImageWidth);
-        usFlag.src = '/country-flags/us.svg';
-
-        const deFlag = new Image(pointImageWidth, pointImageWidth);
-        deFlag.src = '/country-flags/de.svg';
-
-        chart.data.datasets[0].pointStyle = usFlag;
-        chart.data.datasets[1].pointStyle = gbFlag;
-        chart.data.datasets[2].pointStyle = deFlag;
+        chart.data.datasets.forEach((dataset) => {
+            const image = new Image(pointSize, pointSize);
+            image.src = `/country-flags/${dataset.iso2Code}.svg`;
+            dataset.pointStyle = image;
+        });
 
         chart.update();
     }, []);
