@@ -4,7 +4,25 @@ import {Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement,
 import {Line} from "react-chartjs-2";
 import {millify} from "millify";
 
+import gbFlagSvg from "svg-country-flags/svg/gb.svg";
+import usFlagSvg from "svg-country-flags/svg/us.svg";
+import deFlagSvg from "svg-country-flags/svg/de.svg";
+
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip);
+
+const createImageFromSVG = (svg: StaticImageData) => {
+    const aspectRatio = svg.width / svg.height;
+    const width = 30;
+    const height = width / aspectRatio;
+
+    const image = new Image(width, height);
+    image.src = svg.src;
+    return image;
+}
+
+const gbFlag = createImageFromSVG(gbFlagSvg);
+const usFlag = createImageFromSVG(usFlagSvg);
+const deFlag = createImageFromSVG(deFlagSvg);
 
 const data = {
     labels: [
@@ -15,38 +33,47 @@ const data = {
     datasets: [
         {
             label: 'United States',
-            borderColor: '#3e95cd',
+            borderColor: 'red',
+            borderWidth: 3,
             data: [
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
             ],
+            pointStyle: usFlag,
         },
         {
             label: 'United Kingdom',
-            borderColor: '#8e5ea2',
-            borderWidth: 1,
+            borderColor: 'darkblue',
+            borderWidth: 3,
             data: [
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
             ],
+            pointStyle: gbFlag,
         },
         {
             label: 'Germany',
-            borderColor: '#3cba9f',
-            borderWidth: 1,
+            borderColor: 'black',
+            borderWidth: 3,
             data: [
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
                 Math.random() * 1000000000,
             ],
+            pointStyle: deFlag,
         },
     ],
 };
 
 const options = {
     plugins: {
+        legend: {
+            labels: {
+                usePointStyle: true,
+            },
+        },
         title: {
             display: true,
             text: 'Country Funding Per Year',
