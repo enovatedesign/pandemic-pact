@@ -1,14 +1,16 @@
 import TopTenFundersByTotalAwardedDoughnutChart from './components/charts/TopTenFundersByTotalAwardedDoughnutChart'
+import CountryFundingPerYearLineChart from './components/charts/CountryFundingPerYearLineChart'
 
 export default function Home() {
     return (
         <div className="pt-8 p-4">
-            <div className="container mx-auto grid grid-cols-2 gap-4">
-                <div className="col-span-1">
-                    <TopTenFundersByTotalAwardedDoughnutChart />
+            <div className="container mx-auto grid grid-cols-2 gap-8">
+                <div className="col-span-2">
+                    <CountryFundingPerYearLineChart />
                 </div>
 
                 <div className="col-span-1">
+                    <TopTenFundersByTotalAwardedDoughnutChart />
                 </div>
             </div>
         </div>
