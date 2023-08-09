@@ -5,9 +5,11 @@ import Search from './components/search'
 export default function Home() {
     return (
         <div className="pt-8 p-4">
-            <div className="mb-8">
-                <Search />
-            </div>
+            {process.env.MEILISEARCH_HOST &&
+                <div className="mb-8">
+                    <Search />
+                </div>
+            }
 
             <div className="container mx-auto grid grid-cols-2 gap-8">
                 <div className="col-span-2">
