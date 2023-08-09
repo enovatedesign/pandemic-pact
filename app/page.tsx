@@ -1,6 +1,6 @@
 import TopTenFundersByTotalAwardedDoughnutChart from './components/charts/TopTenFundersByTotalAwardedDoughnutChart'
 import CountryFundingPerYearLineChart from './components/charts/CountryFundingPerYearLineChart'
-import Search from './components/search'
+import Search from './components/Search'
 
 export default function Home() {
     return (
