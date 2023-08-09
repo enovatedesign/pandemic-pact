@@ -4,7 +4,7 @@ import {Chart as ChartJS, ArcElement, Legend, Title, Tooltip, type TooltipItem} 
 import {Doughnut} from "react-chartjs-2";
 import {millify} from "millify";
 
-import data from '../../../data/dist/charts/topTenFundersByTotalAwarded.json'
+import data from '../../../data/dist/charts/top-ten-funders-by-total-awarded.json'
 
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
