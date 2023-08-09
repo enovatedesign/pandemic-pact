@@ -7,10 +7,11 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
+        "clean": "ts-node --esm scripts/clean.mts",
         "generate-fake-data": "ts-node --esm scripts/generate-fake-data.mts",
         "collate-chart-data": "ts-node --esm scripts/collate-chart-data/index.mts",
         "index-full-text-search": "ts-node --esm scripts/index-full-text-search.mts",
-        "generate": "npm run generate-fake-data && npm run collate-chart-data"
+        "generate": "npm run clean && npm run generate-fake-data && npm run collate-chart-data && npm run index-full-text-search"
     },
     "dependencies": {
         "@types/fs-extra": "^11.0.1",

@@ -19,9 +19,9 @@ fs.writeJsonSync('./data/dump/free-text-dataset.json', documents, {spaces: 2})
 
 console.log(chalk.blue(`Dumped ${documents.length} free text search documents to ./data/dump/free-text-dataset.json`))
 
-addDocumentsToIndex()
+addDocumentsToSearchIndex()
 
-async function addDocumentsToIndex() {
+async function addDocumentsToSearchIndex() {
     const client = new MeiliSearch({
         host: process.env['MEILISEARCH_HOST'] || 'http://localhost:7700',
         apiKey: process.env['MEILISEARCH_API_KEY'],
@@ -33,5 +33,5 @@ async function addDocumentsToIndex() {
 
     const response = await index.addDocuments(documents)
 
-    console.log(chalk.blue(`Triggered task ${response.taskUid} [status: ${response.status}] to add ${documents.length} documents to index ${response.indexUid}`))
+    console.log(chalk.blue(`Triggered task '${response.taskUid}' [status: ${response.status}] to add ${documents.length} documents to search index '${response.indexUid}'`))
 }
