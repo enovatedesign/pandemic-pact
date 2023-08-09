@@ -16,8 +16,13 @@ console.log(chalk.blue(`Removed ./data/dump (if it existed)`));
 removeSearchIndex()
 
 async function removeSearchIndex() {
+    // Don't try to remove the search index if MeiliSearch is not configured
+    if (typeof process.env['MEILISEARCH_HOST'] === 'undefined') {
+        return;
+    }
+
     const client = new MeiliSearch({
-        host: process.env['MEILISEARCH_HOST'] || 'http://localhost:7700',
+        host: process.env['MEILISEARCH_HOST'],
         apiKey: process.env['MEILISEARCH_API_KEY'],
     })
 
