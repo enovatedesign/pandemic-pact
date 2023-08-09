@@ -1,12 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import chalk from 'chalk'
-
-interface Dictionary<Type> {
-    [key: string]: Type,
-}
-
-type StringDictionary = Dictionary<string>
+import {StringDictionary} from '../types/dictionary'
 
 interface FundersAndAmountAwarded {
     funders: string;

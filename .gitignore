@@ -36,3 +36,4 @@ next-env.d.ts
 
 # downloaded and dumped data
 /data/dist
+/data/dump

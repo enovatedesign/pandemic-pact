@@ -77,12 +77,4 @@ fs.ensureDirSync('./data/dist')
 
 fs.writeJsonSync('./data/dist/complete-dataset.json', data, {spaces: 2})
 
-console.log(chalk.blue("Wrote 20,000 records of fake data to ./data/dist/complete-dataset.json"))
-
-const freeTextData = data.map(
-    record => _.pick(record, ['GrantID', 'GrantTitleEng', 'Abstract', 'LaySummary'])
-)
-
-fs.writeJsonSync('./data/dist/free-text-dataset.json', freeTextData, {spaces: 2})
-
-console.log(chalk.blue("Wrote 20,000 records for free text search to ./data/dist/free-text-dataset.json"))
+console.log(chalk.blue(`Wrote ${data.length} records of fake data to ./data/dist/complete-dataset.json`))
