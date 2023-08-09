@@ -19,7 +19,7 @@ fs.writeJsonSync('./data/dump/free-text-dataset.json', documents, {spaces: 2})
 
 console.log(chalk.blue(`Dumped ${documents.length} free text search documents to ./data/dump/free-text-dataset.json`))
 
-addDocumentsToIndex();
+addDocumentsToIndex()
 
 async function addDocumentsToIndex() {
     const client = new MeiliSearch({
