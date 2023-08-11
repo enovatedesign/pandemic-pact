@@ -1,14 +1,15 @@
 "use client"
 
 const Search = () => {
-    const sendFullTextSearchRequest = event => {
+    const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
         fetch('http://127.0.0.1:7700/indexes/grants/search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                q: event.target.value
+                q: event.target.value,
+                limit: 100_000,
             }),
         })
             .then(response => response.json())
