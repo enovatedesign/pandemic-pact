@@ -1,6 +1,6 @@
 "use client"
 
-const Search = () => {
+export default () => {
     const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
         fetch('http://127.0.0.1:7700/indexes/grants/search', {
             method: 'POST',
@@ -37,5 +37,3 @@ const Search = () => {
         </div>
     )
 }
-
-export default Search
