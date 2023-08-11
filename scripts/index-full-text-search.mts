@@ -29,7 +29,7 @@ async function addDocumentsToSearchIndex() {
 
     const client = new MeiliSearch({
         host: process.env['MEILISEARCH_HOST'] || 'http://localhost:7700',
-        apiKey: process.env['MEILISEARCH_API_KEY'],
+        apiKey: process.env['MEILISEARCH_MASTER_API_KEY'],
     })
 
     const indexName = 'grants'

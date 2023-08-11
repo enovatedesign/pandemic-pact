@@ -4,11 +4,20 @@ import {type SearchResults} from '../types/search-results'
 
 export default ({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) => {
     const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
-        fetch('http://127.0.0.1:7700/indexes/grants/search', {
+        let headers: {[key: string]: string} = {
+            'Content-Type': 'application/json'
+        }
+
+        const host = process.env.NEXT_PUBLIC_MEILISEARCH_HOST
+        const apiKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY
+
+        if (apiKey) {
+            headers['Authorization'] = `Bearer ${apiKey}`
+        }
+
+        fetch(`${host}/indexes/grants/search`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers,
             body: JSON.stringify({
                 q: event.target.value,
                 limit: 100_000,
