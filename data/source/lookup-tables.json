@@ -223,5 +223,139 @@
         "1": "Unspecified",
         "2": "Not applicable",
         "3": "Not known"
+    },
+    "ResearchCat": {
+        "1": "Pathogen: natural history, transmission and diagnostics",
+        "2": "Animal and environmental research and research on diseases vectors ",
+        "3": "Epidemiological studies",
+        "4": "Clinical characterisation and management  in humans                             ",
+        "5": "Infection prevention and control  (including health care workers' protection)",
+        "6": "Therapeutics research, development and implementation",
+        "7": "Vaccines research, development and implementation",
+        "8": "Research to inform ethical issues",
+        "9": "Public health and Policy",
+        "10": "Indirect and Secondary impacts of disease",
+        "11": "Health Systems Research ",
+        "12": "Capacity Strengthening",
+        "13": "Disease Surveillance",
+        "14": "Other"
+    },
+    "ResearchSubcat": {
+        "1": {
+            "1": "Diagnostics",
+            "2": "Pathogen morphology, shedding & natural history",
+            "3": "Pathogen genotyping, mutations and adaptations",
+            "4": "Immunity",
+            "5": "Disease models",
+            "6": "Environmental stability of pathogen",
+            "7": "Other"
+        },
+        "2": {
+            "8": "Animal source and routes of transmission",
+            "9": "Vector biology ",
+            "10": "Vector control strategies",
+            "11": "Other"
+        },
+        "3": {
+            "12": "Disease transmission",
+            "13": "Disease susceptibility",
+            "14": "Impact/ effectiveness of control measures ",
+            "15": "Disease mapping ",
+            "16": "Other"
+        },
+        "4": {
+            "17": "Prognostic factors for disease severity",
+            "18": "Disease pathogenesis",
+            "19": "Supportive care, processes of care and management ",
+            "20": "Post acute and long term health consequences",
+            "21": "Other"
+        },
+        "5": {
+            "22": "Restriction measures to prevent secondary transmission in communities",
+            "23": "Barriers,  PPE, environmental, animal and vector control measures",
+            "24": "IPC in health care settings",
+            "25": "IPC at the human-animal interface ",
+            "26": "Other"
+        },
+        "6": {
+            "27": "Pre-clinical studies",
+            "28": "Phase 0 clinical trial",
+            "29": "Phase 1 clinical trial",
+            "30": "Phase 2 clinical trial",
+            "31": "Phase 3 clinical trial",
+            "32": "Phase 4 clinical trial",
+            "33": "Prophylactic use of treatments",
+            "34": "Therapeutics logistics and supply chains and distribution strategies",
+            "35": " Therapeutic trial design",
+            "36": "Adverse events associated with therapeutic administration",
+            "37": "Other"
+        },
+        "7": {
+            "38": "Pre-clinical studies",
+            "39": "Phase 0 clinical trial",
+            "40": "Phase 1 clinical trial",
+            "41": "Phase 2 clinical trial",
+            "42": "Phase 3 clinical trial",
+            "43": "Phase 4 clinical trial",
+            "44": "Vaccine logistics and supply chains and distribution strategies",
+            "45": "Vaccine design and administration",
+            "46": "Vaccine trial design and infrastructure",
+            "47": "Adverse events associated with  immunization",
+            "48": "Characterisation of vaccine-induced immunity",
+            "49": "Other"
+        },
+        "8": {
+            "50": "Research to inform ethical issues in Research ",
+            "51": "Research to inform ethical issues related to Public Health Measures",
+            "52": "Research to inform ethical issues in Clinical and Health System Decision-Making",
+            "53": "Research to inform ethical issues in the Allocation of Resources ",
+            "54": "Research to inform ethical issues in Governance ",
+            "55": "Research to inform ethical issues related to Social Determinants of Health, Trust, and Inequities",
+            "56": "Other"
+        },
+        "9": {
+            "57": "Approaches to public health interventions ",
+            "58": "Community engagement",
+            "59": "Communication and infodemic management",
+            "60": "Vaccine/Therapeutic/ treatment hesitancy",
+            "61": "Policy research and interventions",
+            "62": "Other"
+        },
+        "10": {
+            "63": "Indirect health impacts",
+            "64": "Impacts on social services",
+            "65": "Economic impacts",
+            "66": "Other secondary impacts ",
+            "67": "Other "
+        },
+        "11": {
+            "68": "Health service delivery  ",
+            "69": "Health financing",
+            "70": "Medicines, vaccines & other technologies ",
+            "71": "Health information systems",
+            "72": "Health leadership and governance",
+            "73": "Health workforce",
+            "74": "Other"
+        },
+        "12": {
+            "75": "Individual level capacity strengthening ",
+            "76": "Institutional level capacity strengthening ",
+            "77": "Systemic/environmental components of capacity strengthening",
+            "78": "Cross-cutting ",
+            "79": "Other"
+        },
+        "13": {
+            "80": "Disease surveillance detection",
+            "81": "Disease surveillance verification",
+            "82": "Disease surveillance notification",
+            "83": "Disease surveillance response ",
+            "84": "Disease surveillance integration",
+            "85": "Analysis for disease surveillance",
+            "86": "Disease surveillance reporting",
+            "87": "Decisions related to  disease surveillance",
+            "88": "Disease surveillance evaluation",
+            "89": "Disease surveillance governance ",
+            "90": "Other"
+        }
     }
 }
