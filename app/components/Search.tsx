@@ -2,7 +2,7 @@
 
 import {type SearchResults} from '../types/search-results'
 
-export default ({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) => {
+export default function Search({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
         let headers: {[key: string]: string} = {
             'Content-Type': 'application/json'
