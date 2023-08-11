@@ -1,12 +1,13 @@
 "use client"
 
-import {Chart as ChartJS, ArcElement, Legend, Title, Tooltip, type TooltipItem} from "chart.js";
-import {Doughnut} from "react-chartjs-2";
-import {millify} from "millify";
+import {Chart as ChartJS, ArcElement, Legend, Title, Tooltip, type TooltipItem} from "chart.js"
+import {Doughnut} from "react-chartjs-2"
+import {millify} from "millify"
+import {type SearchResults} from '../../types/search-results'
 
 import data from '../../../data/dist/charts/top-ten-funders-by-total-awarded.json'
 
-ChartJS.register(ArcElement, Title, Tooltip, Legend);
+ChartJS.register(ArcElement, Title, Tooltip, Legend)
 
 const options = {
     plugins: {
@@ -24,8 +25,9 @@ const options = {
             },
         },
     },
-};
+}
 
-export default function TopTenFundersByTotalAwardedDoughnutChart() {
+export default function TopTenFundersByTotalAwardedDoughnutChart({searchResults}: {searchResults: SearchResults}) {
+    console.log(searchResults.length)
     return <Doughnut data={data} options={options} />
 }

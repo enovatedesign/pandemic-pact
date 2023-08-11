@@ -1,6 +1,8 @@
 "use client"
 
-export default () => {
+import {type SearchResults} from '../types/search-results'
+
+export default ({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) => {
     const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
         fetch('http://127.0.0.1:7700/indexes/grants/search', {
             method: 'POST',
@@ -14,7 +16,7 @@ export default () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                setSearchResults(data.hits)
             }).catch((error) => {
                 console.error('Error:', error)
             })
