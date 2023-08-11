@@ -32,6 +32,10 @@ const data = _.range(20000).map(grantId => {
     const funder = faker.helpers.arrayElement(funders)
     const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
+    const researchCatKey = faker.helpers.objectKey(lookupTables.ResearchCat)
+    const researchCat = lookupTables.ResearchCat[researchCatKey]
+    const researchSubcat = faker.helpers.objectValue(lookupTables.ResearchSubcat[researchCatKey])
+
     return Object.assign(
         {
             "GrantID": grantId,
@@ -51,8 +55,8 @@ const data = _.range(20000).map(grantId => {
             "OccupationalGroups": faker.helpers.objectValue(lookupTables.OccupationalGroups),
             "StudyType": faker.helpers.objectValue(lookupTables.StudyType),
             "ClinicalTrial": faker.helpers.objectValue(lookupTables.ClinTrial),
-            "ResearchCat": "", // awaiting specification
-            "ResearchSubcat": "", // awaiting specification
+            "ResearchCat": researchCat,
+            "ResearchSubcat": researchSubcat,
             "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
             "100DaysMissionFramework": "", // awaiting specification
             "PolicyRoadmap01": "", // awaiting specification
