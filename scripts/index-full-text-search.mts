@@ -36,6 +36,12 @@ async function addDocumentsToSearchIndex() {
 
     const index = client.index(indexName)
 
+    index.updateSettings({
+        pagination: {maxTotalHits: 100000},
+        displayedAttributes: ['GrantID'],
+        searchableAttributes: ['GrantTitleEng', 'Abstract', 'LaySummary'],
+    })
+
     const response = await index.addDocuments(documents)
 
     console.log(chalk.blue(`Triggered task '${response.taskUid}' [status: ${response.status}] to add ${documents.length} documents to search index '${response.indexUid}'`))
