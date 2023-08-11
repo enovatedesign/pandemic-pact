@@ -1,13 +1,10 @@
 "use client"
 
-import {useEffect, useRef} from 'react';
 import {Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip, TooltipItem} from 'chart.js';
 import {Line} from "react-chartjs-2";
 import {millify} from "millify";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Legend, Title, Tooltip);
-
-const pointSize = 18;
 
 export default function CountryFundingPerYearLineChart() {
     const data = {
@@ -19,7 +16,6 @@ export default function CountryFundingPerYearLineChart() {
         datasets: [
             {
                 label: 'United States',
-                iso2Code: 'us',
                 borderColor: 'rgba(0, 0, 255, 0.5)',
                 data: [
                     Math.random() * 1000000000,
@@ -29,7 +25,6 @@ export default function CountryFundingPerYearLineChart() {
             },
             {
                 label: 'United Kingdom',
-                iso2Code: 'gb',
                 borderColor: 'rgba(255, 0, 0, 0.5)',
                 data: [
                     Math.random() * 1000000000,
@@ -39,7 +34,6 @@ export default function CountryFundingPerYearLineChart() {
             },
             {
                 label: 'Germany',
-                iso2Code: 'de',
                 borderColor: 'rgba(0, 0, 0, 0.5)',
                 data: [
                     Math.random() * 1000000000,
@@ -77,23 +71,5 @@ export default function CountryFundingPerYearLineChart() {
         },
     };
 
-    const chartRef = useRef<ChartJS>(null);
-
-    useEffect(() => {
-        const chart = chartRef.current;
-
-        if (!chart) {
-            return;
-        }
-
-        chart.data.datasets.forEach((dataset) => {
-            const image = new Image(pointSize, pointSize);
-            image.src = `/country-flags/${dataset.iso2Code}.svg`;
-            dataset.pointStyle = image;
-        });
-
-        chart.update();
-    }, []);
-
-    return <Line ref={chartRef} data={data} options={options} />;
+    return <Line data={data} options={options} />;
 }
