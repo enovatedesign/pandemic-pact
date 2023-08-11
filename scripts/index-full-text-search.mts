@@ -37,7 +37,7 @@ async function addDocumentsToSearchIndex() {
     const index = client.index(indexName)
 
     index.updateSettings({
-        pagination: {maxTotalHits: 100000},
+        pagination: {maxTotalHits: 100_000},
         displayedAttributes: ['GrantID'],
         searchableAttributes: ['GrantTitleEng', 'Abstract', 'LaySummary'],
     })
