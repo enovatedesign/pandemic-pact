@@ -14,7 +14,6 @@
         "generate": "npm run clean && npm run generate-fake-data && npm run collate-chart-data && npm run index-full-text-search"
     },
     "dependencies": {
-        "@meilisearch/instant-meilisearch": "^0.13.4",
         "@types/fs-extra": "^11.0.1",
         "@types/lodash": "^4.14.195",
         "@types/node": "20.3.3",
@@ -28,22 +27,20 @@
         "eslint": "8.44.0",
         "eslint-config-next": "13.4.7",
         "fs-extra": "^11.1.1",
-        "instantsearch.css": "^8.0.0",
         "lodash": "^4.17.21",
-        "meilisearch": "^0.34.1",
         "millify": "^6.1.0",
         "next": "13.4.7",
         "postcss": "8.4.24",
         "react": "18.2.0",
         "react-chartjs-2": "^5.2.0",
         "react-dom": "18.2.0",
-        "react-instantsearch": "^7.0.1",
         "tailwindcss": "3.3.2",
         "ts-node": "^10.9.1",
         "typescript": "5.1.6"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.0.2",
-        "chalk": "^5.3.0"
+        "chalk": "^5.3.0",
+        "meilisearch": "^0.34.1"
     }
 }

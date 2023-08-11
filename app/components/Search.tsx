@@ -1,44 +1,40 @@
 "use client"
 
-import "instantsearch.css/themes/algolia-min.css";
-import {InstantSearch, SearchBox, Stats, InfiniteHits, Highlight} from 'react-instantsearch'
-import {instantMeiliSearch} from '@meilisearch/instant-meilisearch'
-import {useState} from "react";
-
-const searchClient = instantMeiliSearch(
-    'localhost:7700',
-    ''
-)
-
 const Search = () => {
-    const [showHits, setShowHits] = useState(false);
+    const sendFullTextSearchRequest = event => {
+        fetch('http://127.0.0.1:7700/indexes/grants/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                q: event.target.value
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            }).catch((error) => {
+                console.error('Error:', error)
+            })
+    }
 
     return (
-        <InstantSearch
-            indexName="grants"
-            searchClient={searchClient}
-        >
-            <div className="mb-4">
-                <SearchBox
-                    onInput={(event) => {
-                        setShowHits(event.target.value.length > 0);
-                    }}
-                />
-            </div>
+        <div>
+            <label htmlFor="search-input" className="sr-only">
+                Search
+            </label>
 
-            {showHits && <InfiniteHits hitComponent={Hit} />}
-
-            {showHits && <Stats />}
-        </InstantSearch>
+            <input
+                type="text"
+                name="search-input"
+                id="search-input"
+                className="px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Search"
+                onInput={sendFullTextSearchRequest}
+            />
+        </div>
     )
 }
-
-const Hit = ({hit}) => (
-    <div key={hit.GrantID}>
-        <div className="hit-name">
-            <Highlight attribute="GrantTitleEng" hit={hit} />
-        </div>
-    </div>
-);
 
 export default Search
