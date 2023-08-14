@@ -10,16 +10,12 @@ export default function Home() {
     const [searchResults, setSearchResults] = useState<SearchResults>([])
 
     return (
-        <div className="pt-8 p-4">
-            {process.env.NEXT_PUBLIC_MEILISEARCH_HOST &&
-                <div className="mb-8">
-                    <Search
-                        setSearchResults={setSearchResults}
-                    />
-                </div>
-            }
+        <div className="container mx-auto p-8 flex flex-col gap-y-8">
+            <Search
+                setSearchResults={setSearchResults}
+            />
 
-            <div className="container mx-auto grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-8">
                 <div className="col-span-2">
                     <CountryFundingPerYearLineChart />
                 </div>

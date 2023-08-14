@@ -3,6 +3,10 @@
 import {type SearchResults} from '../types/search-results'
 
 export default function Search({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
+    if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
+        return null
+    }
+
     const sendFullTextSearchRequest = (event: React.ChangeEvent<HTMLInputElement>) => {
         let headers: {[key: string]: string} = {
             'Content-Type': 'application/json'
