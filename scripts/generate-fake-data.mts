@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import {faker} from '@faker-js/faker'
 import _ from 'lodash'
 import chalk from 'chalk'
+import getHumanReadableFileSize from './utils/getHumanReadableFileSize.mjs'
 
 // Set the seed to get consistent results each time
 // https://fakerjs.dev/guide/usage.html#reproducible-results
@@ -77,8 +78,16 @@ const data = _.range(20000).map(grantId => {
     )
 })
 
-fs.ensureDirSync('./data/dist')
+const directory = './data/dist'
 
-fs.writeJsonSync('./data/dist/complete-dataset.json', data, {spaces: 2})
+const filename = 'complete-dataset.json'
 
-console.log(chalk.blue(`Wrote ${data.length} records of fake data to ./data/dist/complete-dataset.json`))
+const pathname = `${directory}/${filename}`
+
+fs.ensureDirSync(directory)
+
+fs.writeJsonSync(pathname, data, {spaces: 2})
+
+const fileSize = getHumanReadableFileSize(pathname)
+
+console.log(chalk.blue(`Wrote ${data.length} records of fake data to ${pathname} [${fileSize}]`))
