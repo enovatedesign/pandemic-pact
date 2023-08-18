@@ -91,3 +91,24 @@ fs.writeJsonSync(pathname, data, {spaces: 2})
 const fileSize = getHumanReadableFileSize(pathname)
 
 console.log(chalk.blue(`Wrote ${data.length} records of fake data to ${pathname} [${fileSize}]`))
+
+const grantsDirectory = `${directory}/grants`
+
+fs.ensureDirSync(grantsDirectory)
+
+data.forEach((grant: {GrantID: number}) => {
+    const pathname = `${grantsDirectory}/${grant.GrantID}.json`
+    fs.writeJsonSync(pathname, grant, {spaces: 2})
+    const fileSize = getHumanReadableFileSize(pathname)
+    console.log(chalk.blue(`Wrote grant ${grant.GrantID} to ${pathname} [${fileSize}]`))
+})
+
+fs.writeJsonSync(
+    `${grantsDirectory}/index.json`,
+    data.map((grant: {GrantID: number}) => grant.GrantID),
+    {spaces: 2}
+)
+
+const grantIdFileSize = getHumanReadableFileSize(`${grantsDirectory}/index.json`)
+
+console.log(chalk.blue(`Wrote grant index to ${grantsDirectory}/index.json [${grantIdFileSize}]`))
