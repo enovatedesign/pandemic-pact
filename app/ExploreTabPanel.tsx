@@ -10,7 +10,7 @@ export default function ExploreTabPanel() {
     return (
         <TabPanel key="explore-tab-panel">
             <div className="mt-6">
-                <Grid className="gap-y-3">
+                <Grid className="gap-y-2">
                     <Col>
                         <SearchInput setSearchResults={setSearchResults} />
                     </Col>
