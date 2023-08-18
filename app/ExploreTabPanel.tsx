@@ -14,9 +14,11 @@ export default function ExploreTabPanel() {
                         <SearchInput setSearchResults={setSearchResults} />
                     </Col>
 
-                    <Col>
-                        <ResultsTable searchResults={searchResults} />
-                    </Col>
+                    {searchResults.length > 0 &&
+                        <Col>
+                            <ResultsTable searchResults={searchResults} />
+                        </Col>
+                    }
                 </Grid>
             </div>
         </TabPanel>

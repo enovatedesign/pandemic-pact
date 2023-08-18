@@ -14,7 +14,7 @@ export default function ResultsTable({searchResults}) {
                 <TableBody>
                     {searchResults.map((result) => {
                         return (
-                            <TableRow>
+                            <TableRow key={result.GrantID}>
                                 <TableCell>
                                     {result.GrantTitleEng}
                                 </TableCell>
