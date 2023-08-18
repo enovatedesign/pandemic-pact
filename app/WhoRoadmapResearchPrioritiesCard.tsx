@@ -1,4 +1,7 @@
-import {BarList, Card, Title, List, ListItem, Grid, Col} from "@tremor/react"
+import {useState} from "react"
+import {BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
+
+import funders from '../data/source/funders.json'
 
 const whoResearchPriorities = [
     {
@@ -134,9 +137,23 @@ const amountOfMoneySpentPerWhoResearchPriorityValueFormatter = (value: number) =
 }
 
 export default function WhoRoadmapResearchPrioritiesCard() {
+    const [selectedFunders, setSelectedFunders] = useState<string[]>([]);
+
     return (
         <Card>
             <Title>Funded Research Projects by WHO Research Priorities</Title>
+
+            <MultiSelect
+                onValueChange={setSelectedFunders}
+                placeholder="Select funders..."
+                className="max-w-xs mt-6"
+            >
+                {funders.map((funderName) => (
+                    <MultiSelectItem key={funderName} value={funderName}>
+                        {funderName}
+                    </MultiSelectItem>
+                ))}
+            </MultiSelect>
 
             <Grid className="mt-6 gap-12" numItems={3}>
                 <Col>
