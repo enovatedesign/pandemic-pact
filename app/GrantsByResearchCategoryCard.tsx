@@ -17,8 +17,12 @@ export default function WhoRoadmapResearchPrioritiesCard() {
         name: researchCatLookupTable[key],
     }))
 
+    const dataset = selectedFunders.length > 0
+        ? completeDataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
+        : completeDataset
+
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
-        const value = completeDataset
+        const value = dataset
             .filter(grant => grant.ResearchCat === researchCategory.name)
             .length
 
@@ -30,7 +34,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
     })
 
     const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
-        const value = completeDataset
+        const value = dataset
             .filter(grant => grant.ResearchCat === researchCategory.name)
             .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
 
