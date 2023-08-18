@@ -9,9 +9,32 @@ dotenv.config({path: './.env.local'})
 
 const data: Array<StringDictionary> = fs.readJsonSync('./data/dist/complete-dataset.json')
 
-const documents = data.map(
-    record => _.pick(record, ['GrantID', 'GrantTitleEng', 'Abstract', 'LaySummary'])
-)
+const attributes = [
+    'GrantID',
+    'GrantTitleEng',
+    'Abstract',
+    'LaySummary',
+    'Disease',
+    'Pathogen'
+]
+
+const displayedAttributes = [
+    'GrantID',
+    'GrantTitleEng',
+]
+
+const searchableAttributes = [
+    'GrantTitleEng',
+    'Abstract',
+    'LaySummary',
+]
+
+const filterableAttributes = [
+    'Disease',
+    'Pathogen',
+]
+
+const documents = data.map(record => _.pick(record, attributes))
 
 fs.ensureDirSync('./data/dump')
 
@@ -38,8 +61,9 @@ async function addDocumentsToSearchIndex() {
 
     index.updateSettings({
         pagination: {maxTotalHits: 100_000},
-        displayedAttributes: ['GrantID', 'GrantTitleEng'],
-        searchableAttributes: ['GrantTitleEng', 'Abstract', 'LaySummary'],
+        displayedAttributes,
+        searchableAttributes,
+        filterableAttributes,
     })
 
     const response = await index.addDocuments(documents)
