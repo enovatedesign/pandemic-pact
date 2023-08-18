@@ -1,138 +1,28 @@
 import {useState} from "react"
 import {BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {type StringDictionary} from "../scripts/types/dictionary"
 
 import funders from '../data/source/funders.json'
+import lookupTables from '../data/source/lookup-tables.json'
 
-const whoResearchPriorities = [
-    {
-        value: '1',
-        name: "Virus: natural history, transmission and diagnostics",
-    },
-    {
-        value: '2',
-        name: "Animal and environmental research",
-    },
-    {
-        value: '3',
-        name: "Epidemiological studies",
-    },
-    {
-        value: '4',
-        name: "Clinical characterization and management",
-    },
-    {
-        value: '5',
-        name: "Infection prevention and control",
-    },
-    {
-        value: '6',
-        name: "Candidate therapeutics R&D",
-    },
-    {
-        value: '7',
-        name: "Candidate vaccines R&D",
-    },
-    {
-        value: '8',
-        name: "Ethics considerations for research",
-    },
-    {
-        value: '9',
-        name: "Social sciences in the outbreak response",
-    },
-    {
-        value: '',
-        name: "N/A",
-    },
-]
+const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
-const numberOfGrantsPerWhoResearchPriority = [
-    {
-        value: 456,
-        name: '',
-    },
-    {
-        value: 351,
-        name: '',
-    },
-    {
-        value: 271,
-        name: '',
-    },
-    {
-        value: 191,
-        name: '',
-    },
-    {
-        value: 91,
-        name: '',
-    },
-    {
-        value: 456,
-        name: '',
-    },
-    {
-        value: 351,
-        name: '',
-    },
-    {
-        value: 271,
-        name: '',
-    },
-    {
-        value: 191,
-        name: '',
-    },
-    {
-        value: 91,
-        name: '',
-    },
-]
+const researchCategories: {value: string, name: string}[] = Object.keys(researchCatLookupTable).map((key: string) => ({
+    value: key,
+    name: researchCatLookupTable[key],
+}))
 
-const amountOfMoneySpentPerWhoResearchPriority = [
-    {
-        value: 456,
-        name: '',
-    },
-    {
-        value: 351,
-        name: '',
-    },
-    {
-        value: 271,
-        name: '',
-    },
-    {
-        value: 191,
-        name: '',
-    },
-    {
-        value: 91,
-        name: '',
-    },
-    {
-        value: 456,
-        name: '',
-    },
-    {
-        value: 351,
-        name: '',
-    },
-    {
-        value: 271,
-        name: '',
-    },
-    {
-        value: 191,
-        name: '',
-    },
-    {
-        value: 91,
-        name: '',
-    },
-]
+const numberOfGrantsPerResearchCategory = researchCategories.map(() => ({
+    value: Math.floor(Math.random() * 100),
+    name: '',
+}))
 
-const amountOfMoneySpentPerWhoResearchPriorityValueFormatter = (value: number) => {
+const amountOfMoneySpentPerResearchCategory = researchCategories.map(() => ({
+    value: (Math.random() * 100).toFixed(),
+    name: '',
+}))
+
+const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
     return `$${value}M`
 }
 
@@ -158,7 +48,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
             <Grid className="mt-6 gap-12" numItems={3}>
                 <Col>
                     <List>
-                        {whoResearchPriorities.map((item) => (
+                        {researchCategories.map((item) => (
                             <ListItem
                                 key={item.value}
                                 className="h-9 mb-2 border-none justify-start"
@@ -171,13 +61,13 @@ export default function WhoRoadmapResearchPrioritiesCard() {
                 </Col>
 
                 <Col>
-                    <BarList data={numberOfGrantsPerWhoResearchPriority} />
+                    <BarList data={numberOfGrantsPerResearchCategory} />
                 </Col>
 
                 <Col>
                     <BarList
-                        data={amountOfMoneySpentPerWhoResearchPriority}
-                        valueFormatter={amountOfMoneySpentPerWhoResearchPriorityValueFormatter}
+                        data={amountOfMoneySpentPerResearchCategory}
+                        valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
                     />
                 </Col>
             </Grid>
