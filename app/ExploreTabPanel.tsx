@@ -1,16 +1,21 @@
-import {TabPanel, Grid, Col, Card, TextInput} from "@tremor/react"
-import {SearchIcon} from "@heroicons/react/solid"
+import {useState} from "react"
+import {TabPanel, Grid, Col, Card} from "@tremor/react"
+import SearchInput from "./SearchInput"
+import ResultsTable from "./ResultsTable"
 
 export default function ExploreTabPanel() {
+    const [searchResults, setSearchResults] = useState([])
+
     return (
         <TabPanel key="explore-tab-panel">
             <div className="mt-6">
-                <Grid className="gap-y-2">
+                <Grid className="gap-y-3">
                     <Col>
-                        <TextInput
-                            icon={SearchIcon}
-                            placeholder="Search..."
-                        />
+                        <SearchInput setSearchResults={setSearchResults} />
+                    </Col>
+
+                    <Col>
+                        <ResultsTable searchResults={searchResults} />
                     </Col>
                 </Grid>
             </div>

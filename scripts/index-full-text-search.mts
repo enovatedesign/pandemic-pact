@@ -38,7 +38,7 @@ async function addDocumentsToSearchIndex() {
 
     index.updateSettings({
         pagination: {maxTotalHits: 100_000},
-        displayedAttributes: ['GrantID'],
+        displayedAttributes: ['GrantID', 'GrantTitleEng'],
         searchableAttributes: ['GrantTitleEng', 'Abstract', 'LaySummary'],
     })
 
