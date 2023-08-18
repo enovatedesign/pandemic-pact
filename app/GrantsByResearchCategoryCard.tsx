@@ -5,7 +5,7 @@ import {millify} from "millify"
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
-import completeDataset from '../data/dist/complete-dataset.json'
+import dataset from '../data/dist/grants-by-research-category-card.json'
 
 export default function WhoRoadmapResearchPrioritiesCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
@@ -17,12 +17,12 @@ export default function WhoRoadmapResearchPrioritiesCard() {
         name: researchCatLookupTable[key],
     }))
 
-    const dataset = selectedFunders.length > 0
-        ? completeDataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
-        : completeDataset
+    const filteredDataset = selectedFunders.length > 0
+        ? dataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
+        : dataset
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
-        const value = dataset
+        const value = filteredDataset
             .filter(grant => grant.ResearchCat === researchCategory.name)
             .length
 
@@ -34,7 +34,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
     })
 
     const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
-        const value = dataset
+        const value = filteredDataset
             .filter(grant => grant.ResearchCat === researchCategory.name)
             .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
 

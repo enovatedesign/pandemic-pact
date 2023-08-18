@@ -29,7 +29,7 @@ const researchInstitutions = _.range(25).map(() => {
     }
 })
 
-const data = _.range(20000).map(grantId => {
+const completeDataset = _.range(20000).map(grantId => {
     const funder = faker.helpers.arrayElement(funders)
     const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
@@ -78,37 +78,40 @@ const data = _.range(20000).map(grantId => {
     )
 })
 
-const directory = './data/dist'
+const distDirectory = './data/dist'
 
-const filename = 'complete-dataset.json'
+fs.ensureDirSync(distDirectory)
 
-const pathname = `${directory}/${filename}`
-
-fs.ensureDirSync(directory)
-
-fs.writeJsonSync(pathname, data, {spaces: 2})
-
-const fileSize = getHumanReadableFileSize(pathname)
-
-console.log(chalk.blue(`Wrote ${data.length} records of fake data to ${pathname} [${fileSize}]`))
-
-const grantsDirectory = `${directory}/grants`
-
-fs.ensureDirSync(grantsDirectory)
-
-data.forEach((grant: {GrantID: number}) => {
-    const pathname = `${grantsDirectory}/${grant.GrantID}.json`
-    fs.writeJsonSync(pathname, grant, {spaces: 2})
-    const fileSize = getHumanReadableFileSize(pathname)
-    console.log(chalk.blue(`Wrote grant ${grant.GrantID} to ${pathname} [${fileSize}]`))
-})
-
-fs.writeJsonSync(
-    `${grantsDirectory}/index.json`,
-    data.map((grant: {GrantID: number}) => grant.GrantID),
-    {spaces: 2}
+writeToDistJsonFile(
+    'complete-dataset.json',
+    completeDataset,
 )
 
-const grantIdFileSize = getHumanReadableFileSize(`${grantsDirectory}/index.json`)
+writeToDistJsonFile(
+    'grants-by-research-category-card.json',
+    completeDataset.map(grant => _.pick(grant, ['GrantID', 'ResearchCat', 'GrantAmountConverted'])),
+)
 
-console.log(chalk.blue(`Wrote grant index to ${grantsDirectory}/index.json [${grantIdFileSize}]`))
+fs.ensureDirSync(`${distDirectory}/grants`)
+
+writeToDistJsonFile(
+    'grants/index.json',
+    completeDataset.map(({GrantID}: {GrantID: number}) => GrantID),
+)
+
+completeDataset.forEach((grant: {GrantID: number}) => {
+    const pathname = `grants/${grant.GrantID}.json`
+    writeToDistJsonFile(pathname, grant, false)
+})
+
+function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
+    const pathname = `${distDirectory}/${filename}`
+
+    fs.writeJsonSync(pathname, data, {spaces: 2})
+
+    const fileSize = getHumanReadableFileSize(pathname)
+
+    if (log) {
+        console.log(chalk.blue(`Wrote ${fileSize} to ${pathname}`))
+    }
+}
