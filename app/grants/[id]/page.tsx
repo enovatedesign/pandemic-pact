@@ -1,23 +1,15 @@
+// TODO only import the specific grant identified by `id` from the dataset if possible
+
+import completeDataset from '../../../data/dist/complete-dataset.json'
+
 export default function Page({params}: {params: {id: string}}) {
-    return <div>My Grant: {params.id}</div>
+    const grant = completeDataset.find((grant: {GrantID: number}) => grant.GrantID === parseInt(params.id))
+
+    return <div>My Grant: {grant.GrantID}</div>
 }
 
 export async function generateStaticParams() {
-    return [
-        {
-            id: '1',
-        },
-        {
-            id: '2',
-        },
-        {
-            id: '3',
-        },
-        {
-            id: '4',
-        },
-        {
-            id: '5',
-        },
-    ]
+    return completeDataset.map((grant: {GrantID: number}) => ({
+        id: `${grant.GrantID}`,
+    }))
 }
