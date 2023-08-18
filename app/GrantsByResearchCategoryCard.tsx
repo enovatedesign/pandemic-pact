@@ -7,47 +7,47 @@ import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
 import completeDataset from '../data/dist/complete-dataset.json'
 
-const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
-
-const researchCategories: {value: string, name: string}[] = Object.keys(researchCatLookupTable).map((key: string) => ({
-    value: key,
-    name: researchCatLookupTable[key],
-}))
-
-const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
-    const value = completeDataset
-        .filter(grant => grant.ResearchCat === researchCategory.name)
-        .length
-
-    return {
-        key: `grants-per-category-${researchCategory.value}`,
-        value: value,
-        name: '',
-    }
-})
-
-const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
-    const value = completeDataset
-        .filter(grant => grant.ResearchCat === researchCategory.name)
-        .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
-
-    return {
-        key: `grant-amount-${researchCategory.value}`,
-        value: value,
-        name: '',
-    }
-})
-
-const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
-    return '$' + millify(value, {precision: 2})
-}
-
 export default function WhoRoadmapResearchPrioritiesCard() {
-    const [selectedFunders, setSelectedFunders] = useState<string[]>([]);
+    const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+
+    const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
+
+    const researchCategories: {value: string, name: string}[] = Object.keys(researchCatLookupTable).map((key: string) => ({
+        value: key,
+        name: researchCatLookupTable[key],
+    }))
+
+    const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
+        const value = completeDataset
+            .filter(grant => grant.ResearchCat === researchCategory.name)
+            .length
+
+        return {
+            key: `grants-per-category-${researchCategory.value}`,
+            value: value,
+            name: '',
+        }
+    })
+
+    const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
+        const value = completeDataset
+            .filter(grant => grant.ResearchCat === researchCategory.name)
+            .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+
+        return {
+            key: `grant-amount-${researchCategory.value}`,
+            value: value,
+            name: '',
+        }
+    })
+
+    const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
+        return '$' + millify(value, {precision: 2})
+    }
 
     return (
         <Card>
-            <Title>Funded Research Projects by WHO Research Priorities</Title>
+            <Title>Grants By Research Category</Title>
 
             <MultiSelect
                 value={selectedFunders}

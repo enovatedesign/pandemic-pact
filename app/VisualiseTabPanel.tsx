@@ -1,12 +1,12 @@
 import {TabPanel, Grid, Card} from "@tremor/react"
 
-import WhoRoadmapResearchPrioritiesCard from './WhoRoadmapResearchPrioritiesCard'
+import GrantsByResearchCategoryCard from './GrantsByResearchCategoryCard'
 
 export default function VisualiseTabPanel() {
     return (
         <TabPanel>
             <div className="mt-6">
-                <WhoRoadmapResearchPrioritiesCard />
+                <GrantsByResearchCategoryCard />
             </div>
         </TabPanel>
     )
