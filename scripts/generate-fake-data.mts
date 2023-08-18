@@ -10,9 +10,9 @@ faker.seed(37148927482342)
 
 const lookupTables = fs.readJsonSync('./data/source/lookup-tables.json')
 
-const funders = _.range(50).map(() => {
+const funders = fs.readJsonSync('./data/source/funders.json').map((funderName: string) => {
     return {
-        "FundingOrgName": faker.company.name(),
+        "FundingOrgName": funderName,
         "FunderAcronym": faker.hacker.abbreviation(),
         "FunderCountry": faker.location.countryCode('alpha-2'),
         "FunderRegion": faker.helpers.objectValue(lookupTables.Regions),
