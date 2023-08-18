@@ -146,8 +146,8 @@ export default function WhoRoadmapResearchPrioritiesCard() {
                                 key={item.value}
                                 className="h-9 mb-2 border-none justify-start"
                             >
-                                <span className="w-8">{item.value}</span>
-                                <span>{item.name}</span>
+                                <span className="min-w-[2rem]">{item.value}</span>
+                                <span className="truncate">{item.name}</span>
                             </ListItem>
                         ))}
                     </List>
