@@ -136,7 +136,7 @@ const amountOfMoneySpentPerWhoResearchPriorityValueFormatter = (value: number) =
 export default function WhoRoadmapResearchPrioritiesCard() {
     return (
         <Card>
-            <Title>Funded COVID-19 Research Projects by WHO Research Priorities</Title>
+            <Title>Funded Research Projects by WHO Research Priorities</Title>
 
             <Grid className="mt-6 gap-12" numItems={3}>
                 <Col>
