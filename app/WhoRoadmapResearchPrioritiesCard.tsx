@@ -1,9 +1,11 @@
 import {useState} from "react"
 import {BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
 import {type StringDictionary} from "../scripts/types/dictionary"
+import {millify} from "millify"
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
+import completeDataset from '../data/dist/complete-dataset.json'
 
 const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
@@ -12,18 +14,32 @@ const researchCategories: {value: string, name: string}[] = Object.keys(research
     name: researchCatLookupTable[key],
 }))
 
-const numberOfGrantsPerResearchCategory = researchCategories.map(() => ({
-    value: Math.floor(Math.random() * 100),
-    name: '',
-}))
+const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
+    const value = completeDataset
+        .filter(grant => grant.ResearchCat === researchCategory.name)
+        .length
 
-const amountOfMoneySpentPerResearchCategory = researchCategories.map(() => ({
-    value: (Math.random() * 100).toFixed(),
-    name: '',
-}))
+    return {
+        key: `grants-per-category-${researchCategory.value}`,
+        value: value,
+        name: '',
+    }
+})
+
+const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
+    const value = completeDataset
+        .filter(grant => grant.ResearchCat === researchCategory.name)
+        .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+
+    return {
+        key: `grant-amount-${researchCategory.value}`,
+        value: value,
+        name: '',
+    }
+})
 
 const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
-    return `$${value}M`
+    return '$' + millify(value, {precision: 2})
 }
 
 export default function WhoRoadmapResearchPrioritiesCard() {
@@ -34,6 +50,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
             <Title>Funded Research Projects by WHO Research Priorities</Title>
 
             <MultiSelect
+                value={selectedFunders}
                 onValueChange={setSelectedFunders}
                 placeholder="Select funders..."
                 className="max-w-xs mt-6"
