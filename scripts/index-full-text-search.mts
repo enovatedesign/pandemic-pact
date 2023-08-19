@@ -55,6 +55,8 @@ async function addDocumentsToSearchIndex() {
         apiKey: process.env['MEILISEARCH_MASTER_API_KEY'],
     })
 
+    // Create index for regular grant free text search
+
     const indexName = 'grants'
 
     const index = client.index(indexName)
@@ -69,4 +71,22 @@ async function addDocumentsToSearchIndex() {
     const response = await index.addDocuments(documents)
 
     console.log(chalk.blue(`Triggered task '${response.taskUid}' [status: ${response.status}] to add ${documents.length} documents to search index '${response.indexUid}'`))
+
+    // Create index with complete dataset for exporting to CSV/XLSX
+
+    const exportIndexName = 'exports'
+
+    const exportIndex = client.index(exportIndexName)
+
+    exportIndex.updateSettings({
+        pagination: {maxTotalHits: 100_000},
+        displayedAttributes: ['*'],
+        searchableAttributes: [],
+        filterableAttributes: ['GrantID'],
+        sortableAttributes: ['GrantID'],
+    })
+
+    const exportResponse = await exportIndex.addDocuments(data)
+
+    console.log(chalk.blue(`Triggered task '${exportResponse.taskUid}' [status: ${exportResponse.status}] to add ${data.length} documents to search index '${exportResponse.indexUid}'`))
 }
