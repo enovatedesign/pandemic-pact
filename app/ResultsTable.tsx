@@ -17,10 +17,10 @@ export default function ResultsTable({searchResults}: {searchResults: SearchResu
                     {searchResults.map((result) => {
                         return (
                             <TableRow key={result.GrantID}>
-                                <TableCell>
+                                <TableCell className="whitespace-normal">
                                     {result.GrantTitleEng}
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-right whitespace-nowrap">
                                     <Link href={`/grants/${result.GrantID}`}>View Grant</Link>
                                 </TableCell>
                             </TableRow>
