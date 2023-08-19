@@ -3,6 +3,7 @@ import {Flex, Button, BarList, Card, Title, List, ListItem, Grid, Col, MultiSele
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
+import * as XLSX from 'xlsx'
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
@@ -51,6 +52,51 @@ export default function WhoRoadmapResearchPrioritiesCard() {
         return '$' + millify(value, {precision: 2})
     }
 
+    const exportResults = () => {
+        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
+            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting export')
+            return
+        }
+
+        setExportingResults(true)
+
+        let headers: {[key: string]: string} = {
+            'Content-Type': 'application/json'
+        }
+
+        const host = process.env.NEXT_PUBLIC_MEILISEARCH_HOST
+        const apiKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY
+
+        if (apiKey) {
+            headers['Authorization'] = `Bearer ${apiKey}`
+        }
+
+        const body = {
+            filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
+            sort: ['GrantID:asc'],
+            limit: 100_000,
+        }
+
+        return fetch(`${host}/indexes/exports/search`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(body),
+        }).then(response => response.json()).then(data => {
+            const worksheet = XLSX.utils.json_to_sheet(data.hits)
+
+            const workbook = XLSX.utils.book_new()
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Grants")
+
+            XLSX.writeFile(workbook, "grants-by-research-category-export.xlsx", {compression: true})
+
+            setExportingResults(false)
+        }).catch((error) => {
+            console.error('Error:', error)
+            setExportingResults(false)
+        })
+    }
+
     return (
         <Card>
             <Flex
@@ -63,6 +109,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
                     icon={DownloadIcon}
                     loading={exportingResults}
                     disabled={exportingResults}
+                    onClick={exportResults}
                 >
                     Export Results To XLSX
                 </Button>
