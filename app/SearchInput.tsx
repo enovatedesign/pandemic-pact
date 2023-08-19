@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
-import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
-import {SearchIcon} from "@heroicons/react/solid"
+import {Button, Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
+import {DownloadIcon, SearchIcon} from "@heroicons/react/solid"
 import {type SearchResults} from './types/search-results'
 import {type StringDictionary} from '../scripts/types/dictionary'
 import lookupTables from '../data/source/lookup-tables.json'
@@ -10,13 +10,9 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
+    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
-    useEffect(() => {
-        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
-            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting search');
-            return
-        }
-
+    const meilisearchFetch = async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
         let headers: {[key: string]: string} = {
             'Content-Type': 'application/json'
         }
@@ -28,9 +24,12 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             headers['Authorization'] = `Bearer ${apiKey}`
         }
 
-        const body: {q: string, filter?: Array<string | string[]>} = {q: searchQuery}
+        const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
+            {q: searchQuery},
+            additionalOptions,
+        )
 
-        const filter = [];
+        const filter = []
 
         if (selectedDiseases.length > 0) {
             filter.push(
@@ -49,22 +48,50 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         }
 
         if (filter.length > 0) {
-            body['filter'] = filter;
+            body['filter'] = filter
         }
 
-        fetch(`${host}/indexes/grants/search`, {
+        return fetch(`${host}/indexes/${index}/search`, {
             method: 'POST',
             headers,
             body: JSON.stringify(body),
+        }).then(response => response.json())
+    }
+
+    const performFullTextSearch = () => {
+        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
+            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting search')
+            return
+        }
+
+        meilisearchFetch('grants').then(data => {
+            setSearchResults(data.hits)
+            setTotalHits(data.estimatedTotalHits)
+        }).catch((error) => {
+            console.error('Error:', error)
         })
-            .then(response => response.json())
-            .then(data => {
-                setSearchResults(data.hits)
-                setTotalHits(data.estimatedTotalHits)
-            }).catch((error) => {
-                console.error('Error:', error)
-            })
-    }, [searchQuery, selectedDiseases, selectedPathogens, setTotalHits, setSearchResults])
+    }
+
+    const exportResults = () => {
+        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
+            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting export')
+            return
+        }
+
+        setExportingResults(true)
+
+        const limit = 100_000 // TODO determine this based on number of generated grants in complete dataset?
+
+        meilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
+            setExportingResults(false)
+            console.log(data);
+        }).catch((error) => {
+            console.error('Error:', error)
+            setExportingResults(false)
+        })
+    }
+
+    useEffect(performFullTextSearch, [searchQuery, selectedDiseases, selectedPathogens, setTotalHits, setSearchResults])
 
     const diseasesLookupTable = lookupTables.Diseases as StringDictionary
 
@@ -118,8 +145,20 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                 </MultiSelect>
             </Col>
 
-            <Col numColSpan={2} className="flex justify-end">
+            <Col
+                numColSpan={2}
+                className="flex justify-between items-center"
+            >
                 <Text>Total Hits: {totalHits}</Text>
+
+                <Button
+                    icon={DownloadIcon}
+                    loading={exportingResults}
+                    disabled={exportingResults || totalHits === 0}
+                    onClick={exportResults}
+                >
+                    Export Results To XLSX
+                </Button>
             </Col>
         </Grid>
     )
