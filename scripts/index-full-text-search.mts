@@ -82,7 +82,7 @@ async function addDocumentsToSearchIndex() {
         pagination: {maxTotalHits: 100_000},
         displayedAttributes: ['*'],
         searchableAttributes,
-        filterableAttributes,
+        filterableAttributes: filterableAttributes.concat(['GrantID']),
         sortableAttributes: ['GrantID'],
     })
 
