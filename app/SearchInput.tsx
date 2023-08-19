@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {Button, Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {DownloadIcon, SearchIcon} from "@heroicons/react/solid"
 import {type SearchResults} from './types/search-results'
@@ -14,36 +14,39 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const [totalHits, setTotalHits] = useState<number>(0)
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
-    const doMeilisearchFetch = async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
-        const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
-            {q: searchQuery},
-            additionalOptions,
-        )
-
-        const filter = []
-
-        if (selectedDiseases.length > 0) {
-            filter.push(
-                selectedDiseases.length === 1 ?
-                    `Disease = "${selectedDiseases[0]}"` :
-                    selectedDiseases.map(disease => `Disease = "${disease}"`)
+    const doMeilisearchFetch = useCallback(
+        async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
+            const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
+                {q: searchQuery},
+                additionalOptions,
             )
-        }
 
-        if (selectedPathogens.length > 0) {
-            filter.push(
-                selectedPathogens.length === 1 ?
-                    `Pathogen = "${selectedPathogens[0]}"` :
-                    selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
-            )
-        }
+            const filter = []
 
-        if (filter.length > 0) {
-            body['filter'] = filter
-        }
+            if (selectedDiseases.length > 0) {
+                filter.push(
+                    selectedDiseases.length === 1 ?
+                        `Disease = "${selectedDiseases[0]}"` :
+                        selectedDiseases.map(disease => `Disease = "${disease}"`)
+                )
+            }
 
-        return meilisearchRequest(index, body)
-    }
+            if (selectedPathogens.length > 0) {
+                filter.push(
+                    selectedPathogens.length === 1 ?
+                        `Pathogen = "${selectedPathogens[0]}"` :
+                        selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
+                )
+            }
+
+            if (filter.length > 0) {
+                body['filter'] = filter
+            }
+
+            return meilisearchRequest(index, body)
+        },
+        [searchQuery, selectedDiseases, selectedPathogens],
+    )
 
     const performFullTextSearch = () => {
         doMeilisearchFetch('grants').then(data => {
@@ -68,7 +71,17 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         })
     }
 
-    useEffect(performFullTextSearch, [searchQuery, selectedDiseases, selectedPathogens, setTotalHits, setSearchResults])
+    useEffect(
+        performFullTextSearch,
+        [
+            searchQuery,
+            doMeilisearchFetch,
+            selectedDiseases,
+            selectedPathogens,
+            setTotalHits,
+            setSearchResults
+        ]
+    )
 
     const diseasesLookupTable = lookupTables.Diseases as StringDictionary
 
