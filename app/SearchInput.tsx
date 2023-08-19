@@ -6,29 +6,16 @@ import {type StringDictionary} from '../scripts/types/dictionary'
 import lookupTables from '../data/source/lookup-tables.json'
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
-    if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
-        return null
-    }
-
-    const diseasesLookupTable = lookupTables.Diseases as StringDictionary
-
-    const diseases: {value: string, name: string}[] = Object.keys(diseasesLookupTable).map((key: string) => ({
-        value: key,
-        name: diseasesLookupTable[key],
-    }))
-
-    const pathogensLookupTable = lookupTables.Pathogens as StringDictionary
-
-    const pathogens: {value: string, name: string}[] = Object.keys(pathogensLookupTable).map((key: string) => ({
-        value: key,
-        name: pathogensLookupTable[key],
-    }))
-
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
 
     useEffect(() => {
+        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
+            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting search');
+            return
+        }
+
         let headers: {[key: string]: string} = {
             'Content-Type': 'application/json'
         }
@@ -75,7 +62,21 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             }).catch((error) => {
                 console.error('Error:', error)
             })
-    }, [searchQuery, selectedDiseases, selectedPathogens])
+    }, [searchQuery, selectedDiseases, selectedPathogens, setSearchResults])
+
+    const diseasesLookupTable = lookupTables.Diseases as StringDictionary
+
+    const diseases: {value: string, name: string}[] = Object.keys(diseasesLookupTable).map((key: string) => ({
+        value: key,
+        name: diseasesLookupTable[key],
+    }))
+
+    const pathogensLookupTable = lookupTables.Pathogens as StringDictionary
+
+    const pathogens: {value: string, name: string}[] = Object.keys(pathogensLookupTable).map((key: string) => ({
+        value: key,
+        name: pathogensLookupTable[key],
+    }))
 
     return (
         <Grid numItems={2} className="gap-2">
@@ -83,7 +84,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                 <TextInput
                     icon={SearchIcon}
                     placeholder="Search..."
-                    onInput={event => setSearchQuery(event.target.value)}
+                    onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
                 />
             </Col>
 
