@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
+import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import {type SearchResults} from './types/search-results'
 import {type StringDictionary} from '../scripts/types/dictionary'
@@ -9,6 +9,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
+    const [totalHits, setTotalHits] = useState<number>(0)
 
     useEffect(() => {
         if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
@@ -59,10 +60,11 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             .then(response => response.json())
             .then(data => {
                 setSearchResults(data.hits)
+                setTotalHits(data.estimatedTotalHits)
             }).catch((error) => {
                 console.error('Error:', error)
             })
-    }, [searchQuery, selectedDiseases, selectedPathogens, setSearchResults])
+    }, [searchQuery, selectedDiseases, selectedPathogens, setTotalHits, setSearchResults])
 
     const diseasesLookupTable = lookupTables.Diseases as StringDictionary
 
@@ -114,6 +116,10 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                         </MultiSelectItem>
                     ))}
                 </MultiSelect>
+            </Col>
+
+            <Col numColSpan={2} className="flex justify-end">
+                <Text>Total Hits: {totalHits}</Text>
             </Col>
         </Grid>
     )
