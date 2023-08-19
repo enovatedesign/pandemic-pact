@@ -1,5 +1,6 @@
 import {useState} from "react"
-import {BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {Flex, Button, BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 
@@ -9,6 +10,7 @@ import dataset from '../data/dist/grants-by-research-category-card.json'
 
 export default function WhoRoadmapResearchPrioritiesCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
@@ -51,7 +53,20 @@ export default function WhoRoadmapResearchPrioritiesCard() {
 
     return (
         <Card>
-            <Title>Grants By Research Category</Title>
+            <Flex
+                justifyContent="between"
+                alignItems="start"
+            >
+                <Title>Grants By Research Category</Title>
+
+                <Button
+                    icon={DownloadIcon}
+                    loading={exportingResults}
+                    disabled={exportingResults}
+                >
+                    Export Results To XLSX
+                </Button>
+            </Flex>
 
             <MultiSelect
                 value={selectedFunders}
