@@ -81,17 +81,9 @@ async function addDocumentsToSearchIndex() {
     exportIndex.updateSettings({
         pagination: {maxTotalHits: 100_000},
         displayedAttributes: ['*'],
-        searchableAttributes: [],
+        searchableAttributes,
         filterableAttributes,
         sortableAttributes: ['GrantID'],
-        rankingRules: [
-            "sort",
-            "words",
-            "typo",
-            "proximity",
-            "attribute",
-            "exactness"
-        ],
     })
 
     const exportResponse = await exportIndex.addDocuments(data)
