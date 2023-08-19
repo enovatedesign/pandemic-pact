@@ -45,7 +45,7 @@ console.log(chalk.blue(`Dumped ${documents.length} free text search documents to
 addDocumentsToSearchIndex()
 
 async function addDocumentsToSearchIndex() {
-    // Don't try to remove the search index if MeiliSearch is not configured
+    // Don't try to add the search index if MeiliSearch is not configured
     if (typeof process.env['MEILISEARCH_HOST'] === 'undefined') {
         return;
     }
