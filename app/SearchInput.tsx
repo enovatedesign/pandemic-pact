@@ -4,6 +4,7 @@ import {DownloadIcon, SearchIcon} from "@heroicons/react/solid"
 import {type SearchResults} from './types/search-results'
 import {type StringDictionary} from '../scripts/types/dictionary'
 import lookupTables from '../data/source/lookup-tables.json'
+import meilisearchRequest from './helpers/meilisearch-request'
 import * as XLSX from 'xlsx'
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
@@ -13,18 +14,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const [totalHits, setTotalHits] = useState<number>(0)
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
-    const meilisearchFetch = async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
-        let headers: {[key: string]: string} = {
-            'Content-Type': 'application/json'
-        }
-
-        const host = process.env.NEXT_PUBLIC_MEILISEARCH_HOST
-        const apiKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY
-
-        if (apiKey) {
-            headers['Authorization'] = `Bearer ${apiKey}`
-        }
-
+    const doMeilisearchFetch = async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
         const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
             {q: searchQuery},
             additionalOptions,
@@ -52,20 +42,11 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             body['filter'] = filter
         }
 
-        return fetch(`${host}/indexes/${index}/search`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(body),
-        }).then(response => response.json())
+        return meilisearchRequest(index, body)
     }
 
     const performFullTextSearch = () => {
-        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
-            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting search')
-            return
-        }
-
-        meilisearchFetch('grants').then(data => {
+        doMeilisearchFetch('grants').then(data => {
             setSearchResults(data.hits)
             setTotalHits(data.estimatedTotalHits)
         }).catch((error) => {
@@ -74,16 +55,11 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     }
 
     const exportResults = () => {
-        if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
-            console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting export')
-            return
-        }
-
         setExportingResults(true)
 
         const limit = 100_000 // TODO determine this based on number of generated grants in complete dataset?
 
-        meilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
+        doMeilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
             const worksheet = XLSX.utils.json_to_sheet(data.hits)
 
             const workbook = XLSX.utils.book_new()
