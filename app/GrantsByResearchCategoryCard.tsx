@@ -4,7 +4,7 @@ import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
-import * as XLSX from 'xlsx'
+import exportToXlsx from "./helpers/export-to-xlsx"
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
@@ -63,14 +63,7 @@ export default function WhoRoadmapResearchPrioritiesCard() {
         }
 
         meilisearchRequest('exports', body).then(data => {
-            const worksheet = XLSX.utils.json_to_sheet(data.hits)
-
-            const workbook = XLSX.utils.book_new()
-
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Grants")
-
-            XLSX.writeFile(workbook, "grants-by-research-category-export.xlsx", {compression: true})
-
+            exportToXlsx('pandemic-pact-grants-by-research-category-export.xlsx', data.hits)
             setExportingResults(false)
         }).catch((error) => {
             console.error('Error:', error)
