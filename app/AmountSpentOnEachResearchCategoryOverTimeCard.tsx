@@ -123,7 +123,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     valueFormatter={valueFormatter}
                     colors={colours}
                     showLegend={false}
-                    className="h-[36rem]"
+                    className="h-[36rem] -ml-2"
                 />
             }
 
@@ -135,12 +135,13 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     valueFormatter={valueFormatter}
                     colors={colours}
                     showLegend={false}
-                    className="h-[36rem]"
+                    className="h-[36rem] -ml-2"
                 />
             }
 
             <Flex
-                justifyContent="end"
+                justifyContent="between"
+                alignItems="center"
             >
                 <TabGroup
                     index={selectedTabIndex}

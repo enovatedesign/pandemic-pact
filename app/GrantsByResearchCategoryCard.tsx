@@ -160,7 +160,7 @@ export default function GrantsByResearchCategoryCard() {
 
                 {selectedTabIndex === 1 &&
                     <ScatterChart
-                        className="h-80 mt-6 -ml-2"
+                        className="h-80 -ml-2"
                         data={scatterChartData}
                         category="Research Category"
                         x="Number Of Grants"
