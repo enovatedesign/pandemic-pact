@@ -1,6 +1,6 @@
 import {useState} from "react"
-import {Flex, Button, BarChart, Card, Title, MultiSelect, MultiSelectItem, Text} from "@tremor/react"
-import {DownloadIcon} from "@heroicons/react/solid"
+import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, } from "@tremor/react"
+import {DownloadIcon, PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
@@ -13,6 +13,7 @@ import dataset from '../data/dist/amount-spent-on-each-research-category-over-ti
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+    const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
@@ -114,7 +115,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                 }
             </Flex>
 
-            <div>
+            {selectedTabIndex === 0 &&
                 <BarChart
                     data={amountSpentOnEachResearchCategoryOverTime}
                     index="year"
@@ -122,13 +123,34 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     valueFormatter={valueFormatter}
                     colors={colours}
                     showLegend={false}
-                    className="h-96"
+                    className="h-[36rem]"
                 />
-            </div>
+            }
+
+            {selectedTabIndex === 1 &&
+                <LineChart
+                    data={amountSpentOnEachResearchCategoryOverTime}
+                    index="year"
+                    categories={researchCategories}
+                    valueFormatter={valueFormatter}
+                    colors={colours}
+                    showLegend={false}
+                    className="h-[36rem]"
+                />
+            }
 
             <Flex
                 justifyContent="end"
             >
+                <TabGroup
+                    index={selectedTabIndex}
+                    onIndexChange={setSelectedTabIndex}
+                >
+                    <TabList variant="solid">
+                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
+                        <Tab icon={PresentationChartLineIcon}>Line</Tab>
+                    </TabList>
+                </TabGroup>
 
                 <Button
                     icon={DownloadIcon}
