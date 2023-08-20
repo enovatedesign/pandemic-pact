@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text, Tab, TabList, TabGroup, ScatterChart} from "@tremor/react"
+import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
@@ -82,6 +82,23 @@ export default function GrantsByResearchCategoryCard() {
             setExportingResults(false)
         })
     }
+
+    const colours: Color[] = [
+        'red',
+        'lime',
+        'cyan',
+        'violet',
+        'orange',
+        'emerald',
+        'indigo',
+        'purple',
+        'amber',
+        'green',
+        'blue',
+        'fuchsia',
+        'yellow',
+        'neutral',
+    ]
 
     return (
         <Card>
@@ -174,6 +191,7 @@ export default function GrantsByResearchCategoryCard() {
                         showLegend={false}
                         autoMinXValue
                         autoMinYValue
+                        colors={colours}
                     />
                 }
 
