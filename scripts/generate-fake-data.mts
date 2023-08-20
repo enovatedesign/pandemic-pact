@@ -100,6 +100,15 @@ writeToDistJsonFile(
 )
 
 writeToDistJsonFile(
+    'grants-by-region-card.json',
+    completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
+        'GrantID',
+        'GrantRegion',
+        'FundingOrgName',
+    ])),
+)
+
+writeToDistJsonFile(
     'amount-spent-on-each-research-category-over-time-card.json',
     completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
         'GrantID',

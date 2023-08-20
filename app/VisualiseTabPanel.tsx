@@ -2,21 +2,25 @@ import {TabPanel, Grid, Col, Card} from "@tremor/react"
 
 import GrantsByResearchCategoryCard from './GrantsByResearchCategoryCard'
 import AmountSpentOnEachResearchCategoryOverTimeCard from './AmountSpentOnEachResearchCategoryOverTimeCard'
+import GrantsByRegionCard from './GrantsByRegionCard'
 
 export default function VisualiseTabPanel() {
     return (
         <TabPanel>
             <Grid
-                numItems={1}
+                numItems={2}
                 className="mt-6 gap-4"
             >
-                <Col>
+                <Col numColSpan={2}>
                     <GrantsByResearchCategoryCard />
                 </Col>
-                <Col>
+                <Col numColSpan={2}>
                     <AmountSpentOnEachResearchCategoryOverTimeCard />
                 </Col>
+                <Col numColSpan={1}>
+                    <GrantsByRegionCard />
+                </Col>
             </Grid>
-        </TabPanel>
+        </TabPanel >
     )
 }
