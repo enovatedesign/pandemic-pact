@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, Button, BarList, Card, Title, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
@@ -10,7 +10,7 @@ import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
 import dataset from '../data/dist/grants-by-research-category-card.json'
 
-export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
+export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
@@ -74,60 +74,90 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
     return (
         <Card>
             <Flex
-                justifyContent="between"
+                flexDirection="col"
                 alignItems="start"
+                className="gap-y-6"
             >
-                <Title>Amount Spent On Each Research Category Over Time</Title>
-
-                <Button
-                    icon={DownloadIcon}
-                    loading={exportingResults}
-                    disabled={exportingResults}
-                    onClick={exportResults}
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
                 >
-                    Export Results To XLSX
-                </Button>
-            </Flex>
+                    <Title>Amount Spent On Each Research Category Over Time</Title>
+                    <Text>Total Grants: {dataset.length}</Text>
+                </Flex>
 
-            <MultiSelect
-                value={selectedFunders}
-                onValueChange={setSelectedFunders}
-                placeholder="Select funders..."
-                className="max-w-xs mt-6"
-            >
-                {funders.map((funderName) => (
-                    <MultiSelectItem key={funderName} value={funderName}>
-                        {funderName}
-                    </MultiSelectItem>
-                ))}
-            </MultiSelect>
-
-            <Grid className="mt-6 gap-12" numItems={3}>
-                <Col>
-                    <List>
-                        {researchCategories.map((item) => (
-                            <ListItem
-                                key={item.value}
-                                className="h-9 mb-2 border-none justify-start"
-                            >
-                                <span className="min-w-[2rem]">{item.value}</span>
-                                <span className="truncate">{item.name}</span>
-                            </ListItem>
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
+                >
+                    <MultiSelect
+                        value={selectedFunders}
+                        onValueChange={setSelectedFunders}
+                        placeholder="Select funders..."
+                        className="max-w-xs"
+                    >
+                        {funders.map((funderName) => (
+                            <MultiSelectItem key={funderName} value={funderName}>
+                                {funderName}
+                            </MultiSelectItem>
                         ))}
-                    </List>
-                </Col>
+                    </MultiSelect>
 
-                <Col>
-                    <BarList data={numberOfGrantsPerResearchCategory} />
-                </Col>
+                    {selectedFunders.length > 0 &&
+                        <Text>Filtered Grants: {filteredDataset.length}</Text>
+                    }
+                </Flex>
 
-                <Col>
-                    <BarList
-                        data={amountOfMoneySpentPerResearchCategory}
-                        valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
-                    />
-                </Col>
-            </Grid>
+                <Grid
+                    className="gap-12"
+                    numItems={3}
+                >
+                    <Col>
+                        <List>
+                            {researchCategories.map((item) => (
+                                <ListItem
+                                    key={item.value}
+                                    className="h-9 mb-2 border-none justify-start"
+                                >
+                                    <span className="min-w-[2rem]">{item.value}</span>
+                                    <span className="truncate">{item.name}</span>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Col>
+
+                    <Col>
+                        <BarList
+                            data={numberOfGrantsPerResearchCategory}
+                        />
+
+                        <Subtitle className="mt-4 text-right">Number of projects</Subtitle>
+                    </Col>
+
+                    <Col>
+                        <BarList
+                            data={amountOfMoneySpentPerResearchCategory}
+                            valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
+                        />
+
+                        <Subtitle className="mt-4 text-right">Known value of projects (USD)</Subtitle>
+                    </Col>
+                </Grid>
+
+                <Flex
+                    justifyContent="end"
+                >
+
+                    <Button
+                        icon={DownloadIcon}
+                        loading={exportingResults}
+                        disabled={exportingResults}
+                        onClick={exportResults}
+                    >
+                        Export Results To XLSX
+                    </Button>
+                </Flex>
+            </Flex>
         </Card>
     )
 }
