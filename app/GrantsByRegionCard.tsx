@@ -35,8 +35,6 @@ export default function GrantsByResearchCategoryCard() {
         }
     })
 
-    console.log(numberOfGrantsPerRegion)
-
     const exportResults = () => {
         setExportingResults(true)
 
