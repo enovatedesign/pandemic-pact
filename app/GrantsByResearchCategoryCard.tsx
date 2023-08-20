@@ -1,6 +1,6 @@
 import {useState} from "react"
-import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text} from "@tremor/react"
-import {DownloadIcon} from "@heroicons/react/solid"
+import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text, Tab, TabList, TabGroup, ScatterChart} from "@tremor/react"
+import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
@@ -12,6 +12,7 @@ import dataset from '../data/dist/grants-by-research-category-card.json'
 
 export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+    const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
@@ -46,6 +47,17 @@ export default function GrantsByResearchCategoryCard() {
             key: `grant-amount-${researchCategory.value}`,
             value: value,
             name: '',
+        }
+    })
+
+    const scatterChartData = researchCategories.map(function (researchCategory, index) {
+        const numberOfGrants = numberOfGrantsPerResearchCategory[index].value;
+        const moneySpent = amountOfMoneySpentPerResearchCategory[index].value;
+
+        return {
+            "Research Category": researchCategory.name,
+            "Number Of Grants": numberOfGrants,
+            "Money Spent": moneySpent,
         }
     })
 
@@ -108,45 +120,76 @@ export default function GrantsByResearchCategoryCard() {
                     }
                 </Flex>
 
-                <Grid
-                    className="gap-12"
-                    numItems={3}
-                >
-                    <Col>
-                        <List>
-                            {researchCategories.map((item) => (
-                                <ListItem
-                                    key={item.value}
-                                    className="h-9 mb-2 border-none justify-start"
-                                >
-                                    <span className="min-w-[2rem]">{item.value}</span>
-                                    <span className="truncate">{item.name}</span>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Col>
+                {selectedTabIndex === 0 &&
+                    <Grid
+                        className="gap-12"
+                        numItems={3}
+                    >
+                        <Col>
+                            <List>
+                                {researchCategories.map((item) => (
+                                    <ListItem
+                                        key={item.value}
+                                        className="h-9 mb-2 border-none justify-start"
+                                    >
+                                        <span className="min-w-[2rem]">{item.value}</span>
+                                        <span className="truncate">{item.name}</span>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Col>
 
-                    <Col>
-                        <BarList
-                            data={numberOfGrantsPerResearchCategory}
-                        />
+                        <Col>
+                            <BarList
+                                data={numberOfGrantsPerResearchCategory}
+                            />
 
-                        <Subtitle className="mt-4 text-right">Number of projects</Subtitle>
-                    </Col>
+                            <Subtitle className="mt-4 text-right">Number of projects</Subtitle>
+                        </Col>
 
-                    <Col>
-                        <BarList
-                            data={amountOfMoneySpentPerResearchCategory}
-                            valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
-                        />
+                        <Col>
+                            <BarList
+                                data={amountOfMoneySpentPerResearchCategory}
+                                valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
+                            />
 
-                        <Subtitle className="mt-4 text-right">Known value of projects (USD)</Subtitle>
-                    </Col>
-                </Grid>
+                            <Subtitle className="mt-4 text-right">Known value of projects (USD)</Subtitle>
+                        </Col>
+                    </Grid>
+                }
+
+                {selectedTabIndex === 1 &&
+                    <ScatterChart
+                        className="h-80 mt-6 -ml-2"
+                        data={scatterChartData}
+                        category="Research Category"
+                        x="Number Of Grants"
+                        y="Money Spent"
+                        showOpacity={true}
+                        minYValue={60}
+                        valueFormatter={{
+                            x: (value: number) => `${value} grants`,
+                            y: amountOfMoneySpentPerResearchCategoryValueFormatter,
+                        }}
+                        showLegend={false}
+                        autoMinXValue
+                        autoMinYValue
+                    />
+                }
 
                 <Flex
-                    justifyContent="end"
+                    justifyContent="between"
+                    alignItems="center"
                 >
+                    <TabGroup
+                        index={selectedTabIndex}
+                        onIndexChange={setSelectedTabIndex}
+                    >
+                        <TabList variant="solid">
+                            <Tab icon={ChartBarIcon}>Bars</Tab>
+                            <Tab icon={SparklesIcon}>Scatter</Tab>
+                        </TabList>
+                    </TabGroup>
 
                     <Button
                         icon={DownloadIcon}
