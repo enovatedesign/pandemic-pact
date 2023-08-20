@@ -1,9 +1,9 @@
-import {TabPanel, Grid, Col, Card} from "@tremor/react"
+import {TabPanel, Grid, Col} from "@tremor/react"
 
 import GrantsByResearchCategoryCard from './GrantsByResearchCategoryCard'
 import AmountSpentOnEachResearchCategoryOverTimeCard from './AmountSpentOnEachResearchCategoryOverTimeCard'
 import GrantsByRegionCard from './GrantsByRegionCard'
-
+import GrantsByMeshClassificationCard from './GrantsByMeshClassificationCard'
 export default function VisualiseTabPanel() {
     return (
         <TabPanel>
@@ -19,6 +19,9 @@ export default function VisualiseTabPanel() {
                 </Col>
                 <Col numColSpan={1}>
                     <GrantsByRegionCard />
+                </Col>
+                <Col numColSpan={1}>
+                    <GrantsByMeshClassificationCard />
                 </Col>
             </Grid>
         </TabPanel >
