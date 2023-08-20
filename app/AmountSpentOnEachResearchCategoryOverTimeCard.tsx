@@ -1,11 +1,11 @@
 import {useState} from "react"
-import {Flex, Button, BarChart, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text} from "@tremor/react"
+import {Flex, Button, BarChart, Card, Title, MultiSelect, MultiSelectItem, Text} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
 import exportToXlsx from "./helpers/export-to-xlsx"
-import {groupBy, mapValues} from 'lodash'
+import {groupBy} from 'lodash'
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
