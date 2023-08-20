@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, } from "@tremor/react"
+import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {DownloadIcon, PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
@@ -42,7 +42,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
         return datapoint
     })
 
-    const colours = [
+    const colours: Color[] = [
         'red',
         'lime',
         'cyan',
