@@ -10,7 +10,7 @@ import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
 import dataset from '../data/dist/grants-by-research-category-card.json'
 
-export default function GrantsByResearchCategoryCard() {
+export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
