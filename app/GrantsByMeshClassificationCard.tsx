@@ -19,8 +19,8 @@ export default function GrantsByResearchCategoryCard() {
 
     const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
 
-    const databars = classifications.map((classification: string) => {
-        const classificationLookupTable = lookupTables[classification] as StringDictionary
+    const databars = classifications.map((classification) => {
+        const classificationLookupTable = lookupTables[classification as keyof typeof lookupTables]
 
         const classificationsNames: string[] = Object.values(classificationLookupTable)
             .filter(
@@ -34,7 +34,7 @@ export default function GrantsByResearchCategoryCard() {
 
         const numberOfGrantsPerClassification = classificationsNames.map(function (classificationName) {
             const numberOfGrants = filteredDataset
-                .filter(grant => grant[classification] === classificationName)
+                .filter(grant => grant[classification as keyof typeof grant] === classificationName)
                 .length
 
             return numberOfGrants
