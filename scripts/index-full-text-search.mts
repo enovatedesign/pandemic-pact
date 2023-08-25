@@ -89,4 +89,26 @@ async function addDocumentsToSearchIndex() {
     const exportResponse = await exportIndex.addDocuments(data)
 
     console.log(chalk.blue(`Triggered task '${exportResponse.taskUid}' [status: ${exportResponse.status}] to add ${data.length} documents to search index '${exportResponse.indexUid}'`))
+
+    // Remove existing NEXT_PUBLIC_MEILISEARCH_* environment variables from .env.local
+
+    const env = fs.readFileSync('./.env.local', 'utf8')
+
+    let nextPublicEnv = env.split('\n')
+        .filter(
+            line => !line.startsWith('NEXT_PUBLIC_MEILISEARCH_')
+        )
+        .join('\n')
+
+    // Add NEXT_PUBLIC_MEILISEARCH_* environment variables to .env.local
+
+    nextPublicEnv = nextPublicEnv.concat(
+        ``,
+        `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env['MEILISEARCH_HOST']}`,
+        `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=`,
+    )
+
+    fs.writeFileSync('./.env.local', nextPublicEnv)
+
+    console.log(chalk.blue(`Added NEXT_PUBLIC_MEILISEARCH_* environment variables to .env.local`))
 }
