@@ -4,6 +4,8 @@ import GrantsByResearchCategoryCard from './GrantsByResearchCategoryCard'
 import AmountSpentOnEachResearchCategoryOverTimeCard from './AmountSpentOnEachResearchCategoryOverTimeCard'
 import GrantsByRegionCard from './GrantsByRegionCard'
 import GrantsByMeshClassificationCard from './GrantsByMeshClassificationCard'
+import GrantsByCountryWhereResearchWasConductedCard from './GrantsByCountryWhereResearchWasConductedCard'
+
 export default function VisualiseTabPanel() {
     return (
         <TabPanel>
@@ -11,6 +13,10 @@ export default function VisualiseTabPanel() {
                 numItems={12}
                 className="mt-6 gap-4"
             >
+                <Col numColSpan={12}>
+                    <GrantsByCountryWhereResearchWasConductedCard />
+                </Col>
+
                 <Col numColSpan={12}>
                     <GrantsByResearchCategoryCard />
                 </Col>
