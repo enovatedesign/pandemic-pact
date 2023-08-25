@@ -2,11 +2,34 @@ import {useState} from 'react'
 import {Flex, Card, Title, } from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
+import {scaleLinear} from "d3-scale";
 
+import dataset from '../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../data/source/geojson/countries.json'
 
 export default function GrantsByCountryWhereResearchWasConducted() {
     const [tooltipContent, setTooltipContent] = useState('')
+
+    const filteredCountriesGeoJson = countriesGeoJson.features.map(country => {
+        let properties = country.properties
+
+        properties.totalGrants = dataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
+
+        country.properties = properties
+
+        return country
+    })
+
+    const allTotalGrants = filteredCountriesGeoJson
+        .filter(country => country.properties.totalGrants)
+        .map(country => country.properties.totalGrants)
+
+    const colorScale = scaleLinear()
+        .domain([
+            Math.min(...allTotalGrants),
+            Math.max(...allTotalGrants),
+        ])
+        .range(["#3b82f6", "#dbeafe"]);
 
     return (
         <Card>
@@ -36,7 +59,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                                 <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
-                                    fill="#D6D6DA"
+                                    fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
                                     stroke="#FFFFFF"
                                     strokeWidth={1}
                                     onMouseEnter={() => {

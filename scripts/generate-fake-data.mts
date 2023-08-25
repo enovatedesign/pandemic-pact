@@ -130,6 +130,14 @@ writeToDistJsonFile(
     ])),
 )
 
+writeToDistJsonFile(
+    'grants-by-country-of-research-card.json',
+    completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
+        'GrantID',
+        'ResearchInstitutionCountry',
+    ])),
+)
+
 fs.ensureDirSync(`${distDirectory}/grants`)
 
 writeToDistJsonFile(
