@@ -1,8 +1,13 @@
+import {useState} from 'react'
 import {Flex, Card, Title, } from "@tremor/react"
-import {ComposableMap, Geographies, Geography, Graticule, Sphere} from 'react-simple-maps'
+import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
+import {Tooltip} from 'react-tooltip'
+
 import countriesGeoJson from '../data/source/geojson/countries.json'
 
 export default function GrantsByCountryWhereResearchWasConducted() {
+    const [tooltipContent, setTooltipContent] = useState('')
+
     return (
         <Card>
             <Flex
@@ -34,12 +39,27 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                                     fill="#D6D6DA"
                                     stroke="#FFFFFF"
                                     strokeWidth={1}
+                                    onMouseEnter={() => {
+                                        setTooltipContent(geo.properties.NAME);
+                                    }}
+                                    onMouseLeave={() => {
+                                        setTooltipContent('');
+                                    }}
+                                    data-tooltip-id="country-tooltip"
                                 />
                             ))
                         }
                     </Geographies>
                 </ComposableMap>
+
             </Flex>
+
+            <Tooltip
+                id="country-tooltip"
+                float={true}
+                content={tooltipContent}
+                isOpen={tooltipContent !== ''}
+            />
         </Card>
     )
 }
