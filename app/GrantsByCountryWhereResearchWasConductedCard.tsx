@@ -20,12 +20,10 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                 <ComposableMap
                     projection="geoMercator"
                     projectionConfig={{
-                        scale: 130,
+                        scale: 110,
+                        center: [0, 40],
                     }}
-                    style={{
-                        borderRadius: 4,
-                        border: "1px solid #D6D6DA",
-                    }}
+                    height={500}
                 >
                     <Geographies geography={countriesGeoJson}>
                         {({geographies}) =>
