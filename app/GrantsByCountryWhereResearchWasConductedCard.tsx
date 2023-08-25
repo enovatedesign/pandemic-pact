@@ -57,9 +57,10 @@ export default function GrantsByCountryWhereResearchWasConducted() {
             <Tooltip
                 id="country-tooltip"
                 float={true}
-                content={tooltipContent}
                 isOpen={tooltipContent !== ''}
-            />
+            >
+                {tooltipContent}
+            </Tooltip>
         </Card>
     )
 }
