@@ -8,8 +8,14 @@ deploy_preview:
   script:
     - npm install --global vercel
     - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-    - vercel deploy --token=$VERCEL_TOKEN > deployment-url.txt
-    - cat deployment-url.txt
+    - vercel deploy --token=$VERCEL_TOKEN | sed -e 's/^/DYNAMIC_ENVIRONMENT_URL=/' > deploy.env
+  artifacts:
+    reports:
+      dotenv: deploy.env
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: $DYNAMIC_ENVIRONMENT_URL
+    on_stop: stop_review
 
 deploy_production:
   stage: deploy
@@ -18,5 +24,10 @@ deploy_production:
   script:
     - npm install --global vercel
     - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-    - vercel deploy --token=$VERCEL_TOKEN > deployment-url.txt
-    - cat deployment-url.txt
+    - vercel deploy --prod --token=$VERCEL_TOKEN | sed -e 's/^/DYNAMIC_ENVIRONMENT_URL=/' > deploy.env
+  artifacts:
+    reports:
+      dotenv: deploy.env
+  environment:
+    name: production
+    url: $DYNAMIC_ENVIRONMENT_URL
