@@ -15,7 +15,6 @@ deploy_preview:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: $DYNAMIC_ENVIRONMENT_URL
-    on_stop: stop_review
 
 deploy_production:
   stage: deploy
