@@ -47,12 +47,14 @@ addDocumentsToSearchIndex()
 async function addDocumentsToSearchIndex() {
     // Don't try to add the search index if MeiliSearch is not configured
     if (typeof process.env['MEILISEARCH_HOST'] === 'undefined') {
-        return;
+        return
     }
+
+    const masterApiKey = process.env['MEILISEARCH_MASTER_API_KEY']
 
     const client = new MeiliSearch({
         host: process.env['MEILISEARCH_HOST'] || 'http://localhost:7700',
-        apiKey: process.env['MEILISEARCH_MASTER_API_KEY'],
+        apiKey: masterApiKey,
     })
 
     // Create index for regular grant free text search
@@ -90,6 +92,20 @@ async function addDocumentsToSearchIndex() {
 
     console.log(chalk.blue(`Triggered task '${exportResponse.taskUid}' [status: ${exportResponse.status}] to add ${data.length} documents to search index '${exportResponse.indexUid}'`))
 
+    // Get the Default Search API Key from Meilisearch if a Master Key is configured
+
+    let searchApiKey = ''
+
+    if (masterApiKey) {
+        const keys = await client.getKeys()
+
+        const key = keys.results.find(key => key.name === 'Default Search API Key')
+
+        if (key) {
+            searchApiKey = key.key
+        }
+    }
+
     // Remove existing NEXT_PUBLIC_MEILISEARCH_* environment variables from .env.local
 
     const env = fs.readFileSync('./.env.local', 'utf8')
@@ -105,7 +121,7 @@ async function addDocumentsToSearchIndex() {
     nextPublicEnv = nextPublicEnv.concat(
         ``,
         `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env['MEILISEARCH_HOST']}`,
-        `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=`,
+        `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
     )
 
     fs.writeFileSync('./.env.local', nextPublicEnv)
