@@ -1,19 +1,27 @@
 import {useState} from 'react'
-import {Flex, Card, Title, } from "@tremor/react"
+import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
-import {scaleLinear} from "d3-scale";
+import {scaleLinear} from "d3-scale"
 
 import dataset from '../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../data/source/geojson/countries.json'
+import lookupTables from '../data/source/lookup-tables.json'
 
 export default function GrantsByCountryWhereResearchWasConducted() {
     const [tooltipContent, setTooltipContent] = useState('')
+    const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
+
+    const pathogens = Object.values(lookupTables.Pathogens)
+
+    const filteredDataset = selectedPathogens.length > 0
+        ? dataset.filter(grant => selectedPathogens.includes(grant.Pathogen))
+        : dataset
 
     const filteredCountriesGeoJson = countriesGeoJson.features.map(country => {
         let properties = country.properties
 
-        properties.totalGrants = dataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
+        properties.totalGrants = filteredDataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
 
         country.properties = properties
 
@@ -29,7 +37,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
             Math.min(...allTotalGrants),
             Math.max(...allTotalGrants),
         ])
-        .range(["#3b82f6", "#dbeafe"]);
+        .range(["#3b82f6", "#dbeafe"])
 
     return (
         <Card>
@@ -43,6 +51,29 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                     alignItems="center"
                 >
                     <Title>Grants By Country Where Research Was Conducted</Title>
+                    <Text>Total Grants: {dataset.length}</Text>
+                </Flex>
+
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
+                >
+                    <MultiSelect
+                        value={selectedPathogens}
+                        onValueChange={setSelectedPathogens}
+                        placeholder="Select pathogens..."
+                        className="max-w-xs"
+                    >
+                        {pathogens.map((pathogenName) => (
+                            <MultiSelectItem key={pathogenName} value={pathogenName}>
+                                {pathogenName}
+                            </MultiSelectItem>
+                        ))}
+                    </MultiSelect>
+
+                    {selectedPathogens.length > 0 &&
+                        <Text>Filtered Grants: {filteredDataset.length}</Text>
+                    }
                 </Flex>
 
                 <ComposableMap
@@ -63,10 +94,10 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                                     stroke="#FFFFFF"
                                     strokeWidth={1}
                                     onMouseEnter={() => {
-                                        setTooltipContent(geo.properties.NAME);
+                                        setTooltipContent(geo.properties.NAME)
                                     }}
                                     onMouseLeave={() => {
-                                        setTooltipContent('');
+                                        setTooltipContent('')
                                     }}
                                     data-tooltip-id="country-tooltip"
                                 />

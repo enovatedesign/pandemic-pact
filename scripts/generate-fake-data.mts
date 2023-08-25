@@ -135,6 +135,7 @@ writeToDistJsonFile(
     completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
         'GrantID',
         'ResearchInstitutionCountry',
+        'Pathogen',
     ])),
 )
 
