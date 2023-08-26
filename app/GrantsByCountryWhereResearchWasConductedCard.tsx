@@ -94,7 +94,12 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                                     stroke="#FFFFFF"
                                     strokeWidth={1}
                                     onMouseEnter={() => {
-                                        setTooltipContent(geo.properties.NAME)
+                                        setTooltipContent(`
+                                            <div>
+                                                <p class="font-bold">${geo.properties.NAME}</p>
+                                                <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
+                                            </div>
+                                        `)
                                     }}
                                     onMouseLeave={() => {
                                         setTooltipContent('')
@@ -112,8 +117,12 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                 id="country-tooltip"
                 float={true}
                 isOpen={tooltipContent !== ''}
+                noArrow={true}
+                place="right-start"
+                offset={10}
+                className="!px-3 !py-2 text-left"
             >
-                {tooltipContent}
+                <div dangerouslySetInnerHTML={{__html: tooltipContent}} />
             </Tooltip>
         </Card>
     )
