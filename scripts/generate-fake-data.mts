@@ -21,7 +21,7 @@ const funders = fs.readJsonSync('./data/source/funders.json').map((funderName: s
     }
 })
 
-const researchInstitutions = _.range(25).map(() => {
+const researchInstitutions = _.range(200).map(() => {
     return {
         "ResearchInstitutionName": faker.company.name(),
         "ResearchInstitutionCountry": faker.location.countryCode('alpha-2'),
@@ -127,6 +127,15 @@ writeToDistJsonFile(
         'Ethnicity',
         'AgeGroups',
         'Rurality',
+    ])),
+)
+
+writeToDistJsonFile(
+    'grants-by-country-of-research-card.json',
+    completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
+        'GrantID',
+        'ResearchInstitutionCountry',
+        'Pathogen',
     ])),
 )
 
