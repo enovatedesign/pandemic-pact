@@ -14,18 +14,21 @@ export default function VisualiseTabPanel() {
                 className="mt-6 gap-4"
             >
                 <Col numColSpan={12}>
+                    <GrantsByResearchCategoryCard />
+                </Col>
+
+                <Col numColSpan={12}>
                     <GrantsByCountryWhereResearchWasConductedCard />
                 </Col>
 
                 <Col numColSpan={12}>
-                    <GrantsByResearchCategoryCard />
-                </Col>
-                <Col numColSpan={12}>
                     <AmountSpentOnEachResearchCategoryOverTimeCard />
                 </Col>
+
                 <Col numColSpan={5}>
                     <GrantsByRegionCard />
                 </Col>
+
                 <Col numColSpan={7}>
                     <GrantsByMeshClassificationCard />
                 </Col>
