@@ -18,8 +18,12 @@ export default function GrantsByCountryWhereResearchWasConducted() {
         ? dataset.filter(grant => selectedPathogens.includes(grant.Pathogen))
         : dataset
 
-    const filteredCountriesGeoJson = countriesGeoJson.features.map(country => {
-        let properties = country.properties
+    const geojson: any = countriesGeoJson
+
+    let filteredCountriesGeoJson = geojson
+
+    filteredCountriesGeoJson.features = filteredCountriesGeoJson.features.map((country: any) => {
+        let properties: any = country.properties
 
         properties.totalGrants = filteredDataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
 
@@ -29,10 +33,11 @@ export default function GrantsByCountryWhereResearchWasConducted() {
     })
 
     const allTotalGrants = filteredCountriesGeoJson
-        .filter(country => country.properties.totalGrants)
-        .map(country => country.properties.totalGrants)
+        .features
+        .filter((country: any) => country.properties.totalGrants)
+        .map((country: any) => country.properties.totalGrants)
 
-    const colorScale = scaleLinear()
+    const colorScale = scaleLinear<string>()
         .domain([
             Math.min(...allTotalGrants),
             Math.max(...allTotalGrants),
@@ -84,7 +89,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                     }}
                     height={500}
                 >
-                    <Geographies geography={countriesGeoJson}>
+                    <Geographies geography={geojson}>
                         {({geographies}) =>
                             geographies.map((geo) => (
                                 <Geography
