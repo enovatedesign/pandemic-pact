@@ -8,7 +8,7 @@ interface Props {
     filename: string
 }
 
-export default function DownloadSvgAsPngButton({selector, filename}: Props) {
+export default function DownloadElementAsPngButton({selector, filename}: Props) {
     const [exportingImage, setExportingImage] = useState(false)
 
     const exportImage = () => {
