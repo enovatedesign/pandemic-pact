@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {Button} from '@tremor/react'
-import {DownloadIcon} from "@heroicons/react/solid"
+import {PhotographIcon} from "@heroicons/react/solid"
 import html2canvas from 'html2canvas';
 
 interface Props {
@@ -37,7 +37,7 @@ export default function DownloadElementAsPngButton({selector, filename}: Props) 
 
     return (
         <Button
-            icon={DownloadIcon}
+            icon={PhotographIcon}
             loading={exportingImage}
             disabled={exportingImage}
             onClick={exportImage}
