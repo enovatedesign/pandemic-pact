@@ -1,6 +1,6 @@
 import {utils, writeFile} from 'xlsx'
 
-export default async function exportToXlsx(filename: string, hits: any[]) {
+export default async function exportToCsv(filename: string, hits: any[]) {
     const worksheet = utils.json_to_sheet(hits)
 
     const workbook = utils.book_new()

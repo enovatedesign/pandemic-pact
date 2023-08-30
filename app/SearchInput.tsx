@@ -5,7 +5,7 @@ import {type SearchResults} from './types/search-results'
 import {type StringDictionary} from '../scripts/types/dictionary'
 import lookupTables from '../data/source/lookup-tables.json'
 import meilisearchRequest from './helpers/meilisearch-request'
-import exportToXlsx from "./helpers/export-to-xlsx"
+import exportToCsv from "./helpers/export-to-csv"
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')
@@ -63,7 +63,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         const limit = 100_000 // TODO determine this based on number of generated grants in complete dataset?
 
         doMeilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
-            exportToXlsx('pandemic-pact-results-export', data.hits)
+            exportToCsv('pandemic-pact-results-export', data.hits)
             setExportingResults(false)
         }).catch((error) => {
             console.error('Error:', error)
@@ -147,7 +147,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                     disabled={exportingResults || totalHits === 0}
                     onClick={exportResults}
                 >
-                    Export Results To XLSX
+                    Export Results To CSV
                 </Button>
             </Col>
         </Grid>

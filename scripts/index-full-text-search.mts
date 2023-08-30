@@ -74,7 +74,7 @@ async function addDocumentsToSearchIndex() {
 
     console.log(chalk.blue(`Triggered task '${response.taskUid}' [status: ${response.status}] to add ${documents.length} documents to search index '${response.indexUid}'`))
 
-    // Create index with complete dataset for exporting to CSV/XLSX
+    // Create index with complete dataset for exporting to CSV
 
     const exportIndexName = 'exports'
 

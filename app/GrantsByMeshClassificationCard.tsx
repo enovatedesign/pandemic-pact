@@ -3,7 +3,7 @@ import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryB
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import meilisearchRequest from './helpers/meilisearch-request'
-import exportToXlsx from "./helpers/export-to-xlsx"
+import exportToCsv from "./helpers/export-to-csv"
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
@@ -57,7 +57,7 @@ export default function GrantsByResearchCategoryCard() {
         }
 
         meilisearchRequest('exports', body).then(data => {
-            exportToXlsx('pandemic-pact-grants-by-region-export', data.hits)
+            exportToCsv('pandemic-pact-grants-by-region-export', data.hits)
             setExportingResults(false)
         }).catch((error) => {
             console.error('Error:', error)
@@ -128,7 +128,7 @@ export default function GrantsByResearchCategoryCard() {
                     disabled={exportingResults}
                     onClick={exportResults}
                 >
-                    Export Results To XLSX
+                    Export Results To CSV
                 </Button>
             </Flex>
         </Card>
