@@ -6,6 +6,7 @@ import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
 import exportToCsv from "./helpers/export-to-csv"
 import {groupBy} from 'lodash'
+import DownloadSvgAsPngButton from "./DownloadSvgAsPngButton"
 
 import funders from '../data/source/funders.json'
 import lookupTables from '../data/source/lookup-tables.json'
@@ -83,7 +84,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
 
     return (
         <Card
-            className="flex flex-col gap-y-6"
+            className="flex flex-col gap-y-6 amount-spent-on-each-research-category-over-time-card"
         >
             <Flex
                 justifyContent="between"
@@ -153,14 +154,25 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     </TabList>
                 </TabGroup>
 
-                <Button
-                    icon={DownloadIcon}
-                    loading={exportingResults}
-                    disabled={exportingResults}
-                    onClick={exportResults}
+                <Flex
+                    justifyContent="end"
+                    alignItems="center"
+                    className="gap-x-2"
                 >
-                    Export Results To CSV
-                </Button>
+                    <DownloadSvgAsPngButton
+                        selector=".amount-spent-on-each-research-category-over-time-card .recharts-surface"
+                        filename="amount-spent-on-each-research-category-over-time"
+                    />
+
+                    <Button
+                        icon={DownloadIcon}
+                        loading={exportingResults}
+                        disabled={exportingResults}
+                        onClick={exportResults}
+                    >
+                        Export Results To CSV
+                    </Button>
+                </Flex>
             </Flex>
         </Card>
     )
