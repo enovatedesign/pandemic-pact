@@ -1,6 +1,7 @@
 import {useState} from "react"
 import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
+import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 import {type StringDictionary} from "../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from './helpers/meilisearch-request'
@@ -101,7 +102,9 @@ export default function GrantsByResearchCategoryCard() {
     ]
 
     return (
-        <Card>
+        <Card
+            id="grants-by-research-category-card"
+        >
             <Flex
                 flexDirection="col"
                 alignItems="start"
@@ -123,7 +126,7 @@ export default function GrantsByResearchCategoryCard() {
                         value={selectedFunders}
                         onValueChange={setSelectedFunders}
                         placeholder="Select funders..."
-                        className="max-w-xs"
+                        className="max-w-xs ignore-in-image-export"
                     >
                         {funders.map((funderName) => (
                             <MultiSelectItem key={funderName} value={funderName}>
@@ -198,6 +201,7 @@ export default function GrantsByResearchCategoryCard() {
                 <Flex
                     justifyContent="between"
                     alignItems="center"
+                    className="ignore-in-image-export"
                 >
                     <TabGroup
                         index={selectedTabIndex}
@@ -209,14 +213,26 @@ export default function GrantsByResearchCategoryCard() {
                         </TabList>
                     </TabGroup>
 
-                    <Button
-                        icon={DownloadIcon}
-                        loading={exportingResults}
-                        disabled={exportingResults}
-                        onClick={exportResults}
+
+                    <Flex
+                        justifyContent="end"
+                        alignItems="center"
+                        className="gap-x-2"
                     >
-                        Export Results To CSV
-                    </Button>
+                        <DownloadElementAsPngButton
+                            selector="#grants-by-research-category-card"
+                            filename="grants-by-research-category"
+                        />
+
+                        <Button
+                            icon={DownloadIcon}
+                            loading={exportingResults}
+                            disabled={exportingResults}
+                            onClick={exportResults}
+                        >
+                            Export Results To CSV
+                        </Button>
+                    </Flex>
                 </Flex>
             </Flex>
         </Card>

@@ -16,8 +16,6 @@ export default function DownloadElementAsPngButton({selector, filename}: Props) 
 
         const element = document.querySelector(selector)
 
-        console.log(element);
-
         const ignoreElements = element => element.classList.contains('ignore-in-image-export')
 
         html2canvas(element, {ignoreElements}).then(canvas => {
