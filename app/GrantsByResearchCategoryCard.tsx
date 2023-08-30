@@ -75,7 +75,7 @@ export default function GrantsByResearchCategoryCard() {
         }
 
         meilisearchRequest('exports', body).then(data => {
-            exportToXlsx('pandemic-pact-grants-by-research-category-export.xlsx', data.hits)
+            exportToXlsx('pandemic-pact-grants-by-research-category-export', data.hits)
             setExportingResults(false)
         }).catch((error) => {
             console.error('Error:', error)

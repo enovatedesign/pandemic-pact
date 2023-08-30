@@ -63,7 +63,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         const limit = 100_000 // TODO determine this based on number of generated grants in complete dataset?
 
         doMeilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
-            exportToXlsx('pandemic-pact-results-export.xlsx', data.hits)
+            exportToXlsx('pandemic-pact-results-export', data.hits)
             setExportingResults(false)
         }).catch((error) => {
             console.error('Error:', error)

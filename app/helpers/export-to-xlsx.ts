@@ -7,5 +7,5 @@ export default async function exportToXlsx(filename: string, hits: any[]) {
 
     XLSX.utils.book_append_sheet(workbook, worksheet, "Grants")
 
-    XLSX.writeFile(workbook, filename, {compression: true})
+    XLSX.writeFile(workbook, `${filename}.csv`, {bookType: 'csv'})
 }
