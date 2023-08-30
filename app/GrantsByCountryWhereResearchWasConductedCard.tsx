@@ -47,7 +47,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
 
     return (
         <Card
-            className="grants-by-country-where-research-was-conducted-card"
+            id="grants-by-country-where-research-was-conducted-card"
         >
             <Flex
                 flexDirection="col"
@@ -70,7 +70,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                         value={selectedPathogens}
                         onValueChange={setSelectedPathogens}
                         placeholder="Select pathogens..."
-                        className="max-w-xs"
+                        className="max-w-xs ignore-in-image-export"
                     >
                         {pathogens.map((pathogenName) => (
                             <MultiSelectItem key={pathogenName} value={pathogenName}>
@@ -124,10 +124,10 @@ export default function GrantsByCountryWhereResearchWasConducted() {
             <Flex
                 justifyContent="end"
                 alignItems="center"
-                className="gap-x-2"
+                className="gap-x-2 ignore-in-image-export"
             >
                 <DownloadSvgAsPngButton
-                    selector=".grants-by-country-where-research-was-conducted-card .rsm-svg"
+                    selector="#grants-by-country-where-research-was-conducted-card"
                     filename="grants-by-country-where-research-was-conducted"
                 />
             </Flex>

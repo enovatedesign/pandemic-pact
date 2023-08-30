@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Button} from '@tremor/react'
 import {DownloadIcon} from "@heroicons/react/solid"
-import d3ToPng from 'd3-svg-to-png'
+import html2canvas from 'html2canvas';
 
 interface Props {
     selector: string
@@ -14,12 +14,25 @@ export default function DownloadSvgAsPngButton({selector, filename}: Props) {
     const exportImage = () => {
         setExportingImage(true)
 
-        console.log(document.querySelector(selector))
+        const element = document.querySelector(selector)
 
-        d3ToPng(selector, filename, {
-            download: true,
-            background: 'white',
-        }).then(fileData => {
+        console.log(element);
+
+        const ignoreElements = element => element.classList.contains('ignore-in-image-export')
+
+        html2canvas(element, {ignoreElements}).then(canvas => {
+            const png = canvas.toDataURL('image/png')
+
+            // download the png to the user's computer
+
+            const link = document.createElement('a')
+
+            link.download = filename
+
+            link.href = png
+
+            link.click()
+
             setExportingImage(false)
         });
     }

@@ -84,7 +84,8 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
 
     return (
         <Card
-            className="flex flex-col gap-y-6 amount-spent-on-each-research-category-over-time-card"
+            className="flex flex-col gap-y-6"
+            id="amount-spent-on-each-research-category-over-time-card"
         >
             <Flex
                 justifyContent="between"
@@ -97,6 +98,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
             <Flex
                 justifyContent="between"
                 alignItems="center"
+                className="ignore-in-image-export"
             >
                 <MultiSelect
                     value={selectedFunders}
@@ -143,6 +145,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
             <Flex
                 justifyContent="between"
                 alignItems="center"
+                className="ignore-in-image-export"
             >
                 <TabGroup
                     index={selectedTabIndex}
@@ -160,7 +163,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     className="gap-x-2"
                 >
                     <DownloadSvgAsPngButton
-                        selector=".amount-spent-on-each-research-category-over-time-card .recharts-surface"
+                        selector="#amount-spent-on-each-research-category-over-time-card"
                         filename="amount-spent-on-each-research-category-over-time"
                     />
 
