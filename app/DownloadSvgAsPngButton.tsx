@@ -4,8 +4,8 @@ import {DownloadIcon} from "@heroicons/react/solid"
 import d3ToPng from 'd3-svg-to-png'
 
 interface Props {
-    selector: string;
-    filename: string;
+    selector: string
+    filename: string
 }
 
 export default function DownloadSvgAsPngButton({selector, filename}: Props) {
@@ -14,9 +14,11 @@ export default function DownloadSvgAsPngButton({selector, filename}: Props) {
     const exportImage = () => {
         setExportingImage(true)
 
+        console.log(document.querySelector(selector))
+
         d3ToPng(selector, filename, {
             download: true,
-            background: 'white'
+            background: 'white',
         }).then(fileData => {
             setExportingImage(false)
         });

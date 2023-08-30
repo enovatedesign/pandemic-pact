@@ -3,6 +3,7 @@ import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/rea
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
+import DownloadSvgAsPngButton from "./DownloadSvgAsPngButton"
 
 import dataset from '../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../data/source/geojson/ne_110m_admin_0_countries.json'
@@ -45,7 +46,9 @@ export default function GrantsByCountryWhereResearchWasConducted() {
         .range(["#3b82f6", "#dbeafe"])
 
     return (
-        <Card>
+        <Card
+            className="grants-by-country-where-research-was-conducted-card"
+        >
             <Flex
                 flexDirection="col"
                 alignItems="start"
@@ -115,7 +118,18 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                         }
                     </Geographies>
                 </ComposableMap>
+            </Flex>
 
+
+            <Flex
+                justifyContent="end"
+                alignItems="center"
+                className="gap-x-2"
+            >
+                <DownloadSvgAsPngButton
+                    selector=".grants-by-country-where-research-was-conducted-card .rsm-svg"
+                    filename="grants-by-country-where-research-was-conducted"
+                />
             </Flex>
 
             <Tooltip
