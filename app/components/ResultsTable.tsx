@@ -1,6 +1,6 @@
 import Link from "next/link"
 import {Button, Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
-import {type SearchResults} from "./types/search-results"
+import {type SearchResults} from "../types/search-results"
 
 export default function ResultsTable({searchResults}: {searchResults: SearchResults}) {
     return (

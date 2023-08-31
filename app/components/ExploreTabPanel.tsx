@@ -2,7 +2,7 @@ import {useState} from "react"
 import {TabPanel, Grid, Col} from "@tremor/react"
 import SearchInput from "./SearchInput"
 import ResultsTable from "./ResultsTable"
-import {type SearchResults} from './types/search-results'
+import {type SearchResults} from '../types/search-results'
 
 export default function ExploreTabPanel() {
     const [searchResults, setSearchResults] = useState<SearchResults>([])
