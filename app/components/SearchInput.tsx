@@ -1,11 +1,11 @@
 import {useCallback, useEffect, useState} from 'react'
 import {Button, Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {DownloadIcon, SearchIcon} from "@heroicons/react/solid"
-import {type SearchResults} from './types/search-results'
-import {type StringDictionary} from '../scripts/types/dictionary'
-import lookupTables from '../data/source/lookup-tables.json'
-import meilisearchRequest from './helpers/meilisearch-request'
-import exportToCsv from "./helpers/export-to-csv"
+import {type SearchResults} from '../types/search-results'
+import {type StringDictionary} from '../../scripts/types/dictionary'
+import lookupTables from '../../data/source/lookup-tables.json'
+import meilisearchRequest from '../helpers/meilisearch-request'
+import exportToCsv from "../helpers/export-to-csv"
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')

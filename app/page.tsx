@@ -7,11 +7,16 @@ import {
     TabPanels,
 } from "@tremor/react"
 
-import VisualiseTabPanel from "./VisualiseTabPanel"
-import ExploreTabPanel from "./ExploreTabPanel"
+import VisualiseTabPanel from "./components/VisualiseTabPanel"
+import ExploreTabPanel from "./components/ExploreTabPanel"
+import Layout from "./components/Layout"
 
-export default function Home() {
-    return (
+const SidebarContent = () => (
+    <></>
+)
+
+const Home = () => (
+    <Layout sidebarContent={<SidebarContent/>}>
         <TabGroup className="mt-6">
             <TabList>
                 <Tab>Visualise</Tab>
@@ -23,5 +28,7 @@ export default function Home() {
                 <ExploreTabPanel />
             </TabPanels>
         </TabGroup>
-    )
-}
+    </Layout>
+)
+
+export default Home
