@@ -14,7 +14,11 @@ import Layout from "./components/Layout"
 const SidebarContent = () => <></>
 
 const Home = () => (
-    <Layout sidebarContent={<SidebarContent/>}>
+    <Layout 
+        title="Pandemic PACT Tracker"
+        summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+        sidebarContent={<SidebarContent/>}
+    >
         <TabGroup className="mt-6">
             <TabList>
                 <Tab>Visualise</Tab>
