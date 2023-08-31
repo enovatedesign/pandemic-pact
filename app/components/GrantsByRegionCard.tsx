@@ -1,13 +1,13 @@
 import {useState} from "react"
 import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, DonutChart} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
-import {type StringDictionary} from "../scripts/types/dictionary"
-import meilisearchRequest from './helpers/meilisearch-request'
-import exportToCsv from "./helpers/export-to-csv"
+import {type StringDictionary} from "../../scripts/types/dictionary"
+import meilisearchRequest from '../helpers/meilisearch-request'
+import exportToCsv from "../helpers/export-to-csv"
 
-import funders from '../data/source/funders.json'
-import lookupTables from '../data/source/lookup-tables.json'
-import dataset from '../data/dist/grants-by-region-card.json'
+import funders from '../../data/source/funders.json'
+import lookupTables from '../../data/source/lookup-tables.json'
+import dataset from '../../data/dist/grants-by-region-card.json'
 
 export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
