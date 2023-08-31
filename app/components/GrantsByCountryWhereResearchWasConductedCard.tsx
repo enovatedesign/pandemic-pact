@@ -5,9 +5,9 @@ import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
 import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 
-import dataset from '../data/dist/grants-by-country-of-research-card.json'
-import countriesGeoJson from '../data/source/geojson/ne_110m_admin_0_countries.json'
-import lookupTables from '../data/source/lookup-tables.json'
+import dataset from '../../data/dist/grants-by-country-of-research-card.json'
+import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
+import lookupTables from '../../data/source/lookup-tables.json'
 
 export default function GrantsByCountryWhereResearchWasConducted() {
     const [tooltipContent, setTooltipContent] = useState('')

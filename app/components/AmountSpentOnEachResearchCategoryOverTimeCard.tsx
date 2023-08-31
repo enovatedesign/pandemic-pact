@@ -1,16 +1,16 @@
 import {useState} from "react"
 import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {DownloadIcon, PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import {type StringDictionary} from "../scripts/types/dictionary"
+import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import meilisearchRequest from './helpers/meilisearch-request'
-import exportToCsv from "./helpers/export-to-csv"
+import meilisearchRequest from '../helpers/meilisearch-request'
+import exportToCsv from "../helpers/export-to-csv"
 import {groupBy} from 'lodash'
 import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 
-import funders from '../data/source/funders.json'
-import lookupTables from '../data/source/lookup-tables.json'
-import dataset from '../data/dist/amount-spent-on-each-research-category-over-time-card.json'
+import funders from '../../data/source/funders.json'
+import lookupTables from '../../data/source/lookup-tables.json'
+import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
