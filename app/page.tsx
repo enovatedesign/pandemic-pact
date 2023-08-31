@@ -11,9 +11,7 @@ import VisualiseTabPanel from "./components/VisualiseTabPanel"
 import ExploreTabPanel from "./components/ExploreTabPanel"
 import Layout from "./components/Layout"
 
-const SidebarContent = () => (
-    <></>
-)
+const SidebarContent = () => <></>
 
 const Home = () => (
     <Layout sidebarContent={<SidebarContent/>}>

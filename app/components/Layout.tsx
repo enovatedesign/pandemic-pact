@@ -33,17 +33,19 @@ const Layout = ({ sidebarContent, children }: SidebarProps) => {
     return (
         <>
             {sidebarContent &&
-                <aside className="flex flex-col space-y-6 p-6 bg-blue-500 text-white h-screen">
-                    <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        <span className="sr-only">Menu</span>
-                        <MenuIcon className="h-8 w-8" aria-hidden="true" />
-                    </button>
+                <aside className="relative">
+                    <div className="sticky top-0 flex flex-col bg-blue-500 text-white h-screen">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
+                            <span className="sr-only">Menu</span>
+                            <MenuIcon className="h-8 w-8" aria-hidden="true" />
+                        </button>
 
-                    <animated.div style={widthAnimationProps}>
-                        <animated.div style={opacityAnimationProps}>
-                            {sidebarContent}
+                        <animated.div className="grow pb-6 px-6 overflow-y-auto" style={widthAnimationProps}>
+                            <animated.div style={opacityAnimationProps}>
+                                {sidebarContent}
+                            </animated.div>
                         </animated.div>
-                    </animated.div>
+                    </div>
                 </aside>
             }
 
