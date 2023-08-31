@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, MultiSelect, MultiSelectItem, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import DownloadElementAsPngButton from "../DownloadElementAsPngButton"
+import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from '../helpers/meilisearch-request'

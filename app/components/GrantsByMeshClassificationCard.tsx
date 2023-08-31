@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
-import DownloadElementAsPngButton from "../DownloadElementAsPngButton"
+import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 import meilisearchRequest from '../helpers/meilisearch-request'
 import exportToCsv from "../helpers/export-to-csv"
 
