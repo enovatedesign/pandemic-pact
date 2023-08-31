@@ -14,9 +14,14 @@ export default function DownloadElementAsPngButton({selector, filename}: Props) 
     const exportImage = () => {
         setExportingImage(true)
 
-        const element = document.querySelector(selector)
+        const element: HTMLElement | null = document.querySelector(selector)
 
-        const ignoreElements = element => element.classList.contains('ignore-in-image-export')
+        if (element === null) {
+            console.error(`DownloadElementAsPngButton: could not find element with selector ${selector}`);
+            return;
+        }
+
+        const ignoreElements = (element: Element) => element.classList.contains('ignore-in-image-export')
 
         html2canvas(element, {ignoreElements}).then(canvas => {
             const png = canvas.toDataURL('image/png')
