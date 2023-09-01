@@ -1,6 +1,7 @@
 // TODO only import the specific grant identified by `id` from the dataset if possible?
 
 import {Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
+import Layout from "../../components/Layout"
 import fs from 'fs-extra'
 
 export async function generateStaticParams() {
@@ -24,30 +25,30 @@ export default function Page({params}: {params: {id: string}}) {
     ]
 
     return (
-        <Grid numItemsLg={6} className="gap-6 mt-6">
-            <Col numColSpanLg={4}>
-                <Card className="h-full">
-                    <Title>{grant.GrantTitleEng}</Title>
+        <Layout title={grant.GrantTitleEng}>
+            <Grid numItemsLg={6} className="gap-6 mt-6">
+                <Col numColSpanLg={4}>
+                    <Card className="h-full">
+                        <Title>Abstract</Title>
+                        <Text className="mt-2">{grant.Abstract}</Text>
+                    </Card>
+                </Col>
 
-                    <Subtitle className="mt-4">Abstract</Subtitle>
-                    <Text className="mt-2">{grant.Abstract}</Text>
-                </Card>
-            </Col>
-
-            <Col numColSpanLg={2}>
-                <div className="space-y-6">
-                    {sidebarItems.map(({text, metric}, index) => (
-                        <Card key={index}>
-                            <Flex justifyContent="start" className="space-x-4">
-                                <div className="truncate">
-                                    <Text>{text}</Text>
-                                    <Metric className="truncate mt-2">{metric}</Metric>
-                                </div>
-                            </Flex>
-                        </Card>
-                    ))}
-                </div>
-            </Col>
-        </Grid>
+                <Col numColSpanLg={2}>
+                    <div className="space-y-6">
+                        {sidebarItems.map(({text, metric}, index) => (
+                            <Card key={index}>
+                                <Flex justifyContent="start" className="space-x-4">
+                                    <div className="truncate">
+                                        <Text>{text}</Text>
+                                        <Metric className="truncate mt-2">{metric}</Metric>
+                                    </div>
+                                </Flex>
+                            </Card>
+                        ))}
+                    </div>
+                </Col>
+            </Grid>
+        </Layout>
     )
 }

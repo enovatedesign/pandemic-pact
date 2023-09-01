@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
-import {type StringDictionary} from "../../scripts/types/dictionary"
+import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 import meilisearchRequest from '../helpers/meilisearch-request'
 import exportToCsv from "../helpers/export-to-csv"
 
@@ -66,7 +66,10 @@ export default function GrantsByResearchCategoryCard() {
     }
 
     return (
-        <Card className="flex flex-col gap-y-6">
+        <Card
+            className="flex flex-col gap-y-6"
+            id="grants-by-mesh-classification-card"
+        >
             <Flex
                 justifyContent="between"
                 alignItems="center"
@@ -78,6 +81,7 @@ export default function GrantsByResearchCategoryCard() {
             <Flex
                 justifyContent="between"
                 alignItems="center"
+                className="ignore-in-image-export"
             >
                 <MultiSelect
                     value={selectedFunders}
@@ -121,7 +125,14 @@ export default function GrantsByResearchCategoryCard() {
 
             <Flex
                 justifyContent="end"
+                alignItems="center"
+                className="gap-x-2 ignore-in-image-export"
             >
+                <DownloadElementAsPngButton
+                    selector="#grants-by-mesh-classification-card"
+                    filename="grant-by-mesh-classification-card"
+                />
+
                 <Button
                     icon={DownloadIcon}
                     loading={exportingResults}

@@ -1,23 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import { useSpring, animated } from '@react-spring/web'
-import { Title, Text } from '@tremor/react'
-import { MenuIcon } from '@heroicons/react/solid'
+import {useState} from 'react'
+import {useSpring, animated} from '@react-spring/web'
+import {Title, Text} from '@tremor/react'
+import {MenuIcon} from '@heroicons/react/solid'
 
 type SidebarProps = {
-    sidebarContent: React.ReactNode,
+    sidebarContent?: React.ReactNode,
     children: React.ReactNode,
     title: string,
-    summary: string,
+    summary?: string,
 }
 
-const Layout = ({ title, summary, sidebarContent, children }: SidebarProps) => {
+const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
 
-    const widthAnimationProps = useSpring({ 
+    const widthAnimationProps = useSpring({
         width: sidebarOpen ? sidebarWidth : 0,
         delay: sidebarOpen ? 0 : duration,
         config: {
@@ -25,7 +25,7 @@ const Layout = ({ title, summary, sidebarContent, children }: SidebarProps) => {
         }
     })
 
-    const opacityAnimationProps = useSpring({ 
+    const opacityAnimationProps = useSpring({
         opacity: sidebarOpen ? 1 : 0,
         delay: sidebarOpen ? duration : 0,
         config: {
