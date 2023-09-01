@@ -24,7 +24,11 @@ export default async function meilisearchRequest(index: string, body: any) {
         headers['Authorization'] = `Bearer ${apiKey}`
     }
 
-    return fetch(`${host}/indexes/${index}/search`, {
+    const indexName = process.env.NEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX ?
+        `${process.env.NEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX}-${index}` :
+        index
+
+    return fetch(`${host}/indexes/${indexName}/search`, {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
