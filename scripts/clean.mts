@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import {MeiliSearch} from 'meilisearch'
 import fs from 'fs-extra'
 import chalk from 'chalk'
+import getMeilisearchIndexName from './utils/getMeilisearchIndexName.mjs'
 
 dotenv.config({path: './.env.local'})
 
@@ -33,7 +34,9 @@ async function removeSearchIndexes() {
 }
 
 async function removeSearchIndex(indexName: string) {
-    const index = client.index(indexName)
+    const name = getMeilisearchIndexName(indexName)
+
+    const index = client.index(name)
 
     const response = await index.delete()
 
