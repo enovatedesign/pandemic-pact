@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import chalk from 'chalk'
 import {StringDictionary} from './types/dictionary'
+import getMeilisearchIndexName from './utils/getMeilisearchIndexName.mjs'
 
 dotenv.config({path: './.env.local'})
 
@@ -59,7 +60,7 @@ async function addDocumentsToSearchIndex() {
 
     // Create index for regular grant free text search
 
-    const indexName = 'grants'
+    const indexName = getMeilisearchIndexName('grants')
 
     const index = client.index(indexName)
 
@@ -76,7 +77,7 @@ async function addDocumentsToSearchIndex() {
 
     // Create index with complete dataset for exporting to CSV
 
-    const exportIndexName = 'exports'
+    const exportIndexName = getMeilisearchIndexName('exports')
 
     const exportIndex = client.index(exportIndexName)
 
