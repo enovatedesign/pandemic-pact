@@ -25,13 +25,11 @@ export default function Page({params}: {params: {id: string}}) {
     ]
 
     return (
-        <Layout>
+        <Layout title={grant.GrantTitleEng}>
             <Grid numItemsLg={6} className="gap-6 mt-6">
                 <Col numColSpanLg={4}>
                     <Card className="h-full">
-                        <Title>{grant.GrantTitleEng}</Title>
-
-                        <Subtitle className="mt-4">Abstract</Subtitle>
+                        <Title>Abstract</Title>
                         <Text className="mt-2">{grant.Abstract}</Text>
                     </Card>
                 </Col>
