@@ -9,7 +9,7 @@ type SidebarProps = {
     sidebarContent?: React.ReactNode,
     children: React.ReactNode,
     title: string,
-    summary: string,
+    summary?: string,
 }
 
 const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
