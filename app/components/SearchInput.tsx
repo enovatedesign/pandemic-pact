@@ -17,7 +17,12 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const doMeilisearchFetch = useCallback(
         async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
             const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
-                {q: searchQuery},
+                {
+                    q: searchQuery,
+                    attributesToHighlight: ['GrantTitleEng'],
+                    highlightPreTag: "<strong>",
+                    highlightPostTag: "</strong>",
+                },
                 additionalOptions,
             )
 
