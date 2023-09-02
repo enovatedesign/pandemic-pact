@@ -134,6 +134,7 @@ async function addDocumentsToSearchIndex() {
     nextPublicEnv = nextPublicEnv.concat(
         `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env['MEILISEARCH_HOST']}`,
         `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
+        `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env['MEILISEARCH_INDEX_PREFIX']}`,
     )
 
     fs.writeFileSync('./.env.local', nextPublicEnv)
