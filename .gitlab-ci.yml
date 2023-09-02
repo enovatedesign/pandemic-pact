@@ -20,14 +20,11 @@ deploy_preview:
 stop_preview:
   stage: deploy
   script:
-    - npm install
-    - npm run clean
+    - ./ci/delete-search-indexes.sh
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
   when: manual
-  variables:
-    MEILISEARCH_INDEX_PREFIX: $CI_COMMIT_REF_NAME
 
 deploy_production:
   stage: deploy
