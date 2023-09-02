@@ -15,6 +15,19 @@ deploy_preview:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: $DYNAMIC_ENVIRONMENT_URL
+    on_stop: stop_preview
+
+stop_preview:
+  stage: deploy
+  script:
+    - npm install
+    - npm run clean
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  variables:
+    MEILISEARCH_INDEX_PREFIX: $CI_COMMIT_REF_NAME
 
 deploy_production:
   stage: deploy
