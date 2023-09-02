@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import chalk from 'chalk'
 import {StringDictionary} from './types/dictionary'
-import {getMeilisearchIndexPrefix, getMeilisearchIndexName} from './utils/meilisearch.mjs'
+import {getMeilisearchIndexName} from './helpers/meilisearch.mjs'
 
 dotenv.config({path: './.env.local'})
 
@@ -107,9 +107,6 @@ async function addDocumentsToSearchIndex() {
         }
     }
 
-    // Set the prefix env, falling back to the Git branch name from Vercel's System Environment Variables
-    const prefix = getMeilisearchIndexPrefix()
-
     // If `.env.local` doesn't exist, create it and add the NEXT_PUBLIC_MEILISEARCH_* environment variables to it
     if (!fs.existsSync('./.env.local')) {
         fs.writeFileSync(
@@ -117,7 +114,7 @@ async function addDocumentsToSearchIndex() {
             ''.concat(
                 `NEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
                 `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
-                `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${prefix}`,
+                `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
             )
         )
 
@@ -141,7 +138,7 @@ async function addDocumentsToSearchIndex() {
     nextPublicEnv = nextPublicEnv.concat(
         `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
         `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
-        `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${prefix}`,
+        `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
     )
 
     fs.writeFileSync('./.env.local', nextPublicEnv)

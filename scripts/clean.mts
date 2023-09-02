@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import {MeiliSearch} from 'meilisearch'
 import fs from 'fs-extra'
 import chalk from 'chalk'
-import {getMeilisearchIndexName} from './utils/meilisearch.mjs'
+import {getMeilisearchIndexName} from './helpers/meilisearch.mjs'
 
 dotenv.config({path: './.env.local'})
 

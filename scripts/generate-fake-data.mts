@@ -2,7 +2,7 @@ import fs from 'fs-extra'
 import {faker} from '@faker-js/faker'
 import _ from 'lodash'
 import chalk from 'chalk'
-import getHumanReadableFileSize from './utils/getHumanReadableFileSize.mjs'
+import getHumanReadableFileSize from './helpers/getHumanReadableFileSize.mjs'
 import {Dictionary} from './types/dictionary'
 
 // Set the seed to get consistent results each time
