@@ -1,6 +1,6 @@
 import {useState} from "react"
 import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
-import Select from "react-select"
+import Select, {type MultiValue} from "react-select"
 import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 import {type StringDictionary} from "../../scripts/types/dictionary"
@@ -12,8 +12,13 @@ import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
 
+interface Option {
+    value: string,
+    label: string,
+}
+
 export default function GrantsByResearchCategoryCard() {
-    const [selectedFunders, setSelectedFunders] = useState<object[]>([])
+    const [selectedFunders, setSelectedFunders] = useState<MultiValue<Option>>([])
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [exportingResults, setExportingResults] = useState<boolean>(false)
 
@@ -131,13 +136,12 @@ export default function GrantsByResearchCategoryCard() {
                     <Select
                         instanceId="funders"
                         value={selectedFunders}
-                        onChange={setSelectedFunders}
+                        onChange={(options: MultiValue<Option>) => {setSelectedFunders(options)}}
                         placeholder="Select funders..."
                         className="ignore-in-image-export"
                         options={funderOptions}
                         isMulti
-                    >
-                    </Select>
+                    />
 
                     {selectedFunders.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
