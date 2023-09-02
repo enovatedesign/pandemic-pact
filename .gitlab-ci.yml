@@ -28,6 +28,7 @@ stop_preview:
   when: manual
   variables:
     MEILISEARCH_INDEX_PREFIX: $CI_COMMIT_REF_NAME
+    GIT_STRATEGY: none # Prevent stop job failing when branch has already been deleted
 
 deploy_production:
   stage: deploy
