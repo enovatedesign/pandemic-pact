@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import chalk from 'chalk'
 import {StringDictionary} from './types/dictionary'
+import {getMeilisearchIndexName} from './helpers/meilisearch.mjs'
 
 dotenv.config({path: './.env.local'})
 
@@ -46,20 +47,20 @@ addDocumentsToSearchIndex()
 
 async function addDocumentsToSearchIndex() {
     // Don't try to add the search index if MeiliSearch is not configured
-    if (typeof process.env['MEILISEARCH_HOST'] === 'undefined') {
+    if (typeof process.env.MEILISEARCH_HOST === 'undefined') {
         return
     }
 
-    const masterApiKey = process.env['MEILISEARCH_MASTER_API_KEY']
+    const masterApiKey = process.env.MEILISEARCH_MASTER_API_KEY
 
     const client = new MeiliSearch({
-        host: process.env['MEILISEARCH_HOST'] || 'http://localhost:7700',
+        host: process.env.MEILISEARCH_HOST || 'http://localhost:7700',
         apiKey: masterApiKey,
     })
 
     // Create index for regular grant free text search
 
-    const indexName = 'grants'
+    const indexName = getMeilisearchIndexName('grants')
 
     const index = client.index(indexName)
 
@@ -76,7 +77,7 @@ async function addDocumentsToSearchIndex() {
 
     // Create index with complete dataset for exporting to CSV
 
-    const exportIndexName = 'exports'
+    const exportIndexName = getMeilisearchIndexName('exports')
 
     const exportIndex = client.index(exportIndexName)
 
@@ -110,7 +111,11 @@ async function addDocumentsToSearchIndex() {
     if (!fs.existsSync('./.env.local')) {
         fs.writeFileSync(
             './.env.local',
-            `NEXT_PUBLIC_MEILISEARCH_HOST=${process.env['MEILISEARCH_HOST']}\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
+            ''.concat(
+                `NEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
+                `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
+                `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
+            )
         )
 
         console.log(chalk.blue(`Added NEXT_PUBLIC_MEILISEARCH_* environment variables to new .env.local`))
@@ -131,8 +136,9 @@ async function addDocumentsToSearchIndex() {
     // Add NEXT_PUBLIC_MEILISEARCH_* environment variables to .env.local
 
     nextPublicEnv = nextPublicEnv.concat(
-        `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env['MEILISEARCH_HOST']}`,
+        `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
         `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
+        `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
     )
 
     fs.writeFileSync('./.env.local', nextPublicEnv)
