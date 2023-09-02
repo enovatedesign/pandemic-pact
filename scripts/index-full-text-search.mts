@@ -110,6 +110,8 @@ async function addDocumentsToSearchIndex() {
     // Set the prefix env, falling back to the Git branch name from Vercel's System Environment Variables
     const prefix = process.env.MEILISEARCH_INDEX_PREFIX ?? process.env.VERCEL_GIT_COMMIT_REF
 
+    console.log(chalk.blue(`Using prefix '${prefix}' for Meilisearch index names`));
+
     // If `.env.local` doesn't exist, create it and add the NEXT_PUBLIC_MEILISEARCH_* environment variables to it
     if (!fs.existsSync('./.env.local')) {
         fs.writeFileSync(
