@@ -2,7 +2,8 @@ import {useState} from 'react'
 import {Button} from '@tremor/react'
 import {DownloadIcon} from "@heroicons/react/outline"
 import {meilisearchRequest} from "../helpers/meilisearch"
-import exportToCsv from '../helpers/export-to-csv'
+import {utils, writeFile} from 'xlsx'
+
 
 interface Props {
     meilisearchRequestBody: any
@@ -16,7 +17,11 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename}: Pr
         setExportingCsv(true)
 
         meilisearchRequest('exports', meilisearchRequestBody).then(data => {
-            exportToCsv(filename, data.hits)
+            const worksheet = utils.json_to_sheet(data.hits)
+            const workbook = utils.book_new()
+            utils.book_append_sheet(workbook, worksheet, "Grants")
+            writeFile(workbook, `${filename}.csv`, {bookType: 'csv'})
+
             setExportingCsv(false)
         }).catch((error) => {
             console.error('Error:', error)
