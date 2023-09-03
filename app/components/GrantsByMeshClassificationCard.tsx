@@ -1,9 +1,7 @@
 import {useState} from "react"
-import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
-import {DownloadIcon} from "@heroicons/react/solid"
+import {Flex, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
-import meilisearchRequest from '../helpers/meilisearch-request'
-import exportToCsv from "../helpers/export-to-csv"
+import ExportToCsvButton from "./ExportToCsvButton"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -11,7 +9,6 @@ import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
 export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
-    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const filteredDataset = selectedFunders.length > 0
         ? dataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
@@ -47,22 +44,10 @@ export default function GrantsByResearchCategoryCard() {
         }
     })
 
-    const exportResults = () => {
-        setExportingResults(true)
-
-        const body = {
-            filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
-            sort: ['GrantID:asc'],
-            limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
-        }
-
-        meilisearchRequest('exports', body).then(data => {
-            exportToCsv('pandemic-pact-grants-by-region-export', data.hits)
-            setExportingResults(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingResults(false)
-        })
+    const meilisearchRequestBody = {
+        filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
+        sort: ['GrantID:asc'],
+        limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
     }
 
     return (
@@ -133,14 +118,10 @@ export default function GrantsByResearchCategoryCard() {
                     filename="grant-by-mesh-classification-card"
                 />
 
-                <Button
-                    icon={DownloadIcon}
-                    loading={exportingResults}
-                    disabled={exportingResults}
-                    onClick={exportResults}
-                >
-                    Export Results To CSV
-                </Button>
+                <ExportToCsvButton
+                    meilisearchRequestBody={meilisearchRequestBody}
+                    filename="grant-by-mesh-classification-card"
+                />
             </Flex>
         </Card>
     )
