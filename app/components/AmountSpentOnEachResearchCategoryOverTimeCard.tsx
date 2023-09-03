@@ -1,12 +1,12 @@
 import {useState} from "react"
-import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
-import {DownloadIcon, PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
+import {Flex, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
+import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import meilisearchRequest from '../helpers/meilisearch-request'
-import exportToCsv from "../helpers/export-to-csv"
+import ExportToPngButton from "./ExportToPngButton"
+import ExportToCsvButton from "./ExportToCsvButton"
+import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {groupBy} from 'lodash'
-import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -15,7 +15,6 @@ import dataset from '../../data/dist/amount-spent-on-each-research-category-over
 export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
-    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
@@ -62,24 +61,6 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
 
     const valueFormatter = (value: number) => {
         return '$' + millify(value, {precision: 2})
-    }
-
-    const exportResults = () => {
-        setExportingResults(true)
-
-        const body = {
-            filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
-            sort: ['GrantID:asc'],
-            limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
-        }
-
-        meilisearchRequest('exports', body).then(data => {
-            exportToCsv('pandemic-pact-grants-by-research-category-export', data.hits)
-            setExportingResults(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingResults(false)
-        })
     }
 
     return (
@@ -162,19 +143,15 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     alignItems="center"
                     className="gap-x-2"
                 >
-                    <DownloadElementAsPngButton
+                    <ExportToPngButton
                         selector="#amount-spent-on-each-research-category-over-time-card"
                         filename="amount-spent-on-each-research-category-over-time"
                     />
 
-                    <Button
-                        icon={DownloadIcon}
-                        loading={exportingResults}
-                        disabled={exportingResults}
-                        onClick={exportResults}
-                    >
-                        Export Results To CSV
-                    </Button>
+                    <ExportToCsvButton
+                        meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                        filename="grant-by-amount-spent-on-each-research-category-over-time"
+                    />
                 </Flex>
             </Flex>
         </Card>

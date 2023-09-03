@@ -3,7 +3,7 @@ import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/rea
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
-import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
+import ExportToPngButton from "./ExportToPngButton"
 
 import dataset from '../../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
@@ -126,7 +126,7 @@ export default function GrantsByCountryWhereResearchWasConducted() {
                 alignItems="center"
                 className="gap-x-2 ignore-in-image-export"
             >
-                <DownloadElementAsPngButton
+                <ExportToPngButton
                     selector="#grants-by-country-where-research-was-conducted-card"
                     filename="grants-by-country-where-research-was-conducted"
                 />

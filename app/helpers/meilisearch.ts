@@ -1,4 +1,15 @@
-export default async function meilisearchRequest(index: string, body: any) {
+type MeilisearchFilter = string | string[]
+
+export interface MeilisearchRequestBody {
+    q?: string
+    filter?: MeilisearchFilter | MeilisearchFilter[]
+    attributesToHighlight?: string[]
+    highlightPreTag?: string
+    highlightPostTag?: string
+    limit?: number
+}
+
+export async function meilisearchRequest(index: string, body: MeilisearchRequestBody) {
     if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
         console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting meilisearch request')
 
@@ -33,4 +44,21 @@ export default async function meilisearchRequest(index: string, body: any) {
         headers,
         body: JSON.stringify(body),
     }).then(response => response.json())
+}
+
+export function exportRequestBody(body: MeilisearchRequestBody = {}): MeilisearchRequestBody {
+    return Object.assign(
+        {},
+        body,
+        // TODO determine limit based on number of generated grants in complete dataset?
+        {limit: 100_000},
+    )
+}
+
+export function exportRequestBodyFilteredToMatchingGrants(grants: {GrantID: number}[]): MeilisearchRequestBody {
+    return Object.assign(
+        {},
+        exportRequestBody(),
+        {filter: `GrantID IN [${grants.map(grant => grant.GrantID).join(',')}]`}
+    )
 }

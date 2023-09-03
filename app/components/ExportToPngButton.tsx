@@ -8,7 +8,7 @@ interface Props {
     filename: string
 }
 
-export default function DownloadElementAsPngButton({selector, filename}: Props) {
+export default function ExportToPngButton({selector, filename}: Props) {
     const [exportingImage, setExportingImage] = useState(false)
 
     const exportImage = () => {
@@ -17,7 +17,7 @@ export default function DownloadElementAsPngButton({selector, filename}: Props) 
         const element: HTMLElement | null = document.querySelector(selector)
 
         if (element === null) {
-            console.error(`DownloadElementAsPngButton: could not find element with selector ${selector}`);
+            console.error(`ExportToPngButton: could not find element with selector ${selector}`);
             return;
         }
 
