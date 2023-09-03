@@ -2,6 +2,7 @@ import {useState} from "react"
 import {Flex, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
+import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -43,12 +44,6 @@ export default function GrantsByResearchCategoryCard() {
             numberOfGrantsPerClassification,
         }
     })
-
-    const meilisearchRequestBody = {
-        filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
-        sort: ['GrantID:asc'],
-        limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
-    }
 
     return (
         <Card
@@ -119,7 +114,7 @@ export default function GrantsByResearchCategoryCard() {
                 />
 
                 <ExportToCsvButton
-                    meilisearchRequestBody={meilisearchRequestBody}
+                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
                     filename="grant-by-mesh-classification-card"
                 />
             </Flex>

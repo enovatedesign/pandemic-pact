@@ -5,7 +5,7 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {type SearchResults} from '../types/search-results'
 import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
-import {meilisearchRequest, type MeilisearchRequestBody} from '../helpers/meilisearch'
+import {meilisearchRequest, exportRequestBody, type MeilisearchRequestBody} from '../helpers/meilisearch'
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')
@@ -84,13 +84,6 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         name: pathogensLookupTable[key],
     }))
 
-    const exportRequestBody = Object.assign(
-        {},
-        sharedRequestBody,
-        // TODO determine limit based on number of generated grants in complete dataset?
-        {limit: 100_000},
-    )
-
     return (
         <Grid numItems={2} className="gap-2" >
             <Col numColSpan={2}>
@@ -136,7 +129,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                 <Text>Total Hits: {totalHits}</Text>
 
                 <ExportToCsvButton
-                    meilisearchRequestBody={exportRequestBody}
+                    meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
                     filename="search-results-export"
                 />
             </Col>

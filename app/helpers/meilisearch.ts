@@ -45,3 +45,20 @@ export async function meilisearchRequest(index: string, body: MeilisearchRequest
         body: JSON.stringify(body),
     }).then(response => response.json())
 }
+
+export function exportRequestBody(body: MeilisearchRequestBody = {}): MeilisearchRequestBody {
+    return Object.assign(
+        {},
+        body,
+        // TODO determine limit based on number of generated grants in complete dataset?
+        {limit: 100_000},
+    )
+}
+
+export function exportRequestBodyFilteredToMatchingGrants(grants: {GrantID: number}[]): MeilisearchRequestBody {
+    return Object.assign(
+        {},
+        exportRequestBody(),
+        {filter: `GrantID IN [${grants.map(grant => grant.GrantID).join(',')}]`}
+    )
+}
