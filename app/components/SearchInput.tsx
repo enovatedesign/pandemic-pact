@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
@@ -22,33 +22,41 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
 
-    let sharedRequestBody: MeilisearchRequestBody = {
-        q: searchQuery,
-    }
+    const sharedRequestBody = useMemo(() => {
+        let body: MeilisearchRequestBody = {
+            q: searchQuery,
+        }
 
-    const filter = []
+        const filter = []
 
-    if (selectedDiseases.length > 0) {
-        filter.push(
-            selectedDiseases.length === 1 ?
-                `Disease = "${selectedDiseases[0]}"` :
-                selectedDiseases.map(disease => `Disease = "${disease}"`)
-        )
-    }
+        if (selectedDiseases.length > 0) {
+            filter.push(
+                selectedDiseases.length === 1 ?
+                    `Disease = "${selectedDiseases[0]}"` :
+                    selectedDiseases.map(disease => `Disease = "${disease}"`)
+            )
+        }
 
-    if (selectedPathogens.length > 0) {
-        filter.push(
-            selectedPathogens.length === 1 ?
-                `Pathogen = "${selectedPathogens[0]}"` :
-                selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
-        )
-    }
+        if (selectedPathogens.length > 0) {
+            filter.push(
+                selectedPathogens.length === 1 ?
+                    `Pathogen = "${selectedPathogens[0]}"` :
+                    selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
+            )
+        }
 
-    if (filter.length > 0) {
-        sharedRequestBody.filter = filter
-    }
+        if (filter.length > 0) {
+            body.filter = filter
+        }
 
-    const performFullTextSearch = () => {
+        return body
+    }, [
+        searchQuery,
+        selectedDiseases,
+        selectedPathogens,
+    ])
+
+    useEffect(() => {
         const searchRequestBody = Object.assign(
             {},
             sharedRequestBody,
@@ -65,18 +73,11 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         }).catch((error) => {
             console.error('Error:', error)
         })
-    }
-
-    useEffect(
-        performFullTextSearch,
-        [
-            searchQuery,
-            selectedDiseases,
-            selectedPathogens,
-            setTotalHits,
-            setSearchResults,
-        ]
-    )
+    }, [
+        sharedRequestBody,
+        setTotalHits,
+        setSearchResults,
+    ])
 
     const diseasesLookupTable = lookupTables.Diseases as StringDictionary
 
