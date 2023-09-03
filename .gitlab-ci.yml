@@ -1,7 +1,7 @@
 default:
   image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.0-node${NODE_VERSION}
 
-deploy_preview:
+deploy_review:
   stage: deploy
   except:
     - master
@@ -15,9 +15,9 @@ deploy_preview:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: $DYNAMIC_ENVIRONMENT_URL
-    on_stop: stop_preview
+    on_stop: stop_review
 
-stop_preview:
+stop_review:
   stage: deploy
   script:
     - ./ci/delete-search-indexes.sh
