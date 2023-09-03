@@ -25,6 +25,8 @@ stop_preview:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
   when: manual
+  variables:
+    GIT_STRATEGY: none
 
 deploy_production:
   stage: deploy
