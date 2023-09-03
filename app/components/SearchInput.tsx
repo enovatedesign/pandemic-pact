@@ -7,13 +7,22 @@ import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
 import meilisearchRequest from '../helpers/meilisearch-request'
 
+interface MeilisearchRequestBody {
+    q: string
+    filter?: (string | string[])[]
+    attributesToHighlight?: string[]
+    highlightPreTag?: string
+    highlightPostTag?: string
+    limit?: number
+}
+
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
 
-    let sharedRequestBody = {
+    let sharedRequestBody: MeilisearchRequestBody = {
         q: searchQuery,
     }
 
@@ -65,7 +74,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             selectedDiseases,
             selectedPathogens,
             setTotalHits,
-            setSearchResults
+            setSearchResults,
         ]
     )
 
