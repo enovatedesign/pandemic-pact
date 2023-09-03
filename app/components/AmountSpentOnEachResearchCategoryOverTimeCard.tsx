@@ -6,7 +6,7 @@ import {millify} from "millify"
 import meilisearchRequest from '../helpers/meilisearch-request'
 import exportToCsv from "../helpers/export-to-csv"
 import {groupBy} from 'lodash'
-import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
+import ExportToPngButton from "./ExportToPngButton"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -162,7 +162,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
                     alignItems="center"
                     className="gap-x-2"
                 >
-                    <DownloadElementAsPngButton
+                    <ExportToPngButton
                         selector="#amount-spent-on-each-research-category-over-time-card"
                         filename="amount-spent-on-each-research-category-over-time"
                     />

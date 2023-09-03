@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
-import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
+import ExportToPngButton from "./ExportToPngButton"
 import meilisearchRequest from '../helpers/meilisearch-request'
 import exportToCsv from "../helpers/export-to-csv"
 
@@ -128,7 +128,7 @@ export default function GrantsByResearchCategoryCard() {
                 alignItems="center"
                 className="gap-x-2 ignore-in-image-export"
             >
-                <DownloadElementAsPngButton
+                <ExportToPngButton
                     selector="#grants-by-mesh-classification-card"
                     filename="grant-by-mesh-classification-card"
                 />

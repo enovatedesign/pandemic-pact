@@ -2,7 +2,7 @@ import {useState} from "react"
 import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import Select, {type MultiValue} from "react-select"
 import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import DownloadElementAsPngButton from "./DownloadElementAsPngButton"
+import ExportToPngButton from "./ExportToPngButton"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import meilisearchRequest from '../helpers/meilisearch-request'
@@ -227,7 +227,7 @@ export default function GrantsByResearchCategoryCard() {
                         alignItems="center"
                         className="gap-x-2"
                     >
-                        <DownloadElementAsPngButton
+                        <ExportToPngButton
                             selector="#grants-by-research-category-card"
                             filename="grants-by-research-category"
                         />
