@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {Button} from '@tremor/react'
-import {TableIcon} from "@heroicons/react/solid"
+import {DownloadIcon} from "@heroicons/react/outline"
 import meilisearchRequest from '../helpers/meilisearch-request'
 import exportToCsv from '../helpers/export-to-csv'
 
@@ -26,7 +26,7 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename}: Pr
 
     return (
         <Button
-            icon={TableIcon}
+            icon={DownloadIcon}
             loading={exportingCsv}
             disabled={exportingCsv}
             onClick={exportCsv}
