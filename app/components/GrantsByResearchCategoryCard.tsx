@@ -1,12 +1,12 @@
 import {useState} from "react"
-import {Flex, Button, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
+import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import Select, {type MultiValue} from "react-select"
-import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
+import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
+import ExportToCsvButton from "./ExportToCsvButton"
+import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import {meilisearchRequest} from "../helpers/meilisearch"
-import exportToCsv from "../helpers/export-to-csv"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -20,7 +20,6 @@ interface Option {
 export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<MultiValue<Option>>([])
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
-    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const funderOptions = funders.map((funderName: string) => ({
         value: funderName,
@@ -75,24 +74,6 @@ export default function GrantsByResearchCategoryCard() {
 
     const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
         return '$' + millify(value, {precision: 2})
-    }
-
-    const exportResults = () => {
-        setExportingResults(true)
-
-        const body = {
-            filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
-            sort: ['GrantID:asc'],
-            limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
-        }
-
-        meilisearchRequest('exports', body).then(data => {
-            exportToCsv('pandemic-pact-grants-by-research-category-export', data.hits)
-            setExportingResults(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingResults(false)
-        })
     }
 
     const colours: Color[] = [
@@ -232,14 +213,10 @@ export default function GrantsByResearchCategoryCard() {
                             filename="grants-by-research-category"
                         />
 
-                        <Button
-                            icon={DownloadIcon}
-                            loading={exportingResults}
-                            disabled={exportingResults}
-                            onClick={exportResults}
-                        >
-                            Export Results To CSV
-                        </Button>
+                        <ExportToCsvButton
+                            meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                            filename="grant-by-research-category"
+                        />
                     </Flex>
                 </Flex>
             </Flex>

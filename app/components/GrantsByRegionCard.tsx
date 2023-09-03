@@ -3,7 +3,8 @@ import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, DonutChar
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {meilisearchRequest} from "../helpers/meilisearch"
-import exportToCsv from "../helpers/export-to-csv"
+import ExportToCsvButton from "./ExportToCsvButton"
+import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 
 import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
@@ -11,7 +12,6 @@ import dataset from '../../data/dist/grants-by-region-card.json'
 
 export default function GrantsByResearchCategoryCard() {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
-    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
     const regionsLookupTable = lookupTables.Regions as StringDictionary
 
@@ -34,24 +34,6 @@ export default function GrantsByResearchCategoryCard() {
             numberOfGrants: numberOfGrants,
         }
     })
-
-    const exportResults = () => {
-        setExportingResults(true)
-
-        const body = {
-            filter: `GrantID IN [${filteredDataset.map(grant => grant.GrantID).join(',')}]`,
-            sort: ['GrantID:asc'],
-            limit: 100_000, // TODO determine this based on number of generated grants in complete dataset?
-        }
-
-        meilisearchRequest('exports', body).then(data => {
-            exportToCsv('pandemic-pact-grants-by-region-export', data.hits)
-            setExportingResults(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingResults(false)
-        })
-    }
 
     return (
         <Card>
@@ -101,14 +83,10 @@ export default function GrantsByResearchCategoryCard() {
                 <Flex
                     justifyContent="end"
                 >
-                    <Button
-                        icon={DownloadIcon}
-                        loading={exportingResults}
-                        disabled={exportingResults}
-                        onClick={exportResults}
-                    >
-                        Export Results To CSV
-                    </Button>
+                    <ExportToCsvButton
+                        meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                        filename="grant-by-region"
+                    />
                 </Flex>
             </Flex>
         </Card>

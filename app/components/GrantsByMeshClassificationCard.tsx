@@ -115,7 +115,7 @@ export default function GrantsByResearchCategoryCard() {
 
                 <ExportToCsvButton
                     meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
-                    filename="grant-by-mesh-classification-card"
+                    filename="grant-by-mesh-classification"
                 />
             </Flex>
         </Card>
