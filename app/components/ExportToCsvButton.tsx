@@ -31,7 +31,7 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename}: Pr
             disabled={exportingCsv}
             onClick={exportCsv}
         >
-            Export Chart To PNG
+            Export Chart To CSV
         </Button >
     )
 }

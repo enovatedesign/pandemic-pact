@@ -1,60 +1,56 @@
-import {useCallback, useEffect, useState} from 'react'
-import {Button, Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
-import {DownloadIcon, SearchIcon} from "@heroicons/react/solid"
+import {useEffect, useState} from 'react'
+import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
+import {SearchIcon} from "@heroicons/react/solid"
+import ExportToCsvButton from "./ExportToCsvButton"
 import {type SearchResults} from '../types/search-results'
 import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
 import meilisearchRequest from '../helpers/meilisearch-request'
-import exportToCsv from "../helpers/export-to-csv"
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
-    const [exportingResults, setExportingResults] = useState<boolean>(false)
 
-    const doMeilisearchFetch = useCallback(
-        async (index: string, additionalOptions: {limit?: number, hitsPerPage?: number, sort?: string[]} = {}) => {
-            const body: {q: string, filter?: Array<string | string[]>} = Object.assign(
-                {
-                    q: searchQuery,
-                    attributesToHighlight: ['GrantTitleEng'],
-                    highlightPreTag: "<strong>",
-                    highlightPostTag: "</strong>",
-                },
-                additionalOptions,
-            )
+    let sharedRequestBody = {
+        q: searchQuery,
+    }
 
-            const filter = []
+    const filter = []
 
-            if (selectedDiseases.length > 0) {
-                filter.push(
-                    selectedDiseases.length === 1 ?
-                        `Disease = "${selectedDiseases[0]}"` :
-                        selectedDiseases.map(disease => `Disease = "${disease}"`)
-                )
-            }
+    if (selectedDiseases.length > 0) {
+        filter.push(
+            selectedDiseases.length === 1 ?
+                `Disease = "${selectedDiseases[0]}"` :
+                selectedDiseases.map(disease => `Disease = "${disease}"`)
+        )
+    }
 
-            if (selectedPathogens.length > 0) {
-                filter.push(
-                    selectedPathogens.length === 1 ?
-                        `Pathogen = "${selectedPathogens[0]}"` :
-                        selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
-                )
-            }
+    if (selectedPathogens.length > 0) {
+        filter.push(
+            selectedPathogens.length === 1 ?
+                `Pathogen = "${selectedPathogens[0]}"` :
+                selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
+        )
+    }
 
-            if (filter.length > 0) {
-                body['filter'] = filter
-            }
-
-            return meilisearchRequest(index, body)
-        },
-        [searchQuery, selectedDiseases, selectedPathogens],
-    )
+    if (filter.length > 0) {
+        sharedRequestBody.filter = filter
+    }
 
     const performFullTextSearch = () => {
-        doMeilisearchFetch('grants').then(data => {
+        const searchRequestBody = Object.assign(
+            {},
+            sharedRequestBody,
+            {
+                attributesToHighlight: ['GrantTitleEng'],
+                highlightPreTag: "<strong>",
+                highlightPostTag: "</strong>",
+            }
+        )
+
+        meilisearchRequest('grants', searchRequestBody).then(data => {
             setSearchResults(data.hits)
             setTotalHits(data.estimatedTotalHits)
         }).catch((error) => {
@@ -62,25 +58,10 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         })
     }
 
-    const exportResults = () => {
-        setExportingResults(true)
-
-        const limit = 100_000 // TODO determine this based on number of generated grants in complete dataset?
-
-        doMeilisearchFetch('exports', {limit, hitsPerPage: limit, sort: ['GrantID:asc']}).then(data => {
-            exportToCsv('pandemic-pact-results-export', data.hits)
-            setExportingResults(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingResults(false)
-        })
-    }
-
     useEffect(
         performFullTextSearch,
         [
             searchQuery,
-            doMeilisearchFetch,
             selectedDiseases,
             selectedPathogens,
             setTotalHits,
@@ -102,8 +83,15 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
         name: pathogensLookupTable[key],
     }))
 
+    const exportRequestBody = Object.assign(
+        {},
+        sharedRequestBody,
+        // TODO determine limit based on number of generated grants in complete dataset?
+        {limit: 100_000},
+    )
+
     return (
-        <Grid numItems={2} className="gap-2">
+        <Grid numItems={2} className="gap-2" >
             <Col numColSpan={2}>
                 <TextInput
                     icon={SearchIcon}
@@ -146,15 +134,11 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
             >
                 <Text>Total Hits: {totalHits}</Text>
 
-                <Button
-                    icon={DownloadIcon}
-                    loading={exportingResults}
-                    disabled={exportingResults || totalHits === 0}
-                    onClick={exportResults}
-                >
-                    Export Results To CSV
-                </Button>
+                <ExportToCsvButton
+                    meilisearchRequestBody={exportRequestBody}
+                    filename="search-results-export"
+                />
             </Col>
-        </Grid>
+        </Grid >
     )
 }
