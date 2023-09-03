@@ -5,16 +5,7 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {type SearchResults} from '../types/search-results'
 import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
-import meilisearchRequest from '../helpers/meilisearch-request'
-
-interface MeilisearchRequestBody {
-    q: string
-    filter?: (string | string[])[]
-    attributesToHighlight?: string[]
-    highlightPreTag?: string
-    highlightPostTag?: string
-    limit?: number
-}
+import {meilisearchRequest, type MeilisearchRequestBody} from '../helpers/meilisearch'
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
     const [searchQuery, setSearchQuery] = useState<string>('')

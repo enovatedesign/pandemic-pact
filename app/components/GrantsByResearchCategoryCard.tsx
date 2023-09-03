@@ -5,7 +5,7 @@ import {DownloadIcon, ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import meilisearchRequest from '../helpers/meilisearch-request'
+import {meilisearchRequest} from "../helpers/meilisearch"
 import exportToCsv from "../helpers/export-to-csv"
 
 import funders from '../../data/source/funders.json'

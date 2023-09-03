@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Button} from '@tremor/react'
 import {DownloadIcon} from "@heroicons/react/outline"
-import meilisearchRequest from '../helpers/meilisearch-request'
+import {meilisearchRequest} from "../helpers/meilisearch"
 import exportToCsv from '../helpers/export-to-csv'
 
 interface Props {

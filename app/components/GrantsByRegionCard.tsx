@@ -2,7 +2,7 @@ import {useState} from "react"
 import {Flex, Button, Card, Title, MultiSelect, MultiSelectItem, Text, DonutChart} from "@tremor/react"
 import {DownloadIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
-import meilisearchRequest from '../helpers/meilisearch-request'
+import {meilisearchRequest} from "../helpers/meilisearch"
 import exportToCsv from "../helpers/export-to-csv"
 
 import funders from '../../data/source/funders.json'

@@ -3,7 +3,7 @@ import {Flex, Button, BarChart, LineChart, Card, Title, MultiSelect, MultiSelect
 import {DownloadIcon, PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import meilisearchRequest from '../helpers/meilisearch-request'
+import {meilisearchRequest} from '../helpers/meilisearch'
 import exportToCsv from "../helpers/export-to-csv"
 import {groupBy} from 'lodash'
 import ExportToPngButton from "./ExportToPngButton"

@@ -1,4 +1,15 @@
-export default async function meilisearchRequest(index: string, body: any) {
+type MeilisearchFilter = string | string[]
+
+export interface MeilisearchRequestBody {
+    q?: string
+    filter?: MeilisearchFilter | MeilisearchFilter[]
+    attributesToHighlight?: string[]
+    highlightPreTag?: string
+    highlightPostTag?: string
+    limit?: number
+}
+
+export async function meilisearchRequest(index: string, body: MeilisearchRequestBody) {
     if (!process.env.NEXT_PUBLIC_MEILISEARCH_HOST) {
         console.warn('NEXT_PUBLIC_MEILISEARCH_HOST is not set, not attempting meilisearch request')
 
