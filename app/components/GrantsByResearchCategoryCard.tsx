@@ -6,15 +6,16 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
+import {Filters} from '../types/filters'
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
 
 interface Props {
-    selectedFunders: string[],
+    selectedFilters: Filters,
 }
 
-export default function GrantsByResearchCategoryCard({selectedFunders}: Props) {
+export default function GrantsByResearchCategoryCard({selectedFilters}: Props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
@@ -24,8 +25,8 @@ export default function GrantsByResearchCategoryCard({selectedFunders}: Props) {
         name: researchCatLookupTable[key],
     }))
 
-    const filteredDataset = selectedFunders.length > 0
-        ? dataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
+    const filteredDataset = selectedFilters.funders.length > 0
+        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
         : dataset
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
@@ -105,7 +106,7 @@ export default function GrantsByResearchCategoryCard({selectedFunders}: Props) {
                     justifyContent="end"
                     alignItems="center"
                 >
-                    {selectedFunders.length > 0 &&
+                    {selectedFilters.funders.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

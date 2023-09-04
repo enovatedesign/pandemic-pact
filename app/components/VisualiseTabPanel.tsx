@@ -5,12 +5,13 @@ import AmountSpentOnEachResearchCategoryOverTimeCard from './AmountSpentOnEachRe
 import GrantsByRegionCard from './GrantsByRegionCard'
 import GrantsByMeshClassificationCard from './GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from './GrantsByCountryWhereResearchWasConductedCard'
+import {Filters} from '../types/filters'
 
 interface Props {
-    selectedFunders: string[],
+    selectedFilters: Filters,
 }
 
-export default function VisualiseTabPanel({selectedFunders}: Props) {
+export default function VisualiseTabPanel({selectedFilters}: Props) {
     return (
         <TabPanel>
             <Grid
@@ -19,7 +20,7 @@ export default function VisualiseTabPanel({selectedFunders}: Props) {
             >
                 <Col numColSpan={12}>
                     <GrantsByResearchCategoryCard
-                        selectedFunders={selectedFunders}
+                        selectedFilters={selectedFilters}
                     />
                 </Col>
 

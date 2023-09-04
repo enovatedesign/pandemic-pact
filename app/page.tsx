@@ -39,7 +39,7 @@ const Home = () => {
 
                 <TabPanels>
                     <VisualiseTabPanel
-                        selectedFunders={selectedFilters.funders}
+                        selectedFilters={selectedFilters}
                     />
                     <ExploreTabPanel />
                 </TabPanels>
