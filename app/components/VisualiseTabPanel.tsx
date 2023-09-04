@@ -6,7 +6,11 @@ import GrantsByRegionCard from './GrantsByRegionCard'
 import GrantsByMeshClassificationCard from './GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from './GrantsByCountryWhereResearchWasConductedCard'
 
-export default function VisualiseTabPanel() {
+interface Props {
+    selectedFunders: string[],
+}
+
+export default function VisualiseTabPanel({selectedFunders}: Props) {
     return (
         <TabPanel>
             <Grid
@@ -14,7 +18,9 @@ export default function VisualiseTabPanel() {
                 className="mt-6 gap-4"
             >
                 <Col numColSpan={12}>
-                    <GrantsByResearchCategoryCard />
+                    <GrantsByResearchCategoryCard
+                        selectedFunders={selectedFunders}
+                    />
                 </Col>
 
                 <Col numColSpan={12}>

@@ -1,7 +1,6 @@
 import {useState} from "react"
 import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import FunderSelect from "./FunderSelect"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -11,8 +10,11 @@ import {millify} from "millify"
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
 
-export default function GrantsByResearchCategoryCard() {
-    const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+interface Props {
+    selectedFunders: string[],
+}
+
+export default function GrantsByResearchCategoryCard({selectedFunders}: Props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
@@ -100,13 +102,9 @@ export default function GrantsByResearchCategoryCard() {
                 </Flex>
 
                 <Flex
-                    justifyContent="between"
+                    justifyContent="end"
                     alignItems="center"
                 >
-                    <FunderSelect
-                        setSelectedFunders={setSelectedFunders}
-                    />
-
                     {selectedFunders.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
