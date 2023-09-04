@@ -32,6 +32,7 @@ export default function FunderSelect({setSelectedFunders}: Props) {
             onChange={onChange}
             placeholder="Select funders..."
             options={options}
+            className="text-black"
             isMulti
         />
     )
