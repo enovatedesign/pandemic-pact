@@ -4,12 +4,13 @@ import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
 import ExportToPngButton from "./ExportToPngButton"
+import {type CardProps} from "../types/card-props"
 
 import dataset from '../../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
 import lookupTables from '../../data/source/lookup-tables.json'
 
-export default function GrantsByCountryWhereResearchWasConducted() {
+export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
     const [tooltipContent, setTooltipContent] = useState('')
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
 

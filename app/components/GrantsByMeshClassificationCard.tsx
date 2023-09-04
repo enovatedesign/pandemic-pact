@@ -1,18 +1,15 @@
-import {useState} from "react"
-import {Flex, Card, Title, MultiSelect, MultiSelectItem, Text, CategoryBar, Legend} from "@tremor/react"
+import {Flex, Card, Title, Text, CategoryBar, Legend} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
+import {type CardProps} from "../types/card-props"
 
-import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
-export default function GrantsByResearchCategoryCard() {
-    const [selectedFunders, setSelectedFunders] = useState<string[]>([])
-
-    const filteredDataset = selectedFunders.length > 0
-        ? dataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
+export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
+    const filteredDataset = selectedFilters.funders.length > 0
+        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
         : dataset
 
     const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
@@ -59,24 +56,10 @@ export default function GrantsByResearchCategoryCard() {
             </Flex>
 
             <Flex
-                justifyContent="between"
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                <MultiSelect
-                    value={selectedFunders}
-                    onValueChange={setSelectedFunders}
-                    placeholder="Select funders..."
-                    className="max-w-xs"
-                >
-                    {funders.map((funderName) => (
-                        <MultiSelectItem key={funderName} value={funderName}>
-                            {funderName}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
-
-                {selectedFunders.length > 0 &&
+                {selectedFilters.funders.length > 0 &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

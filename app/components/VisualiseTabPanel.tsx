@@ -25,19 +25,27 @@ export default function VisualiseTabPanel({selectedFilters}: Props) {
                 </Col>
 
                 <Col numColSpan={12}>
-                    <GrantsByCountryWhereResearchWasConductedCard />
+                    <GrantsByCountryWhereResearchWasConductedCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={12}>
-                    <AmountSpentOnEachResearchCategoryOverTimeCard />
+                    <AmountSpentOnEachResearchCategoryOverTimeCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={5}>
-                    <GrantsByRegionCard />
+                    <GrantsByRegionCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={7}>
-                    <GrantsByMeshClassificationCard />
+                    <GrantsByMeshClassificationCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
             </Grid>
         </TabPanel >

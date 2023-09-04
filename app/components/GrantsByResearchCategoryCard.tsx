@@ -6,7 +6,7 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
-import {CardProps} from "../types/card-props"
+import {type CardProps} from "../types/card-props"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
