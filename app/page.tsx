@@ -12,27 +12,17 @@ import {
 import VisualiseTabPanel from "./components/VisualiseTabPanel"
 import ExploreTabPanel from "./components/ExploreTabPanel"
 import Layout from "./components/Layout"
-import FunderSelect from "./components/FunderSelect"
-
-interface SidebarContentProps {
-    setSelectedFunders: (funders: string[]) => void,
-}
-
-const SidebarContent = ({setSelectedFunders}: SidebarContentProps) => (
-    <FunderSelect
-        setSelectedFunders={setSelectedFunders}
-    />
-)
+import {FilterSidebar} from "./components/FilterSidebar"
 
 const Home = () => {
     const [selectedFunders, setSelectedFunders] = useState<string[]>([])
 
     return (
-        < Layout
+        <Layout
             title="Pandemic PACT Tracker"
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
             sidebarContent={
-                <SidebarContent
+                <FilterSidebar
                     setSelectedFunders={setSelectedFunders}
                 />
             }
@@ -50,7 +40,7 @@ const Home = () => {
                     <ExploreTabPanel />
                 </TabPanels>
             </TabGroup>
-        </Layout >
+        </Layout>
     )
 }
 
