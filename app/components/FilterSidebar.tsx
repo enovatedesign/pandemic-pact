@@ -1,11 +1,17 @@
 import FunderSelect from "./FunderSelect"
+import {type Filters} from "../types/filters"
 
-export interface FilterSidebarProps {
-    setSelectedFunders: (funders: string[]) => void,
+interface FilterSidebarProps {
+    selectedFilters: Filters,
+    setSelectedFilters: (filters: Filters) => void,
 }
 
-export const FilterSidebar = ({setSelectedFunders}: FilterSidebarProps) => (
-    <FunderSelect
-        setSelectedFunders={setSelectedFunders}
-    />
-)
+export const FilterSidebar = ({selectedFilters, setSelectedFilters}: FilterSidebarProps) => {
+    return (
+        <FunderSelect
+            setSelectedFunders={
+                (funders: string[]) => setSelectedFilters({...selectedFilters, funders})
+            }
+        />
+    )
+}

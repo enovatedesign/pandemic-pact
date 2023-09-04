@@ -13,9 +13,12 @@ import VisualiseTabPanel from "./components/VisualiseTabPanel"
 import ExploreTabPanel from "./components/ExploreTabPanel"
 import Layout from "./components/Layout"
 import {FilterSidebar} from "./components/FilterSidebar"
+import {type Filters} from "./types/filters"
 
 const Home = () => {
-    const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+    const [selectedFilters, setSelectedFilters] = useState<Filters>({
+        funders: [],
+    })
 
     return (
         <Layout
@@ -23,7 +26,8 @@ const Home = () => {
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
             sidebarContent={
                 <FilterSidebar
-                    setSelectedFunders={setSelectedFunders}
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
                 />
             }
         >
@@ -35,7 +39,7 @@ const Home = () => {
 
                 <TabPanels>
                     <VisualiseTabPanel
-                        selectedFunders={selectedFunders}
+                        selectedFunders={selectedFilters.funders}
                     />
                     <ExploreTabPanel />
                 </TabPanels>
