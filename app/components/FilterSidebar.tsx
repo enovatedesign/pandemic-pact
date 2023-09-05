@@ -25,7 +25,7 @@ export const FilterSidebar = ({selectedFilters, setSelectedFilters}: FilterSideb
 
                 <FunderSelect
                     setSelectedFunders={
-                        (funders: string[]) => setSelectedFilters({...selectedFilters, funders})
+                        (FundingOrgName: string[]) => setSelectedFilters({...selectedFilters, FundingOrgName})
                     }
                 />
             </Flex>

@@ -17,7 +17,9 @@ import {type Filters} from "./types/filters"
 
 const Home = () => {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
-        funders: [],
+        FundingOrgName: [],
+        ResearchCat: [],
+        Pathogen: [],
     })
 
     return (

@@ -3,6 +3,7 @@ import {type StringDictionary} from "../../scripts/types/dictionary"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-region-card.json'
@@ -15,13 +16,11 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         name: regionsLookupTable[key],
     }))
 
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const numberOfGrantsPerRegion = regions.map(function (region) {
         const numberOfGrants = filteredDataset
-            .filter(grant => grant.GrantRegion === region.name)
+            .filter((grant: any) => grant.GrantRegion === region.name)
             .length
 
         return {
@@ -49,7 +48,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     justifyContent="end"
                     alignItems="center"
                 >
-                    {selectedFilters.funders.length > 0 &&
+                    {filteredDataset.length < dataset.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

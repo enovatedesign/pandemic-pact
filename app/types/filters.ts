@@ -1,3 +1,5 @@
 export interface Filters {
-    funders: string[];
+    FundingOrgName: string[];
+    ResearchCat: string[];
+    Pathogen: string[];
 }

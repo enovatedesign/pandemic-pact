@@ -3,9 +3,11 @@ import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Co
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
+import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
+import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
 
@@ -14,35 +16,45 @@ import dataset from '../../data/dist/amount-spent-on-each-research-category-over
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
+    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
-    const researchCategories: string[] = Object.values(researchCatLookupTable)
-
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(
+        dataset,
+        {...selectedFilters, ResearchCat: selectedResearchCategories},
+    )
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
+
+    const researchCategories: string[] = selectedResearchCategories.length === 0 ?
+        ['All Research Categories'] :
+        Object.values(researchCatLookupTable).filter(
+            researchCategory => selectedResearchCategories.includes(researchCategory)
+        )
 
     const amountSpentOnEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
 
-        let datapoint: {[key: string]: string | number} = {year}
+        let dataPoint: {[key: string]: string | number} = {year}
 
-        researchCategories.forEach(researchCategory => {
-            datapoint[researchCategory] = grants
-                .filter(grant => grant.ResearchCat === researchCategory)
-                .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
-        })
+        if (selectedResearchCategories.length === 0) {
+            dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+        } else {
+            researchCategories.forEach(researchCategory => {
+                dataPoint[researchCategory] = grants
+                    .filter(grant => grant.ResearchCat === researchCategory)
+                    .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            })
+        }
 
-        return datapoint
+        return dataPoint
     })
 
     const colours: Color[] = [
-        'red',
+        'blue',
         'lime',
         'cyan',
         'violet',
@@ -52,7 +64,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
         'purple',
         'amber',
         'green',
-        'blue',
+        'red',
         'fuchsia',
         'yellow',
         'neutral',
@@ -76,11 +88,16 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             </Flex>
 
             <Flex
-                justifyContent="end"
+                justifyContent="between"
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                {selectedFilters.funders.length > 0 &&
+                <ResearchCategorySelect
+                    setSelectedResearchCategories={setSelectedResearchCategories}
+                    className="max-w-xs ignore-in-image-export"
+                />
+
+                {filteredDataset.length < dataset.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

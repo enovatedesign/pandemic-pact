@@ -3,8 +3,10 @@ import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/rea
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
+import PathogenSelect from "./PathogenSelect"
 import ExportToPngButton from "./ExportToPngButton"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import dataset from '../../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
@@ -14,11 +16,10 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
     const [tooltipContent, setTooltipContent] = useState('')
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
 
-    const pathogens = Object.values(lookupTables.Pathogens)
-
-    const filteredDataset = selectedPathogens.length > 0
-        ? dataset.filter(grant => selectedPathogens.includes(grant.Pathogen))
-        : dataset
+    const filteredDataset = filterGrants(
+        dataset,
+        {...selectedFilters, Pathogen: selectedPathogens},
+    )
 
     const geojson: any = countriesGeoJson
 
@@ -27,7 +28,7 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
     filteredCountriesGeoJson.features = filteredCountriesGeoJson.features.map((country: any) => {
         let properties: any = country.properties
 
-        properties.totalGrants = filteredDataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
+        properties.totalGrants = filteredDataset.filter((grant: any) => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
 
         country.properties = properties
 
@@ -67,20 +68,12 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
                     justifyContent="between"
                     alignItems="center"
                 >
-                    <MultiSelect
-                        value={selectedPathogens}
-                        onValueChange={setSelectedPathogens}
-                        placeholder="Select pathogens..."
+                    <PathogenSelect
+                        setSelectedPathogens={setSelectedPathogens}
                         className="max-w-xs ignore-in-image-export"
-                    >
-                        {pathogens.map((pathogenName) => (
-                            <MultiSelectItem key={pathogenName} value={pathogenName}>
-                                {pathogenName}
-                            </MultiSelectItem>
-                        ))}
-                    </MultiSelect>
+                    />
 
-                    {selectedPathogens.length > 0 &&
+                    {filteredDataset.length < dataset.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

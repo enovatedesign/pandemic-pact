@@ -136,6 +136,7 @@ writeToDistJsonFile(
         'GrantID',
         'ResearchInstitutionCountry',
         'Pathogen',
+        'FundingOrgName',
     ])),
 )
 

@@ -3,14 +3,13 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
 
@@ -29,7 +28,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
         const numberOfGrantsPerClassification = classificationsNames.map(function (classificationName) {
             const numberOfGrants = filteredDataset
-                .filter(grant => grant[classification as keyof typeof grant] === classificationName)
+                .filter((grant: any) => grant[classification as keyof typeof grant] === classificationName)
                 .length
 
             return numberOfGrants
@@ -59,7 +58,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                {selectedFilters.funders.length > 0 &&
+                {filteredDataset.length < dataset.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

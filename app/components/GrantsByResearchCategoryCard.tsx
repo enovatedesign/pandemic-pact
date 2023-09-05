@@ -7,6 +7,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
@@ -21,13 +22,11 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         name: researchCatLookupTable[key],
     }))
 
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
         const value = filteredDataset
-            .filter(grant => grant.ResearchCat === researchCategory.name)
+            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
             .length
 
         return {
@@ -39,8 +38,8 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
         const value = filteredDataset
-            .filter(grant => grant.ResearchCat === researchCategory.name)
-            .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
+            .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
 
         return {
             key: `grant-amount-${researchCategory.value}`,
@@ -102,7 +101,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     justifyContent="end"
                     alignItems="center"
                 >
-                    {selectedFilters.funders.length > 0 &&
+                    {filteredDataset.length < dataset.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>
