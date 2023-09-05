@@ -58,7 +58,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                {selectedFilters.FundingOrgName.length > 0 &&
+                {filteredDataset.length < dataset.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

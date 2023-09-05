@@ -73,7 +73,7 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
                         className="max-w-xs ignore-in-image-export"
                     />
 
-                    {selectedPathogens.length > 0 &&
+                    {filteredDataset.length < dataset.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>
