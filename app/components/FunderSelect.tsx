@@ -19,7 +19,7 @@ export default function FunderSelect({setSelectedFunders}: Props) {
         <MultiSelect
             value={selectedOptions}
             onValueChange={onChange}
-            placeholder="Select funders..."
+            placeholder="All"
         >
             {funders.map((funder, index) => (
                 <MultiSelectItem key={`${index}-${funder}`} value={funder}>
