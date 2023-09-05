@@ -1,30 +1,18 @@
 import {useState} from "react"
 import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
-import Select, {type MultiValue} from "react-select"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
+import {type CardProps} from "../types/card-props"
 
-import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
 
-interface Option {
-    value: string,
-    label: string,
-}
-
-export default function GrantsByResearchCategoryCard() {
-    const [selectedFunders, setSelectedFunders] = useState<MultiValue<Option>>([])
+export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
-
-    const funderOptions = funders.map((funderName: string) => ({
-        value: funderName,
-        label: funderName,
-    }))
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
@@ -33,8 +21,8 @@ export default function GrantsByResearchCategoryCard() {
         name: researchCatLookupTable[key],
     }))
 
-    const filteredDataset = selectedFunders.length > 0
-        ? dataset.filter(grant => selectedFunders.find(selectedFunder => selectedFunder.value === grant.FundingOrgName))
+    const filteredDataset = selectedFilters.funders.length > 0
+        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
         : dataset
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
@@ -111,20 +99,10 @@ export default function GrantsByResearchCategoryCard() {
                 </Flex>
 
                 <Flex
-                    justifyContent="between"
+                    justifyContent="end"
                     alignItems="center"
                 >
-                    <Select
-                        instanceId="funders"
-                        value={selectedFunders}
-                        onChange={(options: MultiValue<Option>) => {setSelectedFunders(options)}}
-                        placeholder="Select funders..."
-                        className="ignore-in-image-export"
-                        options={funderOptions}
-                        isMulti
-                    />
-
-                    {selectedFunders.length > 0 &&
+                    {selectedFilters.funders.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

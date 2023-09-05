@@ -5,8 +5,13 @@ import AmountSpentOnEachResearchCategoryOverTimeCard from './AmountSpentOnEachRe
 import GrantsByRegionCard from './GrantsByRegionCard'
 import GrantsByMeshClassificationCard from './GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from './GrantsByCountryWhereResearchWasConductedCard'
+import {Filters} from '../types/filters'
 
-export default function VisualiseTabPanel() {
+interface Props {
+    selectedFilters: Filters,
+}
+
+export default function VisualiseTabPanel({selectedFilters}: Props) {
     return (
         <TabPanel>
             <Grid
@@ -14,23 +19,33 @@ export default function VisualiseTabPanel() {
                 className="mt-6 gap-4"
             >
                 <Col numColSpan={12}>
-                    <GrantsByResearchCategoryCard />
+                    <GrantsByResearchCategoryCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={12}>
-                    <GrantsByCountryWhereResearchWasConductedCard />
+                    <GrantsByCountryWhereResearchWasConductedCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={12}>
-                    <AmountSpentOnEachResearchCategoryOverTimeCard />
+                    <AmountSpentOnEachResearchCategoryOverTimeCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={5}>
-                    <GrantsByRegionCard />
+                    <GrantsByRegionCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
 
                 <Col numColSpan={7}>
-                    <GrantsByMeshClassificationCard />
+                    <GrantsByMeshClassificationCard
+                        selectedFilters={selectedFilters}
+                    />
                 </Col>
             </Grid>
         </TabPanel >

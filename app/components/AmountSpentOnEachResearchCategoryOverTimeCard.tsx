@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, BarChart, LineChart, Card, Title, MultiSelect, MultiSelectItem, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
+import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
@@ -7,21 +7,20 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {groupBy} from 'lodash'
+import {CardProps} from "../types/card-props"
 
-import funders from '../../data/source/funders.json'
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
 
-export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
-    const [selectedFunders, setSelectedFunders] = useState<string[]>([])
+export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
     const researchCategories: string[] = Object.values(researchCatLookupTable)
 
-    const filteredDataset = selectedFunders.length > 0
-        ? dataset.filter(grant => selectedFunders.includes(grant.FundingOrgName))
+    const filteredDataset = selectedFilters.funders.length > 0
+        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
         : dataset
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
@@ -77,24 +76,11 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard() {
             </Flex>
 
             <Flex
-                justifyContent="between"
+                justifyContent="end"
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                <MultiSelect
-                    value={selectedFunders}
-                    onValueChange={setSelectedFunders}
-                    placeholder="Select funders..."
-                    className="max-w-xs"
-                >
-                    {funders.map((funderName) => (
-                        <MultiSelectItem key={funderName} value={funderName}>
-                            {funderName}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
-
-                {selectedFunders.length > 0 &&
+                {selectedFilters.funders.length > 0 &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>
