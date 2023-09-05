@@ -54,7 +54,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
     })
 
     const colours: Color[] = [
-        'red',
+        'blue',
         'lime',
         'cyan',
         'violet',
@@ -64,7 +64,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
         'purple',
         'amber',
         'green',
-        'blue',
+        'red',
         'fuchsia',
         'yellow',
         'neutral',
