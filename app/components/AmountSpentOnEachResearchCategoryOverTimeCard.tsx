@@ -7,6 +7,7 @@ import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
+import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
 
@@ -19,9 +20,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
 
