@@ -38,19 +38,19 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
     ).map(year => {
         const grants = datasetGroupedByYear[year]
 
-        let datapoint: {[key: string]: string | number} = {year}
+        let dataPoint: {[key: string]: string | number} = {year}
 
         if (selectedResearchCategories.length === 0) {
-            datapoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
         } else {
             researchCategories.forEach(researchCategory => {
-                datapoint[researchCategory] = grants
+                dataPoint[researchCategory] = grants
                     .filter(grant => grant.ResearchCat === researchCategory)
                     .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
             })
         }
 
-        return datapoint
+        return dataPoint
     })
 
     const colours: Color[] = [
