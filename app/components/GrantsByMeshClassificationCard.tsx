@@ -3,14 +3,13 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
 

@@ -7,6 +7,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
+import {filterGrants} from "../helpers/filter"
 
 import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
@@ -21,9 +22,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         name: researchCatLookupTable[key],
     }))
 
-    const filteredDataset = selectedFilters.funders.length > 0
-        ? dataset.filter(grant => selectedFilters.funders.includes(grant.FundingOrgName))
-        : dataset
+    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
         const value = filteredDataset
