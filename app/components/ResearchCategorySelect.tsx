@@ -10,7 +10,7 @@ interface Props {
     className?: string
 }
 
-export default function FunderSelect({setSelectedResearchCategories, className}: Props) {
+export default function ResearchCategorySelect({setSelectedResearchCategories, className}: Props) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
 
     const researchCategories = lookupTables.ResearchCat as StringDictionary
