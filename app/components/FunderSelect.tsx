@@ -1,39 +1,32 @@
 import {useState} from "react"
-import Select, {type MultiValue} from "react-select"
+import {MultiSelect, MultiSelectItem} from "@tremor/react"
 
 import funders from '../../data/source/funders.json'
-
-interface SelectOption {
-    value: string,
-    label: string,
-}
 
 interface Props {
     setSelectedFunders: (funders: string[]) => void,
 }
 
 export default function FunderSelect({setSelectedFunders}: Props) {
-    const [selectedOptions, setSelectedOptions] = useState<MultiValue<SelectOption>>([])
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([])
 
-    const options = funders.map((funderName: string) => ({
-        value: funderName,
-        label: funderName,
-    }))
-
-    const onChange = (options: MultiValue<SelectOption>) => {
+    const onChange = (options: string[]) => {
         setSelectedOptions(options)
-        setSelectedFunders(options.map((option: SelectOption) => option.value))
+        setSelectedFunders(options)
     }
 
     return (
-        <Select
-            instanceId="funders"
+        <MultiSelect
             value={selectedOptions}
-            onChange={onChange}
+            onValueChange={onChange}
             placeholder="Select funders..."
-            options={options}
-            className="text-black"
-            isMulti
-        />
+            className="max-w-xs"
+        >
+            {funders.map((funder, index) => (
+                <MultiSelectItem key={`${index}-${funder}`} value={funder}>
+                    {funder}
+                </MultiSelectItem>
+            ))}
+        </MultiSelect>
     )
 }
