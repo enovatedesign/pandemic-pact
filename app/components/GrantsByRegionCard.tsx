@@ -20,7 +20,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const numberOfGrantsPerRegion = regions.map(function (region) {
         const numberOfGrants = filteredDataset
-            .filter(grant => grant.GrantRegion === region.name)
+            .filter((grant: any) => grant.GrantRegion === region.name)
             .length
 
         return {
@@ -48,7 +48,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     justifyContent="end"
                     alignItems="center"
                 >
-                    {selectedFilters.funders.length > 0 &&
+                    {selectedFilters.FundingOrgName.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

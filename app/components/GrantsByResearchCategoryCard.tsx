@@ -26,7 +26,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
         const value = filteredDataset
-            .filter(grant => grant.ResearchCat === researchCategory.name)
+            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
             .length
 
         return {
@@ -38,8 +38,8 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
         const value = filteredDataset
-            .filter(grant => grant.ResearchCat === researchCategory.name)
-            .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
+            .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
 
         return {
             key: `grant-amount-${researchCategory.value}`,
@@ -101,7 +101,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     justifyContent="end"
                     alignItems="center"
                 >
-                    {selectedFilters.funders.length > 0 &&
+                    {selectedFilters.FundingOrgName.length > 0 &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

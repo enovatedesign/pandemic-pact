@@ -28,7 +28,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
         const numberOfGrantsPerClassification = classificationsNames.map(function (classificationName) {
             const numberOfGrants = filteredDataset
-                .filter(grant => grant[classification as keyof typeof grant] === classificationName)
+                .filter((grant: any) => grant[classification as keyof typeof grant] === classificationName)
                 .length
 
             return numberOfGrants
@@ -58,7 +58,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                {selectedFilters.funders.length > 0 &&
+                {selectedFilters.FundingOrgName.length > 0 &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

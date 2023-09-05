@@ -28,7 +28,7 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
     filteredCountriesGeoJson.features = filteredCountriesGeoJson.features.map((country: any) => {
         let properties: any = country.properties
 
-        properties.totalGrants = filteredDataset.filter(grant => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
+        properties.totalGrants = filteredDataset.filter((grant: any) => grant.ResearchInstitutionCountry === country.properties.ISO_A2).length
 
         country.properties = properties
 
