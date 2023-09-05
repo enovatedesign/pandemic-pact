@@ -20,11 +20,18 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
-    const filteredDataset = filterGrants(dataset, selectedFilters)
+    const filteredDataset = filterGrants(
+        dataset,
+        {...selectedFilters, ResearchCat: selectedResearchCategories},
+    )
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
 
-    const researchCategories: string[] = true ? ['All Research Categories'] : Object.values(researchCatLookupTable)
+    const researchCategories: string[] = selectedResearchCategories.length === 0 ?
+        ['All Research Categories'] :
+        Object.values(researchCatLookupTable).filter(
+            researchCategory => selectedResearchCategories.includes(researchCategory)
+        )
 
     const amountSpentOnEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
@@ -33,7 +40,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
         let datapoint: {[key: string]: string | number} = {year}
 
-        if (true) {
+        if (selectedResearchCategories.length === 0) {
             datapoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
         } else {
             researchCategories.forEach(researchCategory => {
