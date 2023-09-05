@@ -3,6 +3,7 @@ import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Co
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
+import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -14,6 +15,7 @@ import dataset from '../../data/dist/amount-spent-on-each-research-category-over
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
+    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
@@ -80,11 +82,16 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             </Flex>
 
             <Flex
-                justifyContent="end"
+                justifyContent="between"
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                {selectedFilters.funders.length > 0 &&
+                <ResearchCategorySelect
+                    setSelectedResearchCategories={setSelectedResearchCategories}
+                    className="max-w-xs ignore-in-image-export"
+                />
+
+                {filteredDataset.length < dataset.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>
