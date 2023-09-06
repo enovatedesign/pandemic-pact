@@ -1,16 +1,8 @@
 "use client"
 
 import {useState} from "react"
-
-import {
-    Tab,
-    TabList,
-    TabGroup,
-    TabPanels,
-} from "@tremor/react"
-
+import Nav from "./components/Nav"
 import VisualiseTabPanel from "./components/VisualiseTabPanel"
-import ExploreTabPanel from "./components/ExploreTabPanel"
 import Layout from "./components/Layout"
 import {FilterSidebar} from "./components/FilterSidebar"
 import {type Filters} from "./types/filters"
@@ -33,19 +25,13 @@ const Home = () => {
                 />
             }
         >
-            <TabGroup className="mt-6">
-                <TabList>
-                    <Tab>Visualise</Tab>
-                    <Tab>Explore</Tab>
-                </TabList>
+            <div className="mt-6">
+                <Nav selected="visualise" />
 
-                <TabPanels>
-                    <VisualiseTabPanel
-                        selectedFilters={selectedFilters}
-                    />
-                    <ExploreTabPanel />
-                </TabPanels>
-            </TabGroup>
+                <VisualiseTabPanel
+                    selectedFilters={selectedFilters}
+                />
+            </div>
         </Layout>
     )
 }

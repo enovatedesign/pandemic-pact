@@ -8,20 +8,18 @@ export default function ExploreTabPanel() {
     const [searchResults, setSearchResults] = useState<SearchResults>([])
 
     return (
-        <TabPanel key="explore-tab-panel">
-            <div className="mt-6">
-                <Grid className="gap-y-2">
-                    <Col>
-                        <SearchInput setSearchResults={setSearchResults} />
-                    </Col>
+        <div className="mt-6">
+            <Grid className="gap-y-2">
+                <Col>
+                    <SearchInput setSearchResults={setSearchResults} />
+                </Col>
 
-                    {searchResults.length > 0 &&
-                        <Col>
-                            <ResultsTable searchResults={searchResults} />
-                        </Col>
-                    }
-                </Grid>
-            </div>
-        </TabPanel>
+                {searchResults.length > 0 &&
+                    <Col>
+                        <ResultsTable searchResults={searchResults} />
+                    </Col>
+                }
+            </Grid>
+        </div>
     )
 }
