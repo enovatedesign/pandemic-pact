@@ -1,16 +1,25 @@
+"use client"
+
+import Nav from "../components/Nav"
+import Layout from "../components/Layout"
 import {useState} from "react"
-import {TabPanel, Grid, Col} from "@tremor/react"
-import SearchInput from "./SearchInput"
-import ResultsTable from "./ResultsTable"
+import {Grid, Col} from "@tremor/react"
+import SearchInput from "../components/SearchInput"
+import ResultsTable from "../components/ResultsTable"
 import {type SearchResults} from '../types/search-results'
 
-export default function ExploreTabPanel() {
+export default function Explore() {
     const [searchResults, setSearchResults] = useState<SearchResults>([])
 
     return (
-        <TabPanel key="explore-tab-panel">
+        <Layout
+            title="Pandemic PACT Tracker"
+            summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+        >
             <div className="mt-6">
-                <Grid className="gap-y-2">
+                <Nav selected="explore" />
+
+                <Grid className="gap-y-2 mt-6">
                     <Col>
                         <SearchInput setSearchResults={setSearchResults} />
                     </Col>
@@ -22,6 +31,6 @@ export default function ExploreTabPanel() {
                     }
                 </Grid>
             </div>
-        </TabPanel>
+        </Layout>
     )
 }
