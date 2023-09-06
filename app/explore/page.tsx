@@ -1,11 +1,15 @@
 "use client"
 
 import Nav from "../components/Nav"
-import ExploreTabPanel from "../components/ExploreTabPanel"
 import Layout from "../components/Layout"
-import {type Filters} from "../types/filters"
+import {useState} from "react"
+import {Grid, Col} from "@tremor/react"
+import SearchInput from "../components/SearchInput"
+import ResultsTable from "../components/ResultsTable"
+import {type SearchResults} from '../types/search-results'
 
-const Explore = () => {
+export default function Explore() {
+    const [searchResults, setSearchResults] = useState<SearchResults>([])
 
     return (
         <Layout
@@ -15,10 +19,18 @@ const Explore = () => {
             <div className="mt-6">
                 <Nav selected="explore" />
 
-                <ExploreTabPanel />
+                <Grid className="gap-y-2 mt-6">
+                    <Col>
+                        <SearchInput setSearchResults={setSearchResults} />
+                    </Col>
+
+                    {searchResults.length > 0 &&
+                        <Col>
+                            <ResultsTable searchResults={searchResults} />
+                        </Col>
+                    }
+                </Grid>
             </div>
         </Layout>
     )
 }
-
-export default Explore

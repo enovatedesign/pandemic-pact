@@ -7,7 +7,7 @@ interface FilterSidebarProps {
     setSelectedFilters: (filters: Filters) => void,
 }
 
-export const FilterSidebar = ({selectedFilters, setSelectedFilters}: FilterSidebarProps) => {
+export default function FilterSidebar({selectedFilters, setSelectedFilters}: FilterSidebarProps) {
     return (
         <Flex
             flexDirection="col"
