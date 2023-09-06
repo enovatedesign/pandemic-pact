@@ -20,7 +20,13 @@ deploy_review:
 stop_review:
   stage: deploy
   script:
-    - ./ci/delete-search-indexes.sh
+    - |
+      for index_name in grants exports
+      do
+        curl -X DELETE \
+             -H "Authorization: Bearer $MEILISEARCH_MASTER_API_KEY" \
+             "${MEILISEARCH_HOST}/indexes/${CI_COMMIT_REF_NAME}-${index_name}"
+      done
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
