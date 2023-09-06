@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
 interface Props {
-    selected: string
+    selected: 'visualise' | 'explore'
 }
 
-export default function Nav({selected = 'visualise'}: Props) {
+export default function Nav({selected}: Props) {
     return (
         <div
             className="tremor-TabList-root justify-start overflow-x-clip flex border-tremor-border dark:border-dark-tremor-border space-x-4 border-b" role="tablist"
