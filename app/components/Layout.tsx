@@ -43,7 +43,10 @@ const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
                             <MenuIcon className="h-8 w-8" aria-hidden="true" />
                         </button>
 
-                        <animated.div className="grow pb-6 px-6 overflow-y-auto" style={widthAnimationProps}>
+                        <animated.div 
+                            className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`} 
+                            style={widthAnimationProps}
+                        >
                             <animated.div style={opacityAnimationProps}>
                                 {sidebarContent}
                             </animated.div>
