@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from 'react'
+import {useRouter, usePathname, useSearchParams} from 'next/navigation'
 import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
@@ -8,10 +9,27 @@ import lookupTables from '../../data/source/lookup-tables.json'
 import {meilisearchRequest, exportRequestBody, type MeilisearchRequestBody} from '../helpers/meilisearch'
 
 export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
-    const [searchQuery, setSearchQuery] = useState<string>('')
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const searchQueryFromUrl = searchParams.get('q') ?? ''
+
+    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
+
+    useEffect(() => {
+        const url = new URL(pathname, window.location.origin)
+        
+        if (searchQuery) {
+            url.searchParams.set('q', searchQuery)
+        } else {
+            url.searchParams.delete('q')
+        } 
+
+        router.replace(url.href, {shallow: true})
+    }, [searchQuery])
 
     const sharedRequestBody = useMemo(() => {
         let body: MeilisearchRequestBody = {
@@ -91,6 +109,7 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
                     icon={SearchIcon}
                     placeholder="Search..."
                     onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
+                    value={searchQuery}
                 />
             </Col>
 
