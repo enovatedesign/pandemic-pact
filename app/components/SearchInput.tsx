@@ -33,7 +33,11 @@ export default function SearchInput({setSearchResponse}: Props) {
         }
 
         router.replace(url.href, {shallow: true})
-    }, [searchQuery])
+    }, [
+        searchQuery,
+        pathname,
+        router,
+    ])
 
     const sharedRequestBody = useMemo(() => {
         let body: MeilisearchRequestBody = {
