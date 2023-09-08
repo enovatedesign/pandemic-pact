@@ -1,5 +1,5 @@
 import Link from "next/link"
-import {Button, Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
+import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
 import {type SearchResults} from "../types/search-results"
 
 interface Props {
