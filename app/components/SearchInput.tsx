@@ -8,7 +8,11 @@ import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
 import {meilisearchRequest, exportRequestBody, type MeilisearchRequestBody} from '../helpers/meilisearch'
 
-export default function SearchInput({setSearchResults}: {setSearchResults: (searchResults: SearchResults) => void}) {
+interface Props {
+    setSearchResults: (searchResults: SearchResults) => void,
+}
+
+export default function SearchInput({setSearchResults}: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -21,12 +25,12 @@ export default function SearchInput({setSearchResults}: {setSearchResults: (sear
 
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
-        
+
         if (searchQuery) {
             url.searchParams.set('q', searchQuery)
         } else {
             url.searchParams.delete('q')
-        } 
+        }
 
         router.replace(url.href, {shallow: true})
     }, [searchQuery])
