@@ -1,17 +1,17 @@
-// TODO only import the specific grant identified by `id` from the dataset if possible?
-
 import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
-import fs from 'fs-extra'
+import dataset from '../../../data/dist/complete-dataset.json'
 
 export async function generateStaticParams() {
-    return fs.readJsonSync('./data/dist/grants/index.json').map(
-        (grantId: number) => ({id: `${grantId}`})
+    return (dataset as any).map(
+        (grant: any) => ({id: `${grant.GrantID}`})
     )
 }
 
 export default function Page({params}: {params: {id: string}}) {
-    const grant = fs.readJsonSync(`./data/dist/grants/${params.id}.json`)
+    const grant = (dataset as any).find(
+        (grant: any) => grant.GrantID === parseInt(params.id)
+    )
 
     const sidebarItems = [
         {
