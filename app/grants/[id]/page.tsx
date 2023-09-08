@@ -1,6 +1,6 @@
 // TODO only import the specific grant identified by `id` from the dataset if possible?
 
-import {Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
+import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
 import fs from 'fs-extra'
 
