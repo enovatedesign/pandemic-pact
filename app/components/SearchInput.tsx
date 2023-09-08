@@ -3,16 +3,16 @@ import {useRouter, usePathname, useSearchParams} from 'next/navigation'
 import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
-import {type SearchResults} from '../types/search-results'
+import {type SearchResponse} from '../types/search'
 import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
 import {meilisearchRequest, exportRequestBody, type MeilisearchRequestBody} from '../helpers/meilisearch'
 
 interface Props {
-    setSearchResults: (searchResults: SearchResults) => void,
+    setSearchResponse: (searchResponse: SearchResponse) => void,
 }
 
-export default function SearchInput({setSearchResults}: Props) {
+export default function SearchInput({setSearchResponse}: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -81,7 +81,7 @@ export default function SearchInput({setSearchResults}: Props) {
         )
 
         meilisearchRequest('grants', searchRequestBody).then(data => {
-            setSearchResults(data.hits)
+            setSearchResponse(data)
             setTotalHits(data.estimatedTotalHits)
         }).catch((error) => {
             console.error('Error:', error)
@@ -89,7 +89,7 @@ export default function SearchInput({setSearchResults}: Props) {
     }, [
         sharedRequestBody,
         setTotalHits,
-        setSearchResults,
+        setSearchResponse,
     ])
 
     const diseasesLookupTable = lookupTables.Diseases as StringDictionary

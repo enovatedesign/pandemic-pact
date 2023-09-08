@@ -6,10 +6,14 @@ import {useState} from "react"
 import {Grid, Col} from "@tremor/react"
 import SearchInput from "../components/SearchInput"
 import ResultsTable from "../components/ResultsTable"
-import {type SearchResults} from '../types/search-results'
+import {type SearchResponse} from '../types/search'
 
 export default function Explore() {
-    const [searchResults, setSearchResults] = useState<SearchResults>([])
+    const [searchResponse, setSearchResponse] = useState<SearchResponse>({
+        hits: [],
+        query: "",
+        estimatedTotalHits: 0,
+    })
 
     return (
         <Layout
@@ -21,15 +25,12 @@ export default function Explore() {
 
                 <Grid className="gap-y-2 mt-6">
                     <Col>
-                        <SearchInput setSearchResults={setSearchResults} />
+                        <SearchInput setSearchResponse={setSearchResponse} />
                     </Col>
 
-                    {searchResults.length > 0 &&
+                    {searchResponse.hits.length > 0 &&
                         <Col>
-                            <ResultsTable
-                                searchQuery="test"
-                                searchResults={searchResults}
-                            />
+                            <ResultsTable searchResponse={searchResponse} />
                         </Col>
                     }
                 </Grid>

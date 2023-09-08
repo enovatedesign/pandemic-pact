@@ -1,13 +1,12 @@
 import Link from "next/link"
 import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
-import {type SearchResults} from "../types/search-results"
+import {type SearchResponse} from "../types/search"
 
 interface Props {
-    searchQuery: string,
-    searchResults: SearchResults,
+    searchResponse: SearchResponse,
 }
 
-export default function ResultsTable({searchQuery, searchResults}: Props) {
+export default function ResultsTable({searchResponse}: Props) {
     return (
         <Card>
             <Table>
@@ -19,8 +18,9 @@ export default function ResultsTable({searchQuery, searchResults}: Props) {
                 </TableHead>
 
                 <TableBody>
-                    {searchResults.map((result) => {
-                        const href = `/grants/${result.GrantID}` + (searchQuery ? `?q=${searchQuery}` : '')
+                    {searchResponse.hits.map((result) => {
+                        const query = searchResponse.query
+                        const href = `/grants/${result.GrantID}` + (query ? `?q=${query}` : '')
 
                         return (
                             <TableRow key={result.GrantID}>
