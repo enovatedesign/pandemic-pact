@@ -1,6 +1,16 @@
+"use client"
+
+import {useEffect, useState} from 'react'
+import {useSearchParams} from 'next/navigation'
 import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
 import dataset from '../../../data/dist/complete-dataset.json'
+import {meilisearchRequest} from '../../helpers/meilisearch'
+
+interface SearchableFieldResults {
+    GrantTitleEng: string,
+    Abstract: string,
+}
 
 export async function generateStaticParams() {
     return (dataset as any).map(
@@ -13,6 +23,11 @@ export default function Page({params}: {params: {id: string}}) {
         (grant: any) => grant.GrantID === parseInt(params.id)
     )
 
+    const [searchableFieldResults, setSearchableFieldResults] = useState<SearchableFieldResults>({
+        GrantTitleEng: grant.GrantTitleEng,
+        Abstract: grant.Abstract,
+    })
+
     const sidebarItems = [
         {
             text: 'Amount Awarded (USD)',
@@ -24,13 +39,53 @@ export default function Page({params}: {params: {id: string}}) {
         },
     ]
 
+    const searchParams = useSearchParams()
+    const searchQueryFromUrl = searchParams.get('q') ?? ''
+
+
+    if (searchQueryFromUrl) {
+        useEffect(() => {
+            const searchRequestBody = {
+                q: searchQueryFromUrl,
+                filter: `GrantID = ${grant.GrantID}`,
+                attributesToHighlight: ['GrantTitleEng', 'Abstract'],
+                highlightPreTag: "<strong>",
+                highlightPostTag: "</strong>",
+            }
+
+            meilisearchRequest('exports', searchRequestBody).then(data => {
+                const hit = data.hits[0]
+
+                setSearchableFieldResults({
+                    GrantTitleEng: hit._formatted.GrantTitleEng,
+                    Abstract: hit._formatted.Abstract,
+                })
+            }).catch((error) => {
+                console.error('Error:', error)
+            })
+        }, [
+            searchQueryFromUrl,
+            grant,
+            setSearchableFieldResults,
+        ])
+    }
+
     return (
-        <Layout title={grant.GrantTitleEng}>
+        <Layout>
+            <div
+                className="mb-6"
+                dangerouslySetInnerHTML={{__html: searchableFieldResults.GrantTitleEng}}
+            />
+
             <Grid numItemsLg={6} className="gap-6 mt-6">
                 <Col numColSpanLg={4}>
                     <Card className="h-full">
                         <Title>Abstract</Title>
-                        <Text className="mt-2">{grant.Abstract}</Text>
+
+                        <div
+                            className="mt-2"
+                            dangerouslySetInnerHTML={{__html: searchableFieldResults.Abstract}}
+                        />
                     </Card>
                 </Col>
 
