@@ -26,7 +26,10 @@ export default function Explore() {
 
                     {searchResults.length > 0 &&
                         <Col>
-                            <ResultsTable searchResults={searchResults} />
+                            <ResultsTable
+                                searchQuery="test"
+                                searchResults={searchResults}
+                            />
                         </Col>
                     }
                 </Grid>

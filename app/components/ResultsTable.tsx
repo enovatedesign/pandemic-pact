@@ -3,10 +3,11 @@ import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell}
 import {type SearchResults} from "../types/search-results"
 
 interface Props {
+    searchQuery: string,
     searchResults: SearchResults,
 }
 
-export default function ResultsTable({searchResults}: Props) {
+export default function ResultsTable({searchQuery, searchResults}: Props) {
     return (
         <Card>
             <Table>
@@ -19,6 +20,8 @@ export default function ResultsTable({searchResults}: Props) {
 
                 <TableBody>
                     {searchResults.map((result) => {
+                        const href = `/grants/${result.GrantID}` + (searchQuery ? `?q=${searchQuery}` : '')
+
                         return (
                             <TableRow key={result.GrantID}>
                                 <TableCell
@@ -26,7 +29,7 @@ export default function ResultsTable({searchResults}: Props) {
                                     dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
                                 />
                                 <TableCell className="text-right whitespace-nowrap">
-                                    <Link href={`/grants/${result.GrantID}`}>View Grant</Link>
+                                    <Link href={href}>View Grant</Link>
                                 </TableCell>
                             </TableRow>
                         )
