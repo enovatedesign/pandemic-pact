@@ -1,8 +1,12 @@
 import Link from "next/link"
-import {Button, Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
-import {type SearchResults} from "../types/search-results"
+import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
+import {type SearchResponse} from "../types/search"
 
-export default function ResultsTable({searchResults}: {searchResults: SearchResults}) {
+interface Props {
+    searchResponse: SearchResponse,
+}
+
+export default function ResultsTable({searchResponse}: Props) {
     return (
         <Card>
             <Table>
@@ -14,7 +18,10 @@ export default function ResultsTable({searchResults}: {searchResults: SearchResu
                 </TableHead>
 
                 <TableBody>
-                    {searchResults.map((result) => {
+                    {searchResponse.hits.map((result) => {
+                        const query = searchResponse.query
+                        const href = `/grants/${result.GrantID}` + (query ? `?q=${query}` : '')
+
                         return (
                             <TableRow key={result.GrantID}>
                                 <TableCell
@@ -22,7 +29,7 @@ export default function ResultsTable({searchResults}: {searchResults: SearchResu
                                     dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
                                 />
                                 <TableCell className="text-right whitespace-nowrap">
-                                    <Link href={`/grants/${result.GrantID}`}>View Grant</Link>
+                                    <Link href={href}>View Grant</Link>
                                 </TableCell>
                             </TableRow>
                         )
