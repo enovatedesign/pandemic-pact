@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {Flex, Card, Title, Text} from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
