@@ -47,30 +47,25 @@ export async function meilisearchRequest(index: string, body: MeilisearchRequest
 }
 
 export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {}, attributesToHighlight: string[]): MeilisearchRequestBody {
-    return Object.assign(
-        {},
-        body,
-        {
-            attributesToHighlight,
-            highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
-            highlightPostTag: '</span>',
-        },
-    )
+    return {
+        ...body,
+        attributesToHighlight,
+        highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
+        highlightPostTag: '</span>',
+    }
 }
 
 export function exportRequestBody(body: MeilisearchRequestBody = {}): MeilisearchRequestBody {
-    return Object.assign(
-        {},
-        body,
+    return {
+        ...body,
         // TODO determine limit based on number of generated grants in complete dataset?
-        {limit: 100_000},
-    )
+        limit: 100_000,
+    }
 }
 
 export function exportRequestBodyFilteredToMatchingGrants(grants: {GrantID: number}[]): MeilisearchRequestBody {
-    return Object.assign(
-        {},
-        exportRequestBody(),
-        {filter: `GrantID IN [${grants.map(grant => grant.GrantID).join(',')}]`}
-    )
+    return {
+        ...exportRequestBody(),
+        filter: `GrantID IN [${grants.map(grant => grant.GrantID).join(',')}]`
+    }
 }

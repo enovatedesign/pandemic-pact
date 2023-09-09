@@ -80,7 +80,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
     useEffect(() => {
         const searchRequestBody = highlightedResultsRequestBody(
-            Object.assign({}, sharedRequestBody),
+            sharedRequestBody,
             ['GrantTitleEng']
         )
 
