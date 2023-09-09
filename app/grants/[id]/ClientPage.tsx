@@ -8,6 +8,7 @@ import {meilisearchRequest, highlightedResultsRequestBody} from '../../helpers/m
 interface SearchableFieldResults {
     GrantTitleEng: string,
     Abstract: string,
+    LaySummary: string | null,
 }
 
 interface Props {
@@ -18,6 +19,7 @@ export default function GrantLandingPage({grant}: Props) {
     const [searchableFieldResults, setSearchableFieldResults] = useState<SearchableFieldResults>({
         GrantTitleEng: grant.GrantTitleEng,
         Abstract: grant.Abstract,
+        LaySummary: grant.LaySummary,
     })
 
     const searchParams = useSearchParams()
@@ -32,7 +34,7 @@ export default function GrantLandingPage({grant}: Props) {
         const searchRequestBody = highlightedResultsRequestBody({
             q: searchQueryFromUrl,
             filter: `GrantID = ${grant.GrantID}`,
-        }, ['GrantTitleEng', 'Abstract'])
+        }, ['GrantTitleEng', 'Abstract', 'LaySummary'])
 
         meilisearchRequest('exports', searchRequestBody).then(data => {
             const hit = data.hits[0]
@@ -40,6 +42,7 @@ export default function GrantLandingPage({grant}: Props) {
             setSearchableFieldResults({
                 GrantTitleEng: hit._formatted.GrantTitleEng,
                 Abstract: hit._formatted.Abstract,
+                LaySummary: hit._formatted.LaySummary,
             })
         }).catch((error) => {
             console.error('Error:', error)

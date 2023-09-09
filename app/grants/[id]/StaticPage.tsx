@@ -25,8 +25,11 @@ export default function StaticPage({grant}: Props) {
             />
 
             <Grid numItemsLg={6} className="gap-6 mt-6">
-                <Col numColSpanLg={4}>
-                    <Card className="h-full">
+                <Col
+                    numColSpanLg={4}
+                    className="flex flex-col gap-6"
+                >
+                    <Card>
                         <Title>Abstract</Title>
 
                         <div
@@ -34,6 +37,17 @@ export default function StaticPage({grant}: Props) {
                             dangerouslySetInnerHTML={{__html: grant.Abstract}}
                         />
                     </Card>
+
+                    {grant.LaySummary &&
+                        <Card>
+                            <Title>Lay Summary</Title>
+
+                            <div
+                                className="mt-2"
+                                dangerouslySetInnerHTML={{__html: grant.LaySummary}}
+                            />
+                        </Card>
+                    }
                 </Col>
 
                 <Col numColSpanLg={2}>
