@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react'
 import {useSearchParams} from 'next/navigation'
 import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
-import {meilisearchRequest} from '../../helpers/meilisearch'
+import {meilisearchRequest, highlightedResultsRequestBody} from '../../helpers/meilisearch'
 
 interface SearchableFieldResults {
     GrantTitleEng: string,
@@ -30,13 +30,10 @@ export default function GrantLandingPage({grant}: Props) {
             return
         }
 
-        const searchRequestBody = {
+        const searchRequestBody = highlightedResultsRequestBody({
             q: searchQueryFromUrl,
             filter: `GrantID = ${grant.GrantID}`,
-            attributesToHighlight: ['GrantTitleEng', 'Abstract'],
-            highlightPreTag: "<strong>",
-            highlightPostTag: "</strong>",
-        }
+        }, ['GrantTitleEng', 'Abstract'])
 
         meilisearchRequest('exports', searchRequestBody).then(data => {
             const hit = data.hits[0]

@@ -6,7 +6,12 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {type SearchResponse} from '../types/search'
 import {type StringDictionary} from '../../scripts/types/dictionary'
 import lookupTables from '../../data/source/lookup-tables.json'
-import {meilisearchRequest, exportRequestBody, type MeilisearchRequestBody} from '../helpers/meilisearch'
+import {
+    meilisearchRequest,
+    exportRequestBody,
+    highlightedResultsRequestBody,
+    type MeilisearchRequestBody
+} from '../helpers/meilisearch'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void,
@@ -74,14 +79,9 @@ export default function SearchInput({setSearchResponse}: Props) {
     ])
 
     useEffect(() => {
-        const searchRequestBody = Object.assign(
-            {},
-            sharedRequestBody,
-            {
-                attributesToHighlight: ['GrantTitleEng'],
-                highlightPreTag: "<strong>",
-                highlightPostTag: "</strong>",
-            }
+        const searchRequestBody = highlightedResultsRequestBody(
+            Object.assign({}, sharedRequestBody),
+            ['GrantTitleEng']
         )
 
         meilisearchRequest('grants', searchRequestBody).then(data => {
