@@ -1,34 +1,34 @@
 import {useState} from "react"
 import {MultiSelect, MultiSelectItem} from "@tremor/react"
 
-import pathogenOptions from '../../data/dist/select-options/Pathogens.json'
+import diseaseOptions from '../../data/dist/select-options/Diseases.json'
 
 interface Props {
-    setSelectedPathogens: (pathogen: string[]) => void,
+    setSelectedDiseases: (disease: string[]) => void,
     className?: string
 }
 
-export default function PathogenSelect({setSelectedPathogens, className}: Props) {
+export default function DiseaseSelect({setSelectedDiseases, className}: Props) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
 
     const onChange = (options: string[]) => {
         setSelectedOptions(options)
-        setSelectedPathogens(options)
+        setSelectedDiseases(options)
     }
 
     return (
         <MultiSelect
             value={selectedOptions}
             onValueChange={onChange}
-            placeholder="All Pathogens"
+            placeholder="All Diseases"
             className={className}
         >
-            {pathogenOptions.map(pathogenOption => (
+            {diseaseOptions.map(diseaseOption => (
                 <MultiSelectItem
-                    key={pathogenOption.value}
-                    value={pathogenOption.label}
+                    key={diseaseOption.value}
+                    value={diseaseOption.label}
                 >
-                    {pathogenOption.label}
+                    {diseaseOption.label}
                 </MultiSelectItem>
             ))}
         </MultiSelect>

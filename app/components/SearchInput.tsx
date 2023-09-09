@@ -1,8 +1,10 @@
 import {useEffect, useMemo, useState} from 'react'
 import {useRouter, usePathname, useSearchParams} from 'next/navigation'
-import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
+import {Text, TextInput, Grid, Col} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
+import DiseaseSelect from "./DiseaseSelect"
+import PathogenSelect from "./PathogenSelect"
 import {type SearchResponse} from '../types/search'
 import {
     meilisearchRequest,
@@ -10,8 +12,6 @@ import {
     highlightedResultsRequestBody,
     type MeilisearchRequestBody
 } from '../helpers/meilisearch'
-import diseaseOptions from '../../data/dist/select-options/Diseases.json'
-import pathogenOptions from '../../data/dist/select-options/Pathogens.json'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void,
@@ -108,37 +108,11 @@ export default function SearchInput({setSearchResponse}: Props) {
             </Col>
 
             <Col>
-                <MultiSelect
-                    value={selectedDiseases}
-                    onValueChange={setSelectedDiseases}
-                    placeholder="Select diseases..."
-                >
-                    {diseaseOptions.map(diseaseOption => (
-                        <MultiSelectItem
-                            key={`diseaseOption.value`}
-                            value={diseaseOption.label}
-                        >
-                            {diseaseOption.label}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
+                <DiseaseSelect setSelectedDiseases={setSelectedDiseases} />
             </Col>
 
             <Col>
-                <MultiSelect
-                    value={selectedPathogens}
-                    onValueChange={setSelectedPathogens}
-                    placeholder="Select pathogens..."
-                >
-                    {pathogenOptions.map(pathogenOption => (
-                        <MultiSelectItem
-                            key={`pathogenOption.value`}
-                            value={pathogenOption.label}
-                        >
-                            {pathogenOption.label}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
+                <PathogenSelect setSelectedPathogens={setSelectedPathogens} />
             </Col>
 
             <Col
