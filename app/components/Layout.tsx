@@ -8,7 +8,7 @@ import {MenuIcon} from '@heroicons/react/solid'
 type SidebarProps = {
     sidebarContent?: React.ReactNode,
     children: React.ReactNode,
-    title: string,
+    title?: string,
     summary?: string,
 }
 
@@ -43,8 +43,8 @@ const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
                             <MenuIcon className="h-8 w-8" aria-hidden="true" />
                         </button>
 
-                        <animated.div 
-                            className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`} 
+                        <animated.div
+                            className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
                             style={widthAnimationProps}
                         >
                             <animated.div style={opacityAnimationProps}>
@@ -56,10 +56,12 @@ const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
             }
 
             <main className="container mx-auto px-12 py-12">
-                <div className="mb-6">
-                    <Title>{title}</Title>
-                    {summary && <Text>{summary}</Text>}
-                </div>
+                {title &&
+                    <div className="mb-6">
+                        <Title>{title}</Title>
+                        {summary && <Text>{summary}</Text>}
+                    </div>
+                }
 
                 {children}
             </main>

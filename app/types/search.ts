@@ -7,3 +7,9 @@ export interface SearchResult {
 }
 
 export type SearchResults = Array<SearchResult>
+
+export interface SearchResponse {
+    hits: SearchResults,
+    query: string,
+    estimatedTotalHits: number,
+}
