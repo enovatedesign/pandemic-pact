@@ -119,6 +119,28 @@ completeDataset.forEach((grant: {GrantID: number}) => {
     writeToDistJsonFile(pathname, grant, false)
 })
 
+fs.ensureDirSync(`${distDirectory}/select-options`)
+
+_.forEach(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: string) => {
+    let options: Array<{label: string, value: string, parent?: string}> = []
+
+    if (lookupTableName === 'ResearchSubcat') {
+        options = _.map(
+            lookupTable,
+            (subLookupTable, parent) => _.map(
+                subLookupTable,
+                (label, value) => ({label, value: String(value), parent}),
+            ),
+        ).flat()
+    } else {
+        options = _.map(lookupTable, (label: string, value: string) => ({label, value}))
+    }
+
+    const pathname = `select-options/${lookupTableName}.json`
+
+    writeToDistJsonFile(pathname, options)
+})
+
 function generateFakeData() {
     console.log(chalk.blue('Generating fake data'))
 
