@@ -5,41 +5,13 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 
-import lookupTables from '../../data/source/lookup-tables.json'
+import ethnicityOptions from '../../data/dist/select-options/Ethnicity.json'
+import ageGroupOptions from '../../data/dist/select-options/AgeGroups.json'
+import ruralityOptions from '../../data/dist/select-options/Rurality.json'
 import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
-
-    const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
-
-    const databars = classifications.map((classification) => {
-        const classificationLookupTable = lookupTables[classification as keyof typeof lookupTables]
-
-        const classificationsNames: string[] = Object.values(classificationLookupTable)
-            .filter(
-                (classificationName: string) => ![
-                    'Unspecified',
-                    'Other',
-                    'Not known',
-                    'Not applicable',
-                ].includes(classificationName)
-            )
-
-        const numberOfGrantsPerClassification = classificationsNames.map(function (classificationName) {
-            const numberOfGrants = filteredDataset
-                .filter((grant: any) => grant[classification as keyof typeof grant] === classificationName)
-                .length
-
-            return numberOfGrants
-        })
-
-        return {
-            classification,
-            classificationsNames,
-            numberOfGrantsPerClassification,
-        }
-    })
 
     return (
         <Card
@@ -64,25 +36,23 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
             </Flex>
 
             <div className="flex flex-col gap-y-6">
-                {databars.map((databar, index) =>
-                    <div key={index}>
-                        <Flex
-                            justifyContent="between"
-                            alignItems="center"
-                        >
-                            <Text>{databar.classification}</Text>
+                <DataBar
+                    dataset={filteredDataset}
+                    fieldName="Ethnicity"
+                    options={ethnicityOptions}
+                />
 
-                            <Legend
-                                categories={databar.classificationsNames}
-                            />
-                        </Flex>
+                <DataBar
+                    dataset={filteredDataset}
+                    fieldName="AgeGroups"
+                    options={ageGroupOptions}
+                />
 
-                        <CategoryBar
-                            values={databar.numberOfGrantsPerClassification}
-                            className="mt-3"
-                        />
-                    </div>
-                )}
+                <DataBar
+                    dataset={filteredDataset}
+                    fieldName="Rurality"
+                    options={ruralityOptions}
+                />
             </div>
 
             <Flex
@@ -103,3 +73,49 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         </Card>
     )
 }
+
+interface DataBarProps {
+    dataset: any[]
+    fieldName: string
+    options: any[]
+}
+
+function DataBar({dataset, fieldName, options}: DataBarProps) {
+    const optionValues: string[] = options.map(
+        (option: any) => option.label
+    ).filter(
+        (name: string) => ![
+            'Unspecified',
+            'Other',
+            'Not known',
+            'Not applicable',
+        ].includes(name)
+    )
+
+    const numberOfGrantsPerOption = optionValues.map(
+        name => dataset.filter(
+            (grant: any) => grant[fieldName] === name
+        ).length
+    )
+
+    return (
+        <div>
+            <Flex
+                justifyContent="between"
+                alignItems="center"
+            >
+                <Text>{fieldName}</Text>
+
+                <Legend
+                    categories={optionValues}
+                />
+            </Flex>
+
+            <CategoryBar
+                values={numberOfGrantsPerOption}
+                className="mt-3"
+            />
+        </div >
+    )
+}
+

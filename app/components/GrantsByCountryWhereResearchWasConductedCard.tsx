@@ -10,7 +10,6 @@ import {filterGrants} from "../helpers/filter"
 
 import dataset from '../../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
-import lookupTables from '../../data/source/lookup-tables.json'
 
 export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
     const [tooltipContent, setTooltipContent] = useState('')

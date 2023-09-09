@@ -4,14 +4,14 @@ import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {type SearchResponse} from '../types/search'
-import {type StringDictionary} from '../../scripts/types/dictionary'
-import lookupTables from '../../data/source/lookup-tables.json'
 import {
     meilisearchRequest,
     exportRequestBody,
     highlightedResultsRequestBody,
     type MeilisearchRequestBody
 } from '../helpers/meilisearch'
+import diseaseOptions from '../../data/dist/select-options/Diseases.json'
+import pathogenOptions from '../../data/dist/select-options/Pathogens.json'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void,
@@ -96,20 +96,6 @@ export default function SearchInput({setSearchResponse}: Props) {
         setSearchResponse,
     ])
 
-    const diseasesLookupTable = lookupTables.Diseases as StringDictionary
-
-    const diseases: {value: string, name: string}[] = Object.keys(diseasesLookupTable).map((key: string) => ({
-        value: key,
-        name: diseasesLookupTable[key],
-    }))
-
-    const pathogensLookupTable = lookupTables.Pathogens as StringDictionary
-
-    const pathogens: {value: string, name: string}[] = Object.keys(pathogensLookupTable).map((key: string) => ({
-        value: key,
-        name: pathogensLookupTable[key],
-    }))
-
     return (
         <Grid numItems={2} className="gap-2" >
             <Col numColSpan={2}>
@@ -127,9 +113,12 @@ export default function SearchInput({setSearchResponse}: Props) {
                     onValueChange={setSelectedDiseases}
                     placeholder="Select diseases..."
                 >
-                    {diseases.map(disease => (
-                        <MultiSelectItem key={`disease-${disease.value}`} value={disease.name}>
-                            {disease.name}
+                    {diseaseOptions.map(diseaseOption => (
+                        <MultiSelectItem
+                            key={`diseaseOption.value`}
+                            value={diseaseOption.label}
+                        >
+                            {diseaseOption.label}
                         </MultiSelectItem>
                     ))}
                 </MultiSelect>
@@ -141,9 +130,12 @@ export default function SearchInput({setSearchResponse}: Props) {
                     onValueChange={setSelectedPathogens}
                     placeholder="Select pathogens..."
                 >
-                    {pathogens.map(pathogen => (
-                        <MultiSelectItem key={`pathogen-${pathogen.value}`} value={pathogen.name}>
-                            {pathogen.name}
+                    {pathogenOptions.map(pathogenOption => (
+                        <MultiSelectItem
+                            key={`pathogenOption.value`}
+                            value={pathogenOption.label}
+                        >
+                            {pathogenOption.label}
                         </MultiSelectItem>
                     ))}
                 </MultiSelect>

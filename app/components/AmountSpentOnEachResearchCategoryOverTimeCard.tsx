@@ -1,7 +1,6 @@
 import {useState} from "react"
 import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
@@ -10,15 +9,12 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
-
-import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
+import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
-
-    const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
     const filteredDataset = filterGrants(
         dataset,
@@ -29,7 +25,9 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
     const researchCategories: string[] = selectedResearchCategories.length === 0 ?
         ['All Research Categories'] :
-        Object.values(researchCatLookupTable).filter(
+        researchCategoryOptions.map(
+            researchCategoryOption => researchCategoryOption.label
+        ).filter(
             researchCategory => selectedResearchCategories.includes(researchCategory)
         )
 

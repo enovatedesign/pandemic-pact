@@ -1,9 +1,7 @@
 import {useState} from "react"
 import {MultiSelect, MultiSelectItem} from "@tremor/react"
 
-import lookupTables from '../../data/source/lookup-tables.json'
-import {StringDictionary} from "../../scripts/types/dictionary"
-import {map} from 'lodash'
+import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
 interface Props {
     setSelectedResearchCategories: (researchCategory: string[]) => void,
@@ -12,8 +10,6 @@ interface Props {
 
 export default function ResearchCategorySelect({setSelectedResearchCategories, className}: Props) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
-
-    const researchCategories = lookupTables.ResearchCat as StringDictionary
 
     const onChange = (options: string[]) => {
         setSelectedOptions(options)
@@ -27,9 +23,12 @@ export default function ResearchCategorySelect({setSelectedResearchCategories, c
             placeholder="All Research Categories"
             className={className}
         >
-            {map(researchCategories, (researchCategory, index) => (
-                <MultiSelectItem key={`${index}-${researchCategory}`} value={researchCategory}>
-                    {researchCategory}
+            {researchCategoryOptions.map(researchCategoryOption => (
+                <MultiSelectItem
+                    key={`researchCategoryOption.value`}
+                    value={researchCategoryOption.label}
+                >
+                    {researchCategoryOption.label}
                 </MultiSelectItem>
             ))}
         </MultiSelect>
