@@ -45,53 +45,7 @@ const researchInstitutions: ResearchInstitution[] = _.range(200).map(() => {
     }
 })
 
-const completeDataset = fs.readJsonSync('./data/source/fake-data-from-covid-tracker.json')
-    .map((covidGrant: {name: string, abstract: string, lay_summary: string}, grantId: number) => {
-        const funder = faker.helpers.arrayElement(funders)
-        const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
-
-        const researchCatKey = faker.helpers.objectKey(lookupTables.ResearchCat)
-        const researchCat = lookupTables.ResearchCat[researchCatKey]
-        const researchSubcat = faker.helpers.objectValue(lookupTables.ResearchSubcat[researchCatKey])
-
-        return {
-            "GrantID": grantId,
-            "GrantTitleEng": covidGrant.name,
-            "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
-            "GrantCountry": faker.location.countryCode('alpha-2'),
-            "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
-            "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
-            "Abstract": covidGrant.abstract,
-            "LaySummary": covidGrant.lay_summary,
-            "GrantEndYear": faker.date.future({years: 5}).getFullYear(),
-            "StudySubject": faker.helpers.objectValue(lookupTables.StudySubject),
-            "Ethnicity": faker.helpers.objectValue(lookupTables.Ethnicity),
-            "AgeGroups": faker.helpers.objectValue(lookupTables.AgeGroups),
-            "Rurality": faker.helpers.objectValue(lookupTables.Rurality),
-            "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
-            "OccupationalGroups": faker.helpers.objectValue(lookupTables.OccupationalGroups),
-            "StudyType": faker.helpers.objectValue(lookupTables.StudyType),
-            "ClinicalTrial": faker.helpers.objectValue(lookupTables.ClinTrial),
-            "ResearchCat": researchCat,
-            "ResearchSubcat": researchSubcat,
-            "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
-            "100DaysMissionFramework": "", // awaiting specification
-            "PolicyRoadmap01": "", // awaiting specification
-            "PolicyRoadmap02": "", // awaiting specification
-            "PolicyRoadmap03": "", // awaiting specification
-            "PolicyRoadmap04": "", // awaiting specification
-            "PolicyRoadmap05": "", // awaiting specification
-            "PolicyRoadmap06": "", // awaiting specification
-            "PolicyRoadmap07": "", // awaiting specification
-            "PolicyRoadmap08": "", // awaiting specification
-            "PolicyRoadmap09": "", // awaiting specification
-            "PolicyRoadmap10": "", // awaiting specification
-            "Pathogen": faker.helpers.objectValue(lookupTables.Pathogens),
-            "Disease": faker.helpers.objectValue(lookupTables.Diseases),
-            ...funder,
-            ...researchInstitution,
-        }
-    })
+const completeDataset = process.env.GENERATE_REAL_DATA ? generateRealData() : generateFakeData()
 
 const distDirectory = './data/dist'
 
@@ -164,6 +118,110 @@ completeDataset.forEach((grant: {GrantID: number}) => {
     const pathname = `grants/${grant.GrantID}.json`
     writeToDistJsonFile(pathname, grant, false)
 })
+
+function generateFakeData() {
+    console.log(chalk.blue('Generating fake data'));
+
+    return fs.readJsonSync('./data/source/fake-data-from-covid-tracker.json')
+        .map((covidGrant: {name: string, abstract: string, lay_summary: string}, grantId: number) => {
+            const funder = faker.helpers.arrayElement(funders)
+            const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
+
+            const researchCatKey = faker.helpers.objectKey(lookupTables.ResearchCat)
+            const researchCat = lookupTables.ResearchCat[researchCatKey]
+            const researchSubcat = faker.helpers.objectValue(lookupTables.ResearchSubcat[researchCatKey])
+
+            return {
+                "GrantID": grantId,
+                "GrantTitleEng": covidGrant.name,
+                "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
+                "GrantCountry": faker.location.countryCode('alpha-2'),
+                "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
+                "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
+                "Abstract": covidGrant.abstract,
+                "LaySummary": covidGrant.lay_summary,
+                "GrantEndYear": faker.date.future({years: 5}).getFullYear(),
+                "StudySubject": faker.helpers.objectValue(lookupTables.StudySubject),
+                "Ethnicity": faker.helpers.objectValue(lookupTables.Ethnicity),
+                "AgeGroups": faker.helpers.objectValue(lookupTables.AgeGroups),
+                "Rurality": faker.helpers.objectValue(lookupTables.Rurality),
+                "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
+                "OccupationalGroups": faker.helpers.objectValue(lookupTables.OccupationalGroups),
+                "StudyType": faker.helpers.objectValue(lookupTables.StudyType),
+                "ClinicalTrial": faker.helpers.objectValue(lookupTables.ClinTrial),
+                "ResearchCat": researchCat,
+                "ResearchSubcat": researchSubcat,
+                "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
+                "100DaysMissionFramework": "", // awaiting specification
+                "PolicyRoadmap01": "", // awaiting specification
+                "PolicyRoadmap02": "", // awaiting specification
+                "PolicyRoadmap03": "", // awaiting specification
+                "PolicyRoadmap04": "", // awaiting specification
+                "PolicyRoadmap05": "", // awaiting specification
+                "PolicyRoadmap06": "", // awaiting specification
+                "PolicyRoadmap07": "", // awaiting specification
+                "PolicyRoadmap08": "", // awaiting specification
+                "PolicyRoadmap09": "", // awaiting specification
+                "PolicyRoadmap10": "", // awaiting specification
+                "Pathogen": faker.helpers.objectValue(lookupTables.Pathogens),
+                "Disease": faker.helpers.objectValue(lookupTables.Diseases),
+                ...funder,
+                ...researchInstitution,
+            }
+        })
+}
+
+function generateRealData() {
+    console.log(chalk.blue('Generating real data'));
+
+    return fs.readJsonSync('./data/source/fake-data-from-covid-tracker.json')
+        .map((covidGrant: {name: string, abstract: string, lay_summary: string}, grantId: number) => {
+            const funder = faker.helpers.arrayElement(funders)
+            const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
+
+            const researchCatKey = faker.helpers.objectKey(lookupTables.ResearchCat)
+            const researchCat = lookupTables.ResearchCat[researchCatKey]
+            const researchSubcat = faker.helpers.objectValue(lookupTables.ResearchSubcat[researchCatKey])
+
+            return {
+                "GrantID": grantId,
+                "GrantTitleEng": covidGrant.name,
+                "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
+                "GrantCountry": faker.location.countryCode('alpha-2'),
+                "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
+                "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
+                "Abstract": covidGrant.abstract,
+                "LaySummary": covidGrant.lay_summary,
+                "GrantEndYear": faker.date.future({years: 5}).getFullYear(),
+                "StudySubject": faker.helpers.objectValue(lookupTables.StudySubject),
+                "Ethnicity": faker.helpers.objectValue(lookupTables.Ethnicity),
+                "AgeGroups": faker.helpers.objectValue(lookupTables.AgeGroups),
+                "Rurality": faker.helpers.objectValue(lookupTables.Rurality),
+                "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
+                "OccupationalGroups": faker.helpers.objectValue(lookupTables.OccupationalGroups),
+                "StudyType": faker.helpers.objectValue(lookupTables.StudyType),
+                "ClinicalTrial": faker.helpers.objectValue(lookupTables.ClinTrial),
+                "ResearchCat": researchCat,
+                "ResearchSubcat": researchSubcat,
+                "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
+                "100DaysMissionFramework": "", // awaiting specification
+                "PolicyRoadmap01": "", // awaiting specification
+                "PolicyRoadmap02": "", // awaiting specification
+                "PolicyRoadmap03": "", // awaiting specification
+                "PolicyRoadmap04": "", // awaiting specification
+                "PolicyRoadmap05": "", // awaiting specification
+                "PolicyRoadmap06": "", // awaiting specification
+                "PolicyRoadmap07": "", // awaiting specification
+                "PolicyRoadmap08": "", // awaiting specification
+                "PolicyRoadmap09": "", // awaiting specification
+                "PolicyRoadmap10": "", // awaiting specification
+                "Pathogen": faker.helpers.objectValue(lookupTables.Pathogens),
+                "Disease": faker.helpers.objectValue(lookupTables.Diseases),
+                ...funder,
+                ...researchInstitution,
+            }
+        })
+}
 
 function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
     const pathname = `${distDirectory}/${filename}`
