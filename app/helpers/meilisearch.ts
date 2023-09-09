@@ -52,8 +52,8 @@ export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {},
         body,
         {
             attributesToHighlight,
-            highlightPreTag: "<strong>",
-            highlightPostTag: "</strong>",
+            highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
+            highlightPostTag: '</span>',
         },
     )
 }
