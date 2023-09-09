@@ -1,4 +1,4 @@
-import {Flex, Card, Title, Text, CategoryBar, Legend} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -26,29 +26,32 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 <Text>Total Grants: {dataset.length}</Text>
             </Flex>
 
-            <Flex
-                alignItems="center"
-                className="ignore-in-image-export"
-            >
-                {filteredDataset.length < dataset.length &&
+            {filteredDataset.length < dataset.length &&
+                <Flex
+                    alignItems="center"
+                    className="ignore-in-image-export"
+                >
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
-                }
-            </Flex>
+                </Flex>
+            }
 
             <div className="flex flex-col gap-y-6">
                 <DataBar
+                    title="Ethnicity"
                     dataset={filteredDataset}
                     fieldName="Ethnicity"
                     options={ethnicityOptions}
                 />
 
                 <DataBar
+                    title="Age Groups"
                     dataset={filteredDataset}
                     fieldName="AgeGroups"
                     options={ageGroupOptions}
                 />
 
                 <DataBar
+                    title="Rurality"
                     dataset={filteredDataset}
                     fieldName="Rurality"
                     options={ruralityOptions}
@@ -75,12 +78,13 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 }
 
 interface DataBarProps {
-    dataset: any[]
+    title: string
     fieldName: string
+    dataset: any[]
     options: any[]
 }
 
-function DataBar({dataset, fieldName, options}: DataBarProps) {
+function DataBar({title, fieldName, dataset, options}: DataBarProps) {
     const optionValues: string[] = options.map(
         (option: any) => option.label
     ).filter(
@@ -100,20 +104,16 @@ function DataBar({dataset, fieldName, options}: DataBarProps) {
 
     return (
         <div>
-            <Flex
-                justifyContent="between"
-                alignItems="center"
-            >
-                <Text>{fieldName}</Text>
+            <Subtitle>{title}</Subtitle>
 
-                <Legend
-                    categories={optionValues}
-                />
-            </Flex>
+            <Legend
+                categories={optionValues}
+                className="mt-4"
+            />
 
             <CategoryBar
                 values={numberOfGrantsPerOption}
-                className="mt-3"
+                className="mt-4"
             />
         </div >
     )
