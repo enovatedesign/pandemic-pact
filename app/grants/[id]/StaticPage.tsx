@@ -1,56 +1,11 @@
-"use client"
-
-import {useEffect, useState} from 'react'
-import {useSearchParams} from 'next/navigation'
 import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
-import {meilisearchRequest, highlightedResultsRequestBody} from '../../helpers/meilisearch'
-
-interface SearchableFieldResults {
-    GrantTitleEng: string,
-    Abstract: string,
-}
 
 interface Props {
     grant: any
 }
 
-export default function GrantLandingPage({grant}: Props) {
-    const [searchableFieldResults, setSearchableFieldResults] = useState<SearchableFieldResults>({
-        GrantTitleEng: grant.GrantTitleEng,
-        Abstract: grant.Abstract,
-    })
-
-    const searchParams = useSearchParams()
-
-    useEffect(() => {
-        const searchQueryFromUrl = searchParams.get('q') ?? ''
-
-        if (!searchQueryFromUrl) {
-            return
-        }
-
-        const searchRequestBody = highlightedResultsRequestBody({
-            q: searchQueryFromUrl,
-            filter: `GrantID = ${grant.GrantID}`,
-        }, ['GrantTitleEng', 'Abstract'])
-
-        meilisearchRequest('exports', searchRequestBody).then(data => {
-            const hit = data.hits[0]
-
-            setSearchableFieldResults({
-                GrantTitleEng: hit._formatted.GrantTitleEng,
-                Abstract: hit._formatted.Abstract,
-            })
-        }).catch((error) => {
-            console.error('Error:', error)
-        })
-    }, [
-        searchParams,
-        grant,
-        setSearchableFieldResults,
-    ])
-
+export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
             text: 'Amount Awarded (USD)',
@@ -66,7 +21,7 @@ export default function GrantLandingPage({grant}: Props) {
         <Layout>
             <div
                 className="mb-6"
-                dangerouslySetInnerHTML={{__html: searchableFieldResults.GrantTitleEng}}
+                dangerouslySetInnerHTML={{__html: grant.GrantTitleEng}}
             />
 
             <Grid numItemsLg={6} className="gap-6 mt-6">
@@ -76,7 +31,7 @@ export default function GrantLandingPage({grant}: Props) {
 
                         <div
                             className="mt-2"
-                            dangerouslySetInnerHTML={{__html: searchableFieldResults.Abstract}}
+                            dangerouslySetInnerHTML={{__html: grant.Abstract}}
                         />
                     </Card>
                 </Col>
