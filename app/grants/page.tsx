@@ -1,9 +1,9 @@
 "use client"
 
+import {Suspense, useState} from "react"
+import {Grid, Col} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
-import {useState} from "react"
-import {Grid, Col} from "@tremor/react"
 import SearchInput from "../components/SearchInput"
 import ResultsTable from "../components/ResultsTable"
 import {type SearchResponse} from '../types/search'
@@ -25,7 +25,14 @@ export default function Explore() {
 
                 <Grid className="gap-y-2 mt-6">
                     <Col>
-                        <SearchInput setSearchResponse={setSearchResponse} />
+                        {/*
+                        Note that the `Suspense` here is to suppress the following error:
+                        https://nextjs.org/docs/messages/deopted-into-client-rendering
+                        TODO work out what to do with the `Suspense` `fallback`
+                        */}
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <SearchInput setSearchResponse={setSearchResponse} />
+                        </Suspense>
                     </Col>
 
                     {searchResponse.hits.length > 0 &&
