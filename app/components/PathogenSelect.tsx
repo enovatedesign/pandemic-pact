@@ -1,9 +1,7 @@
 import {useState} from "react"
 import {MultiSelect, MultiSelectItem} from "@tremor/react"
 
-import lookupTables from '../../data/source/lookup-tables.json'
-import {StringDictionary} from "../../scripts/types/dictionary"
-import {map} from 'lodash'
+import pathogenOptions from '../../data/dist/select-options/Pathogens.json'
 
 interface Props {
     setSelectedPathogens: (pathogen: string[]) => void,
@@ -12,8 +10,6 @@ interface Props {
 
 export default function PathogenSelect({setSelectedPathogens, className}: Props) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
-
-    const pathogens = lookupTables.Pathogens as StringDictionary
 
     const onChange = (options: string[]) => {
         setSelectedOptions(options)
@@ -27,9 +23,12 @@ export default function PathogenSelect({setSelectedPathogens, className}: Props)
             placeholder="All Pathogens"
             className={className}
         >
-            {map(pathogens, (pathogen, index) => (
-                <MultiSelectItem key={`${index}-${pathogen}`} value={pathogen}>
-                    {pathogen}
+            {pathogenOptions.map(pathogenOption => (
+                <MultiSelectItem
+                    key={pathogenOption.value}
+                    value={pathogenOption.label}
+                >
+                    {pathogenOption.label}
                 </MultiSelectItem>
             ))}
         </MultiSelect>

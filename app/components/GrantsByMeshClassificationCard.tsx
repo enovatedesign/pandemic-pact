@@ -1,45 +1,17 @@
-import {Flex, Card, Title, Text, CategoryBar, Legend} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 
-import lookupTables from '../../data/source/lookup-tables.json'
+import ethnicityOptions from '../../data/dist/select-options/Ethnicity.json'
+import ageGroupOptions from '../../data/dist/select-options/AgeGroups.json'
+import ruralityOptions from '../../data/dist/select-options/Rurality.json'
 import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
-
-    const classifications = ['Ethnicity', 'AgeGroups', 'Rurality']
-
-    const databars = classifications.map((classification) => {
-        const classificationLookupTable = lookupTables[classification as keyof typeof lookupTables]
-
-        const classificationsNames: string[] = Object.values(classificationLookupTable)
-            .filter(
-                (classificationName: string) => ![
-                    'Unspecified',
-                    'Other',
-                    'Not known',
-                    'Not applicable',
-                ].includes(classificationName)
-            )
-
-        const numberOfGrantsPerClassification = classificationsNames.map(function (classificationName) {
-            const numberOfGrants = filteredDataset
-                .filter((grant: any) => grant[classification as keyof typeof grant] === classificationName)
-                .length
-
-            return numberOfGrants
-        })
-
-        return {
-            classification,
-            classificationsNames,
-            numberOfGrantsPerClassification,
-        }
-    })
 
     return (
         <Card
@@ -54,35 +26,36 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 <Text>Total Grants: {dataset.length}</Text>
             </Flex>
 
-            <Flex
-                alignItems="center"
-                className="ignore-in-image-export"
-            >
-                {filteredDataset.length < dataset.length &&
+            {filteredDataset.length < dataset.length &&
+                <Flex
+                    alignItems="center"
+                    className="ignore-in-image-export"
+                >
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
-                }
-            </Flex>
+                </Flex>
+            }
 
             <div className="flex flex-col gap-y-6">
-                {databars.map((databar, index) =>
-                    <div key={index}>
-                        <Flex
-                            justifyContent="between"
-                            alignItems="center"
-                        >
-                            <Text>{databar.classification}</Text>
+                <DataBar
+                    title="Ethnicity"
+                    dataset={filteredDataset}
+                    fieldName="Ethnicity"
+                    options={ethnicityOptions}
+                />
 
-                            <Legend
-                                categories={databar.classificationsNames}
-                            />
-                        </Flex>
+                <DataBar
+                    title="Age Groups"
+                    dataset={filteredDataset}
+                    fieldName="AgeGroups"
+                    options={ageGroupOptions}
+                />
 
-                        <CategoryBar
-                            values={databar.numberOfGrantsPerClassification}
-                            className="mt-3"
-                        />
-                    </div>
-                )}
+                <DataBar
+                    title="Rurality"
+                    dataset={filteredDataset}
+                    fieldName="Rurality"
+                    options={ruralityOptions}
+                />
             </div>
 
             <Flex
@@ -103,3 +76,52 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         </Card>
     )
 }
+
+interface DataBarProps {
+    title: string
+    fieldName: string
+    dataset: any[]
+    options: any[]
+}
+
+function DataBar({title, fieldName, dataset, options}: DataBarProps) {
+    const optionValues: string[] = options.map(
+        (option: any) => option.label
+    ).filter(
+        (name: string) => ![
+            'Unspecified',
+            'Other',
+            'Not known',
+            'Not applicable',
+        ].includes(name)
+    )
+
+    const numberOfGrantsPerOption = optionValues.map(
+        name => dataset.filter(
+            (grant: any) => grant[fieldName] === name
+        ).length
+    )
+
+    const sum = numberOfGrantsPerOption.reduce((a, b) => a + b, 0)
+
+    const numberOfGrantsPerOptionPercentage = numberOfGrantsPerOption.map(
+        (value: number) => Math.round((value / sum) * 100)
+    )
+
+    return (
+        <div>
+            <Subtitle>{title} (%)</Subtitle>
+
+            <Legend
+                categories={optionValues}
+                className="mt-4"
+            />
+
+            <CategoryBar
+                values={numberOfGrantsPerOptionPercentage}
+                className="mt-4"
+            />
+        </div >
+    )
+}
+

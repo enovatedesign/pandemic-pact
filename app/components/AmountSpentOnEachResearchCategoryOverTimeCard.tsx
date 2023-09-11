@@ -1,7 +1,6 @@
 import {useState} from "react"
 import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
@@ -10,15 +9,12 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
-
-import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
+import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
 export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
-
-    const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
 
     const filteredDataset = filterGrants(
         dataset,
@@ -27,10 +23,10 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
 
-    const researchCategories: string[] = selectedResearchCategories.length === 0 ?
-        ['All Research Categories'] :
-        Object.values(researchCatLookupTable).filter(
-            researchCategory => selectedResearchCategories.includes(researchCategory)
+    const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
+        [{value: 'All Research Categories', label: 'All Research Categories'}] :
+        researchCategoryOptions.filter(
+            researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
 
     const amountSpentOnEachResearchCategoryOverTime = Object.keys(
@@ -43,9 +39,9 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
         if (selectedResearchCategories.length === 0) {
             dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
         } else {
-            researchCategories.forEach(researchCategory => {
-                dataPoint[researchCategory] = grants
-                    .filter(grant => grant.ResearchCat === researchCategory)
+            selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
+                dataPoint[selectedResearchCategoryOption.label] = grants
+                    .filter(grant => grant.ResearchCat.includes(selectedResearchCategoryOption.value))
                     .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
             })
         }
@@ -73,6 +69,8 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
     const valueFormatter = (value: number) => {
         return '$' + millify(value, {precision: 2})
     }
+
+    const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
     return (
         <Card
@@ -103,7 +101,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             </Flex>
 
             {selectedTabIndex === 0 &&
-                <BarChart
+                <LineChart
                     data={amountSpentOnEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
@@ -115,7 +113,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             }
 
             {selectedTabIndex === 1 &&
-                <LineChart
+                <BarChart
                     data={amountSpentOnEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
@@ -136,8 +134,8 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
                     onIndexChange={setSelectedTabIndex}
                 >
                     <TabList variant="solid">
-                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
                         <Tab icon={PresentationChartLineIcon}>Line</Tab>
+                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
                     </TabList>
                 </TabGroup>
 

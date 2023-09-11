@@ -1,11 +1,11 @@
 import {useEffect, useMemo, useState} from 'react'
 import {useRouter, usePathname, useSearchParams} from 'next/navigation'
-import {Text, TextInput, Grid, Col, MultiSelect, MultiSelectItem} from '@tremor/react'
+import {Text, TextInput, Grid, Col} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
+import DiseaseSelect from "./DiseaseSelect"
+import PathogenSelect from "./PathogenSelect"
 import {type SearchResponse} from '../types/search'
-import {type StringDictionary} from '../../scripts/types/dictionary'
-import lookupTables from '../../data/source/lookup-tables.json'
 import {
     meilisearchRequest,
     exportRequestBody,
@@ -96,20 +96,6 @@ export default function SearchInput({setSearchResponse}: Props) {
         setSearchResponse,
     ])
 
-    const diseasesLookupTable = lookupTables.Diseases as StringDictionary
-
-    const diseases: {value: string, name: string}[] = Object.keys(diseasesLookupTable).map((key: string) => ({
-        value: key,
-        name: diseasesLookupTable[key],
-    }))
-
-    const pathogensLookupTable = lookupTables.Pathogens as StringDictionary
-
-    const pathogens: {value: string, name: string}[] = Object.keys(pathogensLookupTable).map((key: string) => ({
-        value: key,
-        name: pathogensLookupTable[key],
-    }))
-
     return (
         <Grid numItems={2} className="gap-2" >
             <Col numColSpan={2}>
@@ -122,31 +108,11 @@ export default function SearchInput({setSearchResponse}: Props) {
             </Col>
 
             <Col>
-                <MultiSelect
-                    value={selectedDiseases}
-                    onValueChange={setSelectedDiseases}
-                    placeholder="Select diseases..."
-                >
-                    {diseases.map(disease => (
-                        <MultiSelectItem key={`disease-${disease.value}`} value={disease.name}>
-                            {disease.name}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
+                <DiseaseSelect setSelectedDiseases={setSelectedDiseases} />
             </Col>
 
             <Col>
-                <MultiSelect
-                    value={selectedPathogens}
-                    onValueChange={setSelectedPathogens}
-                    placeholder="Select pathogens..."
-                >
-                    {pathogens.map(pathogen => (
-                        <MultiSelectItem key={`pathogen-${pathogen.value}`} value={pathogen.name}>
-                            {pathogen.name}
-                        </MultiSelectItem>
-                    ))}
-                </MultiSelect>
+                <PathogenSelect setSelectedPathogens={setSelectedPathogens} />
             </Col>
 
             <Col

@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Flex, Card, Title, Text, MultiSelect, MultiSelectItem} from "@tremor/react"
+import {Flex, Card, Title, Text} from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
@@ -10,7 +10,6 @@ import {filterGrants} from "../helpers/filter"
 
 import dataset from '../../data/dist/grants-by-country-of-research-card.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
-import lookupTables from '../../data/source/lookup-tables.json'
 
 export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
     const [tooltipContent, setTooltipContent] = useState('')
@@ -45,7 +44,7 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
             Math.min(...allTotalGrants),
             Math.max(...allTotalGrants),
         ])
-        .range(["#3b82f6", "#dbeafe"])
+        .range(["#dbeafe", "#3b82f6"])
 
     return (
         <Card

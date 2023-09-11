@@ -4,29 +4,21 @@ import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
-import {type StringDictionary} from "../../scripts/types/dictionary"
 import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
+import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
-import lookupTables from '../../data/source/lookup-tables.json'
 import dataset from '../../data/dist/grants-by-research-category-card.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    const researchCatLookupTable = lookupTables.ResearchCat as StringDictionary
-
-    const researchCategories: {value: string, name: string}[] = Object.keys(researchCatLookupTable).map((key: string) => ({
-        value: key,
-        name: researchCatLookupTable[key],
-    }))
-
     const filteredDataset = filterGrants(dataset, selectedFilters)
 
-    const numberOfGrantsPerResearchCategory = researchCategories.map(function (researchCategory) {
+    const numberOfGrantsPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .length
 
         return {
@@ -36,9 +28,9 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         }
     })
 
-    const amountOfMoneySpentPerResearchCategory = researchCategories.map(function (researchCategory) {
+    const amountOfMoneySpentPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat === researchCategory.name)
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
 
         return {
@@ -48,12 +40,12 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         }
     })
 
-    const scatterChartData = researchCategories.map(function (researchCategory, index) {
+    const scatterChartData = researchCategoryOptions.map(function (researchCategory, index) {
         const numberOfGrants = numberOfGrantsPerResearchCategory[index].value;
         const moneySpent = amountOfMoneySpentPerResearchCategory[index].value;
 
         return {
-            "Research Category": researchCategory.name,
+            "Research Category": researchCategory.label,
             "Number Of Grants": numberOfGrants,
             "Money Spent": moneySpent,
         }
@@ -113,13 +105,13 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     >
                         <Col>
                             <List>
-                                {researchCategories.map((item) => (
+                                {researchCategoryOptions.map((item) => (
                                     <ListItem
                                         key={item.value}
                                         className="h-9 mb-2 border-none justify-start"
                                     >
                                         <span className="min-w-[2rem]">{item.value}</span>
-                                        <span className="truncate">{item.name}</span>
+                                        <span className="truncate">{item.label}</span>
                                     </ListItem>
                                 ))}
                             </List>
