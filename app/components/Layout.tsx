@@ -2,8 +2,10 @@
 
 import {useState} from 'react'
 import {useSpring, animated} from '@react-spring/web'
-import {Title, Text} from '@tremor/react'
 import {MenuIcon} from '@heroicons/react/solid'
+
+import Heading from './Heading'
+import Text from './Text'
 
 type SidebarProps = {
     sidebarContent?: React.ReactNode,
@@ -58,7 +60,7 @@ const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
             <main className="container mx-auto px-12 py-12">
                 {title &&
                     <div className="mb-6">
-                        <Title>{title}</Title>
+                        <Heading>{title}</Heading>
                         {summary && <Text>{summary}</Text>}
                     </div>
                 }

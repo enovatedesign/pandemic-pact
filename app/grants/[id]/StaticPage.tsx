@@ -18,12 +18,7 @@ export default function StaticPage({grant}: Props) {
     ]
 
     return (
-        <Layout>
-            <div
-                className="mb-6"
-                dangerouslySetInnerHTML={{__html: grant.GrantTitleEng}}
-            />
-
+        <Layout title={grant.GrantTitleEng}>
             <Grid numItemsLg={6} className="gap-6 mt-6">
                 <Col
                     numColSpanLg={4}
