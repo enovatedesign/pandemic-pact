@@ -58,7 +58,6 @@ const sourceDatasetFilename = process.env.GENERATE_REAL_DATA ?
 
 console.log(chalk.blue(`Generating ${process.env.GENERATE_REAL_DATA ? 'real' : 'fake'} data`))
 
-
 const realDataCountryMapping = {
     'Australia': 'AU',
     'Brazil': 'BR',
@@ -234,8 +233,21 @@ _.forEach(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: strin
 
 writeToDistJsonFile(
     'select-options/Funders.json',
-    funders.map(({FundingOrgName}: Funder, index) => ({label: FundingOrgName, value: `${index + 1}`})),
+    _.uniq(
+        completeDataset.map(({FundingOrgName}: {FundingOrgName: string[]}) => FundingOrgName).flat(),
+    ).map(
+        (FundingOrgName: any, index: number) => ({label: FundingOrgName, value: `${index + 1}`})
+    )
 )
+
+function convertMultiColumnFieldToArray(grant: SourceGrant, fieldPrefix: string): string[] {
+    const result = _.filter(
+        grant,
+        (value, field) => !!(`${field}`.match(new RegExp(`^${fieldPrefix}_?\\d+$`)) && value.trim() && value !== "Not Selected")
+    ).map(value => value.trim())
+
+    return result
+}
 
 function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
     const pathname = `${distDirectory}/${filename}`
@@ -247,13 +259,4 @@ function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
     if (log) {
         console.log(chalk.blue(`Wrote ${fileSize} to ${pathname}`))
     }
-}
-
-function convertMultiColumnFieldToArray(grant: SourceGrant, fieldPrefix: string): string[] {
-    const result = _.filter(
-        grant,
-        (value, field) => !!(`${field}`.match(new RegExp(`^${fieldPrefix}_?\\d+$`)) && value.trim() && value !== "Not Selected")
-    ).map(value => value.trim())
-
-    return result
 }
