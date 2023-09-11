@@ -6,24 +6,25 @@ import {getHumanReadableFileSize} from './helpers/files.mjs'
 import {Dictionary} from './types/dictionary'
 
 interface Funder {
-    "FundingOrgName": string
-    "FunderAcronym": string
+    "FundingOrgName": string[]
+    "FunderAcronym": string[]
     "FunderCountry": string
     "FunderRegion": string
     "FunderSubregion": string
 }
 
 interface ResearchInstitution {
-    "ResearchInstitutionName": string
+    "ResearchInstitutionName": string[]
     "ResearchInstitutionCountry": string
     "ResearchInstitutionRegion": string
     "ResearchInstitutionSubregion": string
 }
 
-interface FakeGrant {
+interface SourceGrant {
     "GrantTitleEng": string
     "Abstract": string
     "LaySummary": string
+    [key: string]: string
 }
 
 // Set the seed to get consistent results each time
@@ -34,8 +35,8 @@ const lookupTables = fs.readJsonSync('./data/source/lookup-tables.json')
 
 const funders: Funder[] = fs.readJsonSync('./data/source/funders.json').map((funderName: string) => {
     return {
-        "FundingOrgName": funderName,
-        "FunderAcronym": faker.hacker.abbreviation(),
+        "FundingOrgName": [funderName],
+        "FunderAcronym": [faker.hacker.abbreviation()],
         "FunderCountry": faker.location.countryCode('alpha-2'),
         "FunderRegion": faker.helpers.objectValue(lookupTables.Regions),
         "FunderSubregion": faker.helpers.objectValue(lookupTables.Subregions),
@@ -44,7 +45,7 @@ const funders: Funder[] = fs.readJsonSync('./data/source/funders.json').map((fun
 
 const researchInstitutions: ResearchInstitution[] = _.range(200).map(() => {
     return {
-        "ResearchInstitutionName": faker.company.name(),
+        "ResearchInstitutionName": [faker.company.name()],
         "ResearchInstitutionCountry": faker.location.countryCode('alpha-2'),
         "ResearchInstitutionRegion": faker.helpers.objectValue(lookupTables.Regions),
         "ResearchInstitutionSubregion": faker.helpers.objectValue(lookupTables.Subregions),
@@ -58,34 +59,34 @@ const sourceDatasetFilename = process.env.GENERATE_REAL_DATA ?
 console.log(chalk.blue(`Generating ${process.env.GENERATE_REAL_DATA ? 'real' : 'fake'} data`))
 
 const completeDataset = fs.readJsonSync(sourceDatasetFilename)
-    .map(({GrantTitleEng, Abstract, LaySummary}: FakeGrant, grantId: number) => {
+    .map((sourceGrant: SourceGrant, grantId: number) => {
         const funder = faker.helpers.arrayElement(funders)
         const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
-        const researchCatKey = faker.helpers.objectKey(lookupTables.ResearchCat)
-        const researchCat = lookupTables.ResearchCat[researchCatKey]
-        const researchSubcat = faker.helpers.objectValue(lookupTables.ResearchSubcat[researchCatKey])
+        const researchCat = faker.helpers.objectKey(lookupTables.ResearchCat)
+        const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat[researchCat])
 
-        return {
+        let distGrant = {
             "GrantID": grantId,
-            "GrantTitleEng": GrantTitleEng,
+            "GrantTitleEng": sourceGrant.GrantTitleEng,
             "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
             "GrantCountry": faker.location.countryCode('alpha-2'),
             "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
             "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
-            "Abstract": Abstract,
-            "LaySummary": LaySummary,
-            "GrantEndYear": faker.date.future({years: 5}).getFullYear(),
-            "StudySubject": faker.helpers.objectValue(lookupTables.StudySubject),
+            "Abstract": sourceGrant.Abstract,
+            "LaySummary": sourceGrant.LaySummary,
+            "GrantStartYear": sourceGrant.GrantStartYear ?? `${faker.date.past({years: 5}).getFullYear()}`,
+            "GrantEndYear": sourceGrant.GrantEndYear ?? `${faker.date.future({years: 5}).getFullYear()}`,
+            "StudySubject": [faker.helpers.objectValue(lookupTables.StudySubject)],
             "Ethnicity": faker.helpers.objectValue(lookupTables.Ethnicity),
             "AgeGroups": faker.helpers.objectValue(lookupTables.AgeGroups),
             "Rurality": faker.helpers.objectValue(lookupTables.Rurality),
             "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
-            "OccupationalGroups": faker.helpers.objectValue(lookupTables.OccupationalGroups),
-            "StudyType": faker.helpers.objectValue(lookupTables.StudyType),
-            "ClinicalTrial": faker.helpers.objectValue(lookupTables.ClinTrial),
-            "ResearchCat": researchCat,
-            "ResearchSubcat": researchSubcat,
+            "OccupationalGroups": [faker.helpers.objectValue(lookupTables.OccupationalGroups)],
+            "StudyType": [faker.helpers.objectValue(lookupTables.StudyType)],
+            "ClinicalTrial": [faker.helpers.objectValue(lookupTables.ClinTrial)],
+            "ResearchCat": [researchCat],
+            "ResearchSubcat": [researchSubcat],
             "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
             "100DaysMissionFramework": "", // awaiting specification
             "PolicyRoadmap01": "", // awaiting specification
@@ -98,11 +99,26 @@ const completeDataset = fs.readJsonSync(sourceDatasetFilename)
             "PolicyRoadmap08": "", // awaiting specification
             "PolicyRoadmap09": "", // awaiting specification
             "PolicyRoadmap10": "", // awaiting specification
-            "Pathogen": faker.helpers.objectValue(lookupTables.Pathogens),
-            "Disease": faker.helpers.objectValue(lookupTables.Diseases),
+            "Pathogen": [faker.helpers.objectValue(lookupTables.Pathogens)],
+            "Disease": [faker.helpers.objectValue(lookupTables.Diseases)],
             ...funder,
             ...researchInstitution,
         }
+
+        if (process.env.GENERATE_REAL_DATA) {
+            distGrant['Disease'] = convertMultiColumnFieldToArray(sourceGrant, 'DiseaseName')
+            distGrant['StudySubject'] = convertMultiColumnFieldToArray(sourceGrant, 'StudySubject')
+            distGrant['OccupationalGroups'] = convertMultiColumnFieldToArray(sourceGrant, 'OccupationalGroups')
+            distGrant['StudyType'] = convertMultiColumnFieldToArray(sourceGrant, 'StudyType')
+            distGrant['ClinicalTrial'] = convertMultiColumnFieldToArray(sourceGrant, 'ClinicalTrialPhase')
+            distGrant['FundingOrgName'] = convertMultiColumnFieldToArray(sourceGrant, 'FunderName')
+            distGrant['FunderAcronym'] = convertMultiColumnFieldToArray(sourceGrant, 'FunderAcronym')
+            distGrant['ResearchInstitutionName'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchInstititionName')
+            distGrant['ResearchCat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchCat')
+            distGrant['ResearchSubcat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchSubcat')
+        }
+
+        return distGrant
     })
 
 
@@ -215,4 +231,13 @@ function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
     if (log) {
         console.log(chalk.blue(`Wrote ${fileSize} to ${pathname}`))
     }
+}
+
+function convertMultiColumnFieldToArray(grant: SourceGrant, fieldPrefix: string): string[] {
+    const result = _.filter(
+        grant,
+        (value, field) => !!(`${field}`.match(new RegExp(`^${fieldPrefix}_?\\d+$`)) && value.trim() && value !== "Not Selected")
+    ).map(value => value.trim())
+
+    return result
 }
