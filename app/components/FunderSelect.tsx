@@ -1,10 +1,10 @@
 import {useState} from "react"
 import {MultiSelect, MultiSelectItem} from "@tremor/react"
 
-import funders from '../../data/source/funders.json'
+import funderOptions from '../../data/dist/select-options/Funders.json'
 
 interface Props {
-    setSelectedFunders: (funders: string[]) => void,
+    setSelectedFunders: (funder: string[]) => void,
 }
 
 export default function FunderSelect({setSelectedFunders}: Props) {
@@ -21,9 +21,12 @@ export default function FunderSelect({setSelectedFunders}: Props) {
             onValueChange={onChange}
             placeholder="All"
         >
-            {funders.map((funder, index) => (
-                <MultiSelectItem key={`${index}-${funder}`} value={funder}>
-                    {funder}
+            {funderOptions.map(funderOption => (
+                <MultiSelectItem
+                    key={funderOption.value}
+                    value={funderOption.label}
+                >
+                    {funderOption.label}
                 </MultiSelectItem>
             ))}
         </MultiSelect>

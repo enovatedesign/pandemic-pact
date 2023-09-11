@@ -141,6 +141,11 @@ _.forEach(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: strin
     writeToDistJsonFile(pathname, options)
 })
 
+writeToDistJsonFile(
+    'select-options/Funders.json',
+    funders.map(({FundingOrgName}: Funder, index) => ({label: FundingOrgName, value: `${index + 1}`})),
+)
+
 function generateFakeData() {
     console.log(chalk.blue('Generating fake data'))
 
