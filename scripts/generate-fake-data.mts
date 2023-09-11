@@ -58,6 +58,19 @@ const sourceDatasetFilename = process.env.GENERATE_REAL_DATA ?
 
 console.log(chalk.blue(`Generating ${process.env.GENERATE_REAL_DATA ? 'real' : 'fake'} data`))
 
+
+const realDataCountryMapping = {
+    'Australia': 'AU',
+    'Brazil': 'BR',
+    'Canada': 'CA',
+    'Germany': 'DE',
+    'Mali': 'ML',
+    'Netherlands': 'NL',
+    'Uganda': 'UG',
+    'United Kingdom': 'GB',
+    'United States': 'US',
+}
+
 const completeDataset = fs.readJsonSync(sourceDatasetFilename)
     .map((sourceGrant: SourceGrant, grantId: number) => {
         const funder = faker.helpers.arrayElement(funders)
@@ -116,6 +129,9 @@ const completeDataset = fs.readJsonSync(sourceDatasetFilename)
             distGrant['ResearchInstitutionName'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchInstititionName')
             distGrant['ResearchCat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchCat')
             distGrant['ResearchSubcat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchSubcat')
+
+            distGrant['FunderCountry'] = realDataCountryMapping[sourceGrant.FunderCountry as keyof typeof realDataCountryMapping]
+            distGrant['ResearchInstitutionCountry'] = realDataCountryMapping[sourceGrant.ResearchInstitutionCountry as keyof typeof realDataCountryMapping]
         }
 
         return distGrant
