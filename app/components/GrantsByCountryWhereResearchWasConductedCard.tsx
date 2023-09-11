@@ -44,7 +44,7 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
             Math.min(...allTotalGrants),
             Math.max(...allTotalGrants),
         ])
-        .range(["#3b82f6", "#dbeafe"])
+        .range(["#dbeafe", "#3b82f6"])
 
     return (
         <Card
