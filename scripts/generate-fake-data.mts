@@ -91,7 +91,7 @@ const completeDataset = fs.readJsonSync(sourceDatasetFilename)
             "GrantEndYear": sourceGrant.GrantEndYear ?? `${faker.date.future({years: 5}).getFullYear()}`,
             "StudySubject": [faker.helpers.objectValue(lookupTables.StudySubject)],
             "Ethnicity": faker.helpers.objectValue(lookupTables.Ethnicity),
-            "AgeGroups": faker.helpers.objectValue(lookupTables.AgeGroups),
+            "AgeGroups": sourceGrant.AgeGroups ?? faker.helpers.objectValue(lookupTables.AgeGroups),
             "Rurality": faker.helpers.objectValue(lookupTables.Rurality),
             "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
             "OccupationalGroups": [faker.helpers.objectValue(lookupTables.OccupationalGroups)],
@@ -131,6 +131,10 @@ const completeDataset = fs.readJsonSync(sourceDatasetFilename)
 
             distGrant['FunderCountry'] = realDataCountryMapping[sourceGrant.FunderCountry as keyof typeof realDataCountryMapping]
             distGrant['ResearchInstitutionCountry'] = realDataCountryMapping[sourceGrant.ResearchInstitutionCountry as keyof typeof realDataCountryMapping]
+
+            distGrant['FunderRegion'] = sourceGrant.FunderRegion
+            distGrant['ResearchInstitutionRegion'] = sourceGrant.ResearchInstitutionRegion
+
         }
 
         return distGrant
