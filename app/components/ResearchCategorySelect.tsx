@@ -26,7 +26,7 @@ export default function ResearchCategorySelect({setSelectedResearchCategories, c
             {researchCategoryOptions.map(researchCategoryOption => (
                 <MultiSelectItem
                     key={researchCategoryOption.value}
-                    value={researchCategoryOption.label}
+                    value={researchCategoryOption.value}
                 >
                     {researchCategoryOption.label}
                 </MultiSelectItem>

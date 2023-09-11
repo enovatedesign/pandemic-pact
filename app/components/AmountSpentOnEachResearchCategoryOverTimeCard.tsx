@@ -23,12 +23,10 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
 
-    const researchCategories: string[] = selectedResearchCategories.length === 0 ?
-        ['All Research Categories'] :
-        researchCategoryOptions.map(
-            researchCategoryOption => researchCategoryOption.label
-        ).filter(
-            researchCategory => selectedResearchCategories.includes(researchCategory)
+    const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
+        [{value: 'All Research Categories', label: 'All Research Categories'}] :
+        researchCategoryOptions.filter(
+            researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
 
     const amountSpentOnEachResearchCategoryOverTime = Object.keys(
@@ -41,9 +39,9 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
         if (selectedResearchCategories.length === 0) {
             dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
         } else {
-            researchCategories.forEach(researchCategory => {
-                dataPoint[researchCategory] = grants
-                    .filter(grant => grant.ResearchCat === researchCategory)
+            selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
+                dataPoint[selectedResearchCategoryOption.label] = grants
+                    .filter(grant => grant.ResearchCat.includes(selectedResearchCategoryOption.value))
                     .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
             })
         }
@@ -71,6 +69,8 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
     const valueFormatter = (value: number) => {
         return '$' + millify(value, {precision: 2})
     }
+
+    const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
     return (
         <Card
@@ -101,7 +101,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             </Flex>
 
             {selectedTabIndex === 0 &&
-                <BarChart
+                <LineChart
                     data={amountSpentOnEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
@@ -113,7 +113,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             }
 
             {selectedTabIndex === 1 &&
-                <LineChart
+                <BarChart
                     data={amountSpentOnEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
@@ -134,8 +134,8 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
                     onIndexChange={setSelectedTabIndex}
                 >
                     <TabList variant="solid">
-                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
                         <Tab icon={PresentationChartLineIcon}>Line</Tab>
+                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
                     </TabList>
                 </TabGroup>
 
