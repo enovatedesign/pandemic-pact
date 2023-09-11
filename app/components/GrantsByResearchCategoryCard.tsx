@@ -18,7 +18,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const numberOfGrantsPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat === researchCategory.label)
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .length
 
         return {
@@ -30,7 +30,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const amountOfMoneySpentPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat === researchCategory.label)
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
 
         return {
