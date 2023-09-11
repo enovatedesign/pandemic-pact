@@ -102,9 +102,15 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
         ).length
     )
 
+    const sum = numberOfGrantsPerOption.reduce((a, b) => a + b, 0)
+
+    const numberOfGrantsPerOptionPercentage = numberOfGrantsPerOption.map(
+        (value: number) => Math.round((value / sum) * 100)
+    )
+
     return (
         <div>
-            <Subtitle>{title}</Subtitle>
+            <Subtitle>{title} (%)</Subtitle>
 
             <Legend
                 categories={optionValues}
@@ -112,7 +118,7 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
             />
 
             <CategoryBar
-                values={numberOfGrantsPerOption}
+                values={numberOfGrantsPerOptionPercentage}
                 className="mt-4"
             />
         </div >
