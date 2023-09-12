@@ -47,7 +47,7 @@ export default function ExportToPngButton({selector, filename}: Props) {
             disabled={exportingImage}
             onClick={exportImage}
         >
-            Export Chart To PNG
+            Export Chart Image
         </Button >
     )
 }

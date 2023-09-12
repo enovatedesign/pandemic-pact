@@ -8,9 +8,10 @@ import {utils, writeFile} from 'xlsx'
 interface Props {
     meilisearchRequestBody: any
     filename: string
+    children?: React.ReactNode
 }
 
-export default function ExportToCsvButton({meilisearchRequestBody, filename}: Props) {
+export default function ExportToCsvButton({meilisearchRequestBody, filename, children}: Props) {
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
@@ -36,7 +37,7 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename}: Pr
             disabled={exportingCsv}
             onClick={exportCsv}
         >
-            Export Chart To CSV
+            {children ? children : 'Export Chart Data (CSV)'}
         </Button >
     )
 }
