@@ -14,9 +14,7 @@ export default function ResultsTable({searchResponse}: Props) {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableHeaderCell>Grant Name</TableHeaderCell>
-                        <TableHeaderCell>Search Matches</TableHeaderCell>
-                        <TableHeaderCell>Relevancy Score</TableHeaderCell>
+                        <TableHeaderCell className="font-bold">Grant Name</TableHeaderCell>
                         <TableHeaderCell className="text-right"></TableHeaderCell>
                     </TableRow>
                 </TableHead>
@@ -28,18 +26,21 @@ export default function ResultsTable({searchResponse}: Props) {
 
                         return (
                             <TableRow key={result.GrantID}>
-                                <TableCell
-                                    className="max-w-md truncate"
-                                    dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
-                                />
+                                <TableCell className="flex flex-col gap-y-2">
+                                    <div
+                                        className="whitespace-normal font-semibold"
+                                        dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
+                                    />
 
-                                <SearchMatches result={result} />
-
-                                <TableCell className="text-right whitespace-nowrap truncate">
-                                    {Math.round((result._rankingScore ?? 0) * 100)}%
+                                    {searchResponse.query &&
+                                        <SearchMatches result={result} />
+                                    }
                                 </TableCell>
 
                                 <TableCell className="text-right whitespace-nowrap truncate">
+                                </TableCell>
+
+                                <TableCell className="text-right whitespace-nowrap truncate align-top">
                                     <Link href={href}>View Grant</Link>
                                 </TableCell>
                             </TableRow>
@@ -61,12 +62,13 @@ function SearchMatches({result}: SearchMatchesProps) {
         {label: "Abstract", count: result._formatted.Abstract?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
         {label: "Lay Summary", count: result._formatted.LaySummary?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
     ].filter(({count}) => count > 0)
-        .map(({label, count}) => `${label}: ${count}`)
+        .map(({label, count}) => `${count} in ${label}`)
         .join(', ')
 
     return (
-        <TableCell>
-            {matches}
-        </TableCell>
+        <div className="flex items-center text-xs italic gap-x-8">
+            <div><span className="font-semibold">Word Matches In Fields</span>: {matches}</div>
+            <div><span className="font-semibold">Relevancy Score:</span> {Math.round((result._rankingScore ?? 0) * 100)}%</div>
+        </div>
     )
 }
