@@ -46,10 +46,10 @@ export async function meilisearchRequest(index: string, body: MeilisearchRequest
     }).then(response => response.json())
 }
 
-export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {}, attributesToHighlight: string[]): MeilisearchRequestBody {
+export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {}): MeilisearchRequestBody {
     return {
         ...body,
-        attributesToHighlight,
+        attributesToHighlight: ['GrantTitleEng', 'Abstract', 'LaySummary'],
         highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
         highlightPostTag: '</span>',
     }

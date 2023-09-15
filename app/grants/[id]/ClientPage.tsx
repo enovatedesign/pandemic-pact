@@ -34,9 +34,9 @@ export default function GrantLandingPage({grant}: Props) {
         const searchRequestBody = highlightedResultsRequestBody({
             q: searchQueryFromUrl,
             filter: `GrantID = ${grant.GrantID}`,
-        }, ['GrantTitleEng', 'Abstract', 'LaySummary'])
+        })
 
-        meilisearchRequest('exports', searchRequestBody).then(data => {
+        meilisearchRequest('grants', searchRequestBody).then(data => {
             const hit = data.hits[0]
 
             setSearchableFieldResults({
