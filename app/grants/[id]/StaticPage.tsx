@@ -49,7 +49,7 @@ export default function StaticPage({grant}: Props) {
                         <Card>
                             <Title>Publications</Title>
 
-                            <AccordionList className="mt-4 !shadow-none">
+                            <AccordionList className="mt-2 !shadow-none">
                                 {grant.PubMedLinks.map((link: any, index: number) => (
                                     <Accordion
                                         key={index}
