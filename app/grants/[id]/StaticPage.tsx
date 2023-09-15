@@ -1,4 +1,5 @@
-import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
+import Link from 'next/link'
+import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
 
 interface Props {
@@ -43,7 +44,55 @@ export default function StaticPage({grant}: Props) {
                             />
                         </Card>
                     }
-                </Col>
+
+                    {grant.PubMedLinks?.length > 0 &&
+                        <Card>
+                            <Title>Publications</Title>
+
+                            <AccordionList className="mt-2 !shadow-none">
+                                {grant.PubMedLinks.map((link: any, index: number) => (
+                                    <Accordion
+                                        key={index}
+                                        className="border-0 rounded-none"
+                                    >
+                                        <AccordionHeader className="pl-0 items-start">
+                                            <Text className="text-left text-black">{link.title}</Text>
+                                        </AccordionHeader>
+
+                                        <AccordionBody className="flex flex-col gap-y-4 pl-0">
+                                            <div>
+                                                <Subtitle className="font-bold">Authors</Subtitle>
+                                                <Text>{link.authorString}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">Publish Year</Subtitle>
+                                                <Text>{link.pubYear}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">Journal</Subtitle>
+                                                <Text>{link.journalInfo.journal.title}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">DOI</Subtitle>
+                                                <Text>{link.doi}</Text>
+                                            </div>
+
+                                            <Link
+                                                href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                className="text-right text-blue-500"
+                                            >
+                                                View at Europe PMC
+                                            </Link>
+                                        </AccordionBody>
+                                    </Accordion>
+                                ))}
+                            </AccordionList>
+                        </Card>
+                    }
+                </Col >
 
                 <Col numColSpanLg={2}>
                     <div className="space-y-6">
@@ -59,7 +108,7 @@ export default function StaticPage({grant}: Props) {
                         ))}
                     </div>
                 </Col>
-            </Grid>
-        </Layout>
+            </Grid >
+        </Layout >
     )
 }
