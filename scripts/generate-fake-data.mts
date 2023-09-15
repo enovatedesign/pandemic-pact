@@ -268,7 +268,7 @@ async function getPubMedLinks(pubMedGrantId: string) {
     ).then(response => response.json())
 
     return data.resultList.result.map(
-        (result: any) => _.pick(result, ['title', 'pmid'])
+        (result: any) => _.pick(result, ['title', 'source', 'pmid'])
     )
 }
 

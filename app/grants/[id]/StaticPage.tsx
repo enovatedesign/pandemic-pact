@@ -1,4 +1,5 @@
-import {Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
+import Link from 'next/link'
+import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
 
 interface Props {
@@ -43,7 +44,32 @@ export default function StaticPage({grant}: Props) {
                             />
                         </Card>
                     }
-                </Col>
+
+                    {grant.PubMedLinks.length > 0 &&
+                        <Card>
+                            <Title>Publications</Title>
+
+                            <AccordionList className="mt-4 !shadow-none">
+                                {grant.PubMedLinks.map((link: any, index: number) => (
+                                    <Accordion
+                                        key={index}
+                                        className="border-0 rounded-none"
+                                    >
+                                        <AccordionHeader className="pl-0">
+                                            <Text>{link.title}</Text>
+                                        </AccordionHeader>
+
+                                        <AccordionBody>
+                                            <Link href={`https://europepmc.org/article/${link.source}/${link.pmid}`}>
+                                                View at Europe PMC
+                                            </Link>
+                                        </AccordionBody>
+                                    </Accordion>
+                                ))}
+                            </AccordionList>
+                        </Card>
+                    }
+                </Col >
 
                 <Col numColSpanLg={2}>
                     <div className="space-y-6">
@@ -59,7 +85,7 @@ export default function StaticPage({grant}: Props) {
                         ))}
                     </div>
                 </Col>
-            </Grid>
-        </Layout>
+            </Grid >
+        </Layout >
     )
 }
