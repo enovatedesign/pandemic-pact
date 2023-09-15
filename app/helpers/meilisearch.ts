@@ -50,7 +50,7 @@ export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {})
     return {
         ...body,
         attributesToHighlight: ['GrantTitleEng', 'Abstract', 'LaySummary'],
-        highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
+        highlightPreTag: '<span class="highlighted-search-result-token">',
         highlightPostTag: '</span>',
     }
 }
