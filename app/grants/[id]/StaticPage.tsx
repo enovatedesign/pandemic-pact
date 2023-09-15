@@ -45,7 +45,7 @@ export default function StaticPage({grant}: Props) {
                         </Card>
                     }
 
-                    {grant.PubMedLinks.length > 0 &&
+                    {grant.PubMedLinks?.length > 0 &&
                         <Card>
                             <Title>Publications</Title>
 
