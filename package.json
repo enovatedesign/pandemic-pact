@@ -16,6 +16,7 @@
     "dependencies": {
         "@heroicons/react": "^1.0.6",
         "@react-spring/web": "^9.7.3",
+        "@react-three/fiber": "^8.14.1",
         "@tremor/react": "^3.6.1",
         "@types/fs-extra": "^11.0.1",
         "@types/lodash": "^4.14.195",
@@ -23,6 +24,7 @@
         "@types/react": "18.2.14",
         "@types/react-dom": "18.2.6",
         "@types/react-simple-maps": "^3.0.0",
+        "@types/three": "^0.156.0",
         "autoprefixer": "10.4.14",
         "dotenv": "^16.3.1",
         "encoding": "^0.1.13",
@@ -39,6 +41,7 @@
         "react-simple-maps": "^3.0.0",
         "react-tooltip": "^5.21.1",
         "tailwindcss": "3.3.2",
+        "three": "^0.156.1",
         "ts-node": "^10.9.1",
         "typescript": "5.1.6",
         "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
