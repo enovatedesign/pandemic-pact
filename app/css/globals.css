@@ -18,3 +18,9 @@ body {
     color: rgb(var(--foreground-rgb));
     background: rgb(var(--background-rgb));
 }
+
+.highlighted-search-result-token {
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}

@@ -7,6 +7,7 @@ export interface MeilisearchRequestBody {
     highlightPreTag?: string
     highlightPostTag?: string
     limit?: number
+    showRankingScore?: boolean
 }
 
 export async function meilisearchRequest(index: string, body: MeilisearchRequestBody) {
@@ -46,11 +47,11 @@ export async function meilisearchRequest(index: string, body: MeilisearchRequest
     }).then(response => response.json())
 }
 
-export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {}, attributesToHighlight: string[]): MeilisearchRequestBody {
+export function highlightedResultsRequestBody(body: MeilisearchRequestBody = {}): MeilisearchRequestBody {
     return {
         ...body,
-        attributesToHighlight,
-        highlightPreTag: '<span style="color: red; font-weight: bold; font-style: italic;">',
+        attributesToHighlight: ['GrantTitleEng', 'Abstract', 'LaySummary'],
+        highlightPreTag: '<span class="highlighted-search-result-token">',
         highlightPostTag: '</span>',
     }
 }

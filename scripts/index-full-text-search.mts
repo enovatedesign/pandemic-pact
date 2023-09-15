@@ -22,6 +22,8 @@ const attributes = [
 const displayedAttributes = [
     'GrantID',
     'GrantTitleEng',
+    'Abstract',
+    'LaySummary',
 ]
 
 const searchableAttributes = [
@@ -31,6 +33,7 @@ const searchableAttributes = [
 ]
 
 const filterableAttributes = [
+    'GrantID',
     'Disease',
     'Pathogen',
 ]
@@ -65,7 +68,6 @@ async function addDocumentsToSearchIndex() {
     const index = client.index(indexName)
 
     index.updateSettings({
-        pagination: {maxTotalHits: 100_000},
         displayedAttributes,
         searchableAttributes,
         filterableAttributes,
@@ -85,7 +87,7 @@ async function addDocumentsToSearchIndex() {
         pagination: {maxTotalHits: 100_000},
         displayedAttributes: ['*'],
         searchableAttributes,
-        filterableAttributes: filterableAttributes.concat(['GrantID']),
+        filterableAttributes,
         sortableAttributes: ['GrantID'],
     })
 

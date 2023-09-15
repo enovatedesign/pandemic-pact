@@ -1,6 +1,6 @@
 import Link from "next/link"
 import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
-import {type SearchResponse} from "../types/search"
+import {SearchResponse, SearchResult} from "../types/search"
 
 interface Props {
     searchResponse: SearchResponse,
@@ -12,7 +12,7 @@ export default function ResultsTable({searchResponse}: Props) {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableHeaderCell>Grant Name</TableHeaderCell>
+                        <TableHeaderCell className="font-bold">Grant Name</TableHeaderCell>
                         <TableHeaderCell className="text-right"></TableHeaderCell>
                     </TableRow>
                 </TableHead>
@@ -24,11 +24,21 @@ export default function ResultsTable({searchResponse}: Props) {
 
                         return (
                             <TableRow key={result.GrantID}>
-                                <TableCell
-                                    className="whitespace-normal"
-                                    dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
-                                />
-                                <TableCell className="text-right whitespace-nowrap">
+                                <TableCell className="flex flex-col gap-y-2">
+                                    <div
+                                        className="whitespace-normal font-semibold"
+                                        dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
+                                    />
+
+                                    {searchResponse.query &&
+                                        <SearchMatches result={result} />
+                                    }
+                                </TableCell>
+
+                                <TableCell className="text-right whitespace-nowrap truncate">
+                                </TableCell>
+
+                                <TableCell className="text-right whitespace-nowrap truncate align-top">
                                     <Link href={href}>View Grant</Link>
                                 </TableCell>
                             </TableRow>
@@ -37,5 +47,33 @@ export default function ResultsTable({searchResponse}: Props) {
                 </TableBody>
             </Table>
         </Card >
+    )
+}
+
+interface SearchMatchesProps {
+    result: SearchResult
+}
+
+function SearchMatches({result}: SearchMatchesProps) {
+    let matches = [
+        {label: "Title", count: result._formatted.GrantTitleEng?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
+        {label: "Abstract", count: result._formatted.Abstract?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
+        {label: "Lay Summary", count: result._formatted.LaySummary?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
+    ]
+
+    matches.push({
+        label: "Total",
+        count: matches.reduce((total, {count}) => total + count, 0)
+    })
+
+    const matchText = matches.filter(({count}) => count > 0)
+        .map(({label, count}) => `${count} in ${label}`)
+        .join(', ')
+
+    return (
+        <div className="flex items-center text-xs italic gap-x-8">
+            <div><span className="font-semibold">Word Matches In Fields</span>: {matchText}</div>
+            <div><span className="font-semibold">Relevancy Score:</span> {((result._rankingScore ?? 0) * 100).toFixed(2)}%</div>
+        </div>
     )
 }
