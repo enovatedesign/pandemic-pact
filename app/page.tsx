@@ -4,12 +4,14 @@ import {useRef} from "react"
 import {Canvas, useFrame} from '@react-three/fiber'
 import {Sphere, useTexture} from "@react-three/drei"
 
+// TODO determine FOV based on window width and height
+
 export default function Home() {
     return (
-        <div className="w-screen h-screen">
+        <div className="w-screen h-screen homepage-background">
             <Canvas
                 camera={{
-                    position: [0, 0.4, 2.5],
+                    position: [0, 0.4, 2.6],
                     rotation: [0.4, 0, 0],
                     fov: 40,
                 }}
@@ -34,7 +36,9 @@ function Globe() {
             ref={sphereRef}
             rotation={[Math.PI, 0, Math.PI]}
         >
-            <meshStandardMaterial {...textureProps} />
+            <meshStandardMaterial
+                {...textureProps}
+            />
         </Sphere>
     )
 }
