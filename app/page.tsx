@@ -3,6 +3,7 @@
 import {useRef} from "react"
 import {Canvas, useFrame} from '@react-three/fiber'
 import {Sphere, useTexture} from "@react-three/drei"
+import {Mesh} from "three"
 
 // TODO determine FOV based on window width and height
 
@@ -26,7 +27,7 @@ export default function Home() {
 function Globe() {
     const textureProps = useTexture({map: "/earth.jpg"})
 
-    const sphereRef = useRef()
+    const sphereRef = useRef<Mesh>(null!)
 
     useFrame((state, delta) => (sphereRef.current.rotation.y += delta * 0.05))
 
