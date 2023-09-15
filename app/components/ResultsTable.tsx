@@ -7,8 +7,6 @@ interface Props {
 }
 
 export default function ResultsTable({searchResponse}: Props) {
-    console.log(searchResponse);
-
     return (
         <Card>
             <Table>
@@ -75,7 +73,7 @@ function SearchMatches({result}: SearchMatchesProps) {
     return (
         <div className="flex items-center text-xs italic gap-x-8">
             <div><span className="font-semibold">Word Matches In Fields</span>: {matchText}</div>
-            <div><span className="font-semibold">Relevancy Score:</span> {Math.round((result._rankingScore ?? 0) * 100)}%</div>
+            <div><span className="font-semibold">Relevancy Score:</span> {((result._rankingScore ?? 0) * 100).toFixed(2)}%</div>
         </div>
     )
 }
