@@ -16,6 +16,7 @@
     "dependencies": {
         "@heroicons/react": "^1.0.6",
         "@react-spring/web": "^9.7.3",
+        "@react-three/drei": "^9.83.9",
         "@react-three/fiber": "^8.14.1",
         "@tremor/react": "^3.6.1",
         "@types/fs-extra": "^11.0.1",
