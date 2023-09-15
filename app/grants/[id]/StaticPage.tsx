@@ -55,7 +55,7 @@ export default function StaticPage({grant}: Props) {
                                         key={index}
                                         className="border-0 rounded-none"
                                     >
-                                        <AccordionHeader className="pl-0">
+                                        <AccordionHeader className="pl-0 items-start text-left">
                                             <Text>{link.title}</Text>
                                         </AccordionHeader>
 
