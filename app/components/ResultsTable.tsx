@@ -16,6 +16,7 @@ export default function ResultsTable({searchResponse}: Props) {
                     <TableRow>
                         <TableHeaderCell>Grant Name</TableHeaderCell>
                         <TableHeaderCell>Search Matches</TableHeaderCell>
+                        <TableHeaderCell>Relevancy Score</TableHeaderCell>
                         <TableHeaderCell className="text-right"></TableHeaderCell>
                     </TableRow>
                 </TableHead>
@@ -33,6 +34,10 @@ export default function ResultsTable({searchResponse}: Props) {
                                 />
 
                                 <SearchMatches result={result} />
+
+                                <TableCell className="text-right whitespace-nowrap truncate">
+                                    {Math.round((result._rankingScore ?? 0) * 100)}%
+                                </TableCell>
 
                                 <TableCell className="text-right whitespace-nowrap truncate">
                                     <Link href={href}>View Grant</Link>

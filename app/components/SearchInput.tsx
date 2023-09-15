@@ -79,7 +79,10 @@ export default function SearchInput({setSearchResponse}: Props) {
     ])
 
     useEffect(() => {
-        const searchRequestBody = highlightedResultsRequestBody(sharedRequestBody)
+        const searchRequestBody = highlightedResultsRequestBody({
+            ...sharedRequestBody,
+            showRankingScore: true,
+        })
 
         meilisearchRequest('grants', searchRequestBody).then(data => {
             setSearchResponse(data)

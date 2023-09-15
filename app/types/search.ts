@@ -8,6 +8,7 @@ export interface SearchResult {
         Abstract: string,
         LaySummary: string,
     }
+    _rankingScore?: number,
 }
 
 export type SearchResults = Array<SearchResult>
