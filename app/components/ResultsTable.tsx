@@ -39,7 +39,10 @@ export default function ResultsTable({searchResponse}: Props) {
                                 </TableCell>
 
                                 <TableCell className="text-right whitespace-nowrap truncate align-top">
-                                    <Link href={href}>View Grant</Link>
+                                    <Link
+                                        href={href}
+                                        className="text-blue-500"
+                                    >View Grant</Link>
                                 </TableCell>
                             </TableRow>
                         )

@@ -82,7 +82,7 @@ export default function StaticPage({grant}: Props) {
 
                                             <Link
                                                 href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                className="text-right text-blue-500 underline"
+                                                className="text-right text-blue-500"
                                             >
                                                 View at Europe PMC
                                             </Link>
