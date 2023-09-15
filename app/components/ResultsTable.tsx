@@ -57,17 +57,24 @@ interface SearchMatchesProps {
 }
 
 function SearchMatches({result}: SearchMatchesProps) {
-    const matches = [
+    let matches = [
         {label: "Title", count: result._formatted.GrantTitleEng?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
         {label: "Abstract", count: result._formatted.Abstract?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
         {label: "Lay Summary", count: result._formatted.LaySummary?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
-    ].filter(({count}) => count > 0)
+    ]
+
+    matches.push({
+        label: "Total",
+        count: matches.reduce((total, {count}) => total + count, 0)
+    })
+
+    const matchText = matches.filter(({count}) => count > 0)
         .map(({label, count}) => `${count} in ${label}`)
         .join(', ')
 
     return (
         <div className="flex items-center text-xs italic gap-x-8">
-            <div><span className="font-semibold">Word Matches In Fields</span>: {matches}</div>
+            <div><span className="font-semibold">Word Matches In Fields</span>: {matchText}</div>
             <div><span className="font-semibold">Relevancy Score:</span> {Math.round((result._rankingScore ?? 0) * 100)}%</div>
         </div>
     )
