@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Flex, Text, Metric} from '@tremor/react'
+import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
 import Layout from "../../components/Layout"
 
 interface Props {
@@ -59,8 +59,31 @@ export default function StaticPage({grant}: Props) {
                                             <Text className="text-left text-black">{link.title}</Text>
                                         </AccordionHeader>
 
-                                        <AccordionBody>
-                                            <Link href={`https://europepmc.org/article/${link.source}/${link.pmid}`}>
+                                        <AccordionBody className="flex flex-col gap-y-4 pl-0">
+                                            <div>
+                                                <Subtitle className="font-bold">Authors</Subtitle>
+                                                <Text>{link.authorString}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">Publish Year</Subtitle>
+                                                <Text>{link.pubYear}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">Journal</Subtitle>
+                                                <Text>{link.journalInfo.journal.title}</Text>
+                                            </div>
+
+                                            <div>
+                                                <Subtitle className="font-bold">DOI</Subtitle>
+                                                <Text>{link.doi}</Text>
+                                            </div>
+
+                                            <Link
+                                                href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                className="text-right text-blue-500 underline"
+                                            >
                                                 View at Europe PMC
                                             </Link>
                                         </AccordionBody>

@@ -150,7 +150,7 @@ async function main() {
                 return Promise.resolve(distGrant)
             }
 
-            return getPubMedLinks(pubMedGrantId).then((pubMedLinks) => {
+            return getPubMedLinks(pubMedGrantId).then(pubMedLinks => {
                 distGrant['PubMedLinks'] = pubMedLinks
                 return distGrant
             })
@@ -268,7 +268,15 @@ async function getPubMedLinks(pubMedGrantId: string) {
     ).then(response => response.json())
 
     return data.resultList.result.map(
-        (result: any) => _.pick(result, ['title', 'source', 'pmid'])
+        (result: any) => _.pick(result, [
+            'title',
+            'source',
+            'pmid',
+            'authorString',
+            'doi',
+            'pubYear',
+            'journalInfo.journal.title',
+        ])
     )
 }
 
