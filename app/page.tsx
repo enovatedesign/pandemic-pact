@@ -1,76 +1,78 @@
 "use client"
 
-import {useState, useEffect} from "react"
-import {millify} from "millify"
+import { useRef, useEffect } from "react"
 
+import AnimatedCounter from "./components/AnimatedCounter"
 import RotatingGlobe from "./components/RotatingGlobe"
 
-interface AnimatedCounterProps {
-    prefix?: string
-    finalCount: number,
-    duration?: number
+interface InteractiveBackgroundProps {
+    className?: string,
+    children: React.ReactNode,
 }
 
-export function AnimatedCounter({ prefix, finalCount, duration = 5000 }: AnimatedCounterProps) {
-    const [count, setCount] = useState<number>(0)
-    const [countLabel, setCountLabel] = useState<string>('0')
+export function InteractiveBackground({children, ...rest}: InteractiveBackgroundProps) {
+    const canvas = useRef<HTMLCanvasElement>(null)
 
-    useEffect(() => {
-        setCountLabel(millify(count, {
-            units: ['', 'K', 'm', 'bn', 'T']
-        }))
-    }, [count]) 
+    const drawCircles = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+        canvas.width = canvas.clientWidth
+        canvas.height = canvas.clientHeight
 
-    useEffect(() => {
-        const easeInOutQuint = (x: number) => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)'
 
-        let start:number, previousTimeStamp:number
-        let done:boolean = false
-
-        const countUp = (timeStamp: number) => {
-            if (start === undefined) {
-                start = timeStamp;
-            }
-            const elapsed = timeStamp - start;
-
-            if (previousTimeStamp !== timeStamp) {
-                const updatedCount = easeInOutQuint(elapsed / duration) * finalCount
-                setCount(updatedCount);
-
-                if (updatedCount === finalCount) done = true
-            }
-
-            if (elapsed < duration) {
-                previousTimeStamp = timeStamp;
-
-                if (!done) window.requestAnimationFrame(countUp)
+        for (let x = 0; x < canvas.width; x += 100) {
+            for (let y = 0; y < canvas.height; y += 100) {
+                ctx.beginPath()
+                ctx.arc(x, y, 3, 0, 2 * Math.PI)
+                ctx.fill()
             }
         }
+    }
 
-        setTimeout(() => window.requestAnimationFrame(countUp), 1000)
-	}, []);
+    const initCircleGrid = (canvas: HTMLCanvasElement) => {
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+
+        drawCircles(canvas, ctx)
+
+        window.addEventListener('resize', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            drawCircles(canvas, ctx)
+        })
+    }
+
+    useEffect(() => {
+        if (canvas.current) {
+            canvas.current.classList.add('absolute', 'inset-0', 'w-full', 'h-full', 'z-0')
+            initCircleGrid(canvas.current)
+        }
+    }, [canvas?.current])
 
     return (
-        <span className="text-tremor-brand-subtle font-bold">
-            {prefix && prefix}{countLabel}
-        </span>
+        <section {...rest}>
+            {children}
+
+            <canvas ref={canvas}></canvas>
+        </section>
     )
 }
 
+
 export default function Home() {
+    const counterClasses = "text-tremor-brand-subtle font-bold"
+
     return (
-        <section className="relative w-screen h-screen homepage-background">
-            <div className="relative flex justify-center items-center w-full h-full z-10">
+        <InteractiveBackground className="relative w-screen h-screen homepage-background">
+            <div className="relative flex justify-center items-center w-full h-full z-20">
                 <h2 className="inline-block text-center text-white text-3xl font-light !leading-tight md:text-4xl lg:text-5xl">
                     Delivering insights for<br/>
-                    <AnimatedCounter prefix="$" finalCount={5000000000}></AnimatedCounter> in research funding<br/>
-                    across <AnimatedCounter finalCount={21000}></AnimatedCounter> grants, resulting<br/>
-                    in <AnimatedCounter finalCount={57000}></AnimatedCounter> publications
+                    <AnimatedCounter prefix="$" finalCount={5000000000} className={counterClasses}></AnimatedCounter> in research funding<br/>
+                    across <AnimatedCounter finalCount={21000} className={counterClasses}></AnimatedCounter> grants, resulting<br/>
+                    in <AnimatedCounter finalCount={57000} className={counterClasses}></AnimatedCounter> publications
                 </h2>
             </div>
 
-            <RotatingGlobe className="!absolute inset-0"/>
-        </section>
+            <RotatingGlobe className="!absolute inset-0 z-10"/>
+        </InteractiveBackground>
     )
 }
 
