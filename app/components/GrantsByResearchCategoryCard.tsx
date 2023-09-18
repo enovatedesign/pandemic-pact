@@ -28,7 +28,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         }
     })
 
-    const amountOfMoneySpentPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
+    const amountOfMoneyCommittedPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
@@ -42,16 +42,16 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const scatterChartData = researchCategoryOptions.map(function (researchCategory, index) {
         const numberOfGrants = numberOfGrantsPerResearchCategory[index].value;
-        const moneySpent = amountOfMoneySpentPerResearchCategory[index].value;
+        const moneyCommitted = amountOfMoneyCommittedPerResearchCategory[index].value;
 
         return {
             "Research Category": researchCategory.label,
             "Number Of Grants": numberOfGrants,
-            "Money Spent": moneySpent,
+            "Money Committed": moneyCommitted,
         }
     })
 
-    const amountOfMoneySpentPerResearchCategoryValueFormatter = (value: number) => {
+    const amountOfMoneyCommittedPerResearchCategoryValueFormatter = (value: number) => {
         return '$' + millify(value, {precision: 2})
     }
 
@@ -127,8 +127,8 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
                         <Col>
                             <BarList
-                                data={amountOfMoneySpentPerResearchCategory}
-                                valueFormatter={amountOfMoneySpentPerResearchCategoryValueFormatter}
+                                data={amountOfMoneyCommittedPerResearchCategory}
+                                valueFormatter={amountOfMoneyCommittedPerResearchCategoryValueFormatter}
                             />
 
                             <Subtitle className="mt-4 text-right">Known value of projects (USD)</Subtitle>
@@ -142,12 +142,12 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         data={scatterChartData}
                         category="Research Category"
                         x="Number Of Grants"
-                        y="Money Spent"
+                        y="Money Committed"
                         showOpacity={true}
                         minYValue={60}
                         valueFormatter={{
                             x: (value: number) => `${value} grants`,
-                            y: amountOfMoneySpentPerResearchCategoryValueFormatter,
+                            y: amountOfMoneyCommittedPerResearchCategoryValueFormatter,
                         }}
                         showLegend={false}
                         autoMinXValue
