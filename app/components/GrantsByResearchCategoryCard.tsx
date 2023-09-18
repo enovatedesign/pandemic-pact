@@ -188,6 +188,8 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         />
                     </Flex>
                 </Flex>
+
+                <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
             </Flex>
         </Card>
     )
