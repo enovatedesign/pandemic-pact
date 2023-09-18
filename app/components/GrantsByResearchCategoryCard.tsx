@@ -131,7 +131,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                                 valueFormatter={amountOfMoneyCommittedPerResearchCategoryValueFormatter}
                             />
 
-                            <Subtitle className="mt-4 text-right">Known value of projects (USD)</Subtitle>
+                            <Subtitle className="mt-4 text-right">Known amount committed (USD)</Subtitle>
                         </Col>
                     </Grid>
                 }
