@@ -9,10 +9,10 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
-import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
+import dataset from '../../data/dist/amount-committed-to-each-research-category-over-time-card.json'
 import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
-export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
+export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
@@ -29,7 +29,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
 
-    const amountSpentOnEachResearchCategoryOverTime = Object.keys(
+    const amountCommittedToEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
@@ -75,13 +75,13 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
     return (
         <Card
             className="flex flex-col gap-y-6"
-            id="amount-spent-on-each-research-category-over-time-card"
+            id="amount-committed-to-each-research-category-over-time-card"
         >
             <Flex
                 justifyContent="between"
                 alignItems="center"
             >
-                <Title>Amount Spent On Each Research Category Over Time</Title>
+                <Title>Amount Committed To Each Research Category Over Time</Title>
                 <Text>Total Grants: {dataset.length}</Text>
             </Flex>
 
@@ -102,7 +102,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
             {selectedTabIndex === 0 &&
                 <LineChart
-                    data={amountSpentOnEachResearchCategoryOverTime}
+                    data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
                     valueFormatter={valueFormatter}
@@ -114,7 +114,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
             {selectedTabIndex === 1 &&
                 <BarChart
-                    data={amountSpentOnEachResearchCategoryOverTime}
+                    data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
                     valueFormatter={valueFormatter}
@@ -145,16 +145,18 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
                     className="gap-x-2"
                 >
                     <ExportToPngButton
-                        selector="#amount-spent-on-each-research-category-over-time-card"
-                        filename="amount-spent-on-each-research-category-over-time"
+                        selector="#amount-committed-to-each-research-category-over-time-card"
+                        filename="amount-committed-to-each-research-category-over-time"
                     />
 
                     <ExportToCsvButton
                         meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
-                        filename="grant-by-amount-spent-on-each-research-category-over-time"
+                        filename="grant-by-amount-committed-to-each-research-category-over-time"
                     />
                 </Flex>
             </Flex>
+
+            <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
         </Card>
     )
 }
