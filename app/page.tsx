@@ -1,45 +1,12 @@
 "use client"
 
-import {useRef} from "react"
-import {Canvas, useFrame} from '@react-three/fiber'
-import {Sphere, useTexture} from "@react-three/drei"
-import {Mesh} from "three"
-
-// TODO determine FOV based on window width and height
+import RotatingGlobe from "./components/RotatingGlobe"
 
 export default function Home() {
     return (
         <div className="w-screen h-screen homepage-background">
-            <Canvas
-                camera={{
-                    position: [0, 0.4, 2.6],
-                    rotation: [0.4, 0, 0],
-                    fov: 40,
-                }}
-            >
-                <ambientLight />
-                <Globe />
-            </Canvas>
+            <RotatingGlobe />
         </div>
     )
 }
 
-function Globe() {
-    const textureProps = useTexture({map: "/earth.jpg"})
-
-    const sphereRef = useRef<Mesh>(null!)
-
-    useFrame((state, delta) => (sphereRef.current.rotation.y += delta * 0.05))
-
-    return (
-        <Sphere
-            args={[1, 64, 64]}
-            ref={sphereRef}
-            rotation={[Math.PI, 0, Math.PI]}
-        >
-            <meshStandardMaterial
-                {...textureProps}
-            />
-        </Sphere>
-    )
-}
