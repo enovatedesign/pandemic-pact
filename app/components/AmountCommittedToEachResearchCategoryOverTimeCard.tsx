@@ -9,7 +9,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
-import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
+import dataset from '../../data/dist/amount-committed-to-each-research-category-over-time-card.json'
 import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
 export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
@@ -75,13 +75,13 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
     return (
         <Card
             className="flex flex-col gap-y-6"
-            id="amount-spent-on-each-research-category-over-time-card"
+            id="amount-committed-to-each-research-category-over-time-card"
         >
             <Flex
                 justifyContent="between"
                 alignItems="center"
             >
-                <Title>Amount Spent On Each Research Category Over Time</Title>
+                <Title>Amount Committed To Each Research Category Over Time</Title>
                 <Text>Total Grants: {dataset.length}</Text>
             </Flex>
 
@@ -145,13 +145,13 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                     className="gap-x-2"
                 >
                     <ExportToPngButton
-                        selector="#amount-spent-on-each-research-category-over-time-card"
-                        filename="amount-spent-on-each-research-category-over-time"
+                        selector="#amount-committed-to-each-research-category-over-time-card"
+                        filename="amount-committed-to-each-research-category-over-time"
                     />
 
                     <ExportToCsvButton
                         meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
-                        filename="grant-by-amount-spent-on-each-research-category-over-time"
+                        filename="grant-by-amount-committed-to-each-research-category-over-time"
                     />
                 </Flex>
             </Flex>
