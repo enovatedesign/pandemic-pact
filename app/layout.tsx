@@ -1,7 +1,7 @@
 import './css/globals.css'
-import {Inter} from 'next/font/google'
+import {Figtree} from 'next/font/google'
 
-const inter = Inter({subsets: ['latin']})
+const figTree = Figtree({subsets: ['latin']})
 
 export const metadata = {
     title: 'Pandemic PACT',
@@ -13,7 +13,7 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const classes: string = `${inter.className} flex overflow-x-hidden`;
+    const classes: string = `${figTree.className} flex overflow-x-hidden`;
 
     return (
         <html lang="en">
