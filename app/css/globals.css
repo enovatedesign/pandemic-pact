@@ -25,6 +25,14 @@ body {
     font-style: italic;
 }
 
+.grant-abstract .highlighted-search-result-token {
+    color: blue;
+}
+
+.grant-lay-summary .highlighted-search-result-token {
+    color: green;
+}
+
 .homepage-background {
     background: rgb(97, 212, 209);
     background: radial-gradient(circle at bottom, rgba(97, 212, 209, 1) 0%, rgba(0, 0, 62, 1) 60%);

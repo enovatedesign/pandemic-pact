@@ -25,7 +25,7 @@ export default function StaticPage({grant}: Props) {
                     numColSpanLg={4}
                     className="flex flex-col gap-6"
                 >
-                    <Card>
+                    <Card className="grant-abstract">
                         <Title>Abstract</Title>
 
                         <div
@@ -35,7 +35,7 @@ export default function StaticPage({grant}: Props) {
                     </Card>
 
                     {grant.LaySummary &&
-                        <Card>
+                        <Card className="grant-lay-summary">
                             <Title>Lay Summary</Title>
 
                             <div
