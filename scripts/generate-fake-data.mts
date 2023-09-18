@@ -181,7 +181,7 @@ async function main() {
             'ResearchCat',
             'GrantAmountConverted',
             'FundingOrgName',
-            'GrantEndYear',
+            'GrantStartYear',
         ])),
     )
 

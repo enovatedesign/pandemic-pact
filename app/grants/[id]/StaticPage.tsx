@@ -13,6 +13,10 @@ export default function StaticPage({grant}: Props) {
             metric: `$ ${grant.GrantAmountConverted.toFixed(2)}`,
         },
         {
+            text: 'Start Year',
+            metric: grant.GrantStartYear,
+        },
+        {
             text: 'End Year',
             metric: grant.GrantEndYear,
         },
