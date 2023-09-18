@@ -9,7 +9,7 @@ interface Props {
 export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
-            text: 'Amount Awarded (USD)',
+            text: 'Amount Committed (USD)',
             metric: `$ ${grant.GrantAmountConverted.toFixed(2)}`,
         },
         {
