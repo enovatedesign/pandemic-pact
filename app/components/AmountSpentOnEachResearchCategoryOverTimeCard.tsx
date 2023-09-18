@@ -21,7 +21,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
         {...selectedFilters, ResearchCat: selectedResearchCategories},
     )
 
-    const datasetGroupedByYear = groupBy(filteredDataset, 'GrantEndYear')
+    const datasetGroupedByYear = groupBy(filteredDataset, 'GrantStartYear')
 
     const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
         [{value: 'All Research Categories', label: 'All Research Categories'}] :
