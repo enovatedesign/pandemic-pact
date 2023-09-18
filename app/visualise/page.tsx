@@ -6,7 +6,7 @@ import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategoryCard'
-import AmountSpentOnEachResearchCategoryOverTimeCard from '../components/AmountSpentOnEachResearchCategoryOverTimeCard'
+import AmountCommittedToEachResearchCategoryOverTimeCard from '../components/AmountCommittedToEachResearchCategoryOverTimeCard'
 import GrantsByRegionCard from '../components/GrantsByRegionCard'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConductedCard'
@@ -50,7 +50,7 @@ export default function Visualise() {
                     </Col>
 
                     <Col numColSpan={12}>
-                        <AmountSpentOnEachResearchCategoryOverTimeCard
+                        <AmountCommittedToEachResearchCategoryOverTimeCard
                             selectedFilters={selectedFilters}
                         />
                     </Col>

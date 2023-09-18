@@ -12,7 +12,7 @@ import {CardProps} from "../types/card-props"
 import dataset from '../../data/dist/amount-spent-on-each-research-category-over-time-card.json'
 import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
 
-export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
+export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
@@ -29,7 +29,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
             researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
 
-    const amountSpentOnEachResearchCategoryOverTime = Object.keys(
+    const amountCommittedToEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
@@ -102,7 +102,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
             {selectedTabIndex === 0 &&
                 <LineChart
-                    data={amountSpentOnEachResearchCategoryOverTime}
+                    data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
                     valueFormatter={valueFormatter}
@@ -114,7 +114,7 @@ export default function AmountSpentOnEachResearchCategoryOverTimeCard({selectedF
 
             {selectedTabIndex === 1 &&
                 <BarChart
-                    data={amountSpentOnEachResearchCategoryOverTime}
+                    data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
                     valueFormatter={valueFormatter}
