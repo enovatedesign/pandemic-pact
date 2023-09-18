@@ -4,7 +4,7 @@ import {Sphere, useTexture} from "@react-three/drei"
 import {Mesh} from "three"
 
 export default function RotatingGlobe() {
-    // TODO determine FOV based on window width and height
+    // TODO determine FOV based on window width and height?
     return (
         <Canvas
             camera={{
