@@ -47,7 +47,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
         return {
             "Research Category": researchCategory.label,
             "Number Of Grants": numberOfGrants,
-            "Money Committed": moneyCommitted,
+            "Amount Committed": moneyCommitted,
         }
     })
 
@@ -142,7 +142,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         data={scatterChartData}
                         category="Research Category"
                         x="Number Of Grants"
-                        y="Money Committed"
+                        y="Amount Committed"
                         showOpacity={true}
                         minYValue={60}
                         valueFormatter={{
