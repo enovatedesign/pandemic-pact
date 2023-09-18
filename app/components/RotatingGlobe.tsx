@@ -3,7 +3,11 @@ import {Canvas, useFrame} from '@react-three/fiber'
 import {Sphere, useTexture} from "@react-three/drei"
 import {Mesh} from "three"
 
-export default function RotatingGlobe() {
+interface Props {
+    className?: string
+}
+
+export default function RotatingGlobe({ className }: Props) {
     // TODO determine FOV based on window width and height?
     return (
         <Canvas
@@ -12,6 +16,7 @@ export default function RotatingGlobe() {
                 rotation: [0.4, 0, 0],
                 fov: 40,
             }}
+            className={className}
         >
             <ambientLight />
             <GlobeModel />
