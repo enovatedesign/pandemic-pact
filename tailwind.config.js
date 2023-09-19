@@ -12,6 +12,11 @@ module.exports = {
     current: "currentColor",
     extend: {
       colors: {
+        secondary: {
+          lighter: "hsl(186, 100%, 60%)",
+          DEFAULT: "hsl(186, 100%, 50%)",
+          darker: "hsl(186, 100%, 40%)",
+        },
         // light mode
         tremor: {
           brand: {

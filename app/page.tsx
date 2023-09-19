@@ -5,7 +5,7 @@ import InteractiveBackground from "./components/InteractiveBackground"
 import RotatingGlobe from "./components/RotatingGlobe"
 
 export default function Home() {
-    const counterClasses = "text-tremor-brand-subtle font-bold"
+    const counterClasses = "text-secondary font-bold"
 
     return (
         <InteractiveBackground className="relative w-screen h-screen homepage-background">
