@@ -6,15 +6,16 @@ import {MenuIcon} from '@heroicons/react/solid'
 
 import Heading from './Heading'
 import Text from './Text'
+import NavigationMenu from './NavigationMenu'
 
-type SidebarProps = {
+type Props = {
     sidebarContent?: React.ReactNode,
     children: React.ReactNode,
     title?: string,
     summary?: string,
 }
 
-const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
+const Layout = ({title, summary, sidebarContent, children}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
@@ -37,6 +38,8 @@ const Layout = ({title, summary, sidebarContent, children}: SidebarProps) => {
 
     return (
         <>
+            <NavigationMenu />
+
             {sidebarContent &&
                 <aside className="relative">
                     <div className="sticky top-0 flex flex-col bg-blue-500 text-white h-screen">

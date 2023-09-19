@@ -13,9 +13,9 @@ module.exports = {
     extend: {
       colors: {
         secondary: {
-          lighter: "hsl(186, 100%, 60%)",
-          DEFAULT: "hsl(186, 100%, 50%)",
-          darker: "hsl(186, 100%, 40%)",
+          lighter: "hsl(178, 58%, 71%)",
+          DEFAULT: "hsl(178, 58%, 61%)",
+          darker: "hsl(178, 58%, 51%)",
         },
         // light mode
         tremor: {
@@ -130,5 +130,31 @@ module.exports = {
         /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
     },
   ],
-  plugins: [require("@headlessui/tailwindcss")],
+  plugins: [
+    require("@headlessui/tailwindcss"),
+    ({ addComponents, theme }) => {
+      addComponents(
+        {
+          '.container': {
+            margin: '0 auto',
+            padding: '0 1.5rem',
+            width: '100%',
+            maxWidth: theme('screens.2xl'),
+
+            '@screen md': {
+              padding: '0 2rem',
+            },
+
+            '@screen lg': {
+              padding: '0 3rem',
+            },
+          },
+        },
+        ['responsive']
+      );
+    },
+  ],
+  corePlugins: {
+    container: false,
+  },
 };

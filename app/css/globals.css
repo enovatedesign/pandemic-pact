@@ -34,6 +34,10 @@ body {
 }
 
 .homepage-background {
-    background: rgb(97, 212, 209);
-    background: radial-gradient(circle at bottom, rgba(97, 212, 209, 1) 0%, rgba(0, 0, 62, 1) 60%);
+    background: theme(colors.secondary.DEFAULT);
+    background: radial-gradient(circle at bottom, theme(colors.secondary.DEFAULT) 0%, rgba(0, 0, 62, 1) 60%);
+}
+
+.navigation-menu {
+    box-shadow: inset 0 0 16px 8px rgba(255, 255, 255, 0.08);
 }
