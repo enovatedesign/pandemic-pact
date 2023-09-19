@@ -3,8 +3,8 @@ import {useRouter, usePathname, useSearchParams} from 'next/navigation'
 import {Text, TextInput, Grid, Col} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
-import DiseaseSelect from "./DiseaseSelect"
-import PathogenSelect from "./PathogenSelect"
+import MultiSelect from "./MultiSelect"
+import selectOptions from '../../data/dist/select-options.json'
 import {type SearchResponse} from '../types/search'
 import {
     meilisearchRequest,
@@ -108,11 +108,21 @@ export default function SearchInput({setSearchResponse}: Props) {
             </Col>
 
             <Col>
-                <DiseaseSelect setSelectedDiseases={setSelectedDiseases} />
+                <MultiSelect
+                    options={selectOptions.Disease}
+                    selectedOptions={selectedDiseases}
+                    setSelectedOptions={setSelectedDiseases}
+                    placeholder="All Diseases"
+                />
             </Col>
 
             <Col>
-                <PathogenSelect setSelectedPathogens={setSelectedPathogens} />
+                <MultiSelect
+                    options={selectOptions.Pathogen}
+                    selectedOptions={selectedPathogens}
+                    setSelectedOptions={setSelectedPathogens}
+                    placeholder="All Pathogens"
+                />
             </Col>
 
             <Col

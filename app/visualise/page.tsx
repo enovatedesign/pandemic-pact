@@ -15,8 +15,13 @@ import {type Filters} from "../types/filters"
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         FundingOrgName: [],
-        ResearchCat: [],
+        ResearchInstitutionName: [],
+        Disease: [],
         Pathogen: [],
+        GrantStartYear: [],
+        StudySubject: [],
+        AgeGroups: [],
+        StudyType: [],
     })
 
     return (

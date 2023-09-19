@@ -4,11 +4,8 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
-
-import ethnicityOptions from '../../data/dist/select-options/Ethnicity.json'
-import ageGroupOptions from '../../data/dist/select-options/AgeGroups.json'
-import ruralityOptions from '../../data/dist/select-options/Rurality.json'
-import dataset from '../../data/dist/grants-by-mesh-classification-card.json'
+import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
@@ -40,21 +37,21 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     title="Ethnicity"
                     dataset={filteredDataset}
                     fieldName="Ethnicity"
-                    options={ethnicityOptions}
+                    options={selectOptions.Ethnicity}
                 />
 
                 <DataBar
                     title="Age Groups"
                     dataset={filteredDataset}
                     fieldName="AgeGroups"
-                    options={ageGroupOptions}
+                    options={selectOptions.AgeGroups}
                 />
 
                 <DataBar
                     title="Rurality"
                     dataset={filteredDataset}
                     fieldName="Rurality"
-                    options={ruralityOptions}
+                    options={selectOptions.Rurality}
                 />
             </div>
 
