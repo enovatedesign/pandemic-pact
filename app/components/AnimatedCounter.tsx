@@ -39,6 +39,10 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
         }
 
         setTimeout(() => window.requestAnimationFrame(countUp), 1000)
+
+        return () => {
+            done = true
+        }
 	}, []);
 
     return (
