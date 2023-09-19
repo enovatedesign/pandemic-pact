@@ -7,14 +7,15 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
-import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
-
-import dataset from '../../data/dist/grants-by-research-category-card.json'
+import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     const filteredDataset = filterGrants(dataset, selectedFilters)
+
+    const researchCategoryOptions = selectOptions.ResearchCat
 
     const numberOfGrantsPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset

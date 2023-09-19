@@ -103,7 +103,7 @@ async function main() {
                 "VulnerablePopulations": faker.helpers.objectValue(lookupTables.VulnerablePopulations),
                 "OccupationalGroups": [faker.helpers.objectValue(lookupTables.OccupationalGroups)],
                 "StudyType": [faker.helpers.objectValue(lookupTables.StudyType)],
-                "ClinicalTrial": [faker.helpers.objectValue(lookupTables.ClinTrial)],
+                "ClinicalTrial": [faker.helpers.objectValue(lookupTables.ClinicalTrial)],
                 "ResearchCat": [researchCat],
                 "ResearchSubcat": [researchSubcat],
                 "WHOGHObservatoryFramework": faker.helpers.objectValue(lookupTables.WHOGHObservatoryFramework),
@@ -118,8 +118,8 @@ async function main() {
                 "PolicyRoadmap08": "", // awaiting specification
                 "PolicyRoadmap09": "", // awaiting specification
                 "PolicyRoadmap10": "", // awaiting specification
-                "Pathogen": [faker.helpers.objectValue(lookupTables.Pathogens)],
-                "Disease": [faker.helpers.objectValue(lookupTables.Diseases)],
+                "Pathogen": [faker.helpers.objectValue(lookupTables.Pathogen)],
+                "Disease": [faker.helpers.objectValue(lookupTables.Disease)],
                 ...funder,
                 ...researchInstitution,
             }
@@ -165,54 +165,8 @@ async function main() {
     )
 
     writeToDistJsonFile(
-        'grants-by-research-category-card.json',
-        completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
-            'GrantID',
-            'ResearchCat',
-            'GrantAmountConverted',
-            'FundingOrgName',
-        ])),
-    )
-
-    writeToDistJsonFile(
-        'amount-committed-to-each-research-category-over-time-card.json',
-        completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
-            'GrantID',
-            'ResearchCat',
-            'GrantAmountConverted',
-            'FundingOrgName',
-            'GrantStartYear',
-        ])),
-    )
-
-    writeToDistJsonFile(
-        'grants-by-region-card.json',
-        completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
-            'GrantID',
-            'GrantRegion',
-            'FundingOrgName',
-        ])),
-    )
-
-    writeToDistJsonFile(
-        'grants-by-mesh-classification-card.json',
-        completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
-            'GrantID',
-            'FundingOrgName',
-            'Ethnicity',
-            'AgeGroups',
-            'Rurality',
-        ])),
-    )
-
-    writeToDistJsonFile(
-        'grants-by-country-of-research-card.json',
-        completeDataset.map((grant: Array<Dictionary<string | number>>) => _.pick(grant, [
-            'GrantID',
-            'ResearchInstitutionCountry',
-            'Pathogen',
-            'FundingOrgName',
-        ])),
+        'filterable-dataset.json',
+        getFilterableGrantsWithFields(completeDataset),
     )
 
     fs.ensureDirSync(`${distDirectory}/grants`)
@@ -227,9 +181,7 @@ async function main() {
         writeToDistJsonFile(pathname, grant, false)
     })
 
-    fs.ensureDirSync(`${distDirectory}/select-options`)
-
-    _.forEach(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: string) => {
+    let selectOptions: any = _.mapValues(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: string) => {
         let options: Array<{label: string, value: string, parent?: string}> = []
 
         if (lookupTableName === 'ResearchSubcat') {
@@ -244,20 +196,27 @@ async function main() {
             options = _.map(lookupTable, (label: string, value: string) => ({label, value}))
         }
 
-        const pathname = `select-options/${lookupTableName}.json`
+        // NOTE we are using `label` as value for now because everything except
+        // ResearchCat and ResearchSubcat is currently a text string, but
+        // eventually options will have numeric values
+        if (lookupTableName !== 'ResearchCat' && lookupTableName !== 'ResearchSubcat') {
+            options = options.map(({label}) => ({label, value: label}))
+        }
 
-        writeToDistJsonFile(pathname, options)
+        return options
+    })
+
+    // These options are computed from the dataset, not the lookup tables
+    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear']
+
+    fieldsFromDataset.forEach((fieldName: string) => {
+        selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)
     })
 
     writeToDistJsonFile(
-        'select-options/Funders.json',
-        _.uniq(
-            completeDataset.map(({FundingOrgName}: {FundingOrgName: string[]}) => FundingOrgName).flat(),
-        ).map(
-            (FundingOrgName: any, index: number) => ({label: FundingOrgName, value: `${index + 1}`})
-        )
+        'select-options.json',
+        selectOptions,
     )
-
 }
 
 async function getPubMedLinks(pubMedGrantId: string) {
@@ -299,4 +258,36 @@ function writeToDistJsonFile(filename: string, data: any, log: boolean = true) {
     if (log) {
         console.log(chalk.blue(`Wrote ${fileSize} to ${pathname}`))
     }
+}
+
+function getUniqueValuesAsSelectOptions(dataset: Array<Dictionary<string>>, fieldName: string): Array<{label: string, value: string}> {
+    return _.uniq(
+        dataset.map(grant => grant[fieldName]).flat(),
+    ).map(
+        (label: any, index: number) => ({label, value: label})
+    ).sort(
+        (a, b) => a.label.localeCompare(b.label)
+    )
+}
+
+function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
+    return dataset.map(
+        grant => _.pick(grant, [
+            'GrantID',
+            'FundingOrgName',
+            'ResearchCat',
+            'GrantAmountConverted',
+            'GrantStartYear',
+            'Disease',
+            'Pathogen',
+            'GrantRegion',
+            'Ethnicity',
+            'AgeGroups',
+            'Rurality',
+            'ResearchInstitutionName',
+            'ResearchInstitutionCountry',
+            'StudySubject',
+            'StudyType',
+        ])
+    )
 }
