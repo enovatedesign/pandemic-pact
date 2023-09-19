@@ -1,14 +1,14 @@
 import {useState, useEffect} from "react"
 import {millify} from "millify"
 
-interface AnimatedCounterProps {
+interface Props {
     prefix?: string
     finalCount: number,
     duration?: number,
     className?: string,
 }
 
-export default function AnimatedCounter({ prefix, finalCount, duration = 5000, className }: AnimatedCounterProps) {
+export default function AnimatedCounter({ prefix, finalCount, duration = 5000, className }: Props) {
     const [count, setCount] = useState<number>(0)
     const [countLabel, setCountLabel] = useState<string>('0')
 
