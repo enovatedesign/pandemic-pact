@@ -47,8 +47,8 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
 
     return (
         <span className={`relative inline-block text-center ${className}`}>
-            <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{prefix && prefix}{count}{suffix && suffix}</span>
-            <span className="invisible whitespace-nowrap" aria-hidden>{prefix && prefix}{finalCount}{suffix && suffix}</span>
+            <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{prefix && prefix}{count.toLocaleString()}{suffix && suffix}</span>
+            <span className="invisible whitespace-nowrap" aria-hidden>{prefix && prefix}{finalCount.toLocaleString()}{suffix && suffix}</span>
         </span>
     )
 }
