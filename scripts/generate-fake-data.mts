@@ -70,6 +70,8 @@ const realDataCountryMapping = {
     'United States': 'US',
 }
 
+const sampleGrantNumbers = fs.readJsonSync('./data/source/sample-grant-numbers.json')
+
 const distDirectory = './data/dist'
 
 main()
@@ -78,7 +80,7 @@ async function main() {
     const sourceDataset = fs.readJsonSync(sourceDatasetFilename)
 
     const completeDataset = await Promise.all(
-        sourceDataset.map(async (sourceGrant: Grant, grantId: number) => {
+        sourceDataset.map(async (sourceGrant: Grant, index: number) => {
             const funder = faker.helpers.arrayElement(funders)
             const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
@@ -86,7 +88,7 @@ async function main() {
             const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat[researchCat])
 
             let distGrant: Grant = {
-                "GrantID": grantId,
+                "GrantID": index + 1,
                 "GrantTitleEng": sourceGrant.GrantTitleEng,
                 "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
                 "GrantCountry": faker.location.countryCode('alpha-2'),
@@ -144,13 +146,14 @@ async function main() {
 
             }
 
-            const pubMedGrantId = sourceGrant.PubMedGrantId?.trim()
+            const pubMedGrantId = sampleGrantNumbers[index] ?? null
 
             if (!pubMedGrantId) {
                 return Promise.resolve(distGrant)
             }
 
             return getPubMedLinks(pubMedGrantId).then(pubMedLinks => {
+                distGrant['PubMedGrantId'] = pubMedGrantId
                 distGrant['PubMedLinks'] = pubMedLinks
                 return distGrant
             })
