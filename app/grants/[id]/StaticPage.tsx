@@ -74,10 +74,12 @@ export default function StaticPage({grant}: Props) {
                                                 <Text>{link.pubYear}</Text>
                                             </div>
 
-                                            <div>
-                                                <Subtitle className="font-bold">Journal</Subtitle>
-                                                <Text>{link.journalInfo.journal.title}</Text>
-                                            </div>
+                                            {link.journalInfo?.journal?.title &&
+                                                <div>
+                                                    <Subtitle className="font-bold">Journal</Subtitle>
+                                                    <Text>{link.journalInfo.journal.title}</Text>
+                                                </div>
+                                            }
 
                                             <div>
                                                 <Subtitle className="font-bold">DOI</Subtitle>
