@@ -7,7 +7,6 @@ export interface MeilisearchRequestBody {
     highlightPreTag?: string
     highlightPostTag?: string
     limit?: number
-    showRankingScore?: boolean
 }
 
 export async function meilisearchRequest(index: string, body: MeilisearchRequestBody) {
