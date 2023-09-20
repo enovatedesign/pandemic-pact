@@ -29,7 +29,7 @@ export default function NavigationBar() {
 
     return (
         <nav className="fixed top-8 right-8 z-30">
-            <ul className="flex space-x-10 px-10 py-3 rounded-full border border-primary/25 navigation-menu">
+            <ul className="flex space-x-10 px-10 py-3 rounded-full border border-primary/25 inner-glow">
                 {links.map(link => (
                     <li key={link.href}>
                         <Link 
