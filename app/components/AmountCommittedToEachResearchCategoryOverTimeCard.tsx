@@ -2,15 +2,15 @@ import {useState} from "react"
 import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import {millify} from "millify"
-import ResearchCategorySelect from "./ResearchCategorySelect"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
-import dataset from '../../data/dist/amount-committed-to-each-research-category-over-time-card.json'
-import researchCategoryOptions from '../../data/dist/select-options/ResearchCat.json'
+import MultiSelect from "./MultiSelect"
+import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 
 export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
@@ -22,6 +22,8 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
     )
 
     const datasetGroupedByYear = groupBy(filteredDataset, 'GrantStartYear')
+
+    const researchCategoryOptions = selectOptions.ResearchCat
 
     const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
         [{value: 'All Research Categories', label: 'All Research Categories'}] :
@@ -90,8 +92,11 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                <ResearchCategorySelect
-                    setSelectedResearchCategories={setSelectedResearchCategories}
+                <MultiSelect
+                    options={selectOptions.ResearchCat}
+                    selectedOptions={selectedResearchCategories}
+                    setSelectedOptions={setSelectedResearchCategories}
+                    placeholder="All Research Categories"
                     className="max-w-xs ignore-in-image-export"
                 />
 

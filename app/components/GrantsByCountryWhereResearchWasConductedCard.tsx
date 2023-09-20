@@ -3,12 +3,12 @@ import {Flex, Card, Title, Text} from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
-import PathogenSelect from "./PathogenSelect"
+import MultiSelect from "./MultiSelect"
 import ExportToPngButton from "./ExportToPngButton"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
-
-import dataset from '../../data/dist/grants-by-country-of-research-card.json'
+import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
 
 export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
@@ -67,8 +67,11 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
                     justifyContent="between"
                     alignItems="center"
                 >
-                    <PathogenSelect
-                        setSelectedPathogens={setSelectedPathogens}
+                    <MultiSelect
+                        options={selectOptions.Pathogen}
+                        selectedOptions={selectedPathogens}
+                        setSelectedOptions={setSelectedPathogens}
+                        placeholder="All Pathogens"
                         className="max-w-xs ignore-in-image-export"
                     />
 

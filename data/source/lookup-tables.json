@@ -148,7 +148,7 @@
         "18": "Not applicable",
         "19": "Not known"
     },
-    "ClinTrial": {
+    "ClinicalTrial": {
         "1": "Adaptive Clinical Trial",
         "2": "Clinical Trial, Phase I ",
         "3": "Clinical Trial, Phase II",
@@ -180,7 +180,7 @@
         "14": "Not applicable",
         "15": "Not known"
     },
-    "Diseases": {
+    "Disease": {
         "840539006": "COVID-19",
         "43489008": "Crimean-Congo haemorrhagic fever",
         "37109004": "Ebola virus disease",
@@ -195,7 +195,7 @@
         "2": "Not applicable",
         "3": "Not known"
     },
-    "Pathogens": {
+    "Pathogen": {
         "1263733001": "SARS-CoV",
         "1263732006": "SARSr-CoV",
         "840533007": "SARS-CoV-2",

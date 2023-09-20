@@ -3,11 +3,13 @@ import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
-import regionOptions from '../../data/dist/select-options/Regions.json'
-import dataset from '../../data/dist/grants-by-region-card.json'
+import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
+
+    const regionOptions = selectOptions.Regions
 
     const numberOfGrantsPerRegion = regionOptions.map(function (regionOption) {
         const numberOfGrants = filteredDataset
