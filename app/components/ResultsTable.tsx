@@ -1,3 +1,5 @@
+import '../css/components/results-table.css'
+
 import Link from "next/link"
 import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
 import {SearchResponse, SearchResult} from "../types/search"
