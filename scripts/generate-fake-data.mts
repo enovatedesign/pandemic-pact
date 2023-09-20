@@ -52,11 +52,11 @@ const researchInstitutions: ResearchInstitution[] = _.range(200).map(() => {
     }
 })
 
-const sourceDatasetFilename = process.env.GENERATE_REAL_DATA ?
-    './data/source/sample-real-data.json' :
-    './data/source/fake-data-from-covid-tracker.json'
+const sourceDatasetFilename = process.env.GENERATE_FAKE_DATA ?
+    './data/source/fake-data-from-covid-tracker.json' :
+    './data/source/sample-real-data.json'
 
-console.log(chalk.blue(`Generating ${process.env.GENERATE_REAL_DATA ? 'real' : 'fake'} data`))
+console.log(chalk.blue(`Generating ${process.env.GENERATE_FAKE_DATA ? 'fake' : 'real'} data`))
 
 const realDataCountryMapping = {
     'Australia': 'AU',
@@ -126,7 +126,7 @@ async function main() {
                 ...researchInstitution,
             }
 
-            if (process.env.GENERATE_REAL_DATA) {
+            if (!process.env.GENERATE_FAKE_DATA) {
                 distGrant['Disease'] = convertMultiColumnFieldToArray(sourceGrant, 'DiseaseName')
                 distGrant['StudySubject'] = convertMultiColumnFieldToArray(sourceGrant, 'StudySubject')
                 distGrant['OccupationalGroups'] = convertMultiColumnFieldToArray(sourceGrant, 'OccupationalGroups')
