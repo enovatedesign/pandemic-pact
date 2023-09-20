@@ -3,6 +3,7 @@ import '../css/components/results-table.css'
 import Link from "next/link"
 import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
 import {SearchResponse, SearchResult} from "../types/search"
+import {links} from "../helpers/nav"
 
 interface Props {
     searchResponse: SearchResponse,
@@ -22,7 +23,7 @@ export default function ResultsTable({searchResponse}: Props) {
                 <TableBody>
                     {searchResponse.hits.map((result) => {
                         const query = searchResponse.query
-                        const href = `/grants/${result.GrantID}` + (query ? `?q=${query}` : '')
+                        const href = `${links.explore.url}/${result.GrantID}` + (query ? `?q=${query}` : '')
 
                         return (
                             <TableRow key={result.GrantID}>
