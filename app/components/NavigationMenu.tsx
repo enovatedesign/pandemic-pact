@@ -34,7 +34,7 @@ export default function NavigationBar() {
                     <li key={link.href}>
                         <Link 
                             href={link.href}
-                            className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-secondary focus:text-white hover:text-white'}`}
+                            className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'}`}
                         >
                             {link.label}
                         </Link>

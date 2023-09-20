@@ -12,7 +12,7 @@ module.exports = {
     current: "currentColor",
     extend: {
       colors: {
-        secondary: {
+        primary: {
           lighter: "hsl(178, 58%, 71%)",
           DEFAULT: "hsl(178, 58%, 61%)",
           darker: "hsl(178, 58%, 51%)",
