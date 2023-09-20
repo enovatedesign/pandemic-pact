@@ -17,6 +17,11 @@ module.exports = {
           DEFAULT: "hsl(178, 58%, 61%)",
           darker: "hsl(178, 58%, 51%)",
         },
+        secondary: {
+          lighter: "hsl(240, 100%, 22%)",
+          DEFAULT: "hsl(240, 100%, 12%)",
+          darker: "hsl(240, 100%, 2%)",
+        },
         // light mode
         tremor: {
           brand: {

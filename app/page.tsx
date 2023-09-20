@@ -9,7 +9,7 @@ import RotatingGlobe from "./components/RotatingGlobe"
 
 export default function Home() {
     const counterClasses = "text-primary font-bold"
-    const btnClasses = "flex justify-center px-10 py-3 rounded-full border border-secondary/25 navigation-menu uppercase text-center text-white font-medium tracking-wider text-xl"
+    const btnClasses = "flex justify-center px-10 py-3 rounded-full border border-primary/25 navigation-menu uppercase text-center text-white font-medium tracking-wider text-xl"
 
     return (
         <>
