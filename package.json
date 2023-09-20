@@ -9,9 +9,9 @@
         "start": "next start",
         "lint": "next lint",
         "clean": "ts-node --esm scripts/clean.mts",
-        "generate-fake-data": "ts-node --esm scripts/generate-fake-data.mts",
-        "index-full-text-search": "ts-node --esm scripts/index-full-text-search.mts",
-        "generate": "npm run clean && npm run generate-fake-data && npm run index-full-text-search"
+        "prepare-data": "ts-node --esm scripts/prepare-data.mts",
+        "prepare-meilisearch": "ts-node --esm scripts/prepare-meilisearch.mts",
+        "generate": "npm run clean && npm run prepare-data && npm run prepare-meilisearch"
     },
     "dependencies": {
         "@heroicons/react": "^1.0.6",

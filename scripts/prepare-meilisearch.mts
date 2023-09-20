@@ -111,14 +111,7 @@ async function addDocumentsToSearchIndex() {
 
     // If `.env.local` doesn't exist, create it and add the NEXT_PUBLIC_MEILISEARCH_* environment variables to it
     if (!fs.existsSync('./.env.local')) {
-        fs.writeFileSync(
-            './.env.local',
-            ''.concat(
-                `NEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
-                `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
-                `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
-            )
-        )
+        fs.writeFileSync('./.env.local', environmentVariablesToWrite(searchApiKey))
 
         console.log(chalk.blue(`Added NEXT_PUBLIC_MEILISEARCH_* environment variables to new .env.local`))
 
@@ -137,13 +130,22 @@ async function addDocumentsToSearchIndex() {
 
     // Add NEXT_PUBLIC_MEILISEARCH_* environment variables to .env.local
 
-    nextPublicEnv = nextPublicEnv.concat(
-        `\nNEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
-        `\nNEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
-        `\nNEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`,
-    )
+    nextPublicEnv = nextPublicEnv.concat(`\n${environmentVariablesToWrite(searchApiKey)}`)
 
     fs.writeFileSync('./.env.local', nextPublicEnv)
 
     console.log(chalk.blue(`Added Or Updated NEXT_PUBLIC_MEILISEARCH_* environment variables in existing .env.local`))
+}
+
+function environmentVariablesToWrite(searchApiKey: string) {
+    const variablesToWrite = [
+        `NEXT_PUBLIC_MEILISEARCH_HOST=${process.env.MEILISEARCH_HOST}`,
+        `NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY=${searchApiKey}`,
+    ]
+
+    if (process.env.MEILISEARCH_INDEX_PREFIX) {
+        variablesToWrite.push(`NEXT_PUBLIC_MEILISEARCH_INDEX_PREFIX=${process.env.MEILISEARCH_INDEX_PREFIX}`)
+    }
+
+    return variablesToWrite.join('\n')
 }

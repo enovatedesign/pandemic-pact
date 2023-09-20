@@ -1,6 +1,5 @@
 [
     {
-        "PubMedGrantId": "ATAC",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -53,7 +52,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "CoNVaT",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -106,7 +104,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "CORESMA",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -159,7 +156,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "CORONADX",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -212,7 +208,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "EpiPose project",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -265,7 +260,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "EXSCALATE4CoV ",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -318,7 +312,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "Fight-nCoV",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -371,7 +364,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "HERoS",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -424,7 +416,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "I-MOVE-COVID-19 ",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -477,7 +468,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "OPENCORNA",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -530,7 +520,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "PREVENT-nCoV",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -583,7 +572,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "RECOVER",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -636,7 +624,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "RiPCoN",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -689,7 +676,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "SCORE",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -742,7 +728,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "Solnatide",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -795,7 +780,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "MANCO ",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -848,7 +832,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "CoroNAb",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -901,7 +884,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "CCP-nCoV",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
@@ -954,7 +936,6 @@
         "xx": ""
     },
     {
-        "PubMedGrantId": "THERAMAB",
         "DiseaseName_1": "COVID-19",
         "DiseaseName_2": "Not Selected",
         "DiseaseName_3": "Not Selected",
