@@ -15,7 +15,7 @@ export default function NavigationBar() {
         },
         {
             label: 'Explore',
-            href: '/explore',
+            href: '/grants',
         },
         {
             label: 'Our Team',
