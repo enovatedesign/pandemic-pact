@@ -6,7 +6,6 @@ import {MenuIcon} from '@heroicons/react/solid'
 
 import Heading from './Heading'
 import Text from './Text'
-import NavigationMenu from './NavigationMenu'
 
 type Props = {
     sidebarContent?: React.ReactNode,
@@ -38,8 +37,6 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
 
     return (
         <>
-            <NavigationMenu />
-
             {sidebarContent &&
                 <aside className="relative">
                     <div className="sticky top-0 flex flex-col bg-blue-500 text-white h-screen">
