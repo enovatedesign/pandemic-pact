@@ -66,10 +66,26 @@ export default function InteractiveBackground({children, ...rest}: Props) {
             window.requestAnimationFrame(draw)
         }
 
-        window.addEventListener('mousemove', updateMousePosition);
         window.addEventListener('resize', draw)
 
-        draw()
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        mediaQuery.addEventListener('change', () => {
+            if (mediaQuery.matches) {
+                window.removeEventListener('mousemove', updateMousePosition)
+
+                mouse.x = canvas.clientWidth / 2
+                mouse.y = canvas.clientHeight / 2
+
+                draw()    
+            } else {
+                window.addEventListener('mousemove', updateMousePosition)
+
+                draw()
+            }
+        })
+
+        mediaQuery.dispatchEvent(new Event('change'))
     }
 
     useEffect(() => {
