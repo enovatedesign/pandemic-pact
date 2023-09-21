@@ -10,7 +10,7 @@ export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
             text: 'Amount Committed (USD)',
-            metric: `$ ${grant.GrantAmountConverted.toFixed(2)}`,
+            metric: `$ ${grant.GrantAmountConverted.toLocaleString()}`,
         },
         {
             text: 'Start Year',
