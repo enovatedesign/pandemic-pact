@@ -13,7 +13,6 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
 
     useEffect(() => {
         const easeInOutQuint = (x: number) => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
-        const easeInOutQuad = (x:number) => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 
         let start:number, previousTimeStamp:number
         let done:boolean = false
@@ -25,8 +24,8 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
             const elapsed = timeStamp - start;
 
             if (previousTimeStamp !== timeStamp) {
-                const updatedCount = easeInOutQuad(elapsed / duration) * finalCount
-                setCount(Math.round(updatedCount));
+                const updatedCount = easeInOutQuint(elapsed / duration) * finalCount
+                setCount(Math.ceil(updatedCount));
 
                 if (updatedCount === finalCount) done = true
             }
