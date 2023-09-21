@@ -22,7 +22,10 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         {...selectedFilters, ResearchCat: selectedResearchCategories},
     )
 
-    const datasetGroupedByYear = groupBy(filteredDataset, 'GrantStartYear')
+    let datasetGroupedByYear = groupBy(
+        filteredDataset.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
+        'GrantStartYear',
+    )
 
     const researchCategoryOptions = selectOptions.ResearchCat
 
@@ -40,7 +43,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         let dataPoint: {[key: string]: string | number} = {year}
 
         if (selectedResearchCategories.length === 0) {
-            dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
         } else {
             selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
                 dataPoint[selectedResearchCategoryOption.label] = grants
