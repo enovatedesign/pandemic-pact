@@ -6,6 +6,7 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
 import MultiSelect from "./MultiSelect"
@@ -44,7 +45,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
             selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
                 dataPoint[selectedResearchCategoryOption.label] = grants
                     .filter(grant => grant.ResearchCat.includes(selectedResearchCategoryOption.value))
-                    .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+                    .reduce(...sumNumericGrantAmounts)
             })
         }
 
