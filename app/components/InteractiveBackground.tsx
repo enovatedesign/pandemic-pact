@@ -49,38 +49,38 @@ export default function InteractiveBackground({children, ...rest}: Props) {
         const ctx = canvas.getContext('2d')
         if (!ctx) return
 
-        drawCircles(canvas, ctx)
+        let mouse = {
+            x: canvas.clientWidth / 2,
+            y: canvas.clientHeight / 2,
+        }
 
-        window.addEventListener('resize', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            drawCircles(canvas, ctx)
-        })
-
-        window.addEventListener('mousemove', event => {
+        const updateMousePosition = (event: MouseEvent) => {
             const bounds = canvas.getBoundingClientRect();
 
-            const mouse = {
-                x: event.pageX - bounds.left - scrollX,
-                y: event.pageY - bounds.top - scrollY
-            }
+            mouse.x = event.pageX - bounds.left - scrollX
+            mouse.y = event.pageY - bounds.top - scrollY
+        }
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const draw = () => {
             drawCircles(canvas, ctx, mouse)
-        });
+            window.requestAnimationFrame(draw)
+        }
+
+        window.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('resize', draw)
+
+        draw()
     }
 
     useEffect(() => {
-        if (canvas.current) {
-            canvas.current.classList.add('absolute', 'inset-0', 'w-full', 'h-full', 'z-0')
-            initCircleGrid(canvas.current)
-        }
+        if (canvas.current) initCircleGrid(canvas.current)
     }, [canvas?.current])
 
     return (
         <section {...rest}>
             {children}
 
-            <canvas ref={canvas}></canvas>
+            <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0"></canvas>
         </section>
     )
 }
