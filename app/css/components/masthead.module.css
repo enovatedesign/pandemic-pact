@@ -2,3 +2,119 @@
     background: theme(colors.primary.DEFAULT);
     background: radial-gradient(circle at bottom, theme(colors.primary.DEFAULT) 0%, rgba(0, 0, 62, 1) 60%);
 }
+
+.button {
+    @apply relative flex justify-center items-center space-x-3 px-6 py-2 bg-[#051C51] rounded-full shadow-lg uppercase text-center text-white font-medium tracking-wider sm:px-10 sm:py-3 sm:text-xl;
+}
+
+.button:before {
+    @apply absolute rounded-full bg-gradient-to-t from-primary to-[#296096] -z-1;
+    inset: -2px;
+    content: '';
+}
+
+.chart-icon {
+    @apply fill-primary overflow-visible;
+}
+
+.chart-icon path {
+    transform-origin: center bottom;
+}
+
+.button:hover .chart-icon path:nth-child(1) {
+    animation: grow-shrink-1 1.25s;
+}
+
+.button:hover .chart-icon path:nth-child(2) {
+    animation: shrink-grow 1.25s;
+}
+
+.button:hover .chart-icon path:nth-child(3) {
+    animation: grow-shrink-2 1.25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button .chart-icon path {
+        animation: none !important;
+    }
+}
+
+@keyframes grow-shrink-1 {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+    25% {
+        transform: scale3d(1, 1.1, 1);
+    }
+    50% {
+        transform: scale3d(1, 1, 1);
+    }
+    75%{
+        transform: scale3d(1, 1.4, 1);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes grow-shrink-2 {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+    25% {
+        transform: scale3d(1, 1.4, 1);
+    }
+    50% {
+        transform: scale3d(1, 1, 1);
+    }
+    75%{
+        transform: scale3d(1, 1.1, 1);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes shrink-grow {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+    25% {
+        transform: scale3d(1, 0.8, 1);
+    }
+    50% {
+        transform: scale3d(1, 1, 1);
+    }
+    75%{
+        transform: scale3d(1, 0.6, 1);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.magnify-icon {
+    @apply fill-primary origin-center;
+}
+
+.button:hover .magnify-icon {
+    animation: zoom 0.75s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button .magnify-icon {
+        animation: none !important;
+    }
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        transform: scale3d(0.7, 0.7, 0.7);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
