@@ -22,7 +22,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         {...selectedFilters, ResearchCat: selectedResearchCategories},
     )
 
-    let datasetGroupedByYear = groupBy(
+    const datasetGroupedByYear = groupBy(
         filteredDataset.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
         'GrantStartYear',
     )
