@@ -7,6 +7,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
@@ -32,7 +33,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
     const amountOfMoneyCommittedPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
         const value = filteredDataset
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .reduce((sum: any, grant: any) => sum + grant.GrantAmountConverted, 0)
+            .reduce(...sumNumericGrantAmounts)
 
         return {
             key: `grant-amount-${researchCategory.value}`,

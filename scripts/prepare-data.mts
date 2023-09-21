@@ -87,13 +87,21 @@ async function main() {
             const researchCat = faker.helpers.objectKey(lookupTables.ResearchCat)
             const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat[researchCat])
 
+            const numericGrantAmount = parseInt(
+                sourceGrant.GrantAmountConverted.replace(/[^0-9]/g, '')
+            )
+
+            const grantAmountConverted = isNaN(numericGrantAmount) ?
+                sourceGrant.GrantAmountConverted :
+                numericGrantAmount
+
             let distGrant: Grant = {
                 "GrantID": index + 1,
                 "GrantTitleEng": sourceGrant.GrantTitleEng,
                 "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
                 "GrantCountry": faker.location.countryCode('alpha-2'),
                 "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
-                "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
+                "GrantAmountConverted": grantAmountConverted ?? faker.number.float({min: 100, max: 10000, precision: 0.2}),
                 "Abstract": sourceGrant.Abstract,
                 "LaySummary": sourceGrant.LaySummary,
                 "GrantStartYear": sourceGrant.GrantStartYear ?? `${faker.date.past({years: 5}).getFullYear()}`,
