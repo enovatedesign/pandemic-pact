@@ -38,8 +38,8 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
     return (
         <>
             {sidebarContent &&
-                <aside className="relative">
-                    <div className="sticky top-0 flex flex-col bg-blue-500 text-white h-screen">
+                <aside className="relative bg-secondary">
+                    <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
                         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
                             <span className="sr-only">Menu</span>
                             <MenuIcon className="h-8 w-8" aria-hidden="true" />
