@@ -4,13 +4,13 @@ import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
-import MultiSelect from "./MultiSelect"
-import ExportToPngButton from "./ExportToPngButton"
-import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
-import selectOptions from '../../data/dist/select-options.json'
-import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
+import MultiSelect from "../MultiSelect"
+import ExportToPngButton from "../ExportToPngButton"
+import {type CardProps} from "../../types/card-props"
+import {filterGrants} from "../../helpers/filter"
+import dataset from '../../../data/dist/filterable-dataset.json'
+import selectOptions from '../../../data/dist/select-options.json'
+import countriesGeoJson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 
 export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
