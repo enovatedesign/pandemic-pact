@@ -54,11 +54,16 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 </Flex>
 
                 {selectedTabIndex === 0 &&
-                    <Map dataset={filteredDataset} />
+                    <Map
+                        dataset={filteredDataset}
+                    />
                 }
 
                 {selectedTabIndex === 1 &&
-                    <BarChart dataset={filteredDataset} />
+                    <BarChart
+                        dataset={filteredDataset}
+                        selectedPathogens={selectedPathogens}
+                    />
                 }
             </Flex>
 
