@@ -47,8 +47,6 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
         }
     })
 
-    console.log(data);
-
     return (
         <TremorBarChart
             data={data}
