@@ -1,5 +1,7 @@
 import {BarChart as TremorBarChart, Color} from "@tremor/react"
 import {groupBy} from 'lodash'
+import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
 interface Props {
     dataset: any[],
@@ -52,7 +54,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
         if (selectedPathogens.length === 0) {
             return {
                 country,
-                'All Pathogens': grants.length,
+                'All Pathogens': grants.reduce(...sumNumericGrantAmounts),
             }
         }
 
@@ -61,7 +63,9 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
             ...Object.fromEntries(
                 selectedPathogens.map(pathogen => ([
                     pathogen,
-                    grants.filter((grant: any) => grant.Pathogen.includes(pathogen)).length,
+                    grants.filter((grant: any) => grant.Pathogen
+                        .includes(pathogen))
+                        .reduce(...sumNumericGrantAmounts)
                 ]))
             ),
         }
@@ -76,6 +80,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
             showLegend={false}
             className="h-[36rem] -ml-2"
             layout="vertical"
+            valueFormatter={dollarValueFormatter}
             stack
         />
     )
