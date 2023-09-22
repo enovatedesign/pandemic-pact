@@ -4,6 +4,7 @@ import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import countriesGeoJson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
 interface Props {
     dataset: any[]
@@ -25,10 +26,7 @@ export default function Map({dataset}: Props) {
 
         properties.totalGrants = filteredDataset.length
 
-        properties.totalAmountCommitted = filteredDataset.reduce(
-            (totalAmountCommitted: number, grant: any) => totalAmountCommitted + grant.GrantAmountConverted,
-            0
-        )
+        properties.totalAmountCommitted = filteredDataset.reduce(...sumNumericGrantAmounts)
 
         country.properties = properties
 
