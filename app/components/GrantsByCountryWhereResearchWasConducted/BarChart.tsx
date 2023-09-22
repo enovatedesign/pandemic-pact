@@ -28,6 +28,8 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
 
     const data = Object.entries(
         groupBy(dataset, 'ResearchInstitutionCountry')
+    ).sort(
+        ([countryA, grantsA], [countryB, grantsB]) => grantsB.length - grantsA.length
     ).map(([country, grants]) => {
         if (selectedPathogens.length === 0) {
             return {
