@@ -2,38 +2,33 @@ import {useState} from 'react'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
-import countriesGeoJson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
+import {groupBy, mapValues} from 'lodash'
+import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
 interface Props {
     dataset: any[]
+    displayWhoRegions: boolean
 }
 
-export default function Map({dataset}: Props) {
+export default function Map({dataset, displayWhoRegions}: Props) {
     const [tooltipContent, setTooltipContent] = useState('')
 
-    const geojson: any = countriesGeoJson
+    const geojsonPropertiesByIso2: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset)
 
-    let filteredCountriesGeoJson = geojson
+    geojson.features = geojson.features.map((country: any) => {
+        const properties: any = country.properties
 
-    filteredCountriesGeoJson.features = filteredCountriesGeoJson.features.map((country: any) => {
-        let properties: any = country.properties
-
-        const filteredDataset = dataset.filter(
-            (grant: any) => grant.ResearchInstitutionCountry === country.properties.ISO_A2
-        )
-
-        properties.totalGrants = filteredDataset.length
-
-        properties.totalAmountCommitted = filteredDataset.reduce(...sumNumericGrantAmounts)
-
-        country.properties = properties
+        country.properties = {
+            ...properties,
+            ...geojsonPropertiesByIso2[properties.ISO_A2],
+        }
 
         return country
     })
 
-    const allTotalGrants = filteredCountriesGeoJson
+    const allTotalGrants = geojson
         .features
         .filter((country: any) => country.properties.totalGrants)
         .map((country: any) => country.properties.totalGrants)
@@ -95,5 +90,17 @@ export default function Map({dataset}: Props) {
                 <div dangerouslySetInnerHTML={{__html: tooltipContent}} />
             </Tooltip>
         </div >
+    )
+}
+
+function getGeojsonPropertiesByIso2(dataset: any[]) {
+    return mapValues(
+        groupBy(dataset, 'ResearchInstitutionCountry'),
+        grantsByCountry => {
+            return {
+                totalGrants: grantsByCountry.length,
+                totalAmountCommitted: grantsByCountry.reduce(...sumNumericGrantAmounts),
+            }
+        }
     )
 }

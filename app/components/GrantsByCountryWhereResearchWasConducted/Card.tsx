@@ -59,6 +59,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 {selectedTabIndex === 0 &&
                     <Map
                         dataset={filteredDataset}
+                        displayWhoRegions={displayWhoRegions}
                     />
                 }
 
