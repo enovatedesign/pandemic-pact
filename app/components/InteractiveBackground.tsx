@@ -1,3 +1,4 @@
+import { init } from "next/dist/compiled/@vercel/og/satori"
 import {useRef, useEffect} from "react"
 
 interface Props {
@@ -66,30 +67,49 @@ export default function InteractiveBackground({children, ...rest}: Props) {
             window.requestAnimationFrame(draw)
         }
 
-        window.addEventListener('resize', draw)
-
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-        mediaQuery.addEventListener('change', () => {
+        const handleMediaQueryChange = () => {
             if (mediaQuery.matches) {
                 window.removeEventListener('mousemove', updateMousePosition)
 
                 mouse.x = canvas.clientWidth / 2
                 mouse.y = canvas.clientHeight / 2
-
-                draw()    
             } else {
                 window.addEventListener('mousemove', updateMousePosition)
-
-                draw()
             }
-        })
+            
+            draw()
+        }
 
+        const removeEventListeners = () => {
+            window.removeEventListener('resize', draw)
+            window.removeEventListener('mousemove', updateMousePosition)
+
+            mediaQuery.removeEventListener('change', () => {
+                if (mediaQuery.matches) {
+                    window.removeEventListener('mousemove', updateMousePosition)
+                } else {
+                    window.addEventListener('mousemove', updateMousePosition)
+                }
+            })
+        }
+
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+        window.addEventListener('resize', draw)
+        mediaQuery.addEventListener('change', handleMediaQueryChange)
         mediaQuery.dispatchEvent(new Event('change'))
+
+        return removeEventListeners
     }
 
     useEffect(() => {
-        if (canvas.current) initCircleGrid(canvas.current)
+        if (canvas.current) {
+            const removeEventListeners = initCircleGrid(canvas.current)
+
+            return () => {
+                if (removeEventListeners) removeEventListeners()
+            }
+        }
     }, [canvas?.current])
 
     return (
