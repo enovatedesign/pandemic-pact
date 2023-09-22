@@ -25,7 +25,7 @@ export default function Home() {
 
                 <InteractiveBackground className={`relative w-screen h-screen masthead-background ${styles.background}`}>
                     <div className="relative flex flex-col justify-center items-center w-full h-full z-20 container lg:-translate-y-16">
-                        <h2 className="inline-block mb-12 max-w-3xl text-center text-white text-3xl font-light !leading-tight md:text-4xl lg:mb-20 lg:text-5xl">
+                        <h2 className="inline-block mb-12 max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:mb-20 lg:text-5xl">
                             Delivering insights for over <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants provided by <AnimatedCounter finalCount={351} className={counterClasses} /> funding bodies in <AnimatedCounter finalCount={60} className={counterClasses} /> countries, resulting in <AnimatedCounter finalCount={57000} className={counterClasses} /> publications
                         </h2>
 
