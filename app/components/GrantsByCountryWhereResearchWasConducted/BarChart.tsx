@@ -26,11 +26,29 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
         'neutral',
     ]
 
-    const data = Object.entries(
+    let data: any = Object.entries(
         groupBy(dataset, 'ResearchInstitutionCountry')
     ).sort(
         ([countryA, grantsA], [countryB, grantsB]) => grantsB.length - grantsA.length
-    ).map(([country, grants]) => {
+    )
+
+    const maxBars = 5
+
+    if (data.length > maxBars) {
+        const smallestCountries = data.splice(maxBars - 1)
+
+        data.push([
+            'Other',
+            smallestCountries.reduce(
+                (combinedGrants: any[], [country, grants]: [string, any]) => {
+                    return combinedGrants.concat(grants)
+                },
+                []
+            )
+        ])
+    }
+
+    data = data.map(([country, grants]: [string, any]) => {
         if (selectedPathogens.length === 0) {
             return {
                 country,
@@ -43,7 +61,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
             ...Object.fromEntries(
                 selectedPathogens.map(pathogen => ([
                     pathogen,
-                    grants.filter(grant => grant.Pathogen.includes(pathogen)).length,
+                    grants.filter((grant: any) => grant.Pathogen.includes(pathogen)).length,
                 ]))
             ),
         }
