@@ -3,6 +3,7 @@ import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import countriesGeoJson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
+import {dollarValueFormatter} from "../../helpers/value-formatters"
 
 interface Props {
     dataset: any[]
@@ -18,9 +19,16 @@ export default function Map({dataset}: Props) {
     filteredCountriesGeoJson.features = filteredCountriesGeoJson.features.map((country: any) => {
         let properties: any = country.properties
 
-        properties.totalGrants = dataset.filter(
+        const filteredDataset = dataset.filter(
             (grant: any) => grant.ResearchInstitutionCountry === country.properties.ISO_A2
-        ).length
+        )
+
+        properties.totalGrants = filteredDataset.length
+
+        properties.totalAmountCommitted = filteredDataset.reduce(
+            (totalAmountCommitted: number, grant: any) => totalAmountCommitted + grant.GrantAmountConverted,
+            0
+        )
 
         country.properties = properties
 
@@ -63,6 +71,7 @@ export default function Map({dataset}: Props) {
                                                     <div>
                                                         <p class="font-bold">${geo.properties.NAME}</p>
                                                         <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
+                                                        <p class="text-xs">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
                                                     </div>
                                                 `)
                                 }}
