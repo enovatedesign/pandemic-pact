@@ -1,6 +1,6 @@
 .background {
     background: theme(colors.primary.DEFAULT);
-    background: radial-gradient(circle at bottom, theme(colors.primary.DEFAULT) 0%, rgba(0, 0, 62, 1) 60%);
+    background: radial-gradient(circle at bottom, theme(colors.primary.DEFAULT) -30%, rgba(0, 0, 62, 1) 60%);
 }
 
 .button {
