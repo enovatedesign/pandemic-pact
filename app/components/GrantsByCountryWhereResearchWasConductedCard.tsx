@@ -1,5 +1,6 @@
 import {useState} from 'react'
-import {Flex, Card, Title, Text} from "@tremor/react"
+import {Flex, Card, Title, Text, Tab, TabList, TabGroup} from "@tremor/react"
+import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {Tooltip} from 'react-tooltip'
 import {scaleLinear} from "d3-scale"
@@ -12,6 +13,7 @@ import selectOptions from '../../data/dist/select-options.json'
 import countriesGeoJson from '../../data/source/geojson/ne_110m_admin_0_countries.json'
 
 export default function GrantsByCountryWhereResearchWasConducted({selectedFilters}: CardProps) {
+    const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [tooltipContent, setTooltipContent] = useState('')
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
 
@@ -80,48 +82,63 @@ export default function GrantsByCountryWhereResearchWasConducted({selectedFilter
                     }
                 </Flex>
 
-                <ComposableMap
-                    projection="geoMercator"
-                    projectionConfig={{
-                        scale: 110,
-                        center: [0, 40],
-                    }}
-                    height={500}
-                >
-                    <Geographies geography={geojson}>
-                        {({geographies}) =>
-                            geographies.map((geo) => (
-                                <Geography
-                                    key={geo.rsmKey}
-                                    geography={geo}
-                                    fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
-                                    stroke="#FFFFFF"
-                                    strokeWidth={1}
-                                    onMouseEnter={() => {
-                                        setTooltipContent(`
-                                            <div>
-                                                <p class="font-bold">${geo.properties.NAME}</p>
-                                                <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
-                                            </div>
-                                        `)
-                                    }}
-                                    onMouseLeave={() => {
-                                        setTooltipContent('')
-                                    }}
-                                    data-tooltip-id="country-tooltip"
-                                />
-                            ))
-                        }
-                    </Geographies>
-                </ComposableMap>
+                {selectedTabIndex === 0 &&
+                    <ComposableMap
+                        projection="geoMercator"
+                        projectionConfig={{
+                            scale: 110,
+                            center: [0, 40],
+                        }}
+                        height={500}
+                    >
+                        <Geographies geography={geojson}>
+                            {({geographies}) =>
+                                geographies.map((geo) => (
+                                    <Geography
+                                        key={geo.rsmKey}
+                                        geography={geo}
+                                        fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
+                                        stroke="#FFFFFF"
+                                        strokeWidth={1}
+                                        onMouseEnter={() => {
+                                            setTooltipContent(`
+                                                <div>
+                                                    <p class="font-bold">${geo.properties.NAME}</p>
+                                                    <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
+                                                </div>
+                                            `)
+                                        }}
+                                        onMouseLeave={() => {
+                                            setTooltipContent('')
+                                        }}
+                                        data-tooltip-id="country-tooltip"
+                                    />
+                                ))
+                            }
+                        </Geographies>
+                    </ComposableMap>
+                }
+
+                {selectedTabIndex === 1 &&
+                    <div>TODO</div>
+                }
             </Flex>
 
-
             <Flex
-                justifyContent="end"
+                justifyContent="between"
                 alignItems="center"
                 className="gap-x-2 ignore-in-image-export"
             >
+                <TabGroup
+                    index={selectedTabIndex}
+                    onIndexChange={setSelectedTabIndex}
+                >
+                    <TabList variant="solid">
+                        <Tab icon={GlobeIcon}>Map</Tab>
+                        <Tab icon={ChartBarIcon}>Bars</Tab>
+                    </TabList>
+                </TabGroup>
+
                 <ExportToPngButton
                     selector="#grants-by-country-where-research-was-conducted-card"
                     filename="grants-by-country-where-research-was-conducted"

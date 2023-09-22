@@ -173,7 +173,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         </TabList>
                     </TabGroup>
 
-
                     <Flex
                         justifyContent="end"
                         alignItems="center"
