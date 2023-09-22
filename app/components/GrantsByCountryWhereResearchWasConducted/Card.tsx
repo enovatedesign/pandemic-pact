@@ -21,6 +21,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
 
     return (
         <Card
+            className="flex flex-col gap-y-6"
             id="grants-by-country-where-research-was-conducted-card"
         >
             <Flex
@@ -87,6 +88,8 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                     filename="grants-by-country-where-research-was-conducted"
                 />
             </Flex>
+
+            <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
         </Card>
     )
 }
