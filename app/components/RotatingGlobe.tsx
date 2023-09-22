@@ -2,6 +2,7 @@ import {useRef} from "react"
 import {Canvas, useFrame} from '@react-three/fiber'
 import {Sphere, useTexture} from "@react-three/drei"
 import {Mesh} from "three"
+import {useReducedMotion} from "@react-spring/web"
 
 interface Props {
     className?: string
@@ -29,7 +30,12 @@ function GlobeModel() {
 
     const sphereRef = useRef<Mesh>(null!)
 
-    useFrame((state, delta) => (sphereRef.current.rotation.y += delta * 0.05))
+    const reducedMotion = useReducedMotion()
+
+    useFrame((state, delta) => {
+        if (reducedMotion) return
+        sphereRef.current.rotation.y += delta * 0.05
+    })
 
     return (
         <Sphere

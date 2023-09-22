@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react"
+import {useReducedMotion} from "@react-spring/web"
 
 interface Props {
     prefix?: string
@@ -10,8 +11,11 @@ interface Props {
 
 export default function AnimatedCounter({ prefix, suffix, finalCount, duration = 5000, className }: Props) {
     const [count, setCount] = useState<number>(0)
+    const reducedMotion = useReducedMotion()
 
     useEffect(() => {
+        if (reducedMotion) return
+
         const easeInOutQuint = (x: number) => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
 
         let start:number, previousTimeStamp:number
@@ -42,11 +46,11 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
         return () => {
             done = true
         }
-	}, []);
+	}, [reducedMotion]);
 
     return (
         <span className={`relative inline-block text-center ${className}`}>
-            <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{prefix && prefix}{count.toLocaleString()}{suffix && suffix}</span>
+            <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{prefix && prefix}{reducedMotion ? finalCount.toLocaleString() : count.toLocaleString()}{suffix && suffix}</span>
             <span className="invisible whitespace-nowrap" aria-hidden>{prefix && prefix}{finalCount.toLocaleString()}{suffix && suffix}</span>
         </span>
     )

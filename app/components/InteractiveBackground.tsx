@@ -1,5 +1,5 @@
-import { init } from "next/dist/compiled/@vercel/og/satori"
-import {useRef, useEffect} from "react"
+import {useRef, useEffect, use} from "react"
+import {a, useReducedMotion} from "@react-spring/web"
 
 interface Props {
     className?: string,
@@ -8,6 +8,12 @@ interface Props {
 
 export default function InteractiveBackground({children, ...rest}: Props) {
     const canvas = useRef<HTMLCanvasElement>(null)
+    const animate = useRef<boolean>(true)
+    const reducedMotion = useReducedMotion()
+
+    useEffect(() => {
+        animate.current = !reducedMotion
+    }, [reducedMotion])
 
     const drawCircles = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, mouse?: {x:number, y:number}) => {
         const width = canvas.clientWidth
@@ -55,59 +61,35 @@ export default function InteractiveBackground({children, ...rest}: Props) {
             y: canvas.clientHeight / 2,
         }
 
-        const updateMousePosition = (event: MouseEvent) => {
+        const handleAnimation = (event: MouseEvent) => {
+            if (!animate.current) return
+
             const bounds = canvas.getBoundingClientRect();
 
             mouse.x = event.pageX - bounds.left - scrollX
             mouse.y = event.pageY - bounds.top - scrollY
+
+            window.requestAnimationFrame(drawCircles.bind(null, canvas, ctx, mouse))
         }
 
-        const draw = () => {
-            drawCircles(canvas, ctx, mouse)
-            window.requestAnimationFrame(draw)
+        window.addEventListener('mousemove', handleAnimation)
+        window.addEventListener('resize', drawCircles.bind(null, canvas, ctx, mouse))
+        window.requestAnimationFrame(drawCircles.bind(null, canvas, ctx, mouse))
+
+        const removeListeners = () => {
+            window.removeEventListener('mousemove', handleAnimation)
+            window.removeEventListener('resize', drawCircles.bind(null, canvas, ctx, mouse))
         }
 
-        const handleMediaQueryChange = () => {
-            if (mediaQuery.matches) {
-                window.removeEventListener('mousemove', updateMousePosition)
-
-                mouse.x = canvas.clientWidth / 2
-                mouse.y = canvas.clientHeight / 2
-            } else {
-                window.addEventListener('mousemove', updateMousePosition)
-            }
-            
-            draw()
-        }
-
-        const removeEventListeners = () => {
-            window.removeEventListener('resize', draw)
-            window.removeEventListener('mousemove', updateMousePosition)
-
-            mediaQuery.removeEventListener('change', () => {
-                if (mediaQuery.matches) {
-                    window.removeEventListener('mousemove', updateMousePosition)
-                } else {
-                    window.addEventListener('mousemove', updateMousePosition)
-                }
-            })
-        }
-
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-        window.addEventListener('resize', draw)
-        mediaQuery.addEventListener('change', handleMediaQueryChange)
-        mediaQuery.dispatchEvent(new Event('change'))
-
-        return removeEventListeners
+        return removeListeners
     }
 
     useEffect(() => {
         if (canvas.current) {
-            const removeEventListeners = initCircleGrid(canvas.current)
+            const removeListeners = initCircleGrid(canvas.current)
 
             return () => {
-                if (removeEventListeners) removeEventListeners()
+                if (removeListeners) removeListeners()
             }
         }
     }, [canvas?.current])
