@@ -2,6 +2,7 @@ import {useState} from 'react'
 import {Flex, Card, Title, Text, Tab, TabList, TabGroup} from "@tremor/react"
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import Map from "./Map"
+import BarChart from "./BarChart"
 import MultiSelect from "../MultiSelect"
 import ExportToPngButton from "../ExportToPngButton"
 import {type CardProps} from "../../types/card-props"
@@ -57,7 +58,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 }
 
                 {selectedTabIndex === 1 &&
-                    <div>TODO</div>
+                    <BarChart dataset={filteredDataset} />
                 }
             </Flex>
 
