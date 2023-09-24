@@ -109,18 +109,26 @@ export default function Map({dataset, displayWhoRegions}: Props) {
 
 function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) {
     if (displayWhoRegions) {
-        return Object.entries(
-            groupBy(dataset, 'ResearchInstitutionRegion'),
-        ).map(
-            ([region, grants]) => ({
+        const whoRegions = Object.keys(regionToCountryMapping)
+
+        const grantsGroupedByRegion = groupBy(dataset, 'ResearchInstitutionRegion')
+
+        return whoRegions.map(region => {
+            const grants = grantsGroupedByRegion[region]
+
+            const totalGrants = grants?.length ?? 0
+
+            const totalAmountCommitted = grants?.reduce(...sumNumericGrantAmounts) ?? 0
+
+            return {
                 iso2: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
                 properties: {
                     NAME: region,
-                    totalGrants: grants.length,
-                    totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
+                    totalGrants,
+                    totalAmountCommitted,
                 }
-            })
-        )
+            }
+        })
     }
 
     return Object.entries(
