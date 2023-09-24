@@ -297,6 +297,7 @@ function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
             'Rurality',
             'ResearchInstitutionName',
             'ResearchInstitutionCountry',
+            'ResearchInstitutionRegion',
             'StudySubject',
             'StudyType',
         ])

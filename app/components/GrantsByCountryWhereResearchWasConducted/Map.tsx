@@ -1,9 +1,10 @@
-import {useState} from 'react'
+import {useState, useMemo} from 'react'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
-import {groupBy, mapValues} from 'lodash'
+import {groupBy} from 'lodash'
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
+import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
@@ -15,30 +16,42 @@ interface Props {
 export default function Map({dataset, displayWhoRegions}: Props) {
     const [tooltipContent, setTooltipContent] = useState('')
 
-    const geojsonPropertiesByIso2: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset)
+    const [filteredGeojson, colorScale] = useMemo(() => {
+        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
 
-    geojson.features = geojson.features.map((country: any) => {
-        const properties: any = country.properties
+        const filteredGeojson = {...geojson}
 
-        country.properties = {
-            ...properties,
-            ...geojsonPropertiesByIso2[properties.ISO_A2],
-        }
+        filteredGeojson.features = filteredGeojson.features.map((country: any) => {
+            const existingProperties: any = country.properties
 
-        return country
-    })
+            const propertiesToAssign: any = geojsonPropertiesToAssign.find(
+                (properties: any) => properties.iso2.includes(existingProperties.ISO_A2)
+            )
 
-    const allTotalGrants = geojson
-        .features
-        .filter((country: any) => country.properties.totalGrants)
-        .map((country: any) => country.properties.totalGrants)
+            const newProperties = propertiesToAssign?.properties || {}
 
-    const colorScale = scaleLinear<string>()
-        .domain([
-            Math.min(...allTotalGrants),
-            Math.max(...allTotalGrants),
-        ])
-        .range(["#dbeafe", "#3b82f6"])
+            country.properties = {
+                ...existingProperties,
+                ...newProperties,
+            }
+
+            return country
+        })
+
+        const allTotalGrants = filteredGeojson
+            .features
+            .filter((country: any) => country.properties.totalGrants)
+            .map((country: any) => country.properties.totalGrants)
+
+        const colorScale = scaleLinear<string>()
+            .domain([
+                Math.min(...allTotalGrants),
+                Math.max(...allTotalGrants),
+            ])
+            .range(["#dbeafe", "#3b82f6"])
+
+        return [filteredGeojson, colorScale]
+    }, [dataset, displayWhoRegions])
 
     return (
         <div className="w-full h-full">
@@ -50,7 +63,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                 }}
                 height={500}
             >
-                <Geographies geography={geojson}>
+                <Geographies geography={filteredGeojson}>
                     {({geographies}) =>
                         geographies.map((geo) => (
                             <Geography
@@ -93,14 +106,31 @@ export default function Map({dataset, displayWhoRegions}: Props) {
     )
 }
 
-function getGeojsonPropertiesByIso2(dataset: any[]) {
-    return mapValues(
+function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) {
+    if (displayWhoRegions) {
+        return Object.entries(
+            groupBy(dataset, 'ResearchInstitutionRegion'),
+        ).map(
+            ([region, grants]) => ({
+                iso2: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
+                properties: {
+                    NAME: region,
+                    totalGrants: grants.length,
+                    totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
+                }
+            })
+        )
+    }
+
+    return Object.entries(
         groupBy(dataset, 'ResearchInstitutionCountry'),
-        grantsByCountry => {
-            return {
-                totalGrants: grantsByCountry.length,
-                totalAmountCommitted: grantsByCountry.reduce(...sumNumericGrantAmounts),
+    ).map(
+        ([country, grants]) => ({
+            iso2: [country],
+            properties: {
+                totalGrants: grants.length,
+                totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
             }
-        }
+        })
     )
 }
