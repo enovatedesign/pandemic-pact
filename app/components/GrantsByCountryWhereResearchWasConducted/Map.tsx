@@ -25,17 +25,18 @@ export default function Map({dataset, displayWhoRegions}: Props) {
             const existingProperties: any = country.properties
 
             const propertiesToAssign: any = geojsonPropertiesToAssign.find(
-                (properties: any) => properties.iso2.includes(existingProperties.ISO_A2)
+                (properties: any) => properties.iso2.includes(existingProperties.ISO_A2_EH)
             )
 
             const newProperties = propertiesToAssign?.properties || {}
 
-            country.properties = {
-                ...existingProperties,
-                ...newProperties,
+            return {
+                ...country,
+                properties: {
+                    ...existingProperties,
+                    ...newProperties,
+                },
             }
-
-            return country
         })
 
         const allTotalGrants = filteredGeojson
