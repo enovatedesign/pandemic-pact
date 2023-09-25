@@ -48,7 +48,7 @@ export default function BarChart({dataset, selectedPathogens, displayWhoRegions}
     }
 
     data = data.sort(
-        ([countryA, grantsA], [countryB, grantsB]) => grantsB.length - grantsA.length
+        ([countryA, grantsA]: [string, any], [countryB, grantsB]: [string, any]) => grantsB.length - grantsA.length
     )
 
     const maxBars = 6
