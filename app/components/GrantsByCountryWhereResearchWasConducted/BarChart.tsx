@@ -2,13 +2,15 @@ import {BarChart as TremorBarChart, Color} from "@tremor/react"
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 
 interface Props {
     dataset: any[],
     selectedPathogens: string[],
+    displayWhoRegions: boolean,
 }
 
-export default function BarChart({dataset, selectedPathogens}: Props) {
+export default function BarChart({dataset, selectedPathogens, displayWhoRegions}: Props) {
     const categories = (selectedPathogens.length === 0) ? ['All Pathogens'] : selectedPathogens
 
     const colours: Color[] = [
@@ -28,13 +30,28 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
         'neutral',
     ]
 
-    let data: any = Object.entries(
-        groupBy(dataset, 'ResearchInstitutionCountry')
-    ).sort(
+    let data: any = []
+
+    if (displayWhoRegions) {
+        const whoRegions = Object.keys(regionToCountryMapping)
+
+        const grantsGroupedByRegion = groupBy(dataset, 'ResearchInstitutionRegion')
+
+        data = whoRegions.map(region => [
+            region,
+            grantsGroupedByRegion[region] ?? [],
+        ])
+    } else {
+        data = Object.entries(
+            groupBy(dataset, 'ResearchInstitutionCountry')
+        )
+    }
+
+    data = data.sort(
         ([countryA, grantsA], [countryB, grantsB]) => grantsB.length - grantsA.length
     )
 
-    const maxBars = 5
+    const maxBars = 6
 
     if (data.length > maxBars) {
         const smallestCountries = data.splice(maxBars - 1)
