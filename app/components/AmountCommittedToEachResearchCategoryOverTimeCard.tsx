@@ -1,11 +1,12 @@
 import {useState} from "react"
 import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import {millify} from "millify"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
+import {dollarValueFormatter} from "../helpers/value-formatters"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
 import MultiSelect from "./MultiSelect"
@@ -21,7 +22,10 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         {...selectedFilters, ResearchCat: selectedResearchCategories},
     )
 
-    const datasetGroupedByYear = groupBy(filteredDataset, 'GrantStartYear')
+    const datasetGroupedByYear = groupBy(
+        filteredDataset.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
+        'GrantStartYear',
+    )
 
     const researchCategoryOptions = selectOptions.ResearchCat
 
@@ -39,12 +43,12 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         let dataPoint: {[key: string]: string | number} = {year}
 
         if (selectedResearchCategories.length === 0) {
-            dataPoint['All Research Categories'] = grants.reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+            dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
         } else {
             selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
                 dataPoint[selectedResearchCategoryOption.label] = grants
                     .filter(grant => grant.ResearchCat.includes(selectedResearchCategoryOption.value))
-                    .reduce((sum, grant) => sum + grant.GrantAmountConverted, 0)
+                    .reduce(...sumNumericGrantAmounts)
             })
         }
 
@@ -67,10 +71,6 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         'yellow',
         'neutral',
     ]
-
-    const valueFormatter = (value: number) => {
-        return '$' + millify(value, {precision: 2})
-    }
 
     const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
@@ -110,7 +110,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                     data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
-                    valueFormatter={valueFormatter}
+                    valueFormatter={dollarValueFormatter}
                     colors={colours}
                     showLegend={false}
                     className="h-[36rem] -ml-2"
@@ -122,7 +122,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                     data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
-                    valueFormatter={valueFormatter}
+                    valueFormatter={dollarValueFormatter}
                     colors={colours}
                     showLegend={false}
                     className="h-[36rem] -ml-2"

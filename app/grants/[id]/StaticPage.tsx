@@ -10,7 +10,9 @@ export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
             text: 'Amount Committed (USD)',
-            metric: `$ ${grant.GrantAmountConverted.toFixed(2)}`,
+            metric: (typeof grant.GrantAmountConverted === 'number') ?
+                `$ ${grant.GrantAmountConverted.toLocaleString()}`
+                : grant.GrantAmountConverted,
         },
         {
             text: 'Start Year',
@@ -74,10 +76,12 @@ export default function StaticPage({grant}: Props) {
                                                 <Text>{link.pubYear}</Text>
                                             </div>
 
-                                            <div>
-                                                <Subtitle className="font-bold">Journal</Subtitle>
-                                                <Text>{link.journalInfo.journal.title}</Text>
-                                            </div>
+                                            {link.journalInfo?.journal?.title &&
+                                                <div>
+                                                    <Subtitle className="font-bold">Journal</Subtitle>
+                                                    <Text>{link.journalInfo.journal.title}</Text>
+                                                </div>
+                                            }
 
                                             <div>
                                                 <Subtitle className="font-bold">DOI</Subtitle>

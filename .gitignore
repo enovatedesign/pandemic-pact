@@ -41,3 +41,6 @@ next-env.d.ts
 # sample data spreadsheets
 sample-real-data.csv
 sample-real-data.xlsx
+
+# JQ scripts
+*.jq

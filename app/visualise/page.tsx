@@ -9,7 +9,7 @@ import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory
 import AmountCommittedToEachResearchCategoryOverTimeCard from '../components/AmountCommittedToEachResearchCategoryOverTimeCard'
 import GrantsByRegionCard from '../components/GrantsByRegionCard'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
-import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConductedCard'
+import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import {type Filters} from "../types/filters"
 
 export default function Visualise() {

@@ -52,11 +52,11 @@ const researchInstitutions: ResearchInstitution[] = _.range(200).map(() => {
     }
 })
 
-const sourceDatasetFilename = process.env.GENERATE_REAL_DATA ?
-    './data/source/sample-real-data.json' :
-    './data/source/fake-data-from-covid-tracker.json'
+const sourceDatasetFilename = process.env.GENERATE_FAKE_DATA ?
+    './data/source/fake-data-from-covid-tracker.json' :
+    './data/source/sample-real-data.json'
 
-console.log(chalk.blue(`Generating ${process.env.GENERATE_REAL_DATA ? 'real' : 'fake'} data`))
+console.log(chalk.blue(`Generating ${process.env.GENERATE_FAKE_DATA ? 'fake' : 'real'} data`))
 
 const realDataCountryMapping = {
     'Australia': 'AU',
@@ -70,6 +70,8 @@ const realDataCountryMapping = {
     'United States': 'US',
 }
 
+const sampleGrantNumbers = fs.readJsonSync('./data/source/sample-grant-numbers.json')
+
 const distDirectory = './data/dist'
 
 main()
@@ -78,20 +80,28 @@ async function main() {
     const sourceDataset = fs.readJsonSync(sourceDatasetFilename)
 
     const completeDataset = await Promise.all(
-        sourceDataset.map(async (sourceGrant: Grant, grantId: number) => {
+        sourceDataset.map(async (sourceGrant: Grant, index: number) => {
             const funder = faker.helpers.arrayElement(funders)
             const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
             const researchCat = faker.helpers.objectKey(lookupTables.ResearchCat)
             const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat[researchCat])
 
+            const numericGrantAmount = parseInt(
+                sourceGrant.GrantAmountConverted.replace(/[^0-9]/g, '')
+            )
+
+            const grantAmountConverted = isNaN(numericGrantAmount) ?
+                sourceGrant.GrantAmountConverted :
+                numericGrantAmount
+
             let distGrant: Grant = {
-                "GrantID": grantId,
+                "GrantID": index + 1,
                 "GrantTitleEng": sourceGrant.GrantTitleEng,
                 "GrantRegion": faker.helpers.objectValue(lookupTables.Regions),
                 "GrantCountry": faker.location.countryCode('alpha-2'),
                 "GrantSubregion": faker.helpers.objectValue(lookupTables.Subregions),
-                "GrantAmountConverted": faker.number.float({min: 100, max: 10000, precision: 0.2}),
+                "GrantAmountConverted": grantAmountConverted ?? faker.number.float({min: 100, max: 10000, precision: 0.2}),
                 "Abstract": sourceGrant.Abstract,
                 "LaySummary": sourceGrant.LaySummary,
                 "GrantStartYear": sourceGrant.GrantStartYear ?? `${faker.date.past({years: 5}).getFullYear()}`,
@@ -124,7 +134,7 @@ async function main() {
                 ...researchInstitution,
             }
 
-            if (process.env.GENERATE_REAL_DATA) {
+            if (!process.env.GENERATE_FAKE_DATA) {
                 distGrant['Disease'] = convertMultiColumnFieldToArray(sourceGrant, 'DiseaseName')
                 distGrant['StudySubject'] = convertMultiColumnFieldToArray(sourceGrant, 'StudySubject')
                 distGrant['OccupationalGroups'] = convertMultiColumnFieldToArray(sourceGrant, 'OccupationalGroups')
@@ -144,13 +154,14 @@ async function main() {
 
             }
 
-            const pubMedGrantId = sourceGrant.PubMedGrantId?.trim()
+            const pubMedGrantId = sampleGrantNumbers[index] ?? null
 
             if (!pubMedGrantId) {
                 return Promise.resolve(distGrant)
             }
 
             return getPubMedLinks(pubMedGrantId).then(pubMedLinks => {
+                distGrant['PubMedGrantId'] = pubMedGrantId
                 distGrant['PubMedLinks'] = pubMedLinks
                 return distGrant
             })
@@ -286,6 +297,7 @@ function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
             'Rurality',
             'ResearchInstitutionName',
             'ResearchInstitutionCountry',
+            'ResearchInstitutionRegion',
             'StudySubject',
             'StudyType',
         ])
