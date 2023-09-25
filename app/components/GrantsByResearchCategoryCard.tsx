@@ -4,10 +4,10 @@ import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
-import {millify} from "millify"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
+import {dollarValueFormatter} from "../helpers/value-formatters"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
@@ -52,10 +52,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
             "Amount Committed": moneyCommitted,
         }
     })
-
-    const amountOfMoneyCommittedPerResearchCategoryValueFormatter = (value: number) => {
-        return '$' + millify(value, {precision: 2})
-    }
 
     const colours: Color[] = [
         'red',
@@ -130,7 +126,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         <Col>
                             <BarList
                                 data={amountOfMoneyCommittedPerResearchCategory}
-                                valueFormatter={amountOfMoneyCommittedPerResearchCategoryValueFormatter}
+                                valueFormatter={dollarValueFormatter}
                             />
 
                             <Subtitle className="mt-4 text-right">Known amount committed (USD)</Subtitle>
@@ -149,7 +145,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         minYValue={60}
                         valueFormatter={{
                             x: (value: number) => `${value} grants`,
-                            y: amountOfMoneyCommittedPerResearchCategoryValueFormatter,
+                            y: dollarValueFormatter,
                         }}
                         showLegend={false}
                         autoMinXValue
@@ -172,7 +168,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                             <Tab icon={SparklesIcon}>Scatter</Tab>
                         </TabList>
                     </TabGroup>
-
 
                     <Flex
                         justifyContent="end"

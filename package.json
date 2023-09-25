@@ -14,6 +14,7 @@
         "generate": "npm run clean && npm run prepare-data && npm run prepare-meilisearch"
     },
     "dependencies": {
+        "@headlessui/react": "^1.7.17",
         "@heroicons/react": "^1.0.6",
         "@react-spring/web": "^9.7.3",
         "@react-three/drei": "^9.83.9",

@@ -1,12 +1,12 @@
 import {useState} from "react"
 import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import {millify} from "millify"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
+import {dollarValueFormatter} from "../helpers/value-formatters"
 import {groupBy} from 'lodash'
 import {CardProps} from "../types/card-props"
 import MultiSelect from "./MultiSelect"
@@ -72,10 +72,6 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
         'neutral',
     ]
 
-    const valueFormatter = (value: number) => {
-        return '$' + millify(value, {precision: 2})
-    }
-
     const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
     return (
@@ -114,7 +110,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                     data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
-                    valueFormatter={valueFormatter}
+                    valueFormatter={dollarValueFormatter}
                     colors={colours}
                     showLegend={false}
                     className="h-[36rem] -ml-2"
@@ -126,7 +122,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                     data={amountCommittedToEachResearchCategoryOverTime}
                     index="year"
                     categories={researchCategories}
-                    valueFormatter={valueFormatter}
+                    valueFormatter={dollarValueFormatter}
                     colors={colours}
                     showLegend={false}
                     className="h-[36rem] -ml-2"
