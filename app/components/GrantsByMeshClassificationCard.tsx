@@ -76,6 +76,8 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
         'green',
         'red',
         'pink',
+        'yellow',
+        'violet',
         'neutral',
     ];
 
@@ -83,10 +85,8 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
         (option: any) => option.label
     ).filter(
         (name: string) => ![
-            'Unspecified',
             'Other',
             'Not known',
-            'Not applicable',
         ].includes(name)
     )
 
