@@ -12,7 +12,7 @@ import MultiSelect from "./MultiSelect"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
+export default function FundingAmountsforEachResearchCategoryOverTime({selectedFilters}: CardProps) {
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
