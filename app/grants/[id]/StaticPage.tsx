@@ -22,11 +22,23 @@ export default function StaticPage({grant}: Props) {
             text: 'End Year',
             metric: grant.GrantEndYear,
         },
+        {
+            text: 'Funder',
+            metric: `${grant.FunderName_1} from ${grant.FunderCountry}`,
+        },
+        {
+            text: 'Lead Research Institution',
+            metric: `${grant.ResearchInstitution_1}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+        },
+        {
+            text: 'Disease',
+            metric: `${grant.DiseaseName_1 ?? 'Unknown'}`
+        },
     ]
 
     return (
         <Layout title={grant.GrantTitleEng}>
-            <Grid numItemsLg={6} className="gap-6 mt-6">
+            <Grid numItemsLg={6} className="mt-6 gap-6">
                 <Col
                     numColSpanLg={4}
                     className="flex flex-col gap-6"
@@ -61,11 +73,11 @@ export default function StaticPage({grant}: Props) {
                                         key={index}
                                         className="border-0 rounded-none"
                                     >
-                                        <AccordionHeader className="pl-0 items-start">
+                                        <AccordionHeader className="items-start pl-0">
                                             <Text className="text-left text-black">{link.title}</Text>
                                         </AccordionHeader>
 
-                                        <AccordionBody className="flex flex-col gap-y-4 pl-0">
+                                        <AccordionBody className="flex flex-col pl-0 gap-y-4">
                                             <div>
                                                 <Subtitle className="font-bold">Authors</Subtitle>
                                                 <Text>{link.authorString}</Text>
@@ -109,7 +121,7 @@ export default function StaticPage({grant}: Props) {
                                 <Flex justifyContent="start" className="space-x-4">
                                     <div className="truncate">
                                         <Text>{text}</Text>
-                                        <Metric className="truncate mt-2">{metric}</Metric>
+                                        <Metric className="mt-2 truncate">{metric}</Metric>
                                     </div>
                                 </Flex>
                             </Card>
