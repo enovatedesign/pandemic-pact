@@ -1,9 +1,10 @@
-import {Flex, Card, Title, Text, DonutChart} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, DonutChart} from "@tremor/react"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
+import SubHeading from "./SubHeading"
 import selectOptions from '../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
@@ -30,11 +31,22 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 className="gap-y-6"
             >
                 <Flex
-                    justifyContent="between"
-                    alignItems="center"
+                    className="gap-y-2"
+                    flexDirection="col"
+                    alignItems="start"
                 >
-                    <Title>Grants By Region</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
+                    <Flex
+                        justifyContent="between"
+                        alignItems="center"
+                    >
+                        <Title>Grants By Region</Title>
+                        <Text>Total Grants: {dataset.length}</Text>
+                    </Flex>
+
+                    <Subtitle>
+                        Ut cumque vel magni nostrum quo id quasi aliquam.
+                        Soluta voluptate ea nesciunt ipsam. Occaecati ex aperiam ut omnis.
+                    </Subtitle>
                 </Flex>
 
                 <Flex
@@ -47,7 +59,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 </Flex>
 
                 <DonutChart
-                    className="h-80 -ml-2"
+                    className="-ml-2 h-80"
                     data={numberOfGrantsPerRegion}
                     index="region"
                     category="numberOfGrants"

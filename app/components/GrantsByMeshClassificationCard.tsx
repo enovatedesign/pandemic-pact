@@ -16,11 +16,23 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
             id="grants-by-mesh-classification-card"
         >
             <Flex
-                justifyContent="between"
-                alignItems="center"
+                flexDirection="col"
+                alignItems="start"
+                className="gap-y-2"
             >
-                <Title>Grants By MESH Classifications</Title>
-                <Text>Total Grants: {dataset.length}</Text>
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
+                >
+                    <Title>Grants By MESH Classifications</Title>
+                    <Text>Total Grants: {dataset.length}</Text>
+                </Flex>
+
+                <Subtitle>
+                    Doloribus iste inventore odio sint laboriosam eaque.
+                    Perspiciatis laborum itaque ea labore ratione.
+                    Dolor eveniet itaque dolores doloremque quam alias eaque.
+                </Subtitle>
             </Flex>
 
             {filteredDataset.length < dataset.length &&
