@@ -32,6 +32,9 @@ export default function BarChart({selectedFilters}: CardProps) {
         }
     })
 
+    const maxTotalNumberOfGrants = Math.max(...chartData.map((data) => data["Total Number Of Grants"]))
+    const maxAmountCommitted = Math.max(...chartData.map((data) => data["Amount Committed"]))
+
     return (
         <div className="grid grid-cols-1">
             {chartData.map((data, index) => (
@@ -49,6 +52,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                                 <XAxis
                                     type="number"
                                     hide={true}
+                                    domain={[0, maxTotalNumberOfGrants]}
                                 />
 
                                 <YAxis
@@ -91,6 +95,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                                 <XAxis
                                     type="number"
                                     hide={true}
+                                    domain={[0, maxAmountCommitted]}
                                 />
 
                                 <YAxis
