@@ -14,11 +14,11 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Lead Research Institution',
-            metric: `${grant.ResearchInstitution_1}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+            metric: `${grant.ResearchInstitutionName.join(', ')} ${grant.ResearchInstitutionCountry} ${grant.ResearchInstitutionRegion}`,
         },
         {
             text: 'Disease',
-            metric: `${grant.DiseaseName_1 ?? 'Unknown'}`
+            metric: `${grant.Disease.join(', ')}`
         },
         {
             text: 'Start Year',
@@ -30,7 +30,7 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Funder',
-            metric: `${grant.FunderName_1} from ${grant.FunderCountry}`,
+            metric: `${grant.FundingOrgName.join(', ')} from ${grant.FunderCountry}`,
         },
         {
             text: 'Amount Committed (USD)',
