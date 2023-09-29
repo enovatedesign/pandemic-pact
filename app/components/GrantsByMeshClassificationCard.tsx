@@ -34,24 +34,10 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
             <div className="flex flex-col gap-y-6">
                 <DataBar
-                    title="Ethnicity"
-                    dataset={filteredDataset}
-                    fieldName="Ethnicity"
-                    options={selectOptions.Ethnicity}
-                />
-
-                <DataBar
                     title="Age Groups"
                     dataset={filteredDataset}
                     fieldName="AgeGroups"
                     options={selectOptions.AgeGroups}
-                />
-
-                <DataBar
-                    title="Rurality"
-                    dataset={filteredDataset}
-                    fieldName="Rurality"
-                    options={selectOptions.Rurality}
                 />
             </div>
 
