@@ -70,18 +70,12 @@ interface DataBarProps {
 function DataBar({title, fieldName, dataset, options}: DataBarProps) {
     const colours: Color[] = [
         'blue',
-        'lime',
-        'cyan',
-        'violet',
         'orange',
-        'emerald',
-        'indigo',
         'purple',
         'amber',
         'green',
         'red',
-        'fuchsia',
-        'yellow',
+        'pink',
         'neutral',
     ];
 
