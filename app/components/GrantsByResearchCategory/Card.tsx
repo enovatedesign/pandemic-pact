@@ -1,15 +1,15 @@
 import {useState} from "react"
 import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import ExportToPngButton from "./ExportToPngButton"
-import ExportToCsvButton from "./ExportToCsvButton"
-import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
-import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {dollarValueFormatter} from "../helpers/value-formatters"
-import dataset from '../../data/dist/filterable-dataset.json'
-import selectOptions from '../../data/dist/select-options.json'
+import ExportToPngButton from "../ExportToPngButton"
+import ExportToCsvButton from "../ExportToCsvButton"
+import {exportRequestBodyFilteredToMatchingGrants} from "../../helpers/meilisearch"
+import {type CardProps} from "../../types/card-props"
+import {filterGrants} from "../../helpers/filter"
+import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {dollarValueFormatter} from "../../helpers/value-formatters"
+import dataset from "../../../data/dist/filterable-dataset.json"
+import selectOptions from "../../../data/dist/select-options.json"
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)

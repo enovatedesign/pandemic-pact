@@ -5,7 +5,7 @@ import {Grid, Col} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
-import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategoryCard'
+import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import AmountCommittedToEachResearchCategoryOverTimeCard from '../components/AmountCommittedToEachResearchCategoryOverTimeCard'
 import GrantsByRegionCard from '../components/GrantsByRegionCard'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
