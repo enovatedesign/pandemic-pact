@@ -1,6 +1,5 @@
 import {useState} from "react"
-import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
-import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
+import {Flex, BarChart, Card, Title, Text, Color, Subtitle} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -14,7 +13,6 @@ import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
 export default function AmountCommittedToEachResearchCategoryOverTimeCard({selectedFilters}: CardProps) {
-    const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
@@ -83,7 +81,7 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                 justifyContent="between"
                 alignItems="center"
             >
-                <Title>Amount Committed To Each Research Category Over Time</Title>
+                <Title>Funding Amounts for Each Research Category Over Time</Title>
                 <Text>Total Grants: {dataset.length}</Text>
             </Flex>
 
@@ -105,45 +103,35 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
                 }
             </Flex>
 
-            {selectedTabIndex === 0 &&
-                <LineChart
-                    data={amountCommittedToEachResearchCategoryOverTime}
-                    index="year"
-                    categories={researchCategories}
-                    valueFormatter={dollarValueFormatter}
-                    colors={colours}
-                    showLegend={false}
-                    className="h-[36rem] -ml-2"
-                />
-            }
+            <Flex
+                flexDirection="row"
+                className="gap-x-2"
+            >
+                <Subtitle>Funding</Subtitle>
 
-            {selectedTabIndex === 1 &&
-                <BarChart
-                    data={amountCommittedToEachResearchCategoryOverTime}
-                    index="year"
-                    categories={researchCategories}
-                    valueFormatter={dollarValueFormatter}
-                    colors={colours}
-                    showLegend={false}
-                    className="h-[36rem] -ml-2"
-                />
-            }
+                <Flex
+                    flexDirection="col"
+                    className="gap-y-2"
+                >
+                    <BarChart
+                        data={amountCommittedToEachResearchCategoryOverTime}
+                        index="year"
+                        categories={researchCategories}
+                        valueFormatter={dollarValueFormatter}
+                        colors={colours}
+                        showLegend={false}
+                        className="h-[36rem] -ml-2"
+                    />
+
+                    <Subtitle>Year</Subtitle>
+                </Flex>
+            </Flex>
 
             <Flex
                 justifyContent="between"
                 alignItems="center"
                 className="ignore-in-image-export"
             >
-                <TabGroup
-                    index={selectedTabIndex}
-                    onIndexChange={setSelectedTabIndex}
-                >
-                    <TabList variant="solid">
-                        <Tab icon={PresentationChartLineIcon}>Line</Tab>
-                        <Tab icon={PresentationChartBarIcon}>Bar</Tab>
-                    </TabList>
-                </TabGroup>
-
                 <Flex
                     justifyContent="end"
                     alignItems="center"
