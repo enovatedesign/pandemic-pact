@@ -1,4 +1,4 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color, Button} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -6,9 +6,12 @@ import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
+import {EyeIcon} from "@heroicons/react/solid"
+import {useState} from "react"
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
+    const [unspecified, setUnspecified] = useState(false);
 
     return (
         <Card
@@ -37,24 +40,42 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     title="Age Groups"
                     dataset={filteredDataset}
                     fieldName="AgeGroups"
+                    showUnspecified={unspecified}
                     options={selectOptions.AgeGroups}
                 />
             </div>
 
             <Flex
-                justifyContent="end"
-                alignItems="center"
-                className="gap-x-2 ignore-in-image-export"
             >
-                <ExportToPngButton
-                    selector="#grants-by-mesh-classification-card"
-                    filename="grant-by-mesh-classification-card"
-                />
+                <Flex
+                    alignItems="center"
+                    justifyContent="start"
+                >
+                    <Button
+                        icon={EyeIcon}
+                        onClick={() => {
+                            setUnspecified(!unspecified);
+                        }}
+                    >
+                        {unspecified === true ? 'Show Unspecified' : 'Hide Unspecified'}
+                    </Button >
+                </Flex>
 
-                <ExportToCsvButton
-                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
-                    filename="grant-by-mesh-classification"
-                />
+                <Flex
+                    justifyContent="end"
+                    alignItems="center"
+                    className="gap-x-2 ignore-in-image-export"
+                >
+                    <ExportToPngButton
+                        selector="#grants-by-mesh-classification-card"
+                        filename="grant-by-mesh-classification-card"
+                    />
+
+                    <ExportToCsvButton
+                        meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                        filename="grant-by-mesh-classification"
+                    />
+                </Flex>
             </Flex>
         </Card>
     )
@@ -63,11 +84,12 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 interface DataBarProps {
     title: string
     fieldName: string
+    showUnspecified: boolean
     dataset: any[]
     options: any[]
 }
 
-function DataBar({title, fieldName, dataset, options}: DataBarProps) {
+function DataBar({title, fieldName, showUnspecified, dataset, options}: DataBarProps) {
     const colours: Color[] = [
         'blue',
         'orange',
@@ -81,13 +103,22 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
         'neutral',
     ];
 
+    var filterOut = [
+        'Other',
+        'Not known',
+    ];
+
+    if (showUnspecified) {
+        filterOut = filterOut.concat([
+            'Unspecified',
+            'Not applicable',
+        ]);
+    }
+
     const optionValues: string[] = options.map(
         (option: any) => option.label
     ).filter(
-        (name: string) => ![
-            'Other',
-            'Not known',
-        ].includes(name)
+        (name: string) => !filterOut.includes(name)
     )
 
     const numberOfGrantsPerOption = optionValues.map(
