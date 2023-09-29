@@ -1,4 +1,4 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
@@ -82,6 +82,23 @@ interface DataBarProps {
 }
 
 function DataBar({title, fieldName, dataset, options}: DataBarProps) {
+    const colours: Color[] = [
+        'blue',
+        'lime',
+        'cyan',
+        'violet',
+        'orange',
+        'emerald',
+        'indigo',
+        'purple',
+        'amber',
+        'green',
+        'red',
+        'fuchsia',
+        'yellow',
+        'neutral',
+    ];
+
     const optionValues: string[] = options.map(
         (option: any) => option.label
     ).filter(
@@ -112,11 +129,13 @@ function DataBar({title, fieldName, dataset, options}: DataBarProps) {
             <Legend
                 categories={optionValues}
                 className="mt-4"
+                colors={colours}
             />
 
             <CategoryBar
                 values={numberOfGrantsPerOptionPercentage}
                 className="mt-4"
+                colors={colours}
             />
         </div >
     )
