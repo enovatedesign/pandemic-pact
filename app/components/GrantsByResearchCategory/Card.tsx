@@ -120,7 +120,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     </Flex>
                 </Flex>
 
-                <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
+                <p className="text-sm text-gray-500">Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder.</p>
             </Flex>
         </Card>
     )

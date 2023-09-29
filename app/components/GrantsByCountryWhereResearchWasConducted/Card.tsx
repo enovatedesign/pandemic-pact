@@ -123,7 +123,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 />
             </Flex>
 
-            <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
+            <p className="text-sm text-gray-500">Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
         </Card >
     )
 }
