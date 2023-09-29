@@ -1,4 +1,4 @@
-This project uses the following technologies and packages.
+This project uses the following technologies and packages:
 
 - [Next.js](https://nextjs.org/)
 - [Vercel](https://vercel.com)
