@@ -15,20 +15,22 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
 
     const regionOptions = selectOptions.Regions
 
-    const chartData = researchCategoryOptions.map(function (researchCategory, index) {
-        const grantsInResearchCategory = filteredDataset
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
+    const chartData = regionOptions.map(function (regionOption) {
+        const grantsInRegion = filteredDataset
+            .filter((grant: any) => grant.GrantRegion === regionOption.value)
 
-        const totalGrantsPerRegion = Object.fromEntries(
-            regionOptions.map(({label, value}: any) => ([
+        const totalGrantsPerResearchCategory = Object.fromEntries(
+            researchCategoryOptions.map(({label, value}: any) => ([
                 label,
-                grantsInResearchCategory.filter((grant: any) => grant.GrantRegion === value).length
-            ]))
+                grantsInRegion.filter((grant: any) => grant.ResearchCat.includes(value)).length,
+            ])).filter(
+                ([, value]: any) => value > 0
+            )
         )
 
         return {
-            "Research Category": researchCategory.label,
-            ...totalGrantsPerRegion,
+            "Region": regionOption.label,
+            ...totalGrantsPerResearchCategory,
         }
     })
 
@@ -93,9 +95,12 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                         <PolarGrid />
-                        <PolarAngleAxis dataKey="Research Category" />
 
-                        {regionOptions.map(({label}: any, index: number) => (
+                        <PolarAngleAxis
+                            dataKey="Region"
+                        />
+
+                        {researchCategoryOptions.map(({label}: any, index: number) => (
                             <Radar
                                 key={`${label} Radar`}
                                 name={label}
