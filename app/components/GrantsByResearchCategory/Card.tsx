@@ -3,6 +3,7 @@ import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, T
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "../ExportToPngButton"
 import ExportToCsvButton from "../ExportToCsvButton"
+import BarChart from "./BarChart"
 import {exportRequestBodyFilteredToMatchingGrants} from "../../helpers/meilisearch"
 import {type CardProps} from "../../types/card-props"
 import {filterGrants} from "../../helpers/filter"
@@ -97,41 +98,9 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 </Flex>
 
                 {selectedTabIndex === 0 &&
-                    <Grid
-                        className="gap-12"
-                        numItems={3}
-                    >
-                        <Col>
-                            <List>
-                                {researchCategoryOptions.map((item) => (
-                                    <ListItem
-                                        key={item.value}
-                                        className="h-9 mb-2 border-none justify-start"
-                                    >
-                                        <span className="min-w-[2rem]">{item.value}</span>
-                                        <span className="truncate">{item.label}</span>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Col>
-
-                        <Col>
-                            <BarList
-                                data={numberOfGrantsPerResearchCategory}
-                            />
-
-                            <Subtitle className="mt-4 text-right">Number of projects</Subtitle>
-                        </Col>
-
-                        <Col>
-                            <BarList
-                                data={amountOfMoneyCommittedPerResearchCategory}
-                                valueFormatter={dollarValueFormatter}
-                            />
-
-                            <Subtitle className="mt-4 text-right">Known amount committed (USD)</Subtitle>
-                        </Col>
-                    </Grid>
+                    <BarChart
+                        selectedFilters={selectedFilters}
+                    />
                 }
 
                 {selectedTabIndex === 1 &&
