@@ -1,43 +1,18 @@
-import {Text, Subtitle} from "@tremor/react"
-import {BarChart as RechartBarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
-import {type CardProps} from "../../types/card-props"
-import {filterGrants} from "../../helpers/filter"
-import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {Subtitle} from "@tremor/react"
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
-import dataset from "../../../data/dist/filterable-dataset.json"
-import selectOptions from "../../../data/dist/select-options.json"
 
-export default function BarChart({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
+interface Props {
+    chartData: any,
+}
 
-    const researchCategoryOptions = selectOptions.ResearchCat
-
-    const chartData = researchCategoryOptions.map(function (researchCategory, index) {
-        const grantsWithKnownAmounts = filteredDataset
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
-
-        const grantsWithUnspecifiedAmounts = filteredDataset
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
-
-        const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
-
-        return {
-            "Research Category": researchCategory.label,
-            "Number Of Grants With Known Amount Committed": grantsWithKnownAmounts.length,
-            "Number Of Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
-            "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Amount Committed": moneyCommitted,
-        }
-    })
-
-    const maxTotalNumberOfGrants = Math.max(...chartData.map((data) => data["Total Number Of Grants"]))
-    const maxAmountCommitted = Math.max(...chartData.map((data) => data["Amount Committed"]))
+export default function BarChart({chartData}: Props) {
+    const maxTotalNumberOfGrants = Math.max(...chartData.map((data: any) => data["Total Number Of Grants"]))
+    const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Amount Committed"]))
 
     return (
         <div className="w-full grid grid-cols-[minmax(0,_1.25fr)_minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
-            {chartData.map((data, index) => (
+            {chartData.map((data: any) => (
                 <>
                     <div className="col-span-1 py-3 self-center">
                         <p className="truncate text-sm text-gray-600">{data["Research Category"]}</p>

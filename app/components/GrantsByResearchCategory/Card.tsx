@@ -1,14 +1,14 @@
 import {useState} from "react"
-import {Flex, BarList, Card, Title, Subtitle, List, ListItem, Grid, Col, Text, Tab, TabList, TabGroup, ScatterChart, Color} from "@tremor/react"
+import {Flex, Card, Title, Text, Tab, TabList, TabGroup} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "../ExportToPngButton"
 import ExportToCsvButton from "../ExportToCsvButton"
 import BarChart from "./BarChart"
+import ScatterChart from "./ScatterChart"
 import {exportRequestBodyFilteredToMatchingGrants} from "../../helpers/meilisearch"
 import {type CardProps} from "../../types/card-props"
 import {filterGrants} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {dollarValueFormatter} from "../../helpers/value-formatters"
 import dataset from "../../../data/dist/filterable-dataset.json"
 import selectOptions from "../../../data/dist/select-options.json"
 
@@ -19,57 +19,25 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
     const researchCategoryOptions = selectOptions.ResearchCat
 
-    const numberOfGrantsPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
-        const value = filteredDataset
+    const chartData = researchCategoryOptions.map(function (researchCategory) {
+        const grantsWithKnownAmounts = filteredDataset
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .length
+            .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
 
-        return {
-            key: `grants-per-category-${researchCategory.value}`,
-            value: value,
-            name: '',
-        }
-    })
-
-    const amountOfMoneyCommittedPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
-        const value = filteredDataset
+        const grantsWithUnspecifiedAmounts = filteredDataset
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .reduce(...sumNumericGrantAmounts)
+            .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
 
-        return {
-            key: `grant-amount-${researchCategory.value}`,
-            value: value,
-            name: '',
-        }
-    })
-
-    const scatterChartData = researchCategoryOptions.map(function (researchCategory, index) {
-        const numberOfGrants = numberOfGrantsPerResearchCategory[index].value;
-        const moneyCommitted = amountOfMoneyCommittedPerResearchCategory[index].value;
+        const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
 
         return {
             "Research Category": researchCategory.label,
-            "Number Of Grants": numberOfGrants,
+            "Number Of Grants With Known Amount Committed": grantsWithKnownAmounts.length,
+            "Number Of Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
+            "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
             "Amount Committed": moneyCommitted,
         }
     })
-
-    const colours: Color[] = [
-        'red',
-        'lime',
-        'cyan',
-        'violet',
-        'orange',
-        'emerald',
-        'indigo',
-        'purple',
-        'amber',
-        'green',
-        'blue',
-        'fuchsia',
-        'yellow',
-        'neutral',
-    ]
 
     return (
         <Card
@@ -99,27 +67,13 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
                 {selectedTabIndex === 0 &&
                     <BarChart
-                        selectedFilters={selectedFilters}
+                        chartData={chartData}
                     />
                 }
 
                 {selectedTabIndex === 1 &&
                     <ScatterChart
-                        className="h-80 -ml-2"
-                        data={scatterChartData}
-                        category="Research Category"
-                        x="Number Of Grants"
-                        y="Amount Committed"
-                        showOpacity={true}
-                        minYValue={60}
-                        valueFormatter={{
-                            x: (value: number) => `${value} grants`,
-                            y: dollarValueFormatter,
-                        }}
-                        showLegend={false}
-                        autoMinXValue
-                        autoMinYValue
-                        colors={colours}
+                        chartData={chartData}
                     />
                 }
 
