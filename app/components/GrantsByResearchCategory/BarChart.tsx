@@ -40,25 +40,94 @@ export default function BarChart({selectedFilters}: CardProps) {
         const moneyCommitted = amountOfMoneyCommittedPerResearchCategory[index].value;
 
         return {
-            "name": researchCategory.label,
-            "n": numberOfGrants,
+            "Research Category": researchCategory.label,
+            "Number Of Grants": numberOfGrants,
+            "Amount Committed": moneyCommitted,
         }
     })
 
-    // TODO work out why ResponsiveContainer is not working
     return (
-        <RechartBarChart
-            width={800}
-            height={600}
-            layout="vertical"
-            data={chartData}
-        >
-            <Tooltip />
+        <div className=" w-full h-[800px] flex justify-between gap-x-4">
+            <ResponsiveContainer width="33%" height="100%">
+                <RechartBarChart
+                    data={chartData}
+                    layout="vertical"
+                >
+                    <XAxis
+                        type="number"
+                        hide={true}
+                    />
 
-            <Bar
-                dataKey="n"
-                fill="#8884d8"
-            />
-        </RechartBarChart>
+                    <YAxis
+                        type="category"
+                        dataKey="Research Category"
+                        axisLine={false}
+                        tickLine={false}
+                        width={400}
+                    />
+                </RechartBarChart>
+            </ResponsiveContainer>
+
+            <ResponsiveContainer width="33%" height="100%">
+                <RechartBarChart
+                    data={chartData}
+                    layout="vertical"
+                >
+                    <XAxis
+                        type="number"
+                        hide={true}
+                    />
+
+                    <YAxis
+                        type="category"
+                        dataKey="Research Category"
+                        hide={true}
+                    />
+
+                    <Tooltip
+                        wrapperStyle={{zIndex: 99}}
+                    />
+
+                    <Bar
+                        dataKey="Number Of Grants"
+                        fill="#3b82f6"
+                        barSize={40}
+                        label={{position: 'right'}}
+                    />
+                </RechartBarChart>
+            </ResponsiveContainer>
+
+            <ResponsiveContainer width="33%" height="100%">
+                <RechartBarChart
+                    data={chartData}
+                    layout="vertical"
+                >
+                    <XAxis
+                        type="number"
+                        hide={true}
+                    />
+
+                    <YAxis
+                        type="category"
+                        dataKey="Research Category"
+                        axisLine={false}
+                        tickLine={false}
+                        hide={true}
+                    />
+
+                    <Tooltip
+                        wrapperStyle={{zIndex: 99}}
+                        formatter={dollarValueFormatter}
+                    />
+
+                    <Bar
+                        dataKey="Amount Committed"
+                        fill="#3b82f6"
+                        barSize={40}
+                        label={{position: 'right', formatter: dollarValueFormatter}}
+                    />
+                </RechartBarChart>
+            </ResponsiveContainer>
+        </div>
     )
 }
