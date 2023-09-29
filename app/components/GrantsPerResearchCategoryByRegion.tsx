@@ -23,9 +23,7 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
             researchCategoryOptions.map(({label, value}: any) => ([
                 label,
                 grantsInRegion.filter((grant: any) => grant.ResearchCat.includes(value)).length,
-            ])).filter(
-                ([, value]: any) => value > 0
-            )
+            ]))
         )
 
         return {
