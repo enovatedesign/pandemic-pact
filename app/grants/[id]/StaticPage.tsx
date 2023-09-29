@@ -9,10 +9,16 @@ interface Props {
 export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
-            text: 'Amount Committed (USD)',
-            metric: (typeof grant.GrantAmountConverted === 'number') ?
-                `$ ${grant.GrantAmountConverted.toLocaleString()}`
-                : grant.GrantAmountConverted,
+            text: 'Grant ID',
+            metric: grant.GrantID,
+        },
+        {
+            text: 'Lead Research Institution',
+            metric: `${grant.ResearchInstitution_1}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+        },
+        {
+            text: 'Disease',
+            metric: `${grant.DiseaseName_1 ?? 'Unknown'}`
         },
         {
             text: 'Start Year',
@@ -27,12 +33,10 @@ export default function StaticPage({grant}: Props) {
             metric: `${grant.FunderName_1} from ${grant.FunderCountry}`,
         },
         {
-            text: 'Lead Research Institution',
-            metric: `${grant.ResearchInstitution_1}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
-        },
-        {
-            text: 'Disease',
-            metric: `${grant.DiseaseName_1 ?? 'Unknown'}`
+            text: 'Amount Committed (USD)',
+            metric: (typeof grant.GrantAmountConverted === 'number') ?
+                `$ ${grant.GrantAmountConverted.toLocaleString()}`
+                : grant.GrantAmountConverted,
         },
     ]
 
