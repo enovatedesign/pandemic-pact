@@ -1,34 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project uses the following technologies and packages.
+
+- [Next.js](https://nextjs.org/)
+- [Vercel](https://vercel.com)
+- [Typescript](https://www.typescriptlang.org/).
+- [Meilisearch](https://www.meilisearch.com/)
+- [Tremor](https://www.tremor.so/)
+- [React Simple Maps](https://www.react-simple-maps.io/)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
 
 ## Getting Started
 
-First, run the development server:
+Start by ensuring that you are on the correct version of NodeJS by using NVM:
+
+```bash
+nvm use
+```
+
+### Meilisearch (optional)
+
+The build should run successfully without Meilisearch, but the site relies on it heavily for search and export features so it is recommended. If you don't have it installed, you can get it with brew:
+
+```bash
+brew install meilisearch
+```
+
+I suggest starting it as a service so that it is always running in the background, even after rebooting your computer:
+
+```bash
+brew services start meilisearch
+```
+
+Finally, you will need to create an env file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+The settings from `.env.local.example` should work automatically with the default settings brew meilisearch service.
+
+# Generate Data
+
+Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `/dist/data` directory and sends it to Meilisearch:
+
+```bash
+npm run generate
+```
+
+# Run the Development server
+
+Now that you have generated the required data you can run the dev build:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
