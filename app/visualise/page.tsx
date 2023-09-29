@@ -6,10 +6,10 @@ import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategoryCard'
-import AmountCommittedToEachResearchCategoryOverTimeCard from '../components/AmountCommittedToEachResearchCategoryOverTimeCard'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import {type Filters} from "../types/filters"
+import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
@@ -54,7 +54,7 @@ export default function Visualise() {
                     </Col>
 
                     <Col numColSpan={12}>
-                        <AmountCommittedToEachResearchCategoryOverTimeCard
+                        <FundingAmountsforEachResearchCategoryOverTime
                             selectedFilters={selectedFilters}
                         />
                     </Col>
