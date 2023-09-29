@@ -6,12 +6,12 @@ import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
-import {EyeIcon} from "@heroicons/react/solid"
 import {useState} from "react"
+import {Switch} from "@headlessui/react"
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
-    const [unspecified, setUnspecified] = useState(false);
+    const [unspecified, setUnspecified] = useState(true);
 
     return (
         <Card
@@ -63,14 +63,22 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     alignItems="center"
                     justifyContent="start"
                 >
-                    <Button
-                        icon={EyeIcon}
-                        onClick={() => {
-                            setUnspecified(!unspecified);
-                        }}
-                    >
-                        {unspecified === true ? 'Show Unspecified' : 'Hide Unspecified'}
-                    </Button >
+
+                    <div className="flex items-center gap-x-2">
+                        <Switch
+                            checked={unspecified}
+                            onChange={setUnspecified}
+                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                        >
+                            <span className="sr-only">Display Unspecified</span>
+
+                            <span
+                                className={`${unspecified ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                            />
+                        </Switch>
+
+                        <Text className={opaqueTextIf(!unspecified)}>Hide Unspecified</Text>
+                    </div>
                 </Flex>
 
                 <Flex
@@ -91,6 +99,10 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
             </Flex>
         </Card>
     )
+}
+
+function opaqueTextIf(condition: boolean) {
+    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }
 
 interface DataBarProps {
