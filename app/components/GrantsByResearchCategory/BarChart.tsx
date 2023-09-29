@@ -12,37 +12,22 @@ export default function BarChart({selectedFilters}: CardProps) {
 
     const researchCategoryOptions = selectOptions.ResearchCat
 
-    const numberOfGrantsPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
-        const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .length
-
-        return {
-            key: `grants-per-category-${researchCategory.value}`,
-            value: value,
-            name: '',
-        }
-    })
-
-    const amountOfMoneyCommittedPerResearchCategory = researchCategoryOptions.map(function (researchCategory) {
-        const value = filteredDataset
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .reduce(...sumNumericGrantAmounts)
-
-        return {
-            key: `grant-amount-${researchCategory.value}`,
-            value: value,
-            name: '',
-        }
-    })
-
     const chartData = researchCategoryOptions.map(function (researchCategory, index) {
-        const numberOfGrants = numberOfGrantsPerResearchCategory[index].value;
-        const moneyCommitted = amountOfMoneyCommittedPerResearchCategory[index].value;
+        const grantsWithKnownAmounts = filteredDataset
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
+            .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
+
+        const grantsWithUnspecifiedAmounts = filteredDataset
+            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
+            .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
+
+        const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
 
         return {
             "Research Category": researchCategory.label,
-            "Number Of Grants": numberOfGrants,
+            "Number Of Grants With Known Amount Committed": grantsWithKnownAmounts.length,
+            "Number Of Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
+            "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
             "Amount Committed": moneyCommitted,
         }
     })
@@ -79,15 +64,22 @@ export default function BarChart({selectedFilters}: CardProps) {
                                 />
 
                                 <Bar
-                                    dataKey="Number Of Grants"
+                                    dataKey="Number Of Grants With Known Amount Committed"
                                     fill="#3b82f6"
+                                    stackId="a"
+                                />
+
+                                <Bar
+                                    dataKey="Number Of Grants With Unspecified Amount Committed"
+                                    fill="#f59e0b"
+                                    stackId="a"
                                 />
                             </RechartBarChart>
                         </ResponsiveContainer>
                     </div>
 
                     <div className="col-span-1 py-3 self-center justify-self-end">
-                        <p className="text-sm text-gray-600">{data["Number Of Grants"]}</p>
+                        <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
                     </div>
 
                     <div className="col-span-1">
@@ -116,7 +108,7 @@ export default function BarChart({selectedFilters}: CardProps) {
 
                                 <Bar
                                     dataKey="Amount Committed"
-                                    fill="#3b82f6"
+                                    fill="#22c55e"
 
                                 />
                             </RechartBarChart>
