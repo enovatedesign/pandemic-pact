@@ -1,3 +1,4 @@
+import {Fragment} from "react"
 import {Subtitle} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -13,18 +14,12 @@ export default function BarChart({chartData}: Props) {
     return (
         <div className="w-full grid grid-cols-[minmax(0,_1.25fr)_minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
             {chartData.map((data: any, index: number) => (
-                <>
-                    <div
-                        className="col-span-1 py-3 self-center"
-                        key={`research-category-label-row-${index}`}
-                    >
+                <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
+                    <div className="col-span-1 py-3 self-center">
                         <p className="truncate text-sm text-gray-600">{data["Research Category"]}</p>
-                    </div >
+                    </div>
 
-                    <div
-                        className="col-span-1"
-                        key={`number-of-grants-bar-row-${index}`}
-                    >
+                    <div className="col-span-1">
                         <ResponsiveContainer width="100%" height="100%">
                             <RechartBarChart
                                 data={[data]}
@@ -65,17 +60,11 @@ export default function BarChart({chartData}: Props) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div
-                        className="col-span-1 py-3 pl-2 pr-8 self-center justify-self-end"
-                        key={`number-of-grants-label-row-${index}`}
-                    >
+                    <div className="col-span-1 py-3 pl-2 pr-8 self-center justify-self-end">
                         <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
                     </div>
 
-                    <div
-                        className="col-span-1"
-                        key={`amount-committed-bar-row-${index}`}
-                    >
+                    <div className="col-span-1">
                         <ResponsiveContainer width="100%" height="100%">
                             <RechartBarChart
                                 data={[data]}
@@ -110,15 +99,11 @@ export default function BarChart({chartData}: Props) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div
-                        className="col-span-1 py-3 pl-2 self-center justify-self-end"
-                        key={`amount-committed-label-row-${index}`}
-                    >
+                    <div className="col-span-1 py-3 pl-2 self-center justify-self-end">
                         <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                     </div>
-                </>
-            ))
-            }
+                </Fragment>
+            ))}
 
             <div className="col-span-1" />
 
@@ -129,6 +114,6 @@ export default function BarChart({chartData}: Props) {
             <div className="col-span-2 pl-2 justify-self-end">
                 <Subtitle>Known amount committed (USD)</Subtitle>
             </div>
-        </div >
+        </div>
     )
 }
