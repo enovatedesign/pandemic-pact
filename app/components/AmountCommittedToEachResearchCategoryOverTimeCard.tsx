@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color} from "@tremor/react"
+import {Flex, BarChart, LineChart, Card, Title, Text, TabGroup, Tab, TabList, Color, Subtitle} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
@@ -80,13 +80,24 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
             id="amount-committed-to-each-research-category-over-time-card"
         >
             <Flex
-                justifyContent="between"
-                alignItems="center"
+                flexDirection="col"
+                alignItems="start"
+                className="gap-y-2"
             >
-                <Title>Amount Committed To Each Research Category Over Time</Title>
-                <Text>Total Grants: {dataset.length}</Text>
-            </Flex>
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
+                >
+                    <Title>Amount Committed To Each Research Category Over Time</Title>
+                    <Text>Total Grants: {dataset.length}</Text>
+                </Flex>
 
+                <Subtitle>
+                    Ipsam vero quae beatae quas nemo quae necessitatibus commodi.
+                    Fuga laboriosam possimus corrupti dolore eveniet maiores.
+                    Porro laboriosam laboriosam assumenda esse porro placeat voluptatum.
+                </Subtitle>
+            </Flex>
             <Flex
                 justifyContent="between"
                 alignItems="center"

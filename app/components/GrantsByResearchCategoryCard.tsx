@@ -80,11 +80,22 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 className="gap-y-6"
             >
                 <Flex
-                    justifyContent="between"
-                    alignItems="center"
+                    flexDirection="col"
+                    alignItems="start"
+                    className="gap-y-2"
                 >
-                    <Title>Grants By Research Category</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
+                    <Flex
+                        justifyContent="between"
+                        alignItems="center"
+                    >
+                        <Title>Grants By Research Category</Title>
+                        <Text>Total Grants: {dataset.length}</Text>
+                    </Flex>
+
+                    <Subtitle>
+                        Magni reprehenderit architecto eligendi id sint repudiandae dolore aperiam.
+                        Tenetur sint nemo hic iusto. A corporis aliquam magni nemo harum iusto.
+                    </Subtitle>
                 </Flex>
 
                 <Flex
@@ -106,7 +117,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                                 {researchCategoryOptions.map((item) => (
                                     <ListItem
                                         key={item.value}
-                                        className="h-9 mb-2 border-none justify-start"
+                                        className="justify-start mb-2 border-none h-9"
                                     >
                                         <span className="min-w-[2rem]">{item.value}</span>
                                         <span className="truncate">{item.label}</span>
@@ -136,7 +147,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
 
                 {selectedTabIndex === 1 &&
                     <ScatterChart
-                        className="h-80 -ml-2"
+                        className="-ml-2 h-80"
                         data={scatterChartData}
                         category="Research Category"
                         x="Number Of Grants"
