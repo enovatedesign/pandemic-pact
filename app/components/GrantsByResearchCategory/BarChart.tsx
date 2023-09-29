@@ -71,6 +71,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                                     dataKey="Number Of Grants With Known Amount Committed"
                                     fill="#3b82f6"
                                     stackId="a"
+                                    background={{fill: '#eee'}}
                                 />
 
                                 <Bar
@@ -114,7 +115,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                                 <Bar
                                     dataKey="Amount Committed"
                                     fill="#22c55e"
-
+                                    background={{fill: '#eee'}}
                                 />
                             </RechartBarChart>
                         </ResponsiveContainer>
@@ -126,7 +127,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                 </div>
             ))}
 
-            <div className="grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4 items-center">
+            <div className="mt-4 grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4 items-center">
                 <div className="col-span-1" />
 
                 <div className="col-span-2 justify-self-end">
