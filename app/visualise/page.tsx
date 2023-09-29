@@ -7,7 +7,6 @@ import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import AmountCommittedToEachResearchCategoryOverTimeCard from '../components/AmountCommittedToEachResearchCategoryOverTimeCard'
-import GrantsByRegionCard from '../components/GrantsByRegionCard'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import {type Filters} from "../types/filters"
@@ -60,13 +59,7 @@ export default function Visualise() {
                         />
                     </Col>
 
-                    <Col numColSpan={5}>
-                        <GrantsByRegionCard
-                            selectedFilters={selectedFilters}
-                        />
-                    </Col>
-
-                    <Col numColSpan={7}>
+                    <Col numColSpan={12}>
                         <GrantsByMeshClassificationCard
                             selectedFilters={selectedFilters}
                         />

@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {Flex, Card, Title, Text, Tab, TabList, TabGroup} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, Tab, TabList, TabGroup} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import ExportToPngButton from "../ExportToPngButton"
 import ExportToCsvButton from "../ExportToCsvButton"
@@ -49,11 +49,22 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 className="gap-y-6"
             >
                 <Flex
-                    justifyContent="between"
-                    alignItems="center"
+                    flexDirection="col"
+                    alignItems="start"
+                    className="gap-y-2"
                 >
-                    <Title>Grants By Research Category</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
+                    <Flex
+                        justifyContent="between"
+                        alignItems="center"
+                    >
+                        <Title>Grants By Research Category</Title>
+                        <Text>Total Grants: {dataset.length}</Text>
+                    </Flex>
+
+                    <Subtitle>
+                        Magni reprehenderit architecto eligendi id sint repudiandae dolore aperiam.
+                        Tenetur sint nemo hic iusto. A corporis aliquam magni nemo harum iusto.
+                    </Subtitle>
                 </Flex>
 
                 <Flex
