@@ -1,3 +1,4 @@
+import {Text, Subtitle} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import {type CardProps} from "../../types/card-props"
 import {filterGrants} from "../../helpers/filter"
@@ -47,87 +48,98 @@ export default function BarChart({selectedFilters}: CardProps) {
     })
 
     return (
-        <div className=" w-full h-[800px] flex justify-between gap-x-4">
-            <ResponsiveContainer width="33%" height="100%">
-                <RechartBarChart
-                    data={chartData}
-                    layout="vertical"
-                >
-                    <XAxis
-                        type="number"
-                        hide={true}
-                    />
+        <div className="grid grid-cols-1">
+            {chartData.map((data, index) => (
+                <div className="grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4" key={index}>
+                    <div className="col-span-1 py-3 self-center">
+                        <p className="truncate text-sm text-gray-600">{data["Research Category"]}</p>
+                    </div>
 
-                    <YAxis
-                        type="category"
-                        dataKey="Research Category"
-                        axisLine={false}
-                        tickLine={false}
-                        width={400}
-                    />
-                </RechartBarChart>
-            </ResponsiveContainer>
+                    <div className="col-span-1">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RechartBarChart
+                                data={[data]}
+                                layout="vertical"
+                            >
+                                <XAxis
+                                    type="number"
+                                    hide={true}
+                                />
 
-            <ResponsiveContainer width="33%" height="100%">
-                <RechartBarChart
-                    data={chartData}
-                    layout="vertical"
-                >
-                    <XAxis
-                        type="number"
-                        hide={true}
-                    />
+                                <YAxis
+                                    type="category"
+                                    dataKey="Research Category"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    hide={true}
+                                />
 
-                    <YAxis
-                        type="category"
-                        dataKey="Research Category"
-                        hide={true}
-                    />
+                                <Tooltip
+                                    wrapperStyle={{zIndex: 99}}
+                                />
 
-                    <Tooltip
-                        wrapperStyle={{zIndex: 99}}
-                    />
+                                <Bar
+                                    dataKey="Number Of Grants"
+                                    fill="#3b82f6"
+                                />
+                            </RechartBarChart>
+                        </ResponsiveContainer>
+                    </div>
 
-                    <Bar
-                        dataKey="Number Of Grants"
-                        fill="#3b82f6"
-                        barSize={40}
-                        label={{position: 'right'}}
-                    />
-                </RechartBarChart>
-            </ResponsiveContainer>
+                    <div className="col-span-1 py-3 self-center justify-self-end">
+                        <p className="text-sm text-gray-600">{data["Number Of Grants"]}</p>
+                    </div>
 
-            <ResponsiveContainer width="33%" height="100%">
-                <RechartBarChart
-                    data={chartData}
-                    layout="vertical"
-                >
-                    <XAxis
-                        type="number"
-                        hide={true}
-                    />
+                    <div className="col-span-1">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RechartBarChart
+                                data={[data]}
+                                layout="vertical"
+                            >
+                                <XAxis
+                                    type="number"
+                                    hide={true}
+                                />
 
-                    <YAxis
-                        type="category"
-                        dataKey="Research Category"
-                        axisLine={false}
-                        tickLine={false}
-                        hide={true}
-                    />
+                                <YAxis
+                                    type="category"
+                                    dataKey="Research Category"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    hide={true}
+                                />
 
-                    <Tooltip
-                        wrapperStyle={{zIndex: 99}}
-                        formatter={dollarValueFormatter}
-                    />
+                                <Tooltip
+                                    wrapperStyle={{zIndex: 99}}
+                                    formatter={dollarValueFormatter}
+                                />
 
-                    <Bar
-                        dataKey="Amount Committed"
-                        fill="#3b82f6"
-                        barSize={40}
-                        label={{position: 'right', formatter: dollarValueFormatter}}
-                    />
-                </RechartBarChart>
-            </ResponsiveContainer>
+                                <Bar
+                                    dataKey="Amount Committed"
+                                    fill="#3b82f6"
+
+                                />
+                            </RechartBarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    <div className="col-span-1 py-3 self-center justify-self-end">
+                        <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
+                    </div>
+                </div>
+            ))}
+
+            <div className="grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4 items-center">
+                <div className="col-span-1" />
+
+                <div className="col-span-2 justify-self-end">
+                    <Subtitle>Number of projects</Subtitle>
+                </div>
+
+                <div className="col-span-2 justify-self-end">
+                    <Subtitle>Known amount committed (USD)</Subtitle>
+                </div>
+            </div>
         </div>
     )
 }
