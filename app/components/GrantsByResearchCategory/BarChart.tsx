@@ -65,6 +65,7 @@ export default function BarChart({selectedFilters}: CardProps) {
 
                                 <Tooltip
                                     wrapperStyle={{zIndex: 99}}
+                                    cursor={{fill: 'transparent'}}
                                 />
 
                                 <Bar
@@ -110,6 +111,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                                 <Tooltip
                                     wrapperStyle={{zIndex: 99}}
                                     formatter={dollarValueFormatter}
+                                    cursor={{fill: 'transparent'}}
                                 />
 
                                 <Bar
