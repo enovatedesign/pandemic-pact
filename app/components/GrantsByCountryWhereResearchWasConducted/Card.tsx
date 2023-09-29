@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Flex, Card, Title, Text, Tab, TabList, TabGroup} from "@tremor/react"
+import {Flex, Card, Title, Text, Tab, TabList, TabGroup, Subtitle} from "@tremor/react"
 import {Switch} from '@headlessui/react'
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import Map from "./Map"
@@ -32,13 +32,24 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 className="gap-y-6"
             >
                 <Flex
-                    justifyContent="between"
-                    alignItems="center"
+                    flexDirection='col'
+                    alignItems='start'
+                    className='gap-y-2'
                 >
-                    <Title>Grants By Country Where Research Was Conducted</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                    <Flex
+                        justifyContent="between"
+                        alignItems="center"
+                    >
+                        <Title>Grants By Country Where Research Was Conducted</Title>
+                        <Text>Total Grants: {dataset.length}</Text>
+                    </Flex>
 
+                    <Subtitle>
+                        Possimus fugit laudantium recusandae.
+                        Ducimus rem minima quam consequatur asperiores magni.
+                        Earum a illum.
+                    </Subtitle>
+                </Flex>
                 <Flex
                     justifyContent="between"
                     alignItems="center"
@@ -94,7 +105,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                     <Switch
                         checked={displayWhoRegions}
                         onChange={setDisplayWhoRegions}
-                        className="bg-blue-600 relative inline-flex h-6 w-11 items-center rounded-full"
+                        className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
                     >
                         <span className="sr-only">Display WHO Regions</span>
 
