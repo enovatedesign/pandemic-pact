@@ -16,6 +16,12 @@ Start by ensuring that you are on the correct version of NodeJS by using NVM:
 nvm use
 ```
 
+Install NPM dependencies:
+
+```bash
+npm install
+```
+
 ### Meilisearch (optional)
 
 The build should run successfully without Meilisearch, but the site relies on it heavily for search and export features so it is recommended. If you don't have it installed, you can get it with brew:
