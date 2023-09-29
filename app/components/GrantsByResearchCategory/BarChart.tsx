@@ -36,9 +36,9 @@ export default function BarChart({selectedFilters}: CardProps) {
     const maxAmountCommitted = Math.max(...chartData.map((data) => data["Amount Committed"]))
 
     return (
-        <div className="grid grid-cols-1">
+        <div className="w-full grid grid-cols-[minmax(0,_1.25fr)_minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
             {chartData.map((data, index) => (
-                <div className="grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4" key={index}>
+                <>
                     <div className="col-span-1 py-3 self-center">
                         <p className="truncate text-sm text-gray-600">{data["Research Category"]}</p>
                     </div>
@@ -84,7 +84,7 @@ export default function BarChart({selectedFilters}: CardProps) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="col-span-1 py-3 self-center justify-self-end">
+                    <div className="col-span-1 py-3 pl-2 pr-8 self-center justify-self-end">
                         <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
                     </div>
 
@@ -123,22 +123,20 @@ export default function BarChart({selectedFilters}: CardProps) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="col-span-1 py-3 self-center justify-self-end">
+                    <div className="col-span-1 py-3 pl-2 self-center justify-self-end">
                         <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                     </div>
-                </div>
+                </>
             ))}
 
-            <div className="mt-4 grid grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_70px_minmax(0,_1fr)_70px] gap-4 items-center">
-                <div className="col-span-1" />
+            <div className="col-span-1" />
 
-                <div className="col-span-2 justify-self-end">
-                    <Subtitle>Number of projects</Subtitle>
-                </div>
+            <div className="col-span-2 pr-8 justify-self-end">
+                <Subtitle>Number of projects</Subtitle>
+            </div>
 
-                <div className="col-span-2 justify-self-end">
-                    <Subtitle>Known amount committed (USD)</Subtitle>
-                </div>
+            <div className="col-span-2 pl-2 justify-self-end">
+                <Subtitle>Known amount committed (USD)</Subtitle>
             </div>
         </div>
     )
