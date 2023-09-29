@@ -2,7 +2,7 @@ This project uses the following technologies and packages.
 
 - [Next.js](https://nextjs.org/)
 - [Vercel](https://vercel.com)
-- [Typescript](https://www.typescriptlang.org/).
+- [Typescript](https://www.typescriptlang.org/)
 - [Meilisearch](https://www.meilisearch.com/)
 - [Tremor](https://www.tremor.so/)
 - [React Simple Maps](https://www.react-simple-maps.io/)
