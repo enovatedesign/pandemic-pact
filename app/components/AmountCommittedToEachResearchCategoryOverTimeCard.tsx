@@ -105,9 +105,8 @@ export default function AmountCommittedToEachResearchCategoryOverTimeCard({selec
 
             <Flex
                 flexDirection="row"
-                className="gap-x-2"
             >
-                <Subtitle className="rotate-90">Funding</Subtitle>
+                <Subtitle className="whitespace-nowrap rotate-90">Amount Committed (USD)</Subtitle>
 
                 <Flex
                     flexDirection="col"
