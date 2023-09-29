@@ -36,7 +36,7 @@ Finally, you will need to create an env file:
 cp .env.local.example .env.local
 ```
 
-The settings from `.env.local.example` should work automatically with the default settings brew meilisearch service.
+The settings from `.env.local.example` should work automatically with the brew meilisearch service, without any further configuration.
 
 # Generate Data
 
