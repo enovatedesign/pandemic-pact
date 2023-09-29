@@ -38,7 +38,7 @@ cp .env.local.example .env.local
 
 The settings from `.env.local.example` should work automatically with the brew meilisearch service, without any further configuration.
 
-# Generate Data
+### Generate Data
 
 Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `/dist/data` directory and sends it to Meilisearch:
 
@@ -46,7 +46,7 @@ Next you will need to run our `generate` script which prepares the source data i
 npm run generate
 ```
 
-# Run the Development server
+### Run the Development server
 
 Now that you have generated the required data you can run the dev build:
 
