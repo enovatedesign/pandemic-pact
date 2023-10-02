@@ -1,4 +1,4 @@
-import {useRef, useEffect, use} from "react"
+import {useRef, useEffect, useCallback} from "react"
 import {a, useReducedMotion} from "@react-spring/web"
 
 interface Props {
@@ -52,7 +52,7 @@ export default function InteractiveBackground({children, ...rest}: Props) {
         }
     }
 
-    const initCircleGrid = (canvas: HTMLCanvasElement) => {
+    const initCircleGrid = useCallback((canvas: HTMLCanvasElement) => {
         const ctx = canvas.getContext('2d')
         if (!ctx) return
 
@@ -82,7 +82,7 @@ export default function InteractiveBackground({children, ...rest}: Props) {
         }
 
         return removeListeners
-    }
+    }, [animate])
 
     useEffect(() => {
         if (canvas.current) {
@@ -92,7 +92,7 @@ export default function InteractiveBackground({children, ...rest}: Props) {
                 if (removeListeners) removeListeners()
             }
         }
-    }, [canvas?.current])
+    }, [canvas, initCircleGrid])
 
     return (
         <section {...rest}>
