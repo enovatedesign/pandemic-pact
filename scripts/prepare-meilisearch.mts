@@ -16,7 +16,9 @@ const attributes = [
     'Abstract',
     'LaySummary',
     'Disease',
-    'Pathogen'
+    'Pathogen',
+    'ResearchInstitutionCountry',
+    'ResearchInstitutionRegion',
 ]
 
 const displayedAttributes = [
@@ -36,6 +38,8 @@ const filterableAttributes = [
     'GrantID',
     'Disease',
     'Pathogen',
+    'ResearchInstitutionCountry',
+    'ResearchInstitutionRegion',
 ]
 
 const documents = data.map(record => _.pick(record, attributes))
