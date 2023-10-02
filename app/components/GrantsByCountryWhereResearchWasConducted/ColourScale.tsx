@@ -22,7 +22,7 @@ export default function ColourScale({colourScale}: Props) {
     return (
         <BarChart
             width={300}
-            height={90}
+            height={80}
             layout="vertical"
             data={chartData}
         >
