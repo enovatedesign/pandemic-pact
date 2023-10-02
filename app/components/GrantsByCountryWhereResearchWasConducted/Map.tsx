@@ -76,6 +76,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                                 fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
                                 stroke="#FFFFFF"
                                 strokeWidth={1}
+                                className="cursor-pointer"
                                 onMouseEnter={() => {
                                     setTooltipContent(`
                                                     <div>
