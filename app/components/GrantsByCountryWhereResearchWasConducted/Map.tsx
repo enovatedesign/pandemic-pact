@@ -49,10 +49,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
             .map((country: any) => country.properties.totalGrants)
 
         const colourScale = scaleLinear<string>()
-            .domain([
-                Math.min(...allTotalGrants),
-                Math.max(...allTotalGrants),
-            ])
+            .domain([0, Math.max(...allTotalGrants)])
             .range(["#dbeafe", "#3b82f6"])
 
         return [filteredGeojson, colourScale]
