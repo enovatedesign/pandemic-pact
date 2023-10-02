@@ -29,15 +29,18 @@ export default function SearchInput({setSearchResponse}: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
+    const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [filters, setFilters] = useState<Filters>({
-        Disease: [],
-        Pathogen: [],
-        ResearchInstitutionCountry: [],
-        ResearchInstitutionRegion: [],
-    })
+    const [filters, setFilters] = useState<Filters>(
+        filtersFromUrl ? JSON.parse(filtersFromUrl) : {
+            Disease: [],
+            Pathogen: [],
+            ResearchInstitutionCountry: [],
+            ResearchInstitutionRegion: [],
+        }
+    )
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
@@ -50,9 +53,18 @@ export default function SearchInput({setSearchResponse}: Props) {
             url.searchParams.delete('q')
         }
 
+        const anyFiltersAreSet = Object.values(filters).some(selectedOptions => selectedOptions.length > 0)
+
+        if (anyFiltersAreSet) {
+            url.searchParams.set('filters', JSON.stringify(filters))
+        } else {
+            url.searchParams.delete('filters')
+        }
+
         router.replace(url.href, {shallow: true})
     }, [
         searchQuery,
+        filters,
         pathname,
         router,
     ])
