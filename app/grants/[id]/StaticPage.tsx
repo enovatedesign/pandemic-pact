@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
+import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
 import Layout from "../../components/Layout"
 
 interface Props {
@@ -30,7 +30,8 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Funder',
-            metric: `${grant.FundingOrgName.join(', ')} from ${grant.FunderCountry}`,
+            type: 'list',
+            metric: grant.FundingOrgName,
         },
         {
             text: 'Amount Committed (USD)',
@@ -120,12 +121,20 @@ export default function StaticPage({grant}: Props) {
 
                 <Col numColSpanLg={2}>
                     <div className="space-y-6">
-                        {sidebarItems.map(({text, metric}, index) => (
+                        {sidebarItems.map(({text, type, metric}, index) => (
                             <Card key={index}>
                                 <Flex justifyContent="start" className="space-x-4">
                                     <div className="truncate">
                                         <Text>{text}</Text>
-                                        <Metric className="mt-2 truncate">{metric}</Metric>
+                                        {type === 'list' ?
+                                            <List>
+                                                {metric.map((item: string) => (
+                                                    <ListItem key={item}>{item}</ListItem>
+                                                ))}
+                                            </List>
+                                            :
+                                            <Metric className="mt-2 truncate">{metric}</Metric>
+                                        }
                                     </div>
                                 </Flex>
                             </Card>
