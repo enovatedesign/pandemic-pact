@@ -4,6 +4,7 @@ import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
+import ColourScale from "./ColourScale"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -19,7 +20,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
 
     const [tooltipContent, setTooltipContent] = useState('')
 
-    const [filteredGeojson, colorScale] = useMemo(() => {
+    const [filteredGeojson, colourScale] = useMemo(() => {
         const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
 
         const filteredGeojson = {...geojson}
@@ -47,14 +48,14 @@ export default function Map({dataset, displayWhoRegions}: Props) {
             .filter((country: any) => country.properties.totalGrants)
             .map((country: any) => country.properties.totalGrants)
 
-        const colorScale = scaleLinear<string>()
+        const colourScale = scaleLinear<string>()
             .domain([
                 Math.min(...allTotalGrants),
                 Math.max(...allTotalGrants),
             ])
             .range(["#dbeafe", "#3b82f6"])
 
-        return [filteredGeojson, colorScale]
+        return [filteredGeojson, colourScale]
     }, [dataset, displayWhoRegions])
 
     return (
@@ -73,7 +74,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                             <Geography
                                 key={geo.rsmKey}
                                 geography={geo}
-                                fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
+                                fill={geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"}
                                 stroke="#FFFFFF"
                                 strokeWidth={1}
                                 className="cursor-pointer"
@@ -109,6 +110,8 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                     }
                 </Geographies>
             </ComposableMap>
+
+            <ColourScale colourScale={colourScale} />
 
             <Tooltip
                 id="country-tooltip"
