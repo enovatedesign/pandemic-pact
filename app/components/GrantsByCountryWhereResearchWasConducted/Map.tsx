@@ -1,4 +1,5 @@
 import {useState, useMemo} from 'react'
+import {useRouter} from 'next/navigation'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export default function Map({dataset, displayWhoRegions}: Props) {
+    const router = useRouter()
+
     const [tooltipContent, setTooltipContent] = useState('')
 
     const [filteredGeojson, colorScale] = useMemo(() => {
@@ -84,6 +87,17 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                                 }}
                                 onMouseLeave={() => {
                                     setTooltipContent('')
+                                }}
+                                onClick={() => {
+                                    if (displayWhoRegions) {
+                                        router.push('/grants?filters=' + JSON.stringify({
+                                            ResearchInstitutionRegion: [geo.properties.NAME],
+                                        }))
+                                    } else {
+                                        router.push('/grants?filters=' + JSON.stringify({
+                                            ResearchInstitutionCountry: [geo.properties.ISO_A2_EH],
+                                        }))
+                                    }
                                 }}
                                 data-tooltip-id="country-tooltip"
                             />

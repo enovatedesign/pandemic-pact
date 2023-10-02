@@ -76,7 +76,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
         const filter = []
 
-        if (filters.Disease.length > 0) {
+        if (filters.Disease?.length > 0) {
             filter.push(
                 filters.Disease.length === 1 ?
                     `Disease = "${filters.Disease[0]}"` :
@@ -84,7 +84,7 @@ export default function SearchInput({setSearchResponse}: Props) {
             )
         }
 
-        if (filters.Pathogen.length > 0) {
+        if (filters.Pathogen?.length > 0) {
             filter.push(
                 filters.Pathogen.length === 1 ?
                     `Pathogen = "${filters.Pathogen[0]}"` :
@@ -92,7 +92,7 @@ export default function SearchInput({setSearchResponse}: Props) {
             )
         }
 
-        if (filters.ResearchInstitutionCountry.length > 0) {
+        if (filters.ResearchInstitutionCountry?.length > 0) {
             filter.push(
                 filters.ResearchInstitutionCountry.length === 1 ?
                     `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"` :
@@ -100,7 +100,7 @@ export default function SearchInput({setSearchResponse}: Props) {
             )
         }
 
-        if (filters.ResearchInstitutionRegion.length > 0) {
+        if (filters.ResearchInstitutionRegion?.length > 0) {
             filter.push(
                 filters.ResearchInstitutionRegion.length === 1 ?
                     `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"` :
