@@ -14,7 +14,7 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Lead Research Institution',
-            metric: `${grant.ResearchInstitutionName.join(', ')} ${grant.ResearchInstitutionCountry} ${grant.ResearchInstitutionRegion}`,
+            metric: `${grant.ResearchInstitutionName[0] ?? 'Unknown'} ${grant.ResearchInstitutionCountry} ${grant.ResearchInstitutionRegion}`,
         },
         {
             text: 'Disease',
