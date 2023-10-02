@@ -28,7 +28,7 @@ export default function ColourScale({colourScale}: Props) {
         >
             <XAxis
                 type="number"
-                ticks={[0].concat(ticks)}
+                ticks={ticks}
                 tickLine={false}
                 axisLine={false}
             />
