@@ -80,9 +80,12 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                                 onMouseEnter={() => {
                                     setTooltipContent(`
                                                     <div>
-                                                        <p class="font-bold">${geo.properties.NAME}</p>
-                                                        <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
-                                                        <p class="text-xs">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+                                                        <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
+
+                                                        <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
+                                                        <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+
+                                                        <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
                                                     </div>
                                                 `)
                                 }}
@@ -115,6 +118,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                 place="right-start"
                 offset={10}
                 className="!px-3 !py-2 text-left"
+                variant="light"
             >
                 <div dangerouslySetInnerHTML={{__html: tooltipContent}} />
             </Tooltip>
