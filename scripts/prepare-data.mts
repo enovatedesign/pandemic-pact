@@ -218,7 +218,7 @@ async function main() {
     })
 
     // These options are computed from the dataset, not the lookup tables
-    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear']
+    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear', 'ResearchInstitutionCountry']
 
     fieldsFromDataset.forEach((fieldName: string) => {
         selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)

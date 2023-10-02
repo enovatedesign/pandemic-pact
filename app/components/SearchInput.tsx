@@ -26,6 +26,8 @@ export default function SearchInput({setSearchResponse}: Props) {
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
     const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
+    const [selectedResearchInstitutionCountry, setSelectedResearchInstitutionCountry] = useState<string[]>([])
+    const [selectedResearchInstitutionRegion, setSelectedResearchInstitutionRegion] = useState<string[]>([])
     const [totalHits, setTotalHits] = useState<number>(0)
 
     useEffect(() => {
@@ -67,6 +69,22 @@ export default function SearchInput({setSearchResponse}: Props) {
             )
         }
 
+        if (selectedResearchInstitutionCountry.length > 0) {
+            filter.push(
+                selectedResearchInstitutionCountry.length === 1 ?
+                    `ResearchInstitutionCountry = "${selectedResearchInstitutionCountry[0]}"` :
+                    selectedResearchInstitutionCountry.map(country => `ResearchInstitutionCountry = "${country}"`)
+            )
+        }
+
+        if (selectedResearchInstitutionRegion.length > 0) {
+            filter.push(
+                selectedResearchInstitutionRegion.length === 1 ?
+                    `ResearchInstitutionRegion = "${selectedResearchInstitutionRegion[0]}"` :
+                    selectedResearchInstitutionRegion.map(region => `ResearchInstitutionRegion = "${region}"`)
+            )
+        }
+
         if (filter.length > 0) {
             body.filter = filter
         }
@@ -76,6 +94,8 @@ export default function SearchInput({setSearchResponse}: Props) {
         searchQuery,
         selectedDiseases,
         selectedPathogens,
+        selectedResearchInstitutionCountry,
+        selectedResearchInstitutionRegion,
     ])
 
     useEffect(() => {
@@ -119,6 +139,24 @@ export default function SearchInput({setSearchResponse}: Props) {
                     selectedOptions={selectedPathogens}
                     setSelectedOptions={setSelectedPathogens}
                     placeholder="All Pathogens"
+                />
+            </Col>
+
+            <Col>
+                <MultiSelect
+                    options={selectOptions.ResearchInstitutionCountry}
+                    selectedOptions={selectedResearchInstitutionCountry}
+                    setSelectedOptions={setSelectedResearchInstitutionCountry}
+                    placeholder="All Countries"
+                />
+            </Col>
+
+            <Col>
+                <MultiSelect
+                    options={selectOptions.Regions}
+                    selectedOptions={selectedResearchInstitutionRegion}
+                    setSelectedOptions={setSelectedResearchInstitutionRegion}
+                    placeholder="All Regions"
                 />
             </Col>
 
