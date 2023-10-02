@@ -11,6 +11,7 @@ import {filterGrants} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import dataset from "../../../data/dist/filterable-dataset.json"
 import selectOptions from "../../../data/dist/select-options.json"
+import InfoModal from "../InfoModal"
 
 export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
@@ -57,7 +58,16 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                         justifyContent="between"
                         alignItems="center"
                     >
-                        <Title>Grants By Research Category</Title>
+                        <Flex justifyContent="start" className="gap-x-3">
+                            <Title>Grants By Research Category</Title>
+
+                            <InfoModal>
+                                <Title>Lorem Ipsum Dolor</Title>
+
+                                <Text>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae in, eligendi odio animi distinctio laborum exercitationem, illo deleniti sit sunt nemo doloremque. Nemo reprehenderit inventore magni eligendi nam architecto sint!</Text>
+                            </InfoModal>
+                        </Flex>
+
                         <Text>Total Grants: {dataset.length}</Text>
                     </Flex>
 
