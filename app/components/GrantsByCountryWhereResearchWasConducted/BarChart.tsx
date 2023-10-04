@@ -92,6 +92,10 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
             return setSelectedRegion(null)
         }
 
+        if (!event?.activeLabel) {
+            return
+        }
+
         const totalGrantsInClickedRegion = dataset.filter((grant: any) => grant.ResearchInstitutionRegion === event.activeLabel).length
 
         if (totalGrantsInClickedRegion > 0) {
@@ -124,6 +128,8 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
 
                     <Tooltip
                         formatter={dollarValueFormatter}
+                        isAnimationActive={false}
+                        cursor={{fill: 'transparent'}}
                     />
 
                     {stacks.map((stack, index) => (
@@ -132,6 +138,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                             dataKey={stack}
                             stackId="a"
                             fill={colours[index]}
+                            cursor="pointer"
                         />
                     ))}
                 </RechartBarChart>

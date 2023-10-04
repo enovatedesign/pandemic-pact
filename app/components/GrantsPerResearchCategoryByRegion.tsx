@@ -109,7 +109,9 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                             />
                         ))}
 
-                        <Tooltip />
+                        <Tooltip
+                            isAnimationActive={false}
+                        />
                     </RadarChart>
                 </ResponsiveContainer>
             </div>

@@ -42,6 +42,7 @@ export default function BarChart({chartData}: Props) {
                                 <Tooltip
                                     wrapperStyle={{zIndex: 99}}
                                     cursor={{fill: 'transparent'}}
+                                    isAnimationActive={false}
                                 />
 
                                 <Bar
@@ -88,6 +89,7 @@ export default function BarChart({chartData}: Props) {
                                     wrapperStyle={{zIndex: 99}}
                                     formatter={dollarValueFormatter}
                                     cursor={{fill: 'transparent'}}
+                                    isAnimationActive={false}
                                 />
 
                                 <Bar
