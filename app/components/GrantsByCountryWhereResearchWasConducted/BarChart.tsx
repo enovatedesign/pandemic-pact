@@ -44,7 +44,10 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
 
     if (selectedRegion) {
         data = Object.entries(
-            groupBy(dataset, 'ResearchInstitutionCountry')
+            groupBy(
+                dataset.filter((grant: any) => grant.ResearchInstitutionRegion === selectedRegion),
+                'ResearchInstitutionCountry',
+            )
         )
     } else {
         const whoRegions = Object.keys(regionToCountryMapping)
@@ -84,6 +87,18 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
 
     const stacks = Object.keys(data[0]).filter(key => key !== 'country')
 
+    const handleClick = (event: any) => {
+        if (selectedRegion) {
+            return setSelectedRegion(null)
+        }
+
+        const totalGrantsInClickedRegion = dataset.filter((grant: any) => grant.ResearchInstitutionRegion === event.activeLabel).length
+
+        if (totalGrantsInClickedRegion > 0) {
+            setSelectedRegion(event.activeLabel)
+        }
+    }
+
     return (
         <div className="w-full h-[600px]">
             <ResponsiveContainer
@@ -94,6 +109,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                     data={data}
                     layout="vertical"
                     margin={{top: 5, right: 50, left: 20, bottom: 5}}
+                    onClick={handleClick}
                 >
                     <XAxis
                         type="number"
