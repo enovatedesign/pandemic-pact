@@ -1,4 +1,5 @@
-import {BarChart as TremorBarChart, Color} from "@tremor/react"
+import {useState} from "react"
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
@@ -7,32 +8,45 @@ import regionToCountryMapping from '../../../data/source/region-to-country-mappi
 interface Props {
     dataset: any[],
     selectedPathogens: string[],
-    displayWhoRegions: boolean,
 }
 
-export default function BarChart({dataset, selectedPathogens, displayWhoRegions}: Props) {
+export default function BarChart({dataset, selectedPathogens}: Props) {
+    const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
+
     const categories = (selectedPathogens.length === 0) ? ['All Pathogens'] : selectedPathogens
 
-    const colours: Color[] = [
-        'blue',
-        'lime',
-        'cyan',
-        'violet',
-        'orange',
-        'emerald',
-        'indigo',
-        'purple',
-        'amber',
-        'green',
-        'red',
-        'fuchsia',
-        'yellow',
-        'neutral',
+    const colours = [
+        '#3b82f6',
+        '#f59e0b',
+        '#6b7280',
+        '#ef4444',
+        '#71717a',
+        '#64748b',
+        '#22c55e',
+        '#14b8a6',
+        '#10b981',
+        '#ec4899',
+        '#f43f5e',
+        '#0ea5e9',
+        '#a855f7',
+        '#eab308',
+        '#737373',
+        '#6366f1',
+        '#d946ef',
+        '#06b6d4',
+        '#84cc16',
+        '#8b5cf6',
+        '#f97316',
+        '#78716c',
     ]
 
     let data: any = []
 
-    if (displayWhoRegions) {
+    if (selectedRegion) {
+        data = Object.entries(
+            groupBy(dataset, 'ResearchInstitutionCountry')
+        )
+    } else {
         const whoRegions = Object.keys(regionToCountryMapping)
 
         const grantsGroupedByRegion = groupBy(dataset, 'ResearchInstitutionRegion')
@@ -41,31 +55,11 @@ export default function BarChart({dataset, selectedPathogens, displayWhoRegions}
             region,
             grantsGroupedByRegion[region] ?? [],
         ])
-    } else {
-        data = Object.entries(
-            groupBy(dataset, 'ResearchInstitutionCountry')
-        )
     }
 
     data = data.sort(
         ([countryA, grantsA]: [string, any], [countryB, grantsB]: [string, any]) => grantsB.length - grantsA.length
     )
-
-    const maxBars = 6
-
-    if (data.length > maxBars) {
-        const smallestCountries = data.splice(maxBars - 1)
-
-        data.push([
-            'Other',
-            smallestCountries.reduce(
-                (combinedGrants: any[], [country, grants]: [string, any]) => {
-                    return combinedGrants.concat(grants)
-                },
-                []
-            )
-        ])
-    }
 
     data = data.map(([country, grants]: [string, any]) => {
         if (selectedPathogens.length === 0) {
@@ -88,17 +82,44 @@ export default function BarChart({dataset, selectedPathogens, displayWhoRegions}
         }
     })
 
+    const stacks = Object.keys(data[0]).filter(key => key !== 'country')
+
     return (
-        <TremorBarChart
-            data={data}
-            index="country"
-            categories={categories}
-            colors={colours}
-            showLegend={false}
-            className="h-[36rem] -ml-2"
-            layout="vertical"
-            valueFormatter={dollarValueFormatter}
-            stack
-        />
+        <div className="w-full h-[600px]">
+            <ResponsiveContainer
+                width="100%"
+                height="100%"
+            >
+                <RechartBarChart
+                    data={data}
+                    layout="vertical"
+                    margin={{top: 5, right: 50, left: 20, bottom: 5}}
+                >
+                    <XAxis
+                        type="number"
+                        tickFormatter={dollarValueFormatter}
+                    />
+
+                    <YAxis
+                        dataKey="country"
+                        type="category"
+                        width={100}
+                    />
+
+                    <Tooltip
+                        formatter={dollarValueFormatter}
+                    />
+
+                    {stacks.map((stack, index) => (
+                        <Bar
+                            key={index}
+                            dataKey={stack}
+                            stackId="a"
+                            fill={colours[index]}
+                        />
+                    ))}
+                </RechartBarChart>
+            </ResponsiveContainer>
+        </div>
     )
 }
