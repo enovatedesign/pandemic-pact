@@ -78,7 +78,6 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                     <BarChart
                         dataset={filteredDataset}
                         selectedPathogens={selectedPathogens}
-                        displayWhoRegions={displayWhoRegions}
                     />
                 }
             </Flex>
