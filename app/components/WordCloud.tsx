@@ -26,12 +26,26 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
     }, [setIsMounted])
 
     if (!filterKey || !randomSeedString) return null
+    
+    const results = dataset.reduce((acc, obj) => {
+        const filterValue = obj[filterKey as keyof typeof obj]
 
-    const pathogens = groupBy(dataset, filterKey)
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach((item: string | number) => {
+                if (!acc[item]) {
+                    acc[item] = []
+                }
 
-    const data = Object.keys(pathogens).map((key) => ({
+                acc[item].push(obj.GrantID);
+            })
+        }
+
+        return acc
+    }, {} as {[key: string]: number[]})
+
+    const data = Object.keys(results).map((key) => ({
         text: key,
-        value: pathogens[key].length * 75
+        value: results[key as keyof typeof results].length * 75
     }))
 
     // Ensures the word cloud displays the same on page refresh
