@@ -2,7 +2,6 @@
 
 import styles from "./css/components/masthead.module.css"
 
-import { useRef, useEffect, MutableRefObject } from "react"
 import Link from "next/link"
 
 import { links } from "./helpers/nav"
