@@ -37,21 +37,25 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
 
     const nodes = [
         // Source Regions
-        {"name": "Africa", "type": "source"},
-        {"name": "Americas", "type": "source"},
-        {"name": "South-East Asia", "type": "source"},
-        {"name": "Europe", "type": "source"},
-        {"name": "Eastern Mediterranean", "type": "source"},
-        {"name": "Western Pacific", "type": "source"},
+        {"name": "Africa", isTarget: false},
+        {"name": "Americas", isTarget: false},
+        {"name": "South-East Asia", isTarget: false},
+        {"name": "Europe", isTarget: false},
+        {"name": "Eastern Mediterranean", isTarget: false},
+        {"name": "Western Pacific", isTarget: false},
 
         // Target Regions
-        {"name": "Africa", "type": "target"},
-        {"name": "Americas", "type": "target"},
-        {"name": "South-East Asia", "type": "target"},
-        {"name": "Europe", "type": "target"},
-        {"name": "Eastern Mediterranean", "type": "target"},
-        {"name": "Western Pacific", "type": "target"},
-    ]
+        {"name": "Africa", isTarget: true},
+        {"name": "Americas", isTarget: true},
+        {"name": "South-East Asia", isTarget: true},
+        {"name": "Europe", isTarget: true},
+        {"name": "Eastern Mediterranean", isTarget: true},
+        {"name": "Western Pacific", isTarget: true},
+    ].filter(
+        node => node.isTarget ?
+            filteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
+            filteredDataset.some((grant: any) => grant.FunderRegion === node.name)
+    )
 
     const links = Object.entries(
         groupBy(filteredDataset, 'FunderRegion')
@@ -60,8 +64,8 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
             groupBy(grants, 'ResearchInstitutionRegion')
         ).map(
             ([researchInstitutionRegion, grants]) => ({
-                "source": nodes.findIndex(node => node.name === funderRegion && node.type === 'source'),
-                "target": nodes.findIndex(node => node.name === researchInstitutionRegion && node.type === 'target'),
+                "source": nodes.findIndex(node => node.name === funderRegion && !node.isTarget),
+                "target": nodes.findIndex(node => node.name === researchInstitutionRegion && node.isTarget),
                 "value": grants.length,
             })
         )
@@ -71,18 +75,18 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
         <Card
             id="sankey-test"
         >
-            <Title>Sankey Test</Title>
+            <Title>Regional Flow Of Grants</Title>
 
             <div className="w-full">
                 <ResponsiveContainer width="100%" height={600}>
                     <Sankey
                         data={{nodes, links}}
-                        nodePadding={20}
+                        nodePadding={30}
                         margin={{
                             left: 0,
                             right: 0,
-                            top: 25,
-                            bottom: 25,
+                            top: 30,
+                            bottom: 30,
                         }}
                         node={<SankeyNode />}
                         link={{stroke: '#87CEEB'}}
@@ -98,31 +102,32 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
 }
 
 // Source: https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload, containerWidth}: any) {
-    const isOut = x + width + 6 > containerWidth;
+function SankeyNode({x, y, width, height, index, payload}: any) {
+    const {isTarget, name, value} = payload;
+
     return (
         <Layer key={`CustomNode${index}`}>
             <Rectangle x={x} y={y} width={width} height={height} fill="#5192ca" fillOpacity="1" />
 
             <text
-                textAnchor={isOut ? 'end' : 'start'}
-                x={isOut ? x - 6 : x + width + 6}
+                textAnchor={isTarget ? 'end' : 'start'}
+                x={isTarget ? x - 6 : x + width + 6}
                 y={y + height / 2}
-                fontSize="14"
+                fontSize="16"
                 fill="#fff"
             >
-                {payload.name}
+                {name}
             </text>
 
             <text
-                textAnchor={isOut ? 'end' : 'start'}
-                x={isOut ? x - 6 : x + width + 6}
-                y={y + height / 2 + 13}
-                fontSize="12"
+                textAnchor={isTarget ? 'end' : 'start'}
+                x={isTarget ? x - 6 : x + width + 6}
+                y={y + height / 2 + 16}
+                fontSize="14"
                 fill="#fff"
                 fillOpacity="0.8"
             >
-                {payload.value}
+                {value}
             </text>
         </Layer>
     );
