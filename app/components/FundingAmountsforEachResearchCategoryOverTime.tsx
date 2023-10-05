@@ -106,7 +106,9 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
             <Flex
                 flexDirection="row"
             >
-                <Subtitle className="whitespace-nowrap rotate-90">Amount Committed (USD)</Subtitle>
+                <div className="w-16">
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+                </div>
 
                 <Flex
                     flexDirection="col"
