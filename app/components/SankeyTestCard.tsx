@@ -156,11 +156,20 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
 function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload}: any) {
 
-    const fill = colours[payload.source.name as keyof typeof colours]
+    const gradientId = `linkGradient${index}`
+    const sourceColour = colours[payload.source.name as keyof typeof colours]
+    const targetColour = colours[payload.target.name as keyof typeof colours]
 
     return <Layer key={`CustomLink${index}`}>
+        <defs>
+            <linearGradient id={gradientId}>
+                <stop offset="0%" stopColor={sourceColour} />
+                <stop offset="100%" stopColor={targetColour} />
+            </linearGradient>
+        </defs>
+
         <path
-            fill={fill}
+            fill={`url(#${gradientId})`}
             fillOpacity="0.25"
             strokeWidth="0"
             d={`
