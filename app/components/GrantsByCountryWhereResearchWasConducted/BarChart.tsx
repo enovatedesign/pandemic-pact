@@ -1,4 +1,6 @@
 import {useState} from "react"
+import {Icon, Subtitle} from "@tremor/react"
+import {InformationCircleIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -104,45 +106,58 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
     }
 
     return (
-        <div className="w-full h-[600px]">
-            <ResponsiveContainer
-                width="100%"
-                height="100%"
-            >
-                <RechartBarChart
-                    data={data}
-                    layout="vertical"
-                    margin={{top: 5, right: 50, left: 20, bottom: 5}}
-                    onClick={handleClick}
+        <div className="w-full">
+            <div className="flex justify-center items-center">
+                <Icon
+                    size="lg"
+                    icon={InformationCircleIcon}
+                />
+
+                <Subtitle>
+                    {selectedRegion ? `Viewing ${selectedRegion}. Click a country bar to go back to regions.` : 'Click a region bar to expand.'}
+                </Subtitle>
+            </div>
+
+            <div className="w-full h-[600px] mt-4">
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
                 >
-                    <XAxis
-                        type="number"
-                        tickFormatter={dollarValueFormatter}
-                    />
-
-                    <YAxis
-                        dataKey="country"
-                        type="category"
-                        width={100}
-                    />
-
-                    <Tooltip
-                        formatter={dollarValueFormatter}
-                        isAnimationActive={false}
-                        cursor={{fill: 'transparent'}}
-                    />
-
-                    {stacks.map((stack, index) => (
-                        <Bar
-                            key={index}
-                            dataKey={stack}
-                            stackId="a"
-                            fill={colours[index]}
-                            cursor="pointer"
+                    <RechartBarChart
+                        data={data}
+                        layout="vertical"
+                        margin={{top: 5, right: 50, left: 20, bottom: 5}}
+                        onClick={handleClick}
+                    >
+                        <XAxis
+                            type="number"
+                            tickFormatter={dollarValueFormatter}
                         />
-                    ))}
-                </RechartBarChart>
-            </ResponsiveContainer>
+
+                        <YAxis
+                            dataKey="country"
+                            type="category"
+                            width={100}
+                        />
+
+                        <Tooltip
+                            formatter={dollarValueFormatter}
+                            isAnimationActive={false}
+                            cursor={{fill: 'transparent'}}
+                        />
+
+                        {stacks.map((stack, index) => (
+                            <Bar
+                                key={index}
+                                dataKey={stack}
+                                stackId="a"
+                                fill={colours[index]}
+                                cursor="pointer"
+                            />
+                        ))}
+                    </RechartBarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     )
 }
