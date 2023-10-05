@@ -9,16 +9,12 @@ interface Props {
 export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
-            text: 'Grant ID',
-            metric: grant.GrantID,
-        },
-        {
             text: 'Lead Research Institution',
-            metric: `${grant.ResearchInstitutionName[0] ?? 'Unknown'} ${grant.ResearchInstitutionCountry} ${grant.ResearchInstitutionRegion}`,
+            metric: `${grant.ResearchInstitutionName[0] ?? 'Unknown'}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
         },
         {
             text: 'Disease',
-            metric: `${grant.Disease.join(', ')}`
+            metric: grant.Disease.join(', '),
         },
         {
             text: 'Start Year',
@@ -30,8 +26,7 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Funder',
-            type: 'list',
-            metric: grant.FundingOrgName,
+            metric: grant.FundingOrgName.join(', '),
         },
         {
             text: 'Amount Committed (USD)',
@@ -124,17 +119,9 @@ export default function StaticPage({grant}: Props) {
                         {sidebarItems.map(({text, type, metric}, index) => (
                             <Card key={index}>
                                 <Flex justifyContent="start" className="space-x-4">
-                                    <div className="truncate">
+                                    <div className="">
                                         <Text>{text}</Text>
-                                        {type === 'list' ?
-                                            <List>
-                                                {metric.map((item: string) => (
-                                                    <ListItem key={item}>{item}</ListItem>
-                                                ))}
-                                            </List>
-                                            :
-                                            <Metric className="mt-2 truncate">{metric}</Metric>
-                                        }
+                                        <Metric className="mt-2">{metric}</Metric>
                                     </div>
                                 </Flex>
                             </Card>
