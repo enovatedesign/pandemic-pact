@@ -1,6 +1,5 @@
 import {useState} from 'react'
 import {Flex, Card, Title, Text, Tab, TabList, TabGroup, Subtitle} from "@tremor/react"
-import {Switch} from '@headlessui/react'
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import Map from "./Map"
 import BarChart from "./BarChart"
@@ -14,7 +13,6 @@ import selectOptions from '../../../data/dist/select-options.json'
 export default function GrantsByCountryWhereResearchWasConductedCard({selectedFilters}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
-    const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
     const filteredDataset = filterGrants(
         dataset,
@@ -50,6 +48,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                         Earum a illum.
                     </Subtitle>
                 </Flex>
+
                 <Flex
                     justifyContent="between"
                     alignItems="center"
@@ -70,7 +69,6 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                 {selectedTabIndex === 0 &&
                     <Map
                         dataset={filteredDataset}
-                        displayWhoRegions={displayWhoRegions}
                     />
                 }
 
@@ -98,24 +96,6 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                     </TabList>
                 </TabGroup>
 
-                <div className="flex items-center gap-x-2">
-                    <Text className={opaqueTextIf(!displayWhoRegions)}>Countries</Text>
-
-                    <Switch
-                        checked={displayWhoRegions}
-                        onChange={setDisplayWhoRegions}
-                        className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                    >
-                        <span className="sr-only">Display WHO Regions</span>
-
-                        <span
-                            className={`${displayWhoRegions ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                        />
-                    </Switch>
-
-                    <Text className={opaqueTextIf(displayWhoRegions)}>WHO Regions</Text>
-                </div>
-
                 <ExportToPngButton
                     selector="#grants-by-country-where-research-was-conducted-card"
                     filename="grants-by-country-where-research-was-conducted"
@@ -125,8 +105,4 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
             <p className="text-sm text-gray-500">Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
         </Card >
     )
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }

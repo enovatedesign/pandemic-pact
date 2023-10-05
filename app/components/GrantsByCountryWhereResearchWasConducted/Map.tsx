@@ -1,6 +1,8 @@
 import {useState, useMemo} from 'react'
 import {useRouter} from 'next/navigation'
+import {Text} from "@tremor/react"
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
+import {Switch} from '@headlessui/react'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
@@ -12,13 +14,14 @@ import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
 interface Props {
     dataset: any[]
-    displayWhoRegions: boolean
 }
 
-export default function Map({dataset, displayWhoRegions}: Props) {
+export default function Map({dataset}: Props) {
     const router = useRouter()
 
     const [tooltipContent, setTooltipContent] = useState('')
+
+    const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
     const [filteredGeojson, colourScale] = useMemo(() => {
         const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
@@ -110,6 +113,24 @@ export default function Map({dataset, displayWhoRegions}: Props) {
 
             <ColourScale colourScale={colourScale} />
 
+            <div className="flex items-center gap-x-2">
+                <Text className={opaqueTextIf(!displayWhoRegions)}>Countries</Text>
+
+                <Switch
+                    checked={displayWhoRegions}
+                    onChange={setDisplayWhoRegions}
+                    className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                >
+                    <span className="sr-only">Display WHO Regions</span>
+
+                    <span
+                        className={`${displayWhoRegions ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                    />
+                </Switch>
+
+                <Text className={opaqueTextIf(displayWhoRegions)}>WHO Regions</Text>
+            </div>
+
             <Tooltip
                 id="country-tooltip"
                 float={true}
@@ -161,4 +182,8 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) 
             }
         })
     )
+}
+
+function opaqueTextIf(condition: boolean) {
+    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }
