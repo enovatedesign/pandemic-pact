@@ -38,7 +38,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                         justifyContent="between"
                         alignItems="center"
                     >
-                        <Title>Grants By Country Where Research Was Conducted</Title>
+                        <Title>Number of Grants by Country Where Research Was Conducted</Title>
                         <Text>Total Grants: {dataset.length}</Text>
                     </Flex>
 
