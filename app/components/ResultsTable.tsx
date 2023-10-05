@@ -23,7 +23,7 @@ export default function ResultsTable({searchResponse}: Props) {
                 <TableBody>
                     {searchResponse.hits.map((result) => {
                         const query = searchResponse.query
-                        const href = `${links.explore.url}/${result.GrantID}` + (query ? `?q=${query}` : '')
+                        const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
 
                         return (
                             <TableRow key={result.GrantID}>
