@@ -86,7 +86,7 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
                     justifyContent="between"
                     alignItems="center"
                 >
-                    <Title>Amount Committed To Each Research Category Over Time</Title>
+                    <Title>Funding Amounts for Each Research Category Over Time</Title>
                     <Text>Total Grants: {dataset.length}</Text>
                 </Flex>
 
