@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Icon, Subtitle} from "@tremor/react"
 import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
-import {BarChart as RechartBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
@@ -15,8 +15,6 @@ interface Props {
 
 export default function BarChart({dataset, selectedPathogens}: Props) {
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
-
-    const categories = (selectedPathogens.length === 0) ? ['All Pathogens'] : selectedPathogens
 
     const colours = [
         '#3b82f6',
