@@ -92,29 +92,3 @@
         transform: scale3d(1, 1, 1);
     }
 }
-
-.magnify-icon {
-    @apply fill-primary origin-center;
-}
-
-.button:hover .magnify-icon {
-    animation: zoom 0.75s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .button .magnify-icon {
-        animation: none !important;
-    }
-}
-
-@keyframes zoom {
-    0% {
-        transform: scale3d(1, 1, 1);
-    }
-    50% {
-        transform: scale3d(0.7, 0.7, 0.7);
-    }
-    100% {
-        transform: scale3d(1, 1, 1);
-    }
-}

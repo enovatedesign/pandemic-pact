@@ -4,6 +4,7 @@ import {useState} from 'react'
 import {useSpring, animated} from '@react-spring/web'
 import {MenuIcon} from '@heroicons/react/solid'
 
+import Header from './Header'
 import Heading from './Heading'
 import Text from './Text'
 
@@ -57,16 +58,20 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
                 </aside>
             }
 
-            <main className="container mx-auto px-12 py-12">
-                {title &&
-                    <div className="mb-6">
-                        <Heading>{title}</Heading>
-                        {summary && <Text>{summary}</Text>}
-                    </div>
-                }
+            <div>
+                {/* <Header /> */}
 
-                {children}
-            </main>
+                <main className="container mx-auto px-12 py-12">
+                    {title &&
+                        <div className="mb-6">
+                            <Heading>{title}</Heading>
+                            {summary && <Text>{summary}</Text>}
+                        </div>
+                    }
+
+                    {children}
+                </main>
+            </div>
         </>
     )
 }
