@@ -111,24 +111,28 @@ export default function Map({dataset}: Props) {
                 </Geographies>
             </ComposableMap>
 
-            <ColourScale colourScale={colourScale} />
+            <div className="grid grid-cols-3">
+                <ColourScale colourScale={colourScale} />
 
-            <div className="flex items-center gap-x-2">
-                <Text className={opaqueTextIf(!displayWhoRegions)}>Countries</Text>
+                <div className="justify-self-center mt-4">
+                    <div className="flex items-center gap-x-2">
+                        <Text className={opaqueTextIf(!displayWhoRegions)}>Countries</Text>
 
-                <Switch
-                    checked={displayWhoRegions}
-                    onChange={setDisplayWhoRegions}
-                    className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                >
-                    <span className="sr-only">Display WHO Regions</span>
+                        <Switch
+                            checked={displayWhoRegions}
+                            onChange={setDisplayWhoRegions}
+                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                        >
+                            <span className="sr-only">Display WHO Regions</span>
 
-                    <span
-                        className={`${displayWhoRegions ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                    />
-                </Switch>
+                            <span
+                                className={`${displayWhoRegions ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                            />
+                        </Switch>
 
-                <Text className={opaqueTextIf(displayWhoRegions)}>WHO Regions</Text>
+                        <Text className={opaqueTextIf(displayWhoRegions)}>WHO Regions</Text>
+                    </div>
+                </div>
             </div>
 
             <Tooltip
