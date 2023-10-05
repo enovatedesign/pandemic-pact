@@ -9,8 +9,8 @@ interface Props {
 export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
-            text: 'Lead Research Institution',
-            metric: `${grant.ResearchInstitutionName[0] ?? 'Unknown'}, ${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+            text: 'Research Location',
+            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
         },
         {
             text: 'Disease',
@@ -35,6 +35,13 @@ export default function StaticPage({grant}: Props) {
                 : grant.GrantAmountConverted,
         },
     ]
+
+    if (grant.ResearchInstitutionName.length > 0) {
+        sidebarItems.unshift({
+            text: 'Lead Research Institution',
+            metric: grant.ResearchInstitutionName[0],
+        })
+    }
 
     return (
         <Layout title={grant.GrantTitleEng}>
