@@ -7,33 +7,42 @@ import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 import {groupBy} from "lodash"
 
+const colours = {
+    "Africa": "#3b82f6",
+    "Americas": "#f59e0b",
+    "South-East Asia": "#6b7280",
+    "Europe": "#ef4444",
+    "Eastern Mediterranean": "#71717a",
+    "Western Pacific": "#64748b",
+}
+
+// const colours = [
+//     '#3b82f6',
+//     '#f59e0b',
+//     '#6b7280',
+//     '#ef4444',
+//     '#71717a',
+//     '#64748b',
+//     '#22c55e',
+//     '#14b8a6',
+//     '#10b981',
+//     '#ec4899',
+//     '#f43f5e',
+//     '#0ea5e9',
+//     '#a855f7',
+//     '#eab308',
+//     '#737373',
+//     '#6366f1',
+//     '#d946ef',
+//     '#06b6d4',
+//     '#84cc16',
+//     '#8b5cf6',
+//     '#f97316',
+//     '#78716c',
+// ]
+
 export default function SankeyTestCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
-
-    const colours = [
-        '#3b82f6',
-        '#f59e0b',
-        '#6b7280',
-        '#ef4444',
-        '#71717a',
-        '#64748b',
-        '#22c55e',
-        '#14b8a6',
-        '#10b981',
-        '#ec4899',
-        '#f43f5e',
-        '#0ea5e9',
-        '#a855f7',
-        '#eab308',
-        '#737373',
-        '#6366f1',
-        '#d946ef',
-        '#06b6d4',
-        '#84cc16',
-        '#8b5cf6',
-        '#f97316',
-        '#78716c',
-    ]
 
     const nodes = [
         // Source Regions
@@ -89,7 +98,7 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
                             bottom: 30,
                         }}
                         node={<SankeyNode />}
-                        link={{stroke: '#87CEEB'}}
+                        link={<SankeyLink />}
                     >
                         <Tooltip
                             isAnimationActive={false}
@@ -101,13 +110,23 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
     )
 }
 
-// Source: https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
+// Adapted from:
+// https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
 function SankeyNode({x, y, width, height, index, payload}: any) {
     const {isTarget, name, value} = payload;
 
+    const fill = colours[name as keyof typeof colours]
+
     return (
         <Layer key={`CustomNode${index}`}>
-            <Rectangle x={x} y={y} width={width} height={height} fill="#5192ca" fillOpacity="1" />
+            <Rectangle
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                fill={fill}
+                fillOpacity="1"
+            />
 
             <text
                 textAnchor={isTarget ? 'end' : 'start'}
@@ -131,4 +150,30 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
             </text>
         </Layer>
     );
+}
+
+// Adapted from:
+// https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
+function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload}: any) {
+
+    const fill = colours[payload.source.name as keyof typeof colours]
+
+    return <Layer key={`CustomLink${index}`}>
+        <path
+            fill={fill}
+            fillOpacity="0.25"
+            strokeWidth="0"
+            d={`
+            M${sourceX},${sourceY + linkWidth / 2}
+            C${sourceControlX},${sourceY + linkWidth / 2}
+              ${targetControlX},${targetY + linkWidth / 2}
+              ${targetX},${targetY + linkWidth / 2}
+            L${targetX},${targetY - linkWidth / 2}
+            C${targetControlX},${targetY - linkWidth / 2}
+              ${sourceControlX},${sourceY - linkWidth / 2}
+              ${sourceX},${sourceY - linkWidth / 2}
+            Z
+          `}
+        />
+    </Layer>
 }
