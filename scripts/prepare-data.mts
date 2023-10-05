@@ -224,9 +224,16 @@ async function main() {
         selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)
     })
 
+    writeToDistJsonFile('select-options.json', selectOptions)
+
+    // Use GeoJSON file to create a mapping of ISO2 country codes to country names
+    const geoJson = fs.readJsonSync('./data/source/geojson/ne_110m_admin_0_countries.json')
+
     writeToDistJsonFile(
-        'select-options.json',
-        selectOptions,
+        'iso2a-to-country-name.json',
+        Object.fromEntries(
+            geoJson.features.map((feature: any) => [feature.properties.ISO_A2_EH, feature.properties.NAME])
+        ),
     )
 }
 
