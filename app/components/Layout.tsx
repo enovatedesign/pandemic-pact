@@ -58,10 +58,10 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
                 </aside>
             }
 
-            <div>
+            <div className="container mx-auto px-12 py-12">
                 {/* <Header /> */}
 
-                <main className="container mx-auto px-12 py-12">
+                <main>
                     {title &&
                         <div className="mb-6">
                             <Heading>{title}</Heading>

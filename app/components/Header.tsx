@@ -4,7 +4,7 @@ import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
 
-export default function Header({ className }: { className?: string }) {
+export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     console.log(pathname)
     const links = getLinksArray().filter(link => link.label !== 'Wordcloud')
@@ -22,23 +22,23 @@ export default function Header({ className }: { className?: string }) {
 
     const Logo = () => (
         <Image
-            src="/logo.svg" 
-            alt="Pandemic Pact" 
-            width={192} 
-            height={95} 
+            src="/logo.svg"
+            alt="Pandemic Pact"
+            width={192}
+            height={95}
             className="w-36 h-auto lg:w-48"
         />
     )
 
     return (
         <header className={className}>
-            <div className="py-8 container">
+            <div className="py-8 container max-w-none">
                 {pathname === '/' ?
                     <h1>
                         <span className="sr-only">Pandemic Pact</span>
                         <Logo />
                     </h1>
-                :
+                    :
                     <Link href="/">
                         <span className="sr-only">Return to homepage</span>
                         <Logo />
