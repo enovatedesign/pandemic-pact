@@ -77,12 +77,12 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
                 <ResponsiveContainer width="100%" height={600}>
                     <Sankey
                         data={{nodes, links}}
-                        nodePadding={25}
+                        nodePadding={20}
                         margin={{
                             left: 0,
                             right: 0,
-                            top: 50,
-                            bottom: 50,
+                            top: 25,
+                            bottom: 25,
                         }}
                         link={{stroke: '#87CEEB'}}
                     >
