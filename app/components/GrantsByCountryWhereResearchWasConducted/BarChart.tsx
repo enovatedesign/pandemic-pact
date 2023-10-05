@@ -1,6 +1,6 @@
 import {useState} from "react"
 import {Icon, Subtitle} from "@tremor/react"
-import {InformationCircleIcon} from "@heroicons/react/solid";
+import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -89,11 +89,13 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
 
     const stacks = Object.keys(data[0]).filter(key => key !== 'country')
 
-    const handleClick = (event: any) => {
+    const handleIconClick = () => {
         if (selectedRegion) {
             return setSelectedRegion(null)
         }
+    }
 
+    const handleBarClick = (event: any) => {
         if (!event?.activeLabel) {
             return
         }
@@ -109,12 +111,16 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
         <div className="w-full">
             <div className="flex justify-center items-center">
                 <Icon
-                    size="lg"
-                    icon={InformationCircleIcon}
+                    size={selectedRegion ? 'md' : 'lg'}
+                    icon={selectedRegion ? ArrowLeftIcon : InformationCircleIcon}
+                    className={selectedRegion ? 'cursor-pointer mr-4' : 'cursor-default'}
+                    variant={selectedRegion ? 'shadow' : 'simple'}
+                    color="slate"
+                    onClick={handleIconClick}
                 />
 
-                <Subtitle>
-                    {selectedRegion ? `Viewing ${selectedRegion}. Click a country bar to go back to regions.` : 'Click a region bar to expand.'}
+                <Subtitle className="text-gray-500">
+                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand.'}
                 </Subtitle>
             </div>
 
@@ -127,7 +133,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                         data={data}
                         layout="vertical"
                         margin={{top: 5, right: 50, left: 20, bottom: 5}}
-                        onClick={handleClick}
+                        onClick={handleBarClick}
                     >
                         <XAxis
                             type="number"
@@ -152,7 +158,7 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                                 dataKey={stack}
                                 stackId="a"
                                 fill={colours[index]}
-                                cursor="pointer"
+                                cursor={selectedRegion ? 'default' : 'pointer'}
                             />
                         ))}
                     </RechartBarChart>
