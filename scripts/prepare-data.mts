@@ -230,7 +230,7 @@ async function main() {
     const geoJson = fs.readJsonSync('./data/source/geojson/ne_110m_admin_0_countries.json')
 
     writeToDistJsonFile(
-        'iso2a-to-country-name.json',
+        'iso2a-to-country-name-mapping.json',
         Object.fromEntries(
             geoJson.features.map((feature: any) => [feature.properties.ISO_A2_EH, feature.properties.NAME])
         ),

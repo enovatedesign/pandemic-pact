@@ -6,6 +6,7 @@ import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
+import iso2aToCountryNameMapping from '../../../data/dist/iso2a-to-country-name-mapping.json'
 
 interface Props {
     dataset: any[],
@@ -144,10 +145,12 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                             dataKey="country"
                             type="category"
                             width={100}
+                            tickFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label] : label}
                         />
 
                         <Tooltip
                             formatter={dollarValueFormatter}
+                            labelFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label] : label}
                             isAnimationActive={false}
                             cursor={{fill: 'transparent'}}
                         />
