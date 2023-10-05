@@ -1,5 +1,5 @@
 import {Flex, Card, Title, Subtitle, Text} from "@tremor/react"
-import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer, Sankey} from 'recharts';
+import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
@@ -84,12 +84,46 @@ export default function SankeyTestCard({selectedFilters}: CardProps) {
                             top: 25,
                             bottom: 25,
                         }}
+                        node={<SankeyNode />}
                         link={{stroke: '#87CEEB'}}
                     >
-                        <Tooltip />
+                        <Tooltip
+                            isAnimationActive={false}
+                        />
                     </Sankey>
                 </ResponsiveContainer>
             </div>
         </Card >
     )
+}
+
+// Source: https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
+function SankeyNode({x, y, width, height, index, payload, containerWidth}: any) {
+    const isOut = x + width + 6 > containerWidth;
+    return (
+        <Layer key={`CustomNode${index}`}>
+            <Rectangle x={x} y={y} width={width} height={height} fill="#5192ca" fillOpacity="1" />
+
+            <text
+                textAnchor={isOut ? 'end' : 'start'}
+                x={isOut ? x - 6 : x + width + 6}
+                y={y + height / 2}
+                fontSize="14"
+                fill="#fff"
+            >
+                {payload.name}
+            </text>
+
+            <text
+                textAnchor={isOut ? 'end' : 'start'}
+                x={isOut ? x - 6 : x + width + 6}
+                y={y + height / 2 + 13}
+                fontSize="12"
+                fill="#fff"
+                fillOpacity="0.8"
+            >
+                {payload.value}
+            </text>
+        </Layer>
+    );
 }
