@@ -123,7 +123,7 @@ export default function StaticPage({grant}: Props) {
 
                 <Col numColSpanLg={2}>
                     <div className="space-y-6">
-                        {sidebarItems.map(({text, type, metric}, index) => (
+                        {sidebarItems.map(({text, metric}, index) => (
                             <Card key={index}>
                                 <Flex justifyContent="start" className="space-x-4">
                                     <div className="">
