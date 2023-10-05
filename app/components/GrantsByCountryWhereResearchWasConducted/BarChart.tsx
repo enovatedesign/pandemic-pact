@@ -13,6 +13,8 @@ interface Props {
     selectedPathogens: string[],
 }
 
+type Iso2aCode = keyof typeof iso2aToCountryNameMapping
+
 export default function BarChart({dataset, selectedPathogens}: Props) {
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
 
@@ -143,12 +145,12 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
                             dataKey="country"
                             type="category"
                             width={100}
-                            tickFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label] : label}
+                            tickFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label as Iso2aCode] : label}
                         />
 
                         <Tooltip
                             formatter={dollarValueFormatter}
-                            labelFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label] : label}
+                            labelFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label as Iso2aCode] : label}
                             isAnimationActive={false}
                             cursor={{fill: 'transparent'}}
                         />
