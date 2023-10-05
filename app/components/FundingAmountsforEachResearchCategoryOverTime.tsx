@@ -78,13 +78,24 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
             id="amount-committed-to-each-research-category-over-time-card"
         >
             <Flex
-                justifyContent="between"
-                alignItems="center"
+                flexDirection="col"
+                alignItems="start"
+                className="gap-y-2"
             >
-                <Title>Funding Amounts for Each Research Category Over Time</Title>
-                <Text>Total Grants: {dataset.length}</Text>
-            </Flex>
+                <Flex
+                    justifyContent="between"
+                    alignItems="center"
+                >
+                    <Title>Amount Committed To Each Research Category Over Time</Title>
+                    <Text>Total Grants: {dataset.length}</Text>
+                </Flex>
 
+                <Subtitle>
+                    Ipsam vero quae beatae quas nemo quae necessitatibus commodi.
+                    Fuga laboriosam possimus corrupti dolore eveniet maiores.
+                    Porro laboriosam laboriosam assumenda esse porro placeat voluptatum.
+                </Subtitle>
+            </Flex>
             <Flex
                 justifyContent="between"
                 alignItems="center"
@@ -150,7 +161,7 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
                 </Flex>
             </Flex>
 
-            <p className="text-sm text-gray-500">*Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
+            <p className="text-sm text-gray-500">Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
         </Card>
     )
 }

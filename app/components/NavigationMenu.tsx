@@ -5,7 +5,7 @@ import {MenuIcon} from '@heroicons/react/solid'
 
 export default function NavigationBar() {
     const pathname = usePathname()
-    const links = getLinksArray()
+    const links = getLinksArray().filter(link => link.label !== 'Wordcloud')
 
     return (
         <div className="fixed top-8 right-8 z-30 flex items-center rounded-full border border-primary/25 inner-glow">

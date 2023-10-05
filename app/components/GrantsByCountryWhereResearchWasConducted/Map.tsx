@@ -1,8 +1,10 @@
 import {useState, useMemo} from 'react'
+import {useRouter} from 'next/navigation'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
+import ColourScale from "./ColourScale"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -14,9 +16,11 @@ interface Props {
 }
 
 export default function Map({dataset, displayWhoRegions}: Props) {
+    const router = useRouter()
+
     const [tooltipContent, setTooltipContent] = useState('')
 
-    const [filteredGeojson, colorScale] = useMemo(() => {
+    const [filteredGeojson, colourScale] = useMemo(() => {
         const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
 
         const filteredGeojson = {...geojson}
@@ -44,14 +48,11 @@ export default function Map({dataset, displayWhoRegions}: Props) {
             .filter((country: any) => country.properties.totalGrants)
             .map((country: any) => country.properties.totalGrants)
 
-        const colorScale = scaleLinear<string>()
-            .domain([
-                Math.min(...allTotalGrants),
-                Math.max(...allTotalGrants),
-            ])
+        const colourScale = scaleLinear<string>()
+            .domain([0, Math.max(...allTotalGrants)])
             .range(["#dbeafe", "#3b82f6"])
 
-        return [filteredGeojson, colorScale]
+        return [filteredGeojson, colourScale]
     }, [dataset, displayWhoRegions])
 
     return (
@@ -70,20 +71,35 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                             <Geography
                                 key={geo.rsmKey}
                                 geography={geo}
-                                fill={geo.properties.totalGrants ? colorScale(geo.properties.totalGrants) : "#D6D6DA"}
+                                fill={geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"}
                                 stroke="#FFFFFF"
                                 strokeWidth={1}
+                                className="cursor-pointer"
                                 onMouseEnter={() => {
                                     setTooltipContent(`
                                                     <div>
-                                                        <p class="font-bold">${geo.properties.NAME}</p>
-                                                        <p class="text-xs">Grants: ${geo.properties.totalGrants || 0}</p>
-                                                        <p class="text-xs">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+                                                        <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
+
+                                                        <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
+                                                        <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+
+                                                        <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
                                                     </div>
                                                 `)
                                 }}
                                 onMouseLeave={() => {
                                     setTooltipContent('')
+                                }}
+                                onClick={() => {
+                                    if (displayWhoRegions) {
+                                        router.push('/grants?filters=' + JSON.stringify({
+                                            ResearchInstitutionRegion: [geo.properties.NAME],
+                                        }))
+                                    } else {
+                                        router.push('/grants?filters=' + JSON.stringify({
+                                            ResearchInstitutionCountry: [geo.properties.ISO_A2_EH],
+                                        }))
+                                    }
                                 }}
                                 data-tooltip-id="country-tooltip"
                             />
@@ -91,6 +107,8 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                     }
                 </Geographies>
             </ComposableMap>
+
+            <ColourScale colourScale={colourScale} />
 
             <Tooltip
                 id="country-tooltip"
@@ -100,6 +118,7 @@ export default function Map({dataset, displayWhoRegions}: Props) {
                 place="right-start"
                 offset={10}
                 className="!px-3 !py-2 text-left"
+                variant="light"
             >
                 <div dangerouslySetInnerHTML={{__html: tooltipContent}} />
             </Tooltip>

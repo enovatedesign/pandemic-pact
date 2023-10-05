@@ -46,7 +46,7 @@ export default function AnimatedCounter({ prefix, suffix, finalCount, duration =
         return () => {
             done = true
         }
-	}, [reducedMotion]);
+	}, [reducedMotion, duration, finalCount]);
 
     return (
         <span className={`relative inline-block text-center ${className}`}>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric} from '@tremor/react'
+import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
 import Layout from "../../components/Layout"
 
 interface Props {
@@ -9,10 +9,12 @@ interface Props {
 export default function StaticPage({grant}: Props) {
     const sidebarItems = [
         {
-            text: 'Amount Committed (USD)',
-            metric: (typeof grant.GrantAmountConverted === 'number') ?
-                `$ ${grant.GrantAmountConverted.toLocaleString()}`
-                : grant.GrantAmountConverted,
+            text: 'Research Location',
+            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+        },
+        {
+            text: 'Disease',
+            metric: grant.Disease.join(', '),
         },
         {
             text: 'Start Year',
@@ -22,11 +24,28 @@ export default function StaticPage({grant}: Props) {
             text: 'End Year',
             metric: grant.GrantEndYear,
         },
+        {
+            text: 'Funder',
+            metric: grant.FundingOrgName.join(', '),
+        },
+        {
+            text: 'Amount Committed (USD)',
+            metric: (typeof grant.GrantAmountConverted === 'number') ?
+                `$ ${grant.GrantAmountConverted.toLocaleString()}`
+                : grant.GrantAmountConverted,
+        },
     ]
+
+    if (grant.ResearchInstitutionName.length > 0) {
+        sidebarItems.unshift({
+            text: 'Lead Research Institution',
+            metric: grant.ResearchInstitutionName[0],
+        })
+    }
 
     return (
         <Layout title={grant.GrantTitleEng}>
-            <Grid numItemsLg={6} className="gap-6 mt-6">
+            <Grid numItemsLg={6} className="mt-6 gap-6">
                 <Col
                     numColSpanLg={4}
                     className="flex flex-col gap-6"
@@ -61,11 +80,11 @@ export default function StaticPage({grant}: Props) {
                                         key={index}
                                         className="border-0 rounded-none"
                                     >
-                                        <AccordionHeader className="pl-0 items-start">
+                                        <AccordionHeader className="items-start pl-0">
                                             <Text className="text-left text-black">{link.title}</Text>
                                         </AccordionHeader>
 
-                                        <AccordionBody className="flex flex-col gap-y-4 pl-0">
+                                        <AccordionBody className="flex flex-col pl-0 gap-y-4">
                                             <div>
                                                 <Subtitle className="font-bold">Authors</Subtitle>
                                                 <Text>{link.authorString}</Text>
@@ -107,9 +126,9 @@ export default function StaticPage({grant}: Props) {
                         {sidebarItems.map(({text, metric}, index) => (
                             <Card key={index}>
                                 <Flex justifyContent="start" className="space-x-4">
-                                    <div className="truncate">
+                                    <div className="">
                                         <Text>{text}</Text>
-                                        <Metric className="truncate mt-2">{metric}</Metric>
+                                        <Metric className="mt-2">{metric}</Metric>
                                     </div>
                                 </Flex>
                             </Card>

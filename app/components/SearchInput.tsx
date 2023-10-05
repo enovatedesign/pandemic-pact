@@ -17,15 +17,31 @@ interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void,
 }
 
+export interface Filters {
+    Disease: string[];
+    Pathogen: string[];
+    ResearchInstitutionCountry: string[];
+    ResearchInstitutionRegion: string[];
+}
+
 export default function SearchInput({setSearchResponse}: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
+    const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
-    const [selectedDiseases, setSelectedDiseases] = useState<string[]>([])
-    const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
+
+    const [filters, setFilters] = useState<Filters>(
+        filtersFromUrl ? JSON.parse(filtersFromUrl) : {
+            Disease: [],
+            Pathogen: [],
+            ResearchInstitutionCountry: [],
+            ResearchInstitutionRegion: [],
+        }
+    )
+
     const [totalHits, setTotalHits] = useState<number>(0)
 
     useEffect(() => {
@@ -37,9 +53,18 @@ export default function SearchInput({setSearchResponse}: Props) {
             url.searchParams.delete('q')
         }
 
+        const anyFiltersAreSet = Object.values(filters).some(selectedOptions => selectedOptions.length > 0)
+
+        if (anyFiltersAreSet) {
+            url.searchParams.set('filters', JSON.stringify(filters))
+        } else {
+            url.searchParams.delete('filters')
+        }
+
         router.replace(url.href, {shallow: true})
     }, [
         searchQuery,
+        filters,
         pathname,
         router,
     ])
@@ -51,19 +76,35 @@ export default function SearchInput({setSearchResponse}: Props) {
 
         const filter = []
 
-        if (selectedDiseases.length > 0) {
+        if (filters.Disease?.length > 0) {
             filter.push(
-                selectedDiseases.length === 1 ?
-                    `Disease = "${selectedDiseases[0]}"` :
-                    selectedDiseases.map(disease => `Disease = "${disease}"`)
+                filters.Disease.length === 1 ?
+                    `Disease = "${filters.Disease[0]}"` :
+                    filters.Disease.map(disease => `Disease = "${disease}"`)
             )
         }
 
-        if (selectedPathogens.length > 0) {
+        if (filters.Pathogen?.length > 0) {
             filter.push(
-                selectedPathogens.length === 1 ?
-                    `Pathogen = "${selectedPathogens[0]}"` :
-                    selectedPathogens.map(pathogen => `Pathogen = "${pathogen}"`)
+                filters.Pathogen.length === 1 ?
+                    `Pathogen = "${filters.Pathogen[0]}"` :
+                    filters.Pathogen.map(pathogen => `Pathogen = "${pathogen}"`)
+            )
+        }
+
+        if (filters.ResearchInstitutionCountry?.length > 0) {
+            filter.push(
+                filters.ResearchInstitutionCountry.length === 1 ?
+                    `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"` :
+                    filters.ResearchInstitutionCountry.map(country => `ResearchInstitutionCountry = "${country}"`)
+            )
+        }
+
+        if (filters.ResearchInstitutionRegion?.length > 0) {
+            filter.push(
+                filters.ResearchInstitutionRegion.length === 1 ?
+                    `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"` :
+                    filters.ResearchInstitutionRegion.map(region => `ResearchInstitutionRegion = "${region}"`)
             )
         }
 
@@ -74,8 +115,7 @@ export default function SearchInput({setSearchResponse}: Props) {
         return body
     }, [
         searchQuery,
-        selectedDiseases,
-        selectedPathogens,
+        filters,
     ])
 
     useEffect(() => {
@@ -107,8 +147,8 @@ export default function SearchInput({setSearchResponse}: Props) {
             <Col>
                 <MultiSelect
                     options={selectOptions.Disease}
-                    selectedOptions={selectedDiseases}
-                    setSelectedOptions={setSelectedDiseases}
+                    selectedOptions={filters.Disease}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
                     placeholder="All Diseases"
                 />
             </Col>
@@ -116,9 +156,27 @@ export default function SearchInput({setSearchResponse}: Props) {
             <Col>
                 <MultiSelect
                     options={selectOptions.Pathogen}
-                    selectedOptions={selectedPathogens}
-                    setSelectedOptions={setSelectedPathogens}
+                    selectedOptions={filters.Pathogen}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
                     placeholder="All Pathogens"
+                />
+            </Col>
+
+            <Col>
+                <MultiSelect
+                    options={selectOptions.ResearchInstitutionCountry}
+                    selectedOptions={filters.ResearchInstitutionCountry}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
+                    placeholder="All Countries"
+                />
+            </Col>
+
+            <Col>
+                <MultiSelect
+                    options={selectOptions.Regions}
+                    selectedOptions={filters.ResearchInstitutionRegion}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
+                    placeholder="All Regions"
                 />
             </Col>
 

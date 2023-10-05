@@ -142,7 +142,7 @@ async function main() {
                 distGrant['ClinicalTrial'] = convertMultiColumnFieldToArray(sourceGrant, 'ClinicalTrialPhase')
                 distGrant['FundingOrgName'] = convertMultiColumnFieldToArray(sourceGrant, 'FunderName')
                 distGrant['FunderAcronym'] = convertMultiColumnFieldToArray(sourceGrant, 'FunderAcronym')
-                distGrant['ResearchInstitutionName'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchInstititionName')
+                distGrant['ResearchInstitutionName'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchInstitutionName')
                 distGrant['ResearchCat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchCat')
                 distGrant['ResearchSubcat'] = convertMultiColumnFieldToArray(sourceGrant, 'ResearchSubcat')
 
@@ -218,7 +218,7 @@ async function main() {
     })
 
     // These options are computed from the dataset, not the lookup tables
-    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear']
+    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear', 'ResearchInstitutionCountry']
 
     fieldsFromDataset.forEach((fieldName: string) => {
         selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)

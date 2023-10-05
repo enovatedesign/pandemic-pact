@@ -1,7 +1,5 @@
 import './css/globals.css'
-import {Figtree} from 'next/font/google'
-
-const figTree = Figtree({subsets: ['latin']})
+import font from './globals/font'
 
 export const metadata = {
     title: 'Pandemic PACT',
@@ -13,7 +11,7 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const classes: string = `${figTree.className} flex overflow-x-hidden`;
+    const classes: string = `flex overflow-x-hidden ${font.className}`;
 
     return (
         <html lang="en">

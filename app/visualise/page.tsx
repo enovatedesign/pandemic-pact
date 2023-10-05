@@ -5,9 +5,10 @@ import {Grid, Col} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
-import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategoryCard'
+import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
+import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 
@@ -59,7 +60,13 @@ export default function Visualise() {
                         />
                     </Col>
 
-                    <Col numColSpan={12}>
+                    <Col numColSpan={5}>
+                        <GrantsPerResearchCategoryByRegion
+                            selectedFilters={selectedFilters}
+                        />
+                    </Col>
+
+                    <Col numColSpan={7}>
                         <GrantsByMeshClassificationCard
                             selectedFilters={selectedFilters}
                         />
