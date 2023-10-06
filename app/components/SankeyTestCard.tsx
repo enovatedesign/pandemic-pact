@@ -1,10 +1,8 @@
-import {Flex, Card, Title, Subtitle, Text} from "@tremor/react"
+import {Card, Title} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
-import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
-import selectOptions from '../../data/dist/select-options.json'
 import {groupBy} from "lodash"
 
 const colours = {
@@ -15,31 +13,6 @@ const colours = {
     "Eastern Mediterranean": "#71717a",
     "Western Pacific": "#64748b",
 }
-
-// const colours = [
-//     '#3b82f6',
-//     '#f59e0b',
-//     '#6b7280',
-//     '#ef4444',
-//     '#71717a',
-//     '#64748b',
-//     '#22c55e',
-//     '#14b8a6',
-//     '#10b981',
-//     '#ec4899',
-//     '#f43f5e',
-//     '#0ea5e9',
-//     '#a855f7',
-//     '#eab308',
-//     '#737373',
-//     '#6366f1',
-//     '#d946ef',
-//     '#06b6d4',
-//     '#84cc16',
-//     '#8b5cf6',
-//     '#f97316',
-//     '#78716c',
-// ]
 
 export default function SankeyTestCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
