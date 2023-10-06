@@ -81,7 +81,10 @@ export default function StaticPage({grant}: Props) {
                                         className="border-0 rounded-none"
                                     >
                                         <AccordionHeader className="items-start pl-0">
-                                            <Text className="text-left text-black">{link.title}</Text>
+                                            <p
+                                                className="text-left"
+                                                dangerouslySetInnerHTML={{__html: link.title}}
+                                            />
                                         </AccordionHeader>
 
                                         <AccordionBody className="flex flex-col pl-0 gap-y-4">
