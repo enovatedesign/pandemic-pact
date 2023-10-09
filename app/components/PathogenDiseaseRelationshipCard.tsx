@@ -66,14 +66,14 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
     const links = pathogens.map(
         pathogen => diseases.map(
             disease => {
-                const data = filteredDataset.filter(
+                const grants = filteredDataset.filter(
                     (grant: any) => grant.Pathogen.includes(pathogen) && grant.Disease.includes(disease)
                 )
 
                 return {
                     source: nodes.findIndex(node => node.name === pathogen && !node.isTarget),
                     target: nodes.findIndex(node => node.name === disease && node.isTarget),
-                    value: displayTotalMoneyCommitted ? data.reduce(...sumNumericGrantAmounts) : data.length,
+                    value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
                 }
             }
         )
@@ -119,7 +119,6 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
                                 link={
                                     <SankeyLink
                                         colours={colours}
-                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
                                     />
                                 }
                             >
@@ -210,7 +209,7 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
-function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours, displayTotalMoneyCommitted}: any) {
+function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
     const gradientId = `pathogenDiseaseRelationshipCardGradient${index}`
     const sourceColour = colours.source[payload.source.name]
     const targetColour = colours.target[payload.target.name]
