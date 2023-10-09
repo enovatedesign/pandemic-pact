@@ -19,7 +19,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
         filteredDataset.map((grant: any) => grant.Disease).flat()
     )
 
-    // Ensures the colours are randomly assigned in a consistent between renders and builds
+    // Ensures the colours are randomly assigned but are consistent between renders and builds
     const fixedRandom = seedrandom('pathogen-disease-relationship')
 
     const colours = range(
@@ -70,7 +70,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
                     <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
                 </div>
 
-                <ResponsiveContainer width="100%" height={600}>
+                <ResponsiveContainer width="100%" height={1000}>
                     <Sankey
                         data={{nodes, links}}
                         nodePadding={30}
