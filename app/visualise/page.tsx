@@ -89,14 +89,14 @@ export default function Visualise() {
 
                     <Col numColSpan={12}>
                         <Card>
-                            <Title>Disease WordCloud</Title>
+                            <Title>Disease Word Cloud</Title>
                             <WordCloud filterKey="Disease" randomSeedString="2324234234" />
                         </Card>
                     </Col>
 
                     <Col numColSpan={12}>
                         <Card>
-                            <Title>Pathogen WordCloud</Title>
+                            <Title>Pathogen Word Cloud</Title>
                             <WordCloud filterKey="Pathogen" randomSeedString="2324234234" />
                         </Card>
                     </Col>
