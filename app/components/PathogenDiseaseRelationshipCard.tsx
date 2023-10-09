@@ -1,5 +1,6 @@
 import {useState} from "react"
-import {Card, Title, Subtitle} from "@tremor/react"
+import {Card, Text, Title, Subtitle} from "@tremor/react"
+import {Switch} from '@headlessui/react'
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {uniq} from "lodash"
@@ -7,10 +8,13 @@ import seedrandom from 'seedrandom'
 import MultiSelect from "./MultiSelect"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
+import {dollarValueFormatter} from "../helpers/value-formatters"
 import dataset from '../../data/dist/filterable-dataset.json'
 
 export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>(['SARS-CoV-2'])
+    const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const filteredDataset = filterGrants(dataset, selectedFilters).filter(
         (grant: any) => selectedPathogens.length === 0 || grant.Pathogen.some(
@@ -61,13 +65,17 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
 
     const links = pathogens.map(
         pathogen => diseases.map(
-            disease => ({
-                "source": nodes.findIndex(node => node.name === pathogen && !node.isTarget),
-                "target": nodes.findIndex(node => node.name === disease && node.isTarget),
-                "value": filteredDataset.filter(
+            disease => {
+                const data = filteredDataset.filter(
                     (grant: any) => grant.Pathogen.includes(pathogen) && grant.Disease.includes(disease)
-                ).length,
-            })
+                )
+
+                return {
+                    source: nodes.findIndex(node => node.name === pathogen && !node.isTarget),
+                    target: nodes.findIndex(node => node.name === disease && node.isTarget),
+                    value: displayTotalMoneyCommitted ? data.reduce(...sumNumericGrantAmounts) : data.length,
+                }
+            }
         )
     ).flat(1).filter(
         link => link.value > 0 && link.source !== -1 && link.target !== -1
@@ -86,32 +94,63 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
             />
 
             {links.length > 0 &&
-                <div className="w-full flex items-center">
-                    <div className="w-16">
-                        <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
+                <div>
+                    <div className="w-full flex items-center">
+                        <div className="w-16">
+                            <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
+                        </div>
+
+                        <ResponsiveContainer width="100%" height={600}>
+                            <Sankey
+                                data={{nodes, links}}
+                                nodePadding={30}
+                                margin={{
+                                    left: 0,
+                                    right: 0,
+                                    top: 30,
+                                    bottom: 30,
+                                }}
+                                node={
+                                    <SankeyNode
+                                        colours={colours}
+                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                    />
+                                }
+                                link={
+                                    <SankeyLink
+                                        colours={colours}
+                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                    />
+                                }
+                            >
+                                <Tooltip
+                                    isAnimationActive={false}
+                                    formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                                />
+                            </Sankey>
+                        </ResponsiveContainer>
+
+                        <div className="w-16">
+                            <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
+                        </div>
                     </div>
 
-                    <ResponsiveContainer width="100%" height={600}>
-                        <Sankey
-                            data={{nodes, links}}
-                            nodePadding={30}
-                            margin={{
-                                left: 0,
-                                right: 0,
-                                top: 30,
-                                bottom: 30,
-                            }}
-                            node={<SankeyNode colours={colours} />}
-                            link={<SankeyLink colours={colours} />}
-                        >
-                            <Tooltip
-                                isAnimationActive={false}
-                            />
-                        </Sankey>
-                    </ResponsiveContainer>
+                    <div className="flex items-center gap-x-2">
+                        <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
 
-                    <div className="w-16">
-                        <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
+                        <Switch
+                            checked={displayTotalMoneyCommitted}
+                            onChange={setDisplayTotalMoneyCommitted}
+                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                        >
+                            <span className="sr-only">Display Total Money Committed</span>
+
+                            <span
+                                className={`${displayTotalMoneyCommitted ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                            />
+                        </Switch>
+
+                        <Text className={opaqueTextIf(displayTotalMoneyCommitted)}>Total Amount Committed (USD)</Text>
                     </div>
                 </div>
             }
@@ -125,7 +164,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload, colours}: any) {
+function SankeyNode({x, y, width, height, index, payload, colours, displayTotalMoneyCommitted}: any) {
     const {isTarget, name, value} = payload;
 
     const fill = isTarget ? colours.target[name] : colours.source[name]
@@ -163,7 +202,7 @@ function SankeyNode({x, y, width, height, index, payload, colours}: any) {
                 fill={labelFill}
                 fillOpacity="0.8"
             >
-                {value}
+                {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}
             </text>
         </Layer>
     );
@@ -171,7 +210,7 @@ function SankeyNode({x, y, width, height, index, payload, colours}: any) {
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
-function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
+function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours, displayTotalMoneyCommitted}: any) {
     const gradientId = `pathogenDiseaseRelationshipCardGradient${index}`
     const sourceColour = colours.source[payload.source.name]
     const targetColour = colours.target[payload.target.name]
@@ -201,4 +240,8 @@ function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetC
           `}
         />
     </Layer>
+}
+
+function opaqueTextIf(condition: boolean) {
+    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }
