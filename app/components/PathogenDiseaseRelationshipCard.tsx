@@ -18,7 +18,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
 
     const filteredDataset = filterGrants(dataset, selectedFilters).filter(
         (grant: any) => selectedPathogens.length === 0 || grant.Pathogen.some(
-            pathogen => selectedPathogens.includes(pathogen)
+            (pathogen: string) => selectedPathogens.includes(pathogen)
         )
     )
 
