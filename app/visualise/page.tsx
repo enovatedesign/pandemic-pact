@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react"
-import {Grid, Col} from "@tremor/react"
+import {Card, Col, Grid, Title} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
@@ -13,6 +13,7 @@ import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
+import WordCloud from "../components/WordCloud"
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
@@ -86,6 +87,19 @@ export default function Visualise() {
                         />
                     </Col>
 
+                    <Col numColSpan={12}>
+                        <Card>
+                            <Title>Disease WordCloud</Title>
+                            <WordCloud filterKey="Disease" randomSeedString="2324234234" />
+                        </Card>
+                    </Col>
+
+                    <Col numColSpan={12}>
+                        <Card>
+                            <Title>Pathogen WordCloud</Title>
+                            <WordCloud filterKey="Pathogen" randomSeedString="2324234234" />
+                        </Card>
+                    </Col>
                 </Grid>
             </div>
         </Layout>
