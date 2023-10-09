@@ -45,18 +45,6 @@ export default function Visualise() {
                     className="mt-6 gap-4"
                 >
                     <Col numColSpan={12}>
-                        <PathogenDiseaseRelationshipCard
-                            selectedFilters={selectedFilters}
-                        />
-                    </Col>
-
-                    <Col numColSpan={12}>
-                        <RegionalFlowOfGrantsCard
-                            selectedFilters={selectedFilters}
-                        />
-                    </Col>
-
-                    <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
                             selectedFilters={selectedFilters}
                         />
@@ -74,17 +62,30 @@ export default function Visualise() {
                         />
                     </Col>
 
-                    <Col numColSpan={5}>
+                    <Col numColSpan={12}>
                         <GrantsPerResearchCategoryByRegion
                             selectedFilters={selectedFilters}
                         />
                     </Col>
 
-                    <Col numColSpan={7}>
+                    <Col numColSpan={12}>
                         <GrantsByMeshClassificationCard
                             selectedFilters={selectedFilters}
                         />
                     </Col>
+
+                    <Col numColSpan={12}>
+                        <PathogenDiseaseRelationshipCard
+                            selectedFilters={selectedFilters}
+                        />
+                    </Col>
+
+                    <Col numColSpan={12}>
+                        <RegionalFlowOfGrantsCard
+                            selectedFilters={selectedFilters}
+                        />
+                    </Col>
+
                 </Grid>
             </div>
         </Layout>
