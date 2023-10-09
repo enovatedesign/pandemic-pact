@@ -1,9 +1,10 @@
 import {Card, Title} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
+import {useDarkMode} from 'usehooks-ts'
+import {groupBy} from "lodash"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
-import {groupBy} from "lodash"
 
 const colours = {
     "Africa": "#3b82f6",
@@ -90,6 +91,10 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
 
     const fill = colours[name as keyof typeof colours]
 
+    const {isDarkMode} = useDarkMode()
+
+    const labelFill = isDarkMode ? "#fff" : "#000"
+
     return (
         <Layer key={`CustomNode${index}`}>
             <Rectangle
@@ -106,7 +111,7 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
                 x={isTarget ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill="#fff"
+                fill={labelFill}
             >
                 {name}
             </text>
@@ -116,7 +121,7 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
                 x={isTarget ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill="#fff"
+                fill={labelFill}
                 fillOpacity="0.8"
             >
                 {value}
@@ -128,7 +133,6 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
 function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload}: any) {
-
     const gradientId = `linkGradient${index}`
     const sourceColour = colours[payload.source.name as keyof typeof colours]
     const targetColour = colours[payload.target.name as keyof typeof colours]
