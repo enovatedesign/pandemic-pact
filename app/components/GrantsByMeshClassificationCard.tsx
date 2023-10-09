@@ -1,16 +1,13 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color, Button} from "@tremor/react"
+import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color} from "@tremor/react"
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 import {useState} from "react"
 import {Switch} from "@headlessui/react"
 
-export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
+export default function GrantsByResearchCategoryCard({filteredDataset}: CardProps) {
     const [unspecified, setUnspecified] = useState(true);
 
     return (

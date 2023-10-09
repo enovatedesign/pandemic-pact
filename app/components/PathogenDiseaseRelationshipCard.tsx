@@ -6,13 +6,13 @@ import {useDarkMode} from 'usehooks-ts'
 import {uniq} from "lodash"
 import seedrandom from 'seedrandom'
 import MultiSelect from "./MultiSelect"
-import {type CardProps} from "../types/card-props"
+import {type CardWithOwnFiltersProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import dataset from '../../data/dist/filterable-dataset.json'
 
-export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
+export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardWithOwnFiltersProps) {
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>(['SARS-CoV-2'])
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 

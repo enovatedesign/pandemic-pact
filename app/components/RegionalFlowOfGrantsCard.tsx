@@ -5,14 +5,10 @@ import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
-import dataset from '../../data/dist/filterable-dataset.json'
 
-export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
+export default function RegionalFlowOfGrantsCard({filteredDataset}: CardProps) {
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const colours = {

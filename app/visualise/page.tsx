@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react"
+import {useMemo, useState} from "react"
 import {Card, Col, Grid, Title} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
@@ -11,9 +11,11 @@ import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsBy
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
-import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 import WordCloud from "../components/WordCloud"
+import {type Filters} from "../types/filters"
+import {filterGrants} from "../helpers/filter"
+import completeDataset from '../../data/dist/filterable-dataset.json'
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
@@ -27,6 +29,15 @@ export default function Visualise() {
         StudyType: [],
     })
 
+    const filteredDataset = useMemo(() => {
+        const filteredDataset = filterGrants(
+            completeDataset,
+            selectedFilters,
+        )
+
+        return filteredDataset
+    }, [selectedFilters])
+
     return (
         <Layout
             title="Pandemic PACT Tracker"
@@ -35,6 +46,8 @@ export default function Visualise() {
                 <FilterSidebar
                     selectedFilters={selectedFilters}
                     setSelectedFilters={setSelectedFilters}
+                    completeDataset={completeDataset}
+                    filteredDataset={filteredDataset}
                 />
             }
         >
@@ -47,7 +60,7 @@ export default function Visualise() {
                 >
                     <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
-                            selectedFilters={selectedFilters}
+                            filteredDataset={filteredDataset}
                         />
                     </Col>
 
@@ -65,13 +78,13 @@ export default function Visualise() {
 
                     <Col numColSpan={12}>
                         <GrantsPerResearchCategoryByRegion
-                            selectedFilters={selectedFilters}
+                            filteredDataset={filteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <GrantsByMeshClassificationCard
-                            selectedFilters={selectedFilters}
+                            filteredDataset={filteredDataset}
                         />
                     </Col>
 
@@ -83,7 +96,7 @@ export default function Visualise() {
 
                     <Col numColSpan={12}>
                         <RegionalFlowOfGrantsCard
-                            selectedFilters={selectedFilters}
+                            filteredDataset={filteredDataset}
                         />
                     </Col>
 

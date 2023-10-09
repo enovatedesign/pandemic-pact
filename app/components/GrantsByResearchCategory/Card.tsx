@@ -7,16 +7,12 @@ import BarChart from "./BarChart"
 import ScatterChart from "./ScatterChart"
 import {exportRequestBodyFilteredToMatchingGrants} from "../../helpers/meilisearch"
 import {type CardProps} from "../../types/card-props"
-import {filterGrants} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import dataset from "../../../data/dist/filterable-dataset.json"
 import selectOptions from "../../../data/dist/select-options.json"
 import InfoModal from "../InfoModal"
 
-export default function GrantsByResearchCategoryCard({selectedFilters}: CardProps) {
+export default function GrantsByResearchCategoryCard({filteredDataset}: CardProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
-
-    const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const researchCategoryOptions = selectOptions.ResearchCat
 

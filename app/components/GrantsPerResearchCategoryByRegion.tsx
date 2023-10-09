@@ -4,13 +4,9 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function GrantsPerResearchCategoryByRegion({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
+export default function GrantsPerResearchCategoryByRegion({filteredDataset}: CardProps) {
     const researchCategoryOptions = selectOptions.ResearchCat
 
     const regionOptions = selectOptions.Regions
