@@ -9,7 +9,7 @@ import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
-import SankeyTestCard from '../components/SankeyTestCard'
+import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 
@@ -44,7 +44,7 @@ export default function Visualise() {
                     className="mt-6 gap-4"
                 >
                     <Col numColSpan={12}>
-                        <SankeyTestCard
+                        <RegionalFlowOfGrantsCard
                             selectedFilters={selectedFilters}
                         />
                     </Col>

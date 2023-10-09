@@ -15,7 +15,7 @@ const colours = {
     "Western Pacific": "#64748b",
 }
 
-export default function SankeyTestCard({selectedFilters}: CardProps) {
+export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
 
     const nodes = [
