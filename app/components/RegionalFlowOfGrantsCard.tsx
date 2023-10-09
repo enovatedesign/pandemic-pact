@@ -62,62 +62,70 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         >
             <Title>Regional Flow Of Grants</Title>
 
-            <div className="w-full flex items-center">
-                <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
-                </div>
+            {links.length > 0 &&
+                <div>
+                    <div className="w-full flex items-center">
+                        <div className="w-16">
+                            <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
+                        </div>
 
-                <ResponsiveContainer width="100%" height={600}>
-                    <Sankey
-                        data={{nodes, links}}
-                        nodePadding={30}
-                        margin={{
-                            left: 0,
-                            right: 0,
-                            top: 30,
-                            bottom: 30,
-                        }}
-                        node={
-                            <SankeyNode
-                                colours={colours}
-                                displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                        <ResponsiveContainer width="100%" height={600}>
+                            <Sankey
+                                data={{nodes, links}}
+                                nodePadding={30}
+                                margin={{
+                                    left: 0,
+                                    right: 0,
+                                    top: 30,
+                                    bottom: 30,
+                                }}
+                                node={
+                                    <SankeyNode
+                                        colours={colours}
+                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                    />
+                                }
+                                link={
+                                    <SankeyLink
+                                        colours={colours}
+                                    />
+                                }
+                            >
+                                <Tooltip
+                                    isAnimationActive={false}
+                                    formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                                />
+                            </Sankey>
+                        </ResponsiveContainer>
+
+                        <div className="w-16">
+                            <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-x-2 mt-4">
+                        <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
+
+                        <Switch
+                            checked={displayTotalMoneyCommitted}
+                            onChange={setDisplayTotalMoneyCommitted}
+                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                        >
+                            <span className="sr-only">Display Total Money Committed</span>
+
+                            <span
+                                className={`${displayTotalMoneyCommitted ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
                             />
-                        }
-                        link={
-                            <SankeyLink
-                                colours={colours}
-                            />
-                        }
-                    >
-                        <Tooltip
-                            isAnimationActive={false}
-                            formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
-                        />
-                    </Sankey>
-                </ResponsiveContainer>
+                        </Switch>
 
-                <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
+                        <Text className={opaqueTextIf(displayTotalMoneyCommitted)}>Total Amount Committed (USD)</Text>
+                    </div>
                 </div>
-            </div>
+            }
 
-            <div className="flex items-center gap-x-2 mt-4">
-                <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
-
-                <Switch
-                    checked={displayTotalMoneyCommitted}
-                    onChange={setDisplayTotalMoneyCommitted}
-                    className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                >
-                    <span className="sr-only">Display Total Money Committed</span>
-
-                    <span
-                        className={`${displayTotalMoneyCommitted ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                    />
-                </Switch>
-
-                <Text className={opaqueTextIf(displayTotalMoneyCommitted)}>Total Amount Committed (USD)</Text>
-            </div>
+            {links.length === 0 &&
+                <p className="text-center p-4">No Data.</p>
+            }
         </Card >
     )
 }
