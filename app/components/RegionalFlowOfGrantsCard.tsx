@@ -5,14 +5,10 @@ import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
-import dataset from '../../data/dist/filterable-dataset.json'
 
-export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
+export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: CardProps) {
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const colours = {
@@ -42,12 +38,12 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
         {"name": "Western Pacific", isTarget: true},
     ].filter(
         node => node.isTarget ?
-            filteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
-            filteredDataset.some((grant: any) => grant.FunderRegion === node.name)
+            globallyFilteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
+            globallyFilteredDataset.some((grant: any) => grant.FunderRegion === node.name)
     )
 
     const links = Object.entries(
-        groupBy(filteredDataset, 'FunderRegion')
+        groupBy(globallyFilteredDataset, 'FunderRegion')
     ).map(
         ([funderRegion, grants]) => Object.entries(
             groupBy(grants, 'ResearchInstitutionRegion')

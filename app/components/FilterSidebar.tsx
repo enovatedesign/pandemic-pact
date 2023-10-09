@@ -2,17 +2,17 @@ import {Flex, Text, Subtitle} from "@tremor/react"
 import MultiSelect from "./MultiSelect"
 import {type Filters} from "../types/filters"
 import selectOptions from '../../data/dist/select-options.json'
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
 
 interface FilterSidebarProps {
     selectedFilters: Filters,
     setSelectedFilters: (filters: Filters) => void,
+    completeDataset: any[],
+    globallyFilteredDataset: any[],
 }
 
 type FilterableField = keyof Filters
 
-export default function FilterSidebar({selectedFilters, setSelectedFilters}: FilterSidebarProps) {
+export default function FilterSidebar({selectedFilters, setSelectedFilters, completeDataset, globallyFilteredDataset}: FilterSidebarProps) {
     const filters: any = Object.entries({
         "FundingOrgName": "Funder",
         "ResearchInstitutionName": "Research Institution",
@@ -32,8 +32,6 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters}: Fil
         setSelectedFilters(selectedOptions)
     }
 
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
     return (
         <Flex
             flexDirection="col"
@@ -42,9 +40,9 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters}: Fil
             className="gap-y-4"
         >
             <Subtitle className="text-white">{
-                (filteredDataset.length < dataset.length) ?
-                    `Filtered Grants: ${filteredDataset.length} / ${dataset.length}` :
-                    `Total Grants: ${dataset.length}`
+                (globallyFilteredDataset.length < completeDataset.length) ?
+                    `Filtered Grants: ${globallyFilteredDataset.length} / ${completeDataset.length}` :
+                    `Total Grants: ${completeDataset.length}`
             }</Subtitle>
 
             {filters.map(([field, name]: [FilterableField, string]) => (

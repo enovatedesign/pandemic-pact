@@ -5,12 +5,12 @@ import Map from "./Map"
 import BarChart from "./BarChart"
 import MultiSelect from "../MultiSelect"
 import ExportToPngButton from "../ExportToPngButton"
-import {type CardProps} from "../../types/card-props"
+import {type CardWithOwnFiltersProps} from "../../types/card-props"
 import {filterGrants} from "../../helpers/filter"
 import dataset from '../../../data/dist/filterable-dataset.json'
 import selectOptions from '../../../data/dist/select-options.json'
 
-export default function GrantsByCountryWhereResearchWasConductedCard({selectedFilters}: CardProps) {
+export default function GrantsByCountryWhereResearchWasConductedCard({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
     const [selectedPathogens, setSelectedPathogens] = useState<string[]>([])
 
@@ -55,7 +55,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                         className="max-w-xs ignore-in-image-export"
                     />
 
-                    {filteredDataset.length < dataset.length &&
+                    {filteredDataset.length < globallyFilteredDataset.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </Flex>

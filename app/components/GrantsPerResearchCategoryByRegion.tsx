@@ -4,19 +4,15 @@ import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function GrantsPerResearchCategoryByRegion({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
+export default function GrantsPerResearchCategoryByRegion({globallyFilteredDataset}: CardProps) {
     const researchCategoryOptions = selectOptions.ResearchCat
 
     const regionOptions = selectOptions.Regions
 
     const chartData = regionOptions.map(function (regionOption) {
-        const grantsInRegion = filteredDataset
+        const grantsInRegion = globallyFilteredDataset
             .filter((grant: any) => grant.GrantRegion === regionOption.value)
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
@@ -112,7 +108,7 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 />
 
                 <ExportToCsvButton
-                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(globallyFilteredDataset)}
                     filename="grant-by-mesh-classification"
                 />
             </Flex>

@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react"
+import {useMemo, useState} from "react"
 import {Card, Col, Grid, Title} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
@@ -11,9 +11,11 @@ import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsBy
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
-import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 import WordCloud from "../components/WordCloud"
+import {type Filters} from "../types/filters"
+import {filterGrants} from "../helpers/filter"
+import completeDataset from '../../data/dist/filterable-dataset.json'
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
@@ -27,6 +29,15 @@ export default function Visualise() {
         StudyType: [],
     })
 
+    const globallyFilteredDataset = useMemo(() => {
+        const globallyFilteredDataset = filterGrants(
+            completeDataset,
+            selectedFilters,
+        )
+
+        return globallyFilteredDataset
+    }, [selectedFilters])
+
     return (
         <Layout
             title="Pandemic PACT Tracker"
@@ -35,6 +46,8 @@ export default function Visualise() {
                 <FilterSidebar
                     selectedFilters={selectedFilters}
                     setSelectedFilters={setSelectedFilters}
+                    completeDataset={completeDataset}
+                    globallyFilteredDataset={globallyFilteredDataset}
                 />
             }
         >
@@ -47,57 +60,68 @@ export default function Visualise() {
                 >
                     <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
-                            selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <GrantsByCountryWhereResearchWasConductedCard
                             selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <FundingAmountsforEachResearchCategoryOverTime
                             selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <GrantsPerResearchCategoryByRegion
-                            selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <GrantsByMeshClassificationCard
-                            selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <PathogenDiseaseRelationshipCard
                             selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <RegionalFlowOfGrantsCard
-                            selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
                     <Col numColSpan={12}>
                         <Card>
                             <Title>Disease Word Cloud</Title>
-                            <WordCloud filterKey="Disease" randomSeedString="2324234234" />
+
+                            <WordCloud
+                                filterKey="Disease"
+                                randomSeedString="2324234234"
+                            />
                         </Card>
                     </Col>
 
                     <Col numColSpan={12}>
                         <Card>
                             <Title>Pathogen Word Cloud</Title>
-                            <WordCloud filterKey="Pathogen" randomSeedString="2324234234" />
+
+                            <WordCloud
+                                filterKey="Pathogen"
+                                randomSeedString="2324234234"
+                            />
                         </Card>
                     </Col>
                 </Grid>
