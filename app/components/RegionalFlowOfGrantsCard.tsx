@@ -1,4 +1,4 @@
-import {Card, Title} from "@tremor/react"
+import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
@@ -60,7 +60,11 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
         >
             <Title>Regional Flow Of Grants</Title>
 
-            <div className="w-full">
+            <div className="w-full flex items-center">
+                <div className="w-16">
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
+                </div>
+
                 <ResponsiveContainer width="100%" height={600}>
                     <Sankey
                         data={{nodes, links}}
@@ -79,6 +83,10 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
                         />
                     </Sankey>
                 </ResponsiveContainer>
+
+                <div className="w-16">
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
+                </div>
             </div>
         </Card >
     )
