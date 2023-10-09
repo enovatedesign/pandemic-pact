@@ -22,12 +22,19 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
     // Ensures the colours are randomly assigned but are consistent between renders and builds
     const fixedRandom = seedrandom('pathogen-disease-relationship')
 
-    const colours = range(
-        0,
-        Math.max(selectOptions.Pathogen.length, selectOptions.Disease.length)
-    ).map(
-        () => `#${Math.floor(fixedRandom() * 16777215).toString(16)}`
+    const sourceColours = Object.fromEntries(
+        pathogens.map(
+            pathogen => [pathogen, `#${Math.floor(fixedRandom() * 16777215).toString(16)}`]
+        )
     )
+
+    const targetColours = Object.fromEntries(
+        diseases.map(
+            disease => [disease, `#${Math.floor(fixedRandom() * 16777215).toString(16)}`]
+        )
+    )
+
+    const colours = {source: sourceColours, target: targetColours}
 
     const nodes = pathogens.map(
         pathogen => ({name: pathogen, isTarget: false})
@@ -36,13 +43,9 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
             disease => ({name: disease, isTarget: true})
         )
     ).filter(
-        (node: any) => !["not applicable", "unspecified", "not known"].includes(
-            node.name.toLowerCase()
-        )
-    ).filter(
         node => node.isTarget ?
-            filteredDataset.some((grant: any) => grant.Disease[0] === node.name) :
-            filteredDataset.some((grant: any) => grant.Pathogen[0] === node.name)
+            filteredDataset.some((grant: any) => grant.Disease.includes(node.name)) :
+            filteredDataset.some((grant: any) => grant.Pathogen.includes(node.name))
     )
 
     const links = pathogens.map(
@@ -70,7 +73,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
                     <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
                 </div>
 
-                <ResponsiveContainer width="100%" height={1000}>
+                <ResponsiveContainer width="100%" height={2000}>
                     <Sankey
                         data={{nodes, links}}
                         nodePadding={30}
@@ -102,7 +105,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
 function SankeyNode({x, y, width, height, index, payload, colours}: any) {
     const {isTarget, name, value} = payload;
 
-    const fill = colours[index]
+    const fill = isTarget ? colours.target[name] : colours.source[name]
 
     const {isDarkMode} = useDarkMode()
 
@@ -147,8 +150,8 @@ function SankeyNode({x, y, width, height, index, payload, colours}: any) {
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
 function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
     const gradientId = `pathogenDiseaseRelationshipCardGradient${index}`
-    const sourceColour = colours[index]
-    const targetColour = colours[index]
+    const sourceColour = colours.source[payload.source.name]
+    const targetColour = colours.target[payload.target.name]
 
     return <Layer key={`pathogenDiseaseRelationshipCardLink${index}`}>
         <defs>
