@@ -105,7 +105,7 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
                 </div>
             </div>
 
-            <div className="flex items-center gap-x-2">
+            <div className="flex items-center gap-x-2 mt-4">
                 <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
 
                 <Switch

@@ -17,7 +17,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const filteredDataset = filterGrants(dataset, selectedFilters).filter(
-        (grant: any) => selectedPathogens.length === 0 || grant.Pathogen.some(
+        (grant: any) => grant.Pathogen.some(
             (pathogen: string) => selectedPathogens.includes(pathogen)
         )
     )
@@ -85,12 +85,14 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
         <Card
             id="sankey-test"
         >
-            <Title>Pathogen-Disease Relationships</Title>
+            <Title>Grants By Pathogen and Disease</Title>
 
             <MultiSelect
                 options={allPathogens.map(pathogen => ({value: pathogen, label: pathogen}))}
                 selectedOptions={selectedPathogens}
                 setSelectedOptions={options => setSelectedPathogens(options)}
+                placeholder={"Select Pathogens"}
+                className="mt-4"
             />
 
             {links.length > 0 &&
@@ -134,7 +136,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 mt-4">
                         <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
 
                         <Switch
