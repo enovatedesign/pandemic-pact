@@ -1,7 +1,7 @@
 import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
-import {groupBy, range} from "lodash"
+import {groupBy, range, uniq} from "lodash"
 import seedrandom from 'seedrandom'
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
@@ -9,6 +9,16 @@ import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
 export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
+    const filteredDataset = filterGrants(dataset, selectedFilters)
+
+    const pathogens = uniq(
+        filteredDataset.map((grant: any) => grant.Pathogen).flat()
+    )
+
+    const diseases = uniq(
+        filteredDataset.map((grant: any) => grant.Disease).flat()
+    )
+
     // Ensures the colours are randomly assigned in a consistent between renders and builds
     const fixedRandom = seedrandom('pathogen-disease-relationship')
 
@@ -19,38 +29,34 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
         () => `#${Math.floor(fixedRandom() * 16777215).toString(16)}`
     )
 
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
-    const nodes = selectOptions.Pathogen.map(
-        pathogen => ({"name": pathogen.value, "isTarget": false})
+    const nodes = pathogens.map(
+        pathogen => ({"name": pathogen, "isTarget": false})
     ).concat(
-        selectOptions.Disease.map(
-            disease => ({"name": disease.value, "isTarget": true})
+        diseases.map(
+            disease => ({"name": disease, "isTarget": true})
         )
     ).filter(
-        (node) => !["not applicable", "unspecified", "not known"].includes(node.name.toLowerCase())
+        node => !["not applicable", "unspecified", "not known"].includes(
+            node.name.toLowerCase()
+        )
+    ).filter(
+        node => node.isTarget ?
+            filteredDataset.some((grant: any) => grant.Disease[0] === node.name) :
+            filteredDataset.some((grant: any) => grant.Pathogen[0] === node.name)
     )
 
-    const links = Object.entries(
-        groupBy(
-            filteredDataset,
-            (grant: any) => grant.Pathogen[0]
-        )
-    ).map(
-        ([pathogen, grants]) => Object.entries(
-            groupBy(
-                grants,
-                (grant: any) => grant.Disease[0]
-            )
-        ).map(
-            ([disease, grants]) => ({
+    const links = pathogens.map(
+        pathogen => diseases.map(
+            disease => ({
                 "source": nodes.findIndex(node => node.name === pathogen && !node.isTarget),
                 "target": nodes.findIndex(node => node.name === disease && node.isTarget),
-                "value": grants.length,
+                "value": filteredDataset.filter(
+                    (grant: any) => grant.Pathogen.includes(pathogen) && grant.Disease.includes(disease)
+                ).length,
             })
         )
     ).flat(1).filter(
-        (link: any) => link.source !== -1 && link.target !== -1
+        link => link.value > 0 && link.source !== -1 && link.target !== -1
     )
 
     return (
