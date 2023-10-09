@@ -34,13 +34,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard({selectedFi
                     alignItems='start'
                     className='gap-y-2'
                 >
-                    <Flex
-                        justifyContent="between"
-                        alignItems="center"
-                    >
-                        <Title>Number of Grants by Country Where Research Was Conducted</Title>
-                        <Text>Total Grants: {dataset.length}</Text>
-                    </Flex>
+                    <Title>Number of Grants by Country Where Research Was Conducted</Title>
 
                     <Subtitle>
                         Possimus fugit laudantium recusandae.

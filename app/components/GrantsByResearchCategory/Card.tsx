@@ -67,8 +67,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                                 <Text>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae in, eligendi odio animi distinctio laborum exercitationem, illo deleniti sit sunt nemo doloremque. Nemo reprehenderit inventore magni eligendi nam architecto sint!</Text>
                             </InfoModal>
                         </Flex>
-
-                        <Text>Total Grants: {dataset.length}</Text>
                     </Flex>
 
                     <Subtitle>

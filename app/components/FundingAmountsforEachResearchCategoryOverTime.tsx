@@ -82,13 +82,7 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
                 alignItems="start"
                 className="gap-y-2"
             >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Funding Amounts for Each Research Category Over Time</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                <Title>Funding Amounts for Each Research Category Over Time</Title>
 
                 <Subtitle>
                     Ipsam vero quae beatae quas nemo quae necessitatibus commodi.

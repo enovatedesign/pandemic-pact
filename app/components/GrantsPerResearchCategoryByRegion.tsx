@@ -67,13 +67,7 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 alignItems="start"
                 className="gap-y-2"
             >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Grants Per Research Category By Region</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                <Title>Grants Per Research Category By Region</Title>
 
                 <Subtitle>
                     Doloribus iste inventore odio sint laboriosam eaque.

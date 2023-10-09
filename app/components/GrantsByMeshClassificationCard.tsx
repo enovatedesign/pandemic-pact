@@ -23,13 +23,7 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 alignItems="start"
                 className="gap-y-2"
             >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Grants By MESH Classifications</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                <Title>Grants By MESH Classifications</Title>
 
                 <Subtitle>
                     Doloribus iste inventore odio sint laboriosam eaque.
