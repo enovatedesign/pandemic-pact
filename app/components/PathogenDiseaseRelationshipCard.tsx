@@ -1,12 +1,11 @@
 import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
-import {range, uniq} from "lodash"
+import {uniq} from "lodash"
 import seedrandom from 'seedrandom'
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
-import selectOptions from '../../data/dist/select-options.json'
 
 export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
     const filteredDataset = filterGrants(dataset, selectedFilters)
