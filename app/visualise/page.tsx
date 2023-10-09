@@ -14,20 +14,13 @@ import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelati
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 import WordCloud from "../components/WordCloud"
 import {type Filters} from "../types/filters"
-import {filterGrants} from "../helpers/filter"
+import {emptyFilters, filterGrants} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
 
 export default function Visualise() {
-    const [selectedFilters, setSelectedFilters] = useState<Filters>({
-        FundingOrgName: [],
-        ResearchInstitutionName: [],
-        Disease: [],
-        Pathogen: [],
-        GrantStartYear: [],
-        StudySubject: [],
-        AgeGroups: [],
-        StudyType: [],
-    })
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(
+        emptyFilters(),
+    )
 
     const globallyFilteredDataset = useMemo(() => {
         const globallyFilteredDataset = filterGrants(
