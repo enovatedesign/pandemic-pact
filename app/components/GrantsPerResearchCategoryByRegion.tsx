@@ -1,5 +1,5 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Color, Button} from "@tremor/react"
-import {Radar, RadarChart, PolarGrid, Tooltip, Legend, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer} from 'recharts';
+import {Flex, Card, Title, Subtitle} from "@tremor/react"
+import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
