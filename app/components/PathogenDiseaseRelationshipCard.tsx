@@ -30,13 +30,13 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
     )
 
     const nodes = pathogens.map(
-        pathogen => ({"name": pathogen, "isTarget": false})
+        pathogen => ({name: pathogen, isTarget: false})
     ).concat(
         diseases.map(
-            disease => ({"name": disease, "isTarget": true})
+            disease => ({name: disease, isTarget: true})
         )
     ).filter(
-        node => !["not applicable", "unspecified", "not known"].includes(
+        (node: any) => !["not applicable", "unspecified", "not known"].includes(
             node.name.toLowerCase()
         )
     ).filter(
