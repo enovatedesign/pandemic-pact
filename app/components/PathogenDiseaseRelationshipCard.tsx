@@ -92,7 +92,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
                 </ResponsiveContainer>
 
                 <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Disease</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
                 </div>
             </div>
         </Card >
