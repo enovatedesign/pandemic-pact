@@ -22,14 +22,10 @@ export default function Visualise() {
         emptyFilters(),
     )
 
-    const globallyFilteredDataset = useMemo(() => {
-        const globallyFilteredDataset = filterGrants(
-            completeDataset,
-            selectedFilters,
-        )
-
-        return globallyFilteredDataset
-    }, [selectedFilters])
+    const globallyFilteredDataset = useMemo(
+        () => filterGrants(completeDataset, selectedFilters),
+        [selectedFilters],
+    )
 
     return (
         <Layout
