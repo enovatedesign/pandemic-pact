@@ -1,7 +1,7 @@
 import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
-import {groupBy, range, uniq} from "lodash"
+import {range, uniq} from "lodash"
 import seedrandom from 'seedrandom'
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
