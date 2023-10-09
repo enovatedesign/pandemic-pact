@@ -1,14 +1,26 @@
+import {useState} from "react"
 import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {uniq} from "lodash"
 import seedrandom from 'seedrandom'
+import MultiSelect from "./MultiSelect"
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
 
 export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
+    const [selectedPathogens, setSelectedPathogens] = useState<string[]>(['SARS-CoV-2'])
+
+    const filteredDataset = filterGrants(dataset, selectedFilters).filter(
+        (grant: any) => selectedPathogens.length === 0 || grant.Pathogen.some(
+            pathogen => selectedPathogens.includes(pathogen)
+        )
+    )
+
+    const allPathogens = uniq(
+        dataset.map((grant: any) => grant.Pathogen).flat()
+    )
 
     const pathogens = uniq(
         filteredDataset.map((grant: any) => grant.Pathogen).flat()
@@ -67,34 +79,46 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardP
         >
             <Title>Pathogen-Disease Relationships</Title>
 
-            <div className="w-full flex items-center">
-                <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
-                </div>
+            <MultiSelect
+                options={allPathogens.map(pathogen => ({value: pathogen, label: pathogen}))}
+                selectedOptions={selectedPathogens}
+                setSelectedOptions={options => setSelectedPathogens(options)}
+            />
 
-                <ResponsiveContainer width="100%" height={2000}>
-                    <Sankey
-                        data={{nodes, links}}
-                        nodePadding={30}
-                        margin={{
-                            left: 0,
-                            right: 0,
-                            top: 30,
-                            bottom: 30,
-                        }}
-                        node={<SankeyNode colours={colours} />}
-                        link={<SankeyLink colours={colours} />}
-                    >
-                        <Tooltip
-                            isAnimationActive={false}
-                        />
-                    </Sankey>
-                </ResponsiveContainer>
+            {links.length > 0 &&
+                <div className="w-full flex items-center">
+                    <div className="w-16">
+                        <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
+                    </div>
 
-                <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
+                    <ResponsiveContainer width="100%" height={600}>
+                        <Sankey
+                            data={{nodes, links}}
+                            nodePadding={30}
+                            margin={{
+                                left: 0,
+                                right: 0,
+                                top: 30,
+                                bottom: 30,
+                            }}
+                            node={<SankeyNode colours={colours} />}
+                            link={<SankeyLink colours={colours} />}
+                        >
+                            <Tooltip
+                                isAnimationActive={false}
+                            />
+                        </Sankey>
+                    </ResponsiveContainer>
+
+                    <div className="w-16">
+                        <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
+                    </div>
                 </div>
-            </div>
+            }
+
+            {links.length === 0 &&
+                <p className="text-center p-4">No Data.</p>
+            }
         </Card >
     )
 }
