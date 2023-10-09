@@ -1,7 +1,9 @@
-import {Flex, Text} from "@tremor/react"
+import {Flex, Text, Subtitle} from "@tremor/react"
 import MultiSelect from "./MultiSelect"
 import {type Filters} from "../types/filters"
 import selectOptions from '../../data/dist/select-options.json'
+import {filterGrants} from "../helpers/filter"
+import dataset from '../../data/dist/filterable-dataset.json'
 
 interface FilterSidebarProps {
     selectedFilters: Filters,
@@ -30,6 +32,8 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters}: Fil
         setSelectedFilters(selectedOptions)
     }
 
+    const filteredDataset = filterGrants(dataset, selectedFilters)
+
     return (
         <Flex
             flexDirection="col"
@@ -37,6 +41,12 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters}: Fil
             alignItems="start"
             className="gap-y-4"
         >
+            <Subtitle className="text-white">{
+                (filteredDataset.length < dataset.length) ?
+                    `Filtered Grants: ${filteredDataset.length} / ${dataset.length}` :
+                    `Total Grants: ${dataset.length}`
+            }</Subtitle>
+
             {filters.map(([field, name]: [FilterableField, string]) => (
                 <Flex
                     flexDirection="col"
