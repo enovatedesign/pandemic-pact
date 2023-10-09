@@ -10,6 +10,7 @@ import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassifica
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
+import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import {type Filters} from "../types/filters"
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 
@@ -43,6 +44,12 @@ export default function Visualise() {
                     numItems={12}
                     className="mt-6 gap-4"
                 >
+                    <Col numColSpan={12}>
+                        <PathogenDiseaseRelationshipCard
+                            selectedFilters={selectedFilters}
+                        />
+                    </Col>
+
                     <Col numColSpan={12}>
                         <RegionalFlowOfGrantsCard
                             selectedFilters={selectedFilters}

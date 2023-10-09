@@ -1,68 +1,67 @@
 import {Card, Title, Subtitle} from "@tremor/react"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
-import {groupBy} from "lodash"
+import {groupBy, range} from "lodash"
+import seedrandom from 'seedrandom'
 import {type CardProps} from "../types/card-props"
 import {filterGrants} from "../helpers/filter"
 import dataset from '../../data/dist/filterable-dataset.json'
+import selectOptions from '../../data/dist/select-options.json'
 
-const colours = {
-    "Africa": "#3b82f6",
-    "Americas": "#f59e0b",
-    "South-East Asia": "#6b7280",
-    "Europe": "#ef4444",
-    "Eastern Mediterranean": "#71717a",
-    "Western Pacific": "#64748b",
-}
+export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardProps) {
+    // Ensures the colours are randomly assigned in a consistent between renders and builds
+    const fixedRandom = seedrandom('pathogen-disease-relationship')
 
-export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
+    const colours = range(
+        0,
+        Math.max(selectOptions.Pathogen.length, selectOptions.Disease.length)
+    ).map(
+        () => `#${Math.floor(fixedRandom() * 16777215).toString(16)}`
+    )
+
     const filteredDataset = filterGrants(dataset, selectedFilters)
 
-    const nodes = [
-        // Source Regions
-        {"name": "Africa", isTarget: false},
-        {"name": "Americas", isTarget: false},
-        {"name": "South-East Asia", isTarget: false},
-        {"name": "Europe", isTarget: false},
-        {"name": "Eastern Mediterranean", isTarget: false},
-        {"name": "Western Pacific", isTarget: false},
-
-        // Target Regions
-        {"name": "Africa", isTarget: true},
-        {"name": "Americas", isTarget: true},
-        {"name": "South-East Asia", isTarget: true},
-        {"name": "Europe", isTarget: true},
-        {"name": "Eastern Mediterranean", isTarget: true},
-        {"name": "Western Pacific", isTarget: true},
-    ].filter(
-        node => node.isTarget ?
-            filteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
-            filteredDataset.some((grant: any) => grant.FunderRegion === node.name)
+    const nodes = selectOptions.Pathogen.map(
+        pathogen => ({"name": pathogen.value, "isTarget": false})
+    ).concat(
+        selectOptions.Disease.map(
+            disease => ({"name": disease.value, "isTarget": true})
+        )
+    ).filter(
+        (node) => !["not applicable", "unspecified", "not known"].includes(node.name.toLowerCase())
     )
 
     const links = Object.entries(
-        groupBy(filteredDataset, 'FunderRegion')
+        groupBy(
+            filteredDataset,
+            (grant: any) => grant.Pathogen[0]
+        )
     ).map(
-        ([funderRegion, grants]) => Object.entries(
-            groupBy(grants, 'ResearchInstitutionRegion')
+        ([pathogen, grants]) => Object.entries(
+            groupBy(
+                grants,
+                (grant: any) => grant.Disease[0]
+            )
         ).map(
-            ([researchInstitutionRegion, grants]) => ({
-                "source": nodes.findIndex(node => node.name === funderRegion && !node.isTarget),
-                "target": nodes.findIndex(node => node.name === researchInstitutionRegion && node.isTarget),
+            ([disease, grants]) => ({
+                "source": nodes.findIndex(node => node.name === pathogen && !node.isTarget),
+                "target": nodes.findIndex(node => node.name === disease && node.isTarget),
                 "value": grants.length,
             })
         )
-    ).flat(1)
+    ).flat(1).filter(
+        (link: any) => link.source !== -1 && link.target !== -1
+    )
 
     return (
         <Card
             id="sankey-test"
         >
-            <Title>Regional Flow Of Grants</Title>
+            <Title>Pathogen-Disease Relationships</Title>
 
             <div className="w-full flex items-center">
                 <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
                 </div>
 
                 <ResponsiveContainer width="100%" height={600}>
@@ -75,8 +74,8 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
                             top: 30,
                             bottom: 30,
                         }}
-                        node={<SankeyNode />}
-                        link={<SankeyLink />}
+                        node={<SankeyNode colours={colours} />}
+                        link={<SankeyLink colours={colours} />}
                     >
                         <Tooltip
                             isAnimationActive={false}
@@ -85,7 +84,7 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
                 </ResponsiveContainer>
 
                 <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Disease</Subtitle>
                 </div>
             </div>
         </Card >
@@ -94,17 +93,17 @@ export default function RegionalFlowOfGrantsCard({selectedFilters}: CardProps) {
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload}: any) {
+function SankeyNode({x, y, width, height, index, payload, colours}: any) {
     const {isTarget, name, value} = payload;
 
-    const fill = colours[name as keyof typeof colours]
+    const fill = colours[index]
 
     const {isDarkMode} = useDarkMode()
 
     const labelFill = isDarkMode ? "#fff" : "#000"
 
     return (
-        <Layer key={`RegionalFlowOfGrantsCardNode${index}`}>
+        <Layer key={`pathogenDiseaseRelationshipCardNode${index}`}>
             <Rectangle
                 x={x}
                 y={y}
@@ -140,12 +139,12 @@ function SankeyNode({x, y, width, height, index, payload}: any) {
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
-function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload}: any) {
-    const gradientId = `regionalFlowOfGrantsCardGradient${index}`
-    const sourceColour = colours[payload.source.name as keyof typeof colours]
-    const targetColour = colours[payload.target.name as keyof typeof colours]
+function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
+    const gradientId = `pathogenDiseaseRelationshipCardGradient${index}`
+    const sourceColour = colours[index]
+    const targetColour = colours[index]
 
-    return <Layer key={`RegionalFlowOfGrantsCardLink${index}`}>
+    return <Layer key={`pathogenDiseaseRelationshipCardLink${index}`}>
         <defs>
             <linearGradient id={gradientId}>
                 <stop offset="0%" stopColor={sourceColour} />
