@@ -74,15 +74,6 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 </Subtitle>
             </Flex>
 
-            {filteredDataset.length < dataset.length &&
-                <Flex
-                    alignItems="center"
-                    className="ignore-in-image-export"
-                >
-                    <Text>Filtered Grants: {filteredDataset.length}</Text>
-                </Flex>
-            }
-
             <div className="w-full h-[800px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>

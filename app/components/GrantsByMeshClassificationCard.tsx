@@ -32,15 +32,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                 </Subtitle>
             </Flex>
 
-            {filteredDataset.length < dataset.length &&
-                <Flex
-                    alignItems="center"
-                    className="ignore-in-image-export"
-                >
-                    <Text>Filtered Grants: {filteredDataset.length}</Text>
-                </Flex>
-            }
-
             <div className="flex flex-col gap-y-6">
                 <DataBar
                     title="Age Groups"

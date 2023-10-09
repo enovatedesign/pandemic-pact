@@ -75,15 +75,6 @@ export default function GrantsByResearchCategoryCard({selectedFilters}: CardProp
                     </Subtitle>
                 </Flex>
 
-                <Flex
-                    justifyContent="end"
-                    alignItems="center"
-                >
-                    {filteredDataset.length < dataset.length &&
-                        <Text>Filtered Grants: {filteredDataset.length}</Text>
-                    }
-                </Flex>
-
                 {selectedTabIndex === 0 &&
                     <BarChart
                         chartData={chartData}
