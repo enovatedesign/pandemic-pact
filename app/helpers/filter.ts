@@ -1,5 +1,18 @@
 import {every} from 'lodash'
 
+export function emptyFilters() {
+    return {
+        FundingOrgName: [],
+        ResearchInstitutionName: [],
+        Disease: [],
+        Pathogen: [],
+        GrantStartYear: [],
+        StudySubject: [],
+        AgeGroups: [],
+        StudyType: [],
+    }
+}
+
 export function filterGrants(grants: any, selectedFilterGroups: any) {
     return grants.filter(
         (grant: any) => every(

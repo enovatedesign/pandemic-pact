@@ -1,22 +1,18 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Color, Button} from "@tremor/react"
-import {Radar, RadarChart, PolarGrid, Tooltip, Legend, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer} from 'recharts';
+import {Flex, Card, Title, Subtitle} from "@tremor/react"
+import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
 import ExportToPngButton from "./ExportToPngButton"
 import ExportToCsvButton from "./ExportToCsvButton"
 import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
 import {type CardProps} from "../types/card-props"
-import {filterGrants} from "../helpers/filter"
-import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function GrantsPerResearchCategoryByRegion({selectedFilters}: CardProps) {
-    const filteredDataset = filterGrants(dataset, selectedFilters)
-
+export default function GrantsPerResearchCategoryByRegion({globallyFilteredDataset}: CardProps) {
     const researchCategoryOptions = selectOptions.ResearchCat
 
     const regionOptions = selectOptions.Regions
 
     const chartData = regionOptions.map(function (regionOption) {
-        const grantsInRegion = filteredDataset
+        const grantsInRegion = globallyFilteredDataset
             .filter((grant: any) => grant.GrantRegion === regionOption.value)
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
@@ -67,29 +63,14 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 alignItems="start"
                 className="gap-y-2"
             >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Grants Per Research Category By Region</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                <Title>Grants Per Research Category By Region</Title>
 
                 <Subtitle>
                     Doloribus iste inventore odio sint laboriosam eaque.
                 </Subtitle>
             </Flex>
 
-            {filteredDataset.length < dataset.length &&
-                <Flex
-                    alignItems="center"
-                    className="ignore-in-image-export"
-                >
-                    <Text>Filtered Grants: {filteredDataset.length}</Text>
-                </Flex>
-            }
-
-            <div className="w-full h-80">
+            <div className="w-full h-[800px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                         <PolarGrid />
@@ -127,7 +108,7 @@ export default function GrantsPerResearchCategoryByRegion({selectedFilters}: Car
                 />
 
                 <ExportToCsvButton
-                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
+                    meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(globallyFilteredDataset)}
                     filename="grant-by-mesh-classification"
                 />
             </Flex>
