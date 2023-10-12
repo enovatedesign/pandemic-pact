@@ -293,6 +293,7 @@ function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
         grant => _.pick(grant, [
             'GrantID',
             'FundingOrgName',
+            'FunderRegion',
             'ResearchCat',
             'GrantAmountConverted',
             'GrantStartYear',

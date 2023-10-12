@@ -7,12 +7,12 @@ import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {groupBy} from 'lodash'
-import {CardProps} from "../types/card-props"
+import {CardWithOwnFiltersProps} from "../types/card-props"
 import MultiSelect from "./MultiSelect"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function FundingAmountsforEachResearchCategoryOverTime({selectedFilters}: CardProps) {
+export default function FundingAmountsforEachResearchCategoryOverTime({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
@@ -82,13 +82,7 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
                 alignItems="start"
                 className="gap-y-2"
             >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Funding Amounts for Each Research Category Over Time</Title>
-                    <Text>Total Grants: {dataset.length}</Text>
-                </Flex>
+                <Title>Funding Amounts for Each Research Category Over Time</Title>
 
                 <Subtitle>
                     Ipsam vero quae beatae quas nemo quae necessitatibus commodi.
@@ -109,7 +103,7 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
                     className="max-w-xs ignore-in-image-export"
                 />
 
-                {filteredDataset.length < dataset.length &&
+                {filteredDataset.length < globallyFilteredDataset.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>
