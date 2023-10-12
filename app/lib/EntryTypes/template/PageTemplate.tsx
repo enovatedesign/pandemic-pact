@@ -12,6 +12,8 @@ export default function PageTemplate({data}) {
 
     const { entry } = data
 
+    // console.log('Page Template Data: ', entry)
+
     return (
         <>
             <HtmlHead data={entry.seomatic} />
@@ -24,7 +26,7 @@ export default function PageTemplate({data}) {
                     <Header className="absolute top-0 inset-x-0 z-30"/>
                 </InteractiveBackground>
 
-                <Matrix data={entry.bodyContent} />
+                <Matrix blocks={entry.bodyContent} />
             </main>
         </>
     )

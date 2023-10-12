@@ -39,11 +39,13 @@ const Block = (props) => {
 	}
 };
 
-const Blocks = ({ data }) => {
+const Blocks = ({blocks}) => {
+
+	// console.log('Content Builder Data: ', blocks)
 
 	return (
 		<div className="flex flex-col gap-y-10 sm:gap-y-12">
-			{data.map(block => (
+			{blocks.map(block => (
 				<Block block={block} key={block.id} />
 			))}
 		</div>

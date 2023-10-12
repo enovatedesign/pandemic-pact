@@ -11,6 +11,7 @@ export default async function PageQuery(slug: String, entryType: String = 'page'
                     title
                     typeHandle
                     postDate
+                    slug
                     ... on pages_${entryType}_Entry {
                         summary
                         imageMasthead {
