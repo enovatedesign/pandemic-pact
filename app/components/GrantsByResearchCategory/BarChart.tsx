@@ -43,6 +43,9 @@ export default function BarChart({chartData}: Props) {
                                     wrapperStyle={{zIndex: 99}}
                                     cursor={{fill: 'transparent'}}
                                     labelStyle={{display: 'none'}}
+                                    formatter={(value: any, name: any, props: any) => {
+                                        return [value, name.replace("Number Of ", ""), props]
+                                    }}
                                     isAnimationActive={false}
                                 />
 
