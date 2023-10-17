@@ -34,6 +34,34 @@ export default function StaticPage({grant}: Props) {
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,
         },
+        {
+            text: 'Study Subject',
+            metric: grant.StudySubject,
+        },
+        {
+            text: 'Age Groups',
+            metric: grant.AgeGroups,
+        },
+        {
+            text: 'Rurality',
+            metric: grant.Rurality,
+        },
+        {
+            text: 'Vulnerable Populations',
+            metric: grant.VulnerablePopulations,
+        },
+        {
+            text: 'Occupational Groups',
+            metric: grant.OccupationalGroups,
+        },
+        {
+            text: 'Study Type',
+            metric: grant.StudyType,
+        },
+        {
+            text: 'Clinical Trial',
+            metric: grant.ClinicalTrial,
+        },
     ]
 
     if (grant.ResearchInstitutionName.length > 0) {
