@@ -15,8 +15,8 @@ export default function BarChart({chartData}: Props) {
         <div className="w-full grid grid-cols-[minmax(0,_1.25fr)_minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
             {chartData.map((data: any, index: number) => (
                 <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
-                    <div className="col-span-1 py-3 self-center">
-                        <p className="truncate text-sm text-gray-600">{data["Research Category"]}</p>
+                    <div className="self-center py-3 col-span-1">
+                        <p className="text-sm text-gray-600 truncate">{data["Research Category"]}</p>
                     </div>
 
                     <div className="col-span-1">
@@ -42,6 +42,7 @@ export default function BarChart({chartData}: Props) {
                                 <Tooltip
                                     wrapperStyle={{zIndex: 99}}
                                     cursor={{fill: 'transparent'}}
+                                    labelStyle={{display: 'none'}}
                                     isAnimationActive={false}
                                 />
 
@@ -61,7 +62,7 @@ export default function BarChart({chartData}: Props) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="col-span-1 py-3 pl-2 pr-8 self-center justify-self-end">
+                    <div className="self-center py-3 pl-2 pr-8 col-span-1 justify-self-end">
                         <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
                     </div>
 
@@ -88,6 +89,7 @@ export default function BarChart({chartData}: Props) {
                                 <Tooltip
                                     wrapperStyle={{zIndex: 99}}
                                     formatter={dollarValueFormatter}
+                                    labelStyle={{display: 'none'}}
                                     cursor={{fill: 'transparent'}}
                                     isAnimationActive={false}
                                 />
@@ -101,7 +103,7 @@ export default function BarChart({chartData}: Props) {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="col-span-1 py-3 pl-2 self-center justify-self-end">
+                    <div className="self-center py-3 pl-2 col-span-1 justify-self-end">
                         <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                     </div>
                 </Fragment>
@@ -109,11 +111,11 @@ export default function BarChart({chartData}: Props) {
 
             <div className="col-span-1" />
 
-            <div className="col-span-2 pr-8 justify-self-end">
+            <div className="pr-8 col-span-2 justify-self-end">
                 <Subtitle>Number of projects</Subtitle>
             </div>
 
-            <div className="col-span-2 pl-2 justify-self-end">
+            <div className="pl-2 col-span-2 justify-self-end">
                 <Subtitle>Known amount committed (USD)</Subtitle>
             </div>
         </div>
