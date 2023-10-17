@@ -1,5 +1,5 @@
 import {Fragment} from "react"
-import {Subtitle} from "@tremor/react"
+import {Subtitle, Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 
@@ -66,6 +66,7 @@ export default function BarChart({chartData}: Props) {
                         </ResponsiveContainer>
                     </div>
 
+
                     <div className="self-center py-3 pl-2 pr-8 col-span-1 justify-self-end">
                         <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
                     </div>
@@ -122,6 +123,13 @@ export default function BarChart({chartData}: Props) {
 
             <div className="pl-2 col-span-2 justify-self-end">
                 <Subtitle>Known amount committed (USD)</Subtitle>
+            </div>
+
+            <div className="flex flex-col mt-4 gap-y-2">
+                <Legend
+                    categories={['Number Of Grants With Known Amount Committed', 'Number Of Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    colors={['blue', 'orange', 'green']}
+                />
             </div>
         </div>
     )
