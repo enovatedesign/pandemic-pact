@@ -43,6 +43,7 @@ export default function BarChart({chartData}: Props) {
                                     wrapperStyle={{zIndex: 99}}
                                     cursor={{fill: 'transparent'}}
                                     labelStyle={{display: 'none'}}
+                                    contentStyle={{fontSize: '.9rem'}}
                                     formatter={(value: any, name: any, props: any) => {
                                         return [value, name.replace("Number Of ", ""), props]
                                     }}
@@ -93,6 +94,7 @@ export default function BarChart({chartData}: Props) {
                                     wrapperStyle={{zIndex: 99}}
                                     formatter={dollarValueFormatter}
                                     labelStyle={{display: 'none'}}
+                                    contentStyle={{fontSize: '.9rem'}}
                                     cursor={{fill: 'transparent'}}
                                     isAnimationActive={false}
                                 />
