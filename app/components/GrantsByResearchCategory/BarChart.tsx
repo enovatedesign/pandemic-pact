@@ -16,7 +16,7 @@ export default function BarChart({chartData}: Props) {
             {chartData.map((data: any, index: number) => (
                 <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
                     <div className="self-center py-3 col-span-1">
-                        <p className="text-sm text-gray-600 truncate">{data["Research Category"]}</p>
+                        <p className="text-sm text-gray-600">{data["Research Category"]}</p>
                     </div>
 
                     <div className="col-span-1">
