@@ -7,7 +7,7 @@ import {MenuIcon} from '@heroicons/react/solid'
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     console.log(pathname)
-    const links = getLinksArray().filter(link => link.label !== 'Wordcloud')
+    const links = getLinksArray()
 
     const NavItem = (link: {label: string, href: string}) => (
         <li key={link.href}>
