@@ -1,10 +1,11 @@
 "use client"
 
 import {useMemo, useState} from "react"
-import {Card, Col, Grid, Title} from "@tremor/react"
+import {Col, Grid} from "@tremor/react"
 import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
+import VisualisationCard from "../components/VisualisationCard"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
@@ -55,7 +56,6 @@ export default function Visualise() {
 
                     <Col numColSpan={12}>
                         <GrantsByCountryWhereResearchWasConductedCard
-                            selectedFilters={selectedFilters}
                             globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
@@ -93,25 +93,33 @@ export default function Visualise() {
                     </Col>
 
                     <Col numColSpan={12}>
-                        <Card>
-                            <Title>Disease Word Cloud</Title>
-
-                            <WordCloud
-                                filterKey="Disease"
-                                randomSeedString="2324234234"
-                            />
-                        </Card>
+                        <VisualisationCard
+                            filteredDataset={globallyFilteredDataset}
+                            id="disease-word-cloud"
+                            title="Disease Word Cloud"
+                        >
+                            <div className="w-full">
+                                <WordCloud
+                                    filterKey="Disease"
+                                    randomSeedString="2324234234"
+                                />
+                            </div>
+                        </VisualisationCard>
                     </Col>
 
                     <Col numColSpan={12}>
-                        <Card>
-                            <Title>Pathogen Word Cloud</Title>
-
-                            <WordCloud
-                                filterKey="Pathogen"
-                                randomSeedString="2324234234"
-                            />
-                        </Card>
+                        <VisualisationCard
+                            filteredDataset={globallyFilteredDataset}
+                            id="pathogen-word-cloud"
+                            title="Pathogen Word Cloud"
+                        >
+                            <div className="w-full">
+                                <WordCloud
+                                    filterKey="Pathogen"
+                                    randomSeedString="2324234234"
+                                />
+                            </div>
+                        </VisualisationCard>
                     </Col>
                 </Grid>
             </div>

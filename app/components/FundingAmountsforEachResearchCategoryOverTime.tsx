@@ -1,8 +1,6 @@
 import {useState} from "react"
-import {Flex, BarChart, Card, Title, Text, Color, Subtitle} from "@tremor/react"
-import ExportToPngButton from "./ExportToPngButton"
-import ExportToCsvButton from "./ExportToCsvButton"
-import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
+import {Flex, BarChart, Text, Color, Subtitle} from "@tremor/react"
+import VisualisationCard from "./VisualisationCard"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
@@ -73,89 +71,57 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
     const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
     return (
-        <Card
-            className="flex flex-col gap-y-6"
+        <VisualisationCard
+            filteredDataset={filteredDataset}
             id="amount-committed-to-each-research-category-over-time-card"
+            title="Funding Amounts for Each Research Category Over Time"
+            subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
+            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
         >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="gap-y-2"
-            >
-                <Title>Funding Amounts for Each Research Category Over Time</Title>
-
-                <Subtitle>
-                    Ipsam vero quae beatae quas nemo quae necessitatibus commodi.
-                    Fuga laboriosam possimus corrupti dolore eveniet maiores.
-                    Porro laboriosam laboriosam assumenda esse porro placeat voluptatum.
-                </Subtitle>
-            </Flex>
-            <Flex
-                justifyContent="between"
-                alignItems="center"
-                className="ignore-in-image-export"
-            >
-                <MultiSelect
-                    options={selectOptions.ResearchCat}
-                    selectedOptions={selectedResearchCategories}
-                    setSelectedOptions={setSelectedResearchCategories}
-                    placeholder="All Research Categories"
-                    className="max-w-xs ignore-in-image-export"
-                />
-
-                {filteredDataset.length < globallyFilteredDataset.length &&
-                    <Text>Filtered Grants: {filteredDataset.length}</Text>
-                }
-            </Flex>
-
-            <Flex
-                flexDirection="row"
-            >
-                <div className="w-16">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
-                </div>
-
+            <div className="flex flex-col gap-y-6 w-full">
                 <Flex
-                    flexDirection="col"
-                    className="gap-y-2"
-                >
-                    <BarChart
-                        data={amountCommittedToEachResearchCategoryOverTime}
-                        index="year"
-                        categories={researchCategories}
-                        valueFormatter={dollarValueFormatter}
-                        colors={colours}
-                        showLegend={false}
-                        className="h-[36rem] -ml-2"
-                    />
-
-                    <Subtitle>Year</Subtitle>
-                </Flex>
-            </Flex>
-
-            <Flex
-                justifyContent="between"
-                alignItems="center"
-                className="ignore-in-image-export"
-            >
-                <Flex
-                    justifyContent="end"
+                    justifyContent="between"
                     alignItems="center"
-                    className="gap-x-2"
+                    className="ignore-in-image-export"
                 >
-                    <ExportToPngButton
-                        selector="#amount-committed-to-each-research-category-over-time-card"
-                        filename="amount-committed-to-each-research-category-over-time"
+                    <MultiSelect
+                        options={selectOptions.ResearchCat}
+                        selectedOptions={selectedResearchCategories}
+                        setSelectedOptions={setSelectedResearchCategories}
+                        placeholder="All Research Categories"
+                        className="max-w-xs ignore-in-image-export"
                     />
 
-                    <ExportToCsvButton
-                        meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(filteredDataset)}
-                        filename="grant-by-amount-committed-to-each-research-category-over-time"
-                    />
+                    {filteredDataset.length < globallyFilteredDataset.length &&
+                        <Text>Filtered Grants: {filteredDataset.length}</Text>
+                    }
                 </Flex>
-            </Flex>
 
-            <p className="text-sm text-gray-500">Please note that only a subset of the full dataset is represented in charts related to committed amounts of money.</p>
-        </Card>
+                <Flex
+                    flexDirection="row"
+                >
+                    <div className="w-16">
+                        <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+                    </div>
+
+                    <Flex
+                        flexDirection="col"
+                        className="gap-y-2"
+                    >
+                        <BarChart
+                            data={amountCommittedToEachResearchCategoryOverTime}
+                            index="year"
+                            categories={researchCategories}
+                            valueFormatter={dollarValueFormatter}
+                            colors={colours}
+                            showLegend={false}
+                            className="h-[36rem] -ml-2"
+                        />
+
+                        <Subtitle>Year</Subtitle>
+                    </Flex>
+                </Flex>
+            </div>
+        </VisualisationCard>
     )
 }
