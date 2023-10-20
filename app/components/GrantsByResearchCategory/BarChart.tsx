@@ -127,7 +127,7 @@ export default function BarChart({chartData}: Props) {
 
             <div className="flex flex-col mt-4 gap-y-2">
                 <Legend
-                    categories={['Number Of Grants With Known Amount Committed', 'Number Of Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
                     colors={['blue', 'orange', 'green']}
                 />
             </div>
