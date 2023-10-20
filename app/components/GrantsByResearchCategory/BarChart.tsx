@@ -117,12 +117,12 @@ export default function BarChart({chartData}: Props) {
                     </Fragment>
                 ))}
 
-                <div className="pr-8 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle>Number of projects</Subtitle>
+                <div className="pr-6 col-span-2 justify-self-end hidden md:block">
+                    <Subtitle className="mt-4">Number of projects</Subtitle>
                 </div>
 
                 <div className="pl-2 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle>Known amount committed (USD)</Subtitle>
+                    <Subtitle className="mt-4">Known amount committed (USD)</Subtitle>
                 </div>
             </div>
 
