@@ -1,23 +1,67 @@
 import {every} from 'lodash'
 
+export function availableFilters() {
+    return [
+        {
+            field: 'FundingOrgName',
+            label: 'Funder',
+            excludeGrantsWithMultipleItemsInFieldSwitch: {label: 'Exclude Joint Funding'}
+        },
+
+        {
+            field: 'ResearchInstitutionName',
+            label: 'Research Institution'
+        },
+
+        {
+            field: 'Disease',
+            label: 'Disease'
+        },
+
+        {
+            field: 'Pathogen',
+            label: 'Pathogen',
+            excludeGrantsWithMultipleItemsInFieldSwitch: {label: 'Exclude Grants with Multiple Pathogens'}
+        },
+
+        {
+            field: 'GrantStartYear',
+            label: 'Year'
+        },
+
+        {
+            field: 'StudySubject',
+            label: 'Study Subject'
+        },
+
+        {
+            field: 'AgeGroups',
+            label: 'Age Group'
+        },
+
+        {
+            field: 'StudyType',
+            label: 'Study Type'
+        }
+    ]
+}
+
 export function emptyFilters() {
-    return {
-        FundingOrgName: [],
-        ResearchInstitutionName: [],
-        Disease: [],
-        Pathogen: [],
-        GrantStartYear: [],
-        StudySubject: [],
-        AgeGroups: [],
-        StudyType: [],
-    }
+    return Object.fromEntries(
+        availableFilters().map(
+            ({field}) => ([
+                field,
+                {values: [], excludeGrantsWithMultipleItemsInField: false}
+            ])
+        )
+    )
 }
 
 export function filterGrants(grants: any, selectedFilterGroups: any) {
     return grants.filter(
         (grant: any) => every(
             selectedFilterGroups,
-            (selectedFilters, key) => (selectedFilters.length === 0) || grantMatchesFilter(grant, selectedFilters, key)
+            ({values}, key) => (values.length === 0) || grantMatchesFilter(grant, values, key)
         )
     )
 }

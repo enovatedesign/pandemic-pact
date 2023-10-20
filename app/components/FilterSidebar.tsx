@@ -1,10 +1,9 @@
-import {useState} from "react"
 import {Button, Flex, Text, Subtitle} from "@tremor/react"
 import {XIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
 import {type Filters} from "../types/filters"
-import {emptyFilters} from "../helpers/filter"
+import {availableFilters, emptyFilters} from "../helpers/filter"
 import selectOptions from '../../data/dist/select-options.json'
 
 interface FilterSidebarProps {
@@ -14,27 +13,21 @@ interface FilterSidebarProps {
     globallyFilteredDataset: any[],
 }
 
-type FilterableField = keyof Filters
-
 export default function FilterSidebar({selectedFilters, setSelectedFilters, completeDataset, globallyFilteredDataset}: FilterSidebarProps) {
-    const [includeJointSchemes, setIncludeJointSchemes] = useState<boolean>(true)
-    const [includeMultiPathogen, setIncludeMultiPathogen] = useState<boolean>(true)
-
-    const filters: any = Object.entries({
-        "FundingOrgName": "Funder",
-        "ResearchInstitutionName": "Research Institution",
-        "Disease": "Disease",
-        "Pathogen": "Pathogen",
-        "GrantStartYear": "Year",
-        "StudySubject": "Study Subject",
-        "AgeGroups": "Age Group",
-        "StudyType": "Study Type",
-    })
+    const filters = availableFilters()
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = {...selectedFilters}
 
-        selectedOptions[field] = options
+        selectedOptions[field].values = options
+
+        setSelectedFilters(selectedOptions)
+    }
+
+    const setExcludeGrantsWithMultipleItemsInField = (field: keyof Filters, value: boolean) => {
+        let selectedOptions: Filters = {...selectedFilters}
+
+        selectedOptions[field].excludeGrantsWithMultipleItemsInField = value
 
         setSelectedFilters(selectedOptions)
     }
@@ -52,7 +45,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     `Total Grants: ${completeDataset.length}`
             }</Subtitle>
 
-            {filters.map(([field, name]: [FilterableField, string]) => (
+            {filters.map(({field, label, excludeGrantsWithMultipleItemsInFieldSwitch}) => (
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
@@ -60,27 +53,19 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     className="gap-y-2"
                     key={field}
                 >
-                    <Text className="text-white">Filter by {name}</Text>
+                    <Text className="text-white">Filter by {label}</Text>
 
                     <MultiSelect
                         options={selectOptions[field]}
-                        selectedOptions={selectedFilters[field]}
+                        selectedOptions={selectedFilters[field].values}
                         setSelectedOptions={options => setSelectedOptions(field, options)}
                     />
 
-                    {field === 'FundingOrgName' &&
+                    {excludeGrantsWithMultipleItemsInFieldSwitch &&
                         <Switch
-                            checked={includeJointSchemes}
-                            onChange={setIncludeJointSchemes}
-                            label="Include Joint Schemes"
-                        />
-                    }
-
-                    {field === 'Pathogen' &&
-                        <Switch
-                            checked={includeMultiPathogen}
-                            onChange={setIncludeMultiPathogen}
-                            label="Include Multi-Pathogen Grants"
+                            checked={selectedFilters[field].excludeGrantsWithMultipleItemsInField}
+                            onChange={value => setExcludeGrantsWithMultipleItemsInField(field, value)}
+                            label={excludeGrantsWithMultipleItemsInFieldSwitch.label}
                         />
                     }
                 </Flex>
