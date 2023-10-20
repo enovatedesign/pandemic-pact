@@ -10,12 +10,11 @@ import iso2aToCountryNameMapping from '../../../data/dist/iso2a-to-country-name-
 
 interface Props {
     dataset: any[],
-    selectedPathogens: string[],
 }
 
 type Iso2aCode = keyof typeof iso2aToCountryNameMapping
 
-export default function BarChart({dataset, selectedPathogens}: Props) {
+export default function BarChart({dataset}: Props) {
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
 
     const colours = [
@@ -68,23 +67,9 @@ export default function BarChart({dataset, selectedPathogens}: Props) {
     )
 
     data = data.map(([country, grants]: [string, any]) => {
-        if (selectedPathogens.length === 0) {
-            return {
-                country,
-                'All Pathogens': grants.reduce(...sumNumericGrantAmounts),
-            }
-        }
-
         return {
             country,
-            ...Object.fromEntries(
-                selectedPathogens.map(pathogen => ([
-                    pathogen,
-                    grants.filter((grant: any) => grant.Pathogen
-                        .includes(pathogen))
-                        .reduce(...sumNumericGrantAmounts)
-                ]))
-            ),
+            'Amount Committed': grants.reduce(...sumNumericGrantAmounts),
         }
     })
 

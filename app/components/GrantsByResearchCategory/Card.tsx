@@ -1,19 +1,13 @@
-import {useState} from "react"
-import {Flex, Card, Title, Subtitle, Text, Tab, TabList, TabGroup} from "@tremor/react"
+import {Title, Text} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import ExportToPngButton from "../ExportToPngButton"
-import ExportToCsvButton from "../ExportToCsvButton"
+import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
 import ScatterChart from "./ScatterChart"
-import {exportRequestBodyFilteredToMatchingGrants} from "../../helpers/meilisearch"
 import {type CardProps} from "../../types/card-props"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import selectOptions from "../../../data/dist/select-options.json"
-import InfoModal from "../InfoModal"
 
 export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: CardProps) {
-    const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
-
     const researchCategoryOptions = selectOptions.ResearchCat
 
     const chartData = researchCategoryOptions.map(function (researchCategory) {
@@ -36,87 +30,40 @@ export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: 
         }
     })
 
+    const tabs = [
+        {
+            tab: {
+                icon: ChartBarIcon,
+                label: "Bars",
+            },
+            content: <BarChart chartData={chartData} />,
+        },
+        {
+            tab: {
+                icon: SparklesIcon,
+                label: "Scatter",
+            },
+            content: <ScatterChart chartData={chartData} />,
+        },
+    ]
+
+    const infoModalContents = (
+        <>
+            <Title>Lorem Ipsum Dolor</Title>
+
+            <Text>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae in, eligendi odio animi distinctio laborum exercitationem, illo deleniti sit sunt nemo doloremque. Nemo reprehenderit inventore magni eligendi nam architecto sint!</Text>
+        </>
+    )
+
     return (
-        <Card
-            id="grants-by-research-category-card"
-        >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="gap-y-6"
-            >
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className="gap-y-2"
-                >
-                    <Flex
-                        justifyContent="between"
-                        alignItems="center"
-                    >
-                        <Flex justifyContent="start" className="gap-x-3">
-                            <Title>Grants By Research Category</Title>
-
-                            <InfoModal>
-                                <Title>Lorem Ipsum Dolor</Title>
-
-                                <Text>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae in, eligendi odio animi distinctio laborum exercitationem, illo deleniti sit sunt nemo doloremque. Nemo reprehenderit inventore magni eligendi nam architecto sint!</Text>
-                            </InfoModal>
-                        </Flex>
-                    </Flex>
-
-                    <Subtitle>
-                        Magni reprehenderit architecto eligendi id sint repudiandae dolore aperiam.
-                        Tenetur sint nemo hic iusto. A corporis aliquam magni nemo harum iusto.
-                    </Subtitle>
-                </Flex>
-
-                {selectedTabIndex === 0 &&
-                    <BarChart
-                        chartData={chartData}
-                    />
-                }
-
-                {selectedTabIndex === 1 &&
-                    <ScatterChart
-                        chartData={chartData}
-                    />
-                }
-
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                    className="ignore-in-image-export"
-                >
-                    <TabGroup
-                        index={selectedTabIndex}
-                        onIndexChange={setSelectedTabIndex}
-                    >
-                        <TabList variant="solid">
-                            <Tab icon={ChartBarIcon}>Bars</Tab>
-                            <Tab icon={SparklesIcon}>Scatter</Tab>
-                        </TabList>
-                    </TabGroup>
-
-                    <Flex
-                        justifyContent="end"
-                        alignItems="center"
-                        className="gap-x-2"
-                    >
-                        <ExportToPngButton
-                            selector="#grants-by-research-category-card"
-                            filename="grants-by-research-category"
-                        />
-
-                        <ExportToCsvButton
-                            meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(globallyFilteredDataset)}
-                            filename="grant-by-research-category"
-                        />
-                    </Flex>
-                </Flex>
-
-                <p className="text-sm text-gray-500">Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder.</p>
-            </Flex>
-        </Card>
+        <VisualisationCard
+            filteredDataset={globallyFilteredDataset}
+            id="grants-by-research-category"
+            title="Grants By Research Category"
+            subtitle="Magni reprehenderit architecto eligendi id sint repudiandae dolore aperiam. Tenetur sint nemo hic iusto. A corporis aliquam magni nemo harum iusto."
+            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            infoModalContents={infoModalContents}
+            tabs={tabs}
+        />
     )
 }

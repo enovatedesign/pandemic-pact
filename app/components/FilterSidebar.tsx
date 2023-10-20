@@ -1,8 +1,8 @@
 import {useState} from "react"
 import {Button, Flex, Text, Subtitle} from "@tremor/react"
-import {Switch} from '@headlessui/react'
 import {XIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
+import Switch from './Switch'
 import {type Filters} from "../types/filters"
 import {emptyFilters} from "../helpers/filter"
 import selectOptions from '../../data/dist/select-options.json'
@@ -69,39 +69,19 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     />
 
                     {field === 'FundingOrgName' &&
-                        <div className="flex items-center gap-x-2">
-                            <Switch
-                                checked={includeJointSchemes}
-                                onChange={setIncludeJointSchemes}
-                                className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                            >
-                                <span className="sr-only">Include Joint Schemes</span>
-
-                                <span
-                                    className={`${includeJointSchemes ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                />
-                            </Switch>
-
-                            <Text className="opacity-100 text-white">Include Joint Schemes</Text>
-                        </div>
+                        <Switch
+                            checked={includeJointSchemes}
+                            onChange={setIncludeJointSchemes}
+                            label="Include Joint Schemes"
+                        />
                     }
 
                     {field === 'Pathogen' &&
-                        <div className="flex items-center gap-x-2">
-                            <Switch
-                                checked={includeMultiPathogen}
-                                onChange={setIncludeMultiPathogen}
-                                className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                            >
-                                <span className="sr-only">Include Multi-Pathogen</span>
-
-                                <span
-                                    className={`${includeMultiPathogen ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                />
-                            </Switch>
-
-                            <Text className="opacity-100 text-white">Include Multi-Pathogen</Text>
-                        </div>
+                        <Switch
+                            checked={includeMultiPathogen}
+                            onChange={setIncludeMultiPathogen}
+                            label="Include Multi-Pathogen Grants"
+                        />
                     }
                 </Flex>
             ))}
