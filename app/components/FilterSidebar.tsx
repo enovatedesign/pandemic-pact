@@ -66,6 +66,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                             checked={selectedFilters[field].excludeGrantsWithMultipleItemsInField}
                             onChange={value => setExcludeGrantsWithMultipleItemsInField(field, value)}
                             label={excludeGrantsWithMultipleItemsInFieldSwitch.label}
+                            textClassName="text-white"
                         />
                     }
                 </Flex>
