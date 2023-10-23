@@ -1,5 +1,4 @@
 import {useState} from "react"
-import {Subtitle} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
