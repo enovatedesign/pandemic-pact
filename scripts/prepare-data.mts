@@ -133,6 +133,7 @@ async function main() {
                     {min: 1, max: 2},
                 ),
                 "Disease": [faker.helpers.objectValue(lookupTables.Disease)],
+                "ResearchLocationCountry": faker.helpers.objectValue(lookupTables.Regions),
                 ...funder,
                 ...researchInstitution,
             }
@@ -306,6 +307,7 @@ function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
             'Ethnicity',
             'AgeGroups',
             'Rurality',
+            'ResearchLocationCountry',
             'ResearchInstitutionName',
             'ResearchInstitutionCountry',
             'ResearchInstitutionRegion',
