@@ -95,8 +95,6 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         )
     }
 
-    console.log(nodes, links);
-
     return (
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
