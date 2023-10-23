@@ -45,6 +45,18 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                 "Western Pacific",
             ]
         },
+
+        {
+            field: 'ResearchLocationRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
     ]
 
     const nodes = nodeGroups.map(
@@ -82,6 +94,8 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
             ).flat(2)
         )
     }
+
+    console.log(nodes, links);
 
     return (
         <VisualisationCard
