@@ -21,41 +21,67 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         "Western Pacific": "#64748b",
     }
 
-    const nodes = [
-        // Source Regions
-        {"name": "Africa", isTarget: false},
-        {"name": "Americas", isTarget: false},
-        {"name": "South-East Asia", isTarget: false},
-        {"name": "Europe", isTarget: false},
-        {"name": "Eastern Mediterranean", isTarget: false},
-        {"name": "Western Pacific", isTarget: false},
+    const nodeGroups = [
+        {
+            field: 'FunderRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
 
-        // Target Regions
-        {"name": "Africa", isTarget: true},
-        {"name": "Americas", isTarget: true},
-        {"name": "South-East Asia", isTarget: true},
-        {"name": "Europe", isTarget: true},
-        {"name": "Eastern Mediterranean", isTarget: true},
-        {"name": "Western Pacific", isTarget: true},
-    ].filter(
-        node => node.isTarget ?
-            globallyFilteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
-            globallyFilteredDataset.some((grant: any) => grant.FunderRegion === node.name)
-    )
+        {
+            field: 'ResearchInstitutionRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
+    ]
 
-    const links = Object.entries(
-        groupBy(globallyFilteredDataset, 'FunderRegion')
-    ).map(
-        ([funderRegion, grants]) => Object.entries(
-            groupBy(grants, 'ResearchInstitutionRegion')
+    const nodes = nodeGroups.map(
+        ({field, names}, group) => names.filter(
+            name => globallyFilteredDataset.some(
+                grant => grant[field] === name
+            )
         ).map(
-            ([researchInstitutionRegion, grants]) => ({
-                source: nodes.findIndex(node => node.name === funderRegion && !node.isTarget),
-                target: nodes.findIndex(node => node.name === researchInstitutionRegion && node.isTarget),
-                value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
-            })
+            name => ({name, group})
         )
     ).flat(1)
+
+    let links: any[] = [];
+
+    for (let i = 0, len = nodeGroups.length; i < len - 1; i++) {
+        const sourceGroup = i;
+        const targetGroup = i + 1;
+
+        const {field: sourceField} = nodeGroups[sourceGroup]
+        const {field: targetField} = nodeGroups[targetGroup]
+
+        links = links.concat(
+            Object.entries(
+                groupBy(globallyFilteredDataset, sourceField)
+            ).map(
+                ([sourceFieldValue, grants]) => Object.entries(
+                    groupBy(grants, targetField)
+                ).map(
+                    ([targetFieldValue, grants]) => ({
+                        source: nodes.findIndex(node => node.name === sourceFieldValue && node.group === sourceGroup),
+                        target: nodes.findIndex(node => node.name === targetFieldValue && node.group === targetGroup),
+                        value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
+                    })
+                )
+            ).flat(2)
+        )
+    }
 
     return (
         <VisualisationCard
@@ -85,6 +111,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                                         <SankeyNode
                                             colours={colours}
                                             displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                            totalNodeGroups={nodeGroups.length}
                                         />
                                     }
                                     link={
@@ -126,8 +153,10 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload, colours, displayTotalMoneyCommitted}: any) {
-    const {isTarget, name, value} = payload;
+function SankeyNode({x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups}: any) {
+    const {name, value, group} = payload;
+
+    const isLastNode = group === totalNodeGroups - 1
 
     const fill = colours[name as keyof typeof colours]
 
@@ -147,8 +176,8 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
             />
 
             <text
-                textAnchor={isTarget ? 'end' : 'start'}
-                x={isTarget ? x - 6 : x + width + 6}
+                textAnchor={isLastNode ? 'end' : 'start'}
+                x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
                 fill={labelFill}
@@ -157,8 +186,8 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
             </text>
 
             <text
-                textAnchor={isTarget ? 'end' : 'start'}
-                x={isTarget ? x - 6 : x + width + 6}
+                textAnchor={isLastNode ? 'end' : 'start'}
+                x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
                 fill={labelFill}
