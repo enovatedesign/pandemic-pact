@@ -27,7 +27,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
         dataset.map((grant: any) => grant.Pathogen).flat()
     )
 
-    const pathogens = uniq(
+    const pathogens = (selectedPathogens.length > 0) ? selectedPathogens : uniq(
         filteredDataset.map((grant: any) => grant.Pathogen).flat()
     )
 
