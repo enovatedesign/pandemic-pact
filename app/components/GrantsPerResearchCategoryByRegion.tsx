@@ -6,7 +6,9 @@ import selectOptions from '../../data/dist/select-options.json'
 export default function GrantsPerResearchCategoryByRegion({globallyFilteredDataset}: CardProps) {
     const researchCategoryOptions = selectOptions.ResearchCat
 
-    const regionOptions = selectOptions.Regions
+    const regionOptions = selectOptions.Regions.filter(
+        regionOption => !["Not known", "Unspecified"].includes(regionOption.value)
+    )
 
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = globallyFilteredDataset
