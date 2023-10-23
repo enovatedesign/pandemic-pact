@@ -104,45 +104,65 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
             <div className="w-full">
                 {links.length > 0 &&
                     <div className="flex flex-col justify-center gap-y-8">
-                        <div className="w-full flex items-center">
-                            <div className="w-16">
-                                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
-                            </div>
-
-                            <ResponsiveContainer width="100%" height={600}>
-                                <Sankey
-                                    data={{nodes, links}}
-                                    nodePadding={30}
-                                    margin={{
-                                        left: 0,
-                                        right: 0,
-                                        top: 30,
-                                        bottom: 30,
-                                    }}
-                                    node={
-                                        <SankeyNode
-                                            colours={colours}
-                                            displayTotalMoneyCommitted={displayTotalMoneyCommitted}
-                                            totalNodeGroups={nodeGroups.length}
-                                        />
-                                    }
-                                    link={
-                                        <SankeyLink
-                                            colours={colours}
-                                        />
-                                    }
-                                >
-                                    <Tooltip
-                                        isAnimationActive={false}
-                                        formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                        <ResponsiveContainer width="100%" height={600}>
+                            <Sankey
+                                data={{nodes, links}}
+                                nodePadding={30}
+                                margin={{
+                                    left: 0,
+                                    right: 0,
+                                    top: 40,
+                                    bottom: 80,
+                                }}
+                                node={
+                                    <SankeyNode
+                                        colours={colours}
+                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                        totalNodeGroups={nodeGroups.length}
                                     />
-                                </Sankey>
-                            </ResponsiveContainer>
+                                }
+                                link={
+                                    <SankeyLink
+                                        colours={colours}
+                                    />
+                                }
+                            >
+                                <Tooltip
+                                    isAnimationActive={false}
+                                    formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                                />
 
-                            <div className="w-16">
-                                <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
-                            </div>
-                        </div>
+                                <text
+                                    x={0}
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="start"
+                                >
+                                    Funder Region
+                                </text>
+
+                                <text
+                                    x="50%"
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="middle"
+                                >
+                                    Research Institution Region
+                                </text>
+
+                                <text
+                                    x="100%"
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="end"
+                                >
+                                    Research Location Region
+                                </text>
+                            </Sankey>
+                        </ResponsiveContainer>
 
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
@@ -165,7 +185,9 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups}: any) {
+function SankeyNode(props: any) {
+    const {x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups} = props;
+
     const {name, value, group} = payload;
 
     const isLastNode = group === totalNodeGroups - 1
