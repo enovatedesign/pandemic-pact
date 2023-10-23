@@ -70,6 +70,7 @@ export default function Visualise() {
                     <Col numColSpan={12}>
                         <GrantsPerResearchCategoryByRegion
                             globallyFilteredDataset={globallyFilteredDataset}
+                            selectedFilters={selectedFilters}
                         />
                     </Col>
 
