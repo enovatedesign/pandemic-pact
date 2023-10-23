@@ -56,7 +56,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     <Text className="text-white">Filter by {label}</Text>
 
                     <MultiSelect
-                        options={selectOptions[field]}
+                        options={selectOptions[field as keyof typeof selectOptions]}
                         selectedOptions={selectedFilters[field].values}
                         setSelectedOptions={options => setSelectedOptions(field, options)}
                     />
