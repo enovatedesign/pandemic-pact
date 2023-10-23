@@ -128,7 +128,10 @@ async function main() {
                 "PolicyRoadmap08": "", // awaiting specification
                 "PolicyRoadmap09": "", // awaiting specification
                 "PolicyRoadmap10": "", // awaiting specification
-                "Pathogen": [faker.helpers.objectValue(lookupTables.Pathogen)],
+                "Pathogen": faker.helpers.arrayElements(
+                    Object.values(lookupTables.Pathogen),
+                    {min: 1, max: 2},
+                ),
                 "Disease": [faker.helpers.objectValue(lookupTables.Disease)],
                 ...funder,
                 ...researchInstitution,

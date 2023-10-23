@@ -6,9 +6,10 @@ interface Props {
     onChange: (checked: boolean) => void
     label: string
     className?: string
+    textClassName?: string
 }
 
-export default function Switch({checked, onChange, label, className}: Props) {
+export default function Switch({checked, onChange, label, className, textClassName}: Props) {
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
             <HeadlessUISwitch
@@ -23,7 +24,7 @@ export default function Switch({checked, onChange, label, className}: Props) {
                 />
             </HeadlessUISwitch>
 
-            <Text className="opacity-100">{label}</Text>
+            <Text className={textClassName}>{label}</Text>
         </div>
     )
 }
