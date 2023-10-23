@@ -1,6 +1,6 @@
 export interface Filter {
     values: string[]
-    excludeGrantsWithMultipleItemsInField: boolean
+    excludeGrantsWithMultipleItems: boolean
 }
 
 export interface Filters {

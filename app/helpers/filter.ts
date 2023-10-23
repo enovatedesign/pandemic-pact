@@ -5,7 +5,7 @@ export function availableFilters() {
         {
             field: 'FundingOrgName',
             label: 'Funder',
-            excludeGrantsWithMultipleItemsInFieldSwitch: {label: 'Exclude Joint Funding'}
+            excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'}
         },
 
         {
@@ -21,7 +21,7 @@ export function availableFilters() {
         {
             field: 'Pathogen',
             label: 'Pathogen',
-            excludeGrantsWithMultipleItemsInFieldSwitch: {label: 'Exclude Grants with Multiple Pathogens'}
+            excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'}
         },
 
         {
@@ -51,7 +51,7 @@ export function emptyFilters() {
         availableFilters().map(
             ({field}) => ([
                 field,
-                {values: [], excludeGrantsWithMultipleItemsInField: false}
+                {values: [], excludeGrantsWithMultipleItems: false}
             ])
         )
     )
@@ -61,9 +61,9 @@ export function filterGrants(grants: any, filters: any) {
     return grants.filter(
         (grant: any) => every(
             filters,
-            ({values, excludeGrantsWithMultipleItemsInField}, key) => {
+            ({values, excludeGrantsWithMultipleItems}, key) => {
                 // if the grant has multiple items in the field and the switch is on, exclude it
-                if (excludeGrantsWithMultipleItemsInField && grant[key].length > 1) {
+                if (excludeGrantsWithMultipleItems && grant[key].length > 1) {
                     return false;
                 }
 

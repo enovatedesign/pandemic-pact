@@ -27,7 +27,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
     const setExcludeGrantsWithMultipleItemsInField = (field: keyof Filters, value: boolean) => {
         let selectedOptions: Filters = {...selectedFilters}
 
-        selectedOptions[field].excludeGrantsWithMultipleItemsInField = value
+        selectedOptions[field].excludeGrantsWithMultipleItems = value
 
         setSelectedFilters(selectedOptions)
     }
@@ -45,7 +45,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     `Total Grants: ${completeDataset.length}`
             }</Subtitle>
 
-            {filters.map(({field, label, excludeGrantsWithMultipleItemsInFieldSwitch}) => (
+            {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
@@ -61,11 +61,11 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                         setSelectedOptions={options => setSelectedOptions(field, options)}
                     />
 
-                    {excludeGrantsWithMultipleItemsInFieldSwitch &&
+                    {excludeGrantsWithMultipleItems &&
                         <Switch
-                            checked={selectedFilters[field].excludeGrantsWithMultipleItemsInField}
+                            checked={selectedFilters[field].excludeGrantsWithMultipleItems}
                             onChange={value => setExcludeGrantsWithMultipleItemsInField(field, value)}
-                            label={excludeGrantsWithMultipleItemsInFieldSwitch.label}
+                            label={excludeGrantsWithMultipleItems.label}
                             textClassName="text-white"
                         />
                     }
