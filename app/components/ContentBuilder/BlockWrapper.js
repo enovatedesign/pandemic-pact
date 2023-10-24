@@ -19,8 +19,8 @@ export default function BlockWrapper({ children, options = {} }) {
     ]
 
     const spacingValues = {
-        mobile: reducedSpacing ? '6' : '12',
-        desktop: reducedSpacing ? '12' : '24'
+        mobile: reducedSpacing ? '6' : '6',
+        desktop: reducedSpacing ? '6' : '12'
     }
 
     const blockClasses = [
