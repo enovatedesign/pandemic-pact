@@ -1,45 +1,48 @@
-import Image from "next/image";
+import Image from 'next/image';
+import BlockWrapper from '../BlockWrapper';
 
 export default function ImageBlock({ block }) {
-	const caption = block.caption;
-	const description = block.description;
-	const image = block.image[0];
-	const width = block.width;
 
-	if (description && image && width) {
-		if (width === "one-quarter") {
-			var widthClasses = "md:w-1/4";
-		} else if (width === "one-third") {
-			var widthClasses = "md:w-1/3";
-		} else if (width === "one-half") {
-			var widthClasses = "md:w-1/2";
-		} else if (width === "two-thirds") {
-			var widthClasses = "md:w-2/3";
-		} else if (width === "three-quarters") {
-			var widthClasses = "md:w-3/4";
-		}
+	// console.log(block);
 
-		const blockClasses = ["mx-auto w-full", widthClasses].join(" ");
+    const caption = block.caption
+    const image = block.image[0]
+	const width = block.width
 
-		return (
-			<figure className={blockClasses}>
-				<div className={"block relative pt-full w-full"}>
-					<Image
-						alt={description}
-						height={image.height}
-						src={image.path}
-						width={image.width}
-					/>
-				</div>
-
-				{caption && (
-					<figcaption className="block mt-4 text-center text-xs text-gray-540">
-						{caption}
-					</figcaption>
-				)}
-			</figure>
-		);
-	} else {
-		return null;
+	const sizes = {
+		'full': 			{classes: 'w-full', 	sizes: '100vw'},
+		'three-quarters': 	{classes: 'w-3/4', 		sizes: '(min-width: 786px) 66vw, (min-width: 1024px) 75vw, 100vw' },
+		'two-thirds':     	{classes: 'w-2/3', 		sizes: '(min-width: 786px) 66vw, 100vw'},
+    	'one-half': 		{classes: 'w-1/2', 		sizes: '(min-width: 786px) 66vw, (min-width: 1024px) 50vw, 100vw'},
 	}
+
+    if (image && width) {
+
+        const blockClasses = ['mx-auto w-full'].join(' ');
+
+        return (
+			<BlockWrapper>
+				<figure className={`${sizes[width].classes} mx-auto`}>
+					<div className="breakout">
+						<Image
+							alt={image.altText}
+							height={image.height}
+							src={image.url}
+							width={image.width}
+							sizes={sizes[width].sizes}
+							className="w-full"
+							loading="lazy"
+							/>
+					</div>
+					{caption && (
+						<figcaption className="mt-4 font-medium text-sm text-gray-600 dark:text-gray-400">
+							{caption}
+						</figcaption>
+					)}
+				</figure>
+			</BlockWrapper>
+        );
+    } else {
+        return null;
+    }
 }

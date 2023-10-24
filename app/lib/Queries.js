@@ -78,9 +78,17 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_image_BlockType {
             id
-            image(altText: "", height: "", width: "") {
-              url
+            image @transform(transform: "c2000xauto") {
+              ... on contentAssets_Asset {
+                url
+                width
+                height
+                altText
+              }
             }
+            width
+            caption
+            typeHandle
           }
           ... on bodyContent_imagePair_BlockType {
             id
