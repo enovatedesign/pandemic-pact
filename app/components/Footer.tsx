@@ -47,7 +47,7 @@ export default function Header({className}: {className?: string}) {
     )
 
     return (
-        <footer className="pt-12 pb-12 bg-gradient-to-t from-primary to-70% to-transparent dark:from-primary/50">
+        <footer className="pt-12 pb-12 bg-gradient-to-t from-primary/30 to-70% to-transparent">
             <div className="container">
 
                 <div className="flex flex-col md:flex-row md:justify-between gap-12 md:gap-24">
@@ -96,7 +96,7 @@ export default function Header({className}: {className?: string}) {
 
                 </div>
 
-                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-300 dark:bg-gray-800 dark:border-gray-700">
+                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
                         <div className="text-center xl:text-left">
                             <p className="text-gray-700 dark:text-gray-300">
