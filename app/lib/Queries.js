@@ -105,27 +105,35 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_accordion_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_richTextColumns_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_contentSlider_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_splitImageText_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_tabbedContent_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_table_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_divider_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_gallery_BlockType {
             id
+            typeHandle
           }
           ... on bodyContent_embeddedMedia_BlockType {
             id
