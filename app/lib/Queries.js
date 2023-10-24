@@ -101,7 +101,6 @@ export const contentBuilderQuery = `
               }
             }
             typeHandle
-            status
           }
           ... on bodyContent_accordion_BlockType {
             id
