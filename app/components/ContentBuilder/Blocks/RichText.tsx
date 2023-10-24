@@ -1,3 +1,6 @@
+import BlockWrapper from '../BlockWrapper';
+import { defaultProseClasses } from '@/app/helpers/prose-classes';
+
 export default function RichTextBlock({ block }) {
 	const text = block.text;
 	const textAlign = block.textAlign;
@@ -5,14 +8,16 @@ export default function RichTextBlock({ block }) {
 	if (text && textAlign) {
 		const blockClasses = [
 			"text-" + textAlign,
-			"prose-sm max-w-none md:prose",
+			defaultProseClasses.join(" "),
 		].join(" ");
 
 		return (
-			<div
-				className={blockClasses}
-				dangerouslySetInnerHTML={{ __html: text }}
-			/>
+			<BlockWrapper>
+				<div
+					className={blockClasses}
+					dangerouslySetInnerHTML={{ __html: text }}
+				/>
+			</BlockWrapper>
 		);
 	} else {
 		return null;

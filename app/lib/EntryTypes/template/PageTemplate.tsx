@@ -17,11 +17,9 @@ export default function PageTemplate({data}) {
                 summary={entry.summary}
                 sidebarContent={false}
                 >
-                <div className="container">
 
-                    <Matrix blocks={entry.bodyContent} />
+                <Matrix blocks={entry.bodyContent} />
                     
-                </div>
             </Layout>
         </>
     )

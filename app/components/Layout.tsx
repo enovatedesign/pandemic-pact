@@ -7,6 +7,7 @@ import {useSpring, animated} from '@react-spring/web'
 import {MenuIcon} from '@heroicons/react/solid'
 
 import Header from './Header'
+import Footer from './Footer'
 import PageTitle from './PageTitle'
 import Text from './Text'
 
@@ -94,6 +95,8 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
 
                         </article>
                     </main>
+
+                    <Footer />
                 </div>
             </div>
         </>
