@@ -1,9 +1,13 @@
 export const seomaticQuery = `
-    seomatic {
-        metaJsonLdContainer
-        metaTagContainer
-        metaTitleContainer
+  seo: seomatic(asArray: true) {
+    ... on SeomaticType {
+      metaTitleContainer
+      metaTagContainer
+      metaSiteVarsContainer
+      metaLinkContainer
+      metaJsonLdContainer
     }
+  }
 `
 
 export const contentBuilderQuery = `

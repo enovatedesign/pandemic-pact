@@ -1,11 +1,13 @@
 'use client'
 
+import mastheadStyles from "../css/components/masthead.module.css"
+
 import {useState} from 'react'
 import {useSpring, animated} from '@react-spring/web'
 import {MenuIcon} from '@heroicons/react/solid'
 
 import Header from './Header'
-import Heading from './Heading'
+import PageTitle from './PageTitle'
 import Text from './Text'
 
 type Props = {
@@ -38,39 +40,61 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
 
     return (
         <>
-            {sidebarContent &&
-                <aside className="relative bg-secondary">
-                    <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
-                            <span className="sr-only">Menu</span>
-                            <MenuIcon className="h-8 w-8" aria-hidden="true" />
-                        </button>
+            <div id="skiplink-container">
+                <a href="#content" className="block bg-secondary text-center text-white w-full sr-only focus:not-sr-only focus:relative">
+                    <span className="flex items-center justify-center py-3 lg:py-4 container">
+                        Skip to main content
+                    </span>
+                </a>
+            </div>
+            <div className={`sidebarContent && "flex"`}>
+                {sidebarContent &&
+                    <aside className="relative bg-secondary">
+                        <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
+                                <span className="sr-only">Menu</span>
+                                <MenuIcon className="h-8 w-8" aria-hidden="true" />
+                            </button>
 
-                        <animated.div
-                            className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
-                            style={widthAnimationProps}
-                        >
-                            <animated.div style={opacityAnimationProps}>
-                                {sidebarContent}
+                            <animated.div
+                                className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
+                                style={widthAnimationProps}
+                                >
+                                <animated.div style={opacityAnimationProps}>
+                                    {sidebarContent}
+                                </animated.div>
                             </animated.div>
-                        </animated.div>
-                    </div>
-                </aside>
-            }
-
-            <div className="container mx-auto px-12 py-12">
-                {/* <Header /> */}
-
-                <main>
-                    {title &&
-                        <div className="mb-6">
-                            <Heading>{title}</Heading>
-                            {summary && <Text>{summary}</Text>}
                         </div>
-                    }
+                    </aside>
+                }
 
-                    {children}
-                </main>
+                <div>
+                    <Header className="absolute top-0 w-full z-50"/>
+
+                    <main id="content">
+
+                        <article aria-labelledby="page-title">                            
+
+                            <div className={`h-[20rem] lg:h-[24rem] masthead-background ${mastheadStyles.background}`}>
+
+                                <div className="h-full flex items-end pb-6 lg:pb-12">
+
+                                    {title &&
+                                        <div className="container">
+                                            <PageTitle>{title}</PageTitle>
+                                            {summary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            {children}
+
+                        </article>
+                    </main>
+                </div>
             </div>
         </>
     )

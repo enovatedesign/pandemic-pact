@@ -143,6 +143,7 @@ module.exports = {
   ],
   plugins: [
     require("@headlessui/tailwindcss"),
+    require('@tailwindcss/typography'),
     ({ addComponents, theme }) => {
       addComponents(
         {

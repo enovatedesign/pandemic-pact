@@ -11,7 +11,7 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const classes: string = `flex overflow-x-hidden ${font.className}`;
+    const classes: string = `overflow-x-hidden ${font.className}`;
 
     return (
         <html lang="en">
