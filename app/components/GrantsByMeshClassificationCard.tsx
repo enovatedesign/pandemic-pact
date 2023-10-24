@@ -1,90 +1,43 @@
-import {Flex, Card, Title, Subtitle, Text, CategoryBar, Legend, Color} from "@tremor/react"
-import ExportToPngButton from "./ExportToPngButton"
-import ExportToCsvButton from "./ExportToCsvButton"
-import {exportRequestBodyFilteredToMatchingGrants} from "../helpers/meilisearch"
+import {Flex, Subtitle, CategoryBar, Legend, Color} from "@tremor/react"
+import VisualisationCard from "./VisualisationCard"
 import {type CardProps} from "../types/card-props"
 import selectOptions from '../../data/dist/select-options.json'
 import {useState} from "react"
-import {Switch} from "@headlessui/react"
+import Switch from './Switch'
 
-export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: CardProps) {
+export default function GrantsByMeshClassificationCard({globallyFilteredDataset}: CardProps) {
     const [unspecified, setUnspecified] = useState(true);
 
     return (
-        <Card
-            className="flex flex-col gap-y-6"
-            id="grants-by-mesh-classification-card"
+        <VisualisationCard
+            filteredDataset={globallyFilteredDataset}
+            id="grants-by-mesh-classification"
+            title="Grants By MESH Classifications"
+            subtitle="Doloribus iste inventore odio sint laboriosam eaque. Perspiciatis laborum itaque ea labore ratione. Dolor eveniet itaque dolores doloremque quam alias eaque."
+            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
         >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="gap-y-2"
-            >
-                <Title>Grants By MESH Classifications</Title>
+            <div className="flex flex-col justify-center gap-y-8 w-full">
+                <div className="w-full flex flex-col gap-y-6">
+                    <div className="flex flex-col gap-y-6">
+                        <DataBar
+                            title="Age Groups"
+                            dataset={globallyFilteredDataset}
+                            fieldName="AgeGroups"
+                            showUnspecified={unspecified}
+                            options={selectOptions.AgeGroups}
+                        />
+                    </div>
+                </div>
 
-                <Subtitle>
-                    Doloribus iste inventore odio sint laboriosam eaque.
-                    Perspiciatis laborum itaque ea labore ratione.
-                    Dolor eveniet itaque dolores doloremque quam alias eaque.
-                </Subtitle>
-            </Flex>
-
-            <div className="flex flex-col gap-y-6">
-                <DataBar
-                    title="Age Groups"
-                    dataset={globallyFilteredDataset}
-                    fieldName="AgeGroups"
-                    showUnspecified={unspecified}
-                    options={selectOptions.AgeGroups}
+                <Switch
+                    checked={unspecified}
+                    onChange={setUnspecified}
+                    label="Hide Unspecified"
+                    className="justify-center"
                 />
             </div>
-
-            <Flex
-            >
-                <Flex
-                    alignItems="center"
-                    justifyContent="start"
-                >
-
-                    <div className="flex items-center gap-x-2">
-                        <Switch
-                            checked={unspecified}
-                            onChange={setUnspecified}
-                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                        >
-                            <span className="sr-only">Display Unspecified</span>
-
-                            <span
-                                className={`${unspecified ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                            />
-                        </Switch>
-
-                        <Text className={opaqueTextIf(!unspecified)}>Hide Unspecified</Text>
-                    </div>
-                </Flex>
-
-                <Flex
-                    justifyContent="end"
-                    alignItems="center"
-                    className="gap-x-2 ignore-in-image-export"
-                >
-                    <ExportToPngButton
-                        selector="#grants-by-mesh-classification-card"
-                        filename="grant-by-mesh-classification-card"
-                    />
-
-                    <ExportToCsvButton
-                        meilisearchRequestBody={exportRequestBodyFilteredToMatchingGrants(globallyFilteredDataset)}
-                        filename="grant-by-mesh-classification"
-                    />
-                </Flex>
-            </Flex>
-        </Card>
+        </VisualisationCard>
     )
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }
 
 interface DataBarProps {

@@ -1,6 +1,7 @@
 import {useState} from "react"
-import {Card, Text, Title, Subtitle} from "@tremor/react"
-import {Switch} from '@headlessui/react'
+import {Subtitle} from "@tremor/react"
+import VisualisationCard from "./VisualisationCard"
+import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {uniq} from "lodash"
@@ -26,7 +27,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
         dataset.map((grant: any) => grant.Pathogen).flat()
     )
 
-    const pathogens = uniq(
+    const pathogens = (selectedPathogens.length > 0) ? selectedPathogens : uniq(
         filteredDataset.map((grant: any) => grant.Pathogen).flat()
     )
 
@@ -82,84 +83,77 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
     )
 
     return (
-        <Card
-            id="sankey-test"
+        <VisualisationCard
+            filteredDataset={filteredDataset}
+            id="grants-by-pathogen-and-disease"
+            title="Grants By Pathogen and Disease"
         >
-            <Title>Grants By Pathogen and Disease</Title>
+            <div className="w-full">
+                <MultiSelect
+                    options={allPathogens.map(pathogen => ({value: pathogen, label: pathogen}))}
+                    selectedOptions={selectedPathogens}
+                    setSelectedOptions={options => setSelectedPathogens(options)}
+                    placeholder={"Select Pathogens"}
+                    className="mt-4"
+                />
 
-            <MultiSelect
-                options={allPathogens.map(pathogen => ({value: pathogen, label: pathogen}))}
-                selectedOptions={selectedPathogens}
-                setSelectedOptions={options => setSelectedPathogens(options)}
-                placeholder={"Select Pathogens"}
-                className="mt-4"
-            />
+                {links.length > 0 &&
+                    <div className="flex flex-col justify-center gap-y-8">
+                        <div className="w-full flex items-center">
+                            <div className="w-16">
+                                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
+                            </div>
 
-            {links.length > 0 &&
-                <div>
-                    <div className="w-full flex items-center">
-                        <div className="w-16">
-                            <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
+                            <ResponsiveContainer width="100%" height={600}>
+                                <Sankey
+                                    data={{nodes, links}}
+                                    nodePadding={30}
+                                    margin={{
+                                        left: 0,
+                                        right: 0,
+                                        top: 30,
+                                        bottom: 30,
+                                    }}
+                                    node={
+                                        <SankeyNode
+                                            colours={colours}
+                                            displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                        />
+                                    }
+                                    link={
+                                        <SankeyLink
+                                            colours={colours}
+                                        />
+                                    }
+                                >
+                                    <Tooltip
+                                        isAnimationActive={false}
+                                        formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                                    />
+                                </Sankey>
+                            </ResponsiveContainer>
+
+                            <div className="w-16">
+                                <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
+                            </div>
                         </div>
 
-                        <ResponsiveContainer width="100%" height={600}>
-                            <Sankey
-                                data={{nodes, links}}
-                                nodePadding={30}
-                                margin={{
-                                    left: 0,
-                                    right: 0,
-                                    top: 30,
-                                    bottom: 30,
-                                }}
-                                node={
-                                    <SankeyNode
-                                        colours={colours}
-                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
-                                    />
-                                }
-                                link={
-                                    <SankeyLink
-                                        colours={colours}
-                                    />
-                                }
-                            >
-                                <Tooltip
-                                    isAnimationActive={false}
-                                    formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
-                                />
-                            </Sankey>
-                        </ResponsiveContainer>
-
-                        <div className="w-16">
-                            <Subtitle className="absolute whitespace-nowrap rotate-90 translate-x-1/3">Disease</Subtitle>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-x-2 mt-4">
-                        <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
-
-                        <Switch
+                        <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                        >
-                            <span className="sr-only">Display Total Money Committed</span>
-
-                            <span
-                                className={`${displayTotalMoneyCommitted ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                            />
-                        </Switch>
-
-                        <Text className={opaqueTextIf(displayTotalMoneyCommitted)}>Total Amount Committed (USD)</Text>
+                            leftLabel="Total Grants"
+                            rightLabel="Total Amount Committed (USD)"
+                            screenReaderLabel="Display Total Money Committed"
+                            className="justify-center"
+                        />
                     </div>
-                </div>
-            }
+                }
 
-            {links.length === 0 &&
-                <p className="text-center p-4">No Data.</p>
-            }
-        </Card >
+                {links.length === 0 &&
+                    <p className="text-center p-4">No Data.</p>
+                }
+            </div>
+        </VisualisationCard>
     )
 }
 
@@ -241,8 +235,4 @@ function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetC
           `}
         />
     </Layer>
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }

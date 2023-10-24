@@ -1,6 +1,6 @@
 import {useState} from "react"
-import {Card, Text, Title, Subtitle} from "@tremor/react"
-import {Switch} from '@headlessui/react'
+import VisualisationCard from "./VisualisationCard"
+import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
@@ -20,55 +20,89 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         "Western Pacific": "#64748b",
     }
 
-    const nodes = [
-        // Source Regions
-        {"name": "Africa", isTarget: false},
-        {"name": "Americas", isTarget: false},
-        {"name": "South-East Asia", isTarget: false},
-        {"name": "Europe", isTarget: false},
-        {"name": "Eastern Mediterranean", isTarget: false},
-        {"name": "Western Pacific", isTarget: false},
+    const nodeGroups = [
+        {
+            field: 'FunderRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
 
-        // Target Regions
-        {"name": "Africa", isTarget: true},
-        {"name": "Americas", isTarget: true},
-        {"name": "South-East Asia", isTarget: true},
-        {"name": "Europe", isTarget: true},
-        {"name": "Eastern Mediterranean", isTarget: true},
-        {"name": "Western Pacific", isTarget: true},
-    ].filter(
-        node => node.isTarget ?
-            globallyFilteredDataset.some((grant: any) => grant.ResearchInstitutionRegion === node.name) :
-            globallyFilteredDataset.some((grant: any) => grant.FunderRegion === node.name)
-    )
+        {
+            field: 'ResearchInstitutionRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
 
-    const links = Object.entries(
-        groupBy(globallyFilteredDataset, 'FunderRegion')
-    ).map(
-        ([funderRegion, grants]) => Object.entries(
-            groupBy(grants, 'ResearchInstitutionRegion')
+        {
+            field: 'ResearchLocationRegion',
+            names: [
+                "Africa",
+                "Americas",
+                "South-East Asia",
+                "Europe",
+                "Eastern Mediterranean",
+                "Western Pacific",
+            ]
+        },
+    ]
+
+    const nodes = nodeGroups.map(
+        ({field, names}, group) => names.filter(
+            name => globallyFilteredDataset.some(
+                grant => grant[field] === name
+            )
         ).map(
-            ([researchInstitutionRegion, grants]) => ({
-                source: nodes.findIndex(node => node.name === funderRegion && !node.isTarget),
-                target: nodes.findIndex(node => node.name === researchInstitutionRegion && node.isTarget),
-                value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
-            })
+            name => ({name, group})
         )
     ).flat(1)
 
+    let links: any[] = [];
+
+    for (let i = 0, len = nodeGroups.length; i < len - 1; i++) {
+        const sourceGroup = i;
+        const targetGroup = i + 1;
+
+        const {field: sourceField} = nodeGroups[sourceGroup]
+        const {field: targetField} = nodeGroups[targetGroup]
+
+        links = links.concat(
+            Object.entries(
+                groupBy(globallyFilteredDataset, sourceField)
+            ).map(
+                ([sourceFieldValue, grants]) => Object.entries(
+                    groupBy(grants, targetField)
+                ).map(
+                    ([targetFieldValue, grants]) => ({
+                        source: nodes.findIndex(node => node.name === sourceFieldValue && node.group === sourceGroup),
+                        target: nodes.findIndex(node => node.name === targetFieldValue && node.group === targetGroup),
+                        value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
+                    })
+                )
+            ).flat(2)
+        )
+    }
+
     return (
-        <Card
-            id="sankey-test"
+        <VisualisationCard
+            filteredDataset={globallyFilteredDataset}
+            id="regional-flow-of-grants"
+            title="Regional Flow of Grants"
         >
-            <Title>Regional Flow Of Grants</Title>
-
-            {links.length > 0 &&
-                <div>
-                    <div className="w-full flex items-center">
-                        <div className="w-16">
-                            <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Funder Region</Subtitle>
-                        </div>
-
+            <div className="w-full">
+                {links.length > 0 &&
+                    <div className="flex flex-col justify-center gap-y-8">
                         <ResponsiveContainer width="100%" height={600}>
                             <Sankey
                                 data={{nodes, links}}
@@ -76,13 +110,14 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                                 margin={{
                                     left: 0,
                                     right: 0,
-                                    top: 30,
-                                    bottom: 30,
+                                    top: 40,
+                                    bottom: 80,
                                 }}
                                 node={
                                     <SankeyNode
                                         colours={colours}
                                         displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                        totalNodeGroups={nodeGroups.length}
                                     />
                                 }
                                 link={
@@ -95,45 +130,66 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                                     isAnimationActive={false}
                                     formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
                                 />
+
+                                <text
+                                    x={0}
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="start"
+                                >
+                                    Funder Region
+                                </text>
+
+                                <text
+                                    x="50%"
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="middle"
+                                >
+                                    Research Institution Region
+                                </text>
+
+                                <text
+                                    x="100%"
+                                    y={580}
+                                    fontSize="16"
+                                    fill="#666"
+                                    textAnchor="end"
+                                >
+                                    Research Location Region
+                                </text>
                             </Sankey>
                         </ResponsiveContainer>
 
-                        <div className="w-16">
-                            <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/3">Research Institution Region</Subtitle>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-x-2 mt-4">
-                        <Text className={opaqueTextIf(!displayTotalMoneyCommitted)}>Total Grants</Text>
-
-                        <Switch
+                        <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                        >
-                            <span className="sr-only">Display Total Money Committed</span>
-
-                            <span
-                                className={`${displayTotalMoneyCommitted ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                            />
-                        </Switch>
-
-                        <Text className={opaqueTextIf(displayTotalMoneyCommitted)}>Total Amount Committed (USD)</Text>
+                            leftLabel="Total Grants"
+                            rightLabel="Total Amount Committed (USD)"
+                            screenReaderLabel="Display Total Money Committed"
+                            className="justify-center"
+                        />
                     </div>
-                </div>
-            }
+                }
 
-            {links.length === 0 &&
-                <p className="text-center p-4">No Data.</p>
-            }
-        </Card >
+                {links.length === 0 &&
+                    <p className="text-center p-4">No Data.</p>
+                }
+            </div>
+        </VisualisationCard>
     )
 }
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
-function SankeyNode({x, y, width, height, index, payload, colours, displayTotalMoneyCommitted}: any) {
-    const {isTarget, name, value} = payload;
+function SankeyNode(props: any) {
+    const {x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups} = props;
+
+    const {name, value, group} = payload;
+
+    const isLastNode = group === totalNodeGroups - 1
 
     const fill = colours[name as keyof typeof colours]
 
@@ -153,8 +209,8 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
             />
 
             <text
-                textAnchor={isTarget ? 'end' : 'start'}
-                x={isTarget ? x - 6 : x + width + 6}
+                textAnchor={isLastNode ? 'end' : 'start'}
+                x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
                 fill={labelFill}
@@ -163,8 +219,8 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
             </text>
 
             <text
-                textAnchor={isTarget ? 'end' : 'start'}
-                x={isTarget ? x - 6 : x + width + 6}
+                textAnchor={isLastNode ? 'end' : 'start'}
+                x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
                 fill={labelFill}
@@ -208,8 +264,4 @@ function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetC
           `}
         />
     </Layer>
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }

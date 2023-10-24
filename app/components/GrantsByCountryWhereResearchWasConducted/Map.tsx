@@ -1,16 +1,17 @@
 import {useState, useMemo} from 'react'
 import {useRouter} from 'next/navigation'
-import {Text} from "@tremor/react"
+import dynamic from 'next/dynamic'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
-import {Switch} from '@headlessui/react'
+import DoubleLabelSwitch from "../DoubleLabelSwitch"
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
-import ColourScale from "./ColourScale"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
+
+const ColourScale = dynamic(() => import('./ColourScale'), {ssr: false})
 
 interface Props {
     dataset: any[]
@@ -115,23 +116,13 @@ export default function Map({dataset}: Props) {
                 <ColourScale colourScale={colourScale} />
 
                 <div className="justify-self-center mt-4">
-                    <div className="flex items-center gap-x-2">
-                        <Text className={opaqueTextIf(!displayWhoRegions)}>Countries</Text>
-
-                        <Switch
-                            checked={displayWhoRegions}
-                            onChange={setDisplayWhoRegions}
-                            className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
-                        >
-                            <span className="sr-only">Display WHO Regions</span>
-
-                            <span
-                                className={`${displayWhoRegions ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                            />
-                        </Switch>
-
-                        <Text className={opaqueTextIf(displayWhoRegions)}>WHO Regions</Text>
-                    </div>
+                    <DoubleLabelSwitch
+                        checked={displayWhoRegions}
+                        onChange={setDisplayWhoRegions}
+                        leftLabel="Countries"
+                        rightLabel="WHO Regions"
+                        screenReaderLabel="Display WHO Regions"
+                    />
                 </div>
             </div>
 
@@ -186,8 +177,4 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) 
             }
         })
     )
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }

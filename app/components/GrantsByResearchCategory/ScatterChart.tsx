@@ -25,7 +25,7 @@ export default function ScatterChart({chartData}: Props) {
 
     return (
         <TremorScatterChart
-            className="h-80 -ml-2"
+            className="h-[600px] -ml-2"
             data={chartData}
             category="Research Category"
             x="Total Number Of Grants"
