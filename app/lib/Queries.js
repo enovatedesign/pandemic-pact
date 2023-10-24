@@ -136,6 +136,28 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_embeddedMedia_BlockType {
             id
+            typeHandle
+          }
+          ... on bodyContent_funderLogoAndStatement_BlockType {
+            id
+            typeHandle
+            heading
+            funders {
+              ... on funders_BlockType {
+                id
+                funderLogos {
+                  ... on contentAssets_Asset {
+                    id
+                    altText
+                  }
+                  url(transform: "f240xauto", immediately: true)
+                  width
+                  height
+                }
+                funderName
+                fundingStatement
+              }
+            }
           }
     }
 `

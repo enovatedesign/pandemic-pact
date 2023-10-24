@@ -11,6 +11,7 @@ import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
 import StatisticsBlock from "./Blocks/Statistics";
 import SubHeadingBlock from "./Blocks/SubHeading";
+import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
 
 const blocks = {
 	button: ButtonBlock,
@@ -25,6 +26,7 @@ const blocks = {
 	richText: RichTextBlock,
 	statistics: StatisticsBlock,
 	subHeading: SubHeadingBlock,
+	funderLogoAndStatement: FunderLogoAndStatementBlock,
 };
 
 const Block = (props) => {
