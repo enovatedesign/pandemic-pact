@@ -74,29 +74,37 @@ export default function Header({className}: {className?: string}) {
 
                     </div>
 
-                    <div className="flex justify-center sm:justify-between md:flex-col xl:flex-row md:justify-end items-center gap-6 md:gap-12 xl:gap-24">
+                    <div className="flex justify-center sm:justify-between md:flex-col xl:flex-row md:justify-end items-center xl:items-end gap-6 xl:gap-12">
                                     
                         <Image
                             src="/glopid-r-logo.png"
-                            alt="GLOPID-R Logo"
+                            alt="GLOPID-R logo"
                             width={335}
                             height={79}
-                            className="w-36 lg:w-48"
+                            className="w-36 xl:w-48"
                         />
 
                         <Image
                             src="/ukcdr-logo.png"
-                            alt="UKCDR Logo"
+                            alt="UKCDR logo"
                             width={276}
                             height={114}
-                            className="w-36 lg:w-48"
+                            className="w-36 xl:w-48"
+                        />
+
+                        <Image
+                            src="/psi-logo.png"
+                            alt="Pandemic Sciences Institute logo"
+                            width={480}
+                            height={236}
+                            className="w-36 xl:w-48"
                         />
 
                     </div>
 
                 </div>
 
-                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="mt-12 bg-white py-6 px-8 rounded-2xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
                         <div className="text-center xl:text-left">
                             <p className="text-gray-700 dark:text-gray-300">
