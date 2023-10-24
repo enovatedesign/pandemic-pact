@@ -9,7 +9,7 @@ export default function ImageBlock({ block }) {
     const image = block.image[0]
 	const width = block.width
 
-	const sizes = {
+	const imageWidthLookup = {
 		'full': 			{classes: 'w-full', 	sizes: '100vw'},
 		'three-quarters': 	{classes: 'w-3/4', 		sizes: '(min-width: 786px) 66vw, (min-width: 1024px) 75vw, 100vw' },
 		'two-thirds':     	{classes: 'w-2/3', 		sizes: '(min-width: 786px) 66vw, 100vw'},
@@ -22,14 +22,14 @@ export default function ImageBlock({ block }) {
 
         return (
 			<BlockWrapper>
-				<figure className={`${sizes[width].classes} mx-auto`}>
+				<figure className={`${imageWidthLookup[width].classes} mx-auto`}>
 					<div className="breakout">
 						<Image
 							alt={image.altText}
 							height={image.height}
 							src={image.url}
 							width={image.width}
-							sizes={sizes[width].sizes}
+							sizes={imageWidthLookup[width].sizes}
 							className="w-full"
 							loading="lazy"
 							/>
