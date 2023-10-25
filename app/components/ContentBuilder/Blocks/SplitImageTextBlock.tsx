@@ -1,7 +1,7 @@
 import BlockWrapper from "../BlockWrapper"
 import Image from "next/image"
-import Text from "../../Text"
 import RichText from "../Common/RichText"
+import ButtonLink from "../Common/Button"
 
 const SplitImageTextBlock = ({block}) => {
 
@@ -16,32 +16,30 @@ const SplitImageTextBlock = ({block}) => {
 
     const textWrapperClasses = [
         'mx-auto h-full',
-        'flex items-center',
+        'flex flex-col justify-evenly items-start',
         reverse ? 'md:col-start-2 md:row-start-1' : '',
     ].join(' ');
 
     const imageWrapperClasses = [
         'flex items-center',
         reverse ? 'md:col-start-1 md:row-start-1' : '',
-
     ].join(' ');
 
     return(
         <BlockWrapper>
             <section className={gridClasses}>
-                <div>
-                    <div className={textWrapperClasses}>
+                <div className={textWrapperClasses}>
 
-                        {text && (
-                            <RichText className='' text={text} />
-                        )}
+                    {text && (
+                        <RichText text={text} />
+                    )}
 
-                        {button && (
-                            <p className="mt-10">
-                                {/* {{ macros.button('anchor', button.url, button.text, 'primary', 'lg') }} */}
-                            </p>
-                        )}
-                    </div>
+                    {button && (
+                        <ButtonLink 
+                            linkTo={button.url}
+                            title={button.text}
+                        />
+                    )}
                 </div>
                 <div className={imageWrapperClasses}>
                     <Image
