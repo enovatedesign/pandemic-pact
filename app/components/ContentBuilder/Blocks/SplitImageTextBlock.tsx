@@ -25,6 +25,7 @@ const SplitImageTextBlock = ({block}) => {
         reverse ? 'md:col-start-1 md:row-start-1' : '',
     ].join(' ');
 
+
     return(
         <BlockWrapper>
             <section className={gridClasses}>
@@ -34,7 +35,7 @@ const SplitImageTextBlock = ({block}) => {
                         <RichText text={text} />
                     )}
 
-                    {button && (
+                    {button.url && (
                         <ButtonLink 
                             linkTo={button.url}
                             title={button.text}
@@ -47,7 +48,6 @@ const SplitImageTextBlock = ({block}) => {
                         height={image.height}
                         src={image.url}
                         width={image.width}
-                        // sizes={imageWidthLookup[width].sizes}
                         className="w-full"
                         loading="lazy"
                     />

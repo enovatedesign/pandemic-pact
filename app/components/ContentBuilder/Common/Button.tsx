@@ -2,7 +2,6 @@ import Link from "next/link"
 
 const ButtonLink = ({ colourClass = 'primary', sizeClass = 'base', linkTo, title}) => {
     
-
     const colourClasses = {
         'dark': {
             class: 'bg-gray-700 text-white hover:bg-gray-800',
