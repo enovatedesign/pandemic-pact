@@ -41,6 +41,11 @@ export const contentBuilderQuery = `
           ... on bodyContent_download_BlockType {
             id
             typeHandle
+            download {
+              url
+              text
+              type
+            }
           }
           ... on bodyContent_form_BlockType {
             id
