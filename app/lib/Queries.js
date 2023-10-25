@@ -173,5 +173,27 @@ export const contentBuilderQuery = `
               }
             }
           }
+          ... on bodyContent_splitImageText_BlockType {
+            id
+            typeHandle
+            image(withTransforms: "c2000xauto") {
+              ... on contentAssets_Asset {
+                url
+                width
+                height
+                altText
+              }
+            }
+            button {
+              text
+              url
+              element {
+                title
+                uri
+              }
+            }
+            reverse
+            text
+          }
     }
 `

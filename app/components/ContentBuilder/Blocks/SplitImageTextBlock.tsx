@@ -1,0 +1,64 @@
+import BlockWrapper from "../BlockWrapper"
+import Image from "next/image"
+import Text from "../../Text"
+
+const SplitImageTextBlock = ({block}) => {
+
+    const image = block.image[0] ?? null
+    const text = block.text ?? null
+    const button = block.button ?? null
+    const reverse = block.reverse ?? false
+
+    const gridClasses = [
+        'grid gap-y-12 md:grid-cols-2 gap-x-8 md:gap-x-12 lg:gap-x-24 lg:gap-y-0'
+    ].join(' ');
+
+    const textWrapperClasses = [
+        'mx-auto',
+        'flex items-center',
+        reverse ? 'md:col-start-2 md:row-start-1' : '',
+    ].join(' ');
+
+    const imageWrapperClasses = [
+        'flex items-center',
+        reverse ? 'md:col-start-1 md:row-start-1' : '',
+
+    ].join(' ');
+
+    return(
+        <BlockWrapper>
+            <section className={gridClasses}>
+                <div>
+                    <div className={textWrapperClasses}>
+                        {text && (
+                            <Text className=''>
+                                { text }
+                            </Text>
+                        )}
+                        {button && (
+                            <p className="mt-10">
+                                {/* {{ macros.button('anchor', button.url, button.text, 'primary', 'lg') }} */}
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <div className={imageWrapperClasses}>
+                    <Image
+                        alt={image.altText}
+                        height={image.height}
+                        src={image.url}
+                        width={image.width}
+                        // sizes={imageWidthLookup[width].sizes}
+                        className="w-full"
+                        loading="lazy"
+                    />
+                </div>
+
+            </section>
+        </BlockWrapper>
+    )
+}
+
+export default SplitImageTextBlock
+
+

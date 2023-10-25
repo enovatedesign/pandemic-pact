@@ -9,6 +9,7 @@ import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
 import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
 import DownloadBlock from "./Blocks/Download";
+import SplitImageTextBlock from "./Blocks/SplitImageTextBlock"
 
 const blocks = {
 	button: ButtonBlock,
@@ -21,6 +22,7 @@ const blocks = {
 	richText: RichTextBlock,
 	funderLogoAndStatement: FunderLogoAndStatementBlock,
 	download: DownloadBlock,
+	splitImageText: SplitImageTextBlock,
 };
 
 const Block = (props) => {
