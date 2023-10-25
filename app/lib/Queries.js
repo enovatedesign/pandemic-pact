@@ -142,6 +142,7 @@ export const contentBuilderQuery = `
           ... on bodyContent_divider_BlockType {
             id
             typeHandle
+            style
           }
           ... on bodyContent_gallery_BlockType {
             id
