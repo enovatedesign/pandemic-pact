@@ -2,6 +2,7 @@ import BlockWrapper from "../BlockWrapper"
 import Image from "next/image"
 import RichText from "../Common/RichText"
 import ButtonLink from "../Common/Button"
+import { useInView, animated } from '@react-spring/web';
 
 const SplitImageTextBlock = ({block}) => {
 
@@ -26,10 +27,42 @@ const SplitImageTextBlock = ({block}) => {
     ].join(' ');
 
 
+    const [leftRef, leftSprings] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                x: !reverse ? -100 : 100,
+            },
+            to: {
+                opacity: 1,
+                x: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
+    const [rightRef, rightSprings] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                x: !reverse ? 100 : -100,
+            },
+            to: {
+                opacity: 1,
+                x: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return(
         <BlockWrapper>
             <section className={gridClasses}>
-                <div className={textWrapperClasses}>
+                <animated.div ref={leftRef} style={leftSprings} className={textWrapperClasses}>
 
                     {text && (
                         <RichText text={text} />
@@ -41,8 +74,9 @@ const SplitImageTextBlock = ({block}) => {
                             title={button.text}
                         />
                     )}
-                </div>
-                <div className={imageWrapperClasses}>
+                </animated.div>
+
+                <animated.div ref={rightRef} style={rightSprings} className={imageWrapperClasses}>
                     <Image
                         alt={image.altText}
                         height={image.height}
@@ -51,7 +85,7 @@ const SplitImageTextBlock = ({block}) => {
                         className="w-full"
                         loading="lazy"
                     />
-                </div>
+                </animated.div>
 
             </section>
         </BlockWrapper>
