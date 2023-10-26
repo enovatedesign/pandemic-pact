@@ -84,6 +84,22 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_listContentNews_BlockType {
             id
+            typeHandle
+            customEntries(
+              title: ""
+              thumbnailImage: ""
+              cardsFallbackImage: ""
+              id: ""
+              menuLabel: ""
+              newsTags: ""
+              postDate: ""
+              
+            ) {
+              url
+              title
+            }
+            limit
+            paginate
           }
           ... on bodyContent_image_BlockType {
             id

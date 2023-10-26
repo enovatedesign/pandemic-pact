@@ -13,6 +13,7 @@ import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
 import ImagePairBlock from "./Blocks/ImagePairBlock";
 import AccordionBlock from "./Blocks/AccordionBlock";
+import ListContentNewsBlock from "./Blocks/ListContentNewsBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -29,6 +30,7 @@ const blocks = {
 	tabbedContent: TabbedContentBlock,
 	imagePair: ImagePairBlock,
 	accordion: AccordionBlock,
+	listContentNews: ListContentNewsBlock,
 };
 
 const Block = (props) => {

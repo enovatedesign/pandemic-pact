@@ -4,6 +4,7 @@ import { useState } from "react"
 import AnimateHeight from 'react-animate-height';
 import { useInView, animated } from '@react-spring/web';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 
 type Props = {
     block: {
@@ -53,8 +54,8 @@ const AccordionBlock = ( {block}: Props ) => {
                         const handleClick = () => {
                             activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
                         }
-                        console.log('heading level is', headingLevel)
-
+                        
+                        const iconClasses = 'w-6 h-6 text-primary transition duration-300'
                         return (
                             <>
                                 {accordianData && (
@@ -77,7 +78,11 @@ const AccordionBlock = ( {block}: Props ) => {
                                                     )}
                                                         
                                                     {/* sort icons */}
-                                                    {/* <FontAwesomeIcon icon="fa-solid fa-plus"/> */}
+                                                    {activeIndex === index ? (
+                                                        <MinusIcon className={iconClasses}/>
+                                                    ) : (
+                                                        <PlusIcon className={iconClasses}/>
+                                                    )}
                                                 </button>
 
                                             <AnimateHeight
@@ -100,56 +105,3 @@ const AccordionBlock = ( {block}: Props ) => {
 }
 
 export default AccordionBlock
-
-// {% set headingLevel = block.headingLevel.value|default('2') %}
-
-// {% if accordions|length %}
-//     {% set textClasses = [
-//         macros.richTextEditorClasses({ withContent: true }),
-//     ]|filter|join(' ') %}
-
-//     {% embed '_components/blocks/blockWrapper' %}
-
-//         {% block blockContent %}
-
-//             <div x-data="{ active: 1 }" className="space-y-4">
-
-//                 {% for accordion in accordions %}
-
-//                     <div x-data="{
-//                             id: {{ loop.index }},
-//                             get expanded() {
-//                                 return this.active === this.id
-//                             },
-//                             set expanded(value) {
-//                                 this.active = value ? this.id : null
-//                             },
-//                         }" role="region" className="mx-auto w-full border border-gray-400 rounded {{ textClasses }}">
-//                         <h{{ headingLevel }} className="mb-0">
-//                             <button
-//                                 x-on:click="expanded = !expanded"
-//                                 :aria-expanded="expanded"
-//                                 className="flex items-center justify-between w-full px-6 py-4"
-//                             >
-//                                 <span className="text-left">{{ accordion.accordionHeading }}</span>
-//                                 <span x-show="expanded" aria-hidden="true" className="text-xl fa-solid fa-minus ml-4">&minus;</span>
-//                                 <span x-show="!expanded" aria-hidden="true" className="text-xl fa-solid fa-plus ml-4">&plus;</span>
-//                             </button>
-//                         </h{{ headingLevel }}>
-
-//                         <div x-show="expanded" x-collapse>
-//                             <div className="p-6 pt-3 {{ textClasses }}">
-//                                 {{ accordion.accordionContent }}
-//                             </div>
-//                         </div>
-//                     </div>
-
-//                 {% endfor %}
-
-//             </div>
-
-//         {% endblock %}
-
-//     {% endembed %}
-
-// {% endif %}
