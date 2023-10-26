@@ -8,7 +8,7 @@ import ImageBlock from "./Blocks/Image";
 import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
 import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
-import DownloadBlock from "./Blocks/Download"; // need assistance
+import DownloadBlock from "./Blocks/Download"; 
 import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
 

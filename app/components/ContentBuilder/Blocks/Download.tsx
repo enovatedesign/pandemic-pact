@@ -1,9 +1,19 @@
 import BlockWrapper from "../BlockWrapper";
 
-const DownloadBlock = ({block}) => {
+type Props = {
+	block: {
+		download: {
+			url: string,
+			customText?: string,
+            title: string,
+            type: string
+		}
+	}
+}
+
+const DownloadBlock = ({ block }: Props) => {
 	
-	const download = block.downlaod ?? null
-	console.log(download)
+	const download = block.download ?? null
 
 	const downloadKinds = {
 		'Excel Spreadsheet': {
@@ -26,7 +36,7 @@ const DownloadBlock = ({block}) => {
 	return (
 		<BlockWrapper>
 			<article>
-				download block
+				
 			</article>
 		</BlockWrapper>
 	);

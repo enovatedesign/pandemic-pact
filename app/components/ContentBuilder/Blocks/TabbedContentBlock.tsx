@@ -2,70 +2,102 @@
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
 import { useState } from "react"
+import AnimateHeight from 'react-animate-height';
+import { useInView, animated } from '@react-spring/web';
 
-const TabbedContentBlock = ({block}) => {
+type Props = {
+    block: {
+        id: number,
+        typeHandle: string,
+        tabs: {
+            id: number,
+            heading: string,
+            richText: string,
+          }
+        }
+    };
+
+const TabbedContentBlock = ( {block}: Props ) => {
 
     const tabs = block.tabs ?? null
 
     const [activeIndex, setActiveIndex] = useState(0)
 
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return(
         <BlockWrapper>
-            {tabs && (
-                <div>
-                    <ul
-                        role="tablist"
-                        className="overflow-x-hidden flex justify-center items-stretch space-x-1 lg:space-x-2"
-                    >
-                    {tabs.map((tab, index) => {
-                        
-                        
-                        const handleClick = () => {
-                            setActiveIndex(index)
-                        }
+            <animated.div ref={ref} style={springs}>
 
-                        return(
-                            <li key={index}>
-                                <button
-                                    type="button"
-                                    className="whitespace-nowrap md:whitespace-normal inline-flex px-4 py-2 border-t border-gray-300 border-l border-r rounded-t-md"
-                                    role="tab"
-                                    onClick={handleClick}
-                                >
-                                    { tab.heading }
-                                </button>
-                            </li>
-                        )
-                    })}
-                    </ul>
-                    
-                    <div>
+                {tabs && (
+                    <div className='w-full'>
+                        <ul role="tablist"
+                            className="overflow-x-hidden flex justify-center items-stretch space-x-1 lg:space-x-2"
+                        >
+                            {tabs.map((tab, index) => {
+                                
+                                const handleClick = () => {
+                                    setActiveIndex(index)
+                                }
+
+                                const conditionalClasses = [
+                                    activeIndex === index ? 'bg-white' : 'bg-gray-200'
+                                ].join(' ');
+
+                                return(
+                                    <li key={index}>
+                                        <button
+                                            type="button"
+                                            className={`${conditionalClasses} whitespace-nowrap md:whitespace-normal inline-flex px-4 py-2 border-t border-gray-300 border-l border-r rounded-t-md`}
+                                            role="tab"
+                                            onClick={handleClick}
+                                        >
+                                            { tab.heading }
+                                        </button>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                        
                         <div className="flex justify-center">
-                            <div className="bg-white md:rounded-md shadow-lg">
+                            <div className="bg-white md:rounded-md shadow-lg w-full">
                                 <section
                                     className="p-6 md:p-8"
                                     role="tabpanel"
                                 >
-                                    <ul>
-                                        {tabs.map((tab, index) => {
-                                            return (
-                                            <>
+                                    {tabs.map((tab, index) => {
+                                        return (
+                                            <AnimateHeight 
+                                                key={index}
+                                                duration={300}
+                                                height={activeIndex === index ? 'auto' : 0}
+                                            >
                                                 {activeIndex === index && (
-
-                                                    <li key={index}>
-                                                        <RichText text={tab.richText}/>
-                                                    </li>
+                                                    <RichText text={tab.richText} customClasses='max-w-none'/>
                                                 )}
-                                            </>
-                                            )
-                                        })}
-                                    </ul>
+                                            </AnimateHeight>
+                                        )
+                                    })}
                                 </section>
                             </div>
-                        </div> 
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </animated.div>
         </BlockWrapper>
     )
 }
