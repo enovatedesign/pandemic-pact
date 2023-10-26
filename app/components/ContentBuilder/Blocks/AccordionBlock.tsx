@@ -1,8 +1,9 @@
-import { set } from "lodash"
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
 import { useState } from "react"
 import AnimateHeight from 'react-animate-height';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus } from "@fortawesome/pro-solid-svg-icons";
 
 type Props = {
     block: {
@@ -20,11 +21,11 @@ const AccordionBlock = ( {block}: Props ) => {
     const accordions = block.accordions ?? null
     
     const [activeIndex, setActiveIndex] = useState(-1)
-    
+
     return (
         <BlockWrapper>
             {accordions && (
-                <ul>
+                <ul className="space-y-4">
                     {accordions.map((accordion, index) => {
                         
                         const accordionHeading = accordion.accordionHeading ?? null
@@ -51,8 +52,7 @@ const AccordionBlock = ( {block}: Props ) => {
                                                         <span className="text-left text-primary text-4xl font-bold">{ accordionHeading }</span>
                                                         
                                                         {/* sort icons */}
-                                                        <span aria-hidden="true" className="text-xl fa-solid fa-minus ml-4 text-primary"></span>
-                                                        <span aria-hidden="true" className="text-xl fa-solid fa-plus ml-4 text-primary"></span>
+                                                        {/* <FontAwesomeIcon icon="fa-solid fa-plus"/> */}
                                                     </button>
                                                 </h2>
 
