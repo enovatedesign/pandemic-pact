@@ -46,6 +46,9 @@ export const contentBuilderQuery = `
               url
               title
               type
+              element {
+                title
+              }
             }
           }
           ... on bodyContent_form_BlockType {
@@ -98,6 +101,21 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_imagePair_BlockType {
             id
+            typeHandle
+            imageLeft {
+              url
+              width
+              height
+              alt
+            }
+            imageLeftCaption
+            imageRight {
+              url
+              width
+              height
+              alt
+            }
+            imageRightCaption
           }
           ... on bodyContent_imageSlider_BlockType {
             id

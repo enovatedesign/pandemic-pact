@@ -7,6 +7,9 @@ type Props = {
 			customText?: string,
             title: string,
             type: string
+			element: {
+				title: string,
+			}
 		}
 	}
 }
@@ -14,6 +17,7 @@ type Props = {
 const DownloadBlock = ({ block }: Props) => {
 	
 	const download = block.download ?? null
+	const customText = download.customText ?? null
 
 	const downloadKinds = {
 		'Excel Spreadsheet': {
@@ -35,9 +39,12 @@ const DownloadBlock = ({ block }: Props) => {
 
 	return (
 		<BlockWrapper>
-			<article>
-				
-			</article>
+			{/* {download && (
+				<article>
+					
+				</article>
+			)} */}
+			Download Block
 		</BlockWrapper>
 	);
 }

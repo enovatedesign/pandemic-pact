@@ -8,9 +8,10 @@ import ImageBlock from "./Blocks/Image";
 import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
 import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
-import DownloadBlock from "./Blocks/Download"; 
+import DownloadBlock from "./Blocks/Download"; // need assistance on checking type of asset (word/pdf etc)
 import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
+import ImagePairBlock from "./Blocks/ImagePairBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -25,6 +26,7 @@ const blocks = {
 	download: DownloadBlock,
 	splitImageText: SplitImageTextBlock,
 	tabbedContent: TabbedContentBlock,
+	imagePair: ImagePairBlock,
 };
 
 const Block = (props) => {
