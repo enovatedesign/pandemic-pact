@@ -85,18 +85,18 @@ export const contentBuilderQuery = `
           ... on bodyContent_listContentNews_BlockType {
             id
             typeHandle
-            customEntries(
-              title: ""
-              thumbnailImage: ""
-              cardsFallbackImage: ""
-              id: ""
-              menuLabel: ""
-              newsTags: ""
-              postDate: ""
-              
-            ) {
-              url
-              title
+            customEntries {
+              ... on news_newsArticle_Entry {
+                url
+                title
+                summary
+                thumbnailImage(withTransforms: "c480x480") {
+                  url
+                  width
+                  height
+                  alt
+                }
+              }
             }
             limit
             paginate
