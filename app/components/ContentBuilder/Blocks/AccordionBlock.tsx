@@ -19,6 +19,7 @@ type Props = {
 const AccordionBlock = ( {block}: Props ) => {
     
     const accordions = block.accordions ?? null
+    const headingLevel = block.headingLevel
     
     const [activeIndex, setActiveIndex] = useState(-1)
 
@@ -30,14 +31,14 @@ const AccordionBlock = ( {block}: Props ) => {
                         
                         const accordionHeading = accordion.accordionHeading ?? null
                         const accordionContent = accordion.accordionContent ?? null
-                        const headingLevel = accordion.headingLevel ?? 2
                         
                         const accordianData = [accordionHeading, accordionContent] 
 
                         const handleClick = () => {
                             activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
                         }
-                        console.log(activeIndex)
+                        console.log('heading level is', headingLevel)
+
                         return (
                             <>
                                 {accordianData && (
