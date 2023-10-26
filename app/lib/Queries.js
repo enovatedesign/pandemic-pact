@@ -141,6 +141,14 @@ export const contentBuilderQuery = `
           ... on bodyContent_accordion_BlockType {
             id
             typeHandle
+            accordions {
+              ... on accordions_BlockType {
+                id
+                accordionContent
+                accordionHeading
+              }
+            }
+            headingLevel
           }
           ... on bodyContent_richTextColumns_BlockType {
             id

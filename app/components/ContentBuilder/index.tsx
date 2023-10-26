@@ -12,6 +12,7 @@ import DownloadBlock from "./Blocks/Download"; // need assistance on checking ty
 import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
 import ImagePairBlock from "./Blocks/ImagePairBlock";
+import AccordionBlock from "./Blocks/AccordionBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -27,6 +28,7 @@ const blocks = {
 	splitImageText: SplitImageTextBlock,
 	tabbedContent: TabbedContentBlock,
 	imagePair: ImagePairBlock,
+	accordion: AccordionBlock,
 };
 
 const Block = (props) => {
