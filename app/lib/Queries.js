@@ -102,18 +102,22 @@ export const contentBuilderQuery = `
           ... on bodyContent_imagePair_BlockType {
             id
             typeHandle
-            imageLeft {
-              url
-              width
-              height
-              alt
+            imageLeft(withTransforms: "c1000xauto") {
+              ... on contentAssets_Asset {
+                url
+                width
+                height
+                altText
+              }
             }
             imageLeftCaption
-            imageRight {
-              url
-              width
-              height
-              alt
+            imageRight(withTransforms: "c1000xauto") {
+              ... on contentAssets_Asset {
+                url
+                width
+                height
+                altText
+              }
             }
             imageRightCaption
           }

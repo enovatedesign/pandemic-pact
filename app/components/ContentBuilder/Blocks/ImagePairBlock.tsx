@@ -28,19 +28,6 @@ const ImagePairBlock = ( {block} : Props ) => {
     const imageRight = block.imageRight[0] ?? null
     const imageRightCaption = block.imageRightCaption ?? null
     const images = [imageLeft, imageRight]
-    
-    
-    function calculateHeight(width) {
-        const result = (width / 16)*10
-        return result
-    };
-
-    function calculateSize(one, two) {
-        return one < two ? one : two
-    }
-
-    const imageHeights = calculateSize(calculateHeight(imageLeft.height), calculateHeight(imageRight.height))
-    const imageWidths = calculateSize(imageLeft.width,imageRight.width)
 
     const [leftRef, leftSprings] = useInView(
         () => ({
@@ -81,10 +68,10 @@ const ImagePairBlock = ( {block} : Props ) => {
                     <animated.figure ref={leftRef} style={leftSprings}>
                         <Image
                             alt={imageLeft.altText}
-                            height={imageHeights}
+                            height={imageLeft.height}
                             src={imageLeft.url}
-                            width={imageWidths}
-                            className="w-full "
+                            width={imageLeft.width}
+                            className="w-full"
                             loading="lazy"
                         />
 
@@ -96,9 +83,9 @@ const ImagePairBlock = ( {block} : Props ) => {
                     <animated.figure ref={rightRef} style={rightSprings}>
                         <Image
                             alt={imageRight.altText}
-                            height={imageHeights}
+                            height={imageRight.height}
                             src={imageRight.url}
-                            width={imageWidths}
+                            width={imageRight.width}
                             className="w-full"
                             loading="lazy"
                         />
