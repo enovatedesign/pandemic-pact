@@ -30,8 +30,9 @@ const AccordionBlock = ( {block}: Props ) => {
                         
                         const accordionHeading = accordion.accordionHeading ?? null
                         const accordionContent = accordion.accordionContent ?? null
+                        const headingLevel = accordion.headingLevel ?? 2
+                        
                         const accordianData = [accordionHeading, accordionContent] 
-
 
                         const handleClick = () => {
                             activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
@@ -44,17 +45,24 @@ const AccordionBlock = ( {block}: Props ) => {
                                     <li className="space-y-4" key={index}>
                                         <div role="region" className="mx-auto w-full border border-gray-400 rounded">
                                             
-                                                <h2 className="mb-0">
-                                                    <button
-                                                        className="flex items-center justify-between w-full px-6 py-4"
-                                                        onClick={handleClick}
-                                                    >
-                                                        <span className="text-left text-primary text-4xl font-bold">{ accordionHeading }</span>
+                                                <button
+                                                    className="flex items-center justify-between w-full px-6 py-4"
+                                                    onClick={handleClick}
+                                                >
+                                                    {headingLevel === 2 ? (
+                                                        <h2 className="mb-0 text-left text-primary text-4xl font-bold">
+                                                                { accordionHeading }
+                                                        </h2>
+                                                    ) : (
+                                                        <h3 className="mb-0 text-left text-primary text-4xl font-bold">
+                                                            { accordionHeading }
+                                                        </h3>
+                                                    )}
                                                         
-                                                        {/* sort icons */}
-                                                        {/* <FontAwesomeIcon icon="fa-solid fa-plus"/> */}
-                                                    </button>
-                                                </h2>
+                                                    {/* sort icons */}
+                                                    {/* <FontAwesomeIcon icon="fa-solid fa-plus"/> */}
+
+                                                </button>
 
                                             <AnimateHeight
                                                 duration={300}
