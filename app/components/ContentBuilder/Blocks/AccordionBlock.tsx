@@ -16,8 +16,10 @@ type Props = {
 }
 
 const AccordionBlock = ( {block}: Props ) => {
-
+    
     const accordions = block.accordions ?? null
+    
+    const [activeIndex, setActiveIndex] = useState(-1)
     
     return (
         <BlockWrapper>
@@ -29,7 +31,6 @@ const AccordionBlock = ( {block}: Props ) => {
                         const accordionContent = accordion.accordionContent ?? null
                         const accordianData = [accordionHeading, accordionContent] 
 
-                        const [activeIndex, setActiveIndex] = useState(-1)
 
                         const handleClick = () => {
                             activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
