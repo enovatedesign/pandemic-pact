@@ -2,8 +2,8 @@ import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
 import { useState } from "react"
 import AnimateHeight from 'react-animate-height';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus } from "@fortawesome/pro-solid-svg-icons";
+import { useInView, animated } from '@react-spring/web';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Props = {
     block: {
@@ -19,14 +19,30 @@ type Props = {
 const AccordionBlock = ( {block}: Props ) => {
     
     const accordions = block.accordions ?? null
-    const headingLevel = block.headingLevel
+    const headingLevel = block.headingLevel ?? 2
     
     const [activeIndex, setActiveIndex] = useState(-1)
+
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
 
     return (
         <BlockWrapper>
             {accordions && (
-                <ul className="space-y-4">
+                <animated.ul className="space-y-4" ref={ref} style={springs}>
                     {accordions.map((accordion, index) => {
                         
                         const accordionHeading = accordion.accordionHeading ?? null
@@ -62,7 +78,6 @@ const AccordionBlock = ( {block}: Props ) => {
                                                         
                                                     {/* sort icons */}
                                                     {/* <FontAwesomeIcon icon="fa-solid fa-plus"/> */}
-
                                                 </button>
 
                                             <AnimateHeight
@@ -78,7 +93,7 @@ const AccordionBlock = ( {block}: Props ) => {
                             </>
                         )
                     })}
-                </ul>
+                </animated.ul>
             )}
         </BlockWrapper>
     )
