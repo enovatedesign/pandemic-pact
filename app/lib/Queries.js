@@ -42,8 +42,9 @@ export const contentBuilderQuery = `
             id
             typeHandle
             download {
+              customText
               url
-              text
+              title
               type
             }
           }
@@ -134,6 +135,13 @@ export const contentBuilderQuery = `
           ... on bodyContent_tabbedContent_BlockType {
             id
             typeHandle
+            tabs {
+              ... on tabs_BlockType {
+                id
+                heading
+                richText
+              }
+            }
           }
           ... on bodyContent_table_BlockType {
             id
