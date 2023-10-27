@@ -11,16 +11,22 @@ type Props = {
 		  height: number,
 		  width: number,
 		}
+		autoPlay: boolean,
+		thumbnailsOnly: boolean,
 	}
 }
 
 const GalleryBlock = ( { block }: Props ) => {
 	
 	const images = block.images; 
+	const autoplay = block.autoPlay ?? false
 
 	return (
 		<BlockWrapper>
-			<Gallery images={images} />
+			<Gallery 
+				images={images} 
+				autoplayState={autoplay}
+			/>
 		</BlockWrapper>
 	)
 }

@@ -208,6 +208,8 @@ export const contentBuilderQuery = `
               url
               width
             }
+            autoPlay
+            thumbnailsOnly
           }
           ... on bodyContent_embeddedMedia_BlockType {
             id

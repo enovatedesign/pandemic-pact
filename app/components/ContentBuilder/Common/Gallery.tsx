@@ -3,22 +3,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules"
 import "swiper/css/bundle"
 
-const Gallery = ({images}) => {
+const Gallery = ({images, autoplayState}) => {
 
 	const { url, alt, height, width } = images
 
-	return (
+    const autoplayDelay = autoplayState ? 3000 : null
+    console.log(autoplayDelay)
+    return (    
 		<div>
 			{images && (
 				<Swiper
-					modules={[Navigation, Pagination]}
+					modules={[Navigation, Pagination, Autoplay]}
 					spaceBetween={50}
 					slidesPerView={1}
 					navigation
+                    autoplay={{ delay: autoplayDelay }}
 					pagination={{ clickable: true }}
 					// scrollbar={{ draggable: true }}
 					// onSwiper={(swiper) => console.log(swiper)}
-					// onSlideChange={}
+					// onSlideChange={() => console.log('slide change')}
 					>
 					{images.map((image, index) => {
 						return(
