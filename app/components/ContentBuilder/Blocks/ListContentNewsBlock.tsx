@@ -1,25 +1,60 @@
-import BlockWrapper from "../BlockWrapper"
-import NewsCard from "../News/NewsCard.js"
+import BlockWrapper from "../BlockWrapper";
+import NewsCard from "../News/NewsCard.js";
+import { useInView, animated } from '@react-spring/web';
 
+type Props = {
+    block: {
+        customEntries: {
+            url: string,
+            title: string,
+            summary: string
+            thumbnailImage: {
+              url: string,
+              width: number,
+              height: number,
+              alt: string,
+            }
+        }
+        limit: number,
+        paginate: boolean,
+        addTagsMenu: boolean,
+    }
+}
 
-const ListContentNewsBlock = ( {block} ) => {
+const ListContentNewsBlock = ( {block}: Props ) => {
     
-    const customEntries = block.customEntries ?? null
+    const limit = block.limit ?? null
+    const customEntries = block.customEntries.slice(0, limit) ?? null
+    const paginate = block.paginate ?? false
+    const addTagsMenu = block.addTagsMenu ?? false
+
+
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
 
     return(
-        <>
-            <BlockWrapper>
+        <BlockWrapper>
+            <animated.div ref={ref} style={springs}>
                 <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {customEntries.map((entry, index) => {
-                        return (
-                            <>
-                                <NewsCard entry={entry} key={index}/>
-                            </>
-                        )
+                        return <NewsCard entry={entry} key={index}/>
                     })}
                 </ul>
-            </BlockWrapper>
-        </>
+            </animated.div>
+        </BlockWrapper>
     )
 }
 

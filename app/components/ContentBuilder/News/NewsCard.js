@@ -8,7 +8,6 @@ const NewsCard = ({entry}, {summaryCustomClasses = ''}) => {
         summaryCustomClasses
     ].join(' ')
     
-    console.log(summaryClasses)
     const classes = [
         'flex flex-col overflow-hidden w-full h-full',
         'transition duration-200',
