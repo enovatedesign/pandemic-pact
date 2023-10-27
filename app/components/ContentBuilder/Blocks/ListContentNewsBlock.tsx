@@ -1,5 +1,5 @@
 import BlockWrapper from "../BlockWrapper";
-import NewsCard from "../News/NewsCard.js";
+import NewsCard from "../News/NewsCard";
 import { useInView, animated } from '@react-spring/web';
 
 type Props = {
