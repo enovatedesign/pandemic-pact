@@ -15,6 +15,7 @@ import ImagePairBlock from "./Blocks/ImagePairBlock";
 import AccordionBlock from "./Blocks/AccordionBlock";
 import ListContentNewsBlock from "./Blocks/ListContentNewsBlock";
 import RichTextColumnsBlock from "./Blocks/RichTextColumnsBlock";
+import ContentSliderBlock from "./Blocks/ContentSliderBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -33,6 +34,7 @@ const blocks = {
 	accordion: AccordionBlock,
 	listContentNews: ListContentNewsBlock,
 	richTextColumns: RichTextColumnsBlock,
+	contentSlider: ContentSliderBlock
 };
 
 const Block = (props) => {

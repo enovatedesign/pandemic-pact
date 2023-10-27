@@ -191,6 +191,22 @@ export const contentBuilderQuery = `
           ... on bodyContent_contentSlider_BlockType {
             id
             typeHandle
+            slides {
+              ... on slides_BlockType {
+                id
+                button {
+                  text
+                  url
+                }
+                text
+                image {
+                  width
+                  url
+                  height
+                  alt
+                }
+              }
+            }
           }
           ... on bodyContent_splitImageText_BlockType {
             id
