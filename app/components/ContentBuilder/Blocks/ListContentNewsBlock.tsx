@@ -25,8 +25,8 @@ const ListContentNewsBlock = ( {block}: Props ) => {
     
     const limit = block.limit ?? null
     const customEntries = block.customEntries.slice(0, limit) ?? null
+    const tags = block.addTagsMenu ?? false
     const paginate = block.paginate ?? false
-    const addTagsMenu = block.addTagsMenu ?? false
 
 
     const [ref, springs] = useInView(
@@ -50,7 +50,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
             <animated.div ref={ref} style={springs}>
                 <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {customEntries.map((entry, index) => {
-                        return <NewsCard entry={entry} key={index}/>
+                        return <NewsCard entry={entry} key={index} tags={tags}/>
                     })}
                 </ul>
             </animated.div>

@@ -1,12 +1,8 @@
 import Image from "next/image";
 
-const NewsCard = ({entry}, {summaryCustomClasses = ''}) => {
+const NewsCard = ({entry}) => {
     const { title, summary, } = entry
     const thumbnailImage = entry.thumbnailImage[0] ?? null
-    
-    const summaryClasses = [
-        summaryCustomClasses
-    ].join(' ')
     
     const classes = [
         'flex flex-col overflow-hidden w-full h-full',
