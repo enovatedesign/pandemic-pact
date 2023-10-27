@@ -176,7 +176,7 @@ export const contentBuilderQuery = `
                 button {
                   customText
                   url
-                  title
+                  text
                 }
                 text
                 image {

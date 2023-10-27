@@ -10,7 +10,7 @@ type Props = {
             button: {
               customText: string,
               url: string,
-              title: string,
+              text: string,
             }
             text: string,
             image: {
@@ -46,7 +46,7 @@ const RichTextColumnsBlock = ({block} : Props) => {
                         console.log(button)                        
                         return (
                             <>
-                                <div className="flex flex-col" key={index}>
+                                <div className="flex flex-col space-y-6 items-start" key={index}>
                                     {image && (
                                         <Image 
                                             src={image.url}
@@ -62,8 +62,11 @@ const RichTextColumnsBlock = ({block} : Props) => {
                                         <RichText text={text} />
                                     )}
 
-                                    {button && (
-                                        <ButtonLink linkTo={button.url} title={button.text}/>
+                                    {button.url && (
+                                        <ButtonLink 
+                                            linkTo={button.url}
+                                            title={button.text}
+                                        />
                                     )}
                                 </div>
                             </>
