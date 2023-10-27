@@ -2,7 +2,7 @@ import React from "react";
 import ButtonBlock from "./Blocks/Button";
 import DividerBlock from "./Blocks/Divider";
 import EmbeddedMediaBlock from "./Blocks/EmbeddedMedia";
-import GalleryBlock from "./Blocks/Gallery";
+import GalleryBlock from "./Blocks/GalleryBlock";
 import HighlightedRichTextBlock from "./Blocks/HighlightedRichText";
 import ImageBlock from "./Blocks/Image";
 import MultiColumnsBlock from "./Blocks/MultiColumns";

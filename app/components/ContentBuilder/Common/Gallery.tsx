@@ -1,28 +1,14 @@
-import BlockWrapper from '../BlockWrapper';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules"
 import "swiper/css/bundle"
 
-type Props = {
-	block: {
-		id: number,
-		typeHandle: string,
-		images: {
-		  alt: string,
-		  url: string,
-		  height: number,
-		  width: number,
-		}
-	}
-}
+const Gallery = ({images}) => {
 
-const GalleryBlock = ( { block }: Props ) => {
-	
-	const images = block.images; 
+	const { url, alt, height, width } = images
 
 	return (
-		<BlockWrapper>
+		<div>
 			{images && (
 				<Swiper
 					modules={[Navigation, Pagination]}
@@ -52,8 +38,8 @@ const GalleryBlock = ( { block }: Props ) => {
 
 				</Swiper>
 			)}
-		</BlockWrapper>
+		</div>
 	)
 }
 
-export default GalleryBlock
+export default Gallery
