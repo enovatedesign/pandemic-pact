@@ -23,13 +23,11 @@ const GalleryBlock = ( { block }: Props ) => {
 	const thumbnailsOnly = block.thumbnailsOnly ?? false
 
 	return (
-		<BlockWrapper>
 			<Gallery 
 				images={images} 
 				autoplayState={autoplay}
 				thumbnailsOnlyState={thumbnailsOnly}
 			/>
-		</BlockWrapper>
 	)
 }
 
