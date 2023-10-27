@@ -1,9 +1,10 @@
 import Image from "next/image";
+import NewsTags from "./NewsTags";
 
-const NewsCard = ({entry}) => {
+const NewsCard = ({entry, tags}) => {
     const { title, summary, } = entry
     const thumbnailImage = entry.thumbnailImage[0] ?? null
-    
+
     const classes = [
         'flex flex-col overflow-hidden w-full h-full',
         'transition duration-200',
@@ -41,6 +42,10 @@ const NewsCard = ({entry}) => {
                         </p>
                     )}
                 </div>
+
+                {tags && (
+                    <NewsTags />
+                )}
             </article>
         </div>
     )

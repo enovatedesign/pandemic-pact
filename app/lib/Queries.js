@@ -100,6 +100,7 @@ export const contentBuilderQuery = `
             }
             limit
             paginate
+            addTagsMenu
           }
           ... on bodyContent_image_BlockType {
             id

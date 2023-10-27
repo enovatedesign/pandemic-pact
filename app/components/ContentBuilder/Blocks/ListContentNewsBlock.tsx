@@ -28,7 +28,6 @@ const ListContentNewsBlock = ( {block}: Props ) => {
     const tags = block.addTagsMenu ?? false
     const paginate = block.paginate ?? false
 
-
     const [ref, springs] = useInView(
         () => ({
             from: {

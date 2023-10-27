@@ -1,4 +1,5 @@
-const newsTags = () => {
+const NewsTags = () => {
+
     return(
         <>
             <p>
@@ -7,4 +8,4 @@ const newsTags = () => {
         </>
     )
 }
-export default newsTags
+export default NewsTags
