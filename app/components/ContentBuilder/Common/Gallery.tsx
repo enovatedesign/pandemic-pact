@@ -13,8 +13,6 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
 
     const autoplayDelay = autoplayState ? 3000 : null
 
-    const [activeIndex, setActiveIndex] = useState(0)
-
     return (    
 		<div className="bg-gray-200">
 			{images && (
@@ -55,9 +53,9 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 // onSwiper={(swiper) => console.log(swiper)}
                                 // onSlideChange={() => console.log('slide change')}
                             >
-                                {images.map((image) => {
+                                {images.map((image, index) => {
                                     return(
-                                        <SwiperSlide key={activeIndex}>
+                                        <SwiperSlide key={index}>
                                             <Image
                                                 src={image.url}
                                                 height={image.height}
@@ -74,7 +72,6 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 watchSlidesProgress
                                 spaceBetween={30}
                                 slidesPerView={4}
-                                // onSwiper={setThumbsSwiper}
                                 className=''
                             >
                                 {images.map((image, index) => {
