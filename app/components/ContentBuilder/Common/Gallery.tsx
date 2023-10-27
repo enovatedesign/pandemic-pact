@@ -17,30 +17,30 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
 			{images && (
                 <BlockWrapper>
                     {thumbnailsOnlyState ? (
-                    <div className='pt-8 lg:pt-12'>
-                        <Swiper
-                            modules={[Thumbs, Pagination]}
-                            watchSlidesProgress
-                            spaceBetween={50}
-                            slidesPerView={4}
-                            pagination={{ clickable: true }}
-                            // onSwiper={setThumbsSwiper}
-                        >
-                            {images.map((image, index) => {
-                                return(
-                                    <SwiperSlide key={index}>
-                                        <Image
-                                            src={image.url}
-                                            height={image.height}
-                                            width={image.width}
-                                            alt={image.alt}
-                                            className=''
-                                        />
-                                    </SwiperSlide>
-                                )
-                            })}
-                        </Swiper>
-                    </div>
+                        <div className='pt-8 lg:pt-12'>
+                            <Swiper
+                                modules={[Thumbs, Pagination]}
+                                watchSlidesProgress
+                                spaceBetween={50}
+                                slidesPerView={4}
+                                pagination={{ clickable: true }}
+                                // onSwiper={setThumbsSwiper}
+                            >
+                                {images.map((image, index) => {
+                                    return(
+                                        <SwiperSlide key={index}>
+                                            <Image
+                                                src={image.url}
+                                                height={image.height}
+                                                width={image.width}
+                                                alt={image.alt}
+                                                className=''
+                                            />
+                                        </SwiperSlide>
+                                    )
+                                })}
+                            </Swiper>
+                        </div>
                     ) : (
                         <div>
                             <Swiper
