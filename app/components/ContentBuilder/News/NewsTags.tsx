@@ -25,12 +25,12 @@ const NewsTags = () => {
                     const iconClasses = 'w-8 h-8 text-primary transition duration-300 mr-1'
 
                     return(
-                            <li key={index}>
-                                <a href={tag.url} className={tagClasses}>
-                                <TagIcon className={iconClasses}/>
-                                    {tag.title}
-                                </a>
-                            </li>
+                        <li key={index}>
+                            <a href={tag.url} className={tagClasses}>
+                            <TagIcon className={iconClasses}/>
+                                {tag.title}
+                            </a>
+                        </li>
                     )
                 })}
                 

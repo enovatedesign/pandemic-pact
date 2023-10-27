@@ -1,5 +1,6 @@
 import BlockWrapper from "../BlockWrapper";
 import NewsCard from "../News/NewsCard";
+import { useState, useEffect } from "react";
 import { useInView, animated } from '@react-spring/web';
 
 type Props = {
@@ -23,8 +24,8 @@ type Props = {
 
 const ListContentNewsBlock = ( {block}: Props ) => {
     
-    const limit = block.limit ?? null
-    const customEntries = block.customEntries.slice(0, limit) ?? null
+    const limit = block.limit
+    const limitedEntries = block.customEntries.slice(0, limit) ?? null 
     const tags = block.addTagsMenu ?? false
     const paginate = block.paginate ?? false
 
@@ -48,7 +49,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
         <BlockWrapper>
             <animated.div ref={ref} style={springs}>
                 <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    {customEntries.map((entry, index) => {
+                    {limitedEntries.map((entry, index) => {
                         return <NewsCard entry={entry} key={index} tags={tags}/>
                     })}
                 </ul>
