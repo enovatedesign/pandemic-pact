@@ -202,6 +202,12 @@ export const contentBuilderQuery = `
           ... on bodyContent_gallery_BlockType {
             id
             typeHandle
+            images {
+              alt
+              height
+              url
+              width
+            }
           }
           ... on bodyContent_embeddedMedia_BlockType {
             id
