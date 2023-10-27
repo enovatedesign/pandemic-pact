@@ -17,7 +17,7 @@ const Gallery = ({images, autoplayState}) => {
 					spaceBetween={50}
 					slidesPerView={1}
 					navigation
-                    autoplay={{ delay: autoplayDelay }}
+                    autoplay={ autoplayState ?  { delay: autoplayDelay } : false }
 					pagination={{ clickable: true }}
 					// scrollbar={{ draggable: true }}
 					// onSwiper={(swiper) => console.log(swiper)}
