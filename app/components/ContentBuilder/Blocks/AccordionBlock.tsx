@@ -3,7 +3,6 @@ import RichText from "../Common/RichText"
 import { useState } from "react"
 import AnimateHeight from 'react-animate-height';
 import { useInView, animated } from '@react-spring/web';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 
 type Props = {

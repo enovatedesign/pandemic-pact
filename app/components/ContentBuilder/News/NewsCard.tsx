@@ -16,7 +16,7 @@ const NewsCard = ({entry, tags}) => {
         'block w-full h-full',
         'bg-gray-100',
     ].join(' ')
-    
+    console.log('url is', thumbnailImage.url)
     return (
         <div key={entry.index} className="h-full">
             <article className={classes}>
@@ -41,11 +41,10 @@ const NewsCard = ({entry, tags}) => {
                             {summary}
                         </p>
                     )}
+                    {tags && (
+                        <NewsTags />
+                    )}
                 </div>
-
-                {tags && (
-                    <NewsTags />
-                )}
             </article>
         </div>
     )
