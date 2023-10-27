@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
 import "swiper/css/bundle"
 
-import { useState } from 'react';
 
 
 const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {

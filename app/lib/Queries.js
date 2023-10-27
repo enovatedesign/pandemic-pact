@@ -170,6 +170,23 @@ export const contentBuilderQuery = `
           ... on bodyContent_richTextColumns_BlockType {
             id
             typeHandle
+            columns {
+              ... on columns_BlockType {
+                id
+                button {
+                  customText
+                  url
+                  title
+                }
+                text
+                image {
+                  width
+                  url
+                  height
+                  alt
+                }
+              }
+            }
           }
           ... on bodyContent_contentSlider_BlockType {
             id
