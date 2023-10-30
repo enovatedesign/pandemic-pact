@@ -118,7 +118,7 @@ export const contentBuilderQuery = `
           ... on bodyContent_imagePair_BlockType {
             id
             typeHandle
-            imageLeft(withTransforms: "c1000xauto") {
+            imageLeft @transform(transform: "c1000xauto") {
               ... on contentAssets_Asset {
                 url
                 width
@@ -127,7 +127,7 @@ export const contentBuilderQuery = `
               }
             }
             imageLeftCaption
-            imageRight(withTransforms: "c1000xauto") {
+            imageRight @transform(transform: "c1000xauto") {
               ... on contentAssets_Asset {
                 url
                 width
