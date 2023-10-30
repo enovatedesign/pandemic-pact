@@ -27,8 +27,8 @@ const NewsTags = () => {
                     return(
                         <li key={index}>
                             <a href={tag.url} className={tagClasses}>
-                            <TagIcon className={iconClasses}/>
-                                {tag.title}
+                                <TagIcon className={iconClasses}/>
+                                    {tag.title}
                             </a>
                         </li>
                     )

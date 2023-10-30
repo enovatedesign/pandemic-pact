@@ -1,9 +1,9 @@
 import BlockWrapper from '../BlockWrapper';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
+import { Navigation, Pagination, Autoplay, Thumbs, Controller } from "swiper/modules"
 import "swiper/css/bundle"
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 
 const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
@@ -11,8 +11,6 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
 	const { url, alt, height, width } = images
 
     const autoplayDelay = autoplayState ? 3000 : null
-
-    const [activeIndex, setActiveIndex] = useState(0)
 
     return (    
 		<div className="bg-gray-200">
@@ -46,35 +44,29 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                     ) : (
                         <div>
                             <Swiper
-                                modules={[Navigation, Autoplay]}
+                                modules={[Navigation, Autoplay, Thumbs]}
                                 spaceBetween={50}
                                 slidesPerView={1}
                                 navigation
                                 autoplay={ autoplayState ?  { delay: autoplayDelay } : false }
-                                // onSwiper={(swiper) => console.log(swiper)}
-                                // onSlideChange={() => console.log('slide change')}
                             >
                                 {images.map((image, index) => {
                                     
                                     return(
-                                        <>
-                                            {activeIndex === index && (
-                                                <SwiperSlide key={index}>
-                                                    <Image
-                                                        src={image.url}
-                                                        height={image.height}
-                                                        width={image.width}
-                                                        alt={image.alt}
-                                                        className=''
-                                                    />
-                                                </SwiperSlide>
-                                            )}
-                                        </>
+                                        <SwiperSlide key={index}>
+                                            <Image
+                                                src={image.url}
+                                                height={image.height}
+                                                width={image.width}
+                                                alt={image.alt}
+                                                className=''
+                                            />
+                                        </SwiperSlide>
                                     )
                                 })}
                             </Swiper>
                             <Swiper
-                                modules={[Thumbs]}
+                                modules={[Thumbs, Controller]}
                                 watchSlidesProgress
                                 spaceBetween={30}
                                 slidesPerView={4}
@@ -91,15 +83,11 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                                 width={image.width}
                                                 alt={image.alt}
                                                 className='cursor-pointer'
-                                                onClick={() => {
-                                                    setActiveIndex(index);
-                                                }}
                                             />
                                         </SwiperSlide>
                                     )
                                 })}
                             </Swiper>
-                            
                         </div>
                         
                     )}
