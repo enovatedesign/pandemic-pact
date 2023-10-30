@@ -33,7 +33,6 @@ export default function BlockWrapper({ children, options = {} }) {
         !fill ? `mt-${spacingValues.mobile} lg:mt-${spacingValues.desktop}` : '',
         clipOverflowX ? 'overflow-x-clip' : ''
     ].join(' ');
-    
     return (
         <div className={blockClasses}>
             {container ? <div className="container">{children}</div> : children}

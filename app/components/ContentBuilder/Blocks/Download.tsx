@@ -53,7 +53,7 @@ const DownloadBlock = ({ block }: Props) => {
 
 	const fallbackImage = "/images/file-types/file.png"
 	const image = filteredKind.length > 0 ? filteredKind[0].image : fallbackImage
-	const downloadKind = filteredKind[0].kind
+	const downloadKind = filteredKind[0].kind ?? null
 
 	return (
 		<BlockWrapper>

@@ -231,6 +231,16 @@ export const contentBuilderQuery = `
           ... on bodyContent_table_BlockType {
             id
             typeHandle
+            table {
+              columns {
+                align
+                heading
+                width
+              }
+              rows
+              table
+            }
+            caption
           }
           ... on bodyContent_divider_BlockType {
             id
