@@ -19,7 +19,7 @@ export default function Home() {
                 <div className="w-full h-full bg-white/10"></div>
             </aside>
 
-            <InteractiveBackground className={`relative grow h-screen masthead-background ${styles.background}`}>
+            <InteractiveBackground className={`relative grow h-screen min-h-[44rem] lg:min-h-[60rem] masthead-background ${styles.background}`}>
                 <Header className="absolute top-0 inset-x-0 z-30"/>
 
                 <div className="relative flex flex-col justify-center items-center space-y-12 w-full h-full z-20 container lg:-translate-y-12 lg:space-y-16">
