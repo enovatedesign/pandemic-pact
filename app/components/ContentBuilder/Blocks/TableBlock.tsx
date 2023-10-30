@@ -40,17 +40,20 @@ const TableBlock = ({block}: Props) => {
                                         <thead className="bg-gray-50">
                                             <tr>
                                                 {columns.map(column => {
+                                                    
                                                     const columnWidth = column.width ?? null
                                                     const align = column.align ?? null
 
                                                     const thClasses = [
                                                         'py-3.5 px-6 text-left text-sm text-gray-900',
                                                     ].join(' ') 
-                                                    
+
+                                                    // text-left text-center text-right
                                                     return (
                                                         <>
                                                             <th scope="col" 
-                                                                className={`${thClasses} text-${align} w-[${columnWidth}%]`}
+                                                                className={`${thClasses} text-${align}`}
+                                                                style={{ width: `${columnWidth}%` }}
                                                             >
                                                                 {column.heading}
                                                                 
