@@ -1,14 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {usePathname} from 'next/navigation'
 import {getFooterLinksArray} from '../helpers/nav'
 import {footerLinksFirstCollection} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
 
 export default function Header({className}: {className?: string}) {
-    const pathname = usePathname()
-    console.log(pathname)
     const links = getFooterLinksArray()
     const linksFirstCollection = footerLinksFirstCollection
     const linksSecondCollection = footerLinksSecondCollection

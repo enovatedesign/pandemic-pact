@@ -6,8 +6,6 @@ export default function FunderLogoAndStatement({ block }) {
 	const heading = block.heading
 	const funders = block.funders
 
-    console.log(funders);
-
 	if (funders.length > 0) {
 		const textClasses = [
             'prose prose-lg dark:prose-invert',
