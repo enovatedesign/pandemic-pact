@@ -146,20 +146,27 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_imageSlider_BlockType {
             id
-            slides {
-              ... on slides_BlockType {
-                id
-                button {
-                  text
+            typeHandle
+            heroImageSlides {
+              ... on heroImageSlides_BlockType {
+                slideHeading
+                slideText
+                slideImage @transform(transform: "c2000xauto") {
+                  alt
+                  width
                   url
-                  element {
-                    title
-                    uri
-                  }
+                  height
+                }
+                slideButton {
+                  url
+                  text
+                }
+                slideTextLink {
+                  url
+                  text
                 }
               }
             }
-            typeHandle
           }
           ... on bodyContent_accordion_BlockType {
             id
