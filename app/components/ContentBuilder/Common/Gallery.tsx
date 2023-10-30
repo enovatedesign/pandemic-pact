@@ -1,14 +1,19 @@
+import { useState, useEffect } from 'react';
 import BlockWrapper from '../BlockWrapper';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, Thumbs, Controller } from "swiper/modules"
-import "swiper/css/bundle"
-import { useState, useRef, useEffect } from 'react';
+import { FreeMode, Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/effect-fade';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
 
 const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
 
-	const { url, alt, height, width } = images
+    const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     const autoplayDelay = autoplayState ? 3000 : null
 
@@ -19,22 +24,18 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                     {thumbnailsOnlyState ? (
                         <div className='pt-8 lg:pt-12'>
                             <Swiper
-                                modules={[Thumbs, Pagination]}
-                                watchSlidesProgress
                                 spaceBetween={50}
                                 slidesPerView={4}
-                                pagination={{ clickable: true }}
                             >
                                 {images.map((image, index) => {
-
-                                    return(
+                                    return (
                                         <SwiperSlide key={index}>
                                             <Image
                                                 src={image.url}
                                                 height={image.height}
                                                 width={image.width}
-                                                alt={image.alt}
-                                                className=''
+                                                alt={image.altText}
+                                                className='w-full'
                                             />
                                         </SwiperSlide>
                                     )
@@ -44,45 +45,47 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                     ) : (
                         <div>
                             <Swiper
-                                modules={[Navigation, Autoplay, Thumbs]}
+                                modules={[EffectFade, Navigation, Autoplay, Thumbs]}
                                 spaceBetween={50}
                                 slidesPerView={1}
-                                navigation
+                                navigation={true}
+                                thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
+                                effect="fade"
                                 autoplay={ autoplayState ?  { delay: autoplayDelay } : false }
                             >
                                 {images.map((image, index) => {
-                                    
-                                    return(
+                                    return (
                                         <SwiperSlide key={index}>
                                             <Image
                                                 src={image.url}
                                                 height={image.height}
                                                 width={image.width}
-                                                alt={image.alt}
-                                                className=''
+                                                alt={image.altText}
+                                                className="w-full"
                                             />
                                         </SwiperSlide>
                                     )
                                 })}
                             </Swiper>
                             <Swiper
-                                modules={[Thumbs, Controller]}
-                                watchSlidesProgress
+                                onSwiper={setThumbsSwiper}
+                                loop={true}
+                                modules={[FreeMode, Navigation, Thumbs]}
                                 spaceBetween={30}
                                 slidesPerView={4}
-                                className='mt-8'
+                                watchSlidesProgress={true}
+                                freeMode={true}
+                                className='mySwiper mt-8'
                             >
                                 {images.map((image, index) => {
-
                                     return(
-                                        <SwiperSlide key={index}
-                                        >
+                                        <SwiperSlide key={index}>
                                             <Image
                                                 src={image.url}
                                                 height={image.height}
                                                 width={image.width}
-                                                alt={image.alt}
-                                                className='cursor-pointer'
+                                                alt={image.altText}
+                                                className="cursor-pointer mx-auto shadow-lg transition duration-300 overflow-hidden bg-gray-200"
                                             />
                                         </SwiperSlide>
                                     )
