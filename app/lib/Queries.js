@@ -185,7 +185,7 @@ export const contentBuilderQuery = `
                   text
                 }
                 text
-                image @transform(transform: "c480x480")  {
+                image @transform(transform: "c480x480") {
                   width
                   url
                   height
@@ -205,7 +205,7 @@ export const contentBuilderQuery = `
                   url
                 }
                 text
-                image {
+                image @transform(transform: "c480x480") {
                   width
                   url
                   height
