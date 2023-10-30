@@ -1,50 +1,64 @@
+import Image from "next/image";
 import BlockWrapper from "../BlockWrapper";
 
 type Props = {
 	block: {
 		download: {
+			customText: string,
+			ariaLabel: string,
+			text: string,
+			title: string,
+			type: string,
 			url: string,
-			customText?: string,
-            title: string,
-            type: string
-			element: {
-				title: string,
-			}
-		}
+		  }
 	}
 }
 
 const DownloadBlock = ({ block }: Props) => {
 	
-	const download = block.download ?? null
-	const customText = download.customText ?? null
-
-	const downloadKinds = {
-		'Excel Spreadsheet': {
-			image: 'images/file-types/excel.png',
+	const {url, text, customText} = block.download ?? null
+	
+	const title = customText ? customText :  text
+	
+	
+	const downloadKinds = [
+		{
+			match: '.xlsx',
+			image: '/images/file-types/excel.png',
 		},
-		'PDF': {
-			image: 'images/file-types/pdf.png',
+		{
+			match: '.pdf',
+			image: '/images/file-types/pdf.png',
 		}, 
-		'PowerPoint Presentation': {
-			image: 'images/file-types/powerpoint.png',
+		{
+			match: '.pptx',
+			image: '/images/file-types/powerpoint.png',
 		},
-		"Word Document": {
-			image: 'images/file-types/word.png',
+		{
+			match: '.docx',
+			image: '/images/file-types/word.png',
 		},
-		"Image": {
-			image: 'images/file-types/image.png'
+		{
+			match: '.png',
+			image: '/images/file-types/image.png'
 		}
-	}	
+	]	
+	
+
+	const filteredKind = downloadKinds.filter(kind => url.includes(kind.match)).map((filtered) => {return filtered.image}) 
+
+	const fallbackImage = "/images/file-types/file.png"
+	const image = filteredKind.length > 0 ? filteredKind[0] : fallbackImage
 
 	return (
 		<BlockWrapper>
-			{/* {download && (
-				<article>
-					
-				</article>
-			)} */}
-			Download Block
+			<Image
+				src={image}
+				width={100}
+				height={100}
+				alt="Download"
+				className=""
+			/>
 		</BlockWrapper>
 	);
 }

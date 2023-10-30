@@ -43,12 +43,11 @@ export const contentBuilderQuery = `
             typeHandle
             download {
               customText
-              url
+              ariaLabel
+              text
               title
               type
-              element {
-                title
-              }
+              url
             }
           }
           ... on bodyContent_form_BlockType {

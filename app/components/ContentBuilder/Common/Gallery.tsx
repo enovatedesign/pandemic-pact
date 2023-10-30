@@ -81,7 +81,6 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 className='mt-8'
                             >
                                 {images.map((image, index) => {
-                                            console.log('active index is ', activeIndex)
 
                                     return(
                                         <SwiperSlide key={index}

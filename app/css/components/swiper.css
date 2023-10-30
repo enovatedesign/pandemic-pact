@@ -1,0 +1,28 @@
+/**
+ * Swiper Pagination
+ *
+ */
+
+
+/* 
+ .swiper-pagination {
+
+    .swiper-pagination-bullet {
+        @apply h-5 w-5 bg-white opacity-100 shadow-lg;
+
+        @screen lg {
+            background: theme('colors.white');
+        }
+    }
+
+    .swiper-pagination-bullet-active {
+        @apply bg-primary;
+    }
+
+    &.small {
+        .swiper-pagination-bullet {
+            @apply h-4 w-4;
+        }
+    }
+}
+*/
