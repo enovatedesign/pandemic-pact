@@ -52,6 +52,7 @@ const TableBlock = ({block}: Props) => {
                                                         <>
                                                             <th scope="col" 
                                                                 className={thClasses}
+
                                                             >
                                                                 {column.heading}
                                                                 
@@ -64,26 +65,31 @@ const TableBlock = ({block}: Props) => {
                                             </tr>
                                         </thead>
                                     )}
-{/* 
-                                    {% if rows|length %}
+
+                                    {rows && (
                                         <tbody className="divide-y divide-gray-200">
-                                        {% for row in rows %}
-                                            <tr>
-                                                {% for cell in row %}
-
-                                                    {% set tdClasses = [
-                                                        'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
-                                                        "text-#{columns[loop.index0].align}"
-                                                    ]|filter|join(' ') %}
-
-                                                    <td data-title="{{ columns[loop.index0].heading }}"
-                                                        className="{{ tdClasses }}"
-                                                    >{{ cell }}</td>
-                                                {% endfor %}
-                                            </tr>
-                                        {% endfor %}
+                                            {rows.map(row => {
+                                                return(
+                                                    <>
+                                                        <tr>
+                                                            {row.map(cell => {
+                                                                const tdClasses = [
+                                                                    'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
+                                                                ].join(' ')
+                                                                return (
+                                                                    <>
+                                                                            <td className={ tdClasses }>
+                                                                                { cell }
+                                                                            </td>
+                                                                    </>
+                                                                )
+                                                            })}
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })}
                                         </tbody>
-                                    {% endif %} */}
+                                    )}
                                 </table>
 
                             </div>
