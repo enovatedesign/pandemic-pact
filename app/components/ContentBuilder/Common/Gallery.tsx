@@ -25,7 +25,23 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                         <div className='pt-8 lg:pt-12'>
                             <Swiper
                                 spaceBetween={50}
-                                slidesPerView={4}
+                                breakpoints= {{
+                                    500: {
+                                        slidesPerView: 2,
+                                        slidesPerGroup: 2,
+                                        spaceBetween: 20,
+                                    },
+                                    768: {
+                                        slidesPerView: 3,
+                                        slidesPerGroup: 3,
+                                        spaceBetween: 20,
+                                    },
+                                    992: {
+                                        slidesPerView: 4,
+                                        slidesPerGroup: 4,
+                                        spaceBetween: 20,
+                                    },
+                                }}
                             >
                                 {images.map((image, index) => {
                                     return (
@@ -46,7 +62,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                         <div>
                             <Swiper
                                 modules={[EffectFade, Navigation, Autoplay, Thumbs]}
-                                spaceBetween={50}
+                                spaceBetween={10}
                                 slidesPerView={1}
                                 navigation={true}
                                 thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
