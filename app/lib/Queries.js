@@ -251,8 +251,11 @@ export const contentBuilderQuery = `
           ... on bodyContent_gallery_BlockType {
             id
             typeHandle
-            images {
-              alt
+            images @transform(transform: "c2000x1125") {
+              ... on contentAssets_Asset {
+                id
+                altText
+              }
               height
               url
               width
