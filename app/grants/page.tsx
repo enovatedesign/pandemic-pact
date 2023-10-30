@@ -20,7 +20,7 @@ export default function Explore() {
             title="Pandemic PACT Tracker"
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
         >
-            <div className="mt-6">
+            <div className="container mx-auto my-6 lg:my-12">
                 <Nav selected="explore" />
 
                 <Grid className="gap-y-2 mt-6">

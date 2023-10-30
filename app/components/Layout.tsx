@@ -48,7 +48,7 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
                     </span>
                 </a>
             </div>
-            <div className={`sidebarContent && "flex"`}>
+            <div className={`${sidebarContent && "flex"}`}>
                 {sidebarContent &&
                     <aside className="relative bg-secondary">
                         <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
@@ -69,8 +69,8 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
                     </aside>
                 }
 
-                <div>
-                    <Header className="absolute top-0 w-full z-50"/>
+                <div className="w-full relative">
+                    <Header className="absolute w-full left-0"/>
 
                     <main id="content">
 

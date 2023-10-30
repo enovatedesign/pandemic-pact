@@ -41,7 +41,7 @@ export default function Visualise() {
                 />
             }
         >
-            <div className="mt-6">
+            <div className="container mx-auto my-6 lg:my-12">
                 <Nav selected="visualise" />
 
                 <Grid

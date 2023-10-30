@@ -32,32 +32,34 @@ export default function Header({className}: {className?: string}) {
 
     return (
         <header className={className}>
-            <div className="py-8 container max-w-none">
-                {pathname === '/' ?
-                    <h1>
-                        <span className="sr-only">Pandemic Pact</span>
-                        <Logo />
-                    </h1>
-                    :
-                    <Link href="/">
-                        <span className="sr-only">Return to homepage</span>
-                        <Logo />
-                    </Link>
-                }
+            <div className="container relative">
+                <div className="py-8">
+                    {pathname === '/' ?
+                        <h1>
+                            <span className="sr-only">Pandemic Pact</span>
+                            <Logo />
+                        </h1>
+                        :
+                        <Link href="/">
+                            <span className="sr-only">Return to homepage</span>
+                            <Logo />
+                        </Link>
+                    }
 
-                <div className="fixed top-10 right-6 flex items-center rounded-full border border-primary/25 inner-glow z-10 lg:top-14 lg:right-12">
-                    <button className="p-3 lg:hidden">
-                        <span className="sr-only">Menu</span>
-                        <MenuIcon className="w-8 h-8 fill-white" />
-                    </button>
+                    <div className="fixed top-10 mr-6 md:mr-8 lg:mr-12 right-0 flex items-center rounded-full border border-primary/25 inner-glow z-10 lg:top-14">
+                        <button className="p-3 lg:hidden">
+                            <span className="sr-only">Menu</span>
+                            <MenuIcon className="w-8 h-8 fill-white" />
+                        </button>
 
-                    <nav className="hidden px-10 py-3 lg:block">
-                        <ul className="flex space-x-10">
-                            {links.map(link => (
-                                <NavItem key={link.label} {...link} />
-                            ))}
-                        </ul>
-                    </nav>
+                        <nav className="hidden px-10 py-3 lg:block">
+                            <ul className="flex space-x-10">
+                                {links.map(link => (
+                                    <NavItem key={link.label} {...link} />
+                                ))}
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </header>
