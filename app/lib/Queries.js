@@ -52,6 +52,7 @@ export const contentBuilderQuery = `
                 ... on contentAssets_Asset {
                   id
                   kind
+                  size
                 }
               }
             }

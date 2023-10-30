@@ -10,50 +10,60 @@ type Props = {
 			title: string,
 			type: string,
 			url: string,
-		  }
+			element: {
+				kind: string,
+				size: number,
+			},
+		},
 	}
 }
 
 const DownloadBlock = ({ block }: Props) => {
 	
-	const {url, text, customText} = block.download ?? null
+	const {url, text, customText, element} = block.download ?? null
 	
 	const title = customText ? customText :  text
+	const downloadKind = element.kind ?? null
+	const downloadSize = element.size ?? null
+
+	function sizeCalculations(size) {
+		const divided = size/1000
+		const rounded = Math.round(divided)
+		return rounded
+	}
 	
 	const downloadKinds = [
 		{
-			match: '.xlsx',
+			match: 'excel',
 			image: '/images/file-types/excel.png',
 			kind: 'Excel Spreadsheet'
 		},
 		{
-			match: '.pdf',
+			match: 'pdf',
 			image: '/images/file-types/pdf.png',
 			kind: 'PDF'
 		}, 
 		{
-			match: '.pptx',
+			match: 'powerpoint',
 			image: '/images/file-types/powerpoint.png',
 			kind: 'PowerPoint Presentation'
 		},
 		{
-			match: '.docx',
+			match: 'word',
 			image: '/images/file-types/word.png',
 			kind: 'Word Document'
 		},
 		{
-			match: '.png',
+			match: 'image',
 			image: '/images/file-types/image.png',
 			kind: 'Image'
 		}
 	]	
 	
-
-	const filteredKind = downloadKinds.filter(kind => url.includes(kind.match)) 
-
+	const filteredKind = downloadKinds.filter(icon => downloadKind === icon.match)
 	const fallbackImage = "/images/file-types/file.png"
-	const image = filteredKind.length > 0 ? filteredKind[0].image : fallbackImage
-	const downloadKind = filteredKind[0].kind ?? null
+	const image = filteredKind[0].image ?? fallbackImage
+	console.log(filteredKind[0].image)
 
 	return (
 		<BlockWrapper>
@@ -77,9 +87,15 @@ const DownloadBlock = ({ block }: Props) => {
 									</h2>
 								)}
 
-								{downloadKind && (
+								{url && (
 									<p className="text-sm lg:text-base mt-1 text-gray-400">
-										Download {downloadKind} <span aria-hidden="true">&bull;</span> 
+										Download {filteredKind[0].kind}
+										<span aria-hidden="true">
+											&bull;
+										</span>
+										<span className="pl-0.5">
+											{sizeCalculations(downloadSize)} KB
+										</span>
 									</p>
 								)}
 
