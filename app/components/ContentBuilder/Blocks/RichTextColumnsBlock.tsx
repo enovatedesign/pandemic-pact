@@ -45,28 +45,30 @@ const RichTextColumnsBlock = ({block} : Props) => {
                         const button = column.button ?? null
                         return (
                             <>
-                                <div className="flex flex-col space-y-6 items-start" key={index}>
+                                <div className="flex flex-col space-y-6 items-start bg-white shadow-lg rounded-md" key={index}>
                                     {image && (
                                         <Image 
                                             src={image.url}
                                             height={image.height}
                                             width={image.width}
                                             alt={image.alt}
-                                            className=""
+                                            className="rounded-t-md"
                                             loading='lazy'
                                         />
                                     )}
 
-                                    {text && (
-                                        <RichText text={text} />
-                                    )}
+                                    <div className="p-6 flex flex-col justify-between h-full space-y-4 items-start">
+                                        {text && (
+                                            <RichText text={text} />
+                                            )}
 
-                                    {button.url && (
-                                        <ButtonLink 
+                                        {button.url && (
+                                            <ButtonLink 
                                             linkTo={button.url}
                                             title={button.text}
-                                        />
-                                    )}
+                                            />
+                                            )}
+                                    </div>
                                 </div>
                             </>
                         )

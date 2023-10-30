@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
 import "swiper/css/bundle"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
@@ -13,6 +13,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
     const autoplayDelay = autoplayState ? 3000 : null
 
     const [activeIndex, setActiveIndex] = useState(0)
+
     return (    
 		<div className="bg-gray-200">
 			{images && (
