@@ -23,7 +23,7 @@ export default function Explore() {
             <div className="container mx-auto my-6 lg:my-12">
                 <Nav selected="explore" />
 
-                <Grid className="gap-y-2 mt-6">
+                <Grid className="gap-y-6 lg:gap-y-12 mt-6">
                     <Col>
                         {/*
                         Note that the `Suspense` here is to suppress the following error:

@@ -46,7 +46,7 @@ export default function Visualise() {
 
                 <Grid
                     numItems={12}
-                    className="mt-6 gap-4"
+                    className="mt-6 gap-6 lg:gap-12"
                 >
                     <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
