@@ -2,6 +2,7 @@ import GraphQL from '../lib/GraphQl'
 import * as EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
 import {type Slug, Ancestors} from "../types/cms"
+import { notFound } from 'next/navigation'
 
 const formatEntryType = entryType => 
     entryType.charAt(0).toUpperCase() + entryType.slice(1)
@@ -57,9 +58,7 @@ async function getPageContent(context) {
 	);
 
 	if (!entryTypeData.entry) {
-		return {
-			notFound: true,
-		};
+		notFound()
 	}
 
     const entryType = entryTypeData.entry.typeHandle
