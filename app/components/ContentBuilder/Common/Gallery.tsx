@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
 import "swiper/css/bundle"
-
+import { useState } from 'react';
 
 
 const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
@@ -12,6 +12,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
 
     const autoplayDelay = autoplayState ? 3000 : null
 
+    const [activeIndex, setActiveIndex] = useState(0)
     return (    
 		<div className="bg-gray-200">
 			{images && (
@@ -24,9 +25,9 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 spaceBetween={50}
                                 slidesPerView={4}
                                 pagination={{ clickable: true }}
-                                // onSwiper={setThumbsSwiper}
                             >
                                 {images.map((image, index) => {
+
                                     return(
                                         <SwiperSlide key={index}>
                                             <Image
@@ -53,16 +54,21 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 // onSlideChange={() => console.log('slide change')}
                             >
                                 {images.map((image, index) => {
+                                    
                                     return(
-                                        <SwiperSlide key={index}>
-                                            <Image
-                                                src={image.url}
-                                                height={image.height}
-                                                width={image.width}
-                                                alt={image.alt}
-                                                className=''
-                                            />
-                                        </SwiperSlide>
+                                        <>
+                                            {activeIndex === index && (
+                                                <SwiperSlide key={index}>
+                                                    <Image
+                                                        src={image.url}
+                                                        height={image.height}
+                                                        width={image.width}
+                                                        alt={image.alt}
+                                                        className=''
+                                                    />
+                                                </SwiperSlide>
+                                            )}
+                                        </>
                                     )
                                 })}
                             </Swiper>
@@ -71,9 +77,10 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                 watchSlidesProgress
                                 spaceBetween={30}
                                 slidesPerView={4}
-                                className=''
+                                className='mt-8'
                             >
                                 {images.map((image, index) => {
+                                            console.log('active index is ', activeIndex)
 
                                     return(
                                         <SwiperSlide key={index}
@@ -84,6 +91,9 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                                 width={image.width}
                                                 alt={image.alt}
                                                 className='cursor-pointer'
+                                                onClick={() => {
+                                                    setActiveIndex(index);
+                                                }}
                                             />
                                         </SwiperSlide>
                                     )

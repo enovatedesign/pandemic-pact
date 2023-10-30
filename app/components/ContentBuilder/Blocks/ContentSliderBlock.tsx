@@ -1,7 +1,7 @@
 import BlockWrapper from "../BlockWrapper"
 import Image from "next/image";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation} from "swiper/modules"
+import { Navigation, Pagination } from "swiper/modules"
 import "swiper/css/bundle"
 import RichText from "../Common/RichText";
 import ButtonLink from "../Common/Button";
@@ -29,13 +29,15 @@ const ContentSliderBlock = ({block}: Props ) => {
     const slides = block.slides ?? null
 
     return (
-        <BlockWrapper>
+        <BlockWrapper
+        >
             {slides && (
                 <Swiper
-                    modules={[Navigation]}
+                    modules={[Navigation, Pagination]}
                     spaceBetween={50}
                     slidesPerView={3}
                     navigation
+                    pagination={{clickable: true}}
                 >
                     {slides.map((slide, index) => {
                         

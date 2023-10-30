@@ -43,7 +43,6 @@ const RichTextColumnsBlock = ({block} : Props) => {
                         const image = column.image[0] ?? null
                         const text = column.text ?? null
                         const button = column.button ?? null
-                        console.log(button)                        
                         return (
                             <>
                                 <div className="flex flex-col space-y-6 items-start" key={index}>
