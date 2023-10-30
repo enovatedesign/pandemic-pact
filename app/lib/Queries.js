@@ -48,6 +48,12 @@ export const contentBuilderQuery = `
               title
               type
               url
+              element {
+                ... on contentAssets_Asset {
+                  id
+                  kind
+                }
+              }
             }
           }
           ... on bodyContent_form_BlockType {
