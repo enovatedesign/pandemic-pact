@@ -71,7 +71,7 @@ export default function Header({className}: {className?: string}) {
 
                     </div>
 
-                    <div className="flex justify-center sm:justify-between md:flex-col xl:flex-row md:justify-end items-center xl:items-end gap-6 xl:gap-12">
+                    <div className="flex flex-col justify-center sm:flex-row md:flex-col md:justify-end items-center xl:flex-row xl:items-end gap-6 xl:gap-12">
                                     
                         <Image
                             src="/glopid-r-logo.png"
