@@ -185,7 +185,7 @@ export const contentBuilderQuery = `
                   text
                 }
                 text
-                image {
+                image @transform(transform: "c480x480")  {
                   width
                   url
                   height
@@ -213,10 +213,6 @@ export const contentBuilderQuery = `
                 }
               }
             }
-          }
-          ... on bodyContent_splitImageText_BlockType {
-            id
-            typeHandle
           }
           ... on bodyContent_tabbedContent_BlockType {
             id
