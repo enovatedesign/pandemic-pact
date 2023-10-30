@@ -32,7 +32,7 @@ export default function Header({className}: {className?: string}) {
 
     return (
         <header className={className}>
-            <div className="container relative">
+            <div className="container">
                 <div className="py-8">
                     {pathname === '/' ?
                         <h1>
