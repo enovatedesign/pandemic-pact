@@ -59,7 +59,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                             </Swiper>
                         </div>
                     ) : (
-                        <div>
+                        <div className='pt-8 lg:pt-12'>
                             <Swiper
                                 modules={[EffectFade, Navigation, Autoplay, Thumbs]}
                                 spaceBetween={10}
