@@ -41,12 +41,12 @@ export default function Visualise() {
                 />
             }
         >
-            <div className="mt-6">
+            <div className="container mx-auto my-6 lg:my-12">
                 <Nav selected="visualise" />
 
                 <Grid
                     numItems={12}
-                    className="mt-6 gap-4"
+                    className="mt-6 gap-6 lg:gap-12"
                 >
                     <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
