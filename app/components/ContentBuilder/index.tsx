@@ -18,6 +18,7 @@ import RichTextColumnsBlock from "./Blocks/RichTextColumnsBlock";
 import ContentSliderBlock from "./Blocks/ContentSliderBlock";
 import TableBlock from "./Blocks/TableBlock";
 import HeroImageSliderBlock from "./Blocks/HeroImageSliderBlock";
+import PullQuoteBlock from "./Blocks/PullQuoteBlock"
 
 const blocks = {
 	button: ButtonBlock,
@@ -38,7 +39,8 @@ const blocks = {
 	richTextColumns: RichTextColumnsBlock,
 	contentSlider: ContentSliderBlock,
 	table: TableBlock,
-	imageSlider: HeroImageSliderBlock
+	imageSlider: HeroImageSliderBlock,
+	pullQuote: PullQuoteBlock
 };
 
 const Block = (props) => {
