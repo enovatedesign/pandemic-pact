@@ -18,7 +18,7 @@ type Props = {
     summary?: string,
 }
 
-const Layout = ({title, summary, sidebarContent, children}: Props) => {
+const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
@@ -83,7 +83,7 @@ const Layout = ({title, summary, sidebarContent, children}: Props) => {
                                     {title &&
                                         <div className="container">
                                             <PageTitle>{title}</PageTitle>
-                                            {summary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                            {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
                                         </div>
                                     }
 

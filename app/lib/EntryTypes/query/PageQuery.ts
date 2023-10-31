@@ -14,6 +14,7 @@ export default async function PageQuery(slug: String, entryType: String = 'page'
                     slug
                     ... on pages_${entryType}_Entry {
                         summary
+                        showSummary
                         imageMasthead {
                             ... on contentAssets_Asset {
                                 url(transform: "c1400xauto")
