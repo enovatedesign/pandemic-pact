@@ -39,11 +39,26 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
             alignItems="start"
             className="gap-y-4"
         >
-            <Subtitle className="text-white">{
-                (globallyFilteredDataset.length < completeDataset.length) ?
-                    `Filtered Grants: ${globallyFilteredDataset.length} / ${completeDataset.length}` :
-                    `Total Grants: ${completeDataset.length}`
-            }</Subtitle>
+            <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
+                <p className="flex flex-col gap-1">
+                    {
+                        (globallyFilteredDataset.length < completeDataset.length) ? (
+                            <>
+                                <span className="uppercase text-gray-300 text-xs font-bold">Filtered Grants Total</span>
+                                <span className="flex flex-row items-end gap-1">
+                                    <span className="text-primary font-bold text-4xl">{globallyFilteredDataset.length}</span>
+                                    <span className="text-primary font-bold text-lg"> / {completeDataset.length}</span>
+                                </span>
+                            </>
+                        ) : (
+                            <>  
+                                <span className="uppercase text-gray-300 text-xs font-bold">Total Grants</span>
+                                <span className="text-primary font-bold text-4xl">{completeDataset.length}</span>
+                            </>
+                        )
+                    }
+                </p>
+            </div>
 
             {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
                 <Flex
