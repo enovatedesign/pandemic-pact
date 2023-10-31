@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
+import { teardownCrashReporter } from "next/dist/build/swc";
 
 type Props = {
     block: {
@@ -42,7 +43,6 @@ const HeroImageSliderBlock = ({block}: Props) => {
         'overflow-hidden'
     ].join(' ')
 
-
     return (
         <section >
             {slides && (
@@ -51,7 +51,7 @@ const HeroImageSliderBlock = ({block}: Props) => {
                     slidesPerView={1}
                     effect="fade"
                     pagination={slides.length > 1 ? true : false}
-                    autoplay={{ delay: 3000 }}
+                    autoplay={{ delay: 5000 }}
                 >
                     
                     {slides.map((slide, index) => {
@@ -62,26 +62,32 @@ const HeroImageSliderBlock = ({block}: Props) => {
                         const button = slide.slideButton ?? null
                         const textLink = slide. slideTextLink ?? null
 
+                        const buttonContainerClasses = [
+                            button.url || textLink.url ? "mt-6 md:mt-8 flex flex-row items-center gap-4" : ""
+                        ].join(' ')
+
                         return(
                             <>
-                                <SwiperSlide key={index} className="relative w-full h-full">
-                                    <Image
-                                        src={image.url}
-                                        width={image.width}
-                                        height={image.height}
-                                        alt={image.alt}
-                                        className="w-full object-cover -z-10 absolute "
-                                    />  
+                                <SwiperSlide key={index} className="relative w-full h-full bg-gray-100 overflow-hidden">
+                                    
+                                    <div className="absolute">
+                                        <Image
+                                            src={image.url}
+                                            width={image.width}
+                                            height={image.height}
+                                            alt={image.alt}
+                                            className=""
+                                        />  
+                                    </div>
 
                                     <div className="relative bg-black bg-opacity-60 w-full h-full lg:bg-transparent z-10">
-                                        <div className="">
+                                        <div className="container h-full">
                                             <div className="flex h-full items-center lg:w-1/2">
                                                 <div className="lg:rounded lg:bg-black lg:bg-opacity-60 lg:p-10">
-                                                    <div>
+                                                    <div className="flex flex-col">
                                                         {heading && (
                                                             <>
                                                                 {index === 0 ? (
-
                                                                     <h1 className="text-2xl lg:text-3xl xl:text-5xl text-primary" id="page-title">
                                                                         {heading}
                                                                     </h1>
@@ -95,10 +101,13 @@ const HeroImageSliderBlock = ({block}: Props) => {
                                                         )}
 
                                                         {text && (
-                                                            <RichText text={text} customClasses='text-white' />
+                                                            <div className="pt-4 lg:pt-8">
+                                                                <RichText text={text} customClasses='text-white' />
+                                                            </div>
                                                         )}
 
-                                                        <div className="mt-6 md:mt-8 flex flex-row items-center gap-4">
+
+                                                        <div className={buttonContainerClasses}>
                                                             {button.url && (
                                                                 <ButtonLink linkTo={button.url} title={button.text}/>
                                                             )}
