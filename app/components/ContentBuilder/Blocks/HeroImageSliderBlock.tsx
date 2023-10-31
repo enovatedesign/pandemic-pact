@@ -2,7 +2,7 @@ import Image from "next/image"
 import RichText from "../Common/RichText"
 import ButtonLink from "../Common/Button"
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules"
+import { Pagination, Autoplay, EffectFade } from "swiper/modules"
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -42,10 +42,18 @@ const HeroImageSliderBlock = ({block}: Props) => {
         'overflow-hidden'
     ].join(' ')
 
+
     return (
         <section >
             {slides && (
-                <Swiper className={`${mastheadClasses}`}>
+                <Swiper className={`${mastheadClasses}`}
+                    modules={[EffectFade, Autoplay, Pagination]}
+                    slidesPerView={1}
+                    effect="fade"
+                    pagination={slides.length > 1 ? true : false}
+                    autoplay={{ delay: 3000 }}
+                >
+                    
                     {slides.map((slide, index) => {
 
                         const image = slide.slideImage[0] ?? null
@@ -91,11 +99,11 @@ const HeroImageSliderBlock = ({block}: Props) => {
                                                         )}
 
                                                         <div className="mt-6 md:mt-8 flex flex-row items-center gap-4">
-                                                            {button && (
+                                                            {button.url && (
                                                                 <ButtonLink linkTo={button.url} title={button.text}/>
                                                             )}
 
-                                                            {textLink && (
+                                                            {textLink.url && (
                                                                 <li><a href={textLink.url} className="text-white underline text-sm sm:text-base">{ textLink.text }</a></li>
                                                             )}
                                                         </div>
