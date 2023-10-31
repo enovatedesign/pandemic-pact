@@ -47,7 +47,7 @@ const PullQuoteBlock = ({block}: Props) => {
                         </div>
                         <div className="text-right md:text-center">
                             {quoteName && (
-                                <p className="text-gray-700 "><strong>{ quoteName }</strong></p>
+                                <p className="text-gray-700 "><strong>{quoteName}</strong></p>
                             )}
 
                             {quoteCite ? (
