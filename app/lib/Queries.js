@@ -33,10 +33,11 @@ export const contentBuilderQuery = `
           }
           ... on bodyContent_pullQuote_BlockType {
             id
-            quoteCompany
+            typeHandle
+            text
             quoteName
             quotePosition
-            typeHandle
+            quoteCompany
           }
           ... on bodyContent_download_BlockType {
             id
