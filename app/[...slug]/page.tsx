@@ -1,7 +1,6 @@
 import GraphQL from '../lib/GraphQl'
 import * as EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
-import {type Slug, Ancestors} from "../types/cms"
 import { notFound } from 'next/navigation'
 
 const formatEntryType = entryType => 
