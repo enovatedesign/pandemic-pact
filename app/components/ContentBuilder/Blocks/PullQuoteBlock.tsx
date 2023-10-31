@@ -1,6 +1,6 @@
-import { Block } from "@react-three/fiber/dist/declarations/src/core/utils"
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
+import { useInView, animated } from '@react-spring/web';
 
 type Props = {
     block : {
@@ -21,17 +21,33 @@ const PullQuoteBlock = ({block}: Props) => {
     const quoteCompany = block.quoteCompany ?? null
     const quoteCite = quoteCompany && quotePosition ? [quotePosition, quoteCompany].join(', ') : null
 
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return (
         <>
             {text && (
                 <BlockWrapper options={{padded: true, fill: true}}>
-                    <div className="flex flex-col space-y-4 md:space-y-6 md:items-center">
+                    <animated.div className="flex flex-col space-y-4 md:space-y-6 md:items-center" ref={ref} style={springs}>
                         <div>
                             <RichText text={text} customClasses="md:text-center"/>
                         </div>
                         <div className="text-right md:text-center">
                             {quoteName && (
-                                <p className="text-gray-700 "><strong>{ quoteName }</strong></p>
+                                <p className="text-gray-700 "><strong>{quoteName}</strong></p>
                             )}
 
                             {quoteCite ? (
@@ -44,8 +60,7 @@ const PullQuoteBlock = ({block}: Props) => {
                                 </>  
                             )}
                         </div>
-                    </div>
-
+                    </animated.div>
                 </BlockWrapper>
             )}
         </>

@@ -1,4 +1,5 @@
 import BlockWrapper from "../BlockWrapper"
+import { useInView, animated } from '@react-spring/web';
 
 type Props = {
     caption: string,
@@ -20,10 +21,26 @@ const TableBlock = ({block}: Props) => {
     const columns = table.columns
     const rows = table.rows
 
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return (
         <BlockWrapper>
             {table && (
-                <div className="breakout">
+                <animated.div className="breakout" ref={ref} style={springs}>
                     <div className="overflow-x-auto -m-1">
                         <div className="inline-block min-w-full py-2 align-middle p-1">
                             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-10 md:rounded">
@@ -95,7 +112,7 @@ const TableBlock = ({block}: Props) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </animated.div>
             )}
         </BlockWrapper>
     )
