@@ -4,7 +4,7 @@ import mastheadStyles from "../css/components/masthead.module.css"
 
 import {useState} from 'react'
 import {useSpring, animated} from '@react-spring/web'
-import {MenuIcon} from '@heroicons/react/solid'
+import {AdjustmentsIcon} from '@heroicons/react/outline'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -53,8 +53,8 @@ const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) 
                     <aside className="relative bg-secondary">
                         <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
                             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
-                                <span className="sr-only">Menu</span>
-                                <MenuIcon className="h-8 w-8" aria-hidden="true" />
+                                <span className="sr-only">Filters</span>
+                                <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
 
                             <animated.div
