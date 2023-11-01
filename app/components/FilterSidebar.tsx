@@ -1,7 +1,8 @@
-import {Button, Flex, Text, Subtitle} from "@tremor/react"
+import {Flex, Text, Subtitle} from "@tremor/react"
 import {XIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
+import Button from './Button'
 import {type Filters} from "../types/filters"
 import {availableFilters, emptyFilters} from "../helpers/filter"
 import selectOptions from '../../data/dist/select-options.json'
@@ -88,11 +89,11 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
             ))}
 
             <Button
+                size="xsmall"
+                customClasses="mt-3 self-end flex items-center gap-1"
                 onClick={() => setSelectedFilters(emptyFilters())}
-                className="mt-4 self-end"
-                icon={XIcon}
             >
-                Clear All
+                Clear All <XIcon className="w-5 h-5" />
             </Button>
         </Flex>
     )
