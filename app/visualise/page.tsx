@@ -2,7 +2,6 @@
 
 import {useMemo, useState} from "react"
 import {Col, Grid} from "@tremor/react"
-import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -30,7 +29,8 @@ export default function Visualise() {
 
     return (
         <Layout
-            title="Pandemic PACT Tracker"
+            title="Visualise"
+            showSummary={true}
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
             sidebarContent={
                 <FilterSidebar
@@ -42,8 +42,6 @@ export default function Visualise() {
             }
         >
             <div className="container mx-auto my-6 lg:my-12">
-                <Nav selected="visualise" />
-
                 <Grid
                     numItems={12}
                     className="mt-6 gap-6 lg:gap-12"
