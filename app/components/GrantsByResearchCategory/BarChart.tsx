@@ -17,6 +17,15 @@ export default function BarChart({chartData}: Props) {
     return (
         <>
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
+
+                <div className="pr-6 col-span-2 justify-self-end hidden md:block">
+                    <Subtitle>Number of projects</Subtitle>
+                </div>
+
+                <div className="pl-2 col-span-2 justify-self-end hidden md:block">
+                    <Subtitle>Known amount committed (USD)</Subtitle>
+                </div>
+            
                 {chartData.map((data: any) => (
                     <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
                         <div className="self-center col-span-4 first:mt-0 mt-4">
@@ -121,14 +130,7 @@ export default function BarChart({chartData}: Props) {
                 ))
                 }
 
-                <div className="pr-6 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle className="mt-4">Number of projects</Subtitle>
-                </div>
-
-                <div className="pl-2 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle className="mt-4">Known amount committed (USD)</Subtitle>
-                </div>
-            </div >
+            </div>
 
             <div className="flex flex-col mt-4 gap-y-2">
                 <Legend
