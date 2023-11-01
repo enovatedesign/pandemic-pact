@@ -49,7 +49,7 @@ export default function Header({className}: {className?: string}) {
 
                 <div className="flex flex-col md:flex-row md:justify-between gap-12 md:gap-24">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 md:gap-24 items-end">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24 items-end">
 
                         <div>
                             <h2 className="text-gray-700 dark:text-gray-300 uppercase font-bold text-sm mb-3">Some Heading</h2>
