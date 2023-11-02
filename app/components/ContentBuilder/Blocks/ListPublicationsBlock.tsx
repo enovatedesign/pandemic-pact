@@ -31,7 +31,7 @@ const ListPublicationsBlock = ({block}: Props) => {
             <BlockWrapper>
                 <div className="flex flex-col space-y-8 lg:space-y-12">
 
-                    <h3 className="text-center text-4xl text-black uppercase">
+                    <h3 className="text-center text-2xl md:text-3xl lg:text-4xl text-black uppercase">
                         {heading}
                     </h3>
 

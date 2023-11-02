@@ -72,7 +72,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
 
                                     
                                     {title && (
-                                        <h3 className="text-lg">
+                                        <h3 className="text-2xl md:text-3xl">
                                             {title}
                                         </h3>
                                     )}
@@ -130,7 +130,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                                                 <div className="flex flex-col space-y-4 xl:space-y-8">
                                                                     <Dialog.Title
                                                                         as="h3"
-                                                                        className="text-lg lg:text-3xl leading-6"
+                                                                        className="text-2xl md:text-3xl leading-6"
                                                                     >
                                                                         {title}
                                                                     </Dialog.Title>
