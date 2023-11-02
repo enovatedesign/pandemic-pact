@@ -1,5 +1,6 @@
 import BlockWrapper from "../BlockWrapper"
 import PublicationsCard from "./Publications/PublicationsCard"
+import { useInView, animated } from '@react-spring/web';
 
 type Props = {
     block: {
@@ -26,10 +27,26 @@ const ListPublicationsBlock = ({block}: Props) => {
     const heading = block.heading ?? 'Publications'
     const customEntries = block.customEntries ?? null
 
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return (
         <>
             <BlockWrapper>
-                <div className="flex flex-col space-y-8 lg:space-y-12">
+                <animated.div className="flex flex-col space-y-8 lg:space-y-12" ref={ref} style={springs}>
 
                     <h3 className="text-center text-2xl md:text-3xl lg:text-4xl text-black uppercase">
                         {heading}
@@ -44,7 +61,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                         })}
 
                     </ul>
-                </div>
+                </animated.div>
             </BlockWrapper>
         </>
     )

@@ -35,7 +35,7 @@ const TeamMembersModal = ({entry, isOpen, handleClose}) => {
                         >
                             <Dialog.Panel className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 bg-white p-12 rounded-2xl shadow-2xl shadow-black/40">
 
-                                <div className="">
+                                <div>
                                     <Image 
                                         src={thumbnailImage[0].url}
                                         alt={thumbnailImage[0].alt}

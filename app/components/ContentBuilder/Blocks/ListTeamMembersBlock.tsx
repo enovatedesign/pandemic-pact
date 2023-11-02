@@ -1,5 +1,6 @@
 import Image from "next/image"
 import BlockWrapper from "../BlockWrapper"
+import { useInView, animated } from '@react-spring/web';
 import { useState } from "react"
 import TeamMembersModal from "./Team Members/TeamMembersModal"
 
@@ -30,10 +31,26 @@ const ListTeamMembersBlock = ({block}: Props) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
+
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
     
     return (
         <BlockWrapper>
-            <div className="flex flex-col space-y-8 lg:space-y-12">
+            <animated.div className="flex flex-col space-y-8 lg:space-y-12" ref={ref} style={springs}>
 
                 <h3 className="text-center text-4xl text-black uppercase">
                     {heading}
@@ -95,7 +112,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                     })}
 
                 </ul>
-            </div>
+            </animated.div>
         </BlockWrapper>
     )
 }
