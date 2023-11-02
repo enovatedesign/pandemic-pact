@@ -56,33 +56,34 @@ const ListTeamMembersBlock = ({block}: Props) => {
                             setActiveIndex(-1)
                             setIsOpen(false)
                         }
-
+                        
                         return (
-                            <li key={index} className="flex flex-col space-y-4">
-                                <div>
+                            <li key={index} className=" bg-white shadow-xl hover:shadow-2xl rounded-lg hover:scale-105 transition duration-300 cursor-pointer" onClick={handleOpen}>
+                                
+                                <Image 
+                                    src={thumbnailImage[0].url}
+                                    alt={thumbnailImage[0].alt}
+                                    width={thumbnailImage[0].width}
+                                    height={thumbnailImage[0].height}
+                                    className=" rounded-t-lg"
+                                    loading="lazy"
+                                />
+                                <div className="space-y-4 p-4 xl:p-8">
 
-                                    <Image 
-                                        src={thumbnailImage[0].url}
-                                        alt={thumbnailImage[0].alt}
-                                        width={thumbnailImage[0].width}
-                                        height={thumbnailImage[0].height}
-                                        className=""
-                                        loading="lazy"
-                                    />
                                     
                                     {title && (
-                                        <p>
+                                        <h3 className="text-lg">
                                             {title}
-                                        </p>
+                                        </h3>
                                     )}
                                     
                                     {jobTitle && (
-                                        <p>
+                                        <p className="">
                                             {jobTitle}
                                         </p>
                                     )}
 
-                                    <button onClick={handleOpen}>
+                                    <button onClick={handleOpen} className="rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
                                         Read more
                                     </button>
                                 </div>
@@ -102,7 +103,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                                 <div className="fixed inset-0 bg-black/25" />
                                             </Transition.Child>
 
-                                            <div className="fixed inset-0">
+                                            <div className="fixed inset-0 container">
                                                 <div className="flex min-h-full items-center justify-center">
                                                     <Transition.Child
                                                         as={Fragment}
@@ -113,36 +114,40 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                                         leaveFrom="opacity-100 scale-100"
                                                         leaveTo="opacity-0 scale-95"
                                                     >
-                                                        <Dialog.Panel className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 bg-white p-12 rounded-2xl shadow-2xl shadow-black/40">
-                                                        
-                                                        <Image 
-                                                            src={thumbnailImage[0].url}
-                                                            alt={thumbnailImage[0].alt}
-                                                            width={thumbnailImage[0].width}
-                                                            height={thumbnailImage[0].height}
-                                                            className="w-full object-cover"
-                                                            loading="lazy"
-                                                        />
-                                                        <div className="flex flex-col items-between h-full space-y-4">
-                                                            <Dialog.Title
-                                                                as="h3"
-                                                                className="text-lg font-medium leading-6"
-                                                            >
-                                                                {title}
-                                                            </Dialog.Title>
+                                                        <Dialog.Panel className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 bg-white p-12 rounded-2xl shadow-2xl shadow-black/40">
 
-                                                            <RichText text={aboutText} customClasses=''/>
-
-                                                            <div className="mt-4">
-                                                                <button
-                                                                type="button"
-                                                                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                                                onClick={handleClose}
-                                                                >
-                                                                Close
-                                                                </button>
+                                                            <div className="">
+                                                                <Image 
+                                                                    src={thumbnailImage[0].url}
+                                                                    alt={thumbnailImage[0].alt}
+                                                                    width={thumbnailImage[0].width}
+                                                                    height={thumbnailImage[0].height}
+                                                                    className="w-full h-full object-cover"
+                                                                    loading="lazy"
+                                                                />
                                                             </div>
-                                                        </div>
+                                                            <div className="flex flex-col justify-between">
+                                                                <div className="flex flex-col space-y-4 xl:space-y-8">
+                                                                    <Dialog.Title
+                                                                        as="h3"
+                                                                        className="text-lg lg:text-3xl leading-6"
+                                                                    >
+                                                                        {title}
+                                                                    </Dialog.Title>
+
+                                                                    <RichText text={aboutText}/>
+                                                                </div>
+
+                                                                <div className="flex justify-end">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="rounded-md border-2 border-primary px-4 py-2 text-sm lg:text-xl text-primary hover:bg-primary hover:text-white transition duration-300"
+                                                                        onClick={handleClose}
+                                                                    >
+                                                                        Close
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </Dialog.Panel>
                                                     </Transition.Child>
                                                 </div>
