@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
-import { ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/solid"
 
 import Link from 'next/link'
 import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
@@ -78,19 +78,36 @@ export default function StaticPage({grant}: Props) {
         })
     }
 
+    const titleClasses = [
+        'text-secondary uppercase tracking-widest text-3xl'
+    ].join(' ')
+
     const [abstractShow, setAbstractShow] = useState(false)
+    const [activeIndex, setActiveIndex] = useState(-1)
 
     return (
-        <div className="bg-gradient-to-b from-primary to-white">
+        <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
             <Layout title={grant.GrantTitleEng} >
-                <div className="container mx-auto my-6 lg:my-12 ">
+                <div className="container mx-auto my-6 lg:my-12 relative">
+                    
+                    <Link href="#" className="absolute bg-secondary rounded-full px-12 h-16 right-28 -top-8 flex items-center border-2 border-secondary hover:border-primary transition duration-300">
+                        <div className="uppercase text-white flex items-center space-x-4 ">
+                            <p className="border-2 border-white p-.5 rounded-full">
+                                <ChevronLeftIcon className="w-8 h-8 "/>
+                            </p>
+                            <p>
+                                Grant search
+                            </p>
+                        </div>
+                    </Link>
+
                     <Grid numItemsLg={1} className="gap-6">
                         <Col
                             numColSpanLg={1}
                             className="flex flex-col gap-6 bg-white p-12 rounded-2xl border-4 border-text-tremor-emphasis"
                         >
                             <div className="grant-abstract flex flex-col space-y-4">
-                                <Title className='text-secondary uppercase tracking-widest text-3xl'>Abstract</Title>
+                                <Title className={titleClasses}>Abstract</Title>
                                 <AnimateHeight
                                     duration={300}
                                     height={abstractShow ? 'auto' : 100}
@@ -103,7 +120,7 @@ export default function StaticPage({grant}: Props) {
                                     </AnimateHeight>
 
                                 <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
-                                    <span className='inline-flex '>
+                                    <span className='inline-flex text-secondary'>
                                         {abstractShow ? "read less" : "read more"}
                                     </span>
                                     <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-12 h-12`}/>
@@ -122,56 +139,75 @@ export default function StaticPage({grant}: Props) {
                             }
 
                             {grant.PubMedLinks?.length > 0 &&
-                                <Card>
-                                    <Title>Publications</Title>
+                                <div className='flex flex-col space-y-4'>
+                                    <Title className={titleClasses}>Publications</Title>
 
-                                    <AccordionList className="mt-2 !shadow-none">
-                                        {grant.PubMedLinks.map((link: any, index: number) => (
-                                            <Accordion
-                                                key={index}
-                                                className="border-0 rounded-none"
-                                            >
-                                                <AccordionHeader className="items-start pl-0">
-                                                    <p
-                                                        className="text-left"
-                                                        dangerouslySetInnerHTML={{__html: link.title}}
-                                                    />
-                                                </AccordionHeader>
+                                    <div className='bg-primary/20 p-8 rounded-2xl'>
 
-                                                <AccordionBody className="flex flex-col pl-0 gap-y-4">
-                                                    <div>
-                                                        <Subtitle className="font-bold">Authors</Subtitle>
-                                                        <Text>{link.authorString}</Text>
-                                                    </div>
+                                        <div className="mt-2 !shadow-none">
+                                            {grant.PubMedLinks.map((link: any, index: number) => {
 
-                                                    <div>
-                                                        <Subtitle className="font-bold">Publish Year</Subtitle>
-                                                        <Text>{link.pubYear}</Text>
-                                                    </div>
+                                                const handleClick = () => {
+                                                    activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
+                                                }
 
-                                                    {link.journalInfo?.journal?.title &&
-                                                        <div>
-                                                            <Subtitle className="font-bold">Journal</Subtitle>
-                                                            <Text>{link.journalInfo.journal.title}</Text>
-                                                        </div>
-                                                    }
-
-                                                    <div>
-                                                        <Subtitle className="font-bold">DOI</Subtitle>
-                                                        <Text>{link.doi}</Text>
-                                                    </div>
-
-                                                    <Link
-                                                        href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                        className="text-right text-blue-500"
+                                                return (
+                                                    <div
+                                                        key={index}
                                                     >
-                                                        View at Europe PMC
-                                                    </Link>
-                                                </AccordionBody>
-                                            </Accordion>
-                                        ))}
-                                    </AccordionList>
-                                </Card>
+                                                        <div className="flex justify-between pb-8">
+                                                            <p
+                                                                className="text-left text-2xl text-tremor-content-emphasis"
+                                                                dangerouslySetInnerHTML={{__html: link.title}}
+                                                            />
+                                                            <button onClick={handleClick} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
+                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-12 h-12`}/>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <AnimateHeight
+                                                            duration={300}
+                                                            height={activeIndex === index ? 'auto' : 0}
+                                                        >  
+                                                            <div className="flex flex-col pl-0 gap-y-8">
+                                                                <div>
+                                                                    <Subtitle className="font-bold">Authors</Subtitle>
+                                                                    <Text>{link.authorString}</Text>
+                                                                </div>
+    
+                                                                <div>
+                                                                    <Subtitle className="font-bold">Publish Year</Subtitle>
+                                                                    <Text>{link.pubYear}</Text>
+                                                                </div>
+    
+                                                                {link.journalInfo?.journal?.title &&
+                                                                    <div>
+                                                                        <Subtitle className="font-bold">Journal</Subtitle>
+                                                                        <Text>{link.journalInfo.journal.title}</Text>
+                                                                    </div>
+                                                                }
+    
+                                                                <div>
+                                                                    <Subtitle className="font-bold">DOI</Subtitle>
+                                                                    <Text>{link.doi}</Text>
+                                                                </div>
+                                                                
+                                                                <div>
+                                                                    <Link
+                                                                        href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                                        className="text-left text-white bg-secondary p-4 rounded-full uppercase"
+                                                                    >
+                                                                        View at Europe PMC
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        </AnimateHeight>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </Col >
 
