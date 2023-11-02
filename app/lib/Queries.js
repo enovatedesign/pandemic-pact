@@ -122,6 +122,7 @@ export const contentBuilderQuery = `
                 title
                 jobTitle
                 postNominalLetters
+                aboutText
                 thumbnailImage @transform(transform: "c480x300") {
                   ... on contentAssets_Asset {
                     altText
