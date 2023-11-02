@@ -1,5 +1,5 @@
-import Image from "next/image"
 import BlockWrapper from "../BlockWrapper"
+import PublicationsCard from "../News/PublicationsCard"
 
 type Props = {
     block: {
@@ -38,30 +38,8 @@ const ListPublicationsBlock = ({block}: Props) => {
                     <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
                         
                         {customEntries.map((entry, index) => {
-                            
-                            const {title, summary, thumbnailImage, externalLink} = entry
-
                             return (
-                                <li key={index}  className="bg-white shadow-xl hover:shadow-2xl rounded-lg hover:scale-105 transition duration-300 cursor-pointer">
-                                    <a href={externalLink} target="_blank">
-                                        <Image 
-                                            src={thumbnailImage[0].url}
-                                            alt={thumbnailImage[0].alt}
-                                            width={thumbnailImage[0].width}
-                                            height={thumbnailImage[0].height}
-                                            className=" rounded-t-lg"
-                                            loading="lazy"
-                                        />
-                                        <div className="space-y-4 p-4 xl:p-8">
-                                            <h3 className="text-lg">
-                                                {title}
-                                            </h3>
-                                            <p>
-                                                {summary}
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
+                                <PublicationsCard entry={entry} key={index}/>
                             )
                         })}
 
