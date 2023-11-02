@@ -20,6 +20,7 @@ import TableBlock from "./Blocks/TableBlock";
 import HeroImageSliderBlock from "./Blocks/HeroImageSliderBlock";
 import PullQuoteBlock from "./Blocks/PullQuoteBlock";
 import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
+import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -42,7 +43,8 @@ const blocks = {
 	table: TableBlock,
 	imageSlider: HeroImageSliderBlock,
 	pullQuote: PullQuoteBlock,
-	listTeamMembers: ListTeamMembersBlock
+	listTeamMembers: ListTeamMembersBlock,
+	listPublications: ListPublicationsBlock,
 };
 
 const Block = (props) => {

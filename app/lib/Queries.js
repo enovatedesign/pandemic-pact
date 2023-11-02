@@ -134,6 +134,27 @@ export const contentBuilderQuery = `
               }
             }
           }
+          ... on bodyContent_listPublications_BlockType {
+            id
+            typeHandle
+            heading
+            customEntries {
+              ... on publications_publication_Entry {
+                id
+                title
+                summary
+                externalLink
+                thumbnailImage {
+                  ... on contentAssets_Asset {
+                    alt
+                    height
+                    url
+                    width
+                  }
+                }
+              }
+            }
+          }
           ... on bodyContent_image_BlockType {
             id
             image @transform(transform: "c2000xauto") {
