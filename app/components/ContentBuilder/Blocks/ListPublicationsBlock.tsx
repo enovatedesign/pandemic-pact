@@ -1,5 +1,5 @@
 import BlockWrapper from "../BlockWrapper"
-import PublicationsCard from "../News/PublicationsCard"
+import PublicationsCard from "./Publications/PublicationsCard"
 
 type Props = {
     block: {
