@@ -122,7 +122,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                                                     alt={thumbnailImage[0].alt}
                                                                     width={thumbnailImage[0].width}
                                                                     height={thumbnailImage[0].height}
-                                                                    className="w-full h-full object-cover"
+                                                                    className="w-full h-full object-cover rounded-2xl"
                                                                     loading="lazy"
                                                                 />
                                                             </div>
