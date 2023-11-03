@@ -104,7 +104,7 @@ export default function StaticPage({grant}: Props) {
                     <Grid numItemsLg={1} className="gap-6">
                         <Col
                             numColSpanLg={1}
-                            className="flex flex-col gap-6 bg-white p-12 rounded-2xl border-4 border-text-tremor-emphasis"
+                            className="flex flex-col gap-6 bg-white p-4 md:p-6 lg:p-12 rounded-2xl border-4 border-text-tremor-emphasis"
                         >
                             <div className="grant-abstract flex flex-col space-y-4">
                                 <Title className={titleClasses}>Abstract</Title>
@@ -142,9 +142,9 @@ export default function StaticPage({grant}: Props) {
                                 <div className='flex flex-col space-y-4'>
                                     <Title className={titleClasses}>Publications</Title>
 
-                                    <div className='bg-primary/20 p-8 rounded-2xl'>
+                                    <div className='bg-primary/20 p-4 lg:p-6  rounded-2xl'>
 
-                                        <div className="mt-2 !shadow-none">
+                                        <div className="">
                                             {grant.PubMedLinks.map((link: any, index: number) => {
 
                                                 const handleClick = () => {
@@ -155,9 +155,9 @@ export default function StaticPage({grant}: Props) {
                                                     <div
                                                         key={index}
                                                     >
-                                                        <div className="flex justify-between pb-8">
+                                                        <div className="flex items-center justify-between space-x-2">
                                                             <p
-                                                                className="text-left text-2xl text-tremor-content-emphasis"
+                                                                className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl text-tremor-content-emphasis"
                                                                 dangerouslySetInnerHTML={{__html: link.title}}
                                                             />
                                                             <button onClick={handleClick} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
@@ -169,33 +169,33 @@ export default function StaticPage({grant}: Props) {
                                                             duration={300}
                                                             height={activeIndex === index ? 'auto' : 0}
                                                         >  
-                                                            <div className="flex flex-col pl-0 gap-y-8">
+                                                            <div className="flex flex-col gap-y-4 lg:gap-y-8 pt-4 lg-pt-8">
                                                                 <div>
-                                                                    <Subtitle className="font-bold">Authors</Subtitle>
-                                                                    <Text>{link.authorString}</Text>
+                                                                    <Subtitle className="uppercase">Authors</Subtitle>
+                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</Text>
                                                                 </div>
     
                                                                 <div>
-                                                                    <Subtitle className="font-bold">Publish Year</Subtitle>
-                                                                    <Text>{link.pubYear}</Text>
+                                                                    <Subtitle className="uppercase">Publish Year</Subtitle>
+                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</Text>
                                                                 </div>
     
                                                                 {link.journalInfo?.journal?.title &&
                                                                     <div>
-                                                                        <Subtitle className="font-bold">Journal</Subtitle>
-                                                                        <Text>{link.journalInfo.journal.title}</Text>
+                                                                        <Subtitle className="uppercase">Journal</Subtitle>
+                                                                        <Text className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</Text>
                                                                     </div>
                                                                 }
     
                                                                 <div>
-                                                                    <Subtitle className="font-bold">DOI</Subtitle>
-                                                                    <Text>{link.doi}</Text>
+                                                                    <Subtitle className="uppercase">DOI</Subtitle>
+                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.doi}</Text>
                                                                 </div>
                                                                 
-                                                                <div>
+                                                                <div className="py-4">
                                                                     <Link
                                                                         href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                                        className="text-left text-white bg-secondary p-4 rounded-full uppercase"
+                                                                        className="text-left text-white bg-secondary p-4 rounded-full uppercase border-2 border-secondary hover:border-primary transition duration-300"
                                                                     >
                                                                         View at Europe PMC
                                                                     </Link>
