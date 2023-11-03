@@ -1,9 +1,12 @@
+"use client"
+
 import '../css/components/results-table.css'
 
 import Link from "next/link"
 import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
 import {SearchResponse, SearchResult} from "../types/search"
 import {links} from "../helpers/nav"
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
 
 interface Props {
     searchResponse: SearchResponse,
@@ -12,22 +15,18 @@ interface Props {
 export default function ResultsTable({searchResponse}: Props) {
     return (
         <Card>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableHeaderCell className="font-bold">Grant Name</TableHeaderCell>
-                        <TableHeaderCell className="text-right"></TableHeaderCell>
-                    </TableRow>
-                </TableHead>
+            <Table className='container mx-auto'>
+                
+                <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary py-8">Results</h3>
 
-                <TableBody>
-                    {searchResponse.hits.map((result) => {
+                <div className='flex flex-col space-y-8'>
+                    {searchResponse.hits.map((result, index) => {
                         const query = searchResponse.query
                         const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
 
                         return (
-                            <TableRow key={result.GrantID}>
-                                <TableCell className="flex flex-col gap-y-2">
+                            <div key={result.GrantID}>
+                                <div className="flex flex-col gap-y-2">
                                     <div
                                         className="whitespace-normal font-semibold"
                                         dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
@@ -36,21 +35,23 @@ export default function ResultsTable({searchResponse}: Props) {
                                     {searchResponse.query &&
                                         <SearchMatches result={result} />
                                     }
-                                </TableCell>
+                                </div>
 
-                                <TableCell className="text-right whitespace-nowrap truncate">
-                                </TableCell>
+                                <div className="text-right whitespace-nowrap truncate">
+                                </div>
 
-                                <TableCell className="text-right whitespace-nowrap truncate align-top">
+                                <div className="text-right whitespace-nowrap truncate align-top">
                                     <Link
                                         href={href}
                                         className="text-blue-500"
-                                    >View Grant</Link>
-                                </TableCell>
-                            </TableRow>
+                                    >
+                                        View Grant
+                                    </Link>
+                                </div>
+                            </div>
                         )
                     })}
-                </TableBody>
+                </div>
             </Table>
         </Card >
     )
@@ -75,10 +76,20 @@ function SearchMatches({result}: SearchMatchesProps) {
     const matchText = matches.filter(({count}) => count > 0)
         .map(({label, count}) => `${count} in ${label}`)
         .join(', ')
-
+    
+        const iconClasses = 'w-6 h-6 text-primary transition duration-300'
     return (
-        <div className="text-xs italic">
-            <span className="font-semibold">Word Matches In Fields</span>: {matchText}
+        <div className=" bg-primary/40 p-4 rounded-2xl flex justify-between items-center">
+            <div>
+                <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
+            </div>
+            <button  className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
+                <span className='inline-flex text-white'>
+                    see more
+                    <EyeIcon className={iconClasses} />
+                </span>
+
+            </button>
         </div>
     )
 }
