@@ -88,14 +88,14 @@ export default function StaticPage({grant}: Props) {
     return (
         <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
             <Layout title={grant.GrantTitleEng} >
-                <div className="container mx-auto my-6 lg:my-12 relative">
+                <div className="container mx-auto my-12 relative">
                     
-                    <Link href="#" className="absolute bg-secondary rounded-full px-12 h-16 right-28 -top-8 flex items-center border-2 border-secondary hover:border-primary transition duration-300">
-                        <div className="uppercase text-white flex items-center space-x-4 ">
+                    <Link href="#" className="absolute bg-secondary rounded-full px-4 h-8 -top-4 right-12 md:px-8 md:h-14 md:-top-7 md:right-20 lg:right-28 flex items-center border-2 border-secondary hover:border-primary transition duration-300">
+                        <div className="uppercase text-white flex items-center space-x-2 lg:space-x-4">
                             <p className="border-2 border-white p-.5 rounded-full">
-                                <ChevronLeftIcon className="w-8 h-8 "/>
+                                <ChevronLeftIcon className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 -translate-x-[1px] "/>
                             </p>
-                            <p>
+                            <p className="text-sm md:text-lg lg:text-xl">
                                 Grant search
                             </p>
                         </div>
