@@ -30,8 +30,7 @@ export default function ResultsTable({searchResponse}: Props) {
                     {searchResponse.hits.map((result, index) => {
                         const query = searchResponse.query
                         const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
-                        const Abstract = result.Abstract
-                        const data = {index, activeIndex, setActiveIndex, href, Abstract}
+                        const data = {index, activeIndex, setActiveIndex}
 
                         return (
                             <div key={result.GrantID}>
@@ -65,11 +64,9 @@ interface SearchMatchesProps {
     index: number,
     activeIndex: number,
     setActiveIndex: any,
-    href: string,
-    Abstract: string,
 }
 
-function SearchMatches({result, index, activeIndex, setActiveIndex, href, Abstract}: SearchMatchesProps) {
+function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatchesProps) {
     
     let matches = [
         {label: "Title", count: result._formatted.GrantTitleEng?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
