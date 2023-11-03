@@ -5,10 +5,9 @@ import AnimateHeight from 'react-animate-height';
 import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/solid"
 
 import Link from 'next/link'
-import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
+import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
-import Heading from '@/app/components/PageTitle';
 
 interface Props {
     grant: any
@@ -141,7 +140,7 @@ export default function StaticPage({grant}: Props) {
 
                             <div className="my-2 lg:my-8 -mx-[5%] overflow-hidden">
                                 <div className='relative flex flex-col lg:flex-row justify-start items-center w-full whitespace-nowrap bg-secondary rounded-2xl'>
-                                    <h3 className='py-2 lg:py-0 text-2xl  text-white  uppercase lg:block lg:transform lg:-rotate-90 lg:h-full '>
+                                    <h3 className='py-2 lg:py-0 text-2xl  text-white  uppercase lg:block lg:transform lg:-rotate-90'>
                                         Key facts
                                     </h3>
                                     <div className='w-full bg-primary text-secondary rounded-b-2xl lg:rounded-bl-none lg:rounded-r-2xl'>
