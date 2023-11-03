@@ -79,9 +79,23 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
         count: matches.reduce((total, {count}) => total + count, 0)
     })
 
-    const matchText = matches.filter(({count}) => count > 0)
-        .map(({label, count}) => `${count} in ${label}`)
-        .join(', ')
+    
+    const titleMatchText = matches.filter(label => label.label === "Title")
+    .filter(({count}) => count > 0)
+    .map(({label, count}) => `${count} in ${label}`)
+    .join(', ')
+    
+    const abstractMatchText = matches.filter(label => label.label === "Abstract")
+    .filter(({count}) => count > 0)
+    .map(({label, count}) => `${count} in ${label}`)
+    .join(', ')
+    
+    const totalMatchText = matches.filter(label => label.label === "Total")
+    .filter(({count}) => count > 0)
+    .map(({count}) => count)
+    .join(', ')
+    
+    const matchText = [titleMatchText, abstractMatchText]
     
     const iconClasses = 'w-6 h-6 text-white'
     
@@ -93,7 +107,26 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
         <div className='bg-primary/40 p-4 rounded-2xl'>
             <div className="grid grid-cols-4 gap-4 lg:gap-8">
                 <div className='flex items-center col-start-1 col-span-2'>
-                    <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
+                    <span className="uppercase text-lg">Search Matches:</span>
+                        <ul className="flex space-x-2">
+                            {matchText.map((text, index) => {
+                                return (
+                                    <>
+                                        {text && (
+                                            <li key={index} className='bg-white p-2 ml-2 rounded-lg'>
+                                                {text}
+                                            </li>
+                                        )}
+                                    </>
+                                ) 
+                            })}
+                        </ul>
+                </div>
+                <div className='flex items-center justify-end col-start-3 col-span-1'>
+                    <span className="uppercase text-lg pr-4">Total Matches:</span>
+                        <p className="px-6 py-2 flex items-center justify-center bg-orange-800/80 rounded-lg font-bold text-secondary">
+                            {totalMatchText}
+                        </p>
                 </div>
 
                 <button onClick={handleClick} className='col-start-4 col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary hover:border-primary transition duration-300'>
