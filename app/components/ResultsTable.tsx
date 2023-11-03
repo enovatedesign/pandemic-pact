@@ -83,17 +83,14 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     const titleMatchText = matches.filter(label => label.label === "Title")
     .filter(({count}) => count > 0)
     .map(({label, count}) => `${count} in ${label}`)
-    .join(', ')
     
     const abstractMatchText = matches.filter(label => label.label === "Abstract")
     .filter(({count}) => count > 0)
     .map(({label, count}) => `${count} in ${label}`)
-    .join(', ')
     
     const totalMatchText = matches.filter(label => label.label === "Total")
     .filter(({count}) => count > 0)
     .map(({count}) => count)
-    .join(', ')
     
     const matchText = [titleMatchText, abstractMatchText]
     
@@ -105,31 +102,35 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
 
     return (
         <div className='bg-primary/40 p-4 rounded-2xl'>
-            <div className="grid grid-cols-4 gap-4 lg:gap-8">
-                <div className='flex items-center col-start-1 col-span-2'>
-                    <span className="uppercase text-lg">Search Matches:</span>
-                        <ul className="flex space-x-2">
-                            {matchText.map((text, index) => {
-                                return (
-                                    <>
-                                        {text && (
-                                            <li key={index} className='bg-white p-2 ml-2 rounded-lg'>
-                                                {text}
-                                            </li>
-                                        )}
-                                    </>
-                                ) 
-                            })}
-                        </ul>
+            <div className="grid grid-rows-3 gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
+                <div className='flex items-center justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
+                    <span className="uppercase text-md whitespace-nowrap">
+                        Search Matches:
+                    </span>
+                    <ul className="flex space-x-2">
+                        {matchText.map((text, index) => {
+                            return (
+                                <>
+                                    {text && (
+                                        <li key={index} className='bg-white p-2 ml-2 rounded-lg whitespace-nowrap'>
+                                            {text}
+                                        </li>
+                                    )}
+                                </>
+                            ) 
+                        })}
+                    </ul>
                 </div>
-                <div className='flex items-center justify-end col-start-3 col-span-1'>
-                    <span className="uppercase text-lg pr-4">Total Matches:</span>
-                        <p className="px-6 py-2 flex items-center justify-center bg-orange-800/60 rounded-lg font-bold text-secondary">
-                            {totalMatchText}
-                        </p>
+                <div className='flex items-center justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg::col-span-1'>
+                    <span className="uppercase text-md pr-4 whitespace-nowrap">
+                        Total Matches:
+                    </span>
+                    <p className="px-6 py-2 flex items-center justify-center bg-orange-800/60 rounded-lg font-bold text-secondary">
+                        {totalMatchText}
+                    </p>
                 </div>
 
-                <button onClick={handleClick} className='col-start-4 col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary hover:border-primary transition duration-300'>
+                <button onClick={handleClick} className='row-start-3 row-span-1 lg:row-start-1 lg:col-start-4 lg:col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary hover:border-primary transition duration-300'>
                     <span className='inline-flex text-white'>
                         {activeIndex !== index ? 'See more' : 'See less'}
                     </span>
