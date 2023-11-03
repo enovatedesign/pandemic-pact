@@ -8,6 +8,7 @@ import {links} from "../helpers/nav"
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
+import RichText from './ContentBuilder/Common/RichText'
 
 interface Props {
     searchResponse: SearchResponse,
@@ -17,6 +18,7 @@ interface Props {
 export default function ResultsTable({searchResponse}: Props) {
     
     const [activeIndex, setActiveIndex] = useState(-1)
+
     
     return (
         <Card>
@@ -34,10 +36,12 @@ export default function ResultsTable({searchResponse}: Props) {
                         return (
                             <div key={result.GrantID}>
                                 <div className="flex flex-col gap-y-2">
-                                    <div
-                                        className="whitespace-normal font-semibold"
-                                        dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
-                                    />
+                                    <a href={href} className="hover:underline">
+                                        <div
+                                            className="whitespace-normal font-semibold text-xl"
+                                            dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
+                                        />
+                                    </a>
 
                                     {searchResponse.query &&
                                         <SearchMatches result={result} {...data}/>
@@ -91,13 +95,13 @@ function SearchMatches({result, index, activeIndex, setActiveIndex, href, Abstra
     return (
         <div className='bg-primary/40 p-4 rounded-2xl'>
             <div className="grid grid-cols-4 gap-4 lg:gap-8">
-                <div className='flex items-center'>
+                <div className='flex items-center col-start-1 col-span-2'>
                     <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
                 </div>
 
                 <button onClick={handleClick} className='col-start-4 col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary hover:border-primary transition duration-300'>
                     <span className='inline-flex text-white'>
-                        see more
+                        {activeIndex !== index ? 'See more' : 'See less'}
                     </span>
                     {activeIndex !== index ? (
                         <EyeIcon className={iconClasses} />
@@ -113,11 +117,31 @@ function SearchMatches({result, index, activeIndex, setActiveIndex, href, Abstra
             >
                 <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
 
-                    <Link href={href} className="col-span-3 px-8 py-4  bg-white rounded-2xl">
-                        <p>
-                            {Abstract}
+                    <div className="col-span-3 px-8 py-4 bg-white rounded-2xl">
+                        <p className="pb-4 uppercase text-secondary text-lg">
+                            Abstract Exerpt
                         </p>
-                    </Link>
+                        <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content" />
+                    </div>
+                    <div className='col-start-4 col-span-1 flex flex-col space-y-4'>
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between space-y-2">
+                            <p className='uppercase whitespace-normal'>
+                                Amount committed (usd)
+                            </p>
+                            <p className='text-lg md:text-3xl font-bold whitespace-normal'>
+                                $7,667
+                            </p>
+                        </div>
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between space-y-2">
+                            <p className='uppercase whitespace-normal'>
+                                Start Year
+                            </p>
+                            <p className='text-lg md:text-3xl font-bold whitespace-normal'>
+                                2020
+                            </p>
+                        </div>
+
+                    </div>
                 </div>
             </AnimateHeight>
         </div>
