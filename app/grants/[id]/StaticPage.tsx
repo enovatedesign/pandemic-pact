@@ -58,27 +58,30 @@ export default function StaticPage({grant}: Props) {
             text: 'Study Subject',
             metric: grant.StudySubject,
         },
-        // {
-        //     text: 'Age Groups',
-        //     metric: grant.AgeGroups,
-        // },
-        // {
-        //     text: 'Rurality',
-        //     metric: grant.Rurality,
-        // },
-        // {
-        //     text: 'Vulnerable Populations',
-        //     metric: grant.VulnerablePopulations,
-        // },
-        // {
-        //     text: 'Occupational Groups',
-        //     metric: grant.OccupationalGroups,
-        // },
-        // {
-        //     text: 'Clinical Trial',
-        //     metric: grant.ClinicalTrial,
-        // },
     ]
+
+    // Data unused in new design
+
+    // {
+    //     text: 'Age Groups',
+    //     metric: grant.AgeGroups,
+    // },
+    // {
+    //     text: 'Rurality',
+    //     metric: grant.Rurality,
+    // },
+    // {
+    //     text: 'Vulnerable Populations',
+    //     metric: grant.VulnerablePopulations,
+    // },
+    // {
+    //     text: 'Occupational Groups',
+    //     metric: grant.OccupationalGroups,
+    // },
+    // {
+    //     text: 'Clinical Trial',
+    //     metric: grant.ClinicalTrial,
+    // },
 
     // if (grant.ResearchInstitutionName.length > 0) {
     //     keyFactsItems.unshift({
@@ -136,25 +139,25 @@ export default function StaticPage({grant}: Props) {
                                 </button>
                             </div>
 
-                            <div className=" my-20 ">
-                                <div className='relative flex justify-start '>
-                                    <h3 className='transform -rotate-90 text-2xl bg-secondary text-white  uppercase'>
+                            <div className="my-2 lg:my-8 -mx-[5%] overflow-hidden">
+                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full whitespace-nowrap bg-secondary rounded-2xl'>
+                                    <h3 className='py-2 lg:py-0 text-2xl  text-white  uppercase lg:block lg:transform lg:-rotate-90 lg:h-full '>
                                         Key facts
                                     </h3>
-                                    <div className='col-start-2 bg-primary text-secondary'>
+                                    <div className='w-full bg-primary text-secondary rounded-b-2xl lg:rounded-bl-none lg:rounded-r-2xl'>
                                         <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                                             {keyFactsHeadings.map((heading, index) => {
                                                 const borderClasses = [
                                                     index === 1 ? 'border-x-[1px] border-slate-400' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4 `}>
-                                                            <p>
-                                                                {heading.text}
-                                                            </p>
-                                                            <p className='text-2xl font-bold'>
-                                                                {heading.metric}
-                                                            </p>
+                                                    <li key={index} className={`${borderClasses} p-4  flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                            {heading.text}
+                                                        </p>
+                                                        <p className='text-md md:text-2xl font-bold whitespace-normal'>
+                                                            {heading.metric}
+                                                        </p>
                                                     </li>
                                                 )
                                             })}
@@ -165,13 +168,13 @@ export default function StaticPage({grant}: Props) {
                                                     index === 1 ? 'border-x-[1px] border-slate-400' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4`}>
-                                                            <p>
-                                                                {subHeading.text}
-                                                            </p>
-                                                            <p>
-                                                                {subHeading.metric}
-                                                            </p>
+                                                    <li key={index} className={`${borderClasses} p-4 flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                            {subHeading.text}
+                                                        </p>
+                                                        <p className='font-bold whitespace-normal'>
+                                                            {subHeading.metric}
+                                                        </p>
                                                     </li>
                                                 )
                                             })}
@@ -182,13 +185,13 @@ export default function StaticPage({grant}: Props) {
                                                     index === 0 ? 'border-r-[1px]' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} border-t-[1px] border-slate-400 p-4`}>
-                                                            <p>
-                                                                {category.text}
-                                                            </p>
-                                                            <p>
-                                                                {category.metric}
-                                                            </p>
+                                                    <li key={index} className={`${borderClasses} border-t-[1px] border-slate-400 p-4 flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                            {category.text}
+                                                        </p>
+                                                        <p className='font-bold whitespace-normal'>
+                                                            {category.metric}
+                                                        </p>
                                                     </li>
                                                 )
                                             })}
