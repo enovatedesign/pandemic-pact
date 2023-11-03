@@ -8,32 +8,23 @@ import Link from 'next/link'
 import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
+import Heading from '@/app/components/PageTitle';
 
 interface Props {
     grant: any
 }
 
 export default function StaticPage({grant}: Props) {
-    const keyFactsItems = [
-        {
-            text: 'Research Location',
-            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
-        },
+    
+    const keyFactsHeadings = [
         {
             text: 'Disease',
             metric: grant.Disease.join(', '),
         },
+
         {
-            text: 'Start Year',
-            metric: grant.GrantStartYear,
-        },
-        {
-            text: 'End Year',
-            metric: grant.GrantEndYear,
-        },
-        {
-            text: 'Funder',
-            metric: grant.FundingOrgName.join(', '),
+            text: 'Start & end year',
+            metric: [grant.GrantStartYear, grant.GrantEndYear].join("-"),
         },
         {
             text: 'Amount Committed (USD)',
@@ -41,42 +32,60 @@ export default function StaticPage({grant}: Props) {
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,
         },
+    ]
+
+    const keyFactsSubHeadings = [
         {
-            text: 'Study Subject',
-            metric: grant.StudySubject,
+            text: 'Research Location',
+            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
         },
         {
-            text: 'Age Groups',
-            metric: grant.AgeGroups,
-        },
-        {
-            text: 'Rurality',
-            metric: grant.Rurality,
-        },
-        {
-            text: 'Vulnerable Populations',
-            metric: grant.VulnerablePopulations,
-        },
-        {
-            text: 'Occupational Groups',
-            metric: grant.OccupationalGroups,
+            text: 'Lead Research Institution',
+            metric: grant.ResearchInstitutionName[0],
         },
         {
             text: 'Study Type',
             metric: grant.StudyType,
         },
-        {
-            text: 'Clinical Trial',
-            metric: grant.ClinicalTrial,
-        },
     ]
 
-    if (grant.ResearchInstitutionName.length > 0) {
-        keyFactsItems.unshift({
-            text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName[0],
-        })
-    }
+    const keyFactsSubCategories = [
+        {
+            text: 'Funder',
+            metric: grant.FundingOrgName.join(', '),
+        },
+        {
+            text: 'Study Subject',
+            metric: grant.StudySubject,
+        },
+        // {
+        //     text: 'Age Groups',
+        //     metric: grant.AgeGroups,
+        // },
+        // {
+        //     text: 'Rurality',
+        //     metric: grant.Rurality,
+        // },
+        // {
+        //     text: 'Vulnerable Populations',
+        //     metric: grant.VulnerablePopulations,
+        // },
+        // {
+        //     text: 'Occupational Groups',
+        //     metric: grant.OccupationalGroups,
+        // },
+        // {
+        //     text: 'Clinical Trial',
+        //     metric: grant.ClinicalTrial,
+        // },
+    ]
+
+    // if (grant.ResearchInstitutionName.length > 0) {
+    //     keyFactsItems.unshift({
+    //         text: 'Lead Research Institution',
+    //         metric: grant.ResearchInstitutionName[0],
+    //     })
+    // }
 
     const titleClasses = [
         'text-secondary uppercase tracking-widest text-3xl'
@@ -127,27 +136,67 @@ export default function StaticPage({grant}: Props) {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-2 my-20 ">
+                            <div className=" my-20 ">
                                 <div className='relative flex justify-start '>
-                                    <h3 className='transform -rotate-90 text-2xl bg-secondary text-white px-12 py-2 uppercase'>
+                                    <h3 className='transform -rotate-90 text-2xl bg-secondary text-white  uppercase'>
                                         Key facts
                                     </h3>
+                                    <div className='col-start-2 bg-primary text-secondary'>
+                                        <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                                            {keyFactsHeadings.map((heading, index) => {
+                                                const borderClasses = [
+                                                    index === 1 ? 'border-x-[1px] border-slate-400' : ''
+                                                ].join(' ')
+                                                return (
+                                                    <li key={index} className={`${borderClasses} p-4 `}>
+                                                            <p>
+                                                                {heading.text}
+                                                            </p>
+                                                            <p className='text-2xl font-bold'>
+                                                                {heading.metric}
+                                                            </p>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        <ul className="grid grid-cols-3">
+                                            {keyFactsSubHeadings.map((subHeading, index) => {
+                                                const borderClasses = [
+                                                    index === 1 ? 'border-x-[1px] border-slate-400' : ''
+                                                ].join(' ')
+                                                return (
+                                                    <li key={index} className={`${borderClasses} p-4`}>
+                                                            <p>
+                                                                {subHeading.text}
+                                                            </p>
+                                                            <p>
+                                                                {subHeading.metric}
+                                                            </p>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        <ul className="grid grid-cols-2">
+                                            {keyFactsSubCategories.map((category, index) => {
+                                                const borderClasses = [
+                                                    index === 0 ? 'border-r-[1px]' : ''
+                                                ].join(' ')
+                                                return (
+                                                    <li key={index} className={`${borderClasses} border-t-[1px] border-slate-400 p-4`}>
+                                                            <p>
+                                                                {category.text}
+                                                            </p>
+                                                            <p>
+                                                                {category.metric}
+                                                            </p>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div>
-                                    test
-                                </div>
-                                {/* <div className="space-y-6">
-                                    {keyFactsItems.map(({text, metric}, index) => (
-                                        <Card key={index}>
-                                            <Flex justifyContent="start" className="space-x-4">
-                                                <div className="">
-                                                    <Text>{text}</Text>
-                                                    <Metric className="mt-2">{metric}</Metric>
-                                                </div>
-                                            </Flex>
-                                        </Card>
-                                    ))}
-                                </div> */}
+
+                                        
                             </div>
 
                             {grant.LaySummary &&
