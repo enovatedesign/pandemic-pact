@@ -1,18 +1,23 @@
 "use client"
 
 import '../css/components/results-table.css'
-
 import Link from "next/link"
-import {Card, Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell} from "@tremor/react"
+import {Card, Table} from "@tremor/react"
 import {SearchResponse, SearchResult} from "../types/search"
 import {links} from "../helpers/nav"
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
+import { useState } from 'react'
+import AnimateHeight from 'react-animate-height';
 
 interface Props {
     searchResponse: SearchResponse,
 }
 
+
 export default function ResultsTable({searchResponse}: Props) {
+    
+    const [activeIndex, setActiveIndex] = useState(-1)
+    
     return (
         <Card>
             <Table className='container mx-auto'>
@@ -33,7 +38,7 @@ export default function ResultsTable({searchResponse}: Props) {
                                     />
 
                                     {searchResponse.query &&
-                                        <SearchMatches result={result} />
+                                        <SearchMatches result={result} index={index} activeIndex={activeIndex} setActiveIndex={setActiveIndex}/>
                                     }
                                 </div>
 
@@ -58,10 +63,13 @@ export default function ResultsTable({searchResponse}: Props) {
 }
 
 interface SearchMatchesProps {
-    result: SearchResult
+    result: SearchResult,
+    index: number,
+    activeIndex: number,
+    setActiveIndex: any,
 }
 
-function SearchMatches({result}: SearchMatchesProps) {
+function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatchesProps) {
     let matches = [
         {label: "Title", count: result._formatted.GrantTitleEng?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
         {label: "Abstract", count: result._formatted.Abstract?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
@@ -77,18 +85,27 @@ function SearchMatches({result}: SearchMatchesProps) {
         .map(({label, count}) => `${count} in ${label}`)
         .join(', ')
     
-        const iconClasses = 'w-6 h-6 text-primary transition duration-300'
+    const iconClasses = 'w-6 h-6 text-primary transition duration-300'
+    
+    const handleClick = () => {
+        activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
+    }
+    
     return (
         <div className=" bg-primary/40 p-4 rounded-2xl flex justify-between items-center">
             <div>
                 <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
             </div>
-            <button  className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
+            <button onClick={handleClick} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
                 <span className='inline-flex text-white'>
                     see more
-                    <EyeIcon className={iconClasses} />
-                </span>
+                    {activeIndex !== index ? (
 
+                    <EyeIcon className={iconClasses} />
+                    ) : (
+                        <EyeOffIcon className={iconClasses} />
+                    )}
+                </span>
             </button>
         </div>
     )
