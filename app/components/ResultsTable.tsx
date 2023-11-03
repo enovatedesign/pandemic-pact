@@ -28,6 +28,8 @@ export default function ResultsTable({searchResponse}: Props) {
                     {searchResponse.hits.map((result, index) => {
                         const query = searchResponse.query
                         const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
+                        const Abstract = result.Abstract
+                        const data = {index, activeIndex, setActiveIndex, href, Abstract}
 
                         return (
                             <div key={result.GrantID}>
@@ -38,21 +40,13 @@ export default function ResultsTable({searchResponse}: Props) {
                                     />
 
                                     {searchResponse.query &&
-                                        <SearchMatches result={result} index={index} activeIndex={activeIndex} setActiveIndex={setActiveIndex}/>
-                                    }
+                                        <SearchMatches result={result} {...data}/>
+                                    }   
                                 </div>
 
                                 <div className="text-right whitespace-nowrap truncate">
                                 </div>
 
-                                <div className="text-right whitespace-nowrap truncate align-top">
-                                    <Link
-                                        href={href}
-                                        className="text-blue-500"
-                                    >
-                                        View Grant
-                                    </Link>
-                                </div>
                             </div>
                         )
                     })}
@@ -67,9 +61,12 @@ interface SearchMatchesProps {
     index: number,
     activeIndex: number,
     setActiveIndex: any,
+    href: string,
+    Abstract: string,
 }
 
-function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatchesProps) {
+function SearchMatches({result, index, activeIndex, setActiveIndex, href, Abstract}: SearchMatchesProps) {
+    
     let matches = [
         {label: "Title", count: result._formatted.GrantTitleEng?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
         {label: "Abstract", count: result._formatted.Abstract?.match(/class="highlighted-search-result-token">/g)?.length ?? 0},
@@ -85,28 +82,44 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
         .map(({label, count}) => `${count} in ${label}`)
         .join(', ')
     
-    const iconClasses = 'w-6 h-6 text-primary transition duration-300'
+    const iconClasses = 'w-6 h-6 text-white'
     
     const handleClick = () => {
         activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
     }
-    
-    return (
-        <div className=" bg-primary/40 p-4 rounded-2xl flex justify-between items-center">
-            <div>
-                <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
-            </div>
-            <button onClick={handleClick} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
-                <span className='inline-flex text-white'>
-                    see more
-                    {activeIndex !== index ? (
 
-                    <EyeIcon className={iconClasses} />
+    return (
+        <div className='bg-primary/40 p-4 rounded-2xl'>
+            <div className="grid grid-cols-4 gap-4 lg:gap-8">
+                <div className='flex items-center'>
+                    <span className="uppercase">Search Matches</span>: <span className='bg-white p-2 ml-2 rounded-lg'>{matchText}</span>
+                </div>
+
+                <button onClick={handleClick} className='col-start-4 col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary hover:border-primary transition duration-300'>
+                    <span className='inline-flex text-white'>
+                        see more
+                    </span>
+                    {activeIndex !== index ? (
+                        <EyeIcon className={iconClasses} />
                     ) : (
                         <EyeOffIcon className={iconClasses} />
                     )}
-                </span>
-            </button>
+                </button>
+            </div>
+
+            <AnimateHeight
+                duration={300}
+                height={activeIndex === index ? 'auto' : 0}
+            >
+                <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
+
+                    <Link href={href} className="col-span-3 px-8 py-4  bg-white rounded-2xl">
+                        <p>
+                            {Abstract}
+                        </p>
+                    </Link>
+                </div>
+            </AnimateHeight>
         </div>
     )
 }
