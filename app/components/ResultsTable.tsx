@@ -124,7 +124,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                 </div>
                 <div className='flex items-center justify-end col-start-3 col-span-1'>
                     <span className="uppercase text-lg pr-4">Total Matches:</span>
-                        <p className="px-6 py-2 flex items-center justify-center bg-orange-800/80 rounded-lg font-bold text-secondary">
+                        <p className="px-6 py-2 flex items-center justify-center bg-orange-800/60 rounded-lg font-bold text-secondary">
                             {totalMatchText}
                         </p>
                 </div>
