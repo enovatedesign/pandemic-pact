@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function StaticPage({grant}: Props) {
-    const sidebarItems = [
+    const keyFactsItems = [
         {
             text: 'Research Location',
             metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
@@ -72,7 +72,7 @@ export default function StaticPage({grant}: Props) {
     ]
 
     if (grant.ResearchInstitutionName.length > 0) {
-        sidebarItems.unshift({
+        keyFactsItems.unshift({
             text: 'Lead Research Institution',
             metric: grant.ResearchInstitutionName[0],
         })
@@ -125,6 +125,29 @@ export default function StaticPage({grant}: Props) {
                                     </span>
                                     <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-12 h-12`}/>
                                 </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 my-20 ">
+                                <div className='relative flex justify-start '>
+                                    <h3 className='transform -rotate-90 text-2xl bg-secondary text-white px-12 py-2 uppercase'>
+                                        Key facts
+                                    </h3>
+                                </div>
+                                <div>
+                                    test
+                                </div>
+                                {/* <div className="space-y-6">
+                                    {keyFactsItems.map(({text, metric}, index) => (
+                                        <Card key={index}>
+                                            <Flex justifyContent="start" className="space-x-4">
+                                                <div className="">
+                                                    <Text>{text}</Text>
+                                                    <Metric className="mt-2">{metric}</Metric>
+                                                </div>
+                                            </Flex>
+                                        </Card>
+                                    ))}
+                                </div> */}
                             </div>
 
                             {grant.LaySummary &&
@@ -211,20 +234,7 @@ export default function StaticPage({grant}: Props) {
                             }
                         </Col >
 
-                        {/* <Col numColSpanLg={2}>
-                            <div className="space-y-6">
-                                {sidebarItems.map(({text, metric}, index) => (
-                                    <Card key={index}>
-                                        <Flex justifyContent="start" className="space-x-4">
-                                            <div className="">
-                                                <Text>{text}</Text>
-                                                <Metric className="mt-2">{metric}</Metric>
-                                            </div>
-                                        </Flex>
-                                    </Card>
-                                ))}
-                            </div>
-                        </Col> */}
+                        
                     </Grid>
                 </div>
             </Layout>
