@@ -100,9 +100,11 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                         </p>
                                     )}
 
-                                    <button onClick={handleOpen} className="self-end mt-auto rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
-                                        Read more
-                                    </button>
+                                    <p className="mt-auto self-end">
+                                        <button onClick={handleOpen} className="mt-2 rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
+                                            Read more
+                                        </button>
+                                    </p>
                                 </div>
                                 
                                 {activeIndex === index && (
