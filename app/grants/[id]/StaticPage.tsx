@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
+import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 
 interface Props {
     grant: any
@@ -95,6 +96,12 @@ export default function StaticPage({grant}: Props) {
 
     const [abstractShow, setAbstractShow] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
+    
+    const [currentPage, setCurrentPage] = useState(1)
+    const lastPost = (currentPage * 3)
+    const firstPost = (lastPost - 3)
+    const publicationList = grant.PubMedLinks?.slice(firstPost, lastPost)
+
 
     return (
         <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
@@ -212,14 +219,14 @@ export default function StaticPage({grant}: Props) {
                                 </Card>
                             }
 
-                            {grant.PubMedLinks?.length > 0 &&
+                            {publicationList.length > 0 &&
                                 <div className='flex flex-col space-y-4'>
                                     <Title className={titleClasses}>Publications</Title>
 
-                                    <div className='bg-primary/20 p-4 lg:p-6  rounded-2xl'>
+                                    <div className=''>
 
-                                        <div className="">
-                                            {grant.PubMedLinks.map((link: any, index: number) => {
+                                        <div className="grid grid-cols-1 gap-8">
+                                            {publicationList.map((link: any, index: number) => {
 
                                                 const handleClick = () => {
                                                     activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
@@ -228,6 +235,7 @@ export default function StaticPage({grant}: Props) {
                                                 return (
                                                     <div
                                                         key={index}
+                                                        className="bg-primary/20 p-4  rounded-2xl"
                                                     >
                                                         <div className="flex items-start justify-between space-x-2">
                                                             <p
@@ -281,7 +289,16 @@ export default function StaticPage({grant}: Props) {
                                             })}
                                         </div>
                                     </div>
+                                    {grant.PubMedLinks?.length > 3 && (
+                                        <Pagination 
+                                            totalPosts={grant.PubMedLinks?.length}
+                                            postsPerPage={3}
+                                            setCurrentPage={setCurrentPage}
+                                            currentPage={currentPage}
+                                        />
+                                    )}
                                 </div>
+
                             }
                         </Col >
 

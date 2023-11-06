@@ -30,11 +30,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
     const limit = block.limit 
     const paginate = block.paginate ?? false
     const [currentPage, setCurrentPage] = useState(1)
-    
-    const handlePagination = (index) => {
-        setCurrentPage(index)
-    }
-   
+
     const lastPost = (currentPage * limit)
     const firstPost = (lastPost - limit)
     
