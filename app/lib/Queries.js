@@ -10,6 +10,10 @@ export const seomaticQuery = `
   }
 `
 
+export const newsEntriesQuery = `
+    
+`
+
 export const contentBuilderQuery = `
     bodyContent(status: "enabled") {
         ... on bodyContent_richText_BlockType {
@@ -108,6 +112,48 @@ export const contentBuilderQuery = `
             limit
             paginate
             addTagsMenu
+          }
+          ... on bodyContent_listTeamMembers_BlockType {
+            id
+            typeHandle
+            heading
+            customEntries {
+              ... on teamMembers_teamMember_Entry {
+                title
+                jobTitle
+                postNominalLetters
+                aboutText
+                thumbnailImage @transform(transform: "c480x480") {
+                  ... on contentAssets_Asset {
+                    altText
+                    height
+                    url
+                    width
+                  }
+                }
+              }
+            }
+          }
+          ... on bodyContent_listPublications_BlockType {
+            id
+            typeHandle
+            heading
+            customEntries {
+              ... on publications_publication_Entry {
+                id
+                title
+                summary
+                externalLink
+                thumbnailImage @transform(transform: "c480x300") {
+                  ... on contentAssets_Asset {
+                    alt
+                    height
+                    url
+                    width
+                  }
+                }
+              }
+            }
           }
           ... on bodyContent_image_BlockType {
             id
@@ -314,5 +360,6 @@ export const contentBuilderQuery = `
             reverse
             text
           }
+          
     }
 `

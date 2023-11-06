@@ -1,10 +1,21 @@
 import BlockWrapper from "../BlockWrapper";
 import NewsCard from "../News/NewsCard";
-import { useState, useEffect } from "react";
 import { useInView, animated } from '@react-spring/web';
+import { newsEntriesQuery } from "@/app/lib/Queries";
 
 type Props = {
     block: {
+        newsEntries: {
+            url: string,
+            title: string,
+            summary: string
+            thumbnailImage: {
+              url: string,
+              width: number,
+              height: number,
+              alt: string,
+            },
+        },
         customEntries: {
             url: string,
             title: string,
@@ -14,18 +25,20 @@ type Props = {
               width: number,
               height: number,
               alt: string,
-            }
-        }
+            },
+        },
         limit: number,
         paginate: boolean,
         addTagsMenu: boolean,
     }
 }
 
+
 const ListContentNewsBlock = ( {block}: Props ) => {
     
+
     const limit = block.limit
-    const limitedEntries = block.customEntries.slice(0, limit) ?? null 
+    const limitedEntries = block.customEntries.slice(0, limit) ?? block.newsEntries.slice(0, limit) ?? null
     const tags = block.addTagsMenu ?? false
     const paginate = block.paginate ?? false
 

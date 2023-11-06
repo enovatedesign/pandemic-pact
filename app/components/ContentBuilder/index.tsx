@@ -8,7 +8,7 @@ import ImageBlock from "./Blocks/Image";
 import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
 import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
-import DownloadBlock from "./Blocks/Download"; // need assistance on checking type of asset (word/pdf etc)
+import DownloadBlock from "./Blocks/Download";
 import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
 import ImagePairBlock from "./Blocks/ImagePairBlock";
@@ -18,7 +18,9 @@ import RichTextColumnsBlock from "./Blocks/RichTextColumnsBlock";
 import ContentSliderBlock from "./Blocks/ContentSliderBlock";
 import TableBlock from "./Blocks/TableBlock";
 import HeroImageSliderBlock from "./Blocks/HeroImageSliderBlock";
-import PullQuoteBlock from "./Blocks/PullQuoteBlock"
+import PullQuoteBlock from "./Blocks/PullQuoteBlock";
+import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
+import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 
 const blocks = {
 	button: ButtonBlock,
@@ -40,7 +42,9 @@ const blocks = {
 	contentSlider: ContentSliderBlock,
 	table: TableBlock,
 	imageSlider: HeroImageSliderBlock,
-	pullQuote: PullQuoteBlock
+	pullQuote: PullQuoteBlock,
+	listTeamMembers: ListTeamMembersBlock,
+	listPublications: ListPublicationsBlock,
 };
 
 const Block = (props) => {
