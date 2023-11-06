@@ -51,7 +51,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
     
     return (
         <BlockWrapper>
-            <animated.div className="flex flex-col space-y-8 lg:space-y-12" ref={ref} style={springs}>
+            <animated.div ref={ref} style={springs}>
 
                 {heading && (
                     <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
