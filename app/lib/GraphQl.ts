@@ -5,7 +5,7 @@ export default async function craft(query: string, variables: Record<string, unk
 
     const request: RequestInit = {
         method: "POST",
-        // cache: 'no-store',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${API_TOKEN}`

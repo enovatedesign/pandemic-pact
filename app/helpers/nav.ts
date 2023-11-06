@@ -21,17 +21,17 @@ export const getFooterLinksArray = () => {
 }
 
 export const footerLinksFirstCollection = [
-    { label: 'A link to something', href: '/modern-slavery-statement' },
-    { label: 'Another link to something else', href: '/privacy-and-terms' },
-    { label: 'Link that goes to a page', href: '/accessibility' },
-    { label: 'Another page with link', href: '/accessibility' },
-    { label: 'Link again isn\'t it', href: '/accessibility' },
+    { label: 'A link to something', href: '/' },
+    { label: 'Another link to something else', href: '/' },
+    { label: 'Link that goes to a page', href: '/' },
+    { label: 'Another page with link', href: '/' },
+    { label: 'Link again isn\'t it', href: '/' },
 ]
 
 export const footerLinksSecondCollection = [
-    { label: 'A link to something', href: '/modern-slavery-statement' },
-    { label: 'Another link to something else', href: '/privacy-and-terms' },
-    { label: 'Link that goes to a page', href: '/accessibility' },
-    { label: 'Another page with link', href: '/accessibility' },
-    { label: 'Link again isn\'t it', href: '/accessibility' },
+    { label: 'A link to something', href: '/' },
+    { label: 'Another link to something else', href: '/' },
+    { label: 'Link that goes to a page', href: '/' },
+    { label: 'Another page with link', href: '/' },
+    { label: 'Link again isn\'t it', href: '/' },
 ]

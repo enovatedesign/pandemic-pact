@@ -17,12 +17,11 @@ export default function Explore() {
 
     return (
         <Layout
-            title="Pandemic PACT Tracker"
+            title="Explore"
+            showSummary={true}
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
         >
             <div className="container mx-auto my-6 lg:my-12">
-                <Nav selected="explore" />
-
                 <Grid className="gap-y-6 lg:gap-y-12 mt-6">
                     <Col>
                         {/*

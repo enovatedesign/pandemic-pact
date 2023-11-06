@@ -15,6 +15,7 @@ export default function PageTemplate({data}) {
             <Layout
                 title={entry.title}
                 summary={entry.summary}
+                showSummary={entry.showSummary}
                 sidebarContent={false}
                 >
 

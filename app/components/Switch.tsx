@@ -15,7 +15,7 @@ export default function Switch({checked, onChange, label, className, textClassNa
             <HeadlessUISwitch
                 checked={checked}
                 onChange={onChange}
-                className={`relative inline-flex items-center h-6 rounded-full w-11 ${checked ? 'bg-blue-600' : 'bg-gray-200'}`}
+                className={`relative inline-flex items-center h-6 rounded-full w-11 ${checked ? 'bg-primary' : 'bg-white/25'}`}
             >
                 <span className="sr-only">label</span>
 

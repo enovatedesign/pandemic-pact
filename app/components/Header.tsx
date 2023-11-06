@@ -33,7 +33,7 @@ export default function Header({className}: {className?: string}) {
     return (
         <header className={className}>
             <div className="container">
-                <div className="py-8">
+                <div className="py-8 flex flex-row items-center justify-between">
                     {pathname === '/' ?
                         <h1>
                             <span className="sr-only">Pandemic Pact</span>
@@ -46,7 +46,9 @@ export default function Header({className}: {className?: string}) {
                         </Link>
                     }
 
-                    <div className="fixed top-10 mr-6 md:mr-8 lg:mr-12 right-0 flex items-center rounded-full border border-primary/25 inner-glow z-10 lg:top-14">
+                    {/* mr-6 md:mr-8 lg:mr-12 bg-secondary/50 backdrop-blur-sm */}
+
+                    <div className="flex items-center rounded-full border border-primary/25 inner-glow z-10">
                         <button className="p-3 lg:hidden">
                             <span className="sr-only">Menu</span>
                             <MenuIcon className="w-8 h-8 fill-white" />

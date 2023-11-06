@@ -1,21 +1,22 @@
 import Link from 'next/link';
 
-const Button = ({ size = 'base', colour = 'purple', customClasses = '', children, ...props }) => {
+const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }) => {
     let elementType = 'button';
 
     if (props.href) elementType = 'link';
 
     const styles = {
-        base: 'inline-block text-center font-franzSansBold uppercase rounded-md no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled',
+        base: 'inline-block text-center uppercase font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled',
         sizes: {
-            small: 'py-2 px-5',
+            xsmall: 'py-1 px-3 text-sm',
+            small: 'py-2 px-4',
             base: 'py-4 px-8',
             large: 'py-4 px-12',
         },
         colours: {
-            purple: 'bg-darkGrape text-white hover:bg-darkGrape/80',
-            red: 'bg-brightRed text-white hover:bg-brightRed/80',
-            grey: 'bg-brandGray text-mapBlue hover:bg-brandGray/50',
+            primary: 'bg-primary text-secondary hover:bg-primary-darker',
+            secondary: 'bg-secondary text-white hover:bg-secondary-darker',
+            grey: 'bg-gray-700 text-white hover:bg-gray-900',
         }
     }
 
