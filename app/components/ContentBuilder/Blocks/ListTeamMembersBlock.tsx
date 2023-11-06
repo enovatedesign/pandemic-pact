@@ -3,6 +3,7 @@ import BlockWrapper from "../BlockWrapper"
 import { useInView, animated } from '@react-spring/web';
 import { useState } from "react"
 import TeamMembersModal from "./Team Members/TeamMembersModal"
+import { defaultProseClasses } from '@/app/helpers/prose-classes'
 
 type Props = {
     block: {
@@ -52,20 +53,21 @@ const ListTeamMembersBlock = ({block}: Props) => {
         <BlockWrapper>
             <animated.div className="flex flex-col space-y-8 lg:space-y-12" ref={ref} style={springs}>
 
-                <h3 className="text-center text-4xl text-black uppercase">
-                    {heading}
-                </h3>
+                {heading && (
+                    <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
+                        <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
+                    </div>
+                )}
 
-                <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+                <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     
                     {customEntries.map((entry, index) => {
                         
-                        const {title, jobTitle, thumbnailImage} = entry
+                        const {title, jobTitle, thumbnailImage, postNominalLetters} = entry
 
                         const handleOpen = () => {
                             setActiveIndex(index)
                             setIsOpen(true)
-                    
                         }
                     
                         const handleClose = () => {
@@ -74,32 +76,31 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
                         
                         return (
-                            <li key={index} className=" bg-white shadow-xl hover:shadow-2xl rounded-lg hover:scale-105 transition duration-300 cursor-pointer" onClick={handleOpen}>
+                            <li key={index} className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer" onClick={handleOpen}>
                                 
                                 <Image 
                                     src={thumbnailImage[0].url}
                                     alt={thumbnailImage[0].alt}
                                     width={thumbnailImage[0].width}
                                     height={thumbnailImage[0].height}
-                                    className=" rounded-t-lg"
                                     loading="lazy"
                                 />
-                                <div className="space-y-4 p-4 xl:p-8">
-
+                                <div className="flex flex-col gap-3 p-6 h-full">
                                     
                                     {title && (
-                                        <h3 className="text-2xl md:text-3xl">
+                                        <h3 className="text-xl md:text-2xl">
                                             {title}
+                                            {postNominalLetters && (<span className="block text-base text-gray-500">{postNominalLetters}</span>)}
                                         </h3>
                                     )}
                                     
                                     {jobTitle && (
-                                        <p className="">
+                                        <p className="text-lg font-bold">
                                             {jobTitle}
                                         </p>
                                     )}
 
-                                    <button onClick={handleOpen} className="rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
+                                    <button onClick={handleOpen} className="self-end mt-auto rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
                                         Read more
                                     </button>
                                 </div>
