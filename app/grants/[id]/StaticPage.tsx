@@ -229,7 +229,7 @@ export default function StaticPage({grant}: Props) {
                                                     <div
                                                         key={index}
                                                     >
-                                                        <div className="flex items-center justify-between space-x-2">
+                                                        <div className="flex items-start justify-between space-x-2">
                                                             <p
                                                                 className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl text-tremor-content-emphasis"
                                                                 dangerouslySetInnerHTML={{__html: link.title}}
