@@ -1,6 +1,7 @@
 import BlockWrapper from "../BlockWrapper"
 import PublicationsCard from "./Publications/PublicationsCard"
-import { useInView, animated } from '@react-spring/web';
+import { useInView, animated } from '@react-spring/web'
+import { defaultProseClasses } from '@/app/helpers/prose-classes'
 
 type Props = {
     block: {
@@ -46,13 +47,15 @@ const ListPublicationsBlock = ({block}: Props) => {
     return (
         <>
             <BlockWrapper>
-                <animated.div className="flex flex-col space-y-8 lg:space-y-12" ref={ref} style={springs}>
+                <animated.div ref={ref} style={springs}>
 
-                    <h3 className="text-center text-2xl md:text-3xl lg:text-4xl text-black uppercase">
-                        {heading}
-                    </h3>
+                    {heading && (
+                        <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
+                            <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
+                        </div>
+                    )}
 
-                    <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         
                         {customEntries.map((entry, index) => {
                             return (

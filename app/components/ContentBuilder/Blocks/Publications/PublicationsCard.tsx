@@ -5,20 +5,19 @@ const PublicationsCard = ({entry}) => {
     const {title, summary, thumbnailImage, externalLink} = entry
 
     return (
-        <li className="bg-white shadow-xl hover:shadow-2xl rounded-lg hover:scale-105 transition duration-300 cursor-pointer">
-            <a href={externalLink} target="_blank">
+        <li className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer">
+            <a href={externalLink} target="_blank" rel="nofollow noopener noreferrer">
                 <Image 
                     src={thumbnailImage[0].url}
                     alt={thumbnailImage[0].alt}
                     width={thumbnailImage[0].width}
                     height={thumbnailImage[0].height}
-                    className=" rounded-t-lg"
                     loading="lazy"
                 />
-                <div className="space-y-4 p-4 xl:p-8">
-                    <h3 className="text-lg">
+                <div className="flex flex-col gap-3 p-6 h-full">
+                    <h2 className="text-xl md:text-2xl">
                         {title}
-                    </h3>
+                    </h2>
                     <p>
                         {summary}
                     </p>
