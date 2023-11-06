@@ -11,6 +11,7 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
+import GrantsByDiseaseCard from "../components/GrantsByDisease"
 import WordCloud from "../components/WordCloud"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
@@ -47,6 +48,12 @@ export default function Visualise() {
                 >
                     <Col numColSpan={12}>
                         <GrantsByResearchCategoryCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </Col>
+
+                    <Col numColSpan={12}>
+                        <GrantsByDiseaseCard
                             globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
