@@ -1,32 +1,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {getFooterLinksArray} from '../helpers/nav'
+import FooterMenu from './FooterMenu'
 import {footerLinksFirstCollection} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
+import FooterCopyrightStatement from './FooterCopyrightStatement'
 
 export default function Header({className}: {className?: string}) {
-    const links = getFooterLinksArray()
     const linksFirstCollection = footerLinksFirstCollection
     const linksSecondCollection = footerLinksSecondCollection
-    const currentYear = new Date().getFullYear();
 
     const NavItem = (link: {label: string, href: string}) => (
         <li key={link.href}>
             <Link
                 href={link.href}
                 className={`text-gray-700 dark:text-gray-300 hover:underline`}
-            >
-                {link.label}
-            </Link>
-        </li>
-    )
-
-    const FooterNavItem = (link: {label: string, href: string}) => (
-        <li key={link.href}>
-            <Link
-                href={link.href}
-                className={`text-gray-700 dark:text-gray-300 text-xs uppercase hover:underline`}
             >
                 {link.label}
             </Link>
@@ -103,19 +91,9 @@ export default function Header({className}: {className?: string}) {
 
                 <div className="mt-12 bg-white py-6 px-8 rounded-2xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
-                        <div className="text-center xl:text-left">
-                            <p className="text-gray-700 dark:text-gray-300">
-                                <small className="text-xs uppercase">
-                                    Copyright &copy; {currentYear} The Pandemic Pact. All rights reserved. Built by <a href="https://www.enovate.co.uk" rel="nofollow external noopener noreferrer">Enovate</a>.
-                                </small>
-                            </p>
-                        </div>
+                        <FooterCopyrightStatement />
                         <div className="print:hidden">
-                            <ul className="flex flex-col items-center justify-center sm:flex-row gap-2 sm:gap-4 xl:justify-end">
-                                {links.map(link => (
-                                    <FooterNavItem key={link.label} {...link} />
-                                ))}
-                            </ul>
+                            <FooterMenu />
                         </div>
                     </div>
                 </div>
