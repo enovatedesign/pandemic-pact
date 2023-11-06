@@ -298,25 +298,10 @@ function getUniqueValuesAsSelectOptions(dataset: Array<Dictionary<string>>, fiel
 
 function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
     return dataset.map(
-        grant => _.pick(grant, [
-            'GrantID',
-            'FundingOrgName',
-            'FunderRegion',
-            'ResearchCat',
-            'GrantAmountConverted',
-            'GrantStartYear',
-            'Disease',
-            'Pathogen',
-            'GrantRegion',
-            'Ethnicity',
-            'AgeGroups',
-            'Rurality',
-            'ResearchLocationRegion',
-            'ResearchInstitutionName',
-            'ResearchInstitutionCountry',
-            'ResearchInstitutionRegion',
-            'StudySubject',
-            'StudyType',
+        grant => _.omit(grant, [
+            'GrantTitleEng',
+            'Abstract',
+            'LaySummary',
         ])
     )
 }
