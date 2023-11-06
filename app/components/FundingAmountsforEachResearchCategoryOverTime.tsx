@@ -74,17 +74,17 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
     const tabs = [
         {
             tab: {
-                icon: PresentationChartBarIcon,
-                label: "Map",
-            },
-            content: <BarChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
-        },
-        {
-            tab: {
                 icon: PresentationChartLineIcon,
                 label: "Lines",
             },
             content: <LineChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+        },
+        {
+            tab: {
+                icon: PresentationChartBarIcon,
+                label: "Bar",
+            },
+            content: <BarChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
         },
     ]
 
