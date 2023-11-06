@@ -37,7 +37,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                 flexDirection="row"
             >
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90" color="black">Grants</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
                 </div>
 
                 <div className="w-full h-[800px]">
@@ -105,7 +105,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                 </div>
 
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2" color="black">Amount Committed (USD)</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
                 </div>
             </Flex>
         </VisualisationCard>
