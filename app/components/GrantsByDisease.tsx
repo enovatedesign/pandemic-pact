@@ -8,16 +8,24 @@ import selectOptions from "../../data/dist/select-options.json"
 
 export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
     const chartData = selectOptions.Disease.map(function (disease) {
-        const grants = globallyFilteredDataset.filter((grant: any) => grant.Disease.includes(disease.value))
+        const grantsWithKnownAmounts = globallyFilteredDataset
+            .filter((grant: any) => grant.Disease.includes(disease.value))
+            .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
 
-        const moneyCommitted = grants.reduce(...sumNumericGrantAmounts)
+        const grantsWithUnspecifiedAmounts = globallyFilteredDataset
+            .filter((grant: any) => grant.Disease.includes(disease.value))
+            .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
+
+        const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
 
         return {
             "Disease": disease.label,
-            "Grants": grants.length,
+            "Grants With Known Amount Committed": grantsWithKnownAmounts.length,
+            "Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
+            "Total Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
             "Amount Committed (USD)": moneyCommitted,
         }
-    }).filter(disease => disease["Grants"] > 0)
+    }).filter(disease => disease["Total Grants"] > 0)
 
     return (
         <VisualisationCard
@@ -29,7 +37,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                 flexDirection="row"
             >
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90">Grants</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90" color="black">Grants</Subtitle>
                 </div>
 
                 <div className="w-full h-[800px]">
@@ -59,7 +67,6 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                             <YAxis
                                 yAxisId="right"
                                 orientation="right"
-                                stroke="#22c55e"
                                 tickFormatter={dollarValueFormatter}
                             />
 
@@ -75,21 +82,30 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
 
                             <Bar
                                 yAxisId="left"
-                                dataKey="Grants"
+                                dataKey="Grants With Known Amount Committed"
                                 fill="#3b82f6"
+                                stackId="a"
+                            />
+
+                            <Bar
+                                yAxisId="left"
+                                dataKey="Grants With Unspecified Amount Committed"
+                                fill="#f59e0b"
+                                stackId="a"
                             />
 
                             <Bar
                                 yAxisId="right"
                                 dataKey="Amount Committed (USD)"
                                 fill="#22c55e"
+                                stackId="b"
                             />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
 
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2">Amount Committed (USD)</Subtitle>
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2" color="black">Amount Committed (USD)</Subtitle>
                 </div>
             </Flex>
         </VisualisationCard>
