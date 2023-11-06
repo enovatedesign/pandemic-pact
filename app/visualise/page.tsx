@@ -6,7 +6,6 @@ import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
-import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
@@ -69,12 +68,6 @@ export default function Visualise() {
                         <GrantsPerResearchCategoryByRegion
                             globallyFilteredDataset={globallyFilteredDataset}
                             selectedFilters={selectedFilters}
-                        />
-                    </Col>
-
-                    <Col numColSpan={12}>
-                        <GrantsByMeshClassificationCard
-                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
