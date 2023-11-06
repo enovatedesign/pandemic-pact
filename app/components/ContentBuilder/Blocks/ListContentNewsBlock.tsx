@@ -76,7 +76,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                     <Pagination 
                         totalPosts={customEntries.length}
                         postsPerPage={limit}
-                        handlePagination={handlePagination}
+                        setCurrentPage={setCurrentPage}
                         currentPage={currentPage}
                     />
                 </div>
