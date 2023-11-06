@@ -24,8 +24,10 @@ export default function Map({dataset}: Props) {
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
+    const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
+
     const [filteredGeojson, colourScale] = useMemo(() => {
-        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
+        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions, usingFunderLocation)
 
         const filteredGeojson = {...geojson}
 
@@ -57,7 +59,7 @@ export default function Map({dataset}: Props) {
             .range(["#dbeafe", "#3b82f6"])
 
         return [filteredGeojson, colourScale]
-    }, [dataset, displayWhoRegions])
+    }, [dataset, displayWhoRegions, usingFunderLocation])
 
     return (
         <div className="w-full h-full">
@@ -124,6 +126,16 @@ export default function Map({dataset}: Props) {
                         screenReaderLabel="Display WHO Regions"
                     />
                 </div>
+
+                <div className="justify-self-center mt-4">
+                    <DoubleLabelSwitch
+                        checked={usingFunderLocation}
+                        onChange={setUsingFunderLocation}
+                        leftLabel="Research Institution"
+                        rightLabel="Funder"
+                        screenReaderLabel="Using Funder Location"
+                    />
+                </div>
             </div>
 
             <Tooltip
@@ -142,11 +154,14 @@ export default function Map({dataset}: Props) {
     )
 }
 
-function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) {
+function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean, usingFunderLocation: boolean) {
     if (displayWhoRegions) {
         const whoRegions = Object.keys(regionToCountryMapping)
 
-        const grantsGroupedByRegion = groupBy(dataset, 'ResearchInstitutionRegion')
+        const grantsGroupedByRegion = groupBy(
+            dataset,
+            usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'
+        )
 
         return whoRegions.map(region => {
             const grants = grantsGroupedByRegion[region]
@@ -167,7 +182,10 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) 
     }
 
     return Object.entries(
-        groupBy(dataset, 'ResearchInstitutionCountry'),
+        groupBy(
+            dataset,
+            usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'
+        )
     ).map(
         ([country, grants]) => ({
             iso2: [country],
