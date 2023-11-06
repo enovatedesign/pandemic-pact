@@ -93,9 +93,7 @@ export default function Map({dataset}: Props) {
                                                     </div>
                                                 `)
                                 }}
-                                onMouseLeave={() => {
-                                    setTooltipContent('')
-                                }}
+                                onMouseLeave={() => setTooltipContent('')}
                                 onClick={() => {
                                     if (displayWhoRegions) {
                                         router.push('/grants?filters=' + JSON.stringify({
