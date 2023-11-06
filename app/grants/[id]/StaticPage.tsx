@@ -111,7 +111,7 @@ export default function StaticPage({grant}: Props) {
                     <Link href="/grants" className="absolute bg-secondary rounded-full px-4 h-8 -top-4 right-12 md:px-8 md:h-14 md:-top-7 md:right-20 lg:right-28 flex items-center border-2 border-secondary hover:border-primary transition duration-300">
                         <div className="uppercase text-white flex items-center space-x-2 lg:space-x-4">
                             <p className="border-2 border-white p-.5 rounded-full">
-                                <ChevronLeftIcon className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 -translate-x-[1px] "/>
+                                <ChevronLeftIcon className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 -translate-x-[1px]"/>
                             </p>
                             <p className="text-sm md:text-lg lg:text-xl">
                                 Grant search
@@ -132,9 +132,9 @@ export default function StaticPage({grant}: Props) {
                                     className='relative'
                                 >  
                                     <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider'/>
-                                    {!abstractShow && (
-                                        <div className='absolute inset-0 z-10 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
-                                    )}
+                                        {!abstractShow && (
+                                            <div className='absolute inset-0 z-10 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                        )}
                                     </AnimateHeight>
 
                                 <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>

@@ -14,7 +14,6 @@ interface Props {
     searchResponse: SearchResponse,
 }
 
-
 export default function ResultsTable({searchResponse}: Props) {
     
     const [activeIndex, setActiveIndex] = useState(-1)
@@ -97,12 +96,16 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     const handleClick = () => {
         activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
     }
+    
+    const grantAmountConverted = (typeof result.GrantAmountConverted === 'number') ?
+    `$ ${result.GrantAmountConverted.toLocaleString()}`
+    : result.GrantAmountConverted
 
     return (
         <div className='bg-primary/40 p-4 lg:p-8 rounded-2xl'>
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
                 <div className='flex items-center gap-2 justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
-                    <span className="flex gap-x-1 uppercase text-sm lg:text-lg dark:text-white">
+                    <span className="flex gap-x-1 uppercase text-sm lg:text-lg dark:text-secondary">
                         <span className='hidden md:block'>
                             Search 
                         </span>
@@ -123,7 +126,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                     </ul>
                 </div>
                 <div className='flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1'>
-                    <span className="uppercase text-sm lg:text-lg pr-4 dark:text-white">
+                    <span className="uppercase text-sm lg:text-lg pr-4 dark:text-secondary">
                         Total Matches:
                     </span>
                     <p className="px-4 py-1  bg-searchResult rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">
@@ -161,7 +164,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                                 Amount committed (usd)
                             </p>
                             <p className='text-lg md:text-3xl font-bold whitespace-normal'>
-                                $7,667
+                                {grantAmountConverted}
                             </p>
                         </div>
                         <div  className="bg-primary text-secondary rounded-2xl p-4 flex items-center md:items-start md:flex-col justify-between md:space-y-2">
@@ -169,7 +172,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                                 Start Year
                             </p>
                             <p className='text-lg md:text-3xl font-bold whitespace-normal'>
-                                2020
+                                {result.GrantStartYear}
                             </p>
                         </div>
 
