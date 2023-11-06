@@ -9,7 +9,6 @@ import {AdjustmentsIcon} from '@heroicons/react/outline'
 import Header from './Header'
 import Footer from './Footer'
 import PageTitle from './PageTitle'
-import Text from './Text'
 
 type Props = {
     sidebarContent?: React.ReactNode,
