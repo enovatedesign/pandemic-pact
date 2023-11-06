@@ -1,16 +1,17 @@
 import {useState} from "react"
-import {Flex, BarChart, Text, Color, Subtitle} from "@tremor/react"
+import {Flex, BarChart as TremorBarChart, LineChart as TremorLineChart, Text, Color, Subtitle} from "@tremor/react"
+import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import VisualisationCard from "./VisualisationCard"
+import MultiSelect from "./MultiSelect"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {groupBy} from 'lodash'
 import {CardWithOwnFiltersProps} from "../types/card-props"
-import MultiSelect from "./MultiSelect"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function FundingAmountsforEachResearchCategoryOverTime({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
+export default function FundingAmountsforEachResearchCategoryOverTimeCard({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
@@ -70,6 +71,23 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
 
     const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
 
+    const tabs = [
+        {
+            tab: {
+                icon: PresentationChartBarIcon,
+                label: "Map",
+            },
+            content: <BarChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+        },
+        {
+            tab: {
+                icon: PresentationChartLineIcon,
+                label: "Lines",
+            },
+            content: <LineChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+        },
+    ]
+
     return (
         <VisualisationCard
             filteredDataset={filteredDataset}
@@ -77,51 +95,89 @@ export default function FundingAmountsforEachResearchCategoryOverTime({selectedF
             title="Funding Amounts for Each Research Category Over Time"
             subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
             footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            tabs={tabs}
         >
-            <div className="flex flex-col gap-y-6 w-full">
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                    className="ignore-in-image-export"
-                >
-                    <MultiSelect
-                        options={selectOptions.ResearchCat}
-                        selectedOptions={selectedResearchCategories}
-                        setSelectedOptions={setSelectedResearchCategories}
-                        placeholder="All Research Categories"
-                        className="max-w-xs ignore-in-image-export"
-                    />
+            <Flex
+                justifyContent="between"
+                alignItems="center"
+                className="ignore-in-image-export mb-6"
+            >
+                <MultiSelect
+                    options={selectOptions.ResearchCat}
+                    selectedOptions={selectedResearchCategories}
+                    setSelectedOptions={setSelectedResearchCategories}
+                    placeholder="All Research Categories"
+                    className="max-w-xs ignore-in-image-export"
+                />
 
-                    {filteredDataset.length < globallyFilteredDataset.length &&
-                        <Text>Filtered Grants: {filteredDataset.length}</Text>
-                    }
-                </Flex>
-
-                <Flex
-                    flexDirection="row"
-                >
-                    <div className="w-16">
-                        <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
-                    </div>
-
-                    <Flex
-                        flexDirection="col"
-                        className="gap-y-2"
-                    >
-                        <BarChart
-                            data={amountCommittedToEachResearchCategoryOverTime}
-                            index="year"
-                            categories={researchCategories}
-                            valueFormatter={dollarValueFormatter}
-                            colors={colours}
-                            showLegend={false}
-                            className="h-[36rem] -ml-2"
-                        />
-
-                        <Subtitle>Year</Subtitle>
-                    </Flex>
-                </Flex>
-            </div>
+                {filteredDataset.length < globallyFilteredDataset.length &&
+                    <Text>Filtered Grants: {filteredDataset.length}</Text>
+                }
+            </Flex>
         </VisualisationCard>
+    )
+}
+
+interface ChartProps {
+    data: any[],
+    categories: string[],
+    colours: Color[],
+}
+
+function BarChart({data, categories, colours}: ChartProps) {
+    return (
+        <Flex
+            flexDirection="row"
+        >
+            <div className="w-16">
+                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+            </div>
+
+            <Flex
+                flexDirection="col"
+                className="gap-y-2"
+            >
+                <TremorBarChart
+                    data={data}
+                    index="year"
+                    categories={categories}
+                    valueFormatter={dollarValueFormatter}
+                    colors={colours}
+                    showLegend={false}
+                    className="h-[36rem] -ml-2"
+                />
+
+                <Subtitle>Year</Subtitle>
+            </Flex>
+        </Flex>
+    )
+}
+
+function LineChart({data, categories, colours}: ChartProps) {
+    return (
+        <Flex
+            flexDirection="row"
+        >
+            <div className="w-16">
+                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+            </div>
+
+            <Flex
+                flexDirection="col"
+                className="gap-y-2"
+            >
+                <TremorLineChart
+                    data={data}
+                    index="year"
+                    categories={categories}
+                    valueFormatter={dollarValueFormatter}
+                    colors={colours}
+                    showLegend={false}
+                    className="h-[36rem] -ml-2"
+                />
+
+                <Subtitle>Year</Subtitle>
+            </Flex>
+        </Flex>
     )
 }
