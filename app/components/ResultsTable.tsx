@@ -21,12 +21,12 @@ export default function ResultsTable({searchResponse}: Props) {
 
     
     return (
-        <Card>
-            <Table className='container mx-auto'>
+        <div className=''>
+            <div className='lg:container lg:mx-auto '>
                 
                 <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary dark:text-primary py-4 lg:py-8">Results</h3>
 
-                <div className='flex flex-col space-y-8'>
+                <div className='flex flex-col space-y-8 bg-white p-4 rounded-2xl'>
                     {searchResponse.hits.map((result, index) => {
                         const query = searchResponse.query
                         const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
@@ -54,8 +54,8 @@ export default function ResultsTable({searchResponse}: Props) {
                         )
                     })}
                 </div>
-            </Table>
-        </Card >
+            </div>
+        </div>
     )
 }
 
@@ -102,17 +102,17 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
 
     return (
         <div className='bg-primary/40 p-4 rounded-2xl'>
-            <div className="grid grid-rows-3 gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
-                <div className='flex items-center justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
+            <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
+                <div className='flex flex-col md:flex-row md:items-center md:justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
                     <span className="uppercase text-sm lg:text-md   dark:text-white">
                         Search Matches:
                     </span>
-                    <ul className="flex space-x-2">
+                    <ul className="flex flex-col gap-1 md:flex-row md:gap-2">
                         {matchText.map((text, index) => {
                             return (
                                 <>
-                                    {text && (
-                                        <li key={index} className='bg-white p-2 ml-2 rounded-lg whitespace-nowrap dark:text-primary dark:bg-secondar text-sm lg:text-md'>
+                                    {text.length > 0  && (
+                                        <li key={index} className='bg-white p-2 md:p-2 rounded-lg whitespace-nowrap dark:text-primary dark:bg-secondar text-sm lg:text-md'>
                                             {text}
                                         </li>
                                     )}
@@ -121,11 +121,11 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                         })}
                     </ul>
                 </div>
-                <div className='flex items-center justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1'>
+                <div className='flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1'>
                     <span className="uppercase text-sm lg:text-md pr-4 dark:text-white">
                         Total Matches:
                     </span>
-                    <p className="px-6 py-2 flex items-center justify-center bg-searchResult rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">
+                    <p className="px-4 py-1  bg-searchResult rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">
                         {totalMatchText}
                     </p>
                 </div>
