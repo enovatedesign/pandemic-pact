@@ -1,5 +1,5 @@
 import {Flex, Subtitle} from "@tremor/react"
-import {BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import {BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import VisualisationCard from "./VisualisationCard"
 import {type CardProps} from "../types/card-props"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
