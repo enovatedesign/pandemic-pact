@@ -21,12 +21,11 @@ export default function ResultsTable({searchResponse}: Props) {
 
     
     return (
-        <div className=''>
-            <div className='lg:container lg:mx-auto '>
+            <div className=''>
                 
                 <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary dark:text-primary py-4 lg:py-8">Results</h3>
 
-                <div className='flex flex-col space-y-8 bg-white p-4 rounded-2xl'>
+                <div className='flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-2xl border-2 border-slate-300'>
                     {searchResponse.hits.map((result, index) => {
                         const query = searchResponse.query
                         const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
@@ -34,10 +33,10 @@ export default function ResultsTable({searchResponse}: Props) {
 
                         return (
                             <div key={result.GrantID}>
-                                <div className="flex flex-col space-y-2">
+                                <div className="flex flex-col space-y-2 lg:space-y-6">
                                     <a href={href} className="hover:underline">
                                         <div
-                                            className="whitespace-normal font-semibold text-base lg:text-xl dark:text-primary/80"
+                                            className="whitespace-normal font-semibold text-base lg:text-2xl dark:text-primary/80"
                                             dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
                                         />
                                     </a>
@@ -55,7 +54,6 @@ export default function ResultsTable({searchResponse}: Props) {
                     })}
                 </div>
             </div>
-        </div>
     )
 }
 
@@ -101,18 +99,21 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     }
 
     return (
-        <div className='bg-primary/40 p-4 rounded-2xl'>
+        <div className='bg-primary/40 p-4 lg:p-8 rounded-2xl'>
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
-                <div className='flex flex-col md:flex-row md:items-center md:justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
-                    <span className="uppercase text-sm lg:text-md   dark:text-white">
-                        Search Matches:
+                <div className='flex items-center gap-2 justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
+                    <span className="flex gap-x-1 uppercase text-sm lg:text-lg dark:text-white">
+                        <span className='hidden md:block'>
+                            Search 
+                        </span>
+                            Matches:
                     </span>
-                    <ul className="flex flex-col gap-1 md:flex-row md:gap-2">
+                    <ul className="flex gap-2">
                         {matchText.map((text, index) => {
                             return (
                                 <>
                                     {text.length > 0  && (
-                                        <li key={index} className='bg-white p-2 md:p-2 rounded-lg whitespace-nowrap dark:text-primary dark:bg-secondar text-sm lg:text-md'>
+                                        <li key={index} className='bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap dark:text-primary dark:bg-secondary text-sm lg:text-md'>
                                             {text}
                                         </li>
                                     )}
@@ -122,7 +123,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                     </ul>
                 </div>
                 <div className='flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1'>
-                    <span className="uppercase text-sm lg:text-md pr-4 dark:text-white">
+                    <span className="uppercase text-sm lg:text-lg pr-4 dark:text-white">
                         Total Matches:
                     </span>
                     <p className="px-4 py-1  bg-searchResult rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">
@@ -130,7 +131,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                     </p>
                 </div>
 
-                <button onClick={handleClick} className='row-start-3 row-span-1 lg:row-start-1 lg:col-start-4 lg:col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 border-2 border-secondary dark:border-primary hover:border-primary dark:bg-primary dark:hover:border-secondary transition duration-300'>
+                <button onClick={handleClick} className='row-start-3 row-span-1 lg:row-start-1 lg:col-start-4 lg:col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 py-1 border-2 border-secondary dark:border-primary hover:border-primary dark:bg-primary dark:hover:border-secondary transition duration-300'>
                     <span className='inline-flex text-white dark:text-secondary text-sm lg:text-base'>
                         {activeIndex !== index ? 'See more' : 'See less'}
                     </span>
@@ -148,14 +149,14 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
             >
                 <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
 
-                    <div className="col-span-4 lg:col-span-3 px-8 py-4 bg-white dark:bg-secondary rounded-2xl">
-                        <p className="pb-4 uppercase text-secondary  dark:text-primary text-lg">
+                    <div className="col-span-4 lg:col-span-3 p-4 bg-white/60 dark:bg-secondary rounded-2xl">
+                        <p className="pb-2 lg:pb-4 uppercase text-secondary  dark:text-primary text-lg">
                             Abstract Exerpt
                         </p>
                         <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content dark:text-primary" />
                     </div>
-                    <div className=' hidden lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col lg:space-y-4'>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between space-y-2">
+                    <div className='col-span-4 flex flex-col gap-2 md:flex-row md:justify-between lg:justify-normal lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col lg:space-y-4'>
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex items-center md:items-start md:flex-col justify-between md:space-y-2">
                             <p className='uppercase whitespace-normal'>
                                 Amount committed (usd)
                             </p>
@@ -163,7 +164,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                                 $7,667
                             </p>
                         </div>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between space-y-2">
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex items-center md:items-start md:flex-col justify-between md:space-y-2">
                             <p className='uppercase whitespace-normal'>
                                 Start Year
                             </p>
