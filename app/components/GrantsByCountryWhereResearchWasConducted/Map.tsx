@@ -24,8 +24,10 @@ export default function Map({dataset}: Props) {
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
+    const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
+
     const [filteredGeojson, colourScale] = useMemo(() => {
-        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions)
+        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions, usingFunderLocation)
 
         const filteredGeojson = {...geojson}
 
@@ -57,7 +59,32 @@ export default function Map({dataset}: Props) {
             .range(["#dbeafe", "#3b82f6"])
 
         return [filteredGeojson, colourScale]
-    }, [dataset, displayWhoRegions])
+    }, [dataset, displayWhoRegions, usingFunderLocation])
+
+    const onGeoClick = (geo: any) => {
+        let queryFilters: any = {}
+
+        if (displayWhoRegions) {
+            queryFilters[usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'] = [geo.properties.NAME]
+        } else {
+            queryFilters[usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'] = [geo.properties.ISO_A2_EH]
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+    }
+
+    const onGeoMouseEnter = (geo: any) => {
+        setTooltipContent(`
+            <div>
+                <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
+
+                <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
+                <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+
+                <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
+            </div>
+        `)
+    }
 
     return (
         <div className="w-full h-full">
@@ -79,32 +106,9 @@ export default function Map({dataset}: Props) {
                                 stroke="#FFFFFF"
                                 strokeWidth={1}
                                 className="cursor-pointer"
-                                onMouseEnter={() => {
-                                    setTooltipContent(`
-                                                    <div>
-                                                        <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
-
-                                                        <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
-                                                        <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
-
-                                                        <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
-                                                    </div>
-                                                `)
-                                }}
-                                onMouseLeave={() => {
-                                    setTooltipContent('')
-                                }}
-                                onClick={() => {
-                                    if (displayWhoRegions) {
-                                        router.push('/grants?filters=' + JSON.stringify({
-                                            ResearchInstitutionRegion: [geo.properties.NAME],
-                                        }))
-                                    } else {
-                                        router.push('/grants?filters=' + JSON.stringify({
-                                            ResearchInstitutionCountry: [geo.properties.ISO_A2_EH],
-                                        }))
-                                    }
-                                }}
+                                onClick={() => onGeoClick(geo)}
+                                onMouseEnter={() => onGeoMouseEnter(geo)}
+                                onMouseLeave={() => setTooltipContent('')}
                                 data-tooltip-id="country-tooltip"
                             />
                         ))
@@ -122,6 +126,16 @@ export default function Map({dataset}: Props) {
                         leftLabel="Countries"
                         rightLabel="WHO Regions"
                         screenReaderLabel="Display WHO Regions"
+                    />
+                </div>
+
+                <div className="justify-self-center mt-4">
+                    <DoubleLabelSwitch
+                        checked={usingFunderLocation}
+                        onChange={setUsingFunderLocation}
+                        leftLabel="Research Institution"
+                        rightLabel="Funder"
+                        screenReaderLabel="Using Funder Location"
                     />
                 </div>
             </div>
@@ -142,11 +156,14 @@ export default function Map({dataset}: Props) {
     )
 }
 
-function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) {
+function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean, usingFunderLocation: boolean) {
     if (displayWhoRegions) {
         const whoRegions = Object.keys(regionToCountryMapping)
 
-        const grantsGroupedByRegion = groupBy(dataset, 'ResearchInstitutionRegion')
+        const grantsGroupedByRegion = groupBy(
+            dataset,
+            usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'
+        )
 
         return whoRegions.map(region => {
             const grants = grantsGroupedByRegion[region]
@@ -167,7 +184,10 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean) 
     }
 
     return Object.entries(
-        groupBy(dataset, 'ResearchInstitutionCountry'),
+        groupBy(
+            dataset,
+            usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'
+        )
     ).map(
         ([country, grants]) => ({
             iso2: [country],

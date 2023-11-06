@@ -48,7 +48,9 @@ export default function VisualisationCard({filteredDataset, id, title, subtitle,
                 }
             </Flex>
 
-            {tabs ? tabs[selectedTabIndex].content : children}
+            {children}
+
+            {tabs && tabs[selectedTabIndex].content}
 
             <Flex
                 flexDirection="row-reverse"

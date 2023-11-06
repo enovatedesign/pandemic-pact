@@ -6,12 +6,12 @@ import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
-import GrantsByMeshClassificationCard from '../components/GrantsByMeshClassificationCard'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
+import GrantsByDiseaseCard from "../components/GrantsByDisease"
 import WordCloud from "../components/WordCloud"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
@@ -53,6 +53,12 @@ export default function Visualise() {
                     </Col>
 
                     <Col numColSpan={12}>
+                        <GrantsByDiseaseCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </Col>
+
+                    <Col numColSpan={12}>
                         <GrantsByCountryWhereResearchWasConductedCard
                             globallyFilteredDataset={globallyFilteredDataset}
                         />
@@ -69,12 +75,6 @@ export default function Visualise() {
                         <GrantsPerResearchCategoryByRegion
                             globallyFilteredDataset={globallyFilteredDataset}
                             selectedFilters={selectedFilters}
-                        />
-                    </Col>
-
-                    <Col numColSpan={12}>
-                        <GrantsByMeshClassificationCard
-                            globallyFilteredDataset={globallyFilteredDataset}
                         />
                     </Col>
 
