@@ -60,6 +60,8 @@ async function addDocumentsToSearchIndex(client: MeiliSearch, data: Array<String
             'Pathogen',
             'ResearchInstitutionCountry',
             'ResearchInstitutionRegion',
+            'FunderCountry',
+            'FunderRegion',
         ],
     }
 

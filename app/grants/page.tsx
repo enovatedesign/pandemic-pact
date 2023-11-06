@@ -2,7 +2,6 @@
 
 import {Suspense, useState} from "react"
 import {Grid, Col} from "@tremor/react"
-import Nav from "../components/Nav"
 import Layout from "../components/Layout"
 import SearchInput from "../components/SearchInput"
 import ResultsTable from "../components/ResultsTable"

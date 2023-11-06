@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import VisualisationCard from "../VisualisationCard"
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
 import Map from "./Map"
