@@ -61,6 +61,31 @@ export default function Map({dataset}: Props) {
         return [filteredGeojson, colourScale]
     }, [dataset, displayWhoRegions, usingFunderLocation])
 
+    const onGeoClick = (geo: any) => {
+        let queryFilters: any = {}
+
+        if (displayWhoRegions) {
+            queryFilters[usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'] = [geo.properties.NAME]
+        } else {
+            queryFilters[usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'] = [geo.properties.ISO_A2_EH]
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+    }
+
+    const onGeoMouseEnter = (geo: any) => {
+        setTooltipContent(`
+            <div>
+                <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
+
+                <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
+                <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+
+                <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
+            </div>
+        `)
+    }
+
     return (
         <div className="w-full h-full">
             <ComposableMap
@@ -81,30 +106,9 @@ export default function Map({dataset}: Props) {
                                 stroke="#FFFFFF"
                                 strokeWidth={1}
                                 className="cursor-pointer"
-                                onMouseEnter={() => {
-                                    setTooltipContent(`
-                                                    <div>
-                                                        <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
-
-                                                        <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
-                                                        <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
-
-                                                        <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
-                                                    </div>
-                                                `)
-                                }}
+                                onClick={() => onGeoClick(geo)}
+                                onMouseEnter={() => onGeoMouseEnter(geo)}
                                 onMouseLeave={() => setTooltipContent('')}
-                                onClick={() => {
-                                    if (displayWhoRegions) {
-                                        router.push('/grants?filters=' + JSON.stringify({
-                                            ResearchInstitutionRegion: [geo.properties.NAME],
-                                        }))
-                                    } else {
-                                        router.push('/grants?filters=' + JSON.stringify({
-                                            ResearchInstitutionCountry: [geo.properties.ISO_A2_EH],
-                                        }))
-                                    }
-                                }}
                                 data-tooltip-id="country-tooltip"
                             />
                         ))
