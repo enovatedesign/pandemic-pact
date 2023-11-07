@@ -169,11 +169,11 @@ export default function StaticPage({grant}: Props) {
                                                     index === 1 ? 'border-x-[1px] border-slate-400' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4  flex flex-col justify-between space-y-2`}>
+                                                    <li key={index} className={`${borderClasses} p-4 flex flex-col justify-between space-y-2`}>
                                                         <p className='uppercase text-xs whitespace-normal'>
                                                             {heading.text}
                                                         </p>
-                                                        <p className='text-md md:text-2xl font-bold whitespace-normal'>
+                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold whitespace-normal'>
                                                             {heading.metric}
                                                         </p>
                                                     </li>
@@ -190,7 +190,7 @@ export default function StaticPage({grant}: Props) {
                                                         <p className='uppercase text-xs whitespace-normal'>
                                                             {subHeading.text}
                                                         </p>
-                                                        <p className='font-bold whitespace-normal'>
+                                                        <p className='font-bold whitespace-normal text-lg'>
                                                             {subHeading.metric}
                                                         </p>
                                                     </li>
