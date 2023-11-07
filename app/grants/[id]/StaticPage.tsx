@@ -121,7 +121,7 @@ export default function StaticPage({grant}: Props) {
 
                     <ul className="text-xl lg:text-2xl text-gray-300 flex items-center justify-start gap-4">
                         <li>Funded by <span className="font-medium text-primary">{grant.FundingOrgName.join(', ')}</span></li>
-                        <li className="flex"><span className="sr-only">Total publications:</span> <span className="inline-block bg-primary px-3 rounded-lg tracking-wider font-bold py-1 text-sm uppercase text-secondary">56 publications</span></li>
+                        <li className="flex"><span className="sr-only">Total publications:</span> <span className="inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">{grant.PubMedLinks?.length ?? '0'} publications</span></li>
                     </ul>
 
                     <p className="text-gray-500">
