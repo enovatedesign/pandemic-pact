@@ -22,6 +22,8 @@ export interface Filters {
     Pathogen: string[];
     ResearchInstitutionCountry: string[];
     ResearchInstitutionRegion: string[];
+    FunderCountry: string[];
+    FunderRegion: string[];
 }
 
 export default function SearchInput({setSearchResponse}: Props) {
@@ -39,6 +41,8 @@ export default function SearchInput({setSearchResponse}: Props) {
             Pathogen: [],
             ResearchInstitutionCountry: [],
             ResearchInstitutionRegion: [],
+            FunderCountry: [],
+            FunderRegion: [],
         }
     )
 
@@ -108,6 +112,22 @@ export default function SearchInput({setSearchResponse}: Props) {
             )
         }
 
+        if (filters.FunderCountry?.length > 0) {
+            filter.push(
+                filters.FunderCountry.length === 1 ?
+                    `FunderCountry = "${filters.FunderCountry[0]}"` :
+                    filters.FunderCountry.map(country => `FunderCountry = "${country}"`)
+            )
+        }
+
+        if (filters.FunderRegion?.length > 0) {
+            filter.push(
+                filters.FunderRegion.length === 1 ?
+                    `FunderRegion = "${filters.FunderRegion[0]}"` :
+                    filters.FunderRegion.map(region => `FunderRegion = "${region}"`)
+            )
+        }
+
         if (filter.length > 0) {
             body.filter = filter
         }
@@ -171,29 +191,47 @@ export default function SearchInput({setSearchResponse}: Props) {
                     />
                 </Col>
 
-                {/* <Col>
-                    <MultiSelect
-                        options={selectOptions.ResearchInstitutionCountry}
-                        selectedOptions={filters.ResearchInstitutionCountry}
-                        setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
-                        placeholder="All Countries"
-                    />
-                </Col>
+            <Col>
+                <MultiSelect
+                    options={selectOptions.ResearchInstitutionCountry}
+                    selectedOptions={filters.ResearchInstitutionCountry}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
+                    placeholder="All Research Institution Countries"
+                />
+            </Col>
 
-                <Col>
-                    <MultiSelect
-                        options={selectOptions.Regions}
-                        selectedOptions={filters.ResearchInstitutionRegion}
-                        setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
-                        placeholder="All Regions"
-                    />
-                </Col> */}
+            <Col>
+                <MultiSelect
+                    options={selectOptions.Regions}
+                    selectedOptions={filters.ResearchInstitutionRegion}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
+                    placeholder="All Research Institution Regions"
+                />
+            </Col>
 
-                <Col
-                    numColSpan={2}
-                    className="flex justify-between items-center"
-                >
-                    <Text className='text-secondary text-lg uppercase font-bold pl-12 pt-4'>Total Hits: {totalHits}</Text>
+            <Col>
+                <MultiSelect
+                    options={selectOptions.FunderCountry}
+                    selectedOptions={filters.FunderCountry}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
+                    placeholder="All Funder Countries"
+                />
+            </Col>
+
+            <Col>
+                <MultiSelect
+                    options={selectOptions.Regions}
+                    selectedOptions={filters.FunderRegion}
+                    setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
+                    placeholder="All Funder Regions"
+                />
+            </Col>
+
+            <Col
+                numColSpan={2}
+                className="flex justify-between items-center"
+            >
+                <Text>Total Hits: {totalHits}</Text>
 
                     <div className="space-x-4">
                         <ExportToCsvButton

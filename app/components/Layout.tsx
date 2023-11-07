@@ -9,13 +9,13 @@ import {AdjustmentsIcon} from '@heroicons/react/outline'
 import Header from './Header'
 import Footer from './Footer'
 import PageTitle from './PageTitle'
-import Text from './Text'
 
 type Props = {
     sidebarContent?: React.ReactNode,
     children: React.ReactNode,
     title?: string,
     summary?: string,
+    showSummary?: boolean
 }
 
 const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) => {
@@ -60,7 +60,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) 
                             <animated.div
                                 className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
                                 style={widthAnimationProps}
-                                >
+                            >
                                 <animated.div style={opacityAnimationProps}>
                                     {sidebarContent}
                                 </animated.div>
@@ -70,11 +70,11 @@ const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) 
                 }
 
                 <div className="w-full relative">
-                    <Header className="absolute w-full left-0"/>
+                    <Header className="absolute w-full left-0" />
 
                     <main id="content">
 
-                        <article aria-labelledby="page-title">                            
+                        <article aria-labelledby="page-title">
 
                             <div className={`h-[20rem] lg:h-[24rem] masthead-background ${mastheadStyles.background}`}>
 

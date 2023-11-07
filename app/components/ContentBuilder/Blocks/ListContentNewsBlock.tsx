@@ -8,6 +8,17 @@ import Pagination from "../Common/Pagination";
 
 type Props = {
     block: {
+        newsEntries: {
+            url: string,
+            title: string,
+            summary: string
+            thumbnailImage: {
+              url: string,
+              width: number,
+              height: number,
+              alt: string,
+            },
+        },
         customEntries: {
             url: string,
             title: string,
@@ -17,13 +28,14 @@ type Props = {
               width: number,
               height: number,
               alt: string,
-            }
-        }
+            },
+        },
         limit: number,
         paginate: boolean,
         addTagsMenu: boolean,
     }
 }
+
 
 const ListContentNewsBlock = ( {block}: Props ) => {
     

@@ -226,7 +226,7 @@ async function main() {
     })
 
     // These options are computed from the dataset, not the lookup tables
-    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear', 'ResearchInstitutionCountry']
+    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear', 'ResearchInstitutionCountry', 'FunderCountry']
 
     fieldsFromDataset.forEach((fieldName: string) => {
         selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)
@@ -298,25 +298,10 @@ function getUniqueValuesAsSelectOptions(dataset: Array<Dictionary<string>>, fiel
 
 function getFilterableGrantsWithFields(dataset: Array<Dictionary<string>>) {
     return dataset.map(
-        grant => _.pick(grant, [
-            'GrantID',
-            'FundingOrgName',
-            'FunderRegion',
-            'ResearchCat',
-            'GrantAmountConverted',
-            'GrantStartYear',
-            'Disease',
-            'Pathogen',
-            'GrantRegion',
-            'Ethnicity',
-            'AgeGroups',
-            'Rurality',
-            'ResearchLocationRegion',
-            'ResearchInstitutionName',
-            'ResearchInstitutionCountry',
-            'ResearchInstitutionRegion',
-            'StudySubject',
-            'StudyType',
+        grant => _.omit(grant, [
+            'GrantTitleEng',
+            'Abstract',
+            'LaySummary',
         ])
     )
 }
