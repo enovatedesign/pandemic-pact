@@ -64,7 +64,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                     
                     {customEntries.map((entry, index) => {
 
-                        const handleOpen = () => {
+                        const handleOpen = (index) => {
                             setActiveIndex(index)
                             setIsOpen(true)
                         }
@@ -76,7 +76,13 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         
                         return (
                             <>
-                                <Card entry={entry} index={index} handleOpen={handleOpen} handleClose={handleClose}/>    
+                                <Card 
+                                    entry={entry} 
+                                    activeIndex={activeIndex}
+                                    setActiveIndex={setActiveIndex}
+                                    isOpen={isOpen} 
+                                    setIsOpen={setIsOpen}
+                                />    
                             </>
                         )
                     })}

@@ -3,27 +3,22 @@ import NewsTags from "../News/NewsTags";
 import TeamMembersModal from "../Blocks/Team Members/TeamMembersModal";
 import Button from "../../Button";
 
-const Card = ({entry, tags}) => {
+const Card = ({entry, tags, activeIndex, setActiveIndex, isOpen, setIsOpen}) => {
     
     const { 
         title, 
+        postNominalLetters, 
+        jobTitle,
         summary, 
         url,
         index, 
-        activeIndex,
-        postNominalLetters, 
-        jobTitle,
-        handleOpen,
-        isOpen,
-        handleClose, 
     } = entry
 
     const thumbnailImage = entry.thumbnailImage[0] ?? null
 
     return (
         <li key={index} 
-            className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer dark:bg-gray-800 dark:border-gray-700" 
-            onClick={handleOpen}
+            className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700" 
         >                    
             <Image 
                 src={thumbnailImage.url}
@@ -54,9 +49,9 @@ const Card = ({entry, tags}) => {
                 )}
 
                 <p className="mt-auto self-end">
-                    {isOpen && handleClose ? (
+                    {setActiveIndex ? (
                         <Button 
-                            onClick={handleOpen} 
+                            onClick={() => setActiveIndex(index)} 
                             size="small"
 
                         >
@@ -75,7 +70,9 @@ const Card = ({entry, tags}) => {
                             )}
                         </>
                     )}
+
                 </p>
+                
                 
                 {tags && (
                     <NewsTags />
@@ -84,7 +81,7 @@ const Card = ({entry, tags}) => {
             </div>
             
             {/* {activeIndex === index && (
-                <TeamMembersModal entry={entry} isOpen={isOpen} handleClose={handleClose}/>
+                <TeamMembersModal entry={entry} isOpen={isOpen}/>
             )} */}
         </li>
     )
