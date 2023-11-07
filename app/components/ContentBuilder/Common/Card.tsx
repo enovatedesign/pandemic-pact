@@ -1,7 +1,7 @@
 import Image from "next/image";
 import NewsTags from "../News/NewsTags";
 
-const NewsCard = ({entry, tags}) => {
+const Card = ({entry, tags}) => {
     const { title, summary, } = entry
     const thumbnailImage = entry.thumbnailImage[0] ?? null
 
@@ -50,4 +50,4 @@ const NewsCard = ({entry, tags}) => {
     )
 };
 
-export default NewsCard
+export default Card

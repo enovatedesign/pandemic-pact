@@ -1,8 +1,8 @@
 "use client"
 
 import BlockWrapper from "../BlockWrapper";
-import NewsCard from "../Common/Card";
-import { useState, useEffect } from "react";
+import Card from "../Common/Card";
+import { useState } from "react";
 import { useInView, animated } from '@react-spring/web';
 import Pagination from "../Common/Pagination";
 
@@ -64,7 +64,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                     <animated.div ref={ref} style={springs}>
                         <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                             {paginatedEntries.map((entry, index) => {
-                                return <NewsCard entry={entry} key={index} tags={tags}/>
+                                return <Card entry={entry} key={index} tags={tags}/>
                             })}
                         </ul>
                     </animated.div>
@@ -80,7 +80,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                 <animated.div ref={ref} style={springs}>
                     <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         {limitedEntries.map((entry, index) => {
-                            return <NewsCard entry={entry} key={index} tags={tags}/>
+                            return <Card entry={entry} key={index} tags={tags}/>
                         })}
                     </ul>
                 </animated.div>
