@@ -3,14 +3,13 @@ import NewsTags from "../News/NewsTags";
 import TeamMembersModal from "../Blocks/Team Members/TeamMembersModal";
 import Button from "../../Button";
 
-const Card = ({entry, tags, activeIndex, setActiveIndex, isOpen, setIsOpen}) => {
+const Card = ({entry, tags, children}) => {
     
     const { 
         title, 
         postNominalLetters, 
         jobTitle,
         summary, 
-        url,
         index, 
     } = entry
 
@@ -49,30 +48,13 @@ const Card = ({entry, tags, activeIndex, setActiveIndex, isOpen, setIsOpen}) => 
                 )}
 
                 <p className="mt-auto self-end">
-                    {setActiveIndex ? (
-                        <Button 
-                            onClick={() => setActiveIndex(index)} 
-                            size="small"
-
-                        >
-                            Read more
-                        </Button>
-                    ) : (
+                    {children && (
                         <>
-                            {url && (
-                                <Button 
-                                    size="small"
-                                    colour="primary"
-                                    href={url}
-                                >
-                                    Read More
-                                </Button>
-                            )}
+                            {children}
                         </>
                     )}
 
                 </p>
-                
                 
                 {tags && (
                     <NewsTags />
@@ -80,9 +62,6 @@ const Card = ({entry, tags, activeIndex, setActiveIndex, isOpen, setIsOpen}) => 
 
             </div>
             
-            {/* {activeIndex === index && (
-                <TeamMembersModal entry={entry} isOpen={isOpen}/>
-            )} */}
         </li>
     )
 };

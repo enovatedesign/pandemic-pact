@@ -5,6 +5,7 @@ import Card from "../Common/Card";
 import { useState } from "react";
 import { useInView, animated } from '@react-spring/web';
 import Pagination from "../Common/Pagination";
+import Button from "../../Button";
 
 type Props = {
     block: {
@@ -76,7 +77,16 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                     <animated.div ref={ref} style={springs}>
                         <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {paginatedEntries.map((entry, index) => {
-                                return <Card entry={entry} key={index} tags={tags}/>
+                                return (
+                                    <Card entry={entry} key={index} tags={tags}>
+                                        <Button
+                                            size="small"
+                                            href={entry.url}
+                                        >
+                                            Read more
+                                        </Button>
+                                    </Card>
+                                ) 
                             })}
                         </ul>
                     </animated.div>
@@ -92,7 +102,16 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                 <animated.div ref={ref} style={springs}>
                     <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {limitedEntries.map((entry, index) => {
-                            return <Card entry={entry} key={index} tags={tags}/>
+                            return (
+                                <Card entry={entry} key={index} tags={tags}>
+                                    <Button
+                                        size="small"
+                                        href={entry.url}
+                                    >
+                                        Read more
+                                    </Button>
+                                </Card>
+                            )
                         })}
                     </ul>
                 </animated.div>

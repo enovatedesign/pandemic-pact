@@ -5,6 +5,7 @@ import { useState } from "react"
 import TeamMembersModal from "./Team Members/TeamMembersModal"
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Card from "../Common/Card";
+import Button from "../../Button";
 
 type Props = {
     block: {
@@ -64,7 +65,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                     
                     {customEntries.map((entry, index) => {
 
-                        const handleOpen = (index) => {
+                        const handleOpen = () => {
                             setActiveIndex(index)
                             setIsOpen(true)
                         }
@@ -76,13 +77,20 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         
                         return (
                             <>
-                                <Card 
-                                    entry={entry} 
-                                    activeIndex={activeIndex}
-                                    setActiveIndex={setActiveIndex}
-                                    isOpen={isOpen} 
-                                    setIsOpen={setIsOpen}
-                                />    
+                                <Card
+                                    entry={entry}
+                                >
+                                    <Button 
+                                        size="small"
+                                        onClick={handleOpen}
+                                    >
+                                        read more
+                                    </Button>
+                                </Card>  
+                                
+                                {activeIndex === index && (
+                                    <TeamMembersModal entry={entry} isOpen={isOpen} handleClose={handleClose}/>
+                                )}
                             </>
                         )
                     })}
