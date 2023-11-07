@@ -149,7 +149,7 @@ export default function StaticPage({grant}: Props) {
                                         )}
                                     </AnimateHeight>
 
-                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider text-lg flex space-x-1 items-center'>
+                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
                                     <span className='inline-flex text-secondary'>
                                         {abstractShow ? "read less" : "read more"}
                                     </span>
