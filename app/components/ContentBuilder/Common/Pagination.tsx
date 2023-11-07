@@ -35,7 +35,7 @@ const Pagination = ({
     const iconClasses = 'w-8 h-8 text-primary transition duration-300 border-2 border-primary rounded-full hover:bg-primary hover:text-white'
 
     return (
-        <div className="flex justify-between between pt-20">
+        <div className="flex justify-between between pt-6">
             <div className="flex items-center space-x-4">
                 <button onClick={handlePrev} className={iconClasses} >
                     <ChevronLeftIcon className='-translate-x-[1px]'/>
