@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NewsTags from "./NewsTags";
+import NewsTags from "../News/NewsTags";
 
 const NewsCard = ({entry, tags}) => {
     const { title, summary, } = entry

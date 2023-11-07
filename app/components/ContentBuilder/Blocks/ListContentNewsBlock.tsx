@@ -1,7 +1,7 @@
 "use client"
 
 import BlockWrapper from "../BlockWrapper";
-import NewsCard from "../News/NewsCard";
+import NewsCard from "../Common/Card";
 import { useState, useEffect } from "react";
 import { useInView, animated } from '@react-spring/web';
 import Pagination from "../Common/Pagination";
