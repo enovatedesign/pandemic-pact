@@ -9,6 +9,7 @@ import {AdjustmentsIcon} from '@heroicons/react/outline'
 import Header from './Header'
 import Footer from './Footer'
 import PageTitle from './PageTitle'
+import InteractiveBackground from './InteractiveBackground'
 
 type Props = {
     sidebarContent?: React.ReactNode,
@@ -71,13 +72,15 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                 }
 
                 <div className="w-full relative">
-                    <Header className="absolute w-full left-0" />
+                    <Header className="absolute w-full left-0 z-10" />
 
                     <main id="content">
 
                         <article aria-labelledby="page-title">
 
-                            <div className={`masthead-background ${mastheadStyles.background}`}>
+                            <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
+
+                            {/* <div className={`masthead-background ${mastheadStyles.background}`}> */}
 
                                 <div className="h-full flex items-end pb-6 lg:pb-12">
 
@@ -91,7 +94,9 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                                 </div>
 
-                            </div>
+                            {/* </div> */}
+
+                            </InteractiveBackground>
 
                             {children}
 
