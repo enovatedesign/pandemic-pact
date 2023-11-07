@@ -1,9 +1,9 @@
 "use client"
 
+import '@/app/css/components/breakout.css'
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
-import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/solid"
-
+import { ChevronDownIcon, ChevronLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
 import Link from 'next/link'
 import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
@@ -103,7 +103,7 @@ export default function StaticPage({grant}: Props) {
     // }
 
     const titleClasses = [
-        'text-secondary uppercase tracking-widest text-3xl'
+        'text-secondary uppercase tracking-widest text-3xl font-bold'
     ].join(' ')
 
     const [abstractShow, setAbstractShow] = useState(false)
@@ -134,7 +134,7 @@ export default function StaticPage({grant}: Props) {
                     <Grid numItemsLg={1} className="gap-6">
                         <Col
                             numColSpanLg={1}
-                            className="flex flex-col gap-6 bg-white p-4 md:p-6 lg:p-12 rounded-2xl border-4 border-text-tremor-emphasis"
+                            className="flex flex-col gap-6 bg-white p-4 md:p-6 lg:p-12 rounded-2xl border-2 border-text-tremor-emphasis"
                         >
                             <div className="grant-abstract flex flex-col space-y-4">
                                 <Title className={titleClasses}>Abstract</Title>
@@ -149,31 +149,31 @@ export default function StaticPage({grant}: Props) {
                                         )}
                                     </AnimateHeight>
 
-                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
+                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider text-lg flex space-x-1 items-center'>
                                     <span className='inline-flex text-secondary'>
                                         {abstractShow ? "read less" : "read more"}
                                     </span>
-                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-12 h-12`}/>
+                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`}/>
                                 </button>
                             </div>
 
-                            <div className="my-2 lg:my-8 -mx-[5%] overflow-hidden">
-                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full whitespace-nowrap bg-secondary rounded-2xl'>
-                                    <h3 className='py-2 lg:py-0 text-2xl  text-white  uppercase lg:block lg:transform lg:-rotate-90'>
+                            <div className="my-2 lg:my-8 breakout overflow-hidden">
+                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary rounded-2xl overflow-hidden'>
+                                    <h3 className='self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-2xl text-white font-medium uppercase tracking-wider lg:[writing-mode:vertical-lr]'>
                                         Key facts
                                     </h3>
-                                    <div className='w-full bg-primary text-secondary rounded-b-2xl lg:rounded-bl-none lg:rounded-r-2xl'>
+                                    <div className='w-full bg-primary text-secondary'>
                                         <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                                             {keyFactsHeadings.map((heading, index) => {
                                                 const borderClasses = [
-                                                    index === 1 ? 'border-x-[1px] border-slate-400' : ''
+                                                    index === 1 ? 'border-x-2 border-secondary/10' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4 flex flex-col justify-between space-y-2`}>
-                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                    <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {heading.text}
                                                         </p>
-                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold whitespace-normal'>
+                                                        <p className='text-md md:text-3xl lg:text-5xl font-bold'>
                                                             {heading.metric}
                                                         </p>
                                                     </li>
@@ -183,14 +183,14 @@ export default function StaticPage({grant}: Props) {
                                         <ul className="grid grid-cols-3">
                                             {keyFactsSubHeadings.map((subHeading, index) => {
                                                 const borderClasses = [
-                                                    index === 1 ? 'border-x-[1px] border-slate-400' : ''
+                                                    index === 1 ? 'border-x-2 border-secondary/10' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4 flex flex-col justify-between space-y-2`}>
-                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                    <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {subHeading.text}
                                                         </p>
-                                                        <p className='font-bold whitespace-normal text-lg'>
+                                                        <p className='font-bold text-lg lg:text-xl'>
                                                             {subHeading.metric}
                                                         </p>
                                                     </li>
@@ -200,14 +200,14 @@ export default function StaticPage({grant}: Props) {
                                         <ul className="grid grid-cols-2">
                                             {keyFactsSubCategories.map((category, index) => {
                                                 const borderClasses = [
-                                                    index === 0 ? 'border-r-[1px]' : ''
+                                                    index === 0 ? 'border-r-2' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} border-t-[1px] border-slate-400 p-4 flex flex-col justify-between space-y-2`}>
-                                                        <p className='uppercase text-xs whitespace-normal'>
+                                                    <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col justify-between space-y-2`}>
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {category.text}
                                                         </p>
-                                                        <p className='font-bold whitespace-normal'>
+                                                        <p className='font-bold lg:text-lg'>
                                                             {category.metric}
                                                         </p>
                                                     </li>
