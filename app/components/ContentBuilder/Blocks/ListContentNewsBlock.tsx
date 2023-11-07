@@ -74,7 +74,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
             {paginate ? (
                 <div>
                     <animated.div ref={ref} style={springs}>
-                        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {paginatedEntries.map((entry, index) => {
                                 return <Card entry={entry} key={index} tags={tags}/>
                             })}
@@ -90,7 +90,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                 </div>
             ) : (
                 <animated.div ref={ref} style={springs}>
-                    <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {limitedEntries.map((entry, index) => {
                             return <Card entry={entry} key={index} tags={tags}/>
                         })}

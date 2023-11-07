@@ -80,7 +80,7 @@ const TeamMembersModal = ({entry, isOpen, handleClose}) => {
                     </div>
                 </div>
             </Dialog>
-        </Transition>
+        </Transition> 
     )
 }
 

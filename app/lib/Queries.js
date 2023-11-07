@@ -101,7 +101,7 @@ export const contentBuilderQuery = `
                 url
                 title
                 summary
-                thumbnailImage @transform(transform: "c480x300") {
+                thumbnailImage @transform(transform: "c480x480") {
                   url
                   width
                   height
