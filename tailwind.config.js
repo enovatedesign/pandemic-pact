@@ -23,7 +23,7 @@ module.exports = {
           darker: "hsl(240, 100%, 2%)",
         },
         searchResult: {
-          DEFAULT: '#f4793b',
+          DEFAULT: '#E8AA85',
         },
         // light mode
         tremor: {
