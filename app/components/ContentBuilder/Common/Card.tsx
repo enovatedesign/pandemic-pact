@@ -1,7 +1,5 @@
 import Image from "next/image";
 import NewsTags from "../News/NewsTags";
-import TeamMembersModal from "../Blocks/Team Members/TeamMembersModal";
-import Button from "../../Button";
 
 const Card = ({entry, tags, children}) => {
     
