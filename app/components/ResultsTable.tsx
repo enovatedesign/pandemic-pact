@@ -101,8 +101,8 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     : result.GrantAmountConverted
 
     return (
-        <div className='bg-primary/40 p-4 lg:p-8 rounded-2xl'>
-            <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
+        <div className='bg-primary/40 p-4  rounded-2xl'>
+            <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8 py-8">
                 <div className='flex items-center gap-2 justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
                     <span className="flex gap-x-1 uppercase text-sm lg:text-lg dark:text-secondary">
                         <span className='hidden md:block'>
