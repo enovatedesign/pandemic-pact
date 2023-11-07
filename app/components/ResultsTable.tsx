@@ -1,14 +1,13 @@
 "use client"
 
 import '../css/components/results-table.css'
-import Link from "next/link"
-import {Card, Table} from "@tremor/react"
 import {SearchResponse, SearchResult} from "../types/search"
 import {links} from "../helpers/nav"
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
 import RichText from './ContentBuilder/Common/RichText'
+import Button from './Button'
 
 interface Props {
     searchResponse: SearchResponse,
@@ -133,17 +132,24 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                         {totalMatchText}
                     </p>
                 </div>
-
-                <button onClick={handleClick} className='row-start-3 row-span-1 lg:row-start-1 lg:col-start-4 lg:col-span-1 uppercase bg-secondary rounded-full tracking wider text-lg flex justify-between space-x-2 items-center px-4 py-1 border-2 border-secondary dark:border-primary hover:border-primary dark:bg-primary dark:hover:border-secondary transition duration-300'>
-                    <span className='inline-flex text-white dark:text-secondary text-sm lg:text-base'>
-                        {activeIndex !== index ? 'See more' : 'See less'}
-                    </span>
-                    {activeIndex !== index ? (
-                        <EyeIcon className={iconClasses} />
-                    ) : (
-                        <EyeOffIcon className={iconClasses} />
-                    )}
-                </button>
+                
+                <div className='row-start-3 row-span-1 lg:row-start-1 lg:col-start-4 lg:col-span-1 flex items-center'>
+                    <Button 
+                        onClick={handleClick} 
+                        size='xsmall'
+                        colour='secondary'
+                        customClasses='w-full uppercase flex justify-between space-x-2 border-2 border-secondary dark:border-primary hover:border-primary dark:bg-primary dark:hover:border-secondary transition duration-300'
+                    >
+                        <span className='inline-flex text-white dark:text-secondary text-sm lg:text-base whitespace-nowrap'>
+                            {activeIndex !== index ? 'See more' : 'See less'}
+                        </span>
+                        {activeIndex !== index ? (
+                            <EyeIcon className={iconClasses} />
+                        ) : (
+                            <EyeOffIcon className={iconClasses} />
+                        )}
+                    </Button>
+                </div>
             </div>
 
             <AnimateHeight
@@ -152,14 +158,14 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
             >
                 <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
 
-                    <div className="col-span-4 lg:col-span-3 p-4 bg-white/60 dark:bg-secondary rounded-2xl">
+                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 dark:bg-secondary rounded-2xl">
                         <p className="pb-2 lg:pb-4 uppercase text-secondary  dark:text-primary text-lg">
                             Abstract Exerpt
                         </p>
                         <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content dark:text-primary" />
                     </div>
-                    <div className='col-span-4 flex flex-col gap-2 md:flex-row md:justify-between lg:justify-normal lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col lg:space-y-4'>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex items-center md:items-start md:flex-col justify-between md:space-y-2">
+                    <div className='col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col'>
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 ">
                             <p className='uppercase whitespace-normal'>
                                 Amount committed (usd)
                             </p>
@@ -167,7 +173,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                                 {grantAmountConverted}
                             </p>
                         </div>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex items-center md:items-start md:flex-col justify-between md:space-y-2">
+                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between">
                             <p className='uppercase whitespace-normal'>
                                 Start Year
                             </p>
