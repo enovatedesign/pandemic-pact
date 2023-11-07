@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
-import { ChevronDownIcon, ChevronLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
+import { ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon } from "@heroicons/react/solid"
 import Link from 'next/link'
 import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
@@ -120,7 +120,7 @@ export default function StaticPage({grant}: Props) {
             <Layout title={grant.GrantTitleEng} >
                 <div className="container mx-auto my-12 relative">
                     
-                    <Link href="/grants" className="absolute right-12 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                    <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
                         <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
                             <ChevronLeftIcon className="w-4 h-4"/>
                         </div>
@@ -231,7 +231,7 @@ export default function StaticPage({grant}: Props) {
                                 <div className='flex flex-col space-y-4'>
                                     <Title className={titleClasses}>Publications</Title>
 
-                                    <div className=''>
+                                    <div>
 
                                         <div className="grid grid-cols-1 gap-3">
                                             {publicationList.map((link: any, index: number) => {
@@ -279,16 +279,17 @@ export default function StaticPage({grant}: Props) {
                                                                     <p className='tracking-wider text-tremor-content-emphasis'>{link.doi}</p>
                                                                 </li>
                                                             </ul>
-                                                            <div className="py-4">
+                                                            <div className="py-4 flex">
                                                                 <Button
                                                                     size="small"
                                                                     colour="secondary"
                                                                     href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
                                                                     rel="nofollow noopener noreferrer"
                                                                     target="_blank"
-                                                                    className="text-left text-white bg-secondary p-4 rounded-full uppercase border-2 border-secondary hover:border-primary transition duration-300"
+                                                                    customClasses="flex items-center justify-center self-start gap-2"
                                                                 >
-                                                                    View at Europe PMC
+                                                                    <span>View at Europe PMC</span>
+                                                                    <ExternalLinkIcon className="w-5 h-5"/>
                                                                 </Button>
                                                             </div>
                                                         </AnimateHeight>
@@ -296,6 +297,7 @@ export default function StaticPage({grant}: Props) {
                                                 )
                                             })}
                                         </div>
+
                                     </div>
                                     {grant.PubMedLinks?.length > 3 && (
                                         <Pagination 

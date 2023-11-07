@@ -6,7 +6,7 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', childre
     if (props.href) elementType = 'link';
 
     const styles = {
-        base: 'inline-block text-center uppercase font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled',
+        base: 'text-center uppercase font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled',
         sizes: {
             xsmall: 'py-1 px-3 text-sm',
             small: 'py-2 px-4',
@@ -24,7 +24,7 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', childre
     if (!styles.colours[colour]) throw new Error(`Invalid colour passed to Button: ${colour}`)
 
     const classes = [
-        styles.base,
+        customClasses ? styles.base : `inline-block ${styles.base}`,
         styles.sizes[size],
         styles.colours[colour],
         customClasses,
