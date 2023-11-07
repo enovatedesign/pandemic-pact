@@ -44,24 +44,36 @@ export default function StaticPage({grant}: Props) {
             metric: grant.ResearchInstitutionName[0],
         },
         {
-            text: 'Study Type',
-            metric: grant.StudyType,
+            text: 'Research Category',
+            metric: 'Lorem Ipsum',
         },
     ]
-
+    
     const keyFactsSubCategories = [
         {
-            text: 'Funder',
-            metric: grant.FundingOrgName.join(', '),
+            text: 'Research Subcategory',
+            metric: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui diam, feugiat fringilla dignissim id, tempor quis eros.'
         },
         {
-            text: 'Study Subject',
-            metric: grant.StudySubject,
+            text: 'Pandemic Pact Data Points',
+            metric: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui diam, feugiat fringilla dignissim id, tempor quis eros.',
         },
     ]
-
+    
     // Data unused in new design
-
+    // {
+    //     text: 'Funder',
+    //     metric: grant.FundingOrgName.join(', '),
+    // },
+    // {
+    //     text: 'Study Subject',
+    //     metric: grant.StudySubject,
+    // },
+    
+    // {
+    //     text: 'Study Type',
+    //     metric: grant.StudyType,
+    // },
     // {
     //     text: 'Age Groups',
     //     metric: grant.AgeGroups,
@@ -128,7 +140,7 @@ export default function StaticPage({grant}: Props) {
                                 <Title className={titleClasses}>Abstract</Title>
                                 <AnimateHeight
                                     duration={300}
-                                    height={abstractShow ? 'auto' : 100}
+                                    height={abstractShow ? 'auto' : 230}
                                     className='relative'
                                 >  
                                     <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider'/>
