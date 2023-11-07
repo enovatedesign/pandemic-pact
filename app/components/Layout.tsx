@@ -12,13 +12,14 @@ import PageTitle from './PageTitle'
 
 type Props = {
     sidebarContent?: React.ReactNode,
+    mastheadContent?: React.ReactNode,
     children: React.ReactNode,
     title?: string,
     summary?: string,
     showSummary?: boolean
 }
 
-const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) => {
+const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, children}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
@@ -84,6 +85,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) 
                                         <div className="container">
                                             <PageTitle>{title}</PageTitle>
                                             {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                            {mastheadContent}
                                         </div>
                                     }
 

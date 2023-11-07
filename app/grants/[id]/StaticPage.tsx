@@ -114,10 +114,29 @@ export default function StaticPage({grant}: Props) {
     const firstPost = (lastPost - 3)
     const publicationList = grant.PubMedLinks?.slice(firstPost, lastPost)
 
+    const mastheadContent = () => {
+        return (
+            <>
+                <div className="mt-4 flex flex-row justify-between items-center">
+
+                    <ul className="text-xl lg:text-2xl text-gray-300 flex items-center justify-start gap-4">
+                        <li>Funded by <span className="font-medium text-primary">{grant.FundingOrgName.join(', ')}</span></li>
+                        <li className="flex"><span className="sr-only">Total publications:</span> <span className="inline-block bg-primary px-3 rounded-lg tracking-wider font-bold py-1 text-sm uppercase text-secondary">56 publications</span></li>
+                    </ul>
+
+                    <p className="text-gray-500">
+                        Grant number: <span className="text-gray-400 font-bold uppercase">{grant.PubMedGrantId}</span>
+                    </p>
+
+                </div>
+            </>
+        )
+    }
+
 
     return (
         <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
-            <Layout title={grant.GrantTitleEng} >
+            <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
                 <div className="container mx-auto my-12 relative">
                     
                     <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
