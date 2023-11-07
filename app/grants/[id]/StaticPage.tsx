@@ -1,6 +1,5 @@
 "use client"
 
-import '@/app/css/components/breakout.css'
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height';
 import { ChevronDownIcon, ChevronLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
@@ -9,6 +8,7 @@ import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
+import Button from '@/app/components/Button';
 
 interface Props {
     grant: any
@@ -120,21 +120,17 @@ export default function StaticPage({grant}: Props) {
             <Layout title={grant.GrantTitleEng} >
                 <div className="container mx-auto my-12 relative">
                     
-                    <Link href="/grants" className="absolute bg-secondary rounded-full px-4 h-8 -top-4 right-12 md:px-8 md:h-14 md:-top-7 md:right-20 lg:right-28 flex items-center border-2 border-secondary hover:border-primary transition duration-300">
-                        <div className="uppercase text-white flex items-center space-x-2 lg:space-x-4">
-                            <p className="border-2 border-white p-.5 rounded-full">
-                                <ChevronLeftIcon className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 -translate-x-[1px]"/>
-                            </p>
-                            <p className="text-sm md:text-lg lg:text-xl">
-                                Grant search
-                            </p>
+                    <Link href="/grants" className="absolute right-12 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                        <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
+                            <ChevronLeftIcon className="w-4 h-4"/>
                         </div>
+                        <span className="uppercase tracking-wider font-medium">Grant search</span>
                     </Link>
 
                     <Grid numItemsLg={1} className="gap-6">
                         <Col
                             numColSpanLg={1}
-                            className="flex flex-col gap-6 bg-white p-4 md:p-6 lg:p-12 rounded-2xl border-2 border-text-tremor-emphasis"
+                            className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200"
                         >
                             <div className="grant-abstract flex flex-col space-y-4">
                                 <Title className={titleClasses}>Abstract</Title>
@@ -157,8 +153,8 @@ export default function StaticPage({grant}: Props) {
                                 </button>
                             </div>
 
-                            <div className="my-2 lg:my-8 breakout overflow-hidden">
-                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary rounded-2xl overflow-hidden'>
+                            <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
+                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
                                     <h3 className='self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-2xl text-white font-medium uppercase tracking-wider lg:[writing-mode:vertical-lr]'>
                                         Key facts
                                     </h3>
@@ -173,7 +169,7 @@ export default function StaticPage({grant}: Props) {
                                                         <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {heading.text}
                                                         </p>
-                                                        <p className='text-md md:text-3xl lg:text-5xl font-bold'>
+                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold'>
                                                             {heading.metric}
                                                         </p>
                                                     </li>
@@ -237,7 +233,7 @@ export default function StaticPage({grant}: Props) {
 
                                     <div className=''>
 
-                                        <div className="grid grid-cols-1 gap-8">
+                                        <div className="grid grid-cols-1 gap-3">
                                             {publicationList.map((link: any, index: number) => {
 
                                                 const handleClick = () => {
@@ -247,53 +243,53 @@ export default function StaticPage({grant}: Props) {
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className="bg-primary/20 p-4  rounded-2xl"
+                                                        className="bg-primary/20 py-4 px-6 rounded-2xl"
                                                     >
-                                                        <div className="flex items-start justify-between space-x-2">
-                                                            <p
-                                                                className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl text-tremor-content-emphasis"
+                                                        <a className="flex items-center justify-between space-x-2 cursor-pointer" onClick={handleClick}>
+                                                            <h3
+                                                                className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl"
                                                                 dangerouslySetInnerHTML={{__html: link.title}}
-                                                            />
-                                                            <button onClick={handleClick} className='w-auto uppercase text-tremor-emphasis tracking wider text-lg flex space-x-2 items-center'>
-                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-12 h-12`}/>
+                                                            ></h3>
+                                                            <button className="self-start">
+                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`}/>
                                                             </button>
-                                                        </div>
+                                                        </a>
                                                         
                                                         <AnimateHeight
                                                             duration={300}
                                                             height={activeIndex === index ? 'auto' : 0}
                                                         >  
-                                                            <div className="flex flex-col gap-y-4 lg:gap-y-8 pt-4 lg-pt-8">
-                                                                <div>
-                                                                    <Subtitle className="uppercase">Authors</Subtitle>
-                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</Text>
-                                                                </div>
-    
-                                                                <div>
-                                                                    <Subtitle className="uppercase">Publish Year</Subtitle>
-                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</Text>
-                                                                </div>
-    
+                                                            <ul className="py-6 flex flex-col gap-4">
+                                                                <li className="flex flex-col gap-1">
+                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Authors</h4>
+                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</p>
+                                                                </li>
+                                                                <li className="flex flex-col gap-1">
+                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Publish Year</h4>
+                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</p>
+                                                                </li>
                                                                 {link.journalInfo?.journal?.title &&
-                                                                    <div>
-                                                                        <Subtitle className="uppercase">Journal</Subtitle>
-                                                                        <Text className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</Text>
-                                                                    </div>
+                                                                    <li className="flex flex-col gap-1">
+                                                                        <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Journal</h4>
+                                                                        <p className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</p>
+                                                                    </li>
                                                                 }
-    
-                                                                <div>
-                                                                    <Subtitle className="uppercase">DOI</Subtitle>
-                                                                    <Text className='tracking-wider text-tremor-content-emphasis'>{link.doi}</Text>
-                                                                </div>
-                                                                
-                                                                <div className="py-4">
-                                                                    <Link
-                                                                        href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                                        className="text-left text-white bg-secondary p-4 rounded-full uppercase border-2 border-secondary hover:border-primary transition duration-300"
-                                                                    >
-                                                                        View at Europe PMC
-                                                                    </Link>
-                                                                </div>
+                                                                <li className="flex flex-col gap-1">
+                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">DOI</h4>
+                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.doi}</p>
+                                                                </li>
+                                                            </ul>
+                                                            <div className="py-4">
+                                                                <Button
+                                                                    size="small"
+                                                                    colour="secondary"
+                                                                    href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                                    rel="nofollow noopener noreferrer"
+                                                                    target="_blank"
+                                                                    className="text-left text-white bg-secondary p-4 rounded-full uppercase border-2 border-secondary hover:border-primary transition duration-300"
+                                                                >
+                                                                    View at Europe PMC
+                                                                </Button>
                                                             </div>
                                                         </AnimateHeight>
                                                     </div>
