@@ -78,9 +78,9 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                         <article aria-labelledby="page-title">
 
-                            <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
+                            {/* <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}> */}
 
-                            {/* <div className={`masthead-background ${mastheadStyles.background}`}> */}
+                            <div className={`masthead-background ${mastheadStyles.background}`}>
 
                                 <div className="h-full flex items-end pb-6 lg:pb-12">
 
@@ -94,9 +94,9 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                                 </div>
 
-                            {/* </div> */}
+                            </div>
 
-                            </InteractiveBackground>
+                            {/* </InteractiveBackground> */}
 
                             {children}
 
