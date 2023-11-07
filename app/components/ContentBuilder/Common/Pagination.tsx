@@ -14,7 +14,7 @@ const Pagination = ({
         pageNumbers.push(i)
     }
 
-    const filteredPageNumbers = pageNumbers.length > 3 ? pageNumbers.slice(currentPage-1, currentPage +2) : pageNumbers
+    const filteredPageNumbers = pageNumbers.length > 3 ? pageNumbers.slice(currentPage-1, currentPage +3) : pageNumbers
 
     const handlePrev = () => {
         if (currentPage === 1) {
