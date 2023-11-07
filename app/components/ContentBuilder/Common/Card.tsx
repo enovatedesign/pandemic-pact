@@ -9,21 +9,37 @@ const Card = ({entry, tags, children}) => {
         jobTitle,
         summary, 
         index, 
+        url
     } = entry
 
     const thumbnailImage = entry.thumbnailImage[0] ?? null
 
+
+    //Code so links are within images
     return (
         <li key={index} 
             className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700" 
-        >                    
-            <Image 
-                src={thumbnailImage.url}
-                alt={thumbnailImage.alt}
-                width={thumbnailImage.width}
-                height={thumbnailImage.height}
-                loading="lazy"
-            />
+        >   
+            {url ? (
+                <a href={url}>
+                    <Image 
+                        src={thumbnailImage.url}
+                        alt={thumbnailImage.alt}
+                        width={thumbnailImage.width}
+                        height={thumbnailImage.height}
+                        loading="lazy"
+                    />
+                </a>                
+            ) : (
+                <Image 
+                        src={thumbnailImage.url}
+                        alt={thumbnailImage.alt}
+                        width={thumbnailImage.width}
+                        height={thumbnailImage.height}
+                        loading="lazy"
+                    />
+            )}
+            
             <div className="flex flex-col gap-3 p-6 h-full">
                 
                 {title && (
