@@ -77,12 +77,12 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                         <article aria-labelledby="page-title">
 
-                            <div className={`h-[20rem] lg:h-[24rem] masthead-background ${mastheadStyles.background}`}>
+                            <div className={`masthead-background ${mastheadStyles.background}`}>
 
                                 <div className="h-full flex items-end pb-6 lg:pb-12">
 
                                     {title &&
-                                        <div className="container">
+                                        <div className="container mt-44 lg:mt-52">
                                             <PageTitle>{title}</PageTitle>
                                             {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
                                             {mastheadContent}
