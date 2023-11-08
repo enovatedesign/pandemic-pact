@@ -9,16 +9,18 @@ import {AdjustmentsIcon} from '@heroicons/react/outline'
 import Header from './Header'
 import Footer from './Footer'
 import PageTitle from './PageTitle'
+import InteractiveBackground from './InteractiveBackground'
 
 type Props = {
     sidebarContent?: React.ReactNode,
+    mastheadContent?: React.ReactNode,
     children: React.ReactNode,
     title?: string,
     summary?: string,
     showSummary?: boolean
 }
 
-const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) => {
+const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, children}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
@@ -70,26 +72,31 @@ const Layout = ({title, summary, showSummary, sidebarContent, children}: Props) 
                 }
 
                 <div className="w-full relative">
-                    <Header className="absolute w-full left-0" />
+                    <Header className="absolute w-full left-0 z-10" />
 
                     <main id="content">
 
                         <article aria-labelledby="page-title">
 
-                            <div className={`h-[20rem] lg:h-[24rem] masthead-background ${mastheadStyles.background}`}>
+                            {/* <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}> */}
+
+                            <div className={`masthead-background ${mastheadStyles.background}`}>
 
                                 <div className="h-full flex items-end pb-6 lg:pb-12">
 
                                     {title &&
-                                        <div className="container">
+                                        <div className="container mt-44 lg:mt-52">
                                             <PageTitle>{title}</PageTitle>
                                             {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                            {mastheadContent}
                                         </div>
                                     }
 
                                 </div>
 
                             </div>
+
+                            {/* </InteractiveBackground> */}
 
                             {children}
 
