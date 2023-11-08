@@ -36,6 +36,7 @@ const Card = ({entry, tags, children}) => {
                         alt={thumbnailImage.alt}
                         width={thumbnailImage.width}
                         height={thumbnailImage.height}
+                        className="w-full"
                         loading="lazy"
                     />
             )}
