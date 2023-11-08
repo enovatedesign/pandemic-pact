@@ -14,6 +14,7 @@ import {
 } from '../helpers/meilisearch'
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
+import AdvancedSearch from './AdvancedSearch'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void,
@@ -183,7 +184,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                 
                 <div className='col-span-2'>
                     <AnimateHeight
-                        duration={300}
+                        delay={!advancedSearchShow ? 400 : 0}
+                        duration={400}
                         height={advancedSearchShow ? 0 : 'auto'}
                     >   
 
@@ -253,6 +255,16 @@ export default function SearchInput({setSearchResponse}: Props) {
 
 
                 {/* End of standard search */}
+                <AnimateHeight
+                        delay={advancedSearchShow ? 400 : 0}
+                        duration={400}
+                        height={!advancedSearchShow ? 0 : 'auto'}
+                        className='col-span-2'
+                    >  
+                    <AdvancedSearch />
+                </AnimateHeight>
+
+
                     <Col
                         numColSpan={2}
                         className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
