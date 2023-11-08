@@ -9,19 +9,20 @@ const Card = ({entry, tags, children}) => {
         jobTitle,
         summary, 
         index, 
-        url
+        url,
+        externalLink
     } = entry
 
     const thumbnailImage = entry.thumbnailImage[0] ?? null
 
-
+    console.log(externalLink)
     //Code so links are within images
     return (
         <li key={index} 
             className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700" 
         >   
-            {url ? (
-                <a href={url}>
+            {url || externalLink ? (
+                <a href={url || externalLink}>
                     <Image 
                         src={thumbnailImage.url}
                         alt={thumbnailImage.alt}
