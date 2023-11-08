@@ -56,7 +56,7 @@ const Pagination = ({
     ].join(' ')
 
     return (
-        <div className="flex justify-between between pt-20">
+        <div className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
             <button 
                 onClick={() => updatePage(page - 1)}
                 disabled={page === 1}
@@ -70,24 +70,26 @@ const Pagination = ({
                 </span>
             </button>
 
-            <div className="flex space-x-8">
-                <p className={`${leftFullStopClasses} text-primary flex space-x-2 text-4xl items-end`}>
+            <div className="flex space-x-2 md:space-x-4 lg:space-x-6 xl-space-x-8">
+                <p className={`${leftFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
                     <span>.</span><span>.</span><span>.</span>
                 </p>
-                {filteredPages.map(number => {
-                    const activeButtonClasses = [
-                        page === number ? "bg-primary text-white" :  "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
-                    ].join(' ')
+                <div className="hidden md:block">
+                    {filteredPages.map(number => {
+                        const activeButtonClasses = [
+                            page === number ? "bg-primary text-white" :  "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
+                        ].join(' ')
 
-                    return (
-                        <>  
-                            <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
-                                {number}
-                            </button>
-                        </>
-                    )
-                })}
-                <p className={`${rightFullStopClasses} text-primary flex space-x-2 text-4xl items-end`}>
+                        return (
+                            <>  
+                                <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
+                                    {number}
+                                </button>
+                            </>
+                        )
+                    })}
+                </div>
+                <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
                     <span>.</span><span>.</span><span>.</span>
                 </p>
             </div>
