@@ -13,37 +13,43 @@ const Pagination = ({
     const router = useRouter()
     const pathName = usePathname()
     const params = useSearchParams()
-    
-    console.log(params.get('page'))
+    const pageParam = params.get('page')
 
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(pageParam ? Number(pageParam) : 1)
     const totalPages = Array.from({length: (Math.ceil(totalPosts / postsPerPage))}, (_, i) => i + 1)
 
     useEffect(() => {
+        const newPageParam = params.get('page')
+        if (!newPageParam && page !== 1 ) {
+            setPage(1)
+        } else if (newPageParam && newPageParam !== page.toString()) {
+            setPage(Number(newPageParam))
+        }
+        
         const lastItemIndex = page * postsPerPage
         setFirstItemIndex(lastItemIndex - postsPerPage)
         setLastItemIndex(lastItemIndex)
+    }, [page, postsPerPage, setFirstItemIndex, setLastItemIndex, params])
+    
+    const updateSearchParams = (number: number) => {
+        const newParams = new URLSearchParams(params.toString())
+        newParams.set('page', number.toString())
         
-        // if (router) {
-        //     router.push(
-        //         { 
-        //             pathname: router.pathname, 
-        //             query: page !== 1 ? { page: page } : {}
-        //         },
-        //         undefined, 
-        //         { shallow: true }
-        //     )
-        // }
-    }, [page, postsPerPage, setFirstItemIndex, setLastItemIndex, router])
-
-    // const filteredPageNumbers = pageNumbers.current.length > 3 ? pageNumbers.current.slice(currentPage-1, currentPage +3) : pageNumbers.current
-
+        const url = number !== 1 ? `${pathName}?${newParams.toString()}` : pathName
+        router.push(url, { shallow: true })
+    }
+    
+    const updatePage = (number: number) => {
+        setPage(number)
+        updateSearchParams(number)
+    }
+    
     const iconClasses = 'w-8 h-8 text-primary transition duration-300 border-2 border-primary rounded-full hover:bg-primary hover:text-white '
 
     return (
         <div className="flex justify-between between pt-20">
             <button 
-                onClick={() => setPage(page - 1)}
+                onClick={() => updatePage(page - 1)}
                 disabled={page === 1}
                 className="flex items-center space-x-4 disabled:cursor-not-allowed"
             >
@@ -55,11 +61,11 @@ const Pagination = ({
                 </span>
             </button>
 
-            {/*{pageNumbers.current.length > 5 && (
+            {/* {totalPages.length > 5 && (
                 <div className="flex items-center space-x-4">
-                    <button onClick={() => setCurrentPage(1)}>
+                    <button onClick={() => setPage(1)}>
                         <span  className="hidden md:block text-secondary uppercase font-bold">
-                            {pageNumbers.current[0]}
+                            1
                         </span>
                     </button>
                 </div>
@@ -73,7 +79,7 @@ const Pagination = ({
 
                     return (
                         <>  
-                            <button key={number} onClick={() => setPage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
+                            <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
                                 {number}
                             </button>
                         </>
@@ -81,7 +87,7 @@ const Pagination = ({
                 })}
             </div>
             
-            {totalPages.length > 5 && (
+            {/* {totalPages.length > 5 && (
                 <div className="flex items-center space-x-4">
                     <button onClick={() => setCurrentPage(totalPages.length)}>
                         <span  className="hidden md:block text-secondary uppercase font-bold">
@@ -89,10 +95,10 @@ const Pagination = ({
                         </span>
                     </button>
                 </div>
-            )}
+            )} */}
 
             <button 
-                onClick={() => setPage(page + 1)} 
+                onClick={() => updatePage(page + 1)} 
                 disabled={page === totalPages.length}
                 className="flex items-center space-x-4 disabled:cursor-not-allowed"
             >

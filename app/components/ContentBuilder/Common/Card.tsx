@@ -15,7 +15,6 @@ const Card = ({entry, tags, children}) => {
 
     const thumbnailImage = entry.thumbnailImage[0] ?? null
 
-    console.log(externalLink)
     //Code so links are within images
     return (
         <li key={index} 
