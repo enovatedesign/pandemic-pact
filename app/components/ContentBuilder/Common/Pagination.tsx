@@ -17,6 +17,7 @@ const Pagination = ({
 
     const [page, setPage] = useState(pageParam ? Number(pageParam) : 1)
     const totalPages = Array.from({length: (Math.ceil(totalPosts / postsPerPage))}, (_, i) => i + 1)
+    const filteredPages = (totalPages.length > 3 && page > 3) ? totalPages.slice(page-3, page+2 ) : totalPages.splice(0,5)
 
     useEffect(() => {
         const newPageParam = params.get('page')
@@ -45,6 +46,14 @@ const Pagination = ({
     }
     
     const iconClasses = 'w-8 h-8 text-primary transition duration-300 border-2 border-primary rounded-full hover:bg-primary hover:text-white '
+    
+    const leftFullStopClasses = [
+        page >= 4 ? 'block' : 'invisible'
+    ].join(' ')
+
+    const rightFullStopClasses = [
+        page < totalPages.length -2 ? 'block' : 'hidden'
+    ].join(' ')
 
     return (
         <div className="flex justify-between between pt-20">
@@ -61,18 +70,11 @@ const Pagination = ({
                 </span>
             </button>
 
-            {/* {totalPages.length > 5 && (
-                <div className="flex items-center space-x-4">
-                    <button onClick={() => setPage(1)}>
-                        <span  className="hidden md:block text-secondary uppercase font-bold">
-                            1
-                        </span>
-                    </button>
-                </div>
-            )} */}
-
             <div className="flex space-x-8">
-                {totalPages.map(number => {
+                <p className={`${leftFullStopClasses} text-primary flex space-x-2 text-4xl items-end`}>
+                    <span>.</span><span>.</span><span>.</span>
+                </p>
+                {filteredPages.map(number => {
                     const activeButtonClasses = [
                         page === number ? "bg-primary text-white" :  "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
                     ].join(' ')
@@ -85,17 +87,11 @@ const Pagination = ({
                         </>
                     )
                 })}
+                <p className={`${rightFullStopClasses} text-primary flex space-x-2 text-4xl items-end`}>
+                    <span>.</span><span>.</span><span>.</span>
+                </p>
             </div>
             
-            {/* {totalPages.length > 5 && (
-                <div className="flex items-center space-x-4">
-                    <button onClick={() => setCurrentPage(totalPages.length)}>
-                        <span  className="hidden md:block text-secondary uppercase font-bold">
-                            {totalPages.length}
-                        </span>
-                    </button>
-                </div>
-            )} */}
 
             <button 
                 onClick={() => updatePage(page + 1)} 
