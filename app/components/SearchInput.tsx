@@ -245,10 +245,6 @@ export default function SearchInput({setSearchResponse}: Props) {
 
                     <div className="space-x-4">
                         <ExportToCsvButton
-                        >
-                            Export Data (CSV)
-                        </ExportToCsvButton>
-                        <ExportToCsvButton
                             meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
                             filename="search-results-export"
                         >

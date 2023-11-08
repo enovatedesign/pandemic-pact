@@ -1,6 +1,5 @@
 import {useState} from 'react'
-import {Button} from '@tremor/react'
-import {DownloadIcon} from "@heroicons/react/outline"
+import Button from './Button'
 import {meilisearchRequest} from "../helpers/meilisearch"
 import {utils, writeFile} from 'xlsx'
 
@@ -31,12 +30,12 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename, chi
 
     return (
         <Button
-            icon={DownloadIcon}
             loading={exportingCsv}
             disabled={exportingCsv}
             onClick={exportCsv}
+            colour='secondary'
         >
-            {children ? children : 'Export Chart Data (CSV)'}
+            Export Chart Data (CSV)
         </Button >
     )
 }
