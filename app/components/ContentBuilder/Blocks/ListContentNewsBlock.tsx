@@ -2,7 +2,7 @@
 
 import BlockWrapper from "../BlockWrapper";
 import Card from "../Common/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInView, animated } from '@react-spring/web';
 import Pagination from "../Common/Pagination";
 import Button from "../../Button";
@@ -42,14 +42,16 @@ const ListContentNewsBlock = ( {block}: Props ) => {
     
     const limit = block.limit 
     const paginate = block.paginate ?? false
-    const [currentPage, setCurrentPage] = useState(1)
+    const [firstItemIndex, setFirstItemIndex] = useState(0)
+    const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
 
-    const lastPost = (currentPage * limit)
-    const firstPost = (lastPost - limit)
-    
     const customEntries = block.customEntries ?? null
     const limitedEntries = customEntries.slice(0, limit) 
-    const paginatedEntries = customEntries.slice(firstPost, lastPost)
+    const [paginatedEntries, setPaginatedEntries] = useState(customEntries.slice(firstItemIndex, lastItemIndex))
+
+    useEffect(() => {
+        setPaginatedEntries(customEntries.slice(firstItemIndex, lastItemIndex))
+    }, [customEntries, firstItemIndex, lastItemIndex])
 
     const tags = block.addTagsMenu ?? false
 
@@ -94,8 +96,8 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                     <Pagination 
                         totalPosts={customEntries.length}
                         postsPerPage={limit}
-                        setCurrentPage={setCurrentPage}
-                        currentPage={currentPage}
+                        setFirstItemIndex={setFirstItemIndex}
+                        setLastItemIndex={setLastItemIndex}
                     />
                 </div>
             ) : (

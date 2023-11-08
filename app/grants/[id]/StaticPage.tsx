@@ -110,8 +110,9 @@ export default function StaticPage({grant}: Props) {
     const [activeIndex, setActiveIndex] = useState(-1)
     
     const [currentPage, setCurrentPage] = useState(1)
-    const lastPost = (currentPage * 3)
-    const firstPost = (lastPost - 3)
+    const limit = 10
+    const lastPost = (currentPage * limit)
+    const firstPost = (lastPost - limit)
     const publicationList = grant.PubMedLinks?.slice(firstPost, lastPost)
 
 
@@ -301,10 +302,11 @@ export default function StaticPage({grant}: Props) {
                                             })}
                                         </div>
                                     </div>
-                                    {grant.PubMedLinks?.length > 3 && (
+
+                                    {grant.PubMedLinks?.length > 10 && (
                                         <Pagination 
                                             totalPosts={grant.PubMedLinks?.length}
-                                            postsPerPage={3}
+                                            postsPerPage={limit}
                                             setCurrentPage={setCurrentPage}
                                             currentPage={currentPage}
                                         />
