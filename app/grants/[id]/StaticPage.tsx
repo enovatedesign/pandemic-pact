@@ -109,11 +109,10 @@ export default function StaticPage({grant}: Props) {
     const [abstractShow, setAbstractShow] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
     
-    const [currentPage, setCurrentPage] = useState(1)
     const limit = 10
-    const lastPost = (currentPage * limit)
-    const firstPost = (lastPost - limit)
-    const publicationList = grant.PubMedLinks?.slice(firstPost, lastPost)
+    const [firstItemIndex, setFirstItemIndex] = useState(0)
+    const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
+    const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
 
     const mastheadContent = () => {
         return (
@@ -324,8 +323,8 @@ export default function StaticPage({grant}: Props) {
                                         <Pagination 
                                             totalPosts={grant.PubMedLinks?.length}
                                             postsPerPage={limit}
-                                            setCurrentPage={setCurrentPage}
-                                            currentPage={currentPage}
+                                            setFirstItemIndex={setFirstItemIndex}
+                                            setLastItemIndex={setLastItemIndex}
                                         />
                                     )}
                                 </div>
