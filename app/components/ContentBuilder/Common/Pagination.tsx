@@ -61,7 +61,7 @@ const Pagination = ({
                 onClick={() => updatePage(page - 1)}
                 disabled={page === 1}
                 className="flex items-center space-x-4 disabled:cursor-not-allowed"
-            >
+            >   
                 <p className={iconClasses}>
                     <ChevronLeftIcon className='-translate-x-[1px]'/>
                 </p>
