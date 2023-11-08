@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid"
 

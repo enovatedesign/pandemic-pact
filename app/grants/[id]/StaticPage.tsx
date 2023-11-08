@@ -60,48 +60,6 @@ export default function StaticPage({grant}: Props) {
         },
     ]
     
-    // Data unused in new design
-    // {
-    //     text: 'Funder',
-    //     metric: grant.FundingOrgName.join(', '),
-    // },
-    // {
-    //     text: 'Study Subject',
-    //     metric: grant.StudySubject,
-    // },
-    
-    // {
-    //     text: 'Study Type',
-    //     metric: grant.StudyType,
-    // },
-    // {
-    //     text: 'Age Groups',
-    //     metric: grant.AgeGroups,
-    // },
-    // {
-    //     text: 'Rurality',
-    //     metric: grant.Rurality,
-    // },
-    // {
-    //     text: 'Vulnerable Populations',
-    //     metric: grant.VulnerablePopulations,
-    // },
-    // {
-    //     text: 'Occupational Groups',
-    //     metric: grant.OccupationalGroups,
-    // },
-    // {
-    //     text: 'Clinical Trial',
-    //     metric: grant.ClinicalTrial,
-    // },
-
-    // if (grant.ResearchInstitutionName.length > 0) {
-    //     keyFactsItems.unshift({
-    //         text: 'Lead Research Institution',
-    //         metric: grant.ResearchInstitutionName[0],
-    //     })
-    // }
-
     const titleClasses = [
         'text-secondary uppercase tracking-widest text-3xl font-bold'
     ].join(' ')
