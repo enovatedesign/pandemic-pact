@@ -171,9 +171,9 @@ export default function SearchInput({setSearchResponse}: Props) {
                             placeholder="Search..."
                             onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
                             value={searchQuery}
-                            className="block w-full rounded-md border-0 pl-4 py-2 text-gray-900 shadow-sm  text-xl ring-2 placeholder:text-gray-400 focus:ring-4 ring-secondary focus:ring-inset sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 pl-4 py-1 md:py-2 text-gray-900 shadow-sm ring-2 placeholder:text-gray-400 focus:ring-4 ring-secondary focus:ring-inset text-sm md:text-lg xl:text-xl sm:leading-6"
                         />
-                        <SearchIcon className='w-8 h-8 text-secondary absolute right-4'/>
+                        <SearchIcon className='w-6 h-6 md:w-8 md:h-8 text-secondary absolute right-4'/>
                     </div>
                 </Col>
 
@@ -239,9 +239,9 @@ export default function SearchInput({setSearchResponse}: Props) {
 
             <Col
                 numColSpan={2}
-                className="flex justify-between items-center"
+                className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
             >
-                <Text>Total Hits: {totalHits}</Text>
+                <p className="text-secondary text-lg ">Total Hits: {totalHits}</p>
 
                     <div className="space-x-4">
                         <ExportToCsvButton

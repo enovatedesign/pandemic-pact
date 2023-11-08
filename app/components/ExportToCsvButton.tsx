@@ -9,7 +9,7 @@ interface Props {
     children?: React.ReactNode
 }
 
-export default function ExportToCsvButton({meilisearchRequestBody, filename, children}: Props) {
+export default function ExportToCsvButton({meilisearchRequestBody, filename}: Props) {
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {

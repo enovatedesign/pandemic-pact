@@ -21,7 +21,7 @@ export default function ResultsTable({searchResponse}: Props) {
     return (
             <div className=''>
                 
-                <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary dark:text-primary py-4 lg:py-8">Results</h3>
+                <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary dark:text-primary py-4">Results</h3>
 
                 <div className='flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-2xl border-2 border-slate-300'>
                     {searchResponse.hits.map((result, index) => {

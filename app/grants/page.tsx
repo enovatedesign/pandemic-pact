@@ -22,7 +22,7 @@ export default function Explore() {
                 summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
             >
                 <div className="container mx-auto my-6 lg:my-12 ">
-                    <Grid className="gap-y-6 lg:gap-y-12 mt-6">
+                    <Grid className="gap-y-6 lg:gap-y-8 mt-6">
                         <Col>
                             {/*
                             Note that the `Suspense` here is to suppress the following error:
