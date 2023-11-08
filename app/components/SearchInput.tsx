@@ -165,12 +165,16 @@ export default function SearchInput({setSearchResponse}: Props) {
             </div>
             <Grid numItems={2} className="gap-2" >
                 <Col numColSpan={2}>
-                    <TextInput
-                        icon={SearchIcon}
-                        placeholder="Search..."
-                        onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
-                        value={searchQuery}
-                    />
+                    <div className='w-full  flex items-center relative '>
+                        <input
+                            type='search'
+                            placeholder="Search..."
+                            onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
+                            value={searchQuery}
+                            className="block w-full rounded-md border-0 pl-4 py-2 text-gray-900 shadow-sm  text-xl ring-2 placeholder:text-gray-400 focus:ring-4 ring-secondary focus:ring-inset sm:text-sm sm:leading-6"
+                        />
+                        <SearchIcon className='w-8 h-8 text-secondary absolute right-4'/>
+                    </div>
                 </Col>
 
                 <Col>
@@ -179,6 +183,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                         selectedOptions={filters.Disease}
                         setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
                         placeholder="All Diseases"
+                        className='border-secondary border-2 rounded-xl'
                     />
                 </Col>
 
@@ -188,6 +193,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                         selectedOptions={filters.Pathogen}
                         setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
                         placeholder="All Pathogens"
+                        className='border-secondary border-2 rounded-xl'
                     />
                 </Col>
 
@@ -197,6 +203,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     selectedOptions={filters.ResearchInstitutionCountry}
                     setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
                     placeholder="All Research Institution Countries"
+                    className='border-secondary border-2 rounded-xl'
                 />
             </Col>
 
@@ -206,6 +213,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     selectedOptions={filters.ResearchInstitutionRegion}
                     setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
                     placeholder="All Research Institution Regions"
+                    className='border-secondary border-2 rounded-xl'
                 />
             </Col>
 
@@ -215,6 +223,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     selectedOptions={filters.FunderCountry}
                     setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
                     placeholder="All Funder Countries"
+                    className='border-secondary border-2 rounded-xl'
                 />
             </Col>
 
@@ -224,6 +233,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     selectedOptions={filters.FunderRegion}
                     setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
                     placeholder="All Funder Regions"
+                    className='border-secondary border-2 rounded-xl'
                 />
             </Col>
 
