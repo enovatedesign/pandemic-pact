@@ -144,7 +144,7 @@ export const contentBuilderQuery = `
                 title
                 summary
                 externalLink
-                thumbnailImage @transform(transform: "c480x300") {
+                thumbnailImage  @transform(transform: "c480x480") {
                   ... on contentAssets_Asset {
                     alt
                     height
