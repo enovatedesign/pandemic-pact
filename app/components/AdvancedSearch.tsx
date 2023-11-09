@@ -2,14 +2,18 @@ import { useState, useEffect } from "react"
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
-import { reportWebVitals } from "next/dist/build/templates/pages";
 
 const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-const AdvancedInputRow = ({children}) => {
+  type Props = {
+    children: any
+    index: number
+  }
+
+const AdvancedInputRow = ({children, index} : Props) => {
     
     const [value, setValue] = useState("Regions")
     const [multiValue, setMultiValue] = useState("")
@@ -22,13 +26,14 @@ const AdvancedInputRow = ({children}) => {
     ].join(' ')
 
     const andButtonDivClasses = [
-        and ? 'right-1 transition duration-300' : 'right-1 -translate-x-[50px] transition duration-300'
+        and ? 'right-1 transition duration-300' : 'left-1 transition duration-300'
     ].join(' ')
+
 
     return (
         <div className="flex space-x-8">
 
-            <div className="w-full text-secondary flex flex-col lg:flex-row lg:items-center gap-8 bg-primary rounded-2xl p-4">
+            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-tremor-content-subtle rounded-2xl p-4">
                 <Select value={value} onValueChange={setValue} enableClear={false}>
                     {selectItems.map((key, index) => {
                         
@@ -57,7 +62,7 @@ const AdvancedInputRow = ({children}) => {
                         )
                     })}
                 </MultiSelect>
-                <button onClick={() => setAnd(!and)} className="h-8 relative flex items-center bg-secondary w-48 rounded-full">
+                <button onClick={() => setAnd(!and)} className="h-8 relative flex items-center bg-secondary w-20 md:w-48 rounded-full">
                         <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
                         <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
@@ -65,9 +70,9 @@ const AdvancedInputRow = ({children}) => {
                         </p>
                 </button>
             </div>
-                <div className="flex items-center">
-                    {children}
-                </div>
+            <div className="flex items-center">
+                {children}
+            </div>
         </div>
     )
 }
@@ -75,10 +80,26 @@ const AdvancedInputRow = ({children}) => {
 const AdvancedSearch = () => {
     
     const [rows, setRows] = useState([<AdvancedInputRow key={1}/>])
-    
+    const [globalAnd, setGlobalAnd] = useState(true)
+
+    const globalAndButtonTextClasses = [
+        globalAnd ? 'order-first left-3' : 'order-last right-4'
+    ].join(' ')
+
+    const globalAndButtonDivClasses = [
+        globalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] transition duration-300'
+    ].join(' ')
+
+
     const addRow = () => {
         const newKey = rows.length
         setRows([...rows, <AdvancedInputRow key={newKey}/>])
+    }
+
+    const removeRow = (index) => {
+        const updatedRows = [...rows]
+        updatedRows.splice(index, 1)
+        setRows(updatedRows)
     }
 
     return (
@@ -94,18 +115,40 @@ const AdvancedSearch = () => {
                     <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                 </button>
             </div>
+            <div className="flex items-center space-x-2 pb-2">
+                <p className="text-secondary uppercase">
+                    Set the global and/or functionality: 
+                </p>
+                <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
+                        <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+
+                        <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
+                            {globalAnd ? 'and' : 'or'}
+                        </p>
+                </button>
+            </div>
             <div className="flex flex-col gap-2">
-                {rows.map((row) => {
+                {rows.map((row, index) => {
 
                     return (
-                        <AdvancedInputRow key={row}>
-                            {/* Add remove button function here */}
-                            <button
-                                className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                            >
-                                <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                            </button>
-                        </AdvancedInputRow>
+                        <>
+                            <div>
+                                {index > 0 && (
+                                    <p className="text-center uppercase tracking-wider py-1">
+                                        {globalAnd ? 'and' : 'or'}
+                                    </p>
+                                )}
+                                <AdvancedInputRow key={row} index={index}>
+                                    {/* Add remove button function here */}
+                                    <button
+                                        className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                        onClick={() => removeRow(row)}
+                                    >
+                                        <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                                    </button>
+                                </AdvancedInputRow>
+                            </div>
+                        </>
                     )
                 })}
             </div>
