@@ -3,6 +3,8 @@ import Image from 'next/image'
 import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
+import { useState } from 'react'
+import AnimateHeight from 'react-animate-height'
 
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
@@ -30,9 +32,19 @@ export default function Header({className}: {className?: string}) {
         />
     )
 
+    const [showMobileNav, setShowMobileNav] = useState(false)
+    
+    const buttonClasses = [
+        showMobileNav ? 'bg-primary rounded-full transition duration-300' : 'transparent rounded-full transition duration-300'
+    ].join(' ')
+
+    const mobileTransitionClasses = [
+        showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000'
+    ].join(' ')
+
     return (
         <header className={className}>
-            <div className="container">
+            <div className="container relative">
                 <div className="py-8 flex flex-row items-center justify-between">
                     {pathname === '/' ?
                         <h1>
@@ -49,18 +61,27 @@ export default function Header({className}: {className?: string}) {
                     {/* mr-6 md:mr-8 lg:mr-12 bg-secondary/50 backdrop-blur-sm */}
 
                     <div className="flex items-center rounded-full border border-primary/25 inner-glow z-10">
-                        <button className="p-3 lg:hidden">
+                        <button className={`${buttonClasses} z-10 p-3 lg:hidden`} onClick={() => setShowMobileNav(!showMobileNav)}>
                             <span className="sr-only">Menu</span>
-                            <MenuIcon className="w-8 h-8 fill-white" />
+                            <MenuIcon className="w-8 h-8 fill-white"/>
                         </button>
 
                         <nav className="hidden px-10 py-3 lg:block">
                             <ul className="flex space-x-10">
                                 {links.map(link => (
                                     <NavItem key={link.label} {...link} />
-                                ))}
+                                    ))}
                             </ul>
                         </nav>
+
+
+                        <div className={`${mobileTransitionClasses} h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
+                            <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
+                                {links.map(link => (
+                                        <NavItem key={link.label} {...link} />
+                                    ))}
+                                </ul>
+                        </div>
                     </div>
                 </div>
             </div>
