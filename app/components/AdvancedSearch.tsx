@@ -8,57 +8,49 @@ const camelToSentence = (word: string) => {
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-const AdvancedInputRow = () => {
+const AdvancedInputRow = ({children}) => {
     
     const [value, setValue] = useState("Regions")
     const [multiValue, setMultiValue] = useState("")
     const selectItems = Object.keys(selectOptions)
     const multiSelectItems = selectOptions[value]
     // const [and, setAnd] = useState(true)
-    
+
     return (
-        <div className="text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
-            <Select value={value} onValueChange={setValue}>
-                {selectItems.map((key, index) => {
+
+            <div className="text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
+                <Select value={value} onValueChange={setValue}>
+                    {selectItems.map((key, index) => {
+                        
+                        return (
+                            <SelectItem
+                                value={key}
+                                key={index}
+                                className="cursor-pointer"
+                            >
+                                {camelToSentence(key)}
+                            </SelectItem>
+                        )
+                    })}
+                </Select>
+                <MultiSelect >
+                    {multiSelectItems.map((value, index) => {
+                        return (
+                            <MultiSelectItem
+                                value={value}
+                                key={index}
+                                className="cursor-pointer"
+                            >
+                                {value.value}
+                            </MultiSelectItem>
+                        )
+                    })}
                     
-                    return (
-                        <SelectItem
-                            value={key}
-                            key={index}
-                            className="cursor-pointer"
-                        >
-                            {camelToSentence(key)}
-                        </SelectItem>
-                    )
-                })}
-            </Select>
-            <MultiSelect >
-                {multiSelectItems.map((value, index) => {
-                    return (
-                        <MultiSelectItem
-                            value={value}
-                            key={index}
-                            className="cursor-pointer"
-                        >
-                            {value.value}
-                        </MultiSelectItem>
-                    )
-                })}
-                
-            </MultiSelect>
-            {/* <button
-                onClick={() => setAnd(!and)}
-                className="w-20"
-            >
-                <p>
-                    Switch filter
-                    <span>
-                        {and ? 'or' : 'and'}
-                    </span>
-                </p>
-                
-            </button> */}
-        </div>
+                </MultiSelect>
+                <div className="flex items-center">
+                    {children}
+                </div>
+            </div>
     )
 }
 
@@ -85,9 +77,22 @@ const AdvancedSearch = () => {
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {rows.map(row => {
+                {rows.map((row, index) => {
+
+                    const removeRow = () => {
+                        const updatedRows = [...rows]
+                        updatedRows.splice(index, 1)
+                        setRows(updatedRows)
+                    }
+                    
                     return (
-                        <AdvancedInputRow key={row}/>
+                        <AdvancedInputRow key={row}>
+                            <button
+                                onClick={removeRow}
+                            >
+                                x
+                            </button>
+                        </AdvancedInputRow>
                     )
                 })}
             </div>
