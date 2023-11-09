@@ -195,9 +195,18 @@ async function main() {
         completeDataset.map(({GrantID}: {GrantID: number}) => GrantID),
     )
 
-    completeDataset.forEach((grant: {GrantID: number}) => {
+    completeDataset.forEach((grant: {GrantID: number, ResearchCat: string[]}) => {
         const pathname = `grants/${grant.GrantID}.json`
-        writeToDistJsonFile(pathname, grant, false)
+
+        const researchCats = grant.ResearchCat.map(
+            (researchCat: string) => lookupTables.ResearchCat[researchCat]
+        )
+
+        writeToDistJsonFile(
+            pathname,
+            {...grant, ResearchCat: researchCats},
+            false,
+        )
     })
 
     let selectOptions: any = _.mapValues(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: string) => {
