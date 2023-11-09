@@ -13,15 +13,17 @@ const AdvancedInputRow = () => {
     const keys = Object.keys(selectOptions)
 
     const [filter, setFilter] = useState(null)
+    console.log(filter)
+    
     // const [and, setAnd] = useState(true)
     return (
         <div className="text-secondary flex flex-col lg:flex-row gap-8">
             <Select>
                 {keys.map((key, index) => {
+
                     return (
                         <SelectItem
-                            onSelect={() => setFilter(key)}
-                            value={key}
+                            value={() => setFilter(key)}
                             key={index}
                             className="cursor-pointer"
                         >
@@ -30,8 +32,8 @@ const AdvancedInputRow = () => {
                     )
                 })}
             </Select>
-
             <MultiSelect>
+
                 
             </MultiSelect>
             {/* <button
