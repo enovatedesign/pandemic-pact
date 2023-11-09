@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PlusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
@@ -12,18 +12,19 @@ const AdvancedInputRow = () => {
 
     const keys = Object.keys(selectOptions)
 
-    const [filter, setFilter] = useState(null)
-    console.log(filter)
-    
-    // const [and, setAnd] = useState(true)
-    return (
-        <div className="text-secondary flex flex-col lg:flex-row gap-8">
-            <Select>
-                {keys.map((key, index) => {
+    const [value, setValue] = useState(null)
+    console.log(value)
 
+    // const [and, setAnd] = useState(true)
+    
+    return (
+        <div className="text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
+            <Select value={value} onValueChange={setValue}>
+                {keys.map((key, index) => {
+                    
                     return (
                         <SelectItem
-                            value={() => setFilter(key)}
+                            value={key}
                             key={index}
                             className="cursor-pointer"
                         >
