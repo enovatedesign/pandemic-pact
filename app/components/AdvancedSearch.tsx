@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { PlusIcon } from "@heroicons/react/solid"
+import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
 
@@ -17,8 +17,9 @@ const AdvancedInputRow = ({children}) => {
     // const [and, setAnd] = useState(true)
 
     return (
+        <div className="flex space-x-8">
 
-            <div className="text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
+            <div className="w-full text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
                 <Select value={value} onValueChange={setValue}>
                     {selectItems.map((key, index) => {
                         
@@ -47,10 +48,11 @@ const AdvancedInputRow = ({children}) => {
                     })}
                     
                 </MultiSelect>
+            </div>
                 <div className="flex items-center">
                     {children}
                 </div>
-            </div>
+        </div>
     )
 }
 
@@ -73,24 +75,20 @@ const AdvancedSearch = () => {
                     className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
                     onClick={addRow}
                 >
-                    <PlusIcon onClick={addRow} className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                    <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {rows.map((row, index) => {
+                {rows.map((row) => {
 
-                    const removeRow = () => {
-                        const updatedRows = [...rows]
-                        updatedRows.splice(index, 1)
-                        setRows(updatedRows)
-                    }
-                    
                     return (
                         <AdvancedInputRow key={row}>
+                            {/* Add remove button function here */}
                             <button
-                                onClick={removeRow}
+                                className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                onClick=""                            
                             >
-                                x
+                                <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                             </button>
                         </AdvancedInputRow>
                     )
