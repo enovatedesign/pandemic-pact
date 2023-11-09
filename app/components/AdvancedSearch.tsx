@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { PlusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
-import { MultiSelect, MultiSelectItem } from "@tremor/react";
+import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
 
-const camelToWords = (word: string) => {
+const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
@@ -11,23 +11,41 @@ const camelToWords = (word: string) => {
 const AdvancedInputRow = () => {
 
     const keys = Object.keys(selectOptions)
-    
+
+    const [filter, setFilter] = useState(null)
+    // const [and, setAnd] = useState(true)
     return (
         <div className="text-secondary flex flex-col lg:flex-row gap-8">
-            <MultiSelect>
-                {keys.map(key => {
-
+            <Select>
+                {keys.map((key, index) => {
                     return (
-                        <MultiSelectItem
+                        <SelectItem
+                            onSelect={() => setFilter(key)}
+                            value={key}
+                            key={index}
+                            className="cursor-pointer"
                         >
-                            {camelToWords(key)}
-                        </MultiSelectItem>
+                            {camelToSentence(key)}
+                        </SelectItem>
                     )
                 })}
-            </MultiSelect>
+            </Select>
+
             <MultiSelect>
                 
             </MultiSelect>
+            {/* <button
+                onClick={() => setAnd(!and)}
+                className="w-20"
+            >
+                <p>
+                    Switch filter
+                    <span>
+                        {and ? 'or' : 'and'}
+                    </span>
+                </p>
+                
+            </button> */}
         </div>
     )
 }
