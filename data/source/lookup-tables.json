@@ -75,8 +75,8 @@
     },
     "AgeGroups": {
         "1": "Adolescent",
-        "2": "Adult ",
-        "3": "Aged ",
+        "2": "Adult",
+        "3": "Aged",
         "4": "Frail Elderly",
         "5": "Child",
         "6": "Infant",
@@ -150,7 +150,7 @@
     },
     "ClinicalTrial": {
         "1": "Adaptive Clinical Trial",
-        "2": "Clinical Trial, Phase I ",
+        "2": "Clinical Trial, Phase I",
         "3": "Clinical Trial, Phase II",
         "4": "Clinical Trial, Phase III",
         "5": "Clinical Trial, Phase IV",
@@ -226,16 +226,16 @@
     },
     "ResearchCat": {
         "1": "Pathogen: natural history, transmission and diagnostics",
-        "2": "Animal and environmental research and research on diseases vectors ",
+        "2": "Animal and environmental research and research on diseases vectors",
         "3": "Epidemiological studies",
-        "4": "Clinical characterisation and management  in humans                             ",
+        "4": "Clinical characterisation and management  in humans",
         "5": "Infection prevention and control  (including health care workers' protection)",
         "6": "Therapeutics research, development and implementation",
         "7": "Vaccines research, development and implementation",
         "8": "Research to inform ethical issues",
         "9": "Public health and Policy",
         "10": "Indirect and Secondary impacts of disease",
-        "11": "Health Systems Research ",
+        "11": "Health Systems Research",
         "12": "Capacity Strengthening",
         "13": "Disease Surveillance",
         "14": "Other"
@@ -252,21 +252,21 @@
         },
         "2": {
             "8": "Animal source and routes of transmission",
-            "9": "Vector biology ",
+            "9": "Vector biology",
             "10": "Vector control strategies",
             "11": "Other"
         },
         "3": {
             "12": "Disease transmission",
             "13": "Disease susceptibility",
-            "14": "Impact/ effectiveness of control measures ",
-            "15": "Disease mapping ",
+            "14": "Impact/ effectiveness of control measures",
+            "15": "Disease mapping",
             "16": "Other"
         },
         "4": {
             "17": "Prognostic factors for disease severity",
             "18": "Disease pathogenesis",
-            "19": "Supportive care, processes of care and management ",
+            "19": "Supportive care, processes of care and management",
             "20": "Post acute and long term health consequences",
             "21": "Other"
         },
@@ -274,7 +274,7 @@
             "22": "Restriction measures to prevent secondary transmission in communities",
             "23": "Barriers,  PPE, environmental, animal and vector control measures",
             "24": "IPC in health care settings",
-            "25": "IPC at the human-animal interface ",
+            "25": "IPC at the human-animal interface",
             "26": "Other"
         },
         "6": {
@@ -314,7 +314,7 @@
             "56": "Other"
         },
         "9": {
-            "57": "Approaches to public health interventions ",
+            "57": "Approaches to public health interventions",
             "58": "Community engagement",
             "59": "Communication and infodemic management",
             "60": "Vaccine/Therapeutic/ treatment hesitancy",
@@ -325,36 +325,36 @@
             "63": "Indirect health impacts",
             "64": "Impacts on social services",
             "65": "Economic impacts",
-            "66": "Other secondary impacts ",
+            "66": "Other secondary impacts",
             "67": "Other "
         },
         "11": {
-            "68": "Health service delivery  ",
+            "68": "Health service delivery",
             "69": "Health financing",
-            "70": "Medicines, vaccines & other technologies ",
+            "70": "Medicines, vaccines & other technologies",
             "71": "Health information systems",
             "72": "Health leadership and governance",
             "73": "Health workforce",
             "74": "Other"
         },
         "12": {
-            "75": "Individual level capacity strengthening ",
-            "76": "Institutional level capacity strengthening ",
+            "75": "Individual level capacity strengthening",
+            "76": "Institutional level capacity strengthening",
             "77": "Systemic/environmental components of capacity strengthening",
-            "78": "Cross-cutting ",
+            "78": "Cross-cutting",
             "79": "Other"
         },
         "13": {
             "80": "Disease surveillance detection",
             "81": "Disease surveillance verification",
             "82": "Disease surveillance notification",
-            "83": "Disease surveillance response ",
+            "83": "Disease surveillance response",
             "84": "Disease surveillance integration",
             "85": "Analysis for disease surveillance",
             "86": "Disease surveillance reporting",
             "87": "Decisions related to  disease surveillance",
             "88": "Disease surveillance evaluation",
-            "89": "Disease surveillance governance ",
+            "89": "Disease surveillance governance",
             "90": "Other"
         },
         "14": {
