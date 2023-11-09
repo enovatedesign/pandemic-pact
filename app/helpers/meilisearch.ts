@@ -7,6 +7,8 @@ export interface MeilisearchRequestBody {
     highlightPreTag?: string
     highlightPostTag?: string
     limit?: number
+    attributesToCrop?: string[]
+    cropLength?: number
 }
 
 export async function meilisearchRequest(index: string, body: MeilisearchRequestBody) {

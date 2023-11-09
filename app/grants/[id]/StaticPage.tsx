@@ -204,7 +204,7 @@ export default function StaticPage({grant}: Props) {
                                 </Card>
                             }
 
-                            {publicationList.length > 0 &&
+                            {publicationList?.length > 0 &&
                                 <div className='flex flex-col space-y-4'>
                                     <Title className={titleClasses}>Publications</Title>
 
