@@ -33,9 +33,9 @@ export default function Header({className}: {className?: string}) {
     )
 
     const [showMobileNav, setShowMobileNav] = useState(false)
-    
+
     const buttonClasses = [
-        showMobileNav ? 'bg-primary rounded-full transition duration-300' : 'transparent rounded-full transition duration-300'
+        showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1100ms]' : 'transparent rounded-full transition duration-300'
     ].join(' ')
 
     const mobileTransitionClasses = [
@@ -65,7 +65,7 @@ export default function Header({className}: {className?: string}) {
                             <span className="sr-only">Menu</span>
                             <MenuIcon className="w-8 h-8 fill-white"/>
                         </button>
-
+                    
                         <nav className="hidden px-10 py-3 lg:block">
                             <ul className="flex space-x-10">
                                 {links.map(link => (
@@ -74,13 +74,12 @@ export default function Header({className}: {className?: string}) {
                             </ul>
                         </nav>
 
-
                         <div className={`${mobileTransitionClasses} h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map(link => (
                                         <NavItem key={link.label} {...link} />
                                     ))}
-                                </ul>
+                            </ul>
                         </div>
                     </div>
                 </div>
