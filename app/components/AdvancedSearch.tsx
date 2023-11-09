@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
+import { reportWebVitals } from "next/dist/build/templates/pages";
 
 const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
@@ -14,8 +15,16 @@ const AdvancedInputRow = ({children}) => {
     const [multiValue, setMultiValue] = useState("")
     const selectItems = Object.keys(selectOptions)
     const multiSelectItems = selectOptions[value]
-    // const [and, setAnd] = useState(true)
+    const [and, setAnd] = useState(true)
 
+    const andButtonTextClasses = [
+        and ? 'order-first left-3' : 'order-last right-4'
+    ].join(' ')
+
+    const andButtonDivClasses = [
+        and ? 'right-2' : 'left-2'
+    ].join(' ')
+    
     return (
         <div className="flex space-x-8">
 
@@ -46,8 +55,15 @@ const AdvancedInputRow = ({children}) => {
                             </MultiSelectItem>
                         )
                     })}
-                    
                 </MultiSelect>
+   
+                    <button onClick={() => setAnd(!and)} className="relative flex items-center bg-secondary w-48 rounded-full">
+                            <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+
+                            <p className={`${andButtonTextClasses} text-primary absolute uppercase `}>
+                                {and ? 'and' : 'or'}
+                            </p>
+                    </button>
             </div>
                 <div className="flex items-center">
                     {children}
@@ -86,7 +102,6 @@ const AdvancedSearch = () => {
                             {/* Add remove button function here */}
                             <button
                                 className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                onClick=""                            
                             >
                                 <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                             </button>
