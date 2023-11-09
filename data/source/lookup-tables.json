@@ -228,8 +228,8 @@
         "1": "Pathogen: natural history, transmission and diagnostics",
         "2": "Animal and environmental research and research on diseases vectors",
         "3": "Epidemiological studies",
-        "4": "Clinical characterisation and management  in humans",
-        "5": "Infection prevention and control  (including health care workers' protection)",
+        "4": "Clinical characterisation and management in humans",
+        "5": "Infection prevention and control (including health care workers' protection)",
         "6": "Therapeutics research, development and implementation",
         "7": "Vaccines research, development and implementation",
         "8": "Research to inform ethical issues",
@@ -300,7 +300,7 @@
             "44": "Vaccine logistics and supply chains and distribution strategies",
             "45": "Vaccine design and administration",
             "46": "Vaccine trial design and infrastructure",
-            "47": "Adverse events associated with  immunization",
+            "47": "Adverse events associated with immunization",
             "48": "Characterisation of vaccine-induced immunity",
             "49": "Other"
         },
@@ -352,7 +352,7 @@
             "84": "Disease surveillance integration",
             "85": "Analysis for disease surveillance",
             "86": "Disease surveillance reporting",
-            "87": "Decisions related to  disease surveillance",
+            "87": "Decisions related to disease surveillance",
             "88": "Disease surveillance evaluation",
             "89": "Disease surveillance governance",
             "90": "Other"
