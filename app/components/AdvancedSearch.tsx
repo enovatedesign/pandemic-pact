@@ -22,13 +22,13 @@ const AdvancedInputRow = ({children}) => {
     ].join(' ')
 
     const andButtonDivClasses = [
-        and ? 'right-2' : 'left-2'
+        and ? 'right-1 transition duration-300' : 'right-1 -translate-x-[50px] transition duration-300'
     ].join(' ')
 
     return (
         <div className="flex space-x-8">
 
-            <div className="w-full text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
+            <div className="w-full text-secondary flex flex-col lg:flex-row lg:items-center gap-8 bg-primary rounded-2xl p-4">
                 <Select value={value} onValueChange={setValue} enableClear={false}>
                     {selectItems.map((key, index) => {
                         
@@ -57,10 +57,10 @@ const AdvancedInputRow = ({children}) => {
                         )
                     })}
                 </MultiSelect>
-                <button onClick={() => setAnd(!and)} className="relative flex items-center bg-secondary w-48 rounded-full">
+                <button onClick={() => setAnd(!and)} className="h-8 relative flex items-center bg-secondary w-48 rounded-full">
                         <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
-                        <p className={`${andButtonTextClasses} text-primary absolute uppercase `}>
+                        <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
                             {and ? 'and' : 'or'}
                         </p>
                 </button>
