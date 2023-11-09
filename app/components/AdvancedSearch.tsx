@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
@@ -16,7 +16,6 @@ const camelToSentence = (word: string) => {
 const AdvancedInputRow = ({children, index} : Props) => {
     
     const [value, setValue] = useState("Regions")
-    const [multiValue, setMultiValue] = useState("")
     const selectItems = Object.keys(selectOptions)
     const multiSelectItems = selectOptions[value]
     const [and, setAnd] = useState(true)
@@ -32,11 +31,9 @@ const AdvancedInputRow = ({children, index} : Props) => {
 
     return (
         <div className="flex space-x-8">
-
             <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-tremor-content-subtle rounded-2xl p-4">
                 <Select value={value} onValueChange={setValue} enableClear={false}>
                     {selectItems.map((key, index) => {
-                        
                         return (
                             <SelectItem
                                 value={key}
@@ -96,12 +93,6 @@ const AdvancedSearch = () => {
         setRows([...rows, <AdvancedInputRow key={newKey}/>])
     }
 
-    const removeRow = (index) => {
-        const updatedRows = [...rows]
-        updatedRows.splice(index, 1)
-        setRows(updatedRows)
-    }
-
     return (
         <div className=" w-full bg-white rounded-2xl border-2 border-secondary p-8">
             <div className='flex justify-between pb-8'>
@@ -130,6 +121,12 @@ const AdvancedSearch = () => {
             <div className="flex flex-col gap-2">
                 {rows.map((row, index) => {
 
+                    const removeRow = (key: number) => {
+                        const updatedRows = [...rows]
+                        updatedRows.splice(key, 1)
+                        setRows(updatedRows)
+                    }
+
                     return (
                         <>
                             <div>
@@ -138,11 +135,11 @@ const AdvancedSearch = () => {
                                         {globalAnd ? 'and' : 'or'}
                                     </p>
                                 )}
-                                <AdvancedInputRow key={row} index={index}>
+                                <AdvancedInputRow>
                                     {/* Add remove button function here */}
                                     <button
                                         className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                        onClick={() => removeRow(row)}
+                                        onClick={() => removeRow(index)}
                                     >
                                         <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                                     </button>
