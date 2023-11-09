@@ -9,18 +9,17 @@ const camelToSentence = (word: string) => {
   }
 
 const AdvancedInputRow = () => {
+    
+    const [value, setValue] = useState("Regions")
 
-    const keys = Object.keys(selectOptions)
-
-    const [value, setValue] = useState(null)
-    console.log(value)
-
+    const selectItemKeys = Object.keys(selectOptions)
+    const multiSelectValues = selectOptions[value]
     // const [and, setAnd] = useState(true)
     
     return (
         <div className="text-secondary flex flex-col lg:flex-row gap-8 bg-primary rounded-2xl p-4">
             <Select value={value} onValueChange={setValue}>
-                {keys.map((key, index) => {
+                {selectItemKeys.map((key, index) => {
                     
                     return (
                         <SelectItem
@@ -34,7 +33,13 @@ const AdvancedInputRow = () => {
                 })}
             </Select>
             <MultiSelect>
-
+                {multiSelectValues.map(data => {
+                    return (
+                        <MultiSelectItem>
+                            {data.value}
+                        </MultiSelectItem>
+                    )
+                })}
                 
             </MultiSelect>
             {/* <button
