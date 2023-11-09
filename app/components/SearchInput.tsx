@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from 'react'
 import {useRouter, usePathname, useSearchParams} from 'next/navigation'
-import { Grid, Col } from '@tremor/react'
+import {Grid, Col} from '@tremor/react'
 import {SearchIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
 import MultiSelect from "./MultiSelect"
@@ -142,7 +142,11 @@ export default function SearchInput({setSearchResponse}: Props) {
     ])
 
     useEffect(() => {
-        const searchRequestBody = highlightedResultsRequestBody(sharedRequestBody)
+        const searchRequestBody = highlightedResultsRequestBody({
+            ...sharedRequestBody,
+            attributesToCrop: ['Abstract'],
+            cropLength: 50,
+        })
 
         meilisearchRequest('grants', searchRequestBody).then(data => {
             setSearchResponse(data)
@@ -177,19 +181,19 @@ export default function SearchInput({setSearchResponse}: Props) {
                             value={searchQuery}
                             className="block w-full rounded-md border-0 pl-4 py-1 md:py-2 text-gray-900 shadow-sm ring-2 placeholder:text-gray-400 focus:ring-4 ring-secondary focus:ring-inset text-sm md:text-lg xl:text-xl sm:leading-6"
                         />
-                        <SearchIcon className='w-6 h-6 md:w-8 md:h-8 text-secondary absolute right-4'/>
+                        <SearchIcon className='w-6 h-6 md:w-8 md:h-8 text-secondary absolute right-4' />
                     </div>
                 </Col>
 
-                
+
                 <div className='col-span-2'>
                     <AnimateHeight
                         delay={!advancedSearchShow ? 400 : 0}
                         duration={400}
                         height={advancedSearchShow ? 0 : 'auto'}
-                    >   
+                    >
 
-                        <div  className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2">
                             <Col>
                                 <MultiSelect
                                     options={selectOptions.Disease}
@@ -200,7 +204,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                 />
                             </Col>
 
-                            <Col>   
+                            <Col>
                                 <MultiSelect
                                     options={selectOptions.Pathogen}
                                     selectedOptions={filters.Pathogen}
@@ -209,7 +213,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     className='border-secondary border-2 rounded-xl'
                                 />
                             </Col>
-                        
+
 
                             <Col>
                                 <MultiSelect
@@ -218,7 +222,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
                                     placeholder="All Research Institution Countries"
                                     className='border-secondary border-2 rounded-xl'
-                                    />
+                                />
                             </Col>
                             <Col>
                                 <MultiSelect
@@ -237,7 +241,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
                                     placeholder="All Funder Countries"
                                     className='border-secondary border-2 rounded-xl'
-                                    />
+                                />
                             </Col>
 
                             <Col>
@@ -247,8 +251,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
                                     placeholder="All Funder Regions"
                                     className='border-secondary border-2 rounded-xl'
-                                    />
-                            </Col>  
+                                />
+                            </Col>
                         </div>
                     </AnimateHeight>
                 </div>
@@ -256,36 +260,36 @@ export default function SearchInput({setSearchResponse}: Props) {
 
                 {/* End of standard search */}
                 <AnimateHeight
-                        delay={advancedSearchShow ? 400 : 0}
-                        duration={400}
-                        height={!advancedSearchShow ? 0 : 'auto'}
-                        className='col-span-2'
-                    >  
+                    delay={advancedSearchShow ? 400 : 0}
+                    duration={400}
+                    height={!advancedSearchShow ? 0 : 'auto'}
+                    className='col-span-2'
+                >
                     <AdvancedSearch />
                 </AnimateHeight>
 
 
-                    <Col
-                        numColSpan={2}
-                        className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
-                        >
-                        <p className="text-secondary text-lg ">Total Hits: {totalHits}</p>
+                <Col
+                    numColSpan={2}
+                    className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
+                >
+                    <p className="text-secondary text-lg ">Total Hits: {totalHits}</p>
 
-                        <div className="space-x-4">
-                            <Button
-                                colour='secondary'
-                                onClick={() => setAdvancedSearchShow(!advancedSearchShow)}
-                            >
-                                {advancedSearchShow ? 'Normal Search' : 'Advanced search'}
-                            </Button>
-                            <ExportToCsvButton
-                                meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
-                                filename="search-results-export"
-                                title='Download Data'
-                                >
-                            </ExportToCsvButton>
-                        </div>
-                    </Col>
+                    <div className="space-x-4">
+                        <Button
+                            colour='secondary'
+                            onClick={() => setAdvancedSearchShow(!advancedSearchShow)}
+                        >
+                            {advancedSearchShow ? 'Normal Search' : 'Advanced search'}
+                        </Button>
+                        <ExportToCsvButton
+                            meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
+                            filename="search-results-export"
+                            title='Download Data'
+                        >
+                        </ExportToCsvButton>
+                    </div>
+                </Col>
             </Grid >
         </div>
     )
