@@ -9,16 +9,28 @@ export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     console.log(pathname)
     const links = getLinksArray()
+    
+    const [showMobileNav, setShowMobileNav] = useState(false)
+    
+    const bodyEl = document.querySelector('body')
+    const handleNav = () => {
+        setShowMobileNav(!showMobileNav)
+        bodyEl?.classList.toggle('overflow-y-hidden')
+    }
+
+    const mobileAnimationClasses = [
+        showMobileNav ? 'translate-x-none transition duration-300 delay-[1200ms]' : '-translate-x-[800px] transition duration-300'
+    ].join(' ')
 
     const NavItem = (link: {label: string, href: string}) => (
-        <li key={link.href}>
+        <p key={link.href}>
             <Link
                 href={link.href}
                 className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'}`}
             >
                 {link.label}
             </Link>
-        </li>
+        </p>
     )
 
     const Logo = () => (
@@ -30,15 +42,6 @@ export default function Header({className}: {className?: string}) {
             className="w-36 h-auto lg:w-48"
         />
     )
-
-    const [showMobileNav, setShowMobileNav] = useState(false)
-    
-    const bodyEl = document.querySelector('body')
-    
-    const handleNav = () => {
-        setShowMobileNav(!showMobileNav)
-        bodyEl?.classList.toggle('overflow-y-hidden')
-    }
 
     const buttonClasses = [
         showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1100ms]' : 'transparent rounded-full transition duration-300'
@@ -75,7 +78,9 @@ export default function Header({className}: {className?: string}) {
                         <nav className="hidden px-10 py-3 lg:block">
                             <ul className="flex space-x-10">
                                 {links.map(link => (
-                                        <NavItem key={link.label} {...link}/>
+                                        <li>
+                                            <NavItem key={link.label} {...link}/>
+                                        </li>
                                     ))}
                             </ul>
                         </nav>
@@ -83,7 +88,9 @@ export default function Header({className}: {className?: string}) {
                         <div className={`${mobileTransitionClasses} -z-50 h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map(link => (
-                                        <NavItem key={link.label} {...link}/>
+                                        <li className={`${mobileAnimationClasses} w-full`}>
+                                            <NavItem key={link.label} {...link}/>
+                                        </li>
                                     ))}
                             </ul>
                         </div>

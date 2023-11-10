@@ -6,6 +6,9 @@ interface Props {
 }
 
 export default function Nav({selected}: Props) {
+
+
+    
     return (
         <div
             className="tremor-TabList-root justify-start overflow-x-clip flex border-tremor-border dark:border-dark-tremor-border space-x-4 border-b" role="tablist"

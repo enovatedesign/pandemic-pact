@@ -72,7 +72,7 @@ export default function StaticPage({grant}: Props) {
     const [firstItemIndex, setFirstItemIndex] = useState(0)
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
-    console.log(grant.Abstract)
+
     const mastheadContent = () => {
         return (
             <>
