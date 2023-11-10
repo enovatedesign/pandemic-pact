@@ -19,7 +19,7 @@ export default function Header({className}: {className?: string}) {
     }
 
     const mobileAnimationClasses = [
-        showMobileNav ? 'translate-x-none transition duration-300 delay-[1200ms]' : '-translate-x-[800px] transition duration-300'
+        showMobileNav ? 'translate-x-none transition duration-300 delay-[1100ms]' : '-translate-x-[800px] transition duration-300'
     ].join(' ')
 
     const NavItem = (link: {label: string, href: string}) => (
@@ -44,11 +44,11 @@ export default function Header({className}: {className?: string}) {
     )
 
     const buttonClasses = [
-        showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1100ms]' : 'transparent rounded-full transition duration-300'
+        showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1200ms]' : 'transparent rounded-full transition duration-300'
     ].join(' ')
 
     const mobileTransitionClasses = [
-        showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000'
+        showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000 delay-300'
     ].join(' ')
 
     return (
