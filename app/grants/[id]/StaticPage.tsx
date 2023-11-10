@@ -9,6 +9,7 @@ import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
+import '../../css/components/results-table.css'
 
 interface Props {
     grant: any
@@ -71,7 +72,7 @@ export default function StaticPage({grant}: Props) {
     const [firstItemIndex, setFirstItemIndex] = useState(0)
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
-
+    console.log(grant.Abstract)
     const mastheadContent = () => {
         return (
             <>
