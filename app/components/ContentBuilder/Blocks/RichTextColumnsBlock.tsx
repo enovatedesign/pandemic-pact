@@ -1,7 +1,6 @@
+import Button from "../../Button"
 import BlockWrapper from "../BlockWrapper"
-import Image from "next/image"
-import RichText from "../Common/RichText"
-import ButtonLink from "../Common/Button"
+import Card from "../Common/Card"
 
 type Props = {
     block: {
@@ -40,36 +39,20 @@ const RichTextColumnsBlock = ({block} : Props) => {
                 <div className={gridClasses}>
                     {columns.map((column, index) => {
                         
-                        const image = column.image[0] ?? null
-                        const text = column.text ?? null
                         const button = column.button ?? null
+
                         return (
                             <>
-                                <div className="flex flex-col space-y-6 items-start bg-white shadow-lg rounded-md" key={index}>
-                                    {image && (
-                                        <Image 
-                                            src={image.url}
-                                            height={image.height}
-                                            width={image.width}
-                                            alt={image.alt}
-                                            className="rounded-t-md"
-                                            loading='lazy'
-                                        />
+                                <Card entry={column} image={column.image[0]}>
+                                    {button?.url && (
+                                        <Button 
+                                            size="small"
+                                            href={button.url}
+                                        >
+                                            Read more
+                                        </Button>
                                     )}
-
-                                    <div className="p-6 flex flex-col justify-between h-full space-y-4 items-start">
-                                        {text && (
-                                            <RichText text={text} />
-                                            )}
-
-                                        {button.url && (
-                                            <ButtonLink 
-                                            linkTo={button.url}
-                                            title={button.text}
-                                            />
-                                            )}
-                                    </div>
-                                </div>
+                                </Card>
                             </>
                         )
                     })}
