@@ -119,7 +119,7 @@ export default function StaticPage({grant}: Props) {
                                 >  
                                     <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider'/>
                                         {!abstractShow && (
-                                            <div className='absolute inset-0 z-10 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                            <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
                                         )}
                                     </AnimateHeight>
 
