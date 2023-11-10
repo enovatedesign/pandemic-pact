@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import {useState} from 'react'
 import AnimateHeight from 'react-animate-height';
-import { ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon } from "@heroicons/react/solid"
+import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon} from "@heroicons/react/solid"
 import Link from 'next/link'
-import { Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
+import {Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function StaticPage({grant}: Props) {
-    
+
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -49,25 +49,25 @@ export default function StaticPage({grant}: Props) {
             metric: grant.ResearchCat[0],
         },
     ]
-    
+
     const keyFactsSubCategories = [
         {
             text: 'Research Subcategory',
-            metric: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui diam, feugiat fringilla dignissim id, tempor quis eros.'
+            metric: grant.ResearchSubcat[0],
         },
         {
             text: 'Pandemic Pact Data Points',
             metric: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui diam, feugiat fringilla dignissim id, tempor quis eros.',
         },
     ]
-    
+
     const titleClasses = [
         'text-secondary uppercase tracking-widest text-3xl font-bold'
     ].join(' ')
 
     const [abstractShow, setAbstractShow] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
-    
+
     const limit = 10
     const [firstItemIndex, setFirstItemIndex] = useState(0)
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
@@ -97,10 +97,10 @@ export default function StaticPage({grant}: Props) {
         <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
             <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
                 <div className="container mx-auto my-12 relative">
-                    
+
                     <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
                         <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
-                            <ChevronLeftIcon className="w-4 h-4"/>
+                            <ChevronLeftIcon className="w-4 h-4" />
                         </div>
                         <span className="uppercase tracking-wider font-medium">Grant search</span>
                     </Link>
@@ -116,18 +116,18 @@ export default function StaticPage({grant}: Props) {
                                     duration={300}
                                     height={abstractShow ? 'auto' : 230}
                                     className='relative'
-                                >  
-                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider'/>
-                                        {!abstractShow && (
-                                            <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
-                                        )}
-                                    </AnimateHeight>
+                                >
+                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' />
+                                    {!abstractShow && (
+                                        <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                    )}
+                                </AnimateHeight>
 
                                 <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
                                     <span className='inline-flex text-secondary'>
                                         {abstractShow ? "read less" : "read more"}
                                     </span>
-                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`}/>
+                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
                                 </button>
                             </div>
 
@@ -177,7 +177,7 @@ export default function StaticPage({grant}: Props) {
                                                     index === 0 ? 'border-r-2' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col justify-between space-y-2`}>
+                                                    <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col space-y-2`}>
                                                         <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {category.text}
                                                         </p>
@@ -191,7 +191,7 @@ export default function StaticPage({grant}: Props) {
                                     </div>
                                 </div>
 
-                                        
+
                             </div>
 
                             {grant.LaySummary &&
@@ -229,14 +229,14 @@ export default function StaticPage({grant}: Props) {
                                                                 dangerouslySetInnerHTML={{__html: link.title}}
                                                             ></h3>
                                                             <button className="self-start">
-                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`}/>
+                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`} />
                                                             </button>
                                                         </a>
-                                                        
+
                                                         <AnimateHeight
                                                             duration={300}
                                                             height={activeIndex === index ? 'auto' : 0}
-                                                        >  
+                                                        >
                                                             <ul className="py-6 flex flex-col gap-4">
                                                                 <li className="flex flex-col gap-1">
                                                                     <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Authors</h4>
@@ -267,7 +267,7 @@ export default function StaticPage({grant}: Props) {
                                                                     customClasses="flex items-center justify-center self-start gap-2"
                                                                 >
                                                                     <span>View at Europe PMC</span>
-                                                                    <ExternalLinkIcon className="w-5 h-5"/>
+                                                                    <ExternalLinkIcon className="w-5 h-5" />
                                                                 </Button>
                                                             </div>
                                                         </AnimateHeight>
@@ -279,7 +279,7 @@ export default function StaticPage({grant}: Props) {
                                     </div>
 
                                     {grant.PubMedLinks?.length > 10 && (
-                                        <Pagination 
+                                        <Pagination
                                             totalPosts={grant.PubMedLinks?.length}
                                             postsPerPage={limit}
                                             setFirstItemIndex={setFirstItemIndex}
@@ -291,7 +291,7 @@ export default function StaticPage({grant}: Props) {
                             }
                         </Col >
 
-                        
+
                     </Grid>
                 </div>
             </Layout>
