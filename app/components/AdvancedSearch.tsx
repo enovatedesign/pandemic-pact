@@ -113,7 +113,7 @@ const AdvancedSearch = () => {
                 <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
                         <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
-                        <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
+                        <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
                             {globalAnd ? 'and' : 'or'}
                         </p>
                 </button>
@@ -131,7 +131,7 @@ const AdvancedSearch = () => {
                         <>
                             <div>
                                 {index > 0 && (
-                                    <p className="text-center uppercase tracking-wider py-1">
+                                    <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[156px]">
                                         {globalAnd ? 'and' : 'or'}
                                     </p>
                                 )}
