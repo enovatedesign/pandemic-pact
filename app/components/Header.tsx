@@ -4,7 +4,6 @@ import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
 import { useState } from 'react'
-import AnimateHeight from 'react-animate-height'
 
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
@@ -34,8 +33,11 @@ export default function Header({className}: {className?: string}) {
 
     const [showMobileNav, setShowMobileNav] = useState(false)
     
+    const bodyEl = document.querySelector('body')
+    
     const handleNav = () => {
         setShowMobileNav(!showMobileNav)
+        bodyEl?.classList.toggle('overflow-y-hidden')
     }
 
     const buttonClasses = [
@@ -78,7 +80,7 @@ export default function Header({className}: {className?: string}) {
                             </ul>
                         </nav>
 
-                        <div className={`${mobileTransitionClasses} h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
+                        <div className={`${mobileTransitionClasses} -z-50 h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map(link => (
                                         <NavItem key={link.label} {...link}/>
