@@ -74,7 +74,7 @@ const Pagination = ({
                 <p className={`${leftFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
                     <span>.</span><span>.</span><span>.</span>
                 </p>
-                <div className="hidden md:block">
+                <div className="hidden md:flex md:space-x-4 ">
                     {filteredPages.map(number => {
                         const activeButtonClasses = [
                             page === number ? "bg-primary text-white" :  "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
