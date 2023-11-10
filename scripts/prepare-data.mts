@@ -85,7 +85,7 @@ async function main() {
             const researchInstitution = faker.helpers.arrayElement(researchInstitutions)
 
             const researchCat = faker.helpers.objectKey(lookupTables.ResearchCat)
-            const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat[researchCat])
+            const researchSubcat = faker.helpers.objectKey(lookupTables.ResearchSubcat)
 
             const numericGrantAmount = parseInt(
                 sourceGrant.GrantAmountConverted.replace(/[^0-9]/g, '')
@@ -195,34 +195,30 @@ async function main() {
         completeDataset.map(({GrantID}: {GrantID: number}) => GrantID),
     )
 
-    completeDataset.forEach((grant: {GrantID: number, ResearchCat: string[]}) => {
+    completeDataset.forEach((grant: any) => {
         const pathname = `grants/${grant.GrantID}.json`
 
         const researchCats = grant.ResearchCat.map(
             (researchCat: string) => lookupTables.ResearchCat[researchCat]
-        )
+        ).filter((researchCat: string) => !!researchCat)
+
+        const researchSubcats = grant.ResearchSubcat.map(
+            (researchSubcat: string) => lookupTables.ResearchSubcat[researchSubcat]
+        ).filter((researchSubcat: string) => !!researchSubcat)
 
         writeToDistJsonFile(
             pathname,
-            {...grant, ResearchCat: researchCats},
+            {
+                ...grant,
+                ResearchCat: researchCats,
+                ResearchSubcat: researchSubcats,
+            },
             false,
         )
     })
 
     let selectOptions: any = _.mapValues(lookupTables, (lookupTable: Dictionary<string>, lookupTableName: string) => {
-        let options: Array<{label: string, value: string, parent?: string}> = []
-
-        if (lookupTableName === 'ResearchSubcat') {
-            options = _.map(
-                lookupTable,
-                (subLookupTable, parent) => _.map(
-                    subLookupTable,
-                    (label, value) => ({label, value: String(value), parent}),
-                ),
-            ).flat()
-        } else {
-            options = _.map(lookupTable, (label: string, value: string) => ({label, value}))
-        }
+        let options = _.map(lookupTable, (label: string, value: string) => ({label, value}))
 
         // NOTE we are using `label` as value for now because everything except
         // ResearchCat and ResearchSubcat is currently a text string, but
