@@ -1,7 +1,16 @@
 import Image from "next/image";
 import NewsTags from "../News/NewsTags";
+import RichText from "./RichText";
 
-const Card = ({entry, tags, children}) => {
+type Props = {
+    entry: any,
+    tags: boolean, 
+    children: any,
+    image: any,
+    hover: boolean,
+}
+
+const Card = ({entry, tags, children, image, hover = true}: Props) => {
     
     const { 
         title, 
@@ -10,35 +19,46 @@ const Card = ({entry, tags, children}) => {
         summary, 
         index, 
         url,
-        externalLink
+        externalLink,
+        text,
     } = entry
 
-    const thumbnailImage = entry.thumbnailImage[0] ?? null
+    const cardImage = entry.thumbnailImage ? entry.thumbnailImage[0] : image 
 
-    //Code so links are within images
+    const hoverClasses = [
+        hover ? 'hover:shadow-lg hover:scale-105 transition duration-300' : ''
+    ].join(' ')
+
     return (
         <li key={index} 
-            className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700" 
+            className={`${hoverClasses} flex flex-col bg-white border-2 border-gray-200  rounded-2xl overflow-hidden dark:bg-gray-800 dark:border-gray-700`}
         >   
             {url || externalLink ? (
                 <a href={url || externalLink}>
-                    <Image 
-                        src={thumbnailImage.url}
-                        alt={thumbnailImage.alt}
-                        width={thumbnailImage.width}
-                        height={thumbnailImage.height}
-                        loading="lazy"
-                    />
+                    {cardImage?.url && (
+                        <Image 
+                            src={cardImage.url}
+                            alt={cardImage.alt}
+                            width={cardImage.width}
+                            height={cardImage.height}
+                            className="w-full"
+                            loading="lazy"
+                        />
+                    )}
                 </a>                
             ) : (
-                <Image 
-                        src={thumbnailImage.url}
-                        alt={thumbnailImage.alt}
-                        width={thumbnailImage.width}
-                        height={thumbnailImage.height}
-                        className="w-full"
-                        loading="lazy"
-                    />
+                <>
+                    {cardImage?.url && (
+                        <Image 
+                            src={cardImage.url}
+                            alt={cardImage.alt}
+                            width={cardImage.width}
+                            height={cardImage.height}
+                            className="w-full"
+                            loading="lazy"
+                        />
+                    )}
+                </>
             )}
             
             <div className="flex flex-col gap-3 p-6 h-full">
@@ -62,13 +82,18 @@ const Card = ({entry, tags, children}) => {
                     </p>
                 )}
 
+                {text && (
+                    <RichText text={text}>
+                        {text}
+                    </RichText>
+                )}
+
                 <p className="mt-auto self-end">
                     {children && (
                         <>
                             {children}
                         </>
                     )}
-
                 </p>
                 
                 {tags && (
