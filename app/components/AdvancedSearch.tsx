@@ -11,28 +11,66 @@ const camelToSentence = (word: string) => {
   type Props = {
     children: any
     index: number
+    row: any
   }
 
-const AdvancedInputRow = ({children, index} : Props) => {
+const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
     
-    const [value, setValue] = useState("Regions")
+    const [ localRow, setLocalRow ] = useState(row)
     const selectItems = Object.keys(selectOptions)
-    const multiSelectItems = selectOptions[value]
-    const [and, setAnd] = useState(true)
 
     const andButtonTextClasses = [
-        and ? 'order-first left-3' : 'order-last right-4'
+        localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4'
     ].join(' ')
 
     const andButtonDivClasses = [
-        and ? 'right-1 transition duration-300' : 'left-1 transition duration-300'
+        localRow.logicalAnd ? 'right-1 transition duration-300' : 'left-1 transition duration-300'
     ].join(' ')
 
+    const onSelectChange = (value) => {
+        const newRow = {
+            ...localRow,
+            field: value,
+            values: [],
+        }
+        setLocalRow(newRow)
+        setRows(
+            rows.map(
+                globalRow =>  (globalRow.key === newRow.key) ? newRow : globalRow
+            ),
+        )
+    }
+
+    const onMultiSelectChange = (values) => {
+        const newRow = {
+            ...row,
+            values,
+        }
+        setLocalRow(newRow)
+        setRows(
+            rows.map(
+                globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow
+            )
+        )
+    }
+
+    const onLightSwitchChange = () => {
+        const newRow = {
+            ...row,
+            logicalAnd: !localRow.logicalAnd,
+        }
+        setLocalRow(newRow)
+        setRows(
+            rows.map(
+                globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow
+            )
+        )
+    }
 
     return (
         <div className="flex space-x-8">
             <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-tremor-content-subtle rounded-2xl p-4">
-                <Select value={value} onValueChange={setValue} enableClear={false}>
+                <Select value={localRow.field} onValueChange={onSelectChange} enableClear={false}>
                     {selectItems.map((key, index) => {
                         return (
                             <SelectItem
@@ -46,11 +84,12 @@ const AdvancedInputRow = ({children, index} : Props) => {
                         )
                     })}
                 </Select>
-                <MultiSelect >
-                    {multiSelectItems.map((value, index) => {
+
+                <MultiSelect value={localRow.values} onValueChange={onMultiSelectChange}>
+                    {selectOptions[localRow.field].map((value, index) => {
                         return (
                             <MultiSelectItem
-                                value={value}
+                                value={value.value}
                                 key={index}
                                 className="cursor-pointer"
                             >
@@ -59,11 +98,12 @@ const AdvancedInputRow = ({children, index} : Props) => {
                         )
                     })}
                 </MultiSelect>
-                <button onClick={() => setAnd(!and)} className="h-8 relative flex items-center bg-secondary w-20 md:w-48 rounded-full">
+
+                <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-48 rounded-full">
                         <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
                         <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
-                            {and ? 'and' : 'or'}
+                            {localRow.logicalAnd ? 'and' : 'or'}
                         </p>
                 </button>
             </div>
@@ -75,8 +115,14 @@ const AdvancedInputRow = ({children, index} : Props) => {
 }
 
 const AdvancedSearch = () => {
-    
-    const [rows, setRows] = useState([<AdvancedInputRow key={1}/>])
+    const defaultRow = () => ({
+        field: 'Regions',
+        values: [],
+        logicalAnd: false,
+        key: new Date().getTime(),
+    })
+
+    const [rows, setRows] = useState([defaultRow()])
     const [globalAnd, setGlobalAnd] = useState(true)
 
     const globalAndButtonTextClasses = [
@@ -87,10 +133,8 @@ const AdvancedSearch = () => {
         globalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] transition duration-300'
     ].join(' ')
 
-
     const addRow = () => {
-        const newKey = rows.length
-        setRows([...rows, <AdvancedInputRow key={newKey}/>])
+        setRows([...rows, defaultRow()])
     }
 
     return (
@@ -121,21 +165,21 @@ const AdvancedSearch = () => {
             <div className="flex flex-col gap-2">
                 {rows.map((row, index) => {
 
-                    const removeRow = (key: number) => {
+                    const removeRow = (index: number) => {
                         const updatedRows = [...rows]
-                        updatedRows.splice(key, 1)
+                        updatedRows.splice(index, 1)
                         setRows(updatedRows)
                     }
 
                     return (
                         <>
-                            <div>
+                            <div key={row.key}>
                                 {index > 0 && (
                                     <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[156px]">
                                         {globalAnd ? 'and' : 'or'}
                                     </p>
                                 )}
-                                <AdvancedInputRow>
+                                <AdvancedInputRow row={row} rows={rows} setRows={setRows}>
                                     {/* Add remove button function here */}
                                     <button
                                         className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
