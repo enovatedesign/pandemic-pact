@@ -77,8 +77,8 @@ export default function Header({className}: {className?: string}) {
                     
                         <nav className="hidden px-10 py-3 lg:block">
                             <ul className="flex space-x-10">
-                                {links.map(link => (
-                                        <li>
+                                {links.map((link, index) => (
+                                        <li key={index}>
                                             <NavItem key={link.label} {...link}/>
                                         </li>
                                     ))}
@@ -87,8 +87,8 @@ export default function Header({className}: {className?: string}) {
 
                         <div className={`${mobileTransitionClasses} -z-50 h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
-                                {links.map(link => (
-                                        <li className={`${mobileAnimationClasses} w-full`}>
+                                {links.map((link, index) => (
+                                        <li key={index} className={`${mobileAnimationClasses} w-full`}>
                                             <NavItem key={link.label} {...link}/>
                                         </li>
                                     ))}
