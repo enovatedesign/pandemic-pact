@@ -33,7 +33,9 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
             field: value,
             values: [],
         }
+
         setLocalRow(newRow)
+
         setRows(
             rows.map(
                 globalRow =>  (globalRow.key === newRow.key) ? newRow : globalRow
@@ -46,7 +48,9 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
             ...row,
             values,
         }
+
         setLocalRow(newRow)
+
         setRows(
             rows.map(
                 globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow
@@ -59,7 +63,9 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
             ...row,
             logicalAnd: !localRow.logicalAnd,
         }
+
         setLocalRow(newRow)
+        
         setRows(
             rows.map(
                 globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow

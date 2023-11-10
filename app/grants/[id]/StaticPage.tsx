@@ -45,7 +45,7 @@ export default function StaticPage({grant}: Props) {
         },
         {
             text: 'Research Category',
-            metric: 'Lorem Ipsum',
+            metric: grant.ResearchCat[0],
         },
     ]
     
@@ -159,7 +159,7 @@ export default function StaticPage({grant}: Props) {
                                                     index === 1 ? 'border-x-2 border-secondary/10' : ''
                                                 ].join(' ')
                                                 return (
-                                                    <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col justify-between space-y-2`}>
+                                                    <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2`}>
                                                         <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {subHeading.text}
                                                         </p>
