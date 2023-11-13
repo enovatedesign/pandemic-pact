@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
-import { teardownCrashReporter } from "next/dist/build/swc";
 
 type Props = {
     block: {
@@ -20,7 +19,7 @@ type Props = {
                 url: string,
                 width: number,
                 height: number,
-            }
+            }[],
             slideButton: {
                 url: string,
                 text: string,
@@ -29,7 +28,7 @@ type Props = {
                 url: string,
                 text: string,
             }
-        }
+        }[],
     }
 }
 
