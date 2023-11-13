@@ -88,7 +88,7 @@ export default function Header(className: string) {
 
                 </div>
 
-                <div className="mt-12 bg-white py-6 px-8 rounded-2xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
                         <FooterCopyrightStatement className={''} showCredit={true} />
                         <div className="print:hidden">

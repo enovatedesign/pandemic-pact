@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react'
 import {useRouter, usePathname, useSearchParams} from 'next/navigation'
 import {Grid, Col} from '@tremor/react'
-import {SearchIcon} from "@heroicons/react/solid"
+import {SearchIcon, SwitchHorizontalIcon} from "@heroicons/react/solid"
 import ExportToCsvButton from "./ExportToCsvButton"
 import MultiSelect from "./MultiSelect"
 import selectOptions from '../../data/dist/select-options.json'
@@ -163,25 +163,23 @@ export default function SearchInput({setSearchResponse}: Props) {
     const [advancedSearchShow, setAdvancedSearchShow] = useState(true)
     return (
         <div>
-            <div className="flex flex-col space-y-6 pb-6">
-                <h2 className='text-5xl text-secondary font-bold'>
-                    Grant search
-                </h2>
-                <p className='text-tremor-content text-lg'>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
-                </p>
-            </div>
             <Grid numItems={2} className="gap-2" >
                 <Col numColSpan={2}>
-                    <div className='w-full  flex items-center relative '>
+                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
                         <input
                             type='search'
                             placeholder="Search..."
                             onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
                             value={searchQuery}
-                            className="block w-full rounded-md border-0 pl-4 py-1 md:py-2 text-gray-900 shadow-sm ring-2 placeholder:text-gray-400 focus:ring-4 ring-secondary focus:ring-inset text-sm md:text-lg xl:text-xl sm:leading-6"
+                            className="block w-full placeholder:text-gray-400 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
-                        <SearchIcon className='w-6 h-6 md:w-8 md:h-8 text-secondary absolute right-4' />
+                        <Button
+                            size="xsmall"
+                            colour="grey"
+                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg">
+                            <span className="sr-only">Search</span>
+                            <SearchIcon className='w-6 h-6 text-secondary' />
+                        </Button>
                     </div>
                 </Col>
 
@@ -192,68 +190,67 @@ export default function SearchInput({setSearchResponse}: Props) {
                         duration={400}
                         height={advancedSearchShow ? 0 : 'auto'}
                     >
+                        <section className="w-full bg-white rounded-xl border-2 border-gray-200 p-8">
+                            <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
+                                Advanced Search
+                            </h3>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.Disease}
+                                        selectedOptions={filters.Disease}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
+                                        placeholder="All Diseases"
+                                    />
+                                </Col>
 
-                        <div className="grid grid-cols-2 gap-2">
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.Disease}
-                                    selectedOptions={filters.Disease}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
-                                    placeholder="All Diseases"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
-
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.Pathogen}
-                                    selectedOptions={filters.Pathogen}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
-                                    placeholder="All Pathogens"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.Pathogen}
+                                        selectedOptions={filters.Pathogen}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
+                                        placeholder="All Pathogens"
+                                    />
+                                </Col>
 
 
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.ResearchInstitutionCountry}
-                                    selectedOptions={filters.ResearchInstitutionCountry}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
-                                    placeholder="All Research Institution Countries"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.Regions}
-                                    selectedOptions={filters.ResearchInstitutionRegion}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
-                                    placeholder="All Research Institution Regions"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.ResearchInstitutionCountry}
+                                        selectedOptions={filters.ResearchInstitutionCountry}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
+                                        placeholder="All Research Institution Countries"
 
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.FunderCountry}
-                                    selectedOptions={filters.FunderCountry}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
-                                    placeholder="All Funder Countries"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
+                                    />
+                                </Col>
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.Regions}
+                                        selectedOptions={filters.ResearchInstitutionRegion}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
+                                        placeholder="All Research Institution Regions"
+                                    />
+                                </Col>
 
-                            <Col>
-                                <MultiSelect
-                                    options={selectOptions.Regions}
-                                    selectedOptions={filters.FunderRegion}
-                                    setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
-                                    placeholder="All Funder Regions"
-                                    className='border-secondary border-2 rounded-xl'
-                                />
-                            </Col>
-                        </div>
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.FunderCountry}
+                                        selectedOptions={filters.FunderCountry}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
+                                        placeholder="All Funder Countries"
+                                    />
+                                </Col>
+
+                                <Col>
+                                    <MultiSelect
+                                        options={selectOptions.Regions}
+                                        selectedOptions={filters.FunderRegion}
+                                        setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
+                                        placeholder="All Funder Regions"
+                                    />
+                                </Col>
+                            </div>
+                        </section>
                     </AnimateHeight>
                 </div>
 
@@ -273,19 +270,26 @@ export default function SearchInput({setSearchResponse}: Props) {
                     numColSpan={2}
                     className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
                 >
-                    <p className="text-secondary text-lg ">Total Hits: {totalHits}</p>
+                    <p className="text-secondary flex flex-row item-center gap-2 uppercase">
+                        <span>Total Hits:</span>
+                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">{totalHits}</span>
+                    </p>
 
-                    <div className="space-x-4">
+                    <div className="grow flex flex-row justify-end gap-2">
                         <Button
-                            colour='secondary'
+                            size="xsmall"
+                            colour='grey'
                             onClick={() => setAdvancedSearchShow(!advancedSearchShow)}
+                            customClasses="flex items-center justify-center self-start gap-2"
                         >
-                            {advancedSearchShow ? 'Normal Search' : 'Advanced search'}
+                            {advancedSearchShow ? 'Switch to Standard Search' : 'Switch to Advanced Search'}
+                            <SwitchHorizontalIcon className="w-5 h-5" />
                         </Button>
                         <ExportToCsvButton
                             meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
                             filename="search-results-export"
                             title='Download Data'
+                            size="xsmall"
                         >
                         </ExportToCsvButton>
                     </div>
