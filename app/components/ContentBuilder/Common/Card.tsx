@@ -9,13 +9,13 @@ type Props = {
     image: {
         altText: string,
         url: string, 
-        width: string,
-        height:string
+        width: number,
+        height: number,
     }[],
     hover: boolean,
 }
 
-const Card = ({entry, tags, children, image, hover = true}: Props) => {
+const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
     
     const { 
         title, 

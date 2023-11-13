@@ -27,7 +27,7 @@ const DownloadBlock = ({ block }: Props) => {
 	const downloadKind = element.kind ?? null
 	const downloadSize = element.size ?? null
 
-	function sizeCalculations(size) {
+	function sizeCalculations(size: number) {
 		const divided = size/1000
 		const rounded = Math.round(divided)
 		return rounded

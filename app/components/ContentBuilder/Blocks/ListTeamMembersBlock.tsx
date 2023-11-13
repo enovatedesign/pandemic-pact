@@ -78,8 +78,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         return (
                             <>
                                 <Card
-                                    entry={entry}
-                                >
+                                    entry={entry}>
                                     <Button 
                                         size="small"
                                         onClick={handleOpen}

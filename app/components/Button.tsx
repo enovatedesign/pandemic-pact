@@ -30,19 +30,19 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', childre
         }
     }
 
-    if (!styles.sizes[size]) throw new Error(`Invalid size passed to Button: ${size}`)
-    if (!styles.colours[colour]) throw new Error(`Invalid colour passed to Button: ${colour}`)
+    if (!styles.sizes[size as keyof typeof styles.sizes]) throw new Error(`Invalid size passed to Button: ${size}`)
+    if (!styles.colours[colour as keyof typeof styles.colours]) throw new Error(`Invalid colour passed to Button: ${colour}`)
 
     const classes = [
         customClasses ? styles.base : `inline-block ${styles.base}`,
-        styles.sizes[size],
-        styles.colours[colour],
+        styles.sizes[size as keyof typeof styles.sizes],
+        styles.colours[colour as keyof typeof styles.colours],
         customClasses,
     ].join(' ');
 
     return elementType === 'button' ? 
         <button {...props} className={classes}>{children}</button> :
-        <Link {...props} className={classes}>{children}</Link>
+        <Link href={props.href} {...props} className={classes}>{children}</Link>
 };
 
 export default Button;
