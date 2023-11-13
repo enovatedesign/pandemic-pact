@@ -88,9 +88,7 @@ const Card = ({entry, tags, children, image, hover = true}: Props) => {
                 )}
 
                 {text && (
-                    <RichText text={text} customClasses=''>
-                        {text}
-                    </RichText>
+                    <RichText text={text} customClasses='' invert={false} typeScale={""}/>
                 )}
 
                 <p className="mt-auto self-end">
