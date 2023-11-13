@@ -61,15 +61,7 @@ export default function Home() {
 
                                         <div className="order-1 w-full 2xl:w-auto 2xl:order-2">                                      
 
-                                            <div className="grid grid-cols-3 mx-auto gap-6 md:gap-10 items-center max-w-md">
-                                                    
-                                                <Image
-                                                    src="/glopid-r-logo-inverted.png"
-                                                    alt="GLOPID-R logo"
-                                                    width={335}
-                                                    height={79}
-                                                    className="w-full"
-                                                    />
+                                            <div className="grid grid-cols-4 mx-auto gap-6 md:gap-8 items-center max-w-md">
 
                                                 <Image
                                                     src="/ukcdr-logo.png"
@@ -77,6 +69,14 @@ export default function Home() {
                                                     width={276}
                                                     height={114}
                                                     className="w-full"
+                                                    />
+
+                                                <Image
+                                                    src="/glopid-r-logo-inverted.png"
+                                                    alt="GLOPID-R logo"
+                                                    width={335}
+                                                    height={79}
+                                                    className="w-full col-span-2"
                                                     />
 
                                                 <Image
