@@ -1,15 +1,15 @@
 import Link from 'next/link';
 
 interface Props {
-    size: string, 
-    colour: string, 
-    customClasses: string,
-    props: {
-        href: string
-    }
+    size?: string, 
+    colour?: string, 
+    customClasses?: string,
+    children: any,
+    href?: string
+    onClick?: (() => void)
 }
 
-const Button = ({ size = 'base', colour = 'primary', customClasses = '', ...props }: Props, {children}: any) => {
+const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
     let elementType = 'button';
 
     if (props.href) elementType = 'link';

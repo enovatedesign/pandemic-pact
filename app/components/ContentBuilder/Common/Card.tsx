@@ -4,15 +4,15 @@ import RichText from "./RichText";
 
 type Props = {
     entry: any,
-    tags: boolean, 
+    tags?: boolean, 
     children: any,
     image: {
         altText: string,
         url: string, 
         width: number,
         height: number,
-    }[],
-    hover: boolean,
+    },
+    hover?: boolean,
 }
 
 const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
