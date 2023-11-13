@@ -19,7 +19,7 @@ type Props = {
               height: number,
               alt: string,
             },
-        },
+        }[],
         customEntries: {
             url: string,
             title: string,
@@ -30,7 +30,7 @@ type Props = {
               height: number,
               alt: string,
             },
-        },
+        }[],
         limit: number,
         paginate: boolean,
         addTagsMenu: boolean,

@@ -6,7 +6,12 @@ type Props = {
     entry: any,
     tags: boolean, 
     children: any,
-    image: any,
+    image: {
+        altText: string,
+        url: string, 
+        width: string,
+        height:string
+    }[],
     hover: boolean,
 }
 
@@ -38,7 +43,7 @@ const Card = ({entry, tags, children, image, hover = true}: Props) => {
                     {cardImage?.url && (
                         <Image 
                             src={cardImage.url}
-                            alt={cardImage.alt}
+                            alt={cardImage.altText}
                             width={cardImage.width}
                             height={cardImage.height}
                             className="w-full"
@@ -51,7 +56,7 @@ const Card = ({entry, tags, children, image, hover = true}: Props) => {
                     {cardImage?.url && (
                         <Image 
                             src={cardImage.url}
-                            alt={cardImage.alt}
+                            alt={cardImage.altText}
                             width={cardImage.width}
                             height={cardImage.height}
                             className="w-full"
