@@ -6,17 +6,17 @@ type Props = {
     block: {
         imageLeft: {
             url: string,
-            alt: string,
+            altText: string,
             width: number, 
             height: number, 
-        }
+        }[],
         imageLeftCaption: string,
         imageRight: {
             url: string,
-            alt: string,
+            altText: string,
             width: number, 
             height: number, 
-        }
+        }[],
         imageRightCaption: string,
     }
   }
