@@ -13,17 +13,19 @@ export default function HighlightedRichTextBlock({ block }: Props) {
 	const textAlign = block.textAlign;
 	const width = block.width;
 
+	let widthClasses = ''
+	
 	if (colour && text && textAlign && width) {
 		if (width === "one-quarter") {
-			var widthClasses = "md:w-1/4";
+			let widthClasses = "md:w-1/4";
 		} else if (width === "one-third") {
-			var widthClasses = "md:w-1/3";
+			let widthClasses = "md:w-1/3";
 		} else if (width === "one-half") {
-			var widthClasses = "md:w-1/2";
+			let widthClasses = "md:w-1/2";
 		} else if (width === "two-thirds") {
-			var widthClasses = "md:w-2/3";
+			let widthClasses = "md:w-2/3";
 		} else if (width === "three-quarters") {
-			var widthClasses = "md:w-3/4";
+			let widthClasses = "md:w-3/4";
 		}
 
 		const blockClasses = [

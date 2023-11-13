@@ -88,7 +88,7 @@ const AccordionBlock = ( {block}: Props ) => {
                                                 duration={300}
                                                 height={activeIndex === index ? 'auto' : 0}
                                             >   
-                                                    <RichText customClasses="p-6 pt-3" text={accordionContent} />
+                                                    <RichText customClasses="p-6 pt-3" text={accordionContent} invert={false} typeScale={""} />
                                             </AnimateHeight>
                                         </div>
 

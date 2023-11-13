@@ -101,7 +101,7 @@ const HeroImageSliderBlock = ({block}: Props) => {
 
                                                         {text && (
                                                             <div className="pt-4 lg:pt-8">
-                                                                <RichText text={text} customClasses='text-white' />
+                                                                <RichText text={text} customClasses='text-white' invert={false} typeScale={""} />
                                                             </div>
                                                         )}
 
