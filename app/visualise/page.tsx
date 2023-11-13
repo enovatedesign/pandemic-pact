@@ -31,7 +31,7 @@ export default function Visualise() {
         <Layout
             title="Visualise"
             showSummary={true}
-            summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+            summary="View our visualisations and discover insights within our data."
             sidebarContent={
                 <FilterSidebar
                     selectedFilters={selectedFilters}

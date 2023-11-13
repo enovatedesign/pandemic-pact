@@ -3,15 +3,17 @@ import Button from './Button'
 import {meilisearchRequest} from "../helpers/meilisearch"
 import {utils, writeFile} from 'xlsx'
 import { propagateServerField } from 'next/dist/server/lib/render-server'
+import { CloudDownloadIcon } from '@heroicons/react/outline'
 
 interface Props {
     meilisearchRequestBody: any
     filename: string
     children?: React.ReactNode
     title: string
+    props?: any
 }
 
-export default function ExportToCsvButton({meilisearchRequestBody, filename, title}: Props) {
+export default function ExportToCsvButton({meilisearchRequestBody, filename, title, ...props}: Props) {
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
@@ -35,9 +37,12 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename, tit
             loading={exportingCsv}
             disabled={exportingCsv}
             onClick={exportCsv}
-            colour='secondary'
+            colour="grey"
+            customClasses="flex items-center justify-center self-start gap-2"
+            {...props}
         >
-            {title}
-        </Button >
+            <span>Download Data</span>
+            <CloudDownloadIcon className="w-5 h-5" />
+        </Button>
     )
 }

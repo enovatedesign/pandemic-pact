@@ -25,7 +25,7 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', ...prop
         colours: {
             primary: 'bg-primary text-secondary hover:bg-primary-darker',
             secondary: 'bg-secondary text-white hover:bg-secondary-darker',
-            grey: 'bg-gray-700 text-white hover:bg-gray-900',
+            grey: 'bg-gray-200 hover:bg-white',
         }
     }
 

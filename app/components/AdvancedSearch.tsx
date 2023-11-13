@@ -84,7 +84,7 @@ const AdvancedInputRow = ({children, row, rows, setRows} : AdvancedRowProps) => 
 
     return (
         <div className="flex space-x-8">
-            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-tremor-content-subtle rounded-2xl p-4">
+            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-2xl p-4">
                 <Select value={localRow.field} onValueChange={onSelectChange} enableClear={false}>
                     {selectItems.map((key, index) => {
                         return (
@@ -153,10 +153,10 @@ const AdvancedSearch = () => {
     }
 
     return (
-        <div className=" w-full bg-white rounded-2xl border-2 border-secondary p-8">
+        <section className=" w-full bg-white rounded-xl border-2 border-gray-200 p-8">
             <div className='flex justify-between pb-8'>
-                <h3 className="text-secondary text-xl uppercase">
-                    Advanced grant search
+                <h3 className="text-secondary uppercase tracking-widest text-xl font-bold">
+                    Advanced Search
                 </h3>
                 <button
                     className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
@@ -165,7 +165,7 @@ const AdvancedSearch = () => {
                     <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
                 </button>
             </div>
-            <div className="flex items-center space-x-2 pb-2">
+            <div className="flex items-center justify-center space-x-2 pb-2 pr-[70px] md:pr-[148px]">
                 <p className="text-secondary uppercase">
                     Set the global and/or functionality: 
                 </p>
@@ -190,7 +190,7 @@ const AdvancedSearch = () => {
                         <>
                             <div key={row.key}>
                                 {index > 0 && (
-                                    <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[156px]">
+                                    <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
                                         {globalAnd ? 'and' : 'or'}
                                     </p>
                                 )}
@@ -208,7 +208,7 @@ const AdvancedSearch = () => {
                     )
                 })}
             </div>
-        </div>
+        </section>
     )
 }
 

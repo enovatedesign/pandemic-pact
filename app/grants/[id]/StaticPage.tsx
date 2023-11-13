@@ -62,7 +62,7 @@ export default function StaticPage({grant}: Props) {
     ]
 
     const titleClasses = [
-        'text-secondary uppercase tracking-widest text-3xl font-bold'
+        'text-secondary uppercase tracking-widest text-lg lg:text-xl font-medium'
     ].join(' ')
 
     const [abstractShow, setAbstractShow] = useState(false)
@@ -94,16 +94,15 @@ export default function StaticPage({grant}: Props) {
 
 
     return (
-        <div className="bg-gradient-to-b from-primary/50 to-white to-50%">
-            <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
-                <div className="container mx-auto my-12 relative">
+        <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
+            <div className="container mx-auto my-12 relative">
 
-                    <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
-                        <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
-                            <ChevronLeftIcon className="w-4 h-4" />
-                        </div>
-                        <span className="uppercase tracking-wider font-medium">Grant search</span>
-                    </Link>
+                <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                    <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
+                        <ChevronLeftIcon className="w-4 h-4" />
+                    </div>
+                    <span className="uppercase tracking-wider font-medium">Grant search</span>
+                </Link>
 
                     <Grid numItemsLg={1} className="gap-6">
                         <Col
@@ -123,159 +122,157 @@ export default function StaticPage({grant}: Props) {
                                     )}
                                 </AnimateHeight>
 
-                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
-                                    <span className='inline-flex text-secondary'>
-                                        {abstractShow ? "read less" : "read more"}
-                                    </span>
-                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
-                                </button>
-                            </div>
+                            <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
+                                <span className='inline-flex text-secondary'>
+                                    {abstractShow ? "read less" : "read more"}
+                                </span>
+                                <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
+                            </button>
+                        </div>
 
-                            <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
-                                <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
-                                    <h3 className='self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-2xl text-white font-medium uppercase tracking-wider lg:[writing-mode:vertical-lr]'>
-                                        Key facts
-                                    </h3>
-                                    <div className='w-full bg-primary text-secondary'>
-                                        <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
-                                            {keyFactsHeadings.map((heading, index) => {
-                                                const borderClasses = [
-                                                    index === 1 ? 'border-x-2 border-secondary/10' : ''
-                                                ].join(' ')
-                                                return (
-                                                    <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2`}>
-                                                        <p className='uppercase text-xs tracking-widest font-bold'>
-                                                            {heading.text}
-                                                        </p>
-                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold'>
-                                                            {heading.metric}
-                                                        </p>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                        <ul className="grid grid-cols-3">
-                                            {keyFactsSubHeadings.map((subHeading, index) => {
-                                                const borderClasses = [
-                                                    index === 1 ? 'border-x-2 border-secondary/10' : ''
-                                                ].join(' ')
-                                                return (
-                                                    <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2`}>
-                                                        <p className='uppercase text-xs tracking-widest font-bold'>
-                                                            {subHeading.text}
-                                                        </p>
-                                                        <p className='font-bold text-lg lg:text-xl'>
-                                                            {subHeading.metric}
-                                                        </p>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                        <ul className="grid grid-cols-2">
-                                            {keyFactsSubCategories.map((category, index) => {
-                                                const borderClasses = [
-                                                    index === 0 ? 'border-r-2' : ''
-                                                ].join(' ')
-                                                return (
-                                                    <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col space-y-2`}>
-                                                        <p className='uppercase text-xs tracking-widest font-bold'>
-                                                            {category.text}
-                                                        </p>
-                                                        <p className='font-bold lg:text-lg'>
-                                                            {category.metric}
-                                                        </p>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
+                        <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
+                            <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
+                                <h3 className={`self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] ${titleClasses}`}>
+                                    Key facts
+                                </h3>
+                                <div className='w-full bg-primary text-secondary'>
+                                    <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                                        {keyFactsHeadings.map((heading, index) => {
+                                            const borderClasses = [
+                                                index === 1 ? 'border-x-2 border-secondary/10' : ''
+                                            ].join(' ')
+                                            return (
+                                                <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2`}>
+                                                    <p className='uppercase text-xs tracking-widest font-bold'>
+                                                        {heading.text}
+                                                    </p>
+                                                    <p className='text-md md:text-3xl lg:text-4xl font-bold'>
+                                                        {heading.metric}
+                                                    </p>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                    <ul className="grid grid-cols-3">
+                                        {keyFactsSubHeadings.map((subHeading, index) => {
+                                            const borderClasses = [
+                                                index === 1 ? 'border-x-2 border-secondary/10' : ''
+                                            ].join(' ')
+                                            return (
+                                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2`}>
+                                                    <p className='uppercase text-xs tracking-widest font-bold'>
+                                                        {subHeading.text}
+                                                    </p>
+                                                    <p className='font-bold text-lg lg:text-xl'>
+                                                        {subHeading.metric}
+                                                    </p>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                    <ul className="grid grid-cols-2">
+                                        {keyFactsSubCategories.map((category, index) => {
+                                            const borderClasses = [
+                                                index === 0 ? 'border-r-2' : ''
+                                            ].join(' ')
+                                            return (
+                                                <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col space-y-2`}>
+                                                    <p className='uppercase text-xs tracking-widest font-bold'>
+                                                        {category.text}
+                                                    </p>
+                                                    <p className='font-bold lg:text-lg'>
+                                                        {category.metric}
+                                                    </p>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
                                 </div>
-
-
                             </div>
 
-                            {grant.LaySummary &&
-                                <Card className="grant-lay-summary">
-                                    <Title>Lay Summary</Title>
 
-                                    <div
-                                        className="mt-2"
-                                        dangerouslySetInnerHTML={{__html: grant.LaySummary}}
-                                    />
-                                </Card>
-                            }
+                        </div>
 
-                            {publicationList?.length > 0 &&
-                                <div className='flex flex-col space-y-4'>
-                                    <Title className={titleClasses}>Publications</Title>
+                        {grant.LaySummary &&
+                            <Card className="grant-lay-summary">
+                                <Title>Lay Summary</Title>
 
-                                    <div>
+                                <div
+                                    className="mt-2"
+                                    dangerouslySetInnerHTML={{__html: grant.LaySummary}}
+                                />
+                            </Card>
+                        }
 
-                                        <div className="grid grid-cols-1 gap-3">
-                                            {publicationList.map((link: any, index: number) => {
+                        {publicationList?.length > 0 &&
+                            <div className='flex flex-col space-y-4'>
+                                <h2 className={titleClasses}>Publications</h2>
 
-                                                const handleClick = () => {
-                                                    activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
-                                                }
+                                <div>
 
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="bg-primary/20 py-4 px-6 rounded-2xl"
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {publicationList.map((link: any, index: number) => {
+
+                                            const handleClick = () => {
+                                                activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
+                                            }
+
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="bg-primary/20 py-4 px-6 rounded-2xl"
+                                                >
+                                                    <a className="flex items-center justify-between space-x-2 cursor-pointer" onClick={handleClick}>
+                                                        <h3
+                                                            className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl"
+                                                            dangerouslySetInnerHTML={{__html: link.title}}
+                                                        ></h3>
+                                                        <button className="self-start">
+                                                            <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`} />
+                                                        </button>
+                                                    </a>
+
+                                                    <AnimateHeight
+                                                        duration={300}
+                                                        height={activeIndex === index ? 'auto' : 0}
                                                     >
-                                                        <a className="flex items-center justify-between space-x-2 cursor-pointer" onClick={handleClick}>
-                                                            <h3
-                                                                className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl"
-                                                                dangerouslySetInnerHTML={{__html: link.title}}
-                                                            ></h3>
-                                                            <button className="self-start">
-                                                                <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`} />
-                                                            </button>
-                                                        </a>
-
-                                                        <AnimateHeight
-                                                            duration={300}
-                                                            height={activeIndex === index ? 'auto' : 0}
-                                                        >
-                                                            <ul className="py-6 flex flex-col gap-4">
+                                                        <ul className="py-6 flex flex-col gap-4">
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Authors</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</p>
+                                                            </li>
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Publish Year</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</p>
+                                                            </li>
+                                                            {link.journalInfo?.journal?.title &&
                                                                 <li className="flex flex-col gap-1">
-                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Authors</h4>
-                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</p>
+                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Journal</h4>
+                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</p>
                                                                 </li>
-                                                                <li className="flex flex-col gap-1">
-                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Publish Year</h4>
-                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</p>
-                                                                </li>
-                                                                {link.journalInfo?.journal?.title &&
-                                                                    <li className="flex flex-col gap-1">
-                                                                        <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Journal</h4>
-                                                                        <p className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</p>
-                                                                    </li>
-                                                                }
-                                                                <li className="flex flex-col gap-1">
-                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">DOI</h4>
-                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.doi}</p>
-                                                                </li>
-                                                            </ul>
-                                                            <div className="py-4 flex">
-                                                                <Button
-                                                                    size="small"
-                                                                    colour="secondary"
-                                                                    href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                                    rel="nofollow noopener noreferrer"
-                                                                    target="_blank"
-                                                                    customClasses="flex items-center justify-center self-start gap-2"
-                                                                >
-                                                                    <span>View at Europe PMC</span>
-                                                                    <ExternalLinkIcon className="w-5 h-5" />
-                                                                </Button>
-                                                            </div>
-                                                        </AnimateHeight>
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
-
+                                                            }
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">DOI</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.doi}</p>
+                                                            </li>
+                                                        </ul>
+                                                        <div className="py-4 flex">
+                                                            <Button
+                                                                size="small"
+                                                                colour="secondary"
+                                                                href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                                rel="nofollow noopener noreferrer"
+                                                                target="_blank"
+                                                                customClasses="flex items-center justify-center self-start gap-2"
+                                                            >
+                                                                <span>View at Europe PMC</span>
+                                                                <ExternalLinkIcon className="w-5 h-5" />
+                                                            </Button>
+                                                        </div>
+                                                    </AnimateHeight>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
 
                                     {grant.PubMedLinks?.length > 10 && (
@@ -288,13 +285,22 @@ export default function StaticPage({grant}: Props) {
                                     )}
                                 </div>
 
-                            }
-                        </Col >
+                                {grant.PubMedLinks?.length > 10 && (
+                                    <Pagination
+                                        totalPosts={grant.PubMedLinks?.length}
+                                        postsPerPage={limit}
+                                        setFirstItemIndex={setFirstItemIndex}
+                                        setLastItemIndex={setLastItemIndex}
+                                    />
+                                )}
+                            </div>
+
+                        }
+                    </Col >
 
 
-                    </Grid>
-                </div>
-            </Layout>
-        </div>
+                </Grid>
+            </div>
+        </Layout>
     )
 }

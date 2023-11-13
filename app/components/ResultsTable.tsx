@@ -19,39 +19,40 @@ export default function ResultsTable({searchResponse}: Props) {
 
     
     return (
-            <div className=''>
-                
-                <h3 className="font-bold text-2xl lg:text-4xl tracking-wider text-secondary dark:text-primary py-4">Results</h3>
+        <div>
 
-                <div className='flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-2xl border-2 border-slate-300'>
-                    {searchResponse.hits.map((result, index) => {
-                        const query = searchResponse.query
-                        const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
-                        const data = {index, activeIndex, setActiveIndex}
+            <h3 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">Results</h3>
 
-                        return (
-                            <div key={result.GrantID}>
-                                <div className="flex flex-col space-y-2 lg:space-y-6">
-                                    <a href={href} className="hover:underline">
-                                        <div
-                                            className="whitespace-normal font-semibold text-base lg:text-2xl dark:text-primary/80"
-                                            dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
-                                        />
-                                    </a>
+            <div className='mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200'>
+                {searchResponse.hits.map((result, index) => {
+                    const query = searchResponse.query
+                    const href = `${links.explore.href}/${result.GrantID}` + (query ? `?q=${query}` : '')
+                    const data = {index, activeIndex, setActiveIndex}
 
-                                    {searchResponse.query &&
-                                        <SearchMatches result={result} {...data}/>
-                                    }   
-                                </div>
+                    return (
+                        <div key={result.GrantID}>
+                            <div className="flex flex-col space-y-2 lg:space-y-6">
+                                <a href={href} className="hover:underline">
+                                    <div
+                                        className="whitespace-normal font-semibold text-base lg:text-2xl dark:text-primary/80"
+                                        dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
+                                    />
+                                </a>
 
-                                <div className="text-right whitespace-nowrap truncate">
-                                </div>
-
+                                {searchResponse.query &&
+                                    <SearchMatches result={result} {...data}/>
+                                }   
                             </div>
-                        )
-                    })}
-                </div>
+
+                            <div className="text-right whitespace-nowrap truncate">
+                            </div>
+
+                        </div>
+                    )
+                })}
             </div>
+
+        </div>
     )
 }
 
