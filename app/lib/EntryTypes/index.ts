@@ -1,15 +1,15 @@
-import { ReactElement, Component } from 'react';
+import {ComponentType} from 'react';
 import PageTemplate from './template/PageTemplate';
 import PageQuery from './query/PageQuery';
 
 interface EntryTemplateAndQuery {
-    PageTemplate: (props: any) => ReactElement
-    PageQuery: (slug: string, entryType: string) => any
+    pageTemplate: ComponentType<{data: any}>,
+    pageQuery: (slug: string, entryType: string) => any
 }
 
 const EntryTypes: EntryTemplateAndQuery = {
-    PageTemplate,
-    PageQuery
+    pageTemplate: PageTemplate,
+    pageQuery: PageQuery
 }
 
 export default EntryTypes;
