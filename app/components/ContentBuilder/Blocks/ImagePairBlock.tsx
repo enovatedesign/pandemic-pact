@@ -101,29 +101,3 @@ const ImagePairBlock = ( {block} : Props ) => {
 }
 
 export default ImagePairBlock
-
-{/* <div 
-    {{ macros.inView({
-        animateChildren: true,
-        delayIncrement: 200,
-        customClasses: 'grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-12 lg:gap-x-24'
-    }) }}
->
-
-    <figure>
-        {{ macros.lazyResponsiveImage(imageLeft.altText|default(null), imageLeft, 'w-full', respMap.srcset, respMap.sizes) }}
-
-        {% if imageLeftCaption|length %}
-            <figcaption class="mt-4 font-medium text-base text-gray-600 text-center">{{ imageLeftCaption }}</figcaption>
-        {% endif %}
-    </figure>
-
-    <figure>
-        {{ macros.lazyResponsiveImage(imageRight.altText|default(null), imageRight, 'w-full', respMap.srcset, respMap.sizes) }}
-
-        {% if imageRightCaption|length %}
-            <figcaption class="mt-4 font-medium text-base text-gray-600 text-center">{{ imageRightCaption }}</figcaption>
-        {% endif %}
-    </figure>
-
-</div> */}
