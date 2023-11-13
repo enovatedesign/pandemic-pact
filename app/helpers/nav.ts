@@ -11,7 +11,6 @@ export const getLinksArray = () => {
 }
 
 export const footerLinks = {
-    modernSlaveryStatement: { label: 'Modern Slavery Statement', href: '/modern-slavery-statement' },
     privacyAndTerms: { label: 'Privacy & Terms', href: '/privacy-and-terms' },
     accessibility: { label: 'Accessibility', href: '/accessibility' },
 }
