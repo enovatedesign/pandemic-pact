@@ -4,7 +4,24 @@ import RichText from "../Common/RichText"
 import ButtonLink from "../Common/Button"
 import { useInView, animated } from '@react-spring/web';
 
-const SplitImageTextBlock = ({block}) => {
+interface Props {
+    block: {
+        image: {
+            width: number, 
+            height: number, 
+            url: string, 
+            altText: string,
+        }[],
+        text: string,
+        button: {
+            text: string,
+            url: string,
+        },
+        reverse: boolean,
+    }
+}
+
+const SplitImageTextBlock = ({block}: Props) => {
 
     const image = block.image[0] ?? null
     const text = block.text ?? null

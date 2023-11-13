@@ -16,9 +16,9 @@ type Props = {
               width: number,
               url: string,
               height: number,
-              alt: string,
-            }
-        }
+              altText: string,
+            }[],
+        }[],
     }
 }
 
@@ -37,13 +37,13 @@ const RichTextColumnsBlock = ({block} : Props) => {
         <BlockWrapper>
             {columns && (
                 <div className={gridClasses}>
-                    {columns.map((column, index) => {
+                    {columns.map((column, index: number) => {
                         
                         const button = column.button ?? null
 
                         return (
                             <>
-                                <Card entry={column} image={column.image[0]}>
+                                <Card entry={column} image={column.image[0]} key={index}>
                                     {button?.url && (
                                         <Button 
                                             size="small"
