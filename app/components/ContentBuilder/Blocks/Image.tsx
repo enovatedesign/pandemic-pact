@@ -2,8 +2,21 @@ import Image from 'next/image';
 import BlockWrapper from '../BlockWrapper';
 import { useInView, animated } from '@react-spring/web';
 
-export default function ImageBlock({ block }) {
-    // console.log(block);
+interface Props {
+    block: {
+        caption: string,
+        width: string,
+        popIpBox: boolean,
+        image: {
+            height: number, 
+            width: number,
+            url: string,
+            altText: string,
+        }[],
+    }
+}
+
+export default function ImageBlock({ block }: Props) {
 
     const [ref, springs] = useInView(
         () => ({
