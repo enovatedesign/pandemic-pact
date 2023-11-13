@@ -7,8 +7,8 @@ interface Props {
     children: any,
     href?: string,
     onClick?: (() => void),
-    loading: boolean,
-    disabled: boolean,
+    loading?: boolean,
+    disabled?: boolean,
 }
 
 const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
@@ -43,7 +43,7 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', childre
 
     return elementType === 'button' ? 
         <button {...props} className={classes}>{children}</button> :
-        <Link href={props.href} {...props} className={classes}>{children}</Link>
+        <Link href={props.href as string} {...props} className={classes}>{children}</Link>
 };
 
 export default Button;

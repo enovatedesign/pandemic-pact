@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, Component } from 'react';
 import PageTemplate from './template/PageTemplate';
 import PageQuery from './query/PageQuery';
 
