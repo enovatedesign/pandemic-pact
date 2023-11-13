@@ -24,7 +24,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
     ].join(' ')
 
     const andButtonDivClasses = [
-        localRow.logicalAnd ? 'right-1 transition duration-300' : 'left-1 transition duration-300'
+        localRow.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[56px] transition duration-300'
     ].join(' ')
 
     const onSelectChange = (value) => {
