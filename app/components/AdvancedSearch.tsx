@@ -17,13 +17,12 @@ const camelToSentence = (word: string) => {
 
   type AdvancedRowProps = {
     children: any,
-    index: number,
     row: Row,
     rows: Row[],
-    setRows: (() => void)
+    setRows: ((rows: Row[]) => void)
   }
 
-const AdvancedInputRow = ({children, index, row, rows, setRows} : AdvancedRowProps) => {
+const AdvancedInputRow = ({children, row, rows, setRows} : AdvancedRowProps) => {
     
     const [ localRow, setLocalRow ] = useState<Row>(row)
     
@@ -101,7 +100,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : AdvancedRowPro
                 </Select>
 
                 <MultiSelect value={localRow.values} onValueChange={onMultiSelectChange}>
-                    {selectOptions[localRow.field].map((value: {value: string}, index: number) => {
+                    {selectOptions[localRow.field as keyof typeof selectOptions].map((value: {value: string}, index: number) => {
                         return (
                             <MultiSelectItem
                                 value={value.value}
@@ -130,14 +129,15 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : AdvancedRowPro
 }
 
 const AdvancedSearch = () => {
-    const defaultRow = () => ({
+    
+    const defaultRow:() => Row = () => ({
         field: 'Regions',
         values: [],
         logicalAnd: false,
         key: new Date().getTime(),
     })
 
-    const [rows, setRows] = useState<Row>([defaultRow()])
+    const [rows, setRows] = useState<Row[]>([defaultRow()])
     const [globalAnd, setGlobalAnd] = useState(true)
 
     const globalAndButtonTextClasses = [
@@ -178,7 +178,7 @@ const AdvancedSearch = () => {
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {rows.map((row: Row, index: index) => {
+                {rows.map((row: Row, index: number) => {
 
                     const removeRow = (index: number) => {
                         const updatedRows = [...rows]
