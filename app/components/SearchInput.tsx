@@ -68,7 +68,7 @@ export default function SearchInput({setSearchResponse}: Props) {
             url.searchParams.delete('filters')
         }
 
-        router.replace(url.href, {shallow: true})
+        router.replace(url.href)
     }, [
         searchQuery,
         filters,

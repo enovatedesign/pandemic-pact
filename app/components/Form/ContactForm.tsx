@@ -60,22 +60,22 @@ export default function ContactForm() {
         let isValid = true;
 
         if (contactNumber.length <= 0) {
-            tempErrors["contactNumber"] = true;
+            tempErrors["contactNumber" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (email.length <= 0) {
-            tempErrors["email"] = true;
+            tempErrors["email" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (message.length <= 0) {
-            tempErrors["message"] = true;
+            tempErrors["message" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (name.length <= 0) {
-            tempErrors["name"] = true;
+            tempErrors["name" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 

@@ -44,7 +44,7 @@ const Pagination = ({
         newParams.set('page', number.toString())
         
         const url = number !== 1 ? `${pathName}?${newParams.toString()}` : pathName
-        router.push(url, { shallow: true })
+        router.push(url)
     }
     
     const updatePage = (number: number) => {

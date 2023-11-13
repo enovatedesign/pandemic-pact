@@ -5,7 +5,7 @@ import {footerLinksFirstCollection} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
 
-export default function Header(className: string) {
+export default function Header() {
     const linksFirstCollection = footerLinksFirstCollection
     const linksSecondCollection = footerLinksSecondCollection
 

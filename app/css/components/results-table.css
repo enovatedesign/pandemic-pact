@@ -1,11 +1,16 @@
 .highlighted-search-result-token {
-    background-color: #F0E1D4;
+    background-color: #FDEAE0;
 }
 
 .grant-abstract .highlighted-search-result-token {
-    background-color: #F0E1D4;
+    background-color: #FDEAE0;
 }
 
 .grant-lay-summary .highlighted-search-result-token {
-    background-color: #F0E1D4;
+    background-color: #FDEAE0;
+}
+
+.page-title .highlighted-search-result-token {
+    background-color: #E8AA85;
+    color: hsl(240, 100%, 12%);
 }
