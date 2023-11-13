@@ -11,6 +11,7 @@ interface Props {
     children?: React.ReactNode
     title: string
     props?: any
+    size?: string
 }
 
 export default function ExportToCsvButton({meilisearchRequestBody, filename, title, ...props}: Props) {
