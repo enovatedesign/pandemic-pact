@@ -1,4 +1,11 @@
-const RichText = (props) => {
+interface Props {
+    invert: boolean,
+    typeScale: string,
+    customClasses: string,
+    text: string
+}
+
+const RichText = (props: Props) => {
 
     const invert = props.invert ?? false 
     const typeScale = props.typeScale ?? 'lg:prose-lg' 

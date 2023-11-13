@@ -3,12 +3,17 @@ import { useState, useEffect } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid"
 
+interface Props {
+    postsPerPage: number,
+    totalPosts: number,
+}
+
 const Pagination = ({
     postsPerPage, 
     totalPosts, 
     setFirstItemIndex,
     setLastItemIndex,
-}) => {
+}: Props) => {
     
     const router = useRouter()
     const pathName = usePathname()

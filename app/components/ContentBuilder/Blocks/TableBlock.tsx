@@ -87,7 +87,7 @@ const TableBlock = ({block}: Props) => {
 
                                     {rows && (
                                         <tbody className="divide-y divide-gray-200">
-                                            {rows.map((row: string[]) => {
+                                            {rows.map((row) => {
                                                 return(
                                                     <>
                                                         <tr>

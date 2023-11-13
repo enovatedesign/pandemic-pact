@@ -47,7 +47,7 @@ const blocks = {
 	listPublications: ListPublicationsBlock,
 };
 
-const Block = (props) => {
+const Block = (props: any) => {
 	const { block } = props;
 	const type = block.typeHandle;
 	const Component = blocks[type];
@@ -59,13 +59,13 @@ const Block = (props) => {
 	}
 };
 
-const Blocks = ({blocks}) => {
+const Blocks = ({blocks}: any) => {
 
 	// console.log('Content Builder Data: ', blocks)
 
 	return (
 		<>
-			{blocks.map(block => (
+			{blocks.map((block: any) => (
 				<Block block={block} key={block.id} />
 			))}
 		</>

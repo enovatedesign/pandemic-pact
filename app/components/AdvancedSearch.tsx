@@ -8,17 +8,27 @@ const camelToSentence = (word: string) => {
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-  type Props = {
-    children: any
-    index: number
-    row: any
+  interface Row {
+    field: string,
+    values: string[],
+    logicalAnd: boolean,
+    key: number
   }
 
-const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
-    
-    const [ localRow, setLocalRow ] = useState(row)
-    const selectItems = Object.keys(selectOptions)
+  type AdvancedRowProps = {
+    children: any,
+    index: number,
+    row: Row,
+    rows: Row[],
+    setRows: (() => void)
+  }
 
+const AdvancedInputRow = ({children, index, row, rows, setRows} : AdvancedRowProps) => {
+    
+    const [ localRow, setLocalRow ] = useState<Row>(row)
+    
+    const selectItems = Object.keys(selectOptions)
+    
     const andButtonTextClasses = [
         localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4'
     ].join(' ')
@@ -27,7 +37,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
         localRow.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] md:-translate-x-[40px] transition duration-300'
     ].join(' ')
 
-    const onSelectChange = (value) => {
+    const onSelectChange = (value: string) => {
         const newRow = {
             ...localRow,
             field: value,
@@ -43,7 +53,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
         )
     }
 
-    const onMultiSelectChange = (values) => {
+    const onMultiSelectChange = (values: string[]) => {
         const newRow = {
             ...row,
             values,
@@ -83,7 +93,6 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
                                 value={key}
                                 key={index}
                                 className="cursor-pointer"
-                                
                             >
                                 {camelToSentence(key)}
                             </SelectItem>
@@ -92,7 +101,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
                 </Select>
 
                 <MultiSelect value={localRow.values} onValueChange={onMultiSelectChange}>
-                    {selectOptions[localRow.field].map((value, index) => {
+                    {selectOptions[localRow.field].map((value: {value: string}, index: number) => {
                         return (
                             <MultiSelectItem
                                 value={value.value}
@@ -128,7 +137,7 @@ const AdvancedSearch = () => {
         key: new Date().getTime(),
     })
 
-    const [rows, setRows] = useState([defaultRow()])
+    const [rows, setRows] = useState<Row>([defaultRow()])
     const [globalAnd, setGlobalAnd] = useState(true)
 
     const globalAndButtonTextClasses = [
@@ -169,7 +178,7 @@ const AdvancedSearch = () => {
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {rows.map((row, index) => {
+                {rows.map((row: Row, index: index) => {
 
                     const removeRow = (index: number) => {
                         const updatedRows = [...rows]

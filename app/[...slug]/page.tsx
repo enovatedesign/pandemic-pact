@@ -89,8 +89,11 @@ async function getPageContent(context: Parameters) {
 	// };
 }
 
-export default async function Page({ params }) {
+interface PageParameters {
+	params: any
+}
+
+export default async function Page({params}: PageParameters) {
     const data = await getPageContent(params)
-   
     return <PageClient data={data} />
 }
