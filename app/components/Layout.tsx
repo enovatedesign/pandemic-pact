@@ -41,6 +41,11 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
         }
     })
 
+    const sidebarLegendDividerClasses = [
+        'pt-4 mt-2',
+        'border-t-2 border-gray-500',
+    ].join(' ')
+
     return (
         <>
             <div id="skiplink-container">
@@ -58,6 +63,16 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                                 <span className="sr-only">Filters</span>
                                 <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
+                            
+                            {!sidebarOpen && (
+                                    <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
+                                        <dt className="text-white uppercase">Total grants</dt>
+                                        <dd className="text-primary font-bold">125</dd>
+                                        <dt className={`text-white uppercase ${sidebarLegendDividerClasses}`}>Filters</dt>
+                                        <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">3</dd>
+                                    </dl>
+                                )
+                            }
 
                             <animated.div
                                 className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
