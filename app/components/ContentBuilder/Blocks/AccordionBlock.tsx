@@ -11,8 +11,8 @@ type Props = {
             id: number,
             accordionHeading: string,
             accordionContent: string,
-            headingLevel: number,
-        }
+        }[],
+        headingLevel: number,
     }
 }
 
@@ -43,12 +43,12 @@ const AccordionBlock = ( {block}: Props ) => {
         <BlockWrapper>
             {accordions && (
                 <animated.ul className="space-y-4" ref={ref} style={springs}>
-                    {accordions.map((accordion, index) => {
+                    {accordions.map((accordion, index: number) => {
                         
                         const accordionHeading = accordion.accordionHeading ?? null
                         const accordionContent = accordion.accordionContent ?? null
                         
-                        const accordianData = [accordionHeading, accordionContent] 
+                        const accordionData = [accordionHeading, accordionContent] 
 
                         const handleClick = () => {
                             activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
@@ -57,7 +57,7 @@ const AccordionBlock = ( {block}: Props ) => {
                         const iconClasses = 'w-6 h-6 text-primary transition duration-300'
                         return (
                             <>
-                                {accordianData && (
+                                {accordionData && (
 
                                     <li className="space-y-4" key={index}>
                                         <div role="region" className="mx-auto w-full border border-gray-400 rounded">
