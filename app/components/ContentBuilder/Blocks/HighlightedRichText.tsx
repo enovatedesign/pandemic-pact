@@ -1,4 +1,13 @@
-export default function HighlightedRichTextBlock({ block }) {
+interface Props {
+	block: {
+		colour: string,
+		text: string,
+		textAlign: string,
+		width: string,
+	}
+}
+
+export default function HighlightedRichTextBlock({ block }: Props) {
 	const colour = block.colour;
 	const text = block.text;
 	const textAlign = block.textAlign;
