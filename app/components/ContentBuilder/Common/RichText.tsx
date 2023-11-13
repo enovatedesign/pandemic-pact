@@ -1,7 +1,7 @@
 interface Props {
-    invert: boolean,
-    typeScale: string,
-    customClasses: string,
+    invert?: boolean,
+    typeScale?: string,
+    customClasses?: string,
     text: string
 }
 
