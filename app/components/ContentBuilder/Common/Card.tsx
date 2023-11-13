@@ -6,7 +6,7 @@ type Props = {
     entry: any,
     tags?: boolean, 
     children: any,
-    image: {
+    image?: {
         altText: string,
         url: string, 
         width: number,

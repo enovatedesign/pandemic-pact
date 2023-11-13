@@ -78,7 +78,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         return (
                             <>
                                 <Card
-                                    entry={entry} tags={false} image={[]} hover={false}>
+                                    entry={entry} tags={false} hover={false}>
                                     <Button 
                                         size="small"
                                         onClick={handleOpen}

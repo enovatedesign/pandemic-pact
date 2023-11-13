@@ -80,7 +80,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                         <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {paginatedEntries.map((entry, index: number) => {
                                 return (
-                                    <Card entry={entry} key={index} tags={tags} image={[]} hover={false}>
+                                    <Card entry={entry} key={index} tags={tags} hover={false}>
                                         <Button
                                             size="small"
                                             href={entry.url}
@@ -105,7 +105,7 @@ const ListContentNewsBlock = ( {block}: Props ) => {
                     <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {limitedEntries.map((entry, index: number) => {
                             return (
-                                <Card entry={entry} key={index} tags={tags} image={[]} hover={false}>
+                                <Card entry={entry} key={index} tags={tags} hover={false}>
                                     <Button
                                         size="small"
                                         href={entry.url}

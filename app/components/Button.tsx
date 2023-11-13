@@ -5,8 +5,10 @@ interface Props {
     colour?: string, 
     customClasses?: string,
     children: any,
-    href?: string
-    onClick?: (() => void)
+    href?: string,
+    onClick?: (() => void),
+    loading: boolean,
+    disabled: boolean,
 }
 
 const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
