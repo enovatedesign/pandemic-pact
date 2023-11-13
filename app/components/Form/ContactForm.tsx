@@ -1,5 +1,5 @@
 // Framework
-import React, {useState, useEffect, useCallback, useRef} from "react";
+import React, {useState, useCallback, useRef} from "react";
 
 // FontAwesome
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -56,7 +56,7 @@ export default function ContactForm() {
         "flex gap-1 items-center border border-green-300 bg-green-200 px-3 py-2 font-medium text-green-600 text-xs";
 
     const handleValidation = () => {
-        let tempErrors = {};
+        let tempErrors = {string};
         let isValid = true;
 
         if (contactNumber.length <= 0) {

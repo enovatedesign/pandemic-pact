@@ -14,10 +14,10 @@ type Props = {
                 url: string,
             }
             image: {
-                width: number,
                 url: string,
-                height: number,
                 alt: string,
+                width: number,
+                height: number,
             }[],
        }[],
     }

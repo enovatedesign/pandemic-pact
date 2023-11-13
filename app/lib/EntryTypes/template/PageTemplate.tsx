@@ -4,7 +4,7 @@ import {useMemo, useState} from "react"
 import Layout from "../../../components/Layout"
 import Matrix from "../../../components/ContentBuilder"
 
-export default function PageTemplate({data}) {
+export default function PageTemplate({data}: any) {
 
     const { entry } = data
 
@@ -18,7 +18,6 @@ export default function PageTemplate({data}) {
                 showSummary={entry.showSummary}
                 sidebarContent={false}
                 >
-
                 <Matrix blocks={entry.bodyContent} />
                     
             </Layout>
