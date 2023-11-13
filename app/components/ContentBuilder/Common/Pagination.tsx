@@ -6,6 +6,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid"
 interface Props {
     postsPerPage: number,
     totalPosts: number,
+    setFirstItemIndex: ((index: number) => number)
+    setLastItemIndex: ((index: number) => number)
 }
 
 const Pagination = ({

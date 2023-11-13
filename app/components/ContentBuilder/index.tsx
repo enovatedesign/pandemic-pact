@@ -22,7 +22,7 @@ import PullQuoteBlock from "./Blocks/PullQuoteBlock";
 import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
 import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 
-const blocks = {
+const blocks: any = {
 	button: ButtonBlock,
 	divider: DividerBlock,
 	embeddedMedia: EmbeddedMediaBlock,

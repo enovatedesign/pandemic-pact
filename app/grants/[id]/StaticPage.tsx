@@ -282,8 +282,8 @@ export default function StaticPage({grant}: Props) {
                                         <Pagination
                                             totalPosts={grant.PubMedLinks?.length}
                                             postsPerPage={limit}
-                                            setFirstItemIndex={setFirstItemIndex}
                                             setLastItemIndex={setLastItemIndex}
+                                            setFirstItemIndex={setFirstItemIndex}
                                         />
                                     )}
                                 </div>

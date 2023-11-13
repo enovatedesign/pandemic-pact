@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 
 // Components
-import Button from "../ContentBuilder/Common/Button";
+import Button from "../Button";
 
 // Utils
 import {useGoogleReCaptcha} from "react-google-recaptcha-v3";

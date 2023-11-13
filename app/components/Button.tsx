@@ -4,13 +4,12 @@ interface Props {
     size: string, 
     colour: string, 
     customClasses: string,
-    children: any,
     props: {
         href: string
     }
 }
 
-const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
+const Button = ({ size = 'base', colour = 'primary', customClasses = '', ...props }: Props, {children}: any) => {
     let elementType = 'button';
 
     if (props.href) elementType = 'link';

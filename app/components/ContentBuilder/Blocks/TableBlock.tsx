@@ -10,7 +10,7 @@ type Props = {
               heading: string,
               width: number,
             }[],
-            rows: number[],
+            rows: string[][],
           }
     }
 }
@@ -91,7 +91,7 @@ const TableBlock = ({block}: Props) => {
                                                 return(
                                                     <>
                                                         <tr>
-                                                            {row.map((cell: string) => {
+                                                            {row.map((cell) => {
                                                                 const tdClasses = [
                                                                     'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
                                                                 ].join(' ')

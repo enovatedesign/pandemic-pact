@@ -87,7 +87,7 @@ const TabbedContentBlock = ( {block}: Props ) => {
                                                 height={activeIndex === index ? 'auto' : 0}
                                             >
                                                 {activeIndex === index && (
-                                                    <RichText text={tab.richText} customClasses='max-w-none'/>
+                                                    <RichText text={tab.richText} customClasses='max-w-none' invert={false} typeScale={""}/>
                                                 )}
                                             </AnimateHeight>
                                         )

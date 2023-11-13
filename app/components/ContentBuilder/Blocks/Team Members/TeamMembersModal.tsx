@@ -67,7 +67,7 @@ const TeamMembersModal = ({entry, isOpen, handleClose}: data) => {
                                         )}
                                         
                                         {aboutText && (
-                                            <RichText text={aboutText}/>
+                                            <RichText text={aboutText} invert={false} typeScale={""} customClasses={""}/>
                                         )}
                                     </div>
 

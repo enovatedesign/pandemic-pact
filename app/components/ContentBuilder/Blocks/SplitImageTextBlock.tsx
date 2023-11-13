@@ -82,7 +82,7 @@ const SplitImageTextBlock = ({block}: Props) => {
                 <animated.div ref={leftRef} style={leftSprings} className={textWrapperClasses}>
 
                     {text && (
-                        <RichText text={text} />
+                        <RichText text={text} invert={false} typeScale={""} customClasses={""} />
                     )}
 
                     {button.url && (
