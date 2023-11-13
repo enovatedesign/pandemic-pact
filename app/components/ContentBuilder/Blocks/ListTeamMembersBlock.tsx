@@ -76,7 +76,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
                         
                         return (
-                            <li key={index} className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer" onClick={handleOpen}>
+                            <li key={index} className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={handleOpen}>
                                 
                                 <Image 
                                     src={thumbnailImage[0].url}
@@ -90,12 +90,12 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                     {title && (
                                         <h3 className="text-xl md:text-2xl">
                                             {title}
-                                            {postNominalLetters && (<span className="block text-base text-gray-500">{postNominalLetters}</span>)}
+                                            {postNominalLetters && (<span className="block text-base text-gray-500 dark:text-gray-300">{postNominalLetters}</span>)}
                                         </h3>
                                     )}
                                     
                                     {jobTitle && (
-                                        <p className="text-lg font-bold">
+                                        <p className="text-lg font-bold dark:text-gray-300">
                                             {jobTitle}
                                         </p>
                                     )}
