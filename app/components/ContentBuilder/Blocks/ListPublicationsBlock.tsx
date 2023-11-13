@@ -15,12 +15,12 @@ type Props = {
             summary: string,
             externalLink: string,
             thumbnailImage: {
-                alt: string,
+                altText: string,
                 height: number,
                 url: string,
                 width: number,
-            }
-        }
+            }[],
+        }[],
     }
 }
 
@@ -58,7 +58,7 @@ const ListPublicationsBlock = ({block}: Props) => {
 
                     <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         
-                        {customEntries.map((entry, index) => {
+                        {customEntries.map((entry, index: number) => {
                             return (
                                 <Card entry={entry} key={index}>
                                     <Button 
