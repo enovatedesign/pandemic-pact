@@ -24,7 +24,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
     ].join(' ')
 
     const andButtonDivClasses = [
-        localRow.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[56px] transition duration-300'
+        localRow.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] md:-translate-x-[40px] transition duration-300'
     ].join(' ')
 
     const onSelectChange = (value) => {
@@ -105,7 +105,7 @@ const AdvancedInputRow = ({children, index, row, rows, setRows} : Props) => {
                     })}
                 </MultiSelect>
 
-                <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-48 rounded-full">
+                <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-40 rounded-full">
                         <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
                         <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
