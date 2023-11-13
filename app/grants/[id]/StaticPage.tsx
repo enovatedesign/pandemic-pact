@@ -2,7 +2,7 @@
 
 import {useState} from 'react'
 import AnimateHeight from 'react-animate-height';
-import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon} from "@heroicons/react/solid"
+import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
 import Link from 'next/link'
 import {Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
@@ -25,7 +25,15 @@ export default function StaticPage({grant}: Props) {
 
         {
             text: 'Start & end year',
-            metric: [grant.GrantStartYear, grant.GrantEndYear].join("-"),
+            metric: () => (
+                <div className="flex items-center justify-start gap-1">
+                    {grant.GrantStartYear}
+                    <span className="flex self-end items-center gap-1">
+                        <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
+                        <span className="text-2xl">{grant.GrantEndYear}</span>
+                    </span>
+                </div>
+            ),
         },
         {
             text: 'Amount Committed (USD)',
@@ -146,9 +154,7 @@ export default function StaticPage({grant}: Props) {
                                                     <p className='uppercase text-xs tracking-widest font-bold'>
                                                         {heading.text}
                                                     </p>
-                                                    <p className='text-md md:text-3xl lg:text-4xl font-bold'>
-                                                        {heading.metric}
-                                                    </p>
+                                                    <p className='text-md md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
                                                 </li>
                                             )
                                         })}
