@@ -89,9 +89,11 @@ const Pagination = ({
                         )
                     })}
                 </div>
-                <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                    <span>.</span><span>.</span><span>.</span>
-                </p>
+                {filteredPages.length > 5 && (
+                    <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
+                        <span>.</span><span>.</span><span>.</span>
+                    </p>
+                )}
             </div>
             
 
