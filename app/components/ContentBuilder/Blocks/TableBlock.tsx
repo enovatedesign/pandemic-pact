@@ -2,15 +2,17 @@ import BlockWrapper from "../BlockWrapper"
 import { useInView, animated } from '@react-spring/web';
 
 type Props = {
-    caption: string,
-    table: {
-        columns: {
-          align: number,
-          heading: string,
-          width: number,
-        }
-        rows: number,
-      }
+    block: {
+        caption: string,
+        table: {
+            columns: {
+              align: number,
+              heading: string,
+              width: number,
+            }[],
+            rows: number[],
+          }
+    }
 }
 
 const TableBlock = ({block}: Props) => {
@@ -85,14 +87,15 @@ const TableBlock = ({block}: Props) => {
 
                                     {rows && (
                                         <tbody className="divide-y divide-gray-200">
-                                            {rows.map(row => {
+                                            {rows.map((row: string[]) => {
                                                 return(
                                                     <>
                                                         <tr>
-                                                            {row.map(cell => {
+                                                            {row.map((cell: string) => {
                                                                 const tdClasses = [
                                                                     'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
                                                                 ].join(' ')
+                                                                console.log(cell)
                                                                 return (
                                                                     <>
                                                                         <td className={ tdClasses }>
