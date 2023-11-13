@@ -9,6 +9,8 @@ interface Props {
     onClick?: (() => void),
     loading?: boolean,
     disabled?: boolean,
+    rel?: string,
+    target?: string,
 }
 
 const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
