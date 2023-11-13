@@ -1,6 +1,12 @@
 import BlockWrapper from "../BlockWrapper";
 
-export default function DividerBlock({ block }) {
+interface Props {
+	block: {
+		style: string
+	}
+}
+
+export default function DividerBlock({ block }: Props) {
 
 	const style = block.style;
 	const hrClasses = [
