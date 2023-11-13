@@ -1,5 +1,5 @@
 import GraphQL from '../lib/GraphQl'
-import * as EntryTypes from '../lib/EntryTypes'
+import EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
 import { notFound } from 'next/navigation'
 
@@ -73,7 +73,7 @@ async function getPageContent(context: Parameters) {
 
     const formattedEntryType = formatEntryType(entryType)
 
-    const entryQuery = EntryTypes[`${formattedEntryType}Query`]
+    const entryQuery = EntryTypes[`${formattedEntryType}Query` as keyof typeof EntryTypes]
 
     const data = await entryQuery(slug, entryType)
 

@@ -1,16 +1,16 @@
 'use client'
 
-import * as EntryTypes from '../lib/EntryTypes'
+import EntryTypes from '../lib/EntryTypes'
 
-const formatEntryType = entryType => 
+const formatEntryType = (entryType: string) => 
     entryType.charAt(0).toUpperCase() + entryType.slice(1)
 
 export default function PageClient({data}) {
-
+    console.log(EntryTypes)
     const entryType = formatEntryType(data.entry.typeHandle)
-    const Template = EntryTypes[`${entryType}Template`]
+    const Template = EntryTypes[`${entryType}Template` as keyof typeof EntryTypes]
 
-	return (
+	return ( 
         <Template data={data} />
 	);
 }

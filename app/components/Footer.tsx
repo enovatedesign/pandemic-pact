@@ -3,7 +3,6 @@ import Image from 'next/image'
 import FooterMenu from './FooterMenu'
 import {footerLinksFirstCollection} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
-import {MenuIcon} from '@heroicons/react/solid'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
 
 export default function Header({className}: {className?: string}) {

@@ -1,7 +1,7 @@
 import GraphQL from '../../GraphQl'
 import { contentBuilderQuery, seomaticQuery } from '../../Queries'
 
-export default async function PageQuery(slug: String, entryType: String = 'page') {
+export default async function PageQuery(slug: string, entryType: string = 'page') {
 
 	const data = await GraphQL(
 		`
