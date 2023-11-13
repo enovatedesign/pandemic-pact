@@ -18,8 +18,8 @@ type Props = {
                 url: string,
                 height: number,
                 alt: string,
-            }
-       }
+            }[],
+       }[],
     }
 }
 
@@ -37,10 +37,10 @@ const ContentSliderBlock = ({block}: Props ) => {
                     slidesPerView={4}
                     navigation
                 >
-                    {slides.map((slide, index) => {
+                    {slides.map((slide, index: number) => {
                         
                         const button = slide.button ?? null
-                        console.log(slide)
+
                         return (
                             <>
                                 <SwiperSlide key={index}>
