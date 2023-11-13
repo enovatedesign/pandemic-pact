@@ -3,7 +3,7 @@ import * as EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
 import { notFound } from 'next/navigation'
 
-const formatEntryType = entryType => 
+const formatEntryType = (entryType: string) => 
     entryType.charAt(0).toUpperCase() + entryType.slice(1)
 
 export async function generateStaticParams() {
@@ -23,7 +23,12 @@ export async function generateStaticParams() {
 
     const entries = craftResponse.entries;
 
-	return entries.map(({ slug, ancestors }) => {
+	interface Entry {
+		slug: string, 
+		ancestors: Entry[]
+	}
+
+	return entries.map(({ slug, ancestors }: Entry) => {
 		const slugs = [...ancestors.map(({ slug }) => slug), slug]
 		return ({ slug: slugs })
 	})
@@ -39,8 +44,12 @@ export async function generateStaticParams() {
 	// 	fallback: 'blocking',
 	// };
 }
+interface Parameters {
+	preview?: {token: string},
+	slug: string[]
+}
 
-async function getPageContent(context) {
+async function getPageContent(context: Parameters) {
 
 	const previewToken = context?.preview?.token ?? undefined;
 
