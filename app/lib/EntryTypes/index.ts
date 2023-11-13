@@ -3,13 +3,22 @@ import PageTemplate from './template/PageTemplate';
 import PageQuery from './query/PageQuery';
 
 interface EntryTemplateAndQuery {
-    pageTemplate: ComponentType<{data: any}>,
-    pageQuery: (slug: string, entryType: string) => any
+    templates: {
+        [key: string ]: ComponentType<{data: any}>,
+    },
+    queries: {
+        [key: string]: (slug: string, entryType: string) => any
+    }
 }
 
 const EntryTypes: EntryTemplateAndQuery = {
-    pageTemplate: PageTemplate,
-    pageQuery: PageQuery
+    templates: {
+        page: PageTemplate,
+    },
+    queries: {
+        page: PageQuery,
+    }
 }
 
 export default EntryTypes;
+

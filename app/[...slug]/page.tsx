@@ -3,9 +3,6 @@ import EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
 import { notFound } from 'next/navigation'
 
-const formatEntryType = (entryType: string) => 
-    entryType.charAt(0).toUpperCase() + entryType.slice(1)
-
 export async function generateStaticParams() {
 	const craftResponse = await GraphQL(
 		`{
@@ -71,9 +68,7 @@ async function getPageContent(context: Parameters) {
 
     const entryType = entryTypeData.entry.typeHandle
 
-    const formattedEntryType = formatEntryType(entryType)
-
-    const entryQuery = EntryTypes[`${formattedEntryType}Query` as keyof typeof EntryTypes]
+    const entryQuery = EntryTypes.queries[entryType]
 
     const data = await entryQuery(slug, entryType)
 
