@@ -18,12 +18,12 @@ type Props = {
             postNominalLetters: string,
             aboutText: string,
             thumbnailImage: {
-              alt: string,
+              altText: string,
               url: string,
               height: number,
               width: number,
-            }
-          }
+            }[],
+          }[],
         }
     }
 
