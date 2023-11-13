@@ -1,20 +1,24 @@
+"use client"
+
 import Link from 'next/link'
 import Image from 'next/image'
 import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
 import {MenuIcon} from '@heroicons/react/solid'
-import { useState } from 'react'
+import {useState} from 'react'
 
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     console.log(pathname)
     const links = getLinksArray()
-    
+
     const [showMobileNav, setShowMobileNav] = useState(false)
-    
-    const bodyEl = document.querySelector('body')
+
     const handleNav = () => {
+        const bodyEl = document.querySelector('body')
+
         setShowMobileNav(!showMobileNav)
+
         bodyEl?.classList.toggle('overflow-y-hidden')
     }
 
@@ -72,26 +76,26 @@ export default function Header({className}: {className?: string}) {
                     <div className="flex items-center rounded-full border border-primary/25 inner-glow z-10">
                         <button className={`${buttonClasses} z-10 p-3 lg:hidden`} onClick={handleNav}>
                             <span className="sr-only">Menu</span>
-                            <MenuIcon className="w-8 h-8 fill-white"/>
+                            <MenuIcon className="w-8 h-8 fill-white" />
                         </button>
-                    
+
                         <nav className="hidden px-10 py-3 lg:block">
                             <ul className="flex space-x-10">
                                 {links.map((link, index) => (
-                                        <li key={index}>
-                                            <NavItem key={link.label} {...link}/>
-                                        </li>
-                                    ))}
+                                    <li key={index}>
+                                        <NavItem key={link.label} {...link} />
+                                    </li>
+                                ))}
                             </ul>
                         </nav>
 
                         <div className={`${mobileTransitionClasses} -z-50 h-screen w-screen lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map((link, index) => (
-                                        <li key={index} className={`${mobileAnimationClasses} w-full`}>
-                                            <NavItem key={link.label} {...link}/>
-                                        </li>
-                                    ))}
+                                    <li key={index} className={`${mobileAnimationClasses} w-full`}>
+                                        <NavItem key={link.label} {...link} />
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
