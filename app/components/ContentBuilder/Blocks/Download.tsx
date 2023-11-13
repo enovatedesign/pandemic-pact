@@ -23,7 +23,7 @@ const DownloadBlock = ({ block }: Props) => {
 	
 	const {url, text, customText, element} = block.download ?? null
 	
-	const title = customText ? customText :  text
+	const title = customText ? customText : text
 	const downloadKind = element.kind ?? null
 	const downloadSize = element.size ?? null
 

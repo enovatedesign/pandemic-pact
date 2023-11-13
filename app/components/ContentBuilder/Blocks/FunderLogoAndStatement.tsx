@@ -3,7 +3,14 @@ import BlockWrapper from '../BlockWrapper'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import { useInView, animated } from '@react-spring/web';
 
-export default function FunderLogoAndStatement({ block }) {
+interface Props {
+    block: {
+        heading: string, 
+        funders: any[],   
+    }
+}
+
+export default function FunderLogoAndStatement({ block }: Props) {
 	const heading = block.heading
 	const funders = block.funders
 
@@ -17,7 +24,7 @@ export default function FunderLogoAndStatement({ block }) {
                 )}
 
                 <div className="flex flex-col gap-6">
-                    {funders.map((funder, index) => <FunderItem funder={funder} key={index} index={index} />
+                    {funders.map((funder, index: number) => <FunderItem funder={funder} key={index} index={index} />
                         
                     )}
                 </div>
@@ -28,7 +35,21 @@ export default function FunderLogoAndStatement({ block }) {
 	}
 }
 
-const FunderItem = ({funder, index}) => {
+interface FunderProps {
+    funder: {
+        funderLogos: {
+            altText: string,
+            url: string,
+            width: number,
+            height: number,
+        }[],
+        funderName: string, 
+        fundingStatement: string,
+    }, 
+    index: number
+}
+
+const FunderItem = ({funder, index}: FunderProps) => {
 
     const textClasses = [
         'prose prose-lg dark:prose-invert',
@@ -64,7 +85,7 @@ const FunderItem = ({funder, index}) => {
 
             <div className={`grid ${funder.funderLogos.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} items-center gap-6 lg:gap-12`}>
 
-                {funder.funderLogos.map((logo, index) => {
+                {funder.funderLogos.map((logo, index: number) => {
                     return (
                         <Image
                             key={index}
