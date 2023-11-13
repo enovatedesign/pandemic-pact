@@ -52,7 +52,7 @@ const Pagination = ({
     ].join(' ')
 
     const rightFullStopClasses = [
-        page < totalPages.length -2 ? 'block' : 'hidden'
+        page < totalPages.length -2 ? 'block' : 'invisible'
     ].join(' ')
 
     return (
@@ -89,11 +89,9 @@ const Pagination = ({
                         )
                     })}
                 </div>
-                {filteredPages.length > 5 && (
-                    <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                        <span>.</span><span>.</span><span>.</span>
-                    </p>
-                )}
+                <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
+                    <span>.</span><span>.</span><span>.</span>
+                </p>
             </div>
             
 
