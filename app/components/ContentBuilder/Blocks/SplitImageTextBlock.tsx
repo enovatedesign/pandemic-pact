@@ -1,7 +1,7 @@
 import BlockWrapper from "../BlockWrapper"
 import Image from "next/image"
 import RichText from "../Common/RichText"
-import ButtonLink from "../Common/Button"
+import Button from "../../Button"
 import { useInView, animated } from '@react-spring/web';
 
 interface Props {
@@ -86,10 +86,9 @@ const SplitImageTextBlock = ({block}: Props) => {
                     )}
 
                     {button.url && (
-                        <ButtonLink 
-                            linkTo={button.url}
-                            title={button.text}
-                        />
+                        <Button href={button.url}> 
+                            {button.text}
+                        </Button>
                     )}
                 </animated.div>
 

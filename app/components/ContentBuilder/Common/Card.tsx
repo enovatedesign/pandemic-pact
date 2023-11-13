@@ -88,7 +88,7 @@ const Card = ({entry, tags, children, image, hover = true}: Props) => {
                 )}
 
                 {text && (
-                    <RichText text={text}>
+                    <RichText text={text} customClasses=''>
                         {text}
                     </RichText>
                 )}

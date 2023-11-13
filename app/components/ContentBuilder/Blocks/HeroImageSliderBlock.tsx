@@ -1,6 +1,6 @@
 import Image from "next/image"
 import RichText from "../Common/RichText"
-import ButtonLink from "../Common/Button"
+import Button from '../../Button'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from "swiper/modules"
 
@@ -108,7 +108,7 @@ const HeroImageSliderBlock = ({block}: Props) => {
 
                                                         <div className={buttonContainerClasses}>
                                                             {button.url && (
-                                                                <ButtonLink linkTo={button.url} title={button.text}/>
+                                                                <Button href={button.url}>{button.text}</Button>
                                                             )}
 
                                                             {textLink.url && (

@@ -5,7 +5,7 @@ interface Props {
     text: string
 }
 
-const RichText = ({props}: Props) => {
+const RichText = (props: Props) => {
 
     const invert = props.invert ?? false 
     const typeScale = props.typeScale ?? 'lg:prose-lg' 

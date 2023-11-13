@@ -18,11 +18,9 @@ export default function ButtonBlock({ block }: Props) {
 			<div className={"text-" + position}>
 				<Button
 					colour={colour}
-					target={"/" + button.element.uri}
-					text={button.text}
-					type="anchor"
+					href={"/" + button.element.uri}
 				>
-					Read more
+					{button.text}
 				</Button>
 			</div>
 		);
