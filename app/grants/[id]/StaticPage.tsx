@@ -11,7 +11,6 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
 import { debounce } from 'lodash';
-import { read } from 'fs';
 
 interface Props {
     grant: any
@@ -137,7 +136,15 @@ export default function StaticPage({grant}: Props) {
 
                     <ul className="text-xl lg:text-2xl text-gray-300 flex flex-col md:flex-row items-start md:items-center justify-start gap-4">
                         <li>Funded by <span className="font-medium text-primary">{grant.FundingOrgName.join(', ')}</span></li>
-                        <li className="flex"><span className="sr-only">Total publications:</span> <span className="inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">{grant.PubMedLinks?.length ?? '0'} publications</span></li>
+                        <li className="flex">
+                            <span className="sr-only">
+                                Total publications:
+                            </span>
+                            <a href="#publications" className="inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
+                                {grant.PubMedLinks?.length ?? '0'} publications
+                            </a>
+                        
+                        </li>
                     </ul>
 
                     <p className="text-gray-500">
@@ -184,7 +191,7 @@ export default function StaticPage({grant}: Props) {
                                     <span className='inline-flex text-secondary'>
                                         {abstractShow ? "read less" : "read more"}
                                     </span>
-                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
+                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8 text-secondary`} />
                                 </button>
                             )}
                         </div>
@@ -207,18 +214,18 @@ export default function StaticPage({grant}: Props) {
                                                     </p>
                                                     {heading.startMetric && heading.endMetric ? (
                                                         <div className="flex justify-start gap-1 ">
-                                                            <span className='text-md md:text-3xl lg:text-4xl font-bold'>
+                                                            <span className='text-lg md:text-3xl lg:text-4xl font-bold'>
                                                                 {grant.GrantStartYear}
                                                             </span>
-                                                            <div className='flex gap-1 items-center mt-3'>
+                                                            <div className='flex gap-1 items-center mt-1 md:mt-2 lg:mt-3'>
                                                                 <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
-                                                                <span className="font-bold text-2xl">
+                                                                <span className="font-bold md:text-xl lg:text-2xl">
                                                                     {grant.GrantEndYear}
                                                                 </span>
                                                             </div>
                                                         </div>
                                                     ) : (                                                    
-                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
+                                                        <p className='text-lg md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
                                                     )}
 
                                                 </li>
@@ -278,7 +285,7 @@ export default function StaticPage({grant}: Props) {
 
                         {publicationList?.length > 0 &&
                             <div className='flex flex-col space-y-4'>
-                                <h2 className={titleClasses}>Publications</h2>
+                                <h2 className={titleClasses} id='publications'>Publications</h2>
 
                                 <div>
 
