@@ -27,7 +27,7 @@ interface ImageProps {
 const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const autoplayDelay = autoplayState ? 3000 : null
+    const autoplayDelay = autoplayState ? 3000 : 0
 
     return (    
 		<div className="bg-gray-200">
