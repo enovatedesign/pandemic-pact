@@ -148,14 +148,16 @@ export default function StaticPage({grant}: Props) {
                                                         {heading.text}
                                                     </p>
                                                     {heading.startMetric && heading.endMetric ? (
-                                                        <div className="flex items-center justify-start gap-1 ">
-                                                            <span className='text-2xl'>
+                                                        <div className="flex justify-start gap-1 ">
+                                                            <span className='text-md md:text-3xl lg:text-4xl font-bold'>
                                                                 {grant.GrantStartYear}
                                                             </span>
-                                                            <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
-                                                            <span className="">
-                                                                {grant.GrantEndYear}
-                                                            </span>
+                                                            <div className='flex gap-1 items-center mt-3'>
+                                                                <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
+                                                                <span className="font-bold text-2xl">
+                                                                    {grant.GrantEndYear}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     ) : (                                                    
                                                         <p className='text-md md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
