@@ -11,6 +11,7 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
 import { debounce } from 'lodash';
+import { read } from 'fs';
 
 interface Props {
     grant: any
@@ -75,15 +76,18 @@ export default function StaticPage({grant}: Props) {
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
     const [readMore, setReadMore] = useState(false)
+    const [backgroundShow, setBackgroundShow] = useState(true)
+    
 
     useEffect(() => {
+        const abstract = document.getElementById('abstract')
         const checkHeight = () => {
-            const abstract = document.getElementById('abstract')
-            if (abstract?.offsetHeight > 500 && !readMore) {
+            if (abstract?.offsetHeight > 200) {
                 setReadMore(true)
+            } else {
+                setReadMore(false)
             }
         }
-
         const debouncedCheckHeight = debounce(checkHeight, 200)
 
         if (document.readyState === 'complete') {
@@ -99,7 +103,32 @@ export default function StaticPage({grant}: Props) {
             window.removeEventListener('resize', debouncedCheckHeight)
         }
     }, [readMore])
-    
+
+    useEffect(() => {
+        const handleBackground = () => {
+            if (readMore) {
+                setBackgroundShow(true)
+            } else {
+                setBackgroundShow(false)
+            }
+        }
+
+        const debouncedBackground = debounce(handleBackground, 200)
+
+        if (document.readyState === 'complete') {
+            handleBackground()
+        } else {
+            window.addEventListener('load', handleBackground)
+        }
+
+        window.addEventListener('resize', debouncedBackground)
+
+        return () => {
+            window.removeEventListener('load', handleBackground)
+            window.removeEventListener('resize', debouncedBackground)
+        }
+
+    }, [backgroundShow, readMore])
 
     const mastheadContent = () => {
         return (
@@ -145,7 +174,7 @@ export default function StaticPage({grant}: Props) {
                                 >   
                                     <div id='abstract'>
                                         <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
-                                        {!abstractShow && (
+                                        {backgroundShow && !abstractShow && (
                                             <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
                                         )}
                                     </div>
