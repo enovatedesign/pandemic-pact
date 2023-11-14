@@ -25,15 +25,17 @@ export default function StaticPage({grant}: Props) {
 
         {
             text: 'Start & end year',
-            metric: () => (
-                <div className="flex items-center justify-start gap-1">
-                    {grant.GrantStartYear}
-                    <span className="flex self-end items-center gap-1">
-                        <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
-                        <span className="text-2xl">{grant.GrantEndYear}</span>
-                    </span>
-                </div>
-            ),
+            startMetric: grant.GrantStartYear,
+            endMetric: grant.GrantEndYear,
+            // metric: () => (
+            //     <div className="flex items-center justify-start gap-1">
+            //         {grant.GrantStartYear}
+            //         <span className="flex self-end items-center gap-1">
+            //             <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
+            //             <span className="text-2xl">{grant.GrantEndYear}</span>
+            //         </span>
+            //     </div>
+            // ),
         },
         {
             text: 'Amount Committed (USD)',
@@ -154,7 +156,20 @@ export default function StaticPage({grant}: Props) {
                                                     <p className='uppercase text-xs tracking-widest font-bold'>
                                                         {heading.text}
                                                     </p>
-                                                    <p className='text-md md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
+                                                    {heading.startMetric && heading.endMetric ? (
+                                                        <div className="flex items-center justify-start gap-1 ">
+                                                            <span className='text-2xl'>
+                                                                {grant.GrantStartYear}
+                                                            </span>
+                                                            <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
+                                                            <span className="">
+                                                                {grant.GrantEndYear}
+                                                            </span>
+                                                        </div>
+                                                    ) : (                                                    
+                                                        <p className='text-md md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
+                                                    )}
+
                                                 </li>
                                             )
                                         })}

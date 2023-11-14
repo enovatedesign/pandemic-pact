@@ -207,7 +207,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                             {!advancedSearchShow ? (
                                 <AnimateHeight
                                     duration={400}
-                                    height={!advancedSearchShow ? 'auto' : 0}
+                                    height={!advancedSearchShow && 'auto'}
                                 >   
 
                                     <section className=' bg-white p-4'>
@@ -260,8 +260,12 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     </section>
                                 </AnimateHeight>
                             ) : (
-
+                                <AnimateHeight
+                                    duration={400}
+                                    height={advancedSearchShow && 'auto'}
+                                >
                                     <AdvancedSearch/>
+                                </AnimateHeight>
                                 
                             )}
                     </div>
