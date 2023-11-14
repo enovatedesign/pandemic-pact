@@ -140,7 +140,7 @@ export default function StaticPage({grant}: Props) {
                                     <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                                         {keyFactsHeadings.map((heading, index) => {
                                             const borderClasses = [
-                                                index === 1 ? 'border-x-2 border-secondary/10' : ''
+                                                index === 1 && 'border-x-2 border-secondary/10'
                                             ].join(' ')
                                             return (
                                                 <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2`}>
@@ -168,7 +168,7 @@ export default function StaticPage({grant}: Props) {
                                     <ul className="grid grid-cols-3">
                                         {keyFactsSubHeadings.map((subHeading, index) => {
                                             const borderClasses = [
-                                                index === 1 ? 'border-x-2 border-secondary/10' : ''
+                                                index === 1 && 'border-x-2 border-secondary/10'
                                             ].join(' ')
                                             return (
                                                 <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2`}>
@@ -185,7 +185,7 @@ export default function StaticPage({grant}: Props) {
                                     <ul className="grid grid-cols-2">
                                         {keyFactsSubCategories.map((category, index) => {
                                             const borderClasses = [
-                                                index === 0 ? 'border-r-2' : ''
+                                                index === 0 && 'border-r-2'
                                             ].join(' ')
                                             return (
                                                 <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col space-y-2`}>
