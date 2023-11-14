@@ -19,10 +19,11 @@ const camelToSentence = (word: string) => {
     children: any,
     row: Row,
     rows: Row[],
-    setRows: ((rows: Row[]) => void)
+    setRows: ((rows: Row[]) => void),
+    index: number,
   }
 
-const AdvancedInputRow = ({children, row, rows, setRows} : AdvancedRowProps) => {
+const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowProps) => {
     
     const [ localRow, setLocalRow ] = useState<Row>(row)
     
@@ -121,7 +122,7 @@ const AdvancedInputRow = ({children, row, rows, setRows} : AdvancedRowProps) => 
                         </p>
                 </button>
             </div>
-            <div className="flex items-center">
+            <div className={`${index === 0 && 'invisible pr-8'} flex items-center`}>
                 {children}
             </div>
         </div>
@@ -194,7 +195,7 @@ const AdvancedSearch = () => {
                                         {globalAnd ? 'and' : 'or'}
                                     </p>
                                 )}
-                                <AdvancedInputRow row={row} rows={rows} setRows={setRows}>
+                                <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
                                     {/* Add remove button function here */}
                                     {index > 0 && (
                                         <button
