@@ -140,6 +140,7 @@ const AdvancedSearch = () => {
 
     const [rows, setRows] = useState<Row[]>([defaultRow()])
     const [globalAnd, setGlobalAnd] = useState(true)
+    const maxRows = 6 
 
     const globalAndButtonTextClasses = [
         globalAnd ? 'order-first left-3' : 'order-last right-4'
@@ -159,7 +160,7 @@ const AdvancedSearch = () => {
                 <h3 className="text-secondary uppercase tracking-widest text-xl font-bold">
                     Advanced Search
                 </h3>
-                {rows.length < 7 && (
+                {rows.length < 6 && (
                     <button
                         className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
                         onClick={addRow}
@@ -191,26 +192,24 @@ const AdvancedSearch = () => {
 
                     return (
                         <>  
-                            {index < 7 && (
-                                <div key={row.key}>
+                            <div key={row.key}>
+                                {index > 0 && (
+                                    <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
+                                        {globalAnd ? 'and' : 'or'}
+                                    </p>
+                                )}
+                                <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
+                                    {/* Add remove button function here */}
                                     {index > 0 && (
-                                        <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
-                                            {globalAnd ? 'and' : 'or'}
-                                        </p>
+                                        <button
+                                            className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                            onClick={() => removeRow(index)}
+                                        >
+                                            <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                                        </button>
                                     )}
-                                    <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
-                                        {/* Add remove button function here */}
-                                        {index > 0 && (
-                                            <button
-                                                className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                                onClick={() => removeRow(index)}
-                                            >
-                                                <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                                            </button>
-                                        )}
-                                    </AdvancedInputRow>
-                                </div>
-                            )}
+                                </AdvancedInputRow>
+                            </div>
                         </>
                     )
                 })}
