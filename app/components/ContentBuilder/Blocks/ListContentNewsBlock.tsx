@@ -42,8 +42,8 @@ const ListContentNewsBlock = ( {block}: Props ) => {
     
     const limit = block.limit 
     const paginate = block.paginate ?? false
-    const [firstItemIndex, setFirstItemIndex] = useState(0)
-    const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
+    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
+    const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
 
     const customEntries = block.customEntries ?? null
     const limitedEntries = customEntries.slice(0, limit) 

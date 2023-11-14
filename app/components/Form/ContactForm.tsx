@@ -84,7 +84,7 @@ export default function ContactForm() {
         return isValid;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         let isValidForm = handleValidation();
@@ -135,7 +135,6 @@ export default function ContactForm() {
         setName("");
 
     };
-
 
     return (
         <>

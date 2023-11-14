@@ -4,7 +4,7 @@ import PageQuery from './query/PageQuery';
 
 interface EntryTemplateAndQuery {
     templates: {
-        [key: string ]: ComponentType<{data: any}>,
+        [key: string]: ComponentType<{data: any}>,
     },
     queries: {
         [key: string]: (slug: string, entryType: string) => any
