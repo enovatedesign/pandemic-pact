@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import AnimateHeight from 'react-animate-height';
 import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
+import { debounce } from 'lodash';
 
 interface Props {
     grant: any
@@ -73,6 +74,32 @@ export default function StaticPage({grant}: Props) {
     const [firstItemIndex, setFirstItemIndex] = useState(0)
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
+    const [readMore, setReadMore] = useState(false)
+
+    useEffect(() => {
+        const checkHeight = () => {
+            const abstract = document.getElementById('abstract')
+            if (abstract?.offsetHeight > 500 && !readMore) {
+                setReadMore(true)
+            }
+        }
+
+        const debouncedCheckHeight = debounce(checkHeight, 200)
+
+        if (document.readyState === 'complete') {
+            checkHeight()
+        } else {
+            window.addEventListener('load', checkHeight)
+        }
+
+        window.addEventListener('resize', debouncedCheckHeight)
+
+        return () => {
+            window.removeEventListener('load', checkHeight)
+            window.removeEventListener('resize', debouncedCheckHeight)
+        }
+    }, [readMore])
+    
 
     const mastheadContent = () => {
         return (
@@ -92,7 +119,6 @@ export default function StaticPage({grant}: Props) {
             </>
         )
     }
-
 
     return (
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
@@ -116,19 +142,22 @@ export default function StaticPage({grant}: Props) {
                                     duration={300}
                                     height={abstractShow ? 'auto' : 230}
                                     className='relative'
-                                >
-                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
-                                    {!abstractShow && (
-                                        <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
-                                    )}
+                                >   
+                                    <div id='abstract'>
+                                        <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
+                                        {!abstractShow && (
+                                            <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                        )}
+                                    </div>
                                 </AnimateHeight>
-
-                            <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
-                                <span className='inline-flex text-secondary'>
-                                    {abstractShow ? "read less" : "read more"}
-                                </span>
-                                <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
-                            </button>
+                            {readMore && (
+                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
+                                    <span className='inline-flex text-secondary'>
+                                        {abstractShow ? "read less" : "read more"}
+                                    </span>
+                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8`} />
+                                </button>
+                            )}
                         </div>
 
                         <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">

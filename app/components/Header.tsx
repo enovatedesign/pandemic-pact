@@ -9,7 +9,6 @@ import {useState} from 'react'
 
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
-    console.log(pathname)
     const links = getLinksArray()
 
     const [showMobileNav, setShowMobileNav] = useState(false)
