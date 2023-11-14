@@ -27,15 +27,6 @@ export default function StaticPage({grant}: Props) {
             text: 'Start & end year',
             startMetric: grant.GrantStartYear,
             endMetric: grant.GrantEndYear,
-            // metric: () => (
-            //     <div className="flex items-center justify-start gap-1">
-            //         {grant.GrantStartYear}
-            //         <span className="flex self-end items-center gap-1">
-            //             <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
-            //             <span className="text-2xl">{grant.GrantEndYear}</span>
-            //         </span>
-            //     </div>
-            // ),
         },
         {
             text: 'Amount Committed (USD)',
