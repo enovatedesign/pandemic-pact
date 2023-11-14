@@ -184,90 +184,80 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </div>
                 </Col>
 
-                <section className="col-span-2 w-full bg-white rounded-xl border-2 border-gray-200 p-8 flex flex-col ">
-                    <div className='flex justify-end'>
-                        <div className='flex space-x-8'>
-                            <button onClick={() => setAdvancedSearchShow(false)}>
+                <section className="col-span-2 w-full rounded-xl border-2 bg-200 flex flex-col bg-gray-200 px-4 pt-4">
+                    <div className='flex justify-end '>
+                        <div className="flex space-x-8">
+                            <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} p-4 `}>
                                 Standard Search
                             </button>
-                            <button onClick={() => setAdvancedSearchShow(true)}>
+                            <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} p-4 `}>
                                 Advanced Search
                             </button>
                         </div>
                     </div>
 
-                    <div className='col-span-2'>
-                        <AnimateHeight
-                            duration={400}
-                            height='auto'
-                        >   
+                    <div className={`${!advancedSearchShow ? 'rounded-2xl' : 'rounded-l-2xl rounded-b-2xl'} col-span-2 bg-white p-4 mb-4`}>
+                        
                             {!advancedSearchShow ? (
+                                <AnimateHeight
+                                    duration={400}
+                                    height={!advancedSearchShow ? 'auto' : 0}
+                                >   
 
-                                <>
-                                    <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
-                                        Advanced Search
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <Col>
+                                    <section className=' bg-white p-4'>
+
+                                        <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
+                                            Advanced Search
+                                        </h3>
+                                        <div className="grid grid-cols-2 gap-2">
                                             <MultiSelect
                                                 options={selectOptions.Disease}
                                                 selectedOptions={filters.Disease}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
                                                 placeholder="All Diseases"
-                                            />
-                                        </Col>
+                                                />
 
-                                        <Col>
                                             <MultiSelect
                                                 options={selectOptions.Pathogen}
                                                 selectedOptions={filters.Pathogen}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
                                                 placeholder="All Pathogens"
-                                            />
-                                        </Col>
+                                                />
 
 
-                                        <Col>
                                             <MultiSelect
                                                 options={selectOptions.ResearchInstitutionCountry}
                                                 selectedOptions={filters.ResearchInstitutionCountry}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
                                                 placeholder="All Research Institution Countries"
-
-                                            />
-                                        </Col>
-                                        <Col>
+                                                
+                                                />
                                             <MultiSelect
                                                 options={selectOptions.Regions}
                                                 selectedOptions={filters.ResearchInstitutionRegion}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
                                                 placeholder="All Research Institution Regions"
-                                            />
-                                        </Col>
-
-                                        <Col>
+                                                />
                                             <MultiSelect
                                                 options={selectOptions.FunderCountry}
                                                 selectedOptions={filters.FunderCountry}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
                                                 placeholder="All Funder Countries"
-                                            />
-                                        </Col>
-
-                                        <Col>
+                                                />
                                             <MultiSelect
                                                 options={selectOptions.Regions}
                                                 selectedOptions={filters.FunderRegion}
                                                 setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
                                                 placeholder="All Funder Regions"
-                                            />
-                                        </Col>
-                                    </div>
-                                </>
+                                                />
+                                        </div>
+                                    </section>
+                                </AnimateHeight>
                             ) : (
-                                <AdvancedSearch />
+
+                                    <AdvancedSearch/>
+                                
                             )}
-                        </AnimateHeight>
                     </div>
                 </section>
 
