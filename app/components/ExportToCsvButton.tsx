@@ -43,7 +43,7 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename, tit
             {...props}
         >
             <span>Download Data</span>
-            <CloudDownloadIcon className="w-5 h-5" />
+            <CloudDownloadIcon className="w-5 h-5"/>
         </Button>
     )
 }
