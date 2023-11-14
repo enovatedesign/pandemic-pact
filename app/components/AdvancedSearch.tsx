@@ -158,8 +158,8 @@ const AdvancedSearch = () => {
     return (
         <section className="p-4">
                 <div className='flex justify-between pb-4'>
-                    <div className="flex items-center justify-center space-x-2 pb-2 pr-[70px] md:pr-[148px]">
-                        <p className="text-secondary uppercase">
+                    <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:items-center md:space-x-2  md:pr-[148px]">
+                        <p className="text-secondary uppercase text-sm">
                             Set the global and/or functionality: 
                         </p>
                         <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">

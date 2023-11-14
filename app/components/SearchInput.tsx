@@ -185,14 +185,20 @@ export default function SearchInput({setSearchResponse}: Props) {
                 </Col>
 
                 <section className="col-span-2 w-full rounded-xl border-2 bg-200 flex flex-col bg-gray-200 px-4 pt-4">
-                    <div className='flex justify-end '>
-                        <div className="flex space-x-8">
-                            <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} p-4 `}>
-                                Standard Search
-                            </button>
-                            <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} p-4 `}>
-                                Advanced Search
-                            </button>
+                    <div className='flex items-center justify-between'>
+                        <h2 className='text-secondary uppercase'>
+                            Filters:
+                        </h2>
+
+                        <div className='flex'>
+                            <div className="flex space-x-4 text-sm text-secondary">
+                                <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4`}>
+                                    Standard Search
+                                </button>
+                                <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4`}>
+                                    Advanced Search
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -209,7 +215,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                         <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
                                             Advanced Search
                                         </h3>
-                                        <div className="grid grid-cols-2 gap-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                             <MultiSelect
                                                 options={selectOptions.Disease}
                                                 selectedOptions={filters.Disease}
@@ -271,15 +277,6 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </p>
 
                     <div className="grow flex flex-row justify-end gap-2">
-                        <Button
-                            size="xsmall"
-                            colour='grey'
-                            onClick={() => setAdvancedSearchShow(!advancedSearchShow)}
-                            customClasses="flex items-center justify-center self-start gap-2"
-                        >
-                            {advancedSearchShow ? 'Switch to Standard Search' : 'Switch to Advanced Search'}
-                            <SwitchHorizontalIcon className="w-5 h-5" />
-                        </Button>
                         <ExportToCsvButton
                             meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
                             filename="search-results-export"
