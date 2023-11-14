@@ -152,19 +152,21 @@ const AdvancedSearch = () => {
     const addRow = () => {
         setRows([...rows, defaultRow()])
     }
-
+    console.log(rows.length)
     return (
         <section className=" w-full bg-white rounded-xl border-2 border-gray-200 p-8">
             <div className='flex justify-between pb-8'>
                 <h3 className="text-secondary uppercase tracking-widest text-xl font-bold">
                     Advanced Search
                 </h3>
-                <button
-                    className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                    onClick={addRow}
-                >
-                    <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                </button>
+                {rows.length < 7 && (
+                    <button
+                        className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                        onClick={addRow}
+                    >
+                        <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                    </button>
+                )}
             </div>
             <div className="flex items-center justify-center space-x-2 pb-2 pr-[70px] md:pr-[148px]">
                 <p className="text-secondary uppercase">
@@ -188,25 +190,27 @@ const AdvancedSearch = () => {
                     }
 
                     return (
-                        <>
-                            <div key={row.key}>
-                                {index > 0 && (
-                                    <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
-                                        {globalAnd ? 'and' : 'or'}
-                                    </p>
-                                )}
-                                <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
-                                    {/* Add remove button function here */}
+                        <>  
+                            {index < 7 && (
+                                <div key={row.key}>
                                     {index > 0 && (
-                                        <button
-                                            className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                            onClick={() => removeRow(index)}
-                                        >
-                                            <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                                        </button>
+                                        <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
+                                            {globalAnd ? 'and' : 'or'}
+                                        </p>
                                     )}
-                                </AdvancedInputRow>
-                            </div>
+                                    <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
+                                        {/* Add remove button function here */}
+                                        {index > 0 && (
+                                            <button
+                                                className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                                onClick={() => removeRow(index)}
+                                            >
+                                                <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                                            </button>
+                                        )}
+                                    </AdvancedInputRow>
+                                </div>
+                            )}
                         </>
                     )
                 })}
