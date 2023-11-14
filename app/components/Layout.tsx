@@ -58,13 +58,13 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
             <div className={`${sidebarContent && "flex"}`}>
                 {sidebarContent &&
                     <aside className="relative bg-secondary">
-                        <div className="sticky top-0 flex flex-col bg-white/10 text-white h-screen">
+                        <div className="sticky top-0 flex flex-col bg-transparent text-white h-screen">
                             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
                                 <span className="sr-only">Filters</span>
                                 <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
                             
-                            {!sidebarOpen && (
+                            {/* {!sidebarOpen && (
                                     <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
                                         <dt className="text-white uppercase">Total grants</dt>
                                         <dd className="text-primary font-bold">125</dd>
@@ -72,7 +72,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                                         <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">3</dd>
                                     </dl>
                                 )
-                            }
+                            } */}
 
                             <animated.div
                                 className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
@@ -93,7 +93,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                         <article aria-labelledby="page-title">
 
-                            {/* <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}> */}
+                            <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
 
                             <div className={`masthead-background ${mastheadStyles.background}`}>
 
@@ -111,7 +111,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                             </div>
 
-                            {/* </InteractiveBackground> */}
+                            </InteractiveBackground>
 
                             {children}
 

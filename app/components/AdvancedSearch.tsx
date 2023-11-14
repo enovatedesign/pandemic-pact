@@ -196,12 +196,14 @@ const AdvancedSearch = () => {
                                 )}
                                 <AdvancedInputRow row={row} rows={rows} setRows={setRows}>
                                     {/* Add remove button function here */}
-                                    <button
-                                        className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                        onClick={() => removeRow(index)}
-                                    >
-                                        <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                                    </button>
+                                    {index > 0 && (
+                                        <button
+                                            className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                            onClick={() => removeRow(index)}
+                                        >
+                                            <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                                        </button>
+                                    )}
                                 </AdvancedInputRow>
                             </div>
                         </>
