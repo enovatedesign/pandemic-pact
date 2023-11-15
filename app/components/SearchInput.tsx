@@ -185,17 +185,17 @@ export default function SearchInput({setSearchResponse}: Props) {
                 </Col>
 
                 <section className="col-span-2 w-full rounded-xl border-2 bg-200 flex flex-col bg-gray-200 px-4 pt-4">
-                    <div className='flex items-center justify-between'>
+                    <div className='flex items-center justify-between gap-2'>
                         <h2 className='text-secondary uppercase'>
                             Filters:
                         </h2>
 
                         <div className='flex'>
-                            <div className="flex space-x-4 text-sm text-secondary">
-                                <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4`}>
+                            <div className="flex space-x-1 text-sm text-secondary">
+                                <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4 text-xs md:text-sm`}>
                                     Standard Search
                                 </button>
-                                <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4`}>
+                                <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4 text-xs md:text-sm`}>
                                     Advanced Search
                                 </button>
                             </div>
