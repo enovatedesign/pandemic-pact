@@ -29,7 +29,7 @@ export default function Visualise() {
 
     return (
         <Layout
-            title="Visualise"
+            title="Interactive Charts"
             showSummary={true}
             summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
             sidebarContent={
