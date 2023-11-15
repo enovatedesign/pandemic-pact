@@ -49,9 +49,9 @@ export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: 
 
     const infoModalContents = (
         <>
-            <Title>Lorem Ipsum Dolor</Title>
+            <Title>Distribution of research funding by research category</Title>
 
-            <Text>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae in, eligendi odio animi distinctio laborum exercitationem, illo deleniti sit sunt nemo doloremque. Nemo reprehenderit inventore magni eligendi nam architecto sint!</Text>
+            <Text>We developed a classification of research categories with 13 broad categories by expanding &ldquo;A Coordinated Global Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the R&amp;D Blue Print. All collected funding data are summarised and assigned into a broad category.</Text>
         </>
     )
 
