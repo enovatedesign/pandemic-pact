@@ -29,9 +29,9 @@ export default function Visualise() {
 
     return (
         <Layout
-            title="Visualise"
+            title="Interactive Charts"
             showSummary={true}
-            summary="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+            summary="Explore the historical and near real time data on research funding for infectious disease with a pandemic potential using extensive filters and search functionality."
             sidebarContent={
                 <FilterSidebar
                     selectedFilters={selectedFilters}

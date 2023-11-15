@@ -59,7 +59,7 @@ export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: 
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="grants-by-research-category"
-            title="Grants By Research Category"
+            title="Distribution of research funding by research category"
             subtitle="Magni reprehenderit architecto eligendi id sint repudiandae dolore aperiam. Tenetur sint nemo hic iusto. A corporis aliquam magni nemo harum iusto."
             footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
