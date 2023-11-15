@@ -44,7 +44,7 @@ export default function Visualise() {
             <div className="container mx-auto my-6 lg:my-12">
                 <div
                     className="grid grid-cols-1 mt-6 gap-6 lg:gap-12"
-                >
+                >   
                     <GrantsByResearchCategoryCard
                         globallyFilteredDataset={globallyFilteredDataset}
                     />

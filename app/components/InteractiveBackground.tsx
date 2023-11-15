@@ -97,8 +97,8 @@ export default function InteractiveBackground({children, ...rest}: Props) {
     return (
         <section {...rest}>
             {children}
-
-            <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0"></canvas>
+            <canvas style={{ backgroundImage: `url("images/homepage-dots/home-dot.png")` }} className="absolute inset-0 w-full h-full z-0 md:hidden"></canvas>
+            <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0 hidden md:block"></canvas>
         </section>
     )
 }

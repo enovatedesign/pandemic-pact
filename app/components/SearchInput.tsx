@@ -273,7 +273,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
                 <Col
                     numColSpan={2}
-                    className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between md:items-center"
+                    className="flex justify-between items-center"
                 >
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
                         <span>Total Hits:</span>
