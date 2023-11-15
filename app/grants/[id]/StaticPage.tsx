@@ -160,7 +160,7 @@ export default function StaticPage({grant}: Props) {
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
             <div className="container mx-auto my-12 relative">
 
-                <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-4 py-1.5 lg:px-8 lg:py-3 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
                     <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
                         <ChevronLeftIcon className="w-4 h-4" />
                     </div>
