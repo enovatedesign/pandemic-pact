@@ -95,7 +95,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                             <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
 
-                            <div className={`masthead-background ${mastheadStyles.background}`}>
+                            <div className={`masthead-background ${mastheadStyles.visualise }`}>
 
                                 <div className="h-full flex items-end pb-6 lg:pb-12">
 
