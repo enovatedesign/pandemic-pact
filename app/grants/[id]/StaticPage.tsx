@@ -35,9 +35,6 @@ export default function StaticPage({grant}: Props) {
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,
         },
-    ]
-
-    const keyFactsSubHeadings = [
         {
             text: 'Research Location',
             metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
@@ -47,20 +44,48 @@ export default function StaticPage({grant}: Props) {
             metric: grant.ResearchInstitutionName[0],
         },
         {
-            text: 'Research Category',
-            metric: grant.ResearchCat[0],
+            text: 'Partner Institution',
+            metric: grant.ResearchInstitutionName[1]
         },
     ]
 
-    const keyFactsSubCategories = [
+    const keyFactsSubHeadings = [
+        {
+            text: 'Research Category',
+            metric: grant.ResearchCat[0],
+        },
         {
             text: 'Research Subcategory',
             metric: grant.ResearchSubcat[0],
         },
         {
-            text: 'Pandemic Pact Data Points',
-            metric: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui diam, feugiat fringilla dignissim id, tempor quis eros.',
+            text: 'Special Interest Tags',
+            metric: 'Gender',
         },
+        {
+            text: 'Study Subject',
+            metric: grant.StudyType[0],
+        },
+        {
+            text: 'Clinical Trial Details',
+            metric: grant.ClinicalTrial[0],
+        },
+        {
+            text: 'Broad Policy Alignment',
+            metric: '100 Days Mission',
+        },
+        {
+            text: 'Age Group',
+            metric: grant.AgeGroups,
+        },
+        {
+            text: 'Vulnerable Population',
+            metric: grant.VulnerablePopulations,
+        },
+        {
+            text: 'Occupations of Interest',
+            metric: grant.OccupationalGroups,
+        }
     ]
 
     const titleClasses = [
@@ -202,16 +227,26 @@ export default function StaticPage({grant}: Props) {
                                     Key facts
                                 </h3>
                                 <div className='w-full bg-primary text-secondary'>
-                                    <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                                    <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50% ">
                                         {keyFactsHeadings.map((heading, index) => {
                                             const borderClasses = [
-                                                index === 1 && 'border-x-2 border-secondary/10'
+                                                index === 0 && 'border-r-2',
+                                                index === 2 && 'border-l-2',
+                                                index === 3 && 'border-r-2',
+                                                index === 5 && heading.metric && 'border-l-2',
+                                                index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
+                                            const metricClasses = [
+                                                index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl'
+                                            ].join(' ')
+                                            
                                             return (
-                                                <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2`}>
-                                                    <p className='uppercase text-xs tracking-widest font-bold'>
-                                                        {heading.text}
-                                                    </p>
+                                                <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2  border-secondary/10`}>
+                                                    {heading.metric && (
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
+                                                            {heading.text}
+                                                        </p>
+                                                    )}
                                                     {heading.startMetric && heading.endMetric ? (
                                                         <div className="flex justify-start gap-1 ">
                                                             <span className='text-lg md:text-3xl lg:text-4xl font-bold'>
@@ -219,48 +254,40 @@ export default function StaticPage({grant}: Props) {
                                                             </span>
                                                             <div className='flex gap-1 items-center mt-1 md:mt-2 lg:mt-3'>
                                                                 <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
-                                                                <span className="font-bold md:text-xl lg:text-2xl">
+                                                                <span className={`${metricClasses} font-bold`}>
                                                                     {grant.GrantEndYear}
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                    ) : (                                                    
-                                                        <p className='text-lg md:text-3xl lg:text-4xl font-bold'>{(typeof heading.metric === 'function') ? heading.metric() : heading.metric }</p>
+                                                    ) : (   
+                                                        <>
+                                                            {heading.metric !== null && (
+                                                                <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
+                                                            )}                                                 
+                                                        </>
                                                     )}
-
                                                 </li>
                                             )
                                         })}
                                     </ul>
-                                    <ul className="grid grid-cols-3">
+                                    <ul className="grid grid-cols-3 bg-primary-lightest">
                                         {keyFactsSubHeadings.map((subHeading, index) => {
                                             const borderClasses = [
-                                                index === 1 && 'border-x-2 border-secondary/10'
+                                                index === 0 && 'border-r-2',
+                                                index === 2 && 'border-l-2',
+                                                index === 3 && 'border-r-2',
+                                                index === 5 && 'border-l-2',
+                                                index === 6 && 'border-r-2',
+                                                index === 8 && 'border-l-2',
+                                                index < 6 && 'border-b-2'
                                             ].join(' ')
                                             return (
-                                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2`}>
+                                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
                                                     <p className='uppercase text-xs tracking-widest font-bold'>
                                                         {subHeading.text}
                                                     </p>
                                                     <p className='font-bold text-lg lg:text-xl'>
                                                         {subHeading.metric}
-                                                    </p>
-                                                </li>
-                                            )
-                                        })}
-                                    </ul>
-                                    <ul className="grid grid-cols-2">
-                                        {keyFactsSubCategories.map((category, index) => {
-                                            const borderClasses = [
-                                                index === 0 && 'border-r-2'
-                                            ].join(' ')
-                                            return (
-                                                <li key={index} className={`${borderClasses} border-t-2 border-secondary/10 p-4 py-5 flex flex-col space-y-2`}>
-                                                    <p className='uppercase text-xs tracking-widest font-bold'>
-                                                        {category.text}
-                                                    </p>
-                                                    <p className='font-bold lg:text-lg'>
-                                                        {category.metric}
                                                     </p>
                                                 </li>
                                             )
