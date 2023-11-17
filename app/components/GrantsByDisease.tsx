@@ -22,22 +22,22 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
             "Disease": disease.label,
             "Grants With Known Amount Committed": grantsWithKnownAmounts.length,
             "Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
-            "Total Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Amount Committed (USD)": moneyCommitted,
+            "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
+            "US Dollars Committed": moneyCommitted,
         }
-    }).filter(disease => disease["Total Grants"] > 0)
+    }).filter(disease => disease["Total Number Of Grants"] > 0)
 
     return (
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="grants-by-disease"
-            title="Grants By Disease"
+            title="Global Annual Funding For Research On Diseases With A Pandemic Potential"
         >
             <Flex
                 flexDirection="row"
             >
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
+                    <Subtitle className="absolute text-black whitespace-nowrap -rotate-90">Grants</Subtitle>
                 </div>
 
                 <div className="w-full h-[800px]">
@@ -96,7 +96,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
 
                             <Bar
                                 yAxisId="right"
-                                dataKey="Amount Committed (USD)"
+                                dataKey="US Dollars Committed"
                                 fill="#22c55e"
                                 stackId="b"
                             />
@@ -105,7 +105,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                 </div>
 
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
+                    <Subtitle className="absolute text-black whitespace-nowrap rotate-90 -translate-x-1/2">Amount Committed (USD)</Subtitle>
                 </div>
             </Flex>
         </VisualisationCard>

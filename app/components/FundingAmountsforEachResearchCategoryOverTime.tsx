@@ -32,12 +32,18 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
             researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
 
+    for (let i = 0; i < 13; i++) {
+        selectedResearchCategories[i - 1] = i.toString();
+    }
+
     const amountCommittedToEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
 
         let dataPoint: {[key: string]: string | number} = {year}
+
+        console.log(selectedResearchCategories)
 
         if (selectedResearchCategories.length === 0) {
             dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
@@ -92,7 +98,7 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
         <VisualisationCard
             filteredDataset={filteredDataset}
             id="amount-committed-to-each-research-category-over-time-card"
-            title="Funding Amounts for Each Research Category Over Time"
+            title="Global Annual Funding For Research Categories"
             subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
             footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
             tabs={tabs}
@@ -100,7 +106,7 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
             <Flex
                 justifyContent="between"
                 alignItems="center"
-                className="ignore-in-image-export mb-6"
+                className="mb-6 ignore-in-image-export"
             >
                 <MultiSelect
                     options={selectOptions.ResearchCat}

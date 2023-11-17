@@ -72,12 +72,12 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
         <VisualisationCard
             filteredDataset={filteredDataset}
             id="grant-per-research-category-by-region"
-            title="Grants Per Research Category By Region"
+            title="Regional Distribution of Funding for Research Category"
             subtitle="Doloribus iste inventore odio sint laboriosam eaque."
             footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
         >
             <div className="flex flex-col w-full">
-                <div className="flex justify-between items-center ignore-in-image-export">
+                <div className="flex items-center justify-between ignore-in-image-export">
                     <MultiSelect
                         options={selectOptions.ResearchCat}
                         selectedOptions={selectedResearchCategories}
