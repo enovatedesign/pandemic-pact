@@ -48,6 +48,16 @@ export function availableFilters() {
             label: 'Age Group',
             field: 'AgeGroups',
         },
+
+        {
+            label: 'Vulnerable Populations',
+            field: 'VulnerablePopulations',
+        },
+
+        {
+            label: 'Occupations of Interest',
+            field: 'OccupationalGroups',
+        }
     ]
 }
 
