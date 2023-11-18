@@ -33,6 +33,18 @@ faker.seed(37148927482342)
 
 const lookupTables = fs.readJsonSync('./data/source/lookup-tables.json')
 
+const iso2ToCountryNameMapping = fs.readJsonSync('./data/source/iso2a-to-country-name-mapping.json')
+
+const regionToCountryMapping = fs.readJsonSync('./data/source/region-to-country-mapping.json')
+
+const countryToRegionMapping = Object.keys(regionToCountryMapping).reduce((acc: any, region: string) => {
+    regionToCountryMapping[region].forEach((country: string) => {
+        acc[country] = region
+    })
+
+    return acc
+}, {})
+
 const funders: Funder[] = fs.readJsonSync('./data/source/funders.json').map((funderName: string) => {
     return {
         "FundingOrgName": [funderName],
@@ -78,16 +90,6 @@ main()
 
 async function main() {
     const sourceDataset = fs.readJsonSync(sourceDatasetFilename)
-
-    const regionToCountryMapping = fs.readJsonSync('./data/source/region-to-country-mapping.json')
-
-    const countryToRegionMapping = Object.keys(regionToCountryMapping).reduce((acc: any, region: string) => {
-        regionToCountryMapping[region].forEach((country: string) => {
-            acc[country] = region
-        })
-
-        return acc
-    }, {})
 
     const completeDataset = await Promise.all(
         sourceDataset.map(async (sourceGrant: Grant, index: number) => {
@@ -240,23 +242,21 @@ async function main() {
     })
 
     // These options are computed from the dataset, not the lookup tables
-    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear', 'ResearchInstitutionCountry', 'FunderCountry', 'ResearchLocationCountry']
+    const fieldsFromDataset = ['FundingOrgName', 'ResearchInstitutionName', 'GrantStartYear', 'GrantEndYear']
+
+    // These options are computed from the dataset as well, but need to be mapped
+    // to country names since they are stored as ISO2A codes in the dataset
+    const countryFieldsFromDataset = ['ResearchInstitutionCountry', 'FunderCountry', 'ResearchLocationCountry']
 
     fieldsFromDataset.forEach((fieldName: string) => {
         selectOptions[fieldName] = getUniqueValuesAsSelectOptions(completeDataset, fieldName)
     })
 
+    countryFieldsFromDataset.forEach((fieldName: string) => {
+        selectOptions[fieldName] = getUniqueCountryValuesAsSelectOptions(completeDataset, fieldName)
+    })
+
     writeToDistJsonFile('select-options.json', selectOptions)
-
-    // Use GeoJSON file to create a mapping of ISO2 country codes to country names
-    const geoJson = fs.readJsonSync('./data/source/geojson/ne_110m_admin_0_countries.json')
-
-    writeToDistJsonFile(
-        'iso2a-to-country-name-mapping.json',
-        Object.fromEntries(
-            geoJson.features.map((feature: any) => [feature.properties.ISO_A2_EH, feature.properties.NAME])
-        ),
-    )
 }
 
 async function getPubMedLinks(pubMedGrantId: string) {
@@ -305,6 +305,16 @@ function getUniqueValuesAsSelectOptions(dataset: Array<Dictionary<string>>, fiel
         dataset.map(grant => grant[fieldName]).flat(),
     ).map(
         (label: any, index: number) => ({label, value: label})
+    ).sort(
+        (a, b) => a.label.localeCompare(b.label)
+    )
+}
+
+function getUniqueCountryValuesAsSelectOptions(dataset: Array<Dictionary<string>>, fieldName: string): Array<{label: string, value: string}> {
+    return _.uniq(
+        dataset.map(grant => grant[fieldName]).flat(),
+    ).map(
+        (value: any, index: number) => ({value, label: iso2ToCountryNameMapping[value]})
     ).sort(
         (a, b) => a.label.localeCompare(b.label)
     )

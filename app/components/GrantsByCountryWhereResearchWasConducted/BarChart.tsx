@@ -6,7 +6,7 @@ import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
-import iso2aToCountryNameMapping from '../../../data/dist/iso2a-to-country-name-mapping.json'
+import iso2aToCountryNameMapping from '../../../data/source/iso2a-to-country-name-mapping.json'
 
 interface Props {
     dataset: any[],
