@@ -44,12 +44,12 @@ export default function Visualise() {
             <div className="container mx-auto my-6 lg:my-12">
                 <div
                     className="grid grid-cols-1 mt-6 gap-6 lg:gap-12"
-                >   
-                    <GrantsByResearchCategoryCard
+                >
+                    <GrantsByDiseaseCard
                         globallyFilteredDataset={globallyFilteredDataset}
                     />
 
-                    <GrantsByDiseaseCard
+                    <GrantsByResearchCategoryCard
                         globallyFilteredDataset={globallyFilteredDataset}
                     />
 
@@ -66,7 +66,7 @@ export default function Visualise() {
                         globallyFilteredDataset={globallyFilteredDataset}
                         selectedFilters={selectedFilters}
                     />
-                    
+
                     <PathogenDiseaseRelationshipCard
                         selectedFilters={selectedFilters}
                         globallyFilteredDataset={globallyFilteredDataset}
@@ -87,7 +87,7 @@ export default function Visualise() {
                                 randomSeedString="2324234234"
                             />
                         </div>
-                    
+
                     </VisualisationCard>
 
                     <VisualisationCard
