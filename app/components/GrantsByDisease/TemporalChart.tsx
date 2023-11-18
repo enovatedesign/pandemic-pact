@@ -1,4 +1,5 @@
 import {Fragment} from "react"
+import {Flex, Subtitle} from "@tremor/react"
 import {ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Scatter, ResponsiveContainer} from 'recharts'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 
@@ -49,76 +50,92 @@ export default function TemporalChart({globallyFilteredDataset}: Props) {
     ]
 
     return (
-        <div className="w-full h-[700px]">
-            <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                    width={500}
-                    height={400}
-                    data={data}
-                    margin={{
-                        top: 20,
-                        right: 80,
-                        bottom: 20,
-                        left: 20,
-                    }}
-                >
-                    <CartesianGrid stroke="#f5f5f5" />
+        <Flex
+            flexDirection="row"
+        >
+            <div className="w-8">
+                <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black flex items-center gap-x-2">
+                    <span>&#9679;</span> Grants
+                </Subtitle>
+            </div>
 
-                    <Tooltip
-                        formatter={(value: any, name: any, props: any) => {
-                            let newValue = value
-
-                            if (name.includes("Amount Committed (USD)")) {
-                                newValue = dollarValueFormatter(value)
-                            }
-
-                            return [
-                                newValue,
-                                name.split(".").join(" "),
-                                props,
-                            ]
+            <div className="w-full h-[700px]">
+                <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart
+                        width={500}
+                        height={400}
+                        data={data}
+                        margin={{
+                            top: 20,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
                         }}
-                    />
+                    >
+                        <CartesianGrid stroke="#f5f5f5" />
 
-                    <Legend
-                        formatter={value => value.split(".")[0]}
-                    />
+                        <Tooltip
+                            formatter={(value: any, name: any, props: any) => {
+                                let newValue = value
 
-                    <XAxis dataKey="year" type="category" />
+                                if (name.includes("Amount Committed (USD)")) {
+                                    newValue = dollarValueFormatter(value)
+                                }
 
-                    <YAxis
-                        yAxisId="left"
-                        orientation="left"
-                        type="number"
-                    />
+                                return [
+                                    newValue,
+                                    name.split(".").join(" "),
+                                    props,
+                                ]
+                            }}
+                        />
 
-                    <YAxis
-                        yAxisId="right"
-                        orientation="right"
-                        tickFormatter={dollarValueFormatter}
-                    />
+                        <Legend
+                            formatter={value => value.split(".")[0]}
+                        />
 
-                    {diseases.map(({name, colour}) =>
-                        <Fragment key={name}>
-                            <Scatter
-                                dataKey={`${name}.Total Grants`}
-                                fill={colour}
-                                yAxisId="left"
-                            />
+                        <XAxis dataKey="year" type="category" />
 
-                            <Line
-                                dataKey={`${name}.Amount Committed (USD)`}
-                                stroke={colour}
-                                dot={false}
-                                activeDot={false}
-                                legendType="none"
-                                yAxisId="right"
-                                strokeDasharray="5 5"
-                            />
-                        </Fragment>
-                    )}
-                </ComposedChart>
-            </ResponsiveContainer>
-        </div>
+                        <YAxis
+                            yAxisId="left"
+                            orientation="left"
+                            type="number"
+                        />
+
+                        <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={dollarValueFormatter}
+                        />
+
+                        {diseases.map(({name, colour}) =>
+                            <Fragment key={name}>
+                                <Scatter
+                                    dataKey={`${name}.Total Grants`}
+                                    fill={colour}
+                                    yAxisId="left"
+                                />
+
+                                <Line
+                                    dataKey={`${name}.Amount Committed (USD)`}
+                                    stroke={colour}
+                                    dot={false}
+                                    activeDot={false}
+                                    legendType="none"
+                                    yAxisId="right"
+                                    strokeDasharray="5 5"
+                                />
+                            </Fragment>
+                        )}
+                    </ComposedChart>
+                </ResponsiveContainer>
+            </div>
+
+            <div className="w-8">
+                <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black flex items-center gap-x-2">
+                    <span className="text-4xl block">&#9476;</span> Amount Committed (USD)
+                </Subtitle>
+            </div>
+        </Flex>
     )
 }
