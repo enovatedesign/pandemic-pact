@@ -79,6 +79,16 @@ main()
 async function main() {
     const sourceDataset = fs.readJsonSync(sourceDatasetFilename)
 
+    const regionToCountryMapping = fs.readJsonSync('./data/source/region-to-country-mapping.json')
+
+    const countryToRegionMapping = Object.keys(regionToCountryMapping).reduce((acc: any, region: string) => {
+        regionToCountryMapping[region].forEach((country: string) => {
+            acc[country] = region
+        })
+
+        return acc
+    }, {})
+
     const completeDataset = await Promise.all(
         sourceDataset.map(async (sourceGrant: Grant, index: number) => {
             const funder = faker.helpers.arrayElement(funders)
@@ -94,6 +104,8 @@ async function main() {
             const grantAmountConverted = isNaN(numericGrantAmount) ?
                 sourceGrant.GrantAmountConverted :
                 numericGrantAmount
+
+            const researchLocationCountry = faker.helpers.objectKey(countryToRegionMapping)
 
             let distGrant: Grant = {
                 "GrantID": index + 1,
@@ -133,11 +145,8 @@ async function main() {
                     {min: 1, max: 2},
                 ),
                 "Disease": [faker.helpers.objectValue(lookupTables.Disease)],
-                "ResearchLocationRegion": faker.helpers.arrayElement(
-                    Object.values(
-                        lookupTables.Regions
-                    ).filter((region: any) => !["Not known", "Unspecified"].includes(region))
-                ),
+                "ResearchLocationCountry": researchLocationCountry,
+                "ResearchLocationRegion": countryToRegionMapping[researchLocationCountry],
                 ...funder,
                 ...researchInstitution,
             }
