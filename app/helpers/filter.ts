@@ -5,44 +5,49 @@ export function availableFilters() {
         {
             field: 'FundingOrgName',
             label: 'Funder',
-            excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'}
+            excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'},
         },
 
         {
             field: 'ResearchInstitutionName',
-            label: 'Research Institution'
+            label: 'Research Institution',
+        },
+
+        {
+            field: 'ResearchLocationCountry',
+            label: 'Country',
         },
 
         {
             field: 'Disease',
-            label: 'Disease'
+            label: 'Disease',
         },
 
         {
             field: 'Pathogen',
             label: 'Pathogen',
-            excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'}
+            excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'},
         },
 
         {
             field: 'GrantStartYear',
-            label: 'Year'
+            label: 'Year',
         },
 
         {
             field: 'StudySubject',
-            label: 'Study Subject'
+            label: 'Study Subject',
         },
 
         {
             field: 'AgeGroups',
-            label: 'Age Group'
+            label: 'Age Group',
         },
 
         {
             field: 'StudyType',
-            label: 'Study Type'
-        }
+            label: 'Study Type',
+        },
     ]
 }
 
