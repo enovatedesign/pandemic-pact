@@ -40,13 +40,13 @@ export function availableFilters() {
         },
 
         {
-            label: 'Age Group',
-            field: 'AgeGroups',
+            label: 'Study Type',
+            field: 'StudyType',
         },
 
         {
-            label: 'Study Type',
-            field: 'StudyType',
+            label: 'Age Group',
+            field: 'AgeGroups',
         },
     ]
 }
