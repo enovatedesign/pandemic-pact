@@ -3,50 +3,50 @@ import {every} from 'lodash'
 export function availableFilters() {
     return [
         {
-            field: 'FundingOrgName',
             label: 'Funder',
+            field: 'FundingOrgName',
             excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'},
         },
 
         {
-            field: 'ResearchInstitutionName',
             label: 'Research Institution',
+            field: 'ResearchInstitutionName',
         },
 
         {
-            field: 'ResearchLocationCountry',
             label: 'Country',
+            field: 'ResearchLocationCountry',
         },
 
         {
-            field: 'Disease',
+            label: 'Year',
+            field: 'GrantStartYear',
+        },
+
+        {
             label: 'Disease',
+            field: 'Disease',
         },
 
         {
-            field: 'Pathogen',
             label: 'Pathogen',
+            field: 'Pathogen',
             excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'},
         },
 
         {
-            field: 'GrantStartYear',
-            label: 'Year',
-        },
-
-        {
-            field: 'StudySubject',
             label: 'Study Subject',
+            field: 'StudySubject',
         },
 
         {
-            field: 'AgeGroups',
             label: 'Age Group',
+            field: 'AgeGroups',
         },
 
         {
-            field: 'StudyType',
             label: 'Study Type',
+            field: 'StudyType',
         },
     ]
 }
