@@ -3,45 +3,60 @@ import {every} from 'lodash'
 export function availableFilters() {
     return [
         {
-            field: 'FundingOrgName',
             label: 'Funder',
-            excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'}
+            field: 'FundingOrgName',
+            excludeGrantsWithMultipleItems: {label: 'Exclude Joint Funding'},
         },
 
         {
+            label: 'Research Institution',
             field: 'ResearchInstitutionName',
-            label: 'Research Institution'
         },
 
         {
-            field: 'Disease',
-            label: 'Disease'
+            label: 'Country',
+            field: 'ResearchLocationCountry',
         },
 
         {
-            field: 'Pathogen',
-            label: 'Pathogen',
-            excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'}
-        },
-
-        {
+            label: 'Year',
             field: 'GrantStartYear',
-            label: 'Year'
         },
 
         {
+            label: 'Disease',
+            field: 'Disease',
+        },
+
+        {
+            label: 'Pathogen',
+            field: 'Pathogen',
+            excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'},
+        },
+
+        {
+            label: 'Study Subject',
             field: 'StudySubject',
-            label: 'Study Subject'
         },
 
         {
-            field: 'AgeGroups',
-            label: 'Age Group'
-        },
-
-        {
+            label: 'Study Type',
             field: 'StudyType',
-            label: 'Study Type'
+        },
+
+        {
+            label: 'Age Group',
+            field: 'AgeGroups',
+        },
+
+        {
+            label: 'Vulnerable Populations',
+            field: 'VulnerablePopulations',
+        },
+
+        {
+            label: 'Occupations of Interest',
+            field: 'OccupationalGroups',
         }
     ]
 }

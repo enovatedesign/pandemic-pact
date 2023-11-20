@@ -1,7 +1,6 @@
 "use client"
 
 import {useMemo, useState} from "react"
-import {Col, Grid} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -11,7 +10,7 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
-import GrantsByDiseaseCard from "../components/GrantsByDisease"
+import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
@@ -44,12 +43,12 @@ export default function Visualise() {
             <div className="container mx-auto my-6 lg:my-12">
                 <div
                     className="grid grid-cols-1 mt-6 gap-6 lg:gap-12"
-                >   
-                    <GrantsByResearchCategoryCard
+                >
+                    <GrantsByDiseaseCard
                         globallyFilteredDataset={globallyFilteredDataset}
                     />
 
-                    <GrantsByDiseaseCard
+                    <GrantsByResearchCategoryCard
                         globallyFilteredDataset={globallyFilteredDataset}
                     />
 
@@ -66,7 +65,7 @@ export default function Visualise() {
                         globallyFilteredDataset={globallyFilteredDataset}
                         selectedFilters={selectedFilters}
                     />
-                    
+
                     <PathogenDiseaseRelationshipCard
                         selectedFilters={selectedFilters}
                         globallyFilteredDataset={globallyFilteredDataset}
@@ -87,7 +86,7 @@ export default function Visualise() {
                                 randomSeedString="2324234234"
                             />
                         </div>
-                    
+
                     </VisualisationCard>
 
                     <VisualisationCard
