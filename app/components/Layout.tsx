@@ -64,7 +64,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                                 <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
                             
-                            {/* {!sidebarOpen && (
+                            {!sidebarOpen && (
                                     <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
                                         <dt className="text-white uppercase">Total grants</dt>
                                         <dd className="text-primary font-bold">125</dd>
@@ -72,7 +72,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                                         <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">3</dd>
                                     </dl>
                                 )
-                            } */}
+                            }
 
                             <animated.div
                                 className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
