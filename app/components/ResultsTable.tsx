@@ -34,7 +34,7 @@ export default function ResultsTable({searchResponse}: Props) {
                             <div className="flex flex-col space-y-2 lg:space-y-6">
                                 <a href={href} className="hover:underline">
                                     <div
-                                        className="whitespace-normal font-semibold text-base lg:text-2xl dark:text-primary/80"
+                                        className="whitespace-normal font-semibold text-base lg:text-2xl"
                                         dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
                                     />
                                 </a>
@@ -91,7 +91,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     
     const matchText = [titleMatchText, abstractMatchText]
     
-    const iconClasses = 'w-4 h-4 lg:w-6 lg:h-6 text-white dark:text-secondary'
+    const iconClasses = 'w-4 h-4 lg:w-6 lg:h-6 text-white'
     
     const handleClick = () => {
         activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
@@ -105,7 +105,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
         <div className='bg-primary/40 p-4  rounded-2xl'>
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
                 <div className='flex items-center gap-2 justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
-                    <span className="flex gap-x-1 uppercase text-sm lg:text-lg dark:text-secondary">
+                    <span className="flex gap-x-1 uppercase text-sm lg:text-lg">
                         <span className='hidden md:block'>
                             Search 
                         </span>
@@ -116,7 +116,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                             return (
                                 <>
                                     {text.length > 0  && (
-                                        <li key={index} className='bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap dark:text-primary dark:bg-secondary text-sm lg:text-md'>
+                                        <li key={index} className='bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap text-sm lg:text-md'>
                                             {text}
                                         </li>
                                     )}
@@ -126,10 +126,10 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                     </ul>
                 </div>
                 <div className='flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1'>
-                    <span className="uppercase text-sm lg:text-lg pr-4 dark:text-secondary">
+                    <span className="uppercase text-sm lg:text-lg pr-4">
                         Total Matches:
                     </span>
-                    <p className="px-4 py-1  bg-searchResult rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">
+                    <p className="px-4 py-1  bg-searchResult rounded-lg font-bold text-secondary">
                         {totalMatchText}
                     </p>
                 </div>
@@ -139,9 +139,9 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                         onClick={handleClick} 
                         size='xsmall'
                         colour='secondary'
-                        customClasses='w-full uppercase flex justify-between space-x-2 border-2 border-secondary dark:border-primary hover:border-primary dark:bg-primary dark:hover:border-secondary transition duration-300'
+                        customClasses='w-full uppercase flex justify-between space-x-2 border-2 border-secondary hover:border-primary transition duration-300'
                     >
-                        <span className='inline-flex text-white dark:text-secondary text-sm lg:text-base whitespace-nowrap'>
+                        <span className='inline-flex text-white text-sm lg:text-base whitespace-nowrap'>
                             {activeIndex !== index ? 'See more' : 'See less'}
                         </span>
                         {activeIndex !== index ? (
@@ -159,11 +159,11 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
             >
                 <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
 
-                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 dark:bg-secondary rounded-2xl">
-                        <p className="pb-2 lg:pb-4 uppercase text-secondary  dark:text-primary text-lg">
+                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-2xl">
+                        <p className="pb-2 lg:pb-4 uppercase text-secondary text-lg">
                             Abstract Exerpt
                         </p>
-                        <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content dark:text-primary" />
+                        <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content" />
                     </div>
                     <div className='col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col'>
                         <div  className="bg-primary text-secondary rounded-2xl p-4 ">

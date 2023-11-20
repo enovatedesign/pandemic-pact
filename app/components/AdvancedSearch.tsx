@@ -173,7 +173,7 @@ const AdvancedSearch = () => {
 
                     {rows.length < 6 && (
                         <button
-                            className="dark:text-secondary h-8 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                            className=" h-8 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
                             onClick={addRow}
                         >
                             <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
@@ -201,7 +201,7 @@ const AdvancedSearch = () => {
                                         {/* Add remove button function here */}
                                         {index > 0 && (
                                             <button
-                                            className="dark:text-secondary flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                            className="flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
                                             onClick={() => removeRow(index)}
                                             >
                                                 <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />

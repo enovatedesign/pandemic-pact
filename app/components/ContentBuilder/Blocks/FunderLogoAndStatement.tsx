@@ -52,13 +52,13 @@ interface FunderProps {
 const FunderItem = ({funder, index}: FunderProps) => {
 
     const textClasses = [
-        'prose prose-lg dark:prose-invert',
+        'prose prose-lg',
         'flex justify-center items-center',
         'w-full',
     ].join(" ")
 
     const blockClasses = [
-        'bg-white py-6 px-8 rounded-2xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700',
+        'bg-white py-6 px-8 rounded-2xl border-2 border-gray-200',
         'flex flex-col md:flex-row gap-6 lg:gap-12 items-center',
         'max-w-5xl mx-auto',
         'w-full',

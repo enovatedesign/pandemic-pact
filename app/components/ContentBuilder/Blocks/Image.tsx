@@ -78,7 +78,7 @@ export default function ImageBlock({ block }: Props) {
                             />
                         </div>
                         {caption && (
-                            <figcaption className="mt-4 font-medium text-sm text-gray-600 dark:text-gray-400">
+                            <figcaption className="mt-4 font-medium text-sm text-gray-600">
                                 {caption}
                             </figcaption>
                         )}

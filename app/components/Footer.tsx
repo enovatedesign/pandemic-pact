@@ -13,7 +13,7 @@ export default function Header() {
         <li key={link.href}>
             <Link
                 href={link.href}
-                className={`text-gray-700 dark:text-gray-300 hover:underline`}
+                className={`text-gray-700 hover:underline`}
             >
                 {link.label}
             </Link>
@@ -39,7 +39,7 @@ export default function Header() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24 items-end">
 
                         <div>
-                            <h2 className="text-gray-700 dark:text-gray-300 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
                                 {linksFirstCollection.map(link => (
                                     <NavItem key={link.label} {...link} />
@@ -48,7 +48,7 @@ export default function Header() {
                         </div>
 
                         <div>
-                            <h2 className="text-gray-700 dark:text-gray-300 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
                                 {linksSecondCollection.map(link => (
                                     <NavItem key={link.label} {...link} />
@@ -88,7 +88,7 @@ export default function Header() {
 
                 </div>
 
-                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
                         <FooterCopyrightStatement className={'text-center'} showCredit={true} />
                         <div className="print:hidden">

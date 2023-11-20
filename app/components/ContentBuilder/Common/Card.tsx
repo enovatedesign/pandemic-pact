@@ -36,7 +36,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
 
     return (
         <li key={index} 
-            className={`${hoverClasses} flex flex-col bg-white border-2 border-gray-200  rounded-2xl overflow-hidden dark:bg-gray-800 dark:border-gray-700`}
+            className={`${hoverClasses} flex flex-col bg-white border-2 border-gray-200  rounded-2xl overflow-hidden`}
         >   
             {url || externalLink ? (
                 <a href={url || externalLink}>
@@ -71,12 +71,12 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
                 {title && (
                     <h3 className="text-xl md:text-2xl">
                         {title}
-                        {postNominalLetters && (<span className="block text-base text-gray-500 dark:text-gray-300">{postNominalLetters}</span>)}
+                        {postNominalLetters && (<span className="block text-base text-gray-500">{postNominalLetters}</span>)}
                     </h3>
                 )}
                 
                 {jobTitle && (
-                    <p className="text-lg font-bold dark:text-gray-300">
+                    <p className="text-lg font-bold">
                         {jobTitle}
                     </p>
                 )}

@@ -277,7 +277,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                 >
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
                         <span>Total Hits:</span>
-                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary dark:text-primary dark:bg-secondary">{totalHits}</span>
+                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">{totalHits}</span>
                     </p>
 
                     <div className="grow flex flex-row justify-end gap-2">

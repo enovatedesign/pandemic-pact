@@ -34,13 +34,10 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
     }
 
     return (
-        <Flex
-            flexDirection="col"
-            justifyContent="start"
-            alignItems="start"
-            className="gap-y-4"
-        >
+        <div className="flex flex-col justify-start items-start gap-y-4">
+
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
+        
                 <p className="flex flex-col gap-1">
                     {
                         (globallyFilteredDataset.length < completeDataset.length) ? (
@@ -95,6 +92,6 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
             >
                 Clear All <XIcon className="w-5 h-5" />
             </Button>
-        </Flex>
+        </div>
     )
 }

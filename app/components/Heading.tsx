@@ -15,7 +15,7 @@ type TagProps = {
 const Heading = ({ level = '1', children}: HeadingProps) => {
     const Tag: string = `h${level}`
     const tagProps: TagProps = {
-        className: "font-medium text-tremor-title text-tremor-content-emphasis dark:text-dark-tremor-content-emphasis",
+        className: "font-medium text-tremor-title text-tremor-content-emphasis",
         dangerouslySetInnerHTML: { __html: children }
     }
 
