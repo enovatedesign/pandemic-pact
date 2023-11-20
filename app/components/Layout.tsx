@@ -67,7 +67,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                             {!sidebarOpen && (
                                     <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
                                         <dt className="text-white uppercase">Total grants</dt>
-                                        <dd className="text-primary font-bold">125</dd>
+                                        <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">125</dd>
                                         <dt className={`text-white uppercase ${sidebarLegendDividerClasses}`}>Filters</dt>
                                         <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">3</dd>
                                     </dl>
