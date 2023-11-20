@@ -26,7 +26,7 @@ export default function Home() {
 
             <div className="flex flex-col h-full min-h-screen relative">
 
-                <Header className="w-full relative z-10" />
+                <Header className="w-full relative z-20" />
 
                 <RotatingGlobe className="!absolute inset-x bottom-0 z-10" />
 
