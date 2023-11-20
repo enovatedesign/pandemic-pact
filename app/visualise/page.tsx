@@ -1,7 +1,7 @@
 "use client"
 
 import {useMemo, useState} from "react"
-import {Col, Grid} from "@tremor/react"
+import {Col, Grid, Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -95,13 +95,19 @@ export default function Visualise() {
                         <VisualisationCard
                             filteredDataset={globallyFilteredDataset}
                             id="disease-word-cloud"
-                            title="Disease Word Cloud"
+                            title="Word cloud showing the funding for infectious diseases with a pandemic potential"
                         >
                             <div className="w-full">
                                 <WordCloud
                                     filterKey="Disease"
                                     randomSeedString="2324234234"
                                 />
+                            </div>
+
+                            <div>
+                                <Text>
+                                    The amount of funding is represented by the size of the word
+                                </Text>
                             </div>
                         </VisualisationCard>
                     </Col>
@@ -117,6 +123,12 @@ export default function Visualise() {
                                     filterKey="Pathogen"
                                     randomSeedString="2324234234"
                                 />
+                            </div>
+
+                            <div>
+                                <Text>
+                                    The amount of funding is represented by the size of the word
+                                </Text>
                             </div>
                         </VisualisationCard>
                     </Col>
