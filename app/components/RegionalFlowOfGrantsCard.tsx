@@ -98,7 +98,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="regional-flow-of-grants"
-            title="Regional Flow of Grants"
+            title="Regional Flow of Research Grants"
         >
             <div className="w-full">
                 {links.length > 0 &&
