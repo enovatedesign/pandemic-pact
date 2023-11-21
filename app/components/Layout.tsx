@@ -87,7 +87,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                 }
 
                 <div className="w-full relative">
-                    <Header className="absolute w-full left-0 z-10" />
+                    <Header className="absolute w-full left-0 z-50" />
 
                     <main id="content">
 

@@ -77,7 +77,7 @@ export default function JumpMenu() {
     ])
 
     return (
-        <div className="sticky w-full top-0 bg-primary-lighter">
+        <div className="sticky w-full z-20 top-0 bg-primary-lighter">
             <div className="container mx-auto py-3 flex justify-end">
                 <Listbox value={selected} onChange={setSelected}>
                     {({ open }) => (
