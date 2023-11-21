@@ -1,5 +1,5 @@
-import {Flex, Subtitle} from "@tremor/react"
-import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import {Flex, Subtitle, Legend} from "@tremor/react"
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import selectOptions from "../../../data/dist/select-options.json"
@@ -30,80 +30,85 @@ export default function BarChart({globallyFilteredDataset}: Props) {
     }).filter(disease => disease["Total Grants"] > 0)
 
     return (
-        <Flex
-            flexDirection="row"
-        >
-            <div className="w-8">
-                <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
+        <>
+            <div className="flex flex-col gap-y-2">
+                <Legend
+                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    colors={['blue', 'orange', 'green']}
+                />
             </div>
 
-            <div className="w-full h-[700px]">
-                <ResponsiveContainer width="100%" height="100%">
-                    <RechartBarChart
-                        width={500}
-                        height={300}
-                        data={chartData}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
-                    >
-                        <Legend
-                            verticalAlign="top"
-                        />
+            <Flex
+                flexDirection="row"
+            >
+                <div className="w-8">
+                    <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
+                </div>
 
-                        <XAxis dataKey="Disease" />
-
-                        <YAxis
-                            yAxisId="left"
-                            orientation="left"
-                        />
-
-                        <YAxis
-                            yAxisId="right"
-                            orientation="right"
-                            tickFormatter={dollarValueFormatter}
-                        />
-
-                        <Tooltip
-                            formatter={(value: any, name: any, props: any) => {
-                                if (name.includes("Amount Committed (USD)")) {
-                                    return [dollarValueFormatter(value), name, props]
-                                }
-
-                                return [value, name, props]
+                <div className="w-full h-[700px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RechartBarChart
+                            width={500}
+                            height={300}
+                            data={chartData}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
                             }}
-                        />
+                        >
+                            <XAxis dataKey="Disease" />
 
-                        <Bar
-                            yAxisId="left"
-                            dataKey="Grants With Known Amount Committed"
-                            fill="#3b82f6"
-                            stackId="a"
-                        />
+                            <YAxis
+                                yAxisId="left"
+                                orientation="left"
+                            />
 
-                        <Bar
-                            yAxisId="left"
-                            dataKey="Grants With Unspecified Amount Committed"
-                            fill="#f59e0b"
-                            stackId="a"
-                        />
+                            <YAxis
+                                yAxisId="right"
+                                orientation="right"
+                                tickFormatter={dollarValueFormatter}
+                            />
 
-                        <Bar
-                            yAxisId="right"
-                            dataKey="Amount Committed (USD)"
-                            fill="#22c55e"
-                            stackId="b"
-                        />
-                    </RechartBarChart>
-                </ResponsiveContainer>
-            </div>
+                            <Tooltip
+                                formatter={(value: any, name: any, props: any) => {
+                                    if (name.includes("Amount Committed (USD)")) {
+                                        return [dollarValueFormatter(value), name, props]
+                                    }
 
-            <div className="w-8">
-                <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
-            </div>
-        </Flex>
+                                    return [value, name, props]
+                                }}
+                            />
+
+                            <Bar
+                                yAxisId="left"
+                                dataKey="Grants With Known Amount Committed"
+                                fill="#3b82f6"
+                                stackId="a"
+                            />
+
+                            <Bar
+                                yAxisId="left"
+                                dataKey="Grants With Unspecified Amount Committed"
+                                fill="#f59e0b"
+                                stackId="a"
+                            />
+
+                            <Bar
+                                yAxisId="right"
+                                dataKey="Amount Committed (USD)"
+                                fill="#22c55e"
+                                stackId="b"
+                            />
+                        </RechartBarChart>
+                    </ResponsiveContainer>
+                </div>
+
+                <div className="w-8">
+                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
+                </div>
+            </Flex>
+        </>
     )
 }

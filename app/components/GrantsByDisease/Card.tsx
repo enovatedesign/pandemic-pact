@@ -26,9 +26,9 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="grants-by-disease"
-            title="Grants By Disease"
+            title="Global annual funding for research on diseases with a pandemic potential"
+            subtitle="Total number of grants and US dollars committed for each disease"
             tabs={tabs}
-        >
-        </VisualisationCard>
+        />
     )
 }
