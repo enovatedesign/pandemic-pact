@@ -62,7 +62,7 @@ export default function Home() {
 
                         <div className="w-full flex flex-col item-center justify-center gap-6 mb-6 sm:gap-0 lg:mb-12">
 
-                            <div className="max-w-[12rem] md:max-w-[20rem] mx-auto grid grid-rows-2 grid-cols-2 gap-y-3 gap-x-6 md:gap-y-6 md:gap-x-12 xl:-mb-8">
+                            <div className="max-w-[12rem] md:max-w-[20rem] mx-auto grid grid-rows-2 grid-cols-2 items-center gap-y-3 gap-x-6 md:gap-y-6 md:gap-x-12 xl:-mb-8">
 
                                 <Image
                                     src="/glopid-r-logo-inverted.png"
