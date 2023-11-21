@@ -43,8 +43,6 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
 
         let dataPoint: {[key: string]: string | number} = {year}
 
-        console.log(selectedResearchCategories)
-
         if (selectedResearchCategories.length === 0) {
             dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
         } else {
