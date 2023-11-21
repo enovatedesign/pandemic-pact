@@ -36,7 +36,7 @@ export default function BarChart({chartData}: Props) {
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[data]}
                                     layout="vertical"
@@ -83,12 +83,12 @@ export default function BarChart({chartData}: Props) {
                             </ResponsiveContainer>
                         </div>
 
-                        <div className="self-center py-3 pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
+                        <div className="self-center pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
                             <p className="text-xs text-gray-600">{data["Total Number Of Grants"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[data]}
                                     layout="vertical"
@@ -126,7 +126,7 @@ export default function BarChart({chartData}: Props) {
                             </ResponsiveContainer >
                         </div >
 
-                        <div className="self-center py-3 pl-2 col-span-1 md:col-span-1 justify-self-end">
+                        <div className="self-center pl-2 col-span-1 md:col-span-1 justify-self-end">
                             <p className="text-xs text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                         </div>
                     </Fragment >
