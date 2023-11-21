@@ -34,9 +34,9 @@ export default function Header() {
         <footer className="pt-12 pb-12 bg-gradient-to-t from-primary/30 to-70% to-transparent">
             <div className="container">
 
-                <div className="flex flex-col md:flex-row md:justify-between gap-12 md:gap-24">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-12 md:gap-24">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24 items-end">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24">
 
                         <div>
                             <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
@@ -58,14 +58,14 @@ export default function Header() {
 
                     </div>
 
-                    <div className="flex flex-col justify-center sm:flex-row md:flex-col md:justify-end items-center xl:flex-row xl:items-end gap-6 xl:gap-12">
-                                    
+                    <div className="max-w-[12rem] md:max-w-[20rem] mx-auto md:mx-0 grid grid-rows-2 grid-cols-2 items-center gap-y-3 gap-x-6 md:gap-y-5 md:gap-x-12">
+
                         <Image
                             src="/glopid-r-logo.png"
                             alt="GLOPID-R logo"
                             width={335}
                             height={79}
-                            className="w-36 xl:w-48"
+                            className="w-full col-span-2"
                         />
 
                         <Image
@@ -73,7 +73,7 @@ export default function Header() {
                             alt="UKCDR logo"
                             width={276}
                             height={114}
-                            className="w-36 xl:w-48"
+                            className="w-full"
                         />
 
                         <Image
@@ -81,7 +81,7 @@ export default function Header() {
                             alt="Pandemic Sciences Institute logo"
                             width={480}
                             height={236}
-                            className="w-36 xl:w-48"
+                            className="w-full"
                         />
 
                     </div>
