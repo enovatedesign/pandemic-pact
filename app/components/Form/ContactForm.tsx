@@ -1,13 +1,6 @@
 // Framework
 import React, {useState, useCallback, useRef} from "react";
 
-// FontAwesome
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faCheckCircle,
-    faExclamationCircle,
-} from "@fortawesome/pro-solid-svg-icons";
-
 // Components
 import Button from "../Button";
 
@@ -152,10 +145,6 @@ export default function ContactForm() {
                 {showSuccessMessage && (
                     <div className="xl:col-span-2">
                         <div className={successMessageClasses}>
-                            <span>
-                                <FontAwesomeIcon icon={faCheckCircle} />
-                            </span>
-
                             <span>Thank you, your contact form submission has been sent.</span>
                         </div>
                     </div>
@@ -164,10 +153,6 @@ export default function ContactForm() {
                 {showFailureMessage && (
                     <div className="xl:col-span-2">
                         <div className={errorMessageClasses}>
-                            <span>
-                                <FontAwesomeIcon icon={faExclamationCircle} />
-                            </span>
-
                             <span>Something went wrong. Please try again</span>
                         </div>
                     </div>
@@ -189,10 +174,6 @@ export default function ContactForm() {
 
                         {errors?.name && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle} />
-                                </span>
-
                                 <span>Please enter your name</span>
                             </div>
                         )}
@@ -215,10 +196,6 @@ export default function ContactForm() {
 
                         {errors?.email && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle} />
-                                </span>
-
                                 <span>Please enter your email</span>
                             </div>
                         )}
@@ -244,10 +221,6 @@ export default function ContactForm() {
 
                         {errors?.contactNumber && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle} />
-                                </span>
-
                                 <span>Please enter your contact number</span>
                             </div>
                         )}
@@ -270,10 +243,6 @@ export default function ContactForm() {
 
                         {errors?.message && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle} />
-                                </span>
-
                                 <span>Please enter your message</span>
                             </div>
                         )}
