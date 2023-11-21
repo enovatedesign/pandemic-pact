@@ -56,11 +56,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function JumpMenu() {
-    const [selected, setSelected] = useState(visualisations[0])
+    const [selected, setSelected] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
 
     useEffect(() => {
+        if (!selected) return
         const url = new URL(pathname, window.location.origin)
         router.replace(`#${selected.id}`)
     }, [
