@@ -86,7 +86,7 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
 
     return (
         <div className="flex space-x-8">
-            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-2xl p-4">
+            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg p-3">
                 <Select value={localRow.field} onValueChange={onSelectChange} enableClear={false}>
                     {selectItems.map((key, index) => {
                         return (

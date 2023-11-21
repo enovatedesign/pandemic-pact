@@ -1,23 +1,23 @@
-import {useEffect, useMemo, useState} from 'react'
-import {useRouter, usePathname, useSearchParams} from 'next/navigation'
-import {Grid, Col} from '@tremor/react'
-import {SearchIcon, SwitchHorizontalIcon} from "@heroicons/react/solid"
-import ExportToCsvButton from "./ExportToCsvButton"
-import MultiSelect from "./MultiSelect"
-import selectOptions from '../../data/dist/select-options.json'
-import {type SearchResponse} from '../types/search'
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { Grid, Col } from '@tremor/react';
+import { SearchIcon, SwitchHorizontalIcon } from '@heroicons/react/solid';
+import ExportToCsvButton from './ExportToCsvButton';
+import MultiSelect from './MultiSelect';
+import selectOptions from '../../data/dist/select-options.json';
+import { type SearchResponse } from '../types/search';
 import {
     meilisearchRequest,
     exportRequestBody,
     highlightedResultsRequestBody,
-    type MeilisearchRequestBody
-} from '../helpers/meilisearch'
-import Button from './Button'
-import AnimateHeight from 'react-animate-height'
-import AdvancedSearch from './AdvancedSearch'
+    type MeilisearchRequestBody,
+} from '../helpers/meilisearch';
+import Button from './Button';
+import AnimateHeight from 'react-animate-height';
+import AdvancedSearch from './AdvancedSearch';
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void,
+    setSearchResponse: (searchResponse: SearchResponse) => void;
 }
 
 export interface Filters {
@@ -29,245 +29,316 @@ export interface Filters {
     FunderRegion: string[];
 }
 
-export default function SearchInput({setSearchResponse}: Props) {
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
-    const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
+export default function SearchInput({ setSearchResponse }: Props) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const searchQueryFromUrl = searchParams.get('q') ?? '';
+    const filtersFromUrl = searchParams.get('filters') ?? null;
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
+    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl);
 
     const [filters, setFilters] = useState<Filters>(
-        filtersFromUrl ? JSON.parse(filtersFromUrl) : {
-            Disease: [],
-            Pathogen: [],
-            ResearchInstitutionCountry: [],
-            ResearchInstitutionRegion: [],
-            FunderCountry: [],
-            FunderRegion: [],
-        }
-    )
+        filtersFromUrl
+            ? JSON.parse(filtersFromUrl)
+            : {
+                  Disease: [],
+                  Pathogen: [],
+                  ResearchInstitutionCountry: [],
+                  ResearchInstitutionRegion: [],
+                  FunderCountry: [],
+                  FunderRegion: [],
+              }
+    );
 
-    const [totalHits, setTotalHits] = useState<number>(0)
+    const [totalHits, setTotalHits] = useState<number>(0);
 
     useEffect(() => {
-        const url = new URL(pathname, window.location.origin)
+        const url = new URL(pathname, window.location.origin);
 
         if (searchQuery) {
-            url.searchParams.set('q', searchQuery)
+            url.searchParams.set('q', searchQuery);
         } else {
-            url.searchParams.delete('q')
+            url.searchParams.delete('q');
         }
 
-        const anyFiltersAreSet = Object.values(filters).some(selectedOptions => selectedOptions.length > 0)
+        const anyFiltersAreSet = Object.values(filters).some(
+            (selectedOptions) => selectedOptions.length > 0
+        );
 
         if (anyFiltersAreSet) {
-            url.searchParams.set('filters', JSON.stringify(filters))
+            url.searchParams.set('filters', JSON.stringify(filters));
         } else {
-            url.searchParams.delete('filters')
+            url.searchParams.delete('filters');
         }
 
-        router.replace(url.href)
-    }, [
-        searchQuery,
-        filters,
-        pathname,
-        router,
-    ])
+        router.replace(url.href);
+    }, [searchQuery, filters, pathname, router]);
 
     const sharedRequestBody = useMemo(() => {
         let body: MeilisearchRequestBody = {
             q: searchQuery,
-        }
+        };
 
-        const filter = []
+        const filter = [];
 
         if (filters.Disease?.length > 0) {
             filter.push(
-                filters.Disease.length === 1 ?
-                    `Disease = "${filters.Disease[0]}"` :
-                    filters.Disease.map(disease => `Disease = "${disease}"`)
-            )
+                filters.Disease.length === 1
+                    ? `Disease = "${filters.Disease[0]}"`
+                    : filters.Disease.map((disease) => `Disease = "${disease}"`)
+            );
         }
 
         if (filters.Pathogen?.length > 0) {
             filter.push(
-                filters.Pathogen.length === 1 ?
-                    `Pathogen = "${filters.Pathogen[0]}"` :
-                    filters.Pathogen.map(pathogen => `Pathogen = "${pathogen}"`)
-            )
+                filters.Pathogen.length === 1
+                    ? `Pathogen = "${filters.Pathogen[0]}"`
+                    : filters.Pathogen.map(
+                          (pathogen) => `Pathogen = "${pathogen}"`
+                      )
+            );
         }
 
         if (filters.ResearchInstitutionCountry?.length > 0) {
             filter.push(
-                filters.ResearchInstitutionCountry.length === 1 ?
-                    `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"` :
-                    filters.ResearchInstitutionCountry.map(country => `ResearchInstitutionCountry = "${country}"`)
-            )
+                filters.ResearchInstitutionCountry.length === 1
+                    ? `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"`
+                    : filters.ResearchInstitutionCountry.map(
+                          (country) =>
+                              `ResearchInstitutionCountry = "${country}"`
+                      )
+            );
         }
 
         if (filters.ResearchInstitutionRegion?.length > 0) {
             filter.push(
-                filters.ResearchInstitutionRegion.length === 1 ?
-                    `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"` :
-                    filters.ResearchInstitutionRegion.map(region => `ResearchInstitutionRegion = "${region}"`)
-            )
+                filters.ResearchInstitutionRegion.length === 1
+                    ? `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"`
+                    : filters.ResearchInstitutionRegion.map(
+                          (region) => `ResearchInstitutionRegion = "${region}"`
+                      )
+            );
         }
 
         if (filters.FunderCountry?.length > 0) {
             filter.push(
-                filters.FunderCountry.length === 1 ?
-                    `FunderCountry = "${filters.FunderCountry[0]}"` :
-                    filters.FunderCountry.map(country => `FunderCountry = "${country}"`)
-            )
+                filters.FunderCountry.length === 1
+                    ? `FunderCountry = "${filters.FunderCountry[0]}"`
+                    : filters.FunderCountry.map(
+                          (country) => `FunderCountry = "${country}"`
+                      )
+            );
         }
 
         if (filters.FunderRegion?.length > 0) {
             filter.push(
-                filters.FunderRegion.length === 1 ?
-                    `FunderRegion = "${filters.FunderRegion[0]}"` :
-                    filters.FunderRegion.map(region => `FunderRegion = "${region}"`)
-            )
+                filters.FunderRegion.length === 1
+                    ? `FunderRegion = "${filters.FunderRegion[0]}"`
+                    : filters.FunderRegion.map(
+                          (region) => `FunderRegion = "${region}"`
+                      )
+            );
         }
 
         if (filter.length > 0) {
-            body.filter = filter
+            body.filter = filter;
         }
 
-        return body
-    }, [
-        searchQuery,
-        filters,
-    ])
+        return body;
+    }, [searchQuery, filters]);
 
     useEffect(() => {
         const searchRequestBody = highlightedResultsRequestBody({
             ...sharedRequestBody,
             attributesToCrop: ['Abstract'],
             cropLength: 50,
-        })
+        });
 
-        meilisearchRequest('grants', searchRequestBody).then(data => {
-            setSearchResponse(data)
-            setTotalHits(data.estimatedTotalHits)
-        }).catch((error) => {
-            console.error('Error:', error)
-        })
-    }, [
-        sharedRequestBody,
-        setTotalHits,
-        setSearchResponse,
-    ])
+        meilisearchRequest('grants', searchRequestBody)
+            .then((data) => {
+                setSearchResponse(data);
+                setTotalHits(data.estimatedTotalHits);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }, [sharedRequestBody, setTotalHits, setSearchResponse]);
 
-    const [advancedSearchShow, setAdvancedSearchShow] = useState(false)
+    const [advancedSearchShow, setAdvancedSearchShow] = useState(false);
 
     return (
         <div>
-            <Grid numItems={2} className="gap-2" >
+            <Grid numItems={2} className="gap-3">
                 <Col numColSpan={2}>
                     <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
                         <input
-                            type='search'
+                            type="search"
                             placeholder="Search..."
-                            onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
+                            onInput={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => setSearchQuery(event.target.value)}
                             value={searchQuery}
                             className="block w-full placeholder:text-gray-400 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
                         <Button
                             size="xsmall"
                             colour="grey"
-                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg">
+                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
+                        >
                             <span className="sr-only">Search</span>
-                            <SearchIcon className='w-6 h-6 text-secondary' />
+                            <SearchIcon className="w-6 h-6 text-secondary" />
                         </Button>
                     </div>
                 </Col>
 
-                <section className="col-span-2 w-full rounded-xl border-2 bg-200 flex flex-col bg-gray-200 px-4 pt-4">
-                    <div className='flex items-center justify-between gap-2'>
-                        <h2 className='text-secondary uppercase'>
-                            Filters:
-                        </h2>
-
-                        <div className='flex'>
-                            <div className="flex space-x-1 text-sm text-secondary">
-                                <button onClick={() => setAdvancedSearchShow(false)} className={`${!advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4 text-xs md:text-sm`}>
-                                    Standard Search
-                                </button>
-                                <button onClick={() => setAdvancedSearchShow(true)} className={`${advancedSearchShow ? 'bg-white rounded-t-2xl' : 'bg-gray-200'} uppercase p-4 text-xs md:text-sm`}>
-                                    Advanced Search
-                                </button>
-                            </div>
+                <section className="col-span-2 w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
+                    <div className="flex items-center justify-between gap-2 mx-4">
+                        <h2 className="text-secondary uppercase tracking-widest font-bold">Search Filters</h2>
+                        <div className="flex space-x-1 text-sm text-secondary">
+                            <button
+                                onClick={() => setAdvancedSearchShow(false)}
+                                className={`${
+                                    !advancedSearchShow
+                                        ? 'bg-white rounded-t-lg'
+                                        : 'bg-transparent'
+                                } uppercase px-4 py-2 text-xs md:text-sm`}
+                            >
+                                Standard Search
+                            </button>
+                            <button
+                                onClick={() => setAdvancedSearchShow(true)}
+                                className={`${
+                                    advancedSearchShow
+                                        ? 'bg-white rounded-t-lg'
+                                        : 'bg-transparent'
+                                } uppercase px-4 py-2 text-xs md:text-sm`}
+                            >
+                                Advanced Search
+                            </button>
                         </div>
                     </div>
 
-                    <div className={`${!advancedSearchShow ? 'rounded-2xl' : 'rounded-l-2xl rounded-b-2xl'} col-span-2 bg-white p-4 mb-4`}>
-                        
-                            {!advancedSearchShow ? (
-                                <AnimateHeight
-                                    duration={400}
-                                    height={!advancedSearchShow && 'auto'}
-                                >   
+                    <div
+                        className={`rounded-lg col-span-2 bg-white p-3`}
+                    >
+                        {!advancedSearchShow ? (
+                            <AnimateHeight
+                                duration={400}
+                                height={!advancedSearchShow && 'auto'}
+                            >
+                                <section className=" bg-white p-3">
+                                    <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
+                                        Advanced Search
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                        <MultiSelect
+                                            options={selectOptions.Disease}
+                                            selectedOptions={filters.Disease}
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    Disease: selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Diseases"
+                                        />
 
-                                    <section className=' bg-white p-4'>
+                                        <MultiSelect
+                                            options={selectOptions.Pathogen}
+                                            selectedOptions={filters.Pathogen}
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    Pathogen: selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Pathogens"
+                                        />
 
-                                        <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
-                                            Advanced Search
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                            <MultiSelect
-                                                options={selectOptions.Disease}
-                                                selectedOptions={filters.Disease}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, Disease: selectedOptions})}
-                                                placeholder="All Diseases"
-                                                />
-
-                                            <MultiSelect
-                                                options={selectOptions.Pathogen}
-                                                selectedOptions={filters.Pathogen}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, Pathogen: selectedOptions})}
-                                                placeholder="All Pathogens"
-                                                />
-
-
-                                            <MultiSelect
-                                                options={selectOptions.ResearchInstitutionCountry}
-                                                selectedOptions={filters.ResearchInstitutionCountry}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionCountry: selectedOptions})}
-                                                placeholder="All Research Institution Countries"
-                                                
-                                                />
-                                            <MultiSelect
-                                                options={selectOptions.Regions}
-                                                selectedOptions={filters.ResearchInstitutionRegion}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, ResearchInstitutionRegion: selectedOptions})}
-                                                placeholder="All Research Institution Regions"
-                                                />
-                                            <MultiSelect
-                                                options={selectOptions.FunderCountry}
-                                                selectedOptions={filters.FunderCountry}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderCountry: selectedOptions})}
-                                                placeholder="All Funder Countries"
-                                                />
-                                            <MultiSelect
-                                                options={selectOptions.Regions}
-                                                selectedOptions={filters.FunderRegion}
-                                                setSelectedOptions={(selectedOptions) => setFilters({...filters, FunderRegion: selectedOptions})}
-                                                placeholder="All Funder Regions"
-                                                />
-                                        </div>
-                                    </section>
-                                </AnimateHeight>
-                            ) : (
-                                <AnimateHeight
-                                    duration={400}
-                                    height={advancedSearchShow && 'auto'}
-                                >
-                                    <AdvancedSearch/>
-                                </AnimateHeight>
-                                
-                            )}
+                                        <MultiSelect
+                                            options={
+                                                selectOptions.ResearchInstitutionCountry
+                                            }
+                                            selectedOptions={
+                                                filters.ResearchInstitutionCountry
+                                            }
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    ResearchInstitutionCountry:
+                                                        selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Research Institution Countries"
+                                        />
+                                        <MultiSelect
+                                            options={selectOptions.Regions}
+                                            selectedOptions={
+                                                filters.ResearchInstitutionRegion
+                                            }
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    ResearchInstitutionRegion:
+                                                        selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Research Institution Regions"
+                                        />
+                                        <MultiSelect
+                                            options={
+                                                selectOptions.FunderCountry
+                                            }
+                                            selectedOptions={
+                                                filters.FunderCountry
+                                            }
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    FunderCountry:
+                                                        selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Funder Countries"
+                                        />
+                                        <MultiSelect
+                                            options={selectOptions.Regions}
+                                            selectedOptions={
+                                                filters.FunderRegion
+                                            }
+                                            setSelectedOptions={(
+                                                selectedOptions
+                                            ) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    FunderRegion:
+                                                        selectedOptions,
+                                                })
+                                            }
+                                            placeholder="All Funder Regions"
+                                        />
+                                    </div>
+                                </section>
+                            </AnimateHeight>
+                        ) : (
+                            <AnimateHeight
+                                duration={400}
+                                height={advancedSearchShow && 'auto'}
+                            >
+                                <AdvancedSearch />
+                            </AnimateHeight>
+                        )}
                     </div>
                 </section>
 
@@ -277,20 +348,23 @@ export default function SearchInput({setSearchResponse}: Props) {
                 >
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
                         <span>Total Hits:</span>
-                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">{totalHits}</span>
+                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
+                            {totalHits}
+                        </span>
                     </p>
 
                     <div className="grow flex flex-row justify-end gap-2">
                         <ExportToCsvButton
-                            meilisearchRequestBody={exportRequestBody(sharedRequestBody)}
+                            meilisearchRequestBody={exportRequestBody(
+                                sharedRequestBody
+                            )}
                             filename="search-results-export"
-                            title='Download Data'
+                            title="Download Data"
                             size="xsmall"
-                        >
-                        </ExportToCsvButton>
+                        ></ExportToCsvButton>
                     </div>
                 </Col>
-            </Grid >
+            </Grid>
         </div>
-    )
+    );
 }
