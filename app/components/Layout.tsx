@@ -59,7 +59,7 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                 {sidebarContent &&
                     <aside className="relative bg-secondary border-r border-primary/25">
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
-                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6 text-primary hover:text-white duration-300 transition-colors">
                                 <span className="sr-only">Filters</span>
                                 <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
