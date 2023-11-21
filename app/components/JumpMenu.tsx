@@ -5,47 +5,47 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
 
 const visualisations = [
     {
-        id: 'grants-by-disease',
+        id: 'grants-by-disease-anchor',
         title: 'Global annual funding for research on diseases with a pandemic potential',
         current: true,
     },
     {
-        id: 'grants-by-research-category',
+        id: 'grants-by-research-category-anchor',
         title: 'Global distribution of funding for research categories',
         current: false,
     },
     {
-        id: 'grants-by-country-where-research-was-conducted',
+        id: 'grants-by-country-where-research-was-conducted-anchor',
         title: 'Global Map Showing Where Research Was Conducted',
         current: false,
     },
     {
-        id: 'amount-committed-to-each-research-category-over-time-card',
+        id: 'amount-committed-to-each-research-category-over-time-card-anchor',
         title: 'Global Annual Funding For Research Categories',
         current: false,
     },
     {
-        id: 'grant-per-research-category-by-region',
+        id: 'grant-per-research-category-by-region-anchor',
         title: 'Regional Distribution of Funding for Research Category',
         current: false,
     },
     {
-        id: 'grants-by-pathogen-and-disease',
+        id: 'grants-by-pathogen-and-disease-anchor',
         title: 'Grants By Pathogen and Disease',
         current: false,
     },
     {
-        id: 'regional-flow-of-grants',
+        id: 'regional-flow-of-grants-anchor',
         title: 'Regional Flow of Research Grants',
         current: false,
     },
     {
-        id: 'disease-word-cloud',
+        id: 'disease-word-cloud-anchor',
         title: 'Word cloud showing the funding for infectious diseases with a pandemic potential',
         current: false,
     },
     {
-        id: 'pathogen-word-cloud',
+        id: 'pathogen-word-cloud-anchor',
         title: 'Word cloud showing the funding for priority pathogens',
         current: false,
     },
