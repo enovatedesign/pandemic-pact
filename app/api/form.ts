@@ -81,7 +81,7 @@ async function sendEmail(req: NextApiRequest, res: NextApiResponse) {
     try {
         const data = await sesClient.send(new SendEmailCommand(params));
         return res.status(200).json({error: ''});
-    } catch (err: Error) {
+    } catch (err: any) {
         return res.status(err.statusCode || 500).json({error: err.message});
     }
 

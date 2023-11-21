@@ -1,6 +1,6 @@
 import Image from "next/image"
 import RichText from "../Common/RichText"
-import ButtonLink from "../Common/Button"
+import Button from '../../Button'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from "swiper/modules"
 
@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
-import { teardownCrashReporter } from "next/dist/build/swc";
 
 type Props = {
     block: {
@@ -20,7 +19,7 @@ type Props = {
                 url: string,
                 width: number,
                 height: number,
-            }
+            }[],
             slideButton: {
                 url: string,
                 text: string,
@@ -29,7 +28,7 @@ type Props = {
                 url: string,
                 text: string,
             }
-        }
+        }[],
     }
 }
 
@@ -102,14 +101,14 @@ const HeroImageSliderBlock = ({block}: Props) => {
 
                                                         {text && (
                                                             <div className="pt-4 lg:pt-8">
-                                                                <RichText text={text} customClasses='text-white' />
+                                                                <RichText text={text} customClasses='text-white' invert={false} typeScale={""} />
                                                             </div>
                                                         )}
 
 
                                                         <div className={buttonContainerClasses}>
                                                             {button.url && (
-                                                                <ButtonLink linkTo={button.url} title={button.text}/>
+                                                                <Button href={button.url}>{button.text}</Button>
                                                             )}
 
                                                             {textLink.url && (

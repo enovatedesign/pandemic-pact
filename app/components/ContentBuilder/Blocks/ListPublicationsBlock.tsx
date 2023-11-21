@@ -1,7 +1,8 @@
 import BlockWrapper from "../BlockWrapper"
-import PublicationsCard from "./Publications/PublicationsCard"
+import Card from "../Common/Card"
 import { useInView, animated } from '@react-spring/web'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
+import Button from "../../Button"
 
 type Props = {
     block: {
@@ -14,12 +15,12 @@ type Props = {
             summary: string,
             externalLink: string,
             thumbnailImage: {
-                alt: string,
+                altText: string,
                 height: number,
                 url: string,
                 width: number,
-            }
-        }
+            }[],
+        }[],
     }
 }
 
@@ -55,11 +56,19 @@ const ListPublicationsBlock = ({block}: Props) => {
                         </div>
                     )}
 
-                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         
-                        {customEntries.map((entry, index) => {
+                        {customEntries.map((entry, index: number) => {
                             return (
-                                <PublicationsCard entry={entry} key={index}/>
+                                <Card entry={entry} key={index}>
+                                    <Button 
+                                        href={entry.externalLink}
+                                        size="small"
+                                    >
+                                        Read More
+                                    </Button>
+                                </Card>
+
                             )
                         })}
 

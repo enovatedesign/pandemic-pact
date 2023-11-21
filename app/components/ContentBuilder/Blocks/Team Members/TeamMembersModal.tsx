@@ -3,7 +3,13 @@ import { Dialog, Transition } from "@headlessui/react"
 import Image from "next/image"
 import RichText from "../../Common/RichText"
 
-const TeamMembersModal = ({entry, isOpen, handleClose}) => {
+interface data {
+    entry: any, 
+    isOpen: boolean, 
+    handleClose: () => void
+}
+
+const TeamMembersModal = ({entry, isOpen, handleClose}: data) => {
 
     const {title, jobTitle, postNominalLetters, aboutText, thumbnailImage} = entry
 
@@ -61,7 +67,7 @@ const TeamMembersModal = ({entry, isOpen, handleClose}) => {
                                         )}
                                         
                                         {aboutText && (
-                                            <RichText text={aboutText}/>
+                                            <RichText text={aboutText} invert={false} typeScale={""} customClasses={""}/>
                                         )}
                                     </div>
 
@@ -80,7 +86,7 @@ const TeamMembersModal = ({entry, isOpen, handleClose}) => {
                     </div>
                 </div>
             </Dialog>
-        </Transition>
+        </Transition> 
     )
 }
 

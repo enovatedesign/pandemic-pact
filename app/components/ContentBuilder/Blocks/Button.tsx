@@ -1,6 +1,14 @@
 import Button from "../../Button";
 
-export default function ButtonBlock({ block }) {
+interface Props {
+	block: {
+		button: any,
+		colour: string,
+		position: string
+	}
+}
+
+export default function ButtonBlock({ block }: Props) {
 	const button = block.button;
 	const colour = block.colour;
 	const position = block.position;
@@ -10,10 +18,10 @@ export default function ButtonBlock({ block }) {
 			<div className={"text-" + position}>
 				<Button
 					colour={colour}
-					target={"/" + button.element.uri}
-					text={button.text}
-					type="anchor"
-				/>
+					href={"/" + button.element.uri}
+				>
+					{button.text}
+				</Button>
 			</div>
 		);
 	} else {

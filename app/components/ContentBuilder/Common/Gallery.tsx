@@ -11,11 +11,23 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
-const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
+interface Props {
+    images: any[],
+    autoplayState: boolean,
+    thumbnailsOnlyState: boolean,
+}
+
+interface ImageProps {
+    width: number, 
+    height: number, 
+    altText: string, 
+    url: string
+}
+
+const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
-    const autoplayDelay = autoplayState ? 3000 : null
+    const autoplayDelay = autoplayState ? 3000 : 0
 
     return (    
 		<div className="bg-gray-200">
@@ -43,7 +55,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState}) => {
                                     },
                                 }}
                             >
-                                {images.map((image, index) => {
+                                {images.map((image: ImageProps, index: number) => {
                                     return (
                                         <SwiperSlide key={index}>
                                             <Image

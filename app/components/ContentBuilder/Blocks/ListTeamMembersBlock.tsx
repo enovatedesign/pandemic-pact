@@ -4,6 +4,8 @@ import { useInView, animated } from '@react-spring/web';
 import { useState } from "react"
 import TeamMembersModal from "./Team Members/TeamMembersModal"
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
+import Card from "../Common/Card";
+import Button from "../../Button";
 
 type Props = {
     block: {
@@ -16,12 +18,12 @@ type Props = {
             postNominalLetters: string,
             aboutText: string,
             thumbnailImage: {
-              alt: string,
+              altText: string,
               url: string,
               height: number,
               width: number,
-            }
-          }
+            }[],
+          }[],
         }
     }
 
@@ -62,8 +64,6 @@ const ListTeamMembersBlock = ({block}: Props) => {
                 <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     
                     {customEntries.map((entry, index) => {
-                        
-                        const {title, jobTitle, thumbnailImage, postNominalLetters} = entry
 
                         const handleOpen = () => {
                             setActiveIndex(index)
@@ -76,41 +76,21 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
                         
                         return (
-                            <li key={index} className="flex flex-col bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl overflow-hidden hover:scale-105 transition duration-300 cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={handleOpen}>
-                                
-                                <Image 
-                                    src={thumbnailImage[0].url}
-                                    alt={thumbnailImage[0].alt}
-                                    width={thumbnailImage[0].width}
-                                    height={thumbnailImage[0].height}
-                                    loading="lazy"
-                                />
-                                <div className="flex flex-col gap-3 p-6 h-full">
-                                    
-                                    {title && (
-                                        <h3 className="text-xl md:text-2xl">
-                                            {title}
-                                            {postNominalLetters && (<span className="block text-base text-gray-500 dark:text-gray-300">{postNominalLetters}</span>)}
-                                        </h3>
-                                    )}
-                                    
-                                    {jobTitle && (
-                                        <p className="text-lg font-bold dark:text-gray-300">
-                                            {jobTitle}
-                                        </p>
-                                    )}
-
-                                    <p className="mt-auto self-end">
-                                        <button onClick={handleOpen} className="mt-2 rounded-md border-2 border-primary px-4 py-2 text-sm text-primary hover:bg-primary hover:text-white transition duration-300">
-                                            Read more
-                                        </button>
-                                    </p>
-                                </div>
+                            <>
+                                <Card
+                                    entry={entry} tags={false} hover={false}>
+                                    <Button 
+                                        size="small"
+                                        onClick={handleOpen}
+                                    >
+                                        read more
+                                    </Button>
+                                </Card>  
                                 
                                 {activeIndex === index && (
                                     <TeamMembersModal entry={entry} isOpen={isOpen} handleClose={handleClose}/>
                                 )}
-                            </li>
+                            </>
                         )
                     })}
 

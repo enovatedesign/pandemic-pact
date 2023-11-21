@@ -7,6 +7,5 @@ export const defaultProseClasses = [
     'prose-a:text-primary',
     'prose-headings:text-primary',
     'prose-gray',
-    'dark:prose-invert',
     'mx-auto',
 ]

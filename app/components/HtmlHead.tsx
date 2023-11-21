@@ -1,7 +1,7 @@
 import Head from "next/head"
 import parse from "html-react-parser";
 
-export default function HtmlHead({data}) {
+export default function HtmlHead({data}: any) {
 
 	console.log('HtmlHead Data: ', data)
 

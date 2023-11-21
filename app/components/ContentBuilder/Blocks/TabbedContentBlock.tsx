@@ -13,7 +13,7 @@ type Props = {
             id: number,
             heading: string,
             richText: string,
-          }
+          }[],
         }
     };
 
@@ -48,7 +48,7 @@ const TabbedContentBlock = ( {block}: Props ) => {
                         <ul role="tablist"
                             className="overflow-x-hidden flex justify-center items-stretch space-x-1 lg:space-x-2"
                         >
-                            {tabs.map((tab, index) => {
+                            {tabs.map((tab, index: number) => {
                                 
                                 const handleClick = () => {
                                     setActiveIndex(index)
@@ -79,7 +79,7 @@ const TabbedContentBlock = ( {block}: Props ) => {
                                     className="p-6 md:p-8"
                                     role="tabpanel"
                                 >
-                                    {tabs.map((tab, index) => {
+                                    {tabs.map((tab, index: number) => {
                                         return (
                                             <AnimateHeight 
                                                 key={index}
@@ -87,7 +87,7 @@ const TabbedContentBlock = ( {block}: Props ) => {
                                                 height={activeIndex === index ? 'auto' : 0}
                                             >
                                                 {activeIndex === index && (
-                                                    <RichText text={tab.richText} customClasses='max-w-none'/>
+                                                    <RichText text={tab.richText} customClasses='max-w-none' invert={false} typeScale={""}/>
                                                 )}
                                             </AnimateHeight>
                                         )
