@@ -10,16 +10,17 @@ import {useState} from 'react'
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     const links = getLinksArray()
-    const bodyEl = document.querySelector('body')
 
     const [showMobileNav, setShowMobileNav] = useState(false)
 
     const navItemClick = () => {
+        const bodyEl = document.querySelector('body')
         bodyEl?.classList.remove('overflow-y-hidden')
     }
 
     const handleNav = () => {
         setShowMobileNav(!showMobileNav)
+        const bodyEl = document.querySelector('body')
         bodyEl?.classList.toggle('overflow-y-hidden')
     }
 
