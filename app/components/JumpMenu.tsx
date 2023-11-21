@@ -5,47 +5,47 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
 
 const visualisations = [
     {
-        id: 'grants-by-disease',
+        id: 'grants-by-disease-anchor',
         title: 'Global annual funding for research on diseases with a pandemic potential',
         current: true,
     },
     {
-        id: 'grants-by-research-category',
+        id: 'grants-by-research-category-anchor',
         title: 'Global distribution of funding for research categories',
         current: false,
     },
     {
-        id: 'grants-by-country-where-research-was-conducted',
+        id: 'grants-by-country-where-research-was-conducted-anchor',
         title: 'Global Map Showing Where Research Was Conducted',
         current: false,
     },
     {
-        id: 'amount-committed-to-each-research-category-over-time-card',
+        id: 'amount-committed-to-each-research-category-over-time-card-anchor',
         title: 'Global Annual Funding For Research Categories',
         current: false,
     },
     {
-        id: 'grant-per-research-category-by-region',
+        id: 'grant-per-research-category-by-region-anchor',
         title: 'Regional Distribution of Funding for Research Category',
         current: false,
     },
     {
-        id: 'grants-by-pathogen-and-disease',
+        id: 'grants-by-pathogen-and-disease-anchor',
         title: 'Grants By Pathogen and Disease',
         current: false,
     },
     {
-        id: 'regional-flow-of-grants',
+        id: 'regional-flow-of-grants-anchor',
         title: 'Regional Flow of Research Grants',
         current: false,
     },
     {
-        id: 'disease-word-cloud',
+        id: 'disease-word-cloud-anchor',
         title: 'Word cloud showing the funding for infectious diseases with a pandemic potential',
         current: false,
     },
     {
-        id: 'pathogen-word-cloud',
+        id: 'pathogen-word-cloud-anchor',
         title: 'Word cloud showing the funding for priority pathogens',
         current: false,
     },
@@ -56,11 +56,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function JumpMenu() {
-    const [selected, setSelected] = useState(visualisations[0])
+    const [selected, setSelected] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
 
     useEffect(() => {
+        if (!selected) return
         const url = new URL(pathname, window.location.origin)
         router.replace(`#${selected.id}`)
     }, [
@@ -70,7 +71,7 @@ export default function JumpMenu() {
     ])
 
     return (
-        <div className="sticky w-full z-[9999] top-0 bg-primary-lighter">
+        <div className="sticky w-full top-0 bg-primary-lighter">
             <div className="container mx-auto py-3 flex justify-end">
                 <Listbox value={selected} onChange={setSelected}>
                     {({ open }) => (
@@ -98,7 +99,7 @@ export default function JumpMenu() {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute right-0 z-10 mt-2 w-96 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Listbox.Options className="absolute right-0 z-10 mt-2 w-80 lg:w-96 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         {visualisations.map((option) => (
                                             <Listbox.Option
                                                 key={option.title}
@@ -107,7 +108,7 @@ export default function JumpMenu() {
                                                         active
                                                             ? 'bg-secondary text-white'
                                                             : 'text-gray-900',
-                                                        'cursor-default select-none p-4 text-sm'
+                                                        'cursor-default select-none px-4 py-2 lg:p-4 text-sm'
                                                     )
                                                 }
                                                 value={option}

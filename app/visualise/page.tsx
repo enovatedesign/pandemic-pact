@@ -45,7 +45,7 @@ export default function Visualise() {
 
             <JumpMenu />
 
-            <div className="container mx-auto my-6 lg:my-12">
+            <div className="container relative -z-1 mx-auto my-6 lg:my-12">
                 <div
                     className="mt-6 grid grid-cols-1 gap-6 lg:gap-12"
                 >
