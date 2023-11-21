@@ -98,7 +98,7 @@ export default function Visualise() {
                     <VisualisationCard
                         filteredDataset={globallyFilteredDataset}
                         id="pathogen-word-cloud"
-                        title="Pathogen Word Cloud"
+                        title="Word cloud showing the funding for priority pathogens"
                     >
                         <div className="w-full">
                             <WordCloud
