@@ -1,4 +1,4 @@
-export default function FooterCopyrightStatement({className, showCredit = true}: {className: string, showCredit: boolean}) {
+export default function FooterCopyrightStatement({className, showCredit = true}: {className?: string, showCredit: boolean}) {
 
     className = className ?? 'text-center xl:text-left text-gray-700'
 
