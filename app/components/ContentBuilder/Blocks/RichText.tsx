@@ -1,7 +1,14 @@
 import BlockWrapper from '../BlockWrapper';
 import { defaultProseClasses } from '@/app/helpers/prose-classes';
 
-export default function RichTextBlock({ block }) {
+interface Props {
+	block: {
+		text: string,
+		textAlign: string
+	}
+}
+
+export default function RichTextBlock({ block }: Props) {
 	const text = block.text;
 	const textAlign = block.textAlign;
 

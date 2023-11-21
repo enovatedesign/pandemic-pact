@@ -1,7 +1,7 @@
 "use client"
 
 import {useMemo, useState} from "react"
-import {Col, Grid} from "@tremor/react"
+import {Col, Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -11,8 +11,9 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
-import GrantsByDiseaseCard from "../components/GrantsByDisease"
+import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
+import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
@@ -41,86 +42,82 @@ export default function Visualise() {
                 />
             }
         >
+
+            <JumpMenu />
+
             <div className="container mx-auto my-6 lg:my-12">
-                <Grid
-                    numItems={12}
-                    className="mt-6 gap-6 lg:gap-12"
+                <div
+                    className="mt-6 grid grid-cols-1 gap-6 lg:gap-12"
                 >
-                    <Col numColSpan={12}>
-                        <GrantsByResearchCategoryCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <GrantsByDiseaseCard
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <GrantsByDiseaseCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <GrantsByResearchCategoryCard
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <GrantsByCountryWhereResearchWasConductedCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <GrantsByCountryWhereResearchWasConductedCard
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <FundingAmountsforEachResearchCategoryOverTime
-                            selectedFilters={selectedFilters}
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <FundingAmountsforEachResearchCategoryOverTime
+                        selectedFilters={selectedFilters}
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <GrantsPerResearchCategoryByRegion
-                            globallyFilteredDataset={globallyFilteredDataset}
-                            selectedFilters={selectedFilters}
-                        />
-                    </Col>
+                    <GrantsPerResearchCategoryByRegion
+                        globallyFilteredDataset={globallyFilteredDataset}
+                        selectedFilters={selectedFilters}
+                    />
 
-                    <Col numColSpan={12}>
-                        <PathogenDiseaseRelationshipCard
-                            selectedFilters={selectedFilters}
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <PathogenDiseaseRelationshipCard
+                        selectedFilters={selectedFilters}
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <RegionalFlowOfGrantsCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </Col>
+                    <RegionalFlowOfGrantsCard
+                        globallyFilteredDataset={globallyFilteredDataset}
+                    />
 
-                    <Col numColSpan={12}>
-                        <VisualisationCard
-                            filteredDataset={globallyFilteredDataset}
-                            id="disease-word-cloud"
-                            title="Disease Word Cloud"
-                        >
-                            <div className="w-full">
-                                <WordCloud
-                                    filterKey="Disease"
-                                    randomSeedString="2324234234"
-                                />
-                            </div>
-                        </VisualisationCard>
-                    </Col>
+                    <VisualisationCard
+                        filteredDataset={globallyFilteredDataset}
+                        id="disease-word-cloud"
+                        title="Word cloud showing the funding for infectious diseases with a pandemic potential"
+                    >
+                        <div className="w-full">
+                            <WordCloud
+                                filterKey="Disease"
+                                randomSeedString="2324234234"
+                            />
+                        </div>
 
-                    <Col numColSpan={12}>
-                        <VisualisationCard
-                            filteredDataset={globallyFilteredDataset}
-                            id="pathogen-word-cloud"
-                            title="Pathogen Word Cloud"
-                        >
-                            <div className="w-full">
-                                <WordCloud
-                                    filterKey="Pathogen"
-                                    randomSeedString="2324234234"
-                                />
-                            </div>
-                        </VisualisationCard>
-                    </Col>
-                </Grid>
+                        <div>
+                            <Text>
+                                The amount of funding is represented by the size of the word
+                            </Text>
+                        </div>
+                    </VisualisationCard>
+
+                    <VisualisationCard
+                        filteredDataset={globallyFilteredDataset}
+                        id="pathogen-word-cloud"
+                        title="Word cloud showing the funding for priority pathogens"
+                    >
+                        <div className="w-full">
+                            <WordCloud
+                                filterKey="Pathogen"
+                                randomSeedString="2324234234"
+                            />
+                        </div>
+
+                        <div>
+                            <Text>
+                                The amount of funding is represented by the size of the word
+                            </Text>
+                        </div>
+                    </VisualisationCard>
+                </div>
             </div>
         </Layout>
     )

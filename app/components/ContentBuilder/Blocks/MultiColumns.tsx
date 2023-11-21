@@ -1,7 +1,13 @@
 // Framework
 import Image from "next/image";
 
-export default function MultiColumnsBlock({ block }) {
+interface Props {
+	block: {
+		column: any[]
+	}
+}
+
+export default function MultiColumnsBlock({ block }: Props) {
 	const columns = block.column;
 
 	if (columns) {

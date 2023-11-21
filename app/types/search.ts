@@ -3,6 +3,8 @@ export interface SearchResult {
     GrantTitleEng: string,
     Abstract: string,
     LaySummary: string,
+    GrantAmountConverted?: number,
+    GrantStartYear: string,
     _formatted: {
         GrantTitleEng: string,
         Abstract: string,

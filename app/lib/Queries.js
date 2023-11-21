@@ -101,7 +101,7 @@ export const contentBuilderQuery = `
                 url
                 title
                 summary
-                thumbnailImage @transform(transform: "c480x300") {
+                thumbnailImage @transform(transform: "c480x480") {
                   url
                   width
                   height
@@ -117,6 +117,7 @@ export const contentBuilderQuery = `
             id
             typeHandle
             heading
+            summary
             customEntries {
               ... on teamMembers_teamMember_Entry {
                 title
@@ -144,7 +145,7 @@ export const contentBuilderQuery = `
                 title
                 summary
                 externalLink
-                thumbnailImage @transform(transform: "c480x300") {
+                thumbnailImage  @transform(transform: "c480x480") {
                   ... on contentAssets_Asset {
                     alt
                     height

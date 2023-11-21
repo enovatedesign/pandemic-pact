@@ -3,6 +3,11 @@
     background: radial-gradient(circle at bottom, theme(colors.primary.DEFAULT) -30%, rgba(0, 0, 62, 1) 60%);
 }
 
+.visualise {
+    background: theme(colors.primary.DEFAULT);
+    background: radial-gradient(circle at 50% 250%, theme(colors.primary.DEFAULT) -70%, rgba(0, 0, 62, 1) 80%);
+}
+
 .button {
     @apply relative flex justify-center items-center space-x-3 px-6 py-2 bg-[#051C51] rounded-full shadow-lg uppercase text-center text-white font-medium tracking-wider sm:px-10 sm:py-3 sm:text-xl;
 }

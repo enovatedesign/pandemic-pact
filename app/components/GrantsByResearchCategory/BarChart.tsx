@@ -1,5 +1,4 @@
 import {Fragment} from "react"
-import {useDarkMode} from "usehooks-ts";
 import {Subtitle, Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -9,31 +8,35 @@ interface Props {
 }
 
 export default function BarChart({chartData}: Props) {
-    const {isDarkMode} = useDarkMode()
-
     const maxTotalNumberOfGrants = Math.max(...chartData.map((data: any) => data["Total Number Of Grants"]))
     const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Amount Committed"]))
 
     return (
         <>
+            <div className="flex flex-col gap-y-2">
+                <Legend
+                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    colors={['blue', 'orange', 'green']}
+                />
+            </div>
+
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
-
-                <div className="pr-6 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle>Number of projects</Subtitle>
+                <div className="hidden pr-6 col-span-2 justify-self-end md:block">
+                    <Subtitle className="text-sm">Number of projects</Subtitle>
                 </div>
 
-                <div className="pl-2 col-span-2 justify-self-end hidden md:block">
-                    <Subtitle>Known amount committed (USD)</Subtitle>
+                <div className="hidden pl-2 col-span-2 justify-self-end md:block">
+                    <Subtitle className="text-sm">Known amount committed (USD)</Subtitle>
                 </div>
-            
+
                 {chartData.map((data: any) => (
                     <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
-                        <div className="self-center col-span-4 first:mt-0 mt-4">
-                            <p className="text-md text-gray-600">{data["Research Category"]}</p>
+                        <div className="self-center mt-1 col-span-4 first:mt-0">
+                            <p className="text-gray-600 text-sm">{data["Research Category"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[data]}
                                     layout="vertical"
@@ -68,7 +71,7 @@ export default function BarChart({chartData}: Props) {
                                         dataKey="Number Of Grants With Known Amount Committed"
                                         fill="#3b82f6"
                                         stackId="a"
-                                        background={{fill: (isDarkMode ? '#64748b' : '#eee')}}
+                                        background={{fill: '#eee'}}
                                     />
 
                                     <Bar
@@ -80,12 +83,12 @@ export default function BarChart({chartData}: Props) {
                             </ResponsiveContainer>
                         </div>
 
-                        <div className="self-center py-3 pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
-                            <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
+                        <div className="self-center pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
+                            <p className="text-xs text-gray-600">{data["Total Number Of Grants"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[data]}
                                     layout="vertical"
@@ -117,26 +120,19 @@ export default function BarChart({chartData}: Props) {
                                     <Bar
                                         dataKey="Amount Committed"
                                         fill="#22c55e"
-                                        background={{fill: (isDarkMode ? '#64748b' : '#eee')}}
+                                        background={{fill: '#eee'}}
                                     />
                                 </RechartBarChart >
                             </ResponsiveContainer >
                         </div >
 
-                        <div className="self-center py-3 pl-2 col-span-1 md:col-span-1 justify-self-end">
-                            <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
+                        <div className="self-center pl-2 col-span-1 md:col-span-1 justify-self-end">
+                            <p className="text-xs text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                         </div>
                     </Fragment >
                 ))
                 }
 
-            </div>
-
-            <div className="flex flex-col mt-4 gap-y-2">
-                <Legend
-                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
-                    colors={['blue', 'orange', 'green']}
-                />
             </div>
         </>
     )

@@ -10,7 +10,7 @@ type Props = {
 		  url: string,
 		  height: number,
 		  width: number,
-		}
+		}[],
 		autoPlay: boolean,
 		thumbnailsOnly: boolean,
 	}

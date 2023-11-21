@@ -31,7 +31,7 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
         const filterValue = obj[filterKey as keyof typeof obj]
 
         if (Array.isArray(filterValue)) {
-            filterValue.forEach((item: string | number) => {
+            filterValue.forEach((item: any) => {
                 if (!acc[item]) {
                     acc[item] = []
                 }

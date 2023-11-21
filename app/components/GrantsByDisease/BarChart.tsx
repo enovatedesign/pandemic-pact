@@ -1,12 +1,14 @@
-import {Flex, Subtitle} from "@tremor/react"
-import {BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
-import VisualisationCard from "./VisualisationCard"
-import {type CardProps} from "../types/card-props"
-import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {dollarValueFormatter} from "../helpers/value-formatters"
-import selectOptions from "../../data/dist/select-options.json"
+import {Flex, Subtitle, Legend} from "@tremor/react"
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
+import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {dollarValueFormatter} from "../../helpers/value-formatters"
+import selectOptions from "../../../data/dist/select-options.json"
 
-export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
+interface Props {
+    globallyFilteredDataset: any,
+}
+
+export default function BarChart({globallyFilteredDataset}: Props) {
     const chartData = selectOptions.Disease.map(function (disease) {
         const grantsWithKnownAmounts = globallyFilteredDataset
             .filter((grant: any) => grant.Disease.includes(disease.value))
@@ -28,11 +30,14 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
     }).filter(disease => disease["Total Grants"] > 0)
 
     return (
-        <VisualisationCard
-            filteredDataset={globallyFilteredDataset}
-            id="grants-by-disease"
-            title="Grants By Disease"
-        >
+        <>
+            <div className="flex flex-col gap-y-2">
+                <Legend
+                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    colors={['blue', 'orange', 'green']}
+                />
+            </div>
+
             <Flex
                 flexDirection="row"
             >
@@ -40,9 +45,9 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                     <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
                 </div>
 
-                <div className="w-full h-[800px]">
+                <div className="w-full h-[700px]">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
+                        <RechartBarChart
                             width={500}
                             height={300}
                             data={chartData}
@@ -53,10 +58,6 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                                 bottom: 5,
                             }}
                         >
-                            <Legend
-                                verticalAlign="top"
-                            />
-
                             <XAxis dataKey="Disease" />
 
                             <YAxis
@@ -100,7 +101,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                                 fill="#22c55e"
                                 stackId="b"
                             />
-                        </BarChart>
+                        </RechartBarChart>
                     </ResponsiveContainer>
                 </div>
 
@@ -108,6 +109,6 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
                     <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
                 </div>
             </Flex>
-        </VisualisationCard>
+        </>
     )
 }

@@ -1,32 +1,33 @@
+"use client"
+
+import {useState, useEffect} from 'react'
+import AnimateHeight from 'react-animate-height';
+import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
 import Link from 'next/link'
-import {Accordion, AccordionHeader, AccordionBody, AccordionList, Grid, Col, Card, Title, Subtitle, Flex, Text, Metric, List, ListItem} from '@tremor/react'
+import {Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
+import RichText from '@/app/components/ContentBuilder/Common/RichText'
+import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
+import Button from '@/app/components/Button';
+import '../../css/components/results-table.css'
+import {debounce} from 'lodash';
 
 interface Props {
     grant: any
 }
 
 export default function StaticPage({grant}: Props) {
-    const sidebarItems = [
-        {
-            text: 'Research Location',
-            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
-        },
+
+    const keyFactsHeadings = [
         {
             text: 'Disease',
             metric: grant.Disease.join(', '),
         },
+
         {
-            text: 'Start Year',
-            metric: grant.GrantStartYear,
-        },
-        {
-            text: 'End Year',
-            metric: grant.GrantEndYear,
-        },
-        {
-            text: 'Funder',
-            metric: grant.FundingOrgName.join(', '),
+            text: 'Start & end year',
+            startMetric: grant.GrantStartYear,
+            endMetric: grant.GrantEndYear,
         },
         {
             text: 'Amount Committed (USD)',
@@ -35,58 +36,266 @@ export default function StaticPage({grant}: Props) {
                 : grant.GrantAmountConverted,
         },
         {
-            text: 'Study Subject',
-            metric: grant.StudySubject,
+            text: 'Research Location',
+            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
         },
         {
-            text: 'Age Groups',
-            metric: grant.AgeGroups,
+            text: 'Lead Research Institution',
+            metric: grant.ResearchInstitutionName[0],
         },
         {
-            text: 'Rurality',
-            metric: grant.Rurality,
-        },
-        {
-            text: 'Vulnerable Populations',
-            metric: grant.VulnerablePopulations,
-        },
-        {
-            text: 'Occupational Groups',
-            metric: grant.OccupationalGroups,
-        },
-        {
-            text: 'Study Type',
-            metric: grant.StudyType,
-        },
-        {
-            text: 'Clinical Trial',
-            metric: grant.ClinicalTrial,
+            text: 'Partner Institution',
+            metric: grant.ResearchInstitutionName[1]
         },
     ]
 
-    if (grant.ResearchInstitutionName.length > 0) {
-        sidebarItems.unshift({
-            text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName[0],
-        })
+    const keyFactsSubHeadings = [
+        {
+            text: 'Research Category',
+            metric: grant.ResearchCat[0],
+        },
+        {
+            text: 'Research Subcategory',
+            metric: grant.ResearchSubcat[0],
+        },
+        {
+            text: 'Special Interest Tags',
+            metric: 'Gender',
+        },
+        {
+            text: 'Study Subject',
+            metric: grant.StudyType[0],
+        },
+        {
+            text: 'Clinical Trial Details',
+            metric: grant.ClinicalTrial[0],
+        },
+        {
+            text: 'Broad Policy Alignment',
+            metric: '100 Days Mission',
+        },
+        {
+            text: 'Age Group',
+            metric: grant.AgeGroups,
+        },
+        {
+            text: 'Vulnerable Population',
+            metric: grant.VulnerablePopulations,
+        },
+        {
+            text: 'Occupations of Interest',
+            metric: grant.OccupationalGroups,
+        }
+    ]
+
+    const titleClasses = [
+        'text-secondary uppercase tracking-widest text-lg lg:text-xl font-medium'
+    ].join(' ')
+
+    const [abstractShow, setAbstractShow] = useState(false)
+    const [activeIndex, setActiveIndex] = useState(-1)
+
+    const limit = 10
+    const [firstItemIndex, setFirstItemIndex] = useState(0)
+    const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
+    const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
+    const [readMore, setReadMore] = useState(false)
+    const [backgroundShow, setBackgroundShow] = useState(true)
+
+
+    useEffect(() => {
+        const abstract = document.getElementById('abstract')
+
+        const checkHeight = () => {
+            setReadMore((abstract?.offsetHeight || 0) > 200)
+        }
+
+        const debouncedCheckHeight = debounce(checkHeight, 200)
+
+        if (document.readyState === 'complete') {
+            checkHeight()
+        } else {
+            window.addEventListener('load', checkHeight)
+        }
+
+        window.addEventListener('resize', debouncedCheckHeight)
+
+        return () => {
+            window.removeEventListener('load', checkHeight)
+            window.removeEventListener('resize', debouncedCheckHeight)
+        }
+    }, [readMore])
+
+    useEffect(() => {
+        const handleBackground = () => {
+            if (readMore) {
+                setBackgroundShow(true)
+            } else {
+                setBackgroundShow(false)
+            }
+        }
+
+        const debouncedBackground = debounce(handleBackground, 200)
+
+        if (document.readyState === 'complete') {
+            handleBackground()
+        } else {
+            window.addEventListener('load', handleBackground)
+        }
+
+        window.addEventListener('resize', debouncedBackground)
+
+        return () => {
+            window.removeEventListener('load', handleBackground)
+            window.removeEventListener('resize', debouncedBackground)
+        }
+
+    }, [backgroundShow, readMore])
+
+    const mastheadContent = () => {
+        return (
+            <>
+                <div className="mt-4 flex flex-col gap-4 md:flex-row items-start justify-between md:items-center">
+
+                    <ul className="text-xl lg:text-2xl text-gray-300 flex flex-col md:flex-row items-start md:items-center justify-start gap-4">
+                        <li>Funded by <span className="font-medium text-primary">{grant.FundingOrgName.join(', ')}</span></li>
+                        <li className="flex">
+                            <span className="sr-only">
+                                Total publications:
+                            </span>
+                            <a href="#publications" className="z-50 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
+                                {grant.PubMedLinks?.length ?? '0'} publications
+                            </a>
+
+                        </li>
+                    </ul>
+
+                    <p className="text-white/80">
+                        Grant number: <span className="text-white/60 font-bold uppercase">{grant.PubMedGrantId}</span>
+                    </p>
+
+                </div>
+            </>
+        )
     }
 
     return (
-        <Layout title={grant.GrantTitleEng}>
-            <div className="container mx-auto my-6 lg:my-12">
-                <Grid numItemsLg={6} className="gap-6">
-                    <Col
-                        numColSpanLg={4}
-                        className="flex flex-col gap-6"
-                    >
-                        <Card className="grant-abstract">
-                            <Title>Abstract</Title>
+        <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
+            <div className="container mx-auto my-12 relative">
 
-                            <div
-                                className="mt-2"
-                                dangerouslySetInnerHTML={{__html: grant.Abstract}}
-                            />
-                        </Card>
+                <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                    <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
+                        <ChevronLeftIcon className="w-4 h-4" />
+                    </div>
+                    <span className="uppercase tracking-wider font-medium">Grant search</span>
+                </Link>
+
+                <Grid numItemsLg={1} className="gap-6">
+                    <Col
+                        numColSpanLg={1}
+                        className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200"
+                    >
+                        <div className="grant-abstract flex flex-col space-y-4">
+                            <Title className={titleClasses}>Abstract</Title>
+                            <AnimateHeight
+                                duration={300}
+                                height={abstractShow ? 'auto' : 230}
+                                className='relative'
+                            >
+                                <div id='abstract'>
+                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
+                                    {backgroundShow && !abstractShow && (
+                                        <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                    )}
+                                </div>
+                            </AnimateHeight>
+                            {readMore && (
+                                <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
+                                    <span className='inline-flex text-secondary'>
+                                        {abstractShow ? "read less" : "read more"}
+                                    </span>
+                                    <ChevronDownIcon className={`${abstractShow && "-rotate-180"} transition duration-300 w-8 h-8 text-secondary`} />
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
+                            <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
+                                <h3 className={`self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] ${titleClasses}`}>
+                                    Key facts
+                                </h3>
+                                <div className='w-full bg-primary text-secondary'>
+                                    <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50% ">
+                                        {keyFactsHeadings.map((heading, index) => {
+                                            const borderClasses = [
+                                                index === 0 && 'border-r-2',
+                                                index === 2 && 'border-l-2',
+                                                index === 3 && 'border-r-2',
+                                                index === 5 && heading.metric && 'border-l-2',
+                                                index > 2 ? 'border-b-2' : 'border-b-2',
+                                            ].join(' ')
+                                            const metricClasses = [
+                                                index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl'
+                                            ].join(' ')
+
+                                            return (
+                                                <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2  border-secondary/10`}>
+                                                    {heading.metric && (
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
+                                                            {heading.text}
+                                                        </p>
+                                                    )}
+                                                    {heading.startMetric && heading.endMetric ? (
+                                                        <div className="flex justify-start gap-1 ">
+                                                            <span className='text-lg md:text-3xl lg:text-4xl font-bold'>
+                                                                {grant.GrantStartYear}
+                                                            </span>
+                                                            <div className='flex gap-1 items-center mt-1 md:mt-2 lg:mt-3'>
+                                                                <ArrowRightIcon className="h-5 w-5 opacity-50" />
+                                                                <span className={`${metricClasses} font-bold`}>
+                                                                    {grant.GrantEndYear}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {heading.metric !== null && (
+                                                                <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                    <ul className="grid grid-cols-3 bg-primary-lightest">
+                                        {keyFactsSubHeadings.map((subHeading, index) => {
+                                            const borderClasses = [
+                                                index === 0 && 'border-r-2',
+                                                index === 2 && 'border-l-2',
+                                                index === 3 && 'border-r-2',
+                                                index === 5 && 'border-l-2',
+                                                index === 6 && 'border-r-2',
+                                                index === 8 && 'border-l-2',
+                                                index < 6 && 'border-b-2'
+                                            ].join(' ')
+                                            return (
+                                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
+                                                    <p className='uppercase text-xs tracking-widest font-bold'>
+                                                        {subHeading.text}
+                                                    </p>
+                                                    <p className='font-bold text-lg lg:text-xl'>
+                                                        {subHeading.metric}
+                                                    </p>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
 
                         {grant.LaySummary &&
                             <Card className="grant-lay-summary">
@@ -99,74 +308,101 @@ export default function StaticPage({grant}: Props) {
                             </Card>
                         }
 
-                        {grant.PubMedLinks?.length > 0 &&
-                            <Card>
-                                <Title>Publications</Title>
+                        {publicationList?.length > 0 &&
+                            <div className='flex flex-col space-y-4'>
+                                <h2 className={titleClasses} id='publications'>Publications</h2>
 
-                                <AccordionList className="mt-2 !shadow-none">
-                                    {grant.PubMedLinks.map((link: any, index: number) => (
-                                        <Accordion
-                                            key={index}
-                                            className="border-0 rounded-none"
-                                        >
-                                            <AccordionHeader className="items-start pl-0">
-                                                <p
-                                                    className="text-left"
-                                                    dangerouslySetInnerHTML={{__html: link.title}}
-                                                />
-                                            </AccordionHeader>
+                                <div>
 
-                                            <AccordionBody className="flex flex-col pl-0 gap-y-4">
-                                                <div>
-                                                    <Subtitle className="font-bold">Authors</Subtitle>
-                                                    <Text>{link.authorString}</Text>
-                                                </div>
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {publicationList.map((link: any, index: number) => {
 
-                                                <div>
-                                                    <Subtitle className="font-bold">Publish Year</Subtitle>
-                                                    <Text>{link.pubYear}</Text>
-                                                </div>
+                                            const handleClick = () => {
+                                                activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
+                                            }
 
-                                                {link.journalInfo?.journal?.title &&
-                                                    <div>
-                                                        <Subtitle className="font-bold">Journal</Subtitle>
-                                                        <Text>{link.journalInfo.journal.title}</Text>
-                                                    </div>
-                                                }
-
-                                                <div>
-                                                    <Subtitle className="font-bold">DOI</Subtitle>
-                                                    <Text>{link.doi}</Text>
-                                                </div>
-
-                                                <Link
-                                                    href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
-                                                    className="text-right text-blue-500"
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="bg-primary/20 py-4 px-6 rounded-2xl"
                                                 >
-                                                    View at Europe PMC
-                                                </Link>
-                                            </AccordionBody>
-                                        </Accordion>
-                                    ))}
-                                </AccordionList>
-                            </Card>
+                                                    <a className="flex items-center justify-between space-x-2 cursor-pointer" onClick={handleClick}>
+                                                        <h3
+                                                            className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl"
+                                                            dangerouslySetInnerHTML={{__html: link.title}}
+                                                        ></h3>
+                                                        <button className="self-start">
+                                                            <ChevronDownIcon className={`${activeIndex === index && "-rotate-180"} transition duration-300 w-10 h-10`} />
+                                                        </button>
+                                                    </a>
+
+                                                    <AnimateHeight
+                                                        duration={300}
+                                                        height={activeIndex === index ? 'auto' : 0}
+                                                    >
+                                                        <ul className="py-6 flex flex-col gap-4">
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Authors</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.authorString}</p>
+                                                            </li>
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Publish Year</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.pubYear}</p>
+                                                            </li>
+                                                            {link.journalInfo?.journal?.title &&
+                                                                <li className="flex flex-col gap-1">
+                                                                    <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">Journal</h4>
+                                                                    <p className='tracking-wider text-tremor-content-emphasis'>{link.journalInfo.journal.title}</p>
+                                                                </li>
+                                                            }
+                                                            <li className="flex flex-col gap-1">
+                                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">DOI</h4>
+                                                                <p className='tracking-wider text-tremor-content-emphasis'>{link.doi}</p>
+                                                            </li>
+                                                        </ul>
+                                                        <div className="py-4 flex">
+                                                            <Button
+                                                                size="small"
+                                                                colour="secondary"
+                                                                href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                                                rel="nofollow noopener noreferrer"
+                                                                target="_blank"
+                                                                customClasses="flex items-center justify-center self-start gap-2"
+                                                            >
+                                                                <span>View at Europe PMC</span>
+                                                                <ExternalLinkIcon className="w-5 h-5" />
+                                                            </Button>
+                                                        </div>
+                                                    </AnimateHeight>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+
+                                    {grant.PubMedLinks?.length > 10 && (
+                                        <Pagination
+                                            totalPosts={grant.PubMedLinks?.length}
+                                            postsPerPage={limit}
+                                            setLastItemIndex={setLastItemIndex}
+                                            setFirstItemIndex={setFirstItemIndex}
+                                        />
+                                    )}
+                                </div>
+
+                                {grant.PubMedLinks?.length > 10 && (
+                                    <Pagination
+                                        totalPosts={grant.PubMedLinks?.length}
+                                        postsPerPage={limit}
+                                        setFirstItemIndex={setFirstItemIndex}
+                                        setLastItemIndex={setLastItemIndex}
+                                    />
+                                )}
+                            </div>
+
                         }
                     </Col >
 
-                    <Col numColSpanLg={2}>
-                        <div className="space-y-6">
-                            {sidebarItems.map(({text, metric}, index) => (
-                                <Card key={index}>
-                                    <Flex justifyContent="start" className="space-x-4">
-                                        <div className="">
-                                            <Text>{text}</Text>
-                                            <Metric className="mt-2">{metric}</Metric>
-                                        </div>
-                                    </Flex>
-                                </Card>
-                            ))}
-                        </div>
-                    </Col>
+
                 </Grid>
             </div>
         </Layout>

@@ -2,7 +2,6 @@ import {useState} from "react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
-import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
 import {type CardProps} from "../types/card-props"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
@@ -98,7 +97,8 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="regional-flow-of-grants"
-            title="Regional Flow of Grants"
+            title="Regional Flow of Research Grants"
+            subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
         >
             <div className="w-full">
                 {links.length > 0 &&
@@ -166,8 +166,8 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            leftLabel="Total Grants"
-                            rightLabel="Total Amount Committed (USD)"
+                            leftLabel="Total Number of Grants"
+                            rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
                             className="justify-center"
                         />
@@ -175,7 +175,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                 }
 
                 {links.length === 0 &&
-                    <p className="text-center p-4">No Data.</p>
+                    <p className="p-4 text-center">No Data.</p>
                 }
             </div>
         </VisualisationCard>
@@ -193,10 +193,6 @@ function SankeyNode(props: any) {
 
     const fill = colours[name as keyof typeof colours]
 
-    const {isDarkMode} = useDarkMode()
-
-    const labelFill = isDarkMode ? "#fff" : "#000"
-
     return (
         <Layer key={`RegionalFlowOfGrantsCardNode${index}`}>
             <Rectangle
@@ -213,7 +209,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill={labelFill}
+                fill="#fff"
             >
                 {name}
             </text>
@@ -223,7 +219,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill={labelFill}
+                fill="#fff"
                 fillOpacity="0.8"
             >
                 {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}

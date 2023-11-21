@@ -2,8 +2,21 @@ import Image from 'next/image';
 import BlockWrapper from '../BlockWrapper';
 import { useInView, animated } from '@react-spring/web';
 
-export default function ImageBlock({ block }) {
-    // console.log(block);
+interface Props {
+    block: {
+        caption: string,
+        width: string,
+        popIpBox: boolean,
+        image: {
+            height: number, 
+            width: number,
+            url: string,
+            altText: string,
+        }[],
+    }
+}
+
+export default function ImageBlock({ block }: Props) {
 
     const [ref, springs] = useInView(
         () => ({
@@ -51,7 +64,7 @@ export default function ImageBlock({ block }) {
             <BlockWrapper>
                 <animated.div ref={ref} style={springs}>
                     <figure
-                        className={`${imageWidthLookup[width].classes} mx-auto`}
+                        className={`${imageWidthLookup[width as keyof typeof imageWidthLookup].classes} mx-auto`}
                     >
                         <div className="breakout">
                             <Image
@@ -59,13 +72,13 @@ export default function ImageBlock({ block }) {
                                 height={image.height}
                                 src={image.url}
                                 width={image.width}
-                                sizes={imageWidthLookup[width].sizes}
+                                sizes={imageWidthLookup[width as keyof typeof imageWidthLookup].sizes}
                                 className="w-full"
                                 loading="lazy"
                             />
                         </div>
                         {caption && (
-                            <figcaption className="mt-4 font-medium text-sm text-gray-600 dark:text-gray-400">
+                            <figcaption className="mt-4 font-medium text-sm text-gray-600">
                                 {caption}
                             </figcaption>
                         )}

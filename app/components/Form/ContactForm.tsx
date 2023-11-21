@@ -1,18 +1,18 @@
 // Framework
-import React, {useState, useEffect, useCallback, useRef} from "react";
-
-// FontAwesome
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faCheckCircle,
-    faExclamationCircle,
-} from "@fortawesome/pro-solid-svg-icons";
+import React, {useState, useCallback, useRef} from "react";
 
 // Components
-import Button from "../common/content/Button";
+import Button from "../Button";
 
 // Utils
 import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
+
+interface Errors {
+    contactNumber?: boolean;
+    email?: boolean;
+    message?: boolean;
+    name?: boolean;
+}
 
 export default function ContactForm() {
 
@@ -26,14 +26,14 @@ export default function ContactForm() {
     const [buttonText, setButtonText] = useState("Send");
 
     // Form validation
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Errors>({});
 
     // User friendly messages
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showFailureMessage, setShowFailureMessage] = useState(false);
 
     // Google ReCaptcha
-    const { executeRecaptcha } = useGoogleReCaptcha();
+    const {executeRecaptcha} = useGoogleReCaptcha();
 
     // Generate a Google ReCaptcha token
     const handleReCaptchaVerify = useCallback(async () => {
@@ -56,26 +56,26 @@ export default function ContactForm() {
         "flex gap-1 items-center border border-green-300 bg-green-200 px-3 py-2 font-medium text-green-600 text-xs";
 
     const handleValidation = () => {
-        let tempErrors = {};
+        let tempErrors: {[key: string]: boolean} = {};
         let isValid = true;
 
         if (contactNumber.length <= 0) {
-            tempErrors["contactNumber"] = true;
+            tempErrors["contactNumber" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (email.length <= 0) {
-            tempErrors["email"] = true;
+            tempErrors["email" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (message.length <= 0) {
-            tempErrors["message"] = true;
+            tempErrors["message" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (name.length <= 0) {
-            tempErrors["name"] = true;
+            tempErrors["name" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
@@ -84,7 +84,7 @@ export default function ContactForm() {
         return isValid;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         let isValidForm = handleValidation();
@@ -136,7 +136,6 @@ export default function ContactForm() {
 
     };
 
-
     return (
         <>
             <form
@@ -146,10 +145,6 @@ export default function ContactForm() {
                 {showSuccessMessage && (
                     <div className="xl:col-span-2">
                         <div className={successMessageClasses}>
-                            <span>
-                                <FontAwesomeIcon icon={faCheckCircle}/>
-                            </span>
-
                             <span>Thank you, your contact form submission has been sent.</span>
                         </div>
                     </div>
@@ -158,10 +153,6 @@ export default function ContactForm() {
                 {showFailureMessage && (
                     <div className="xl:col-span-2">
                         <div className={errorMessageClasses}>
-                            <span>
-                                <FontAwesomeIcon icon={faExclamationCircle}/>
-                            </span>
-
                             <span>Something went wrong. Please try again</span>
                         </div>
                     </div>
@@ -183,10 +174,6 @@ export default function ContactForm() {
 
                         {errors?.name && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle}/>
-                                </span>
-
                                 <span>Please enter your name</span>
                             </div>
                         )}
@@ -209,10 +196,6 @@ export default function ContactForm() {
 
                         {errors?.email && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle}/>
-                                </span>
-
                                 <span>Please enter your email</span>
                             </div>
                         )}
@@ -238,10 +221,6 @@ export default function ContactForm() {
 
                         {errors?.contactNumber && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle}/>
-                                </span>
-
                                 <span>Please enter your contact number</span>
                             </div>
                         )}
@@ -258,16 +237,12 @@ export default function ContactForm() {
                             onChange={(e) => {
                                 setMessage(e.target.value);
                             }}
-                            rows="6"
+                            rows={6}
                             value={message}
                         ></textarea>
 
                         {errors?.message && (
                             <div className={errorMessageClasses}>
-                                <span>
-                                    <FontAwesomeIcon icon={faExclamationCircle}/>
-                                </span>
-
                                 <span>Please enter your message</span>
                             </div>
                         )}
@@ -278,9 +253,10 @@ export default function ContactForm() {
                     <Button
                         colour="dark"
                         size="full"
-                        text={buttonText}
                         type="submit"
-                    />
+                    >
+                        {buttonText}
+                    </Button>
                 </div>
             </form>
         </>

@@ -3,10 +3,9 @@ import Image from 'next/image'
 import FooterMenu from './FooterMenu'
 import {footerLinksFirstCollection} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
-import {MenuIcon} from '@heroicons/react/solid'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
 
-export default function Header({className}: {className?: string}) {
+export default function Header() {
     const linksFirstCollection = footerLinksFirstCollection
     const linksSecondCollection = footerLinksSecondCollection
 
@@ -14,7 +13,7 @@ export default function Header({className}: {className?: string}) {
         <li key={link.href}>
             <Link
                 href={link.href}
-                className={`text-gray-700 dark:text-gray-300 hover:underline`}
+                className={`text-gray-700 hover:underline`}
             >
                 {link.label}
             </Link>
@@ -35,12 +34,12 @@ export default function Header({className}: {className?: string}) {
         <footer className="pt-12 pb-12 bg-gradient-to-t from-primary/30 to-70% to-transparent">
             <div className="container">
 
-                <div className="flex flex-col md:flex-row md:justify-between gap-12 md:gap-24">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-12 md:gap-24">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24 items-end">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24">
 
                         <div>
-                            <h2 className="text-gray-700 dark:text-gray-300 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
                                 {linksFirstCollection.map(link => (
                                     <NavItem key={link.label} {...link} />
@@ -49,7 +48,7 @@ export default function Header({className}: {className?: string}) {
                         </div>
 
                         <div>
-                            <h2 className="text-gray-700 dark:text-gray-300 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
                                 {linksSecondCollection.map(link => (
                                     <NavItem key={link.label} {...link} />
@@ -59,14 +58,14 @@ export default function Header({className}: {className?: string}) {
 
                     </div>
 
-                    <div className="flex flex-col justify-center sm:flex-row md:flex-col md:justify-end items-center xl:flex-row xl:items-end gap-6 xl:gap-12">
-                                    
+                    <div className="max-w-[12rem] md:max-w-[20rem] mx-auto md:mx-0 grid grid-rows-2 grid-cols-2 items-center gap-y-3 gap-x-6 md:gap-y-5 md:gap-x-12">
+
                         <Image
                             src="/glopid-r-logo.png"
                             alt="GLOPID-R logo"
                             width={335}
                             height={79}
-                            className="w-36 xl:w-48"
+                            className="w-full col-span-2"
                         />
 
                         <Image
@@ -74,7 +73,7 @@ export default function Header({className}: {className?: string}) {
                             alt="UKCDR logo"
                             width={276}
                             height={114}
-                            className="w-36 xl:w-48"
+                            className="w-full"
                         />
 
                         <Image
@@ -82,16 +81,16 @@ export default function Header({className}: {className?: string}) {
                             alt="Pandemic Sciences Institute logo"
                             width={480}
                             height={236}
-                            className="w-36 xl:w-48"
+                            className="w-full"
                         />
 
                     </div>
 
                 </div>
 
-                <div className="mt-12 bg-white py-6 px-8 rounded-2xl border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200">
                     <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
-                        <FooterCopyrightStatement />
+                        <FooterCopyrightStatement className={'text-center'} showCredit={true} />
                         <div className="print:hidden">
                             <FooterMenu />
                         </div>
