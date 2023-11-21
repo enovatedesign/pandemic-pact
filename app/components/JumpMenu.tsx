@@ -99,7 +99,7 @@ export default function JumpMenu() {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute right-0 z-10 mt-2 w-96 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Listbox.Options className="absolute right-0 z-10 mt-2 w-80 lg:w-96 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         {visualisations.map((option) => (
                                             <Listbox.Option
                                                 key={option.title}
@@ -108,7 +108,7 @@ export default function JumpMenu() {
                                                         active
                                                             ? 'bg-secondary text-white'
                                                             : 'text-gray-900',
-                                                        'cursor-default select-none p-4 text-sm'
+                                                        'cursor-default select-none px-4 py-2 lg:p-4 text-sm'
                                                     )
                                                 }
                                                 value={option}
