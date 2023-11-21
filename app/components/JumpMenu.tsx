@@ -3,6 +3,12 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
 
+interface IVisualisation {
+    id: string;
+    title: string;
+    current: boolean;
+}
+
 const visualisations = [
     {
         id: 'grants-by-disease-anchor',
@@ -56,12 +62,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function JumpMenu() {
-    const [selected, setSelected] = useState(false)
+    const [selected, setSelected] = useState<IVisualisation>({id: '', title: '', current: false})
     const router = useRouter()
     const pathname = usePathname()
 
     useEffect(() => {
-        if (!selected) return
+        if (!selected.id) return
         const url = new URL(pathname, window.location.origin)
         router.replace(`#${selected.id}`)
     }, [

@@ -30,7 +30,7 @@ export default function Header({className}: {className?: string}) {
     const NavItem = (link: {label: string, href: string}) => (
         <p key={link.href}>
             <Link
-                onClick={navItemClick()}
+                onClick={navItemClick}
                 href={link.href}
                 className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'}`}
             >
@@ -91,7 +91,7 @@ export default function Header({className}: {className?: string}) {
                             </ul>
                         </nav>
 
-                        <div className={`${mobileTransitionClasses} h-screen w-full lg:hidden bg-secondary absolute left-0 top-0 inset-0`}>
+                        <div className={`${mobileTransitionClasses} h-screen w-full lg:hidden bg-secondary absolute inset-0`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map((link, index) => (
                                     <li key={index} className={`${mobileAnimationClasses} w-full`}>
