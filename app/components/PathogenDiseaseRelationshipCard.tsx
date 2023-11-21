@@ -4,7 +4,6 @@ import {Subtitle} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
-import {useDarkMode} from 'usehooks-ts'
 import {uniq} from "lodash"
 import seedrandom from 'seedrandom'
 import MultiSelect from "./MultiSelect"
@@ -175,10 +174,6 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
 
     const fill = isTarget ? colours.target[name] : colours.source[name]
 
-    const {isDarkMode} = useDarkMode()
-
-    const labelFill = isDarkMode ? "#fff" : "#000"
-
     return (
         <Layer key={`pathogenDiseaseRelationshipCardNode${index}`}>
             <Rectangle
@@ -195,7 +190,7 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
                 x={isTarget ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill={labelFill}
+                fill="#fff"
             >
                 {name}
             </text>
@@ -205,7 +200,7 @@ function SankeyNode({x, y, width, height, index, payload, colours, displayTotalM
                 x={isTarget ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill={labelFill}
+                fill="#fff"
                 fillOpacity="0.8"
             >
                 {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}

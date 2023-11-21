@@ -2,7 +2,6 @@ import {useState} from "react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
-import {useDarkMode} from 'usehooks-ts'
 import {groupBy} from "lodash"
 import {type CardProps} from "../types/card-props"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
@@ -194,10 +193,6 @@ function SankeyNode(props: any) {
 
     const fill = colours[name as keyof typeof colours]
 
-    const {isDarkMode} = useDarkMode()
-
-    const labelFill = isDarkMode ? "#fff" : "#000"
-
     return (
         <Layer key={`RegionalFlowOfGrantsCardNode${index}`}>
             <Rectangle
@@ -214,7 +209,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill={labelFill}
+                fill="#fff"
             >
                 {name}
             </text>
@@ -224,7 +219,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill={labelFill}
+                fill="#fff"
                 fillOpacity="0.8"
             >
                 {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}

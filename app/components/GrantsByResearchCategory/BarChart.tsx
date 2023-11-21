@@ -1,5 +1,4 @@
 import {Fragment} from "react"
-import {useDarkMode} from "usehooks-ts";
 import {Subtitle, Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -9,8 +8,6 @@ interface Props {
 }
 
 export default function BarChart({chartData}: Props) {
-    const {isDarkMode} = useDarkMode()
-
     const maxTotalNumberOfGrants = Math.max(...chartData.map((data: any) => data["Total Number Of Grants"]))
     const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Amount Committed"]))
 
@@ -74,7 +71,7 @@ export default function BarChart({chartData}: Props) {
                                         dataKey="Number Of Grants With Known Amount Committed"
                                         fill="#3b82f6"
                                         stackId="a"
-                                        background={{fill: (isDarkMode ? '#64748b' : '#eee')}}
+                                        background={{fill: '#eee'}}
                                     />
 
                                     <Bar
@@ -123,7 +120,7 @@ export default function BarChart({chartData}: Props) {
                                     <Bar
                                         dataKey="Amount Committed"
                                         fill="#22c55e"
-                                        background={{fill: (isDarkMode ? '#64748b' : '#eee')}}
+                                        background={{fill: '#eee'}}
                                     />
                                 </RechartBarChart >
                             </ResponsiveContainer >
