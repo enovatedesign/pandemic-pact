@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import BlockWrapper from '../BlockWrapper';
 import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules"
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {FreeMode, Navigation, Pagination, Autoplay, EffectFade, Thumbs} from "swiper/modules"
+import {Swiper as SwiperType} from "swiper/types"
 
 // Import Swiper styles
 import 'swiper/css';
@@ -18,26 +19,26 @@ interface Props {
 }
 
 interface ImageProps {
-    width: number, 
-    height: number, 
-    altText: string, 
+    width: number,
+    height: number,
+    altText: string,
     url: string
 }
 
-const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
+const Gallery = ({images, autoplayState, thumbnailsOnlyState}: Props) => {
 
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType>();
     const autoplayDelay = autoplayState ? 3000 : 0
 
-    return (    
-		<div className="bg-gray-200">
-			{images && (
+    return (
+        <div className="bg-gray-200">
+            {images && (
                 <BlockWrapper>
                     {thumbnailsOnlyState ? (
                         <div className='pt-8 lg:pt-12'>
                             <Swiper
                                 spaceBetween={50}
-                                breakpoints= {{
+                                breakpoints={{
                                     500: {
                                         slidesPerView: 2,
                                         slidesPerGroup: 2,
@@ -79,7 +80,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
                                 navigation={true}
                                 thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
                                 effect="fade"
-                                autoplay={ autoplayState ?  { delay: autoplayDelay } : false }
+                                autoplay={autoplayState ? {delay: autoplayDelay} : false}
                             >
                                 {images.map((image, index) => {
                                     return (
@@ -106,7 +107,7 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
                                 className='mySwiper mt-8'
                             >
                                 {images.map((image, index) => {
-                                    return(
+                                    return (
                                         <SwiperSlide key={index}>
                                             <Image
                                                 src={image.url}
@@ -120,13 +121,13 @@ const Gallery = ({images, autoplayState, thumbnailsOnlyState} : Props) => {
                                 })}
                             </Swiper>
                         </div>
-                        
+
                     )}
 
                 </BlockWrapper>
-			)}
-		</div>
-	)
+            )}
+        </div>
+    )
 }
 
 export default Gallery

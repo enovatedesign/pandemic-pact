@@ -10,7 +10,7 @@ import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
-import { debounce } from 'lodash';
+import {debounce} from 'lodash';
 
 interface Props {
     grant: any
@@ -101,17 +101,15 @@ export default function StaticPage({grant}: Props) {
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
     const [readMore, setReadMore] = useState(false)
     const [backgroundShow, setBackgroundShow] = useState(true)
-    
+
 
     useEffect(() => {
         const abstract = document.getElementById('abstract')
+
         const checkHeight = () => {
-            if (abstract?.offsetHeight > 200) {
-                setReadMore(true)
-            } else {
-                setReadMore(false)
-            }
+            setReadMore((abstract?.offsetHeight || 0) > 200)
         }
+
         const debouncedCheckHeight = debounce(checkHeight, 200)
 
         if (document.readyState === 'complete') {
@@ -168,7 +166,7 @@ export default function StaticPage({grant}: Props) {
                             <a href="#publications" className="z-50 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
                                 {grant.PubMedLinks?.length ?? '0'} publications
                             </a>
-                        
+
                         </li>
                     </ul>
 
@@ -192,25 +190,25 @@ export default function StaticPage({grant}: Props) {
                     <span className="uppercase tracking-wider font-medium">Grant search</span>
                 </Link>
 
-                    <Grid numItemsLg={1} className="gap-6">
-                        <Col
-                            numColSpanLg={1}
-                            className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200"
-                        >
-                            <div className="grant-abstract flex flex-col space-y-4">
-                                <Title className={titleClasses}>Abstract</Title>
-                                <AnimateHeight
-                                    duration={300}
-                                    height={abstractShow ? 'auto' : 230}
-                                    className='relative'
-                                >   
-                                    <div id='abstract'>
-                                        <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
-                                        {backgroundShow && !abstractShow && (
-                                            <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
-                                        )}
-                                    </div>
-                                </AnimateHeight>
+                <Grid numItemsLg={1} className="gap-6">
+                    <Col
+                        numColSpanLg={1}
+                        className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200"
+                    >
+                        <div className="grant-abstract flex flex-col space-y-4">
+                            <Title className={titleClasses}>Abstract</Title>
+                            <AnimateHeight
+                                duration={300}
+                                height={abstractShow ? 'auto' : 230}
+                                className='relative'
+                            >
+                                <div id='abstract'>
+                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
+                                    {backgroundShow && !abstractShow && (
+                                        <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
+                                    )}
+                                </div>
+                            </AnimateHeight>
                             {readMore && (
                                 <button onClick={() => setAbstractShow(!abstractShow)} className='w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center'>
                                     <span className='inline-flex text-secondary'>
@@ -239,7 +237,7 @@ export default function StaticPage({grant}: Props) {
                                             const metricClasses = [
                                                 index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl'
                                             ].join(' ')
-                                            
+
                                             return (
                                                 <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2  border-secondary/10`}>
                                                     {heading.metric && (
@@ -253,17 +251,17 @@ export default function StaticPage({grant}: Props) {
                                                                 {grant.GrantStartYear}
                                                             </span>
                                                             <div className='flex gap-1 items-center mt-1 md:mt-2 lg:mt-3'>
-                                                                <ArrowRightIcon className="h-5 w-5 opacity-50" /> 
+                                                                <ArrowRightIcon className="h-5 w-5 opacity-50" />
                                                                 <span className={`${metricClasses} font-bold`}>
                                                                     {grant.GrantEndYear}
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                    ) : (   
+                                                    ) : (
                                                         <>
                                                             {heading.metric !== null && (
                                                                 <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
-                                                            )}                                                 
+                                                            )}
                                                         </>
                                                     )}
                                                 </li>
