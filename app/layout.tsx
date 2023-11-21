@@ -14,7 +14,7 @@ export default function RootLayout({
     const classes: string = `overflow-x-hidden ${font.className}`;
 
     return (
-        <html lang="en">
+        <html lang="en" className="scroll-smooth">
             <body className={classes}>
                 {children}
             </body>

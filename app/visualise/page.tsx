@@ -13,6 +13,7 @@ import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelati
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
+import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
@@ -41,6 +42,9 @@ export default function Visualise() {
                 />
             }
         >
+
+            <JumpMenu />
+
             <div className="container mx-auto my-6 lg:my-12">
                 <div
                     className="mt-6 grid grid-cols-1 gap-6 lg:gap-12"
