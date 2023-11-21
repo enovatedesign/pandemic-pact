@@ -99,6 +99,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
             filteredDataset={globallyFilteredDataset}
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
+            subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
         >
             <div className="w-full">
                 {links.length > 0 &&
