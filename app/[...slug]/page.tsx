@@ -1,10 +1,7 @@
 import GraphQL from '../lib/GraphQl'
-import * as EntryTypes from '../lib/EntryTypes'
+import EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
 import { notFound } from 'next/navigation'
-
-const formatEntryType = entryType => 
-    entryType.charAt(0).toUpperCase() + entryType.slice(1)
 
 export async function generateStaticParams() {
 	const craftResponse = await GraphQL(
@@ -23,7 +20,12 @@ export async function generateStaticParams() {
 
     const entries = craftResponse.entries;
 
-	return entries.map(({ slug, ancestors }) => {
+	interface Entry {
+		slug: string, 
+		ancestors: Entry[]
+	}
+
+	return entries.map(({ slug, ancestors }: Entry) => {
 		const slugs = [...ancestors.map(({ slug }) => slug), slug]
 		return ({ slug: slugs })
 	})
@@ -39,8 +41,12 @@ export async function generateStaticParams() {
 	// 	fallback: 'blocking',
 	// };
 }
+interface Parameters {
+	preview?: {token: string},
+	slug: string[]
+}
 
-async function getPageContent(context) {
+async function getPageContent(context: Parameters) {
 
 	const previewToken = context?.preview?.token ?? undefined;
 
@@ -62,9 +68,7 @@ async function getPageContent(context) {
 
     const entryType = entryTypeData.entry.typeHandle
 
-    const formattedEntryType = formatEntryType(entryType)
-
-    const entryQuery = EntryTypes[`${formattedEntryType}Query`]
+    const entryQuery = EntryTypes.queries[entryType]
 
     const data = await entryQuery(slug, entryType)
 
@@ -80,8 +84,11 @@ async function getPageContent(context) {
 	// };
 }
 
-export default async function Page({ params }) {
+interface PageParameters {
+	params: any
+}
+
+export default async function Page({params}: PageParameters) {
     const data = await getPageContent(params)
-   
     return <PageClient data={data} />
 }

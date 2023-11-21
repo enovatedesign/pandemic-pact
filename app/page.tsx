@@ -23,91 +23,91 @@ export default function Home() {
                     </span>
                 </a>
             </div>
-            <div className="w-full relative">
-                <main>
 
-                    <article aria-labelledby="page-title"> 
+            <div className="flex flex-col h-full min-h-screen relative">
 
-                        <InteractiveBackground className={`relative grow h-screen min-h-[44rem] lg:min-h-[60rem] masthead-background ${styles.background}`}>
-                            <Header className="absolute w-full left-0 z-30"/>
+                <Header className="w-full relative z-20" />
 
-                            <div id="content" className="relative flex flex-col justify-center items-center space-y-12 w-full h-full z-20 container lg:-translate-y-12 lg:space-y-16">
-                                <h2 id="page-title" className="inline-block max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
-                                    Delivering insights for over: <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants, from <AnimatedCounter finalCount={351} className={counterClasses} /> global funders
-                                </h2>
+                <RotatingGlobe className="!absolute inset-x bottom-0 z-10" />
 
-                                <Link href={links.visualise.href} className={styles.button}>
-                                    <span>{links.visualise.label}</span>
+                <div className="grow flex flex-col relative z-10">
 
-                                    <svg className={styles['chart-icon']} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                        <path d="M0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272z"/>
-                                        <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z"/>
-                                        <path d="M368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
-                                    </svg>
-                                </Link>
+                    <main id="content" className="grow flex justify-center items-center">
 
-                                <p className="text-center text-white/50">License text to go here lorem ipsum dolor amet.</p>
-                            </div>
+                        {/* Top content section */}
+                        <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-12 w-full z-20 container">
+                                
+                            <h1 id="page-title" className="inline-block max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
+                                Delivering insights for over: <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants, from <AnimatedCounter finalCount={351} className={counterClasses} /> global funders
+                            </h1>
 
-                            <div className="absolute inset-x bottom-6 w-full z-20">
+                            <Link href={links.visualise.href} className={styles.button}>
+                                <span>{links.visualise.label}</span>
 
-                                <div className="container">
+                                <svg className={styles['chart-icon']} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272z"/>
+                                    <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z"/>
+                                    <path d="M368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
+                                </svg>
+                            </Link>
 
-                                    <div className="flex flex-col md:flex-row flex-wrap gap-y-3 justify-between items-center">
+                            <p className="text-center text-white/50">License text to go here lorem ipsum dolor amet.</p>
 
-                                        <div className="order-2 flex flex-1 2xl:order-1">
-                                            <FooterCopyrightStatement showCredit={false} className="text-center md:text-left text-gray-300" />
-                                        </div>
+                        </article>
 
-                                        <div className="order-1 w-full 2xl:w-auto 2xl:order-2">                                      
+                    </main>
 
-                                            <div className="grid grid-cols-4 mx-auto gap-6 md:gap-8 items-center max-w-md">
+                    {/* Footer */}
+                    <footer className="container relative z-20 mt-10 lg:mt-20">
 
-                                                <Image
-                                                    src="/ukcdr-logo.png"
-                                                    alt="UKCDR logo"
-                                                    width={276}
-                                                    height={114}
-                                                    className="w-full"
-                                                    />
+                        <div className="w-full flex flex-col item-center justify-center gap-6 mb-6 sm:gap-0 lg:mb-12">
 
-                                                <Image
-                                                    src="/glopid-r-logo-inverted.png"
-                                                    alt="GLOPID-R logo"
-                                                    width={335}
-                                                    height={79}
-                                                    className="w-full col-span-2"
-                                                    />
+                            <div className="max-w-[12rem] md:max-w-[20rem] mx-auto grid grid-rows-2 grid-cols-2 gap-y-3 gap-x-6 md:gap-y-6 md:gap-x-12 xl:-mb-8">
 
-                                                <Image
-                                                    src="/psi-logo-inverted.png"
-                                                    alt="Pandemic Sciences Institute logo"
-                                                    width={480}
-                                                    height={236}
-                                                    className="w-full"
-                                                    />
+                                <Image
+                                    src="/glopid-r-logo-inverted.png"
+                                    alt="GLOPID-R logo"
+                                    width={335}
+                                    height={79}
+                                    className="w-full col-span-2"
+                                />
 
-                                            </div>
+                                <Image
+                                    src="/ukcdr-logo.png"
+                                    alt="UKCDR logo"
+                                    width={276}
+                                    height={114}
+                                    className="w-full"
+                                />
 
-                                        </div>
-
-                                        <div className="order-3 flex md:justify-end flex-1 2xl:order-3">
-                                            <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline"/>
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                                <Image
+                                    src="/psi-logo-inverted.png"
+                                    alt="Pandemic Sciences Institute logo"
+                                    width={480}
+                                    height={236}
+                                    className="w-full"
+                                />
 
                             </div>
 
-                            <RotatingGlobe className="!absolute inset-0 z-10"/>
+                            <div className="flex flex-col md:flex-row justify-between items-center">
+                                
+                                <FooterCopyrightStatement showCredit={false} className="text-center md:text-left text-gray-300" />
 
-                        </InteractiveBackground>
+                                <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline"/>
 
-                    </article>
-                </main>
+                            </div>
+
+                        </div>
+
+                    </footer>
+
+                </div>
+                
+                <InteractiveBackground className={`absolute inset-0 h-screen masthead-background ${styles.background}`}></InteractiveBackground>
+
             </div>
+
         </>
     )
 }

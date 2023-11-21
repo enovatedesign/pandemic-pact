@@ -1,7 +1,11 @@
+"use client"
+
 import BlockWrapper from "../BlockWrapper";
-import NewsCard from "../News/NewsCard";
+import Card from "../Common/Card";
+import { useState, useEffect } from "react";
 import { useInView, animated } from '@react-spring/web';
-import { newsEntriesQuery } from "@/app/lib/Queries";
+import Pagination from "../Common/Pagination";
+import Button from "../../Button";
 
 type Props = {
     block: {
@@ -15,7 +19,7 @@ type Props = {
               height: number,
               alt: string,
             },
-        },
+        }[],
         customEntries: {
             url: string,
             title: string,
@@ -26,7 +30,7 @@ type Props = {
               height: number,
               alt: string,
             },
-        },
+        }[],
         limit: number,
         paginate: boolean,
         addTagsMenu: boolean,
@@ -36,11 +40,20 @@ type Props = {
 
 const ListContentNewsBlock = ( {block}: Props ) => {
     
-
-    const limit = block.limit
-    const limitedEntries = block.customEntries.slice(0, limit) ?? block.newsEntries.slice(0, limit) ?? null
-    const tags = block.addTagsMenu ?? false
+    const limit = block.limit 
     const paginate = block.paginate ?? false
+    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
+    const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
+
+    const customEntries = block.customEntries ?? null
+    const limitedEntries = customEntries.slice(0, limit) 
+    const [paginatedEntries, setPaginatedEntries] = useState(customEntries.slice(firstItemIndex, lastItemIndex))
+
+    useEffect(() => {
+        setPaginatedEntries(customEntries.slice(firstItemIndex, lastItemIndex))
+    }, [customEntries, firstItemIndex, lastItemIndex])
+
+    const tags = block.addTagsMenu ?? false
 
     const [ref, springs] = useInView(
         () => ({
@@ -60,13 +73,51 @@ const ListContentNewsBlock = ( {block}: Props ) => {
 
     return(
         <BlockWrapper>
-            <animated.div ref={ref} style={springs}>
-                <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    {limitedEntries.map((entry, index) => {
-                        return <NewsCard entry={entry} key={index} tags={tags}/>
-                    })}
-                </ul>
-            </animated.div>
+
+            {paginate ? (
+                <div>
+                    <animated.div ref={ref} style={springs}>
+                        <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                            {paginatedEntries.map((entry, index: number) => {
+                                return (
+                                    <Card entry={entry} key={index} tags={tags} hover={false}>
+                                        <Button
+                                            size="small"
+                                            href={entry.url}
+                                        >
+                                            Read more
+                                        </Button>
+                                    </Card>
+                                ) 
+                            })}
+                        </ul>
+                    </animated.div>
+                    
+                    <Pagination 
+                        totalPosts={customEntries.length}
+                        postsPerPage={limit}
+                        setFirstItemIndex={setFirstItemIndex}
+                        setLastItemIndex={setLastItemIndex}
+                    />
+                </div>
+            ) : (
+                <animated.div ref={ref} style={springs}>
+                    <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        {limitedEntries.map((entry, index: number) => {
+                            return (
+                                <Card entry={entry} key={index} tags={tags} hover={false}>
+                                    <Button
+                                        size="small"
+                                        href={entry.url}
+                                    >
+                                        Read more
+                                    </Button>
+                                </Card>
+                            )
+                        })}
+                    </ul>
+                </animated.div>
+            )}
         </BlockWrapper>
     )
 }

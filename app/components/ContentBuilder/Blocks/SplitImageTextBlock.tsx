@@ -1,10 +1,27 @@
 import BlockWrapper from "../BlockWrapper"
 import Image from "next/image"
 import RichText from "../Common/RichText"
-import ButtonLink from "../Common/Button"
+import Button from "../../Button"
 import { useInView, animated } from '@react-spring/web';
 
-const SplitImageTextBlock = ({block}) => {
+interface Props {
+    block: {
+        image: {
+            width: number, 
+            height: number, 
+            url: string, 
+            altText: string,
+        }[],
+        text: string,
+        button: {
+            text: string,
+            url: string,
+        },
+        reverse: boolean,
+    }
+}
+
+const SplitImageTextBlock = ({block}: Props) => {
 
     const image = block.image[0] ?? null
     const text = block.text ?? null
@@ -65,14 +82,13 @@ const SplitImageTextBlock = ({block}) => {
                 <animated.div ref={leftRef} style={leftSprings} className={textWrapperClasses}>
 
                     {text && (
-                        <RichText text={text} />
+                        <RichText text={text} invert={false} typeScale={""} customClasses={""} />
                     )}
 
                     {button.url && (
-                        <ButtonLink 
-                            linkTo={button.url}
-                            title={button.text}
-                        />
+                        <Button href={button.url}> 
+                            {button.text}
+                        </Button>
                     )}
                 </animated.div>
 

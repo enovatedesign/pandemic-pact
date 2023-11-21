@@ -1,4 +1,4 @@
-export default function EmbeddedMediaBlock({ block }) {
+export default function EmbeddedMediaBlock({ block }: any) {
 	const html = block.media[0].embeddedAsset.html;
 	const type = block.media[0].embeddedAsset.type;
 

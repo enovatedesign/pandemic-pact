@@ -46,6 +46,8 @@ async function addDocumentsToSearchIndex(client: MeiliSearch, data: Array<String
             'GrantTitleEng',
             'Abstract',
             'LaySummary',
+            'GrantAmountConverted',
+            'GrantStartYear',
         ],
 
         searchableAttributes: [

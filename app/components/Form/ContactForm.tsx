@@ -1,5 +1,5 @@
 // Framework
-import React, {useState, useEffect, useCallback, useRef} from "react";
+import React, {useState, useCallback, useRef} from "react";
 
 // FontAwesome
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 
 // Components
-import Button from "../common/content/Button";
+import Button from "../Button";
 
 // Utils
 import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
@@ -56,26 +56,26 @@ export default function ContactForm() {
         "flex gap-1 items-center border border-green-300 bg-green-200 px-3 py-2 font-medium text-green-600 text-xs";
 
     const handleValidation = () => {
-        let tempErrors = {};
+        let tempErrors = {string};
         let isValid = true;
 
         if (contactNumber.length <= 0) {
-            tempErrors["contactNumber"] = true;
+            tempErrors["contactNumber" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (email.length <= 0) {
-            tempErrors["email"] = true;
+            tempErrors["email" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (message.length <= 0) {
-            tempErrors["message"] = true;
+            tempErrors["message" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
         if (name.length <= 0) {
-            tempErrors["name"] = true;
+            tempErrors["name" as keyof typeof tempErrors] = true;
             isValid = false;
         }
 
@@ -84,7 +84,7 @@ export default function ContactForm() {
         return isValid;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         let isValidForm = handleValidation();
@@ -135,7 +135,6 @@ export default function ContactForm() {
         setName("");
 
     };
-
 
     return (
         <>

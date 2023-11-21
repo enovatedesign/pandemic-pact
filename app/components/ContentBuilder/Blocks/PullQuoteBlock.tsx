@@ -43,7 +43,7 @@ const PullQuoteBlock = ({block}: Props) => {
                 <BlockWrapper options={{padded: true, fill: true}}>
                     <animated.div className="flex flex-col space-y-4 md:space-y-6 md:items-center" ref={ref} style={springs}>
                         <div>
-                            <RichText text={text} customClasses="md:text-center"/>
+                            <RichText text={text} customClasses="md:text-center" invert={false} typeScale={""}/>
                         </div>
                         <div className="text-right md:text-center">
                             {quoteName && (
@@ -68,49 +68,3 @@ const PullQuoteBlock = ({block}: Props) => {
 }
 
 export default PullQuoteBlock
-
-// {% if text|length %}
-//     {% set textLength = text|length %}
-
-//     {% set textClasses = [
-//         macros.richTextEditorClasses(),
-//         (textLength < 300) ? 'prose-lg lg:prose-2xl',
-//         'md:text-center',
-//         'mx-auto'
-//     ]|filter|join(' ') %}
-
-//     {% embed '_components/blocks/blockWrapper' with {
-//         fill: true
-//     } %}
-
-//         {% block blockContent %}
-
-//             {% import "_components/macros" as macros %}
-
-//             <blockquote {{ macros.inView() }}>
-
-//                 <div class="{{ textClasses }}">{{ text }}</div>
-
-//                 {% if quoteInfo|length %}
-
-//                     {% set quoteCite = [sourcePosition, sourceCompany]|filter|join(', ') %}
-
-//                     <footer class="mt-8 text-right md:text-center">
-//                         {% if name|length %}
-//                             <p class="text-gray-700"><strong>{{ name }}</strong></p>
-//                         {% endif %}
-
-//                         {% if quoteCite|length %}
-//                             <p class="text-gray-600 text-sm">{{ quoteCite }}</p>
-//                         {% endif %}
-//                     </footer>
-
-//                 {% endif %}
-
-//             </blockquote>
-
-//         {% endblock %}
-
-//     {% endembed %}
-
-// {% endif %}
