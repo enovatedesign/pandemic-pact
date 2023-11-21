@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 interface Props {
-    size?: string, 
-    colour?: string, 
+    size?: string,
+    colour?: string,
     customClasses?: string,
     children: any,
     href?: string,
@@ -11,9 +11,10 @@ interface Props {
     disabled?: boolean,
     rel?: string,
     target?: string,
+    type?: "button" | "submit" | "reset",
 }
 
-const Button = ({ size = 'base', colour = 'primary', customClasses = '', children, ...props }: Props) => {
+const Button = ({size = 'base', colour = 'primary', customClasses = '', children, ...props}: Props) => {
     let elementType = 'button';
 
     if (props.href) elementType = 'link';
@@ -43,7 +44,7 @@ const Button = ({ size = 'base', colour = 'primary', customClasses = '', childre
         customClasses,
     ].join(' ');
 
-    return elementType === 'button' ? 
+    return elementType === 'button' ?
         <button {...props} className={classes}>{children}</button> :
         <Link href={props.href as string} {...props} className={classes}>{children}</Link>
 };
