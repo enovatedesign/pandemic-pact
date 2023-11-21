@@ -16,20 +16,26 @@ export default function BarChart({chartData}: Props) {
 
     return (
         <>
-            <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
+            <div className="flex flex-col gap-y-2">
+                <Legend
+                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    colors={['blue', 'orange', 'green']}
+                />
+            </div>
 
-                <div className="pr-6 col-span-2 justify-self-end hidden md:block">
+            <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
+                <div className="hidden pr-6 col-span-2 justify-self-end md:block">
                     <Subtitle>Number of projects</Subtitle>
                 </div>
 
-                <div className="pl-2 col-span-2 justify-self-end hidden md:block">
+                <div className="hidden pl-2 col-span-2 justify-self-end md:block">
                     <Subtitle>Known amount committed (USD)</Subtitle>
                 </div>
-            
+
                 {chartData.map((data: any) => (
                     <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
-                        <div className="self-center col-span-4 first:mt-0 mt-4">
-                            <p className="text-md text-gray-600">{data["Research Category"]}</p>
+                        <div className="self-center mt-4 col-span-4 first:mt-0">
+                            <p className="text-gray-600 text-md">{data["Research Category"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
@@ -130,13 +136,6 @@ export default function BarChart({chartData}: Props) {
                 ))
                 }
 
-            </div>
-
-            <div className="flex flex-col mt-4 gap-y-2">
-                <Legend
-                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
-                    colors={['blue', 'orange', 'green']}
-                />
             </div>
         </>
     )

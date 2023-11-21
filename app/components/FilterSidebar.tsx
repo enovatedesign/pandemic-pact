@@ -34,7 +34,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
     }
 
     return (
-        <div className="flex flex-col justify-start items-start gap-y-4">
+        <div className="flex flex-col items-start justify-start gap-y-4">
 
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
         
@@ -42,16 +42,16 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     {
                         (globallyFilteredDataset.length < completeDataset.length) ? (
                             <>
-                                <span className="uppercase text-gray-300 text-xs font-bold">Filtered Grants Total</span>
+                                <span className="text-xs font-bold text-gray-300 uppercase">Filtered Grants Total</span>
                                 <span className="flex flex-row items-end gap-1">
-                                    <span className="text-primary font-bold text-4xl">{globallyFilteredDataset.length}</span>
-                                    <span className="text-primary font-bold text-lg"> / {completeDataset.length}</span>
+                                    <span className="text-4xl font-bold text-primary">{globallyFilteredDataset.length}</span>
+                                    <span className="text-lg font-bold text-primary"> / {completeDataset.length}</span>
                                 </span>
                             </>
                         ) : (
                             <>  
-                                <span className="uppercase text-gray-300 text-xs font-bold">Total Grants</span>
-                                <span className="text-primary font-bold text-4xl">{completeDataset.length}</span>
+                                <span className="text-xs font-bold text-gray-300 uppercase">Total Number Of Grants</span>
+                                <span className="text-4xl font-bold text-primary">{completeDataset.length}</span>
                             </>
                         )
                     }

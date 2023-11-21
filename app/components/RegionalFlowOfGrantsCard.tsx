@@ -98,7 +98,8 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="regional-flow-of-grants"
-            title="Regional Flow of Grants"
+            title="Regional Flow of Research Grants"
+            subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
         >
             <div className="w-full">
                 {links.length > 0 &&
@@ -166,8 +167,8 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            leftLabel="Total Grants"
-                            rightLabel="Total Amount Committed (USD)"
+                            leftLabel="Total Number of Grants"
+                            rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
                             className="justify-center"
                         />
@@ -175,7 +176,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
                 }
 
                 {links.length === 0 &&
-                    <p className="text-center p-4">No Data.</p>
+                    <p className="p-4 text-center">No Data.</p>
                 }
             </div>
         </VisualisationCard>

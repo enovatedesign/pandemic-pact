@@ -26,8 +26,8 @@ export default function GrantsByCountryWhereResearchWasConductedCard({globallyFi
         <VisualisationCard
             filteredDataset={globallyFilteredDataset}
             id="grants-by-country-where-research-was-conducted"
-            title="Number of Grants by Country Where Research Was Conducted"
-            subtitle="Possimus fugit laudantium recusandae. Ducimus rem minima quam consequatur asperiores magni. Earum a illum. "
+            title="Global Map Showing Where Research Was Conducted"
+            subtitle="The information on the research location was collected where available from the grant application, and can be different to the location of research institution."
             footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
             tabs={tabs}
         />

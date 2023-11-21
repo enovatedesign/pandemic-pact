@@ -1,6 +1,7 @@
 "use client"
 
 import {useMemo, useState} from "react"
+import {Col, Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -42,7 +43,7 @@ export default function Visualise() {
         >
             <div className="container mx-auto my-6 lg:my-12">
                 <div
-                    className="grid grid-cols-1 mt-6 gap-6 lg:gap-12"
+                    className="mt-6 grid grid-cols-1 gap-6 lg:gap-12"
                 >
                     <GrantsByDiseaseCard
                         globallyFilteredDataset={globallyFilteredDataset}
@@ -78,7 +79,7 @@ export default function Visualise() {
                     <VisualisationCard
                         filteredDataset={globallyFilteredDataset}
                         id="disease-word-cloud"
-                        title="Disease Word Cloud"
+                        title="Word cloud showing the funding for infectious diseases with a pandemic potential"
                     >
                         <div className="w-full">
                             <WordCloud
@@ -87,18 +88,29 @@ export default function Visualise() {
                             />
                         </div>
 
+                        <div>
+                            <Text>
+                                The amount of funding is represented by the size of the word
+                            </Text>
+                        </div>
                     </VisualisationCard>
 
                     <VisualisationCard
                         filteredDataset={globallyFilteredDataset}
                         id="pathogen-word-cloud"
-                        title="Pathogen Word Cloud"
+                        title="Word cloud showing the funding for priority pathogens"
                     >
                         <div className="w-full">
                             <WordCloud
                                 filterKey="Pathogen"
                                 randomSeedString="2324234234"
                             />
+                        </div>
+
+                        <div>
+                            <Text>
+                                The amount of funding is represented by the size of the word
+                            </Text>
                         </div>
                     </VisualisationCard>
                 </div>

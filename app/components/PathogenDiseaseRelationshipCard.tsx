@@ -1,4 +1,5 @@
 import {useState} from "react"
+import {Title, Text} from "@tremor/react"
 import {Subtitle} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
@@ -82,10 +83,20 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
         link => link.value > 0 && link.source !== -1 && link.target !== -1
     )
 
+
+    const infoModalContents = (
+        <>
+            <Title>Grants By Pathogen and Disease</Title>
+
+            <Text>The list contains the WHO priority diseases plus pandemic influenza, Mpox and plague</Text>
+        </>
+    )
+
     return (
         <VisualisationCard
             filteredDataset={filteredDataset}
             id="grants-by-pathogen-and-disease"
+            infoModalContents={infoModalContents}
             title="Grants By Pathogen and Disease"
         >
             <div className="w-full">
@@ -99,7 +110,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
 
                 {links.length > 0 &&
                     <div className="flex flex-col justify-center gap-y-8">
-                        <div className="w-full flex items-center">
+                        <div className="flex items-center w-full">
                             <div className="w-16">
                                 <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Pathogen</Subtitle>
                             </div>
@@ -141,8 +152,8 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            leftLabel="Total Grants"
-                            rightLabel="Total Amount Committed (USD)"
+                            leftLabel="Total Number of Grants"
+                            rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
                             className="justify-center"
                         />
@@ -150,7 +161,7 @@ export default function PathogenDiseaseRelationshipCard({selectedFilters}: CardW
                 }
 
                 {links.length === 0 &&
-                    <p className="text-center p-4">No Data.</p>
+                    <p className="p-4 text-center">No Data.</p>
                 }
             </div>
         </VisualisationCard>
