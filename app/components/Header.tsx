@@ -76,7 +76,7 @@ export default function Header({className}: {className?: string}) {
 
                     {/* mr-6 md:mr-8 lg:mr-12 bg-secondary/50 backdrop-blur-sm */}
 
-                    <div className="flex items-center rounded-full border border-primary/25 inner-glow z-10">
+                    <div className="flex items-center rounded-full border border-primary/25 inner-glow">
                         <button className={`${buttonClasses} z-10 p-3 lg:hidden`} onClick={handleNav}>
                             <span className="sr-only">Menu</span>
                             <MenuIcon className="w-8 h-8 fill-white" />
