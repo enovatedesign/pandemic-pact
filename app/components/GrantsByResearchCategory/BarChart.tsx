@@ -22,17 +22,17 @@ export default function BarChart({chartData}: Props) {
 
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
-                    <Subtitle>Number of projects</Subtitle>
+                    <Subtitle className="text-sm">Number of projects</Subtitle>
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <Subtitle>Known amount committed (USD)</Subtitle>
+                    <Subtitle className="text-sm">Known amount committed (USD)</Subtitle>
                 </div>
 
                 {chartData.map((data: any) => (
                     <Fragment key={"Grants By Research Category " + data["Research Category"] + " Row"}>
-                        <div className="self-center mt-4 col-span-4 first:mt-0">
-                            <p className="text-gray-600 text-md">{data["Research Category"]}</p>
+                        <div className="self-center mt-1 col-span-4 first:mt-0">
+                            <p className="text-gray-600 text-sm">{data["Research Category"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
@@ -84,7 +84,7 @@ export default function BarChart({chartData}: Props) {
                         </div>
 
                         <div className="self-center py-3 pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
-                            <p className="text-sm text-gray-600">{data["Total Number Of Grants"]}</p>
+                            <p className="text-xs text-gray-600">{data["Total Number Of Grants"]}</p>
                         </div>
 
                         <div className="col-span-3 md:col-span-1">
@@ -127,7 +127,7 @@ export default function BarChart({chartData}: Props) {
                         </div >
 
                         <div className="self-center py-3 pl-2 col-span-1 md:col-span-1 justify-self-end">
-                            <p className="text-sm text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
+                            <p className="text-xs text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                         </div>
                     </Fragment >
                 ))
