@@ -51,7 +51,7 @@ const visualisations = [
     },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
@@ -63,7 +63,11 @@ export default function JumpMenu() {
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
         router.replace(`#${selected.id}`)
-    }, [selected, pathname])
+    }, [
+        selected,
+        pathname,
+        router
+    ])
 
     return (
         <div className="sticky w-full z-[9999] inset-x-0 top-0 container mx-auto py-3 bg-primary-lighter flex justify-end">
