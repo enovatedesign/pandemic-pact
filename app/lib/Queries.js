@@ -117,6 +117,7 @@ export const contentBuilderQuery = `
             id
             typeHandle
             heading
+            summary
             customEntries {
               ... on teamMembers_teamMember_Entry {
                 title

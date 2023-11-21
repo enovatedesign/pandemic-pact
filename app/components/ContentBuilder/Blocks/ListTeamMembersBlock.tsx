@@ -6,12 +6,14 @@ import TeamMembersModal from "./Team Members/TeamMembersModal"
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Card from "../Common/Card";
 import Button from "../../Button";
+import RichText from "../Common/RichText";
 
 type Props = {
     block: {
         id: number,
         typeHandle: string,
         heading: string,
+        summary: string,
         customEntries: {
             title: string,
             jobTitle: string,
@@ -30,6 +32,7 @@ type Props = {
 const ListTeamMembersBlock = ({block}: Props) => {
 
     const heading = block.heading ?? 'Meet the team'
+    const summary = block.summary ?? null
     const customEntries = block.customEntries ?? null
 
     const [isOpen, setIsOpen] = useState(false)
@@ -55,13 +58,20 @@ const ListTeamMembersBlock = ({block}: Props) => {
         <BlockWrapper>
             <animated.div ref={ref} style={springs}>
 
-                {heading && (
-                    <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
-                        <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
-                    </div>
-                )}
+                <div className="flex flex-col items-center space-y-4 pb-8">
+                    {heading && (
+                        <div className={`${defaultProseClasses.join(" ")}`}>
+                            <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
+                        </div>
+                    )}
+                    
+                    {summary && (
+                        <RichText text={summary} customClasses="max-w-5xl text-center"/>
+                    )}
 
-                <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     
                     {customEntries.map((entry, index) => {
 
@@ -76,9 +86,9 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
                         
                         return (
-                            <>
+                            <div key={index}>
                                 <Card
-                                    entry={entry} tags={false} hover={false}>
+                                    entry={entry} tags={false} hover={false} >
                                     <Button 
                                         size="small"
                                         onClick={handleOpen}
@@ -90,11 +100,11 @@ const ListTeamMembersBlock = ({block}: Props) => {
                                 {activeIndex === index && (
                                     <TeamMembersModal entry={entry} isOpen={isOpen} handleClose={handleClose}/>
                                 )}
-                            </>
+                            </div>
                         )
                     })}
 
-                </ul>
+                </div>
             </animated.div>
         </BlockWrapper>
     )

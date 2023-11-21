@@ -35,7 +35,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
     ].join(' ')
 
     return (
-        <li key={index} 
+        <div key={index} 
             className={`${hoverClasses} flex flex-col bg-white border-2 border-gray-200  rounded-2xl overflow-hidden`}
         >   
             {url || externalLink ? (
@@ -105,7 +105,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
 
             </div>
             
-        </li>
+        </div>
     )
 };
 
