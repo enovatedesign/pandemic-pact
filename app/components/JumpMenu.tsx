@@ -108,7 +108,7 @@ export default function JumpMenu() {
                                                         active
                                                             ? 'bg-secondary text-white'
                                                             : 'text-gray-900',
-                                                        'cursor-default select-none px-4 py-2 lg:p-4 text-sm'
+                                                        'cursor-default select-none px-4 py-2 text-sm'
                                                     )
                                                 }
                                                 value={option}
