@@ -1,7 +1,7 @@
 "use client"
 
 import {useMemo, useState} from "react"
-import {Col, Text} from "@tremor/react"
+import {Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
 import VisualisationCard from "../components/VisualisationCard"
@@ -28,19 +28,51 @@ export default function Visualise() {
         [selectedFilters],
     )
 
-    return (
-        <Layout
-            title="Interactive Charts"
-            showSummary={true}
-            summary="Explore the historical and near real time data on research funding for infectious disease with a pandemic potential using extensive filters and search functionality."
-            sidebarContent={
+    const sidebar = useMemo(() => {
+        const numberOfActiveFilters = Object.values(selectedFilters).filter(
+            filter => filter.values.length > 0,
+        ).length
+
+        return {
+            openContent: (
                 <FilterSidebar
                     selectedFilters={selectedFilters}
                     setSelectedFilters={setSelectedFilters}
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                 />
-            }
+            ),
+            closedContent: (
+                <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
+                    {(globallyFilteredDataset.length < completeDataset.length) ? (
+                        <>
+                            <dt className="text-white uppercase">Filtered Grants Total</dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{globallyFilteredDataset.length} / {completeDataset.length}</dd>
+                        </>
+                    ) : (
+                        <>
+                            <dt className="text-white uppercase">Total grants</dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{globallyFilteredDataset.length}</dd>
+                        </>
+                    )}
+
+                    {numberOfActiveFilters > 0 && (
+                        <>
+                            <dt className="text-white uppercase pt-4 mt-2 border-t-2 border-gray-500">Filters</dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{numberOfActiveFilters}</dd>
+                        </>
+                    )}
+                </dl>
+            ),
+        }
+    }, [selectedFilters, globallyFilteredDataset])
+
+    return (
+        <Layout
+            title="Interactive Charts"
+            showSummary={true}
+            summary="Explore the historical and near real time data on research funding for infectious disease with a pandemic potential using extensive filters and search functionality."
+            sidebar={sidebar}
         >
 
             <JumpMenu />

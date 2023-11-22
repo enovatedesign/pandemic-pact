@@ -12,7 +12,10 @@ import PageTitle from './PageTitle'
 import InteractiveBackground from './InteractiveBackground'
 
 type Props = {
-    sidebarContent?: React.ReactNode,
+    sidebar?: {
+        openContent?: React.ReactNode
+        closedContent?: React.ReactNode
+    },
     mastheadContent?: React.ReactNode,
     children: React.ReactNode,
     title?: string,
@@ -20,7 +23,7 @@ type Props = {
     showSummary?: boolean
 }
 
-const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, children}: Props) => {
+const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400;
     const duration = 50;
@@ -41,11 +44,6 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
         }
     })
 
-    const sidebarLegendDividerClasses = [
-        'pt-4 mt-2',
-        'border-t-2 border-gray-500',
-    ].join(' ')
-
     return (
         <>
             <div id="skiplink-container">
@@ -55,31 +53,23 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
                     </span>
                 </a>
             </div>
-            <div className={`${sidebarContent && "flex"}`}>
-                {sidebarContent &&
+            <div className={`${sidebar && "flex"}`}>
+                {sidebar &&
                     <aside className="relative bg-secondary border-r border-primary/25">
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
                             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6 text-primary hover:text-white duration-300 transition-colors">
                                 <span className="sr-only">Filters</span>
                                 <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
-                            
-                            {!sidebarOpen && (
-                                    <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
-                                        <dt className="text-white uppercase">Total grants</dt>
-                                        <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">125</dd>
-                                        <dt className={`text-white uppercase ${sidebarLegendDividerClasses}`}>Filters</dt>
-                                        <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">3</dd>
-                                    </dl>
-                                )
-                            }
+
+                            {!sidebarOpen && sidebar.closedContent}
 
                             <animated.div
                                 className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
                                 style={widthAnimationProps}
                             >
                                 <animated.div style={opacityAnimationProps}>
-                                    {sidebarContent}
+                                    {sidebarOpen && sidebar.openContent}
                                 </animated.div>
                             </animated.div>
                         </div>
@@ -95,21 +85,21 @@ const Layout = ({title, summary, showSummary, sidebarContent, mastheadContent, c
 
                             <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
 
-                            <div className={`masthead-background ${mastheadStyles.visualise }`}>
+                                <div className={`masthead-background ${mastheadStyles.visualise}`}>
 
-                                <div className="h-full flex items-end pb-6 lg:pb-12">
+                                    <div className="h-full flex items-end pb-6 lg:pb-12">
 
-                                    {title &&
-                                        <div className="container mt-44 lg:mt-52">
-                                            <PageTitle>{title}</PageTitle>
-                                            {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
-                                            {mastheadContent}
-                                        </div>
-                                    }
+                                        {title &&
+                                            <div className="container mt-44 lg:mt-52">
+                                                <PageTitle>{title}</PageTitle>
+                                                {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                                {mastheadContent}
+                                            </div>
+                                        }
+
+                                    </div>
 
                                 </div>
-
-                            </div>
 
                             </InteractiveBackground>
 
