@@ -209,7 +209,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill="#fff"
+                fill="#000"
             >
                 {name}
             </text>
@@ -219,7 +219,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill="#fff"
+                fill="#000"
                 fillOpacity="0.8"
             >
                 {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}
