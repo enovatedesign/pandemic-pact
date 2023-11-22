@@ -35,7 +35,7 @@ fs.writeJsonSync('./selectOptions.json', selectOptions)
 
 function parseSelectOptionsFromChoices(choices: string) {
     return Object.fromEntries(
-        choices.split('|').map(choice => {
+        choices.split(' | ').map(choice => {
             const [id, ...rest] = choice.split(',')
 
             return [
