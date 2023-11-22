@@ -26,7 +26,6 @@ const selectOptions = Object.fromEntries(
     )
 )
 
-// console.log(selectOptions)
 const row = checkBoxFields.find(row => row['Variable / Field Name'] === 'funder_name') as Row
 const choices = row['Choices, Calculations, OR Slider Labels'].split('|')
 
@@ -41,7 +40,9 @@ function parseSelectOptionsFromChoices(choices: string) {
 
             return [
                 id.trim(),
-                rest.join(',').trim()
+                rest.join(',')
+                    .replace(/<[^>]*>?/gm, '') // remove html tags (if any)
+                    .trim()
             ]
         })
     )
