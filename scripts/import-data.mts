@@ -3,9 +3,7 @@ import {read, utils} from 'xlsx'
 
 const buffer = fs.readFileSync('./data.csv')
 
-const workbook = read(buffer, {
-    raw: true,
-})
+const workbook = read(buffer, {raw: true})
 
 const sheetName = workbook.SheetNames[0]
 
