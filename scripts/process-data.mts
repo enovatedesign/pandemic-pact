@@ -3,34 +3,42 @@ import _ from 'lodash'
 
 type RawGrant = {[key: string]: string}
 
-const grants: RawGrant[] = fs.readJsonSync('./data.json')
+const rawGrants: RawGrant[] = fs.readJsonSync('./data.json')
 
-const grant = grants[0]
+const headings = Object.keys(rawGrants[0])
 
-const checkBoxFields = [
-    'study_subject',
-    'ethnicity',
-    'age_groups',
-    'rurality',
-    'vulnerable_population',
-    'occupational_groups',
-    'study_type',
-    'study_type_main',
-    'clinical_trial',
-    'pathogen',
-    'coronavirus',
-    'disease',
-    'funder_name',
-    'funder_country',
-    'funder_region',
-    'research_institution_region',
-    'tags',
-]
+const fields = _.partition(
+    headings,
+    heading => heading.includes('___')
+)
 
-checkBoxFields.forEach(field => {
-    const x = convertCheckBoxFieldToArray(grant, field)
-    console.log(field, x)
+const textFields = fields[1]
+
+const checkBoxFields = _.uniq(
+    fields[0].map(
+        field => field.split('___')[0]
+    )
+)
+
+const grants = rawGrants.map(rawGrant => {
+    const textFieldValues = _.pick(rawGrant, textFields)
+
+    const checkBoxFieldValues = Object.fromEntries(
+        checkBoxFields.map(
+            field => ([
+                field,
+                convertCheckBoxFieldToArray(rawGrant, field),
+            ])
+        )
+    )
+
+    return {
+        ...textFieldValues,
+        ...checkBoxFieldValues,
+    }
 })
+
+fs.writeJsonSync('./grants.json', grants)
 
 function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
     return Object.entries(grant).filter(
