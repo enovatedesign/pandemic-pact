@@ -235,26 +235,28 @@ export default function StaticPage({grant}: Props) {
                                                 index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
                                             const metricClasses = [
-                                                index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl'
+                                                index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'
                                             ].join(' ')
 
                                             return (
                                                 <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2  border-secondary/10`}>
-                                                    {heading.metric && (
+                                                    {(heading.metric || heading.startMetric) && (
                                                         <p className='uppercase text-xs tracking-widest font-bold'>
                                                             {heading.text}
                                                         </p>
                                                     )}
                                                     {heading.startMetric && heading.endMetric ? (
-                                                        <div className="flex justify-start gap-1 ">
-                                                            <span className='text-lg md:text-3xl lg:text-4xl font-bold'>
+                                                        <div className="flex gap-1 items-center ">
+                                                            <span className={metricClasses}>
                                                                 {grant.GrantStartYear}
                                                             </span>
-                                                            <div className='flex gap-1 items-center mt-1 md:mt-2 lg:mt-3'>
-                                                                <ArrowRightIcon className="h-5 w-5 opacity-50" />
-                                                                <span className={`${metricClasses} font-bold`}>
-                                                                    {grant.GrantEndYear}
-                                                                </span>
+                                                            <div className='flex gap-1 items-end h-full'>
+                                                                <div className='flex items-center gap-1'>
+                                                                    <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" /> 
+                                                                    <span className='text-md md:text-xl lg:text-2xl font-bold'>
+                                                                        {grant.GrantEndYear}
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ) : (
