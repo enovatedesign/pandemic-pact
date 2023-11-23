@@ -153,6 +153,7 @@ export const contentBuilderQuery = `
                     width
                   }
                 }
+                publicationType(label: true)
               }
             }
           }
@@ -360,6 +361,22 @@ export const contentBuilderQuery = `
             }
             reverse
             text
+          }
+          ... on bodyContent_featuredPublication_BlockType {
+            id
+            typeHandle
+            thumbnailImage  @transform(transform: "c480x480") {
+              ... on contentAssets_Asset {
+                alt
+                height
+                url
+                width
+              }
+            }
+            summary
+            publicationTitle
+            publicationType(label: true)
+            externalLink
           }
           
     }

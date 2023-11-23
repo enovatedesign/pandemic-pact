@@ -19,13 +19,14 @@ type Props = {
                 url: string,
                 width: number,
             }[],
+            publicationType: string,
         }[],
     }
 }
 
 const ListPublicationsBlock = ({block}: Props) => {
 
-    const heading = block.heading ?? 'Publications'
+    const heading = block.heading ?? null
     const customEntries = block.customEntries ?? null
 
     return (
@@ -37,11 +38,21 @@ const ListPublicationsBlock = ({block}: Props) => {
                     </div>
                 )}
 
-                <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     
                     {customEntries.map((entry, index: number) => {
+
+                        const cardData = {
+                            title: entry.title,
+                            imageLabel: entry.publicationType,
+                            summary: entry.summary,
+                            summaryClasses: '',
+                            url: entry.externalLink,
+                            thumbnailImage: entry.thumbnailImage,
+                        }
+
                         return (
-                            <Card entry={entry} key={index}>
+                            <Card entry={cardData} key={index}>
                                 <Button 
                                     href={entry.externalLink}
                                     size="small"
