@@ -157,28 +157,28 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
                 duration={300}
                 height={activeIndex === index ? 'auto' : 0}
             >
-                <div className='grid grid-cols-4 gap-4 lg:gap-8 py-4'>
+                <div className='grid grid-cols-4 gap-4 lg:gap-8 pt-4'>
 
                     <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-2xl">
-                        <p className="pb-2 lg:pb-4 uppercase text-secondary text-lg">
+                        <p className="pb-2 lg:pb-3 uppercase text-secondary text-md">
                             Abstract Exerpt
                         </p>
                         <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content" />
                     </div>
                     <div className='col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col'>
                         <div  className="bg-primary text-secondary rounded-2xl p-4 ">
-                            <p className='uppercase whitespace-normal'>
+                            <p className='uppercase text-xs tracking-widest font-bold whitespace-normal'>
                                 Amount committed (usd)
                             </p>
-                            <p className='text-lg md:text-3xl font-bold whitespace-normal'>
+                            <p className='text-lg md:text-3xl lg:text-4xl font-bold whitespace-normal'>
                                 {grantAmountConverted}
                             </p>
                         </div>
                         <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between">
-                            <p className='uppercase whitespace-normal'>
+                            <p className='uppercase text-xs tracking-widest font-bold whitespace-normal'>
                                 Start Year
                             </p>
-                            <p className='text-lg md:text-3xl font-bold whitespace-normal'>
+                            <p className='text-lg md:text-3xl lg:text-4xl font-bold whitespace-normal'>
                                 {result.GrantStartYear}
                             </p>
                         </div>

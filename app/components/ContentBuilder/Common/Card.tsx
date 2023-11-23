@@ -1,6 +1,7 @@
 import Image from "next/image";
 import NewsTags from "../News/NewsTags";
 import RichText from "./RichText";
+import { useInView, animated } from '@react-spring/web';
 
 type Props = {
     entry: any,
@@ -34,9 +35,27 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
         hover ? 'hover:shadow-lg hover:scale-105 transition duration-300' : ''
     ].join(' ')
 
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
     return (
-        <div key={index} 
+        <animated.div key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200  rounded-2xl overflow-hidden ${hoverClasses}`}
+            ref={ref}
+            style={springs}
         >   
             {url || externalLink ? (
                 <a href={url || externalLink}>
@@ -105,7 +124,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
 
             </div>
             
-        </div>
+        </animated.div>
     )
 };
 

@@ -169,8 +169,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
 
     return (
         <div>
-            <Grid numItems={2} className="gap-3">
-                <Col numColSpan={2}>
+            <div className="grid grid-cols-2 gap-3">
+                <div className='col-span-2'>
                     <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
                         <input
                             type="search"
@@ -179,7 +179,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => setSearchQuery(event.target.value)}
                             value={searchQuery}
-                            className="block w-full placeholder:text-gray-400 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
                         <Button
                             size="xsmall"
@@ -190,7 +190,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             <SearchIcon className="w-6 h-6 text-secondary" />
                         </Button>
                     </div>
-                </Col>
+                </div>
 
                 <section className="col-span-2 w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
                     <div className="flex items-center justify-between gap-2 mx-4">
@@ -364,7 +364,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         ></ExportToCsvButton>
                     </div>
                 </Col>
-            </Grid>
+            </div>
         </div>
     );
 }
