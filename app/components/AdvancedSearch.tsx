@@ -2,6 +2,7 @@ import { useState } from "react"
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
+import Button from './Button'
 
 const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
@@ -203,16 +204,14 @@ const AdvancedSearch = () => {
                         )
                     })}
                     {rows.length < 6 && (
-                        <div className={`${paddingClasses} flex gap-1 justify-center pt-2 `}>
-                            <button
-                                className="flex items-center py-1 px-2 rounded-full bg-secondary"
+                        <div className={`${paddingClasses} flex justify-center`}>
+                            <Button
+                                size="xsmall"
+                                customClasses="mt-3 flex items-center gap-1"
                                 onClick={addRow}
                             >
-                                <span className="uppercase text-primary text-sm">
-                                    Add a row
-                                </span>
-                                <PlusIcon className="w-6 aspect-square text-primary active:scale-90 transition duration-200"/>
-                            </button>
+                                Add a row <PlusIcon className="w-5 h-5" aria-hidden="true" />
+                            </Button>
                         </div>
                     )}
                 </div>
