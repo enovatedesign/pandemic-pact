@@ -212,7 +212,7 @@ export default function StaticPage({grant}: Props) {
                                 className='relative'
                             >
                                 <div id='abstract'>
-                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
+                                    <RichText text={grant.Abstract} customClasses='max-w-none' />
                                     {backgroundShow && !abstractShow && (
                                         <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
                                     )}
