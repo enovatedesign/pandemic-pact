@@ -33,6 +33,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 	const image = pub.thumbnailImage[0];
 	const type = pub.publicationType;
 	const url = pub.externalLink;
+	const urlCondition = (url?.length);
 
 	const hoverClasses = [
         url ? 'hover:shadow-lg transition duration-300' : ''
@@ -57,7 +58,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 								</div>
 							)}
 							<ConditionalWrapper
-								condition={url}
+								condition={urlCondition}
 								wrapper={children => <a href={url}>{children}</a>}
 							>
 								<Image 
@@ -77,23 +78,24 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 
 								<h2 className="text-secondary text-xl md:text-2xl">
 									<ConditionalWrapper
-										condition={url}
+										condition={urlCondition}
 										wrapper={children => <a href={url}>{children}</a>}
 									>
 										{title}
 									</ConditionalWrapper>
 								</h2>
 								<p className="lg:text-lg">{summary}</p>
-								<p className="mt-auto self-end">
-									<Button 
-										href={url}
-										size="small"
-										customClasses="mt-3 self-end flex items-center gap-1"
-									>
-										Read More <ExternalLinkIcon className="w-4 h-4" />
-									</Button>
-								</p>
-									
+								{urlCondition && (
+									<p className="mt-auto self-end">
+										<Button 
+											href={url}
+											size="small"
+											customClasses="mt-3 self-end flex items-center gap-1"
+										>
+											Read More <ExternalLinkIcon className="w-4 h-4" />
+										</Button>
+									</p>
+								)}	
 							</div>
 
 						</div>

@@ -17,7 +17,7 @@ type Props = {
     hover?: boolean,
 }
 
-const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
+const Card = ({entry, tags = false, children, image}: Props) => {
     
     const {
         index,
@@ -33,12 +33,11 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
 
     const cardImage = thumbnailImage ? thumbnailImage[0] : image 
 
-    const hoverClasses = [
-        hover ? 'hover:shadow-lg hover:scale-105 transition duration-300' : ''
-    ].join(' ')
+    const urlCondition = (url?.length);
 
-    // const ConditionalWrapper = ({ condition, wrapper, children }) => 
-    //     condition ? wrapper(children) : children;
+    const hoverClasses = [
+        urlCondition ? 'hover:shadow-lg transition duration-300' : ''
+    ].join(' ')
 
     const [ref, springs] = useInView(
         () => ({
@@ -63,7 +62,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
             style={springs}
         >   
             <ConditionalWrapper
-                condition={url}
+                condition={urlCondition}
                 wrapper={children => <a href={url}>{children}</a>}
             >
                 {cardImage?.url && (
@@ -90,7 +89,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
                 {title && (
                     <h3 className="text-secondary text-xl md:text-2xl">
                         <ConditionalWrapper
-                            condition={url}
+                            condition={urlCondition}
                             wrapper={children => <a href={url}>{children}</a>}
                         >
                             {title}
