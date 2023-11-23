@@ -18,7 +18,7 @@ export default function Explore() {
         <Layout
             title="Grant Search"
             showSummary={true}
-            summary="Search our database of Grants."
+            summary="Explore our data on research grants for infectious diseases with pandemic potential."
         >
             <div className="container mx-auto my-6 lg:my-12">
                 <Grid className="gap-y-6 lg:gap-y-8 mt-6">

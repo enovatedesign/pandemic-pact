@@ -21,6 +21,7 @@ import HeroImageSliderBlock from "./Blocks/HeroImageSliderBlock";
 import PullQuoteBlock from "./Blocks/PullQuoteBlock";
 import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
 import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
+import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock";
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -45,6 +46,7 @@ const blocks: any = {
 	pullQuote: PullQuoteBlock,
 	listTeamMembers: ListTeamMembersBlock,
 	listPublications: ListPublicationsBlock,
+	featuredPublication: FeaturedPublicationBlock,
 };
 
 const Block = (props: any) => {

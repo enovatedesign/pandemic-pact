@@ -50,11 +50,18 @@ const ListTeamMembersBlock = ({block}: Props) => {
                     
                     {customEntries.map((entry, index) => {
 
+                        const cardData = {
+                            title: entry.title,
+                            summary: entry.jobTitle,
+                            summaryClasses: 'text-lg font-bold',
+                            thumbnailImage: entry.thumbnailImage,
+                        }
+
                         return (
                             <>
                                 <div key={index}>
                                     <Card
-                                        entry={entry} 
+                                        entry={cardData} 
                                         tags={false} 
                                         hover={false} 
                                     >
