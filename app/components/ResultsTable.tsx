@@ -21,7 +21,7 @@ export default function ResultsTable({searchResponse}: Props) {
     return (
         <div>
 
-            <h3 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">Results</h3>
+            <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">Results</h2>
 
             <div className='mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200'>
                 {searchResponse.hits.map((result, index) => {
@@ -30,24 +30,15 @@ export default function ResultsTable({searchResponse}: Props) {
                     const data = {index, activeIndex, setActiveIndex}
 
                     return (
-                        <div key={result.GrantID}>
-                            <div className="flex flex-col space-y-2 lg:space-y-6">
-                                <a href={href} className="hover:underline">
-                                    <div
-                                        className="whitespace-normal font-semibold text-base lg:text-2xl"
-                                        dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
-                                    />
-                                </a>
+                        <article key={result.GrantID} className="flex flex-col space-y-2 lg:space-y-6">
+                                <h3><a href={href} className="hover:underline font-semibold text-base lg:text-2xl"
+                                    dangerouslySetInnerHTML={{__html: result._formatted.GrantTitleEng}}
+                                ></a></h3>
 
                                 {searchResponse.query &&
                                     <SearchMatches result={result} {...data}/>
                                 }   
-                            </div>
-
-                            <div className="text-right whitespace-nowrap truncate">
-                            </div>
-
-                        </div>
+                        </article>
                     )
                 })}
             </div>
@@ -102,7 +93,7 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
     : result.GrantAmountConverted
 
     return (
-        <div className='bg-primary/40 p-4  rounded-2xl'>
+        <div className='bg-primary/40 p-4 rounded-2xl'>
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4 lg:lg:gap-8">
                 <div className='flex items-center gap-2 justify-between lg:justify-start row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-2'>
                     <span className="flex gap-x-1 uppercase text-sm lg:text-lg">
@@ -159,26 +150,26 @@ function SearchMatches({result, index, activeIndex, setActiveIndex}: SearchMatch
             >
                 <div className='grid grid-cols-4 gap-4 lg:gap-8 pt-4'>
 
-                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-2xl">
-                        <p className="pb-2 lg:pb-3 uppercase text-secondary text-md">
-                            Abstract Exerpt
+                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-xl">
+                        <p className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
+                            Abstract Excerpt
                         </p>
-                        <RichText text={result._formatted.Abstract} customClasses="min-w-full text-tremor-content" />
+                        <RichText text={result._formatted.Abstract} customClasses='max-w-none' />
                     </div>
                     <div className='col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col'>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 ">
-                            <p className='uppercase text-xs tracking-widest font-bold whitespace-normal'>
+                        <div  className="bg-primary text-secondary rounded-xl p-4">
+                            <p className='uppercase text-xs tracking-widest font-bold'>
                                 Amount committed (usd)
                             </p>
-                            <p className='text-lg md:text-3xl lg:text-4xl font-bold whitespace-normal'>
+                            <p className='text-lg md:text-3xl lg:text-4xl font-bold mt-2'>
                                 {grantAmountConverted}
                             </p>
                         </div>
-                        <div  className="bg-primary text-secondary rounded-2xl p-4 flex flex-col justify-between">
-                            <p className='uppercase text-xs tracking-widest font-bold whitespace-normal'>
+                        <div  className="bg-primary text-secondary rounded-xl p-4">
+                            <p className='uppercase text-xs tracking-widest font-bold'>
                                 Start Year
                             </p>
-                            <p className='text-lg md:text-3xl lg:text-4xl font-bold whitespace-normal'>
+                            <p className='text-lg md:text-3xl lg:text-4xl font-bold mt-2'>
                                 {result.GrantStartYear}
                             </p>
                         </div>
