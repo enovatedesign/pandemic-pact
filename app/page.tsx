@@ -51,7 +51,9 @@ export default function Home() {
                                 </svg>
                             </Link>
 
-                            <p className="text-center text-white/50">License text to go here lorem ipsum dolor amet.</p>
+                            <small>
+                                <p className="text-center text-white/60 text-sm">The Pandemic PACT tracker data is made available free for use under a Creative Commons CC BY 4.0 licence (<Link href="/about" className="underline">citation details</Link>).</p>
+                            </small>
 
                         </article>
 
