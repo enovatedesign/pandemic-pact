@@ -2,6 +2,7 @@ import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Button from "../../Button"
+import { ExternalLinkIcon } from '@heroicons/react/outline'
 
 type Props = {
     block: {
@@ -38,7 +39,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                     </div>
                 )}
 
-                <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     
                     {customEntries.map((entry, index: number) => {
 
@@ -56,15 +57,16 @@ const ListPublicationsBlock = ({block}: Props) => {
                                 <Button 
                                     href={entry.externalLink}
                                     size="small"
+                                    customClasses="mt-3 self-end flex items-center gap-1"
                                 >
-                                    Read More
+                                    Read More <ExternalLinkIcon className="w-4 h-4" />
                                 </Button>
                             </Card>
 
                         )
                     })}
 
-                </ul>
+                </div>
             </BlockWrapper>
         </>
     )

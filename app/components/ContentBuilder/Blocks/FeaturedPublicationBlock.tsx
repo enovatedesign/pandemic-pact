@@ -2,29 +2,37 @@ import Button from "../../Button"
 import Image from "next/image";
 import BlockWrapper from "../BlockWrapper"
 import ConditionalWrapper from "../../ConditionalWrapper"
+import { ExternalLinkIcon } from "@heroicons/react/outline"
 
 interface Props {
 	block: {
-		publicationTitle: string,
-		publicationType: string,
-		summary: string,
-		thumbnailImage: {
-			altText: string,
-			height: number,
-			url: string,
-			width: number,
-		}[],
-		externalLink: any,
-	}
+        id: string,
+        typeHandle: string,
+        featuredPublication: {
+            id: number,
+            title: string,
+            summary: string,
+            externalLink: string,
+            thumbnailImage: {
+                altText: string,
+                height: number,
+                url: string,
+                width: number,
+            }[],
+            publicationType: string,
+        }[],
+    }
 }
 
 export default function FeaturedPublicationBlock({ block }: Props) {
 
-	const title = block.publicationTitle;
-	const summary = block.summary;
-	const image = block.thumbnailImage[0];
-	const type = block.publicationType;
-	const url = block.externalLink;
+	const pub = block.featuredPublication[0];
+
+	const title = pub.title;
+	const summary = pub.summary;
+	const image = pub.thumbnailImage[0];
+	const type = pub.publicationType;
+	const url = pub.externalLink;
 
 	const hoverClasses = [
         url ? 'hover:shadow-lg transition duration-300' : ''
@@ -79,9 +87,10 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 								<p className="mt-auto self-end">
 									<Button 
 										href={url}
-										size="small"	
+										size="small"
+										customClasses="mt-3 self-end flex items-center gap-1"
 									>
-										Read More
+										Read More <ExternalLinkIcon className="w-4 h-4" />
 									</Button>
 								</p>
 									

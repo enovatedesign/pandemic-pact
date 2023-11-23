@@ -365,18 +365,23 @@ export const contentBuilderQuery = `
           ... on bodyContent_featuredPublication_BlockType {
             id
             typeHandle
-            thumbnailImage  @transform(transform: "c480x480") {
-              ... on contentAssets_Asset {
-                alt
-                height
-                url
-                width
+            featuredPublication {
+              ... on publications_publication_Entry {
+                id
+                title
+                summary
+                externalLink
+                thumbnailImage  @transform(transform: "c480x480") {
+                  ... on contentAssets_Asset {
+                    alt
+                    height
+                    url
+                    width
+                  }
+                }
+                publicationType(label: true)
               }
             }
-            summary
-            publicationTitle
-            publicationType(label: true)
-            externalLink
           }
           
     }

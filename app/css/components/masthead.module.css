@@ -13,7 +13,7 @@
 }
 
 .button:before {
-    @apply absolute rounded-full bg-gradient-to-t from-primary to-[#296096] -z-1;
+    @apply absolute rounded-full bg-gradient-to-t from-primary to-[#296096] -z-1 tracking-wider;
     inset: -2px;
     content: '';
 }
