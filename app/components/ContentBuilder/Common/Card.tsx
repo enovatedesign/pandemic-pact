@@ -33,7 +33,7 @@ const Card = ({entry, tags = false, children, image}: Props) => {
 
     const cardImage = thumbnailImage ? thumbnailImage[0] : image 
 
-    const urlCondition = (url?.length);
+    const urlCondition = url?.startsWith('http');
 
     const hoverClasses = [
         urlCondition ? 'hover:shadow-lg transition duration-300' : ''

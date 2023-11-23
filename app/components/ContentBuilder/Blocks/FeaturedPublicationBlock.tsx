@@ -33,7 +33,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 	const image = pub.thumbnailImage[0];
 	const type = pub.publicationType;
 	const url = pub.externalLink;
-	const urlCondition = (url?.length);
+	const urlCondition = url?.startsWith('http');
 
 	const hoverClasses = [
         url ? 'hover:shadow-lg transition duration-300' : ''
