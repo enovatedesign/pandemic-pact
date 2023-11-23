@@ -44,7 +44,7 @@ const Pagination = ({
         newParams.set('page', number.toString())
 
         const url = number !== 1 ? `${pathName}?${newParams.toString()}` : pathName
-        router.push(url)
+        router.push(url, { scroll: false })
     }
 
     const updatePage = (number: number) => {
@@ -52,7 +52,7 @@ const Pagination = ({
         updateSearchParams(number)
     }
 
-    const iconClasses = 'w-8 h-8 text-primary transition duration-300 border-2 border-primary rounded-full hover:bg-primary hover:text-white '
+    const iconClasses = 'w-8 h-8 transition duration-300 border-2 rounded-full'
 
     const leftFullStopClasses = [
         page >= 4 ? 'block' : 'invisible'
@@ -66,20 +66,28 @@ const Pagination = ({
         <div className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
             <button
                 onClick={() => updatePage(page - 1)}
-                disabled={page === 1}
+                disabled={page === 1 ? true : false}
                 className="flex items-center space-x-4 disabled:cursor-not-allowed"
             >
-                <p className={iconClasses}>
-                    <ChevronLeftIcon className='-translate-x-[1px]' />
+                <p className={`${iconClasses} ${page === 1 ? 'border-gray-400 text-gray' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}>
+                    {page === 1 ? (
+                        <p>
+                            <ChevronLeftIcon className='text-gray-400 -translate-x-[1px]'/>
+                        </p>        
+                    ) : (
+                        <a href="#paginationTop">
+                            <ChevronLeftIcon className='text-primary -translate-x-[1px] hover:text-white transition duration-300'/>
+                        </a>
+                    )}
                 </p>
-                <span className="hidden md:block text-secondary uppercase font-bold">
+                <span className={`${page === 1 ? 'text-gray-400' : 'text-secondary'} hidden md:block  uppercase font-bold`}>
                     Previous
                 </span>
             </button>
 
             <div className="flex space-x-2 md:space-x-4 lg:space-x-6 xl-space-x-8">
                 <p className={`${leftFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                    <span>.</span><span>.</span><span>.</span>
+                    …
                 </p>
                 <div className="hidden md:flex md:space-x-4 ">
                     {filteredPages.map(number => {
@@ -89,15 +97,17 @@ const Pagination = ({
 
                         return (
                             <>
-                                <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
-                                    {number}
-                                </button>
+                                <a href="#paginationTop">
+                                    <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
+                                        {number}
+                                    </button>
+                                </a>
                             </>
                         )
                     })}
                 </div>
                 <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                    <span>.</span><span>.</span><span>.</span>
+                    …
                 </p>
             </div>
 
@@ -110,8 +120,16 @@ const Pagination = ({
                 <span className="hidden md:block text-secondary uppercase font-bold">
                     Next
                 </span>
-                <p className={iconClasses}>
-                    <ChevronRightIcon className="translate-x-[1px]" />
+                <p className={`${iconClasses} ${page === totalPages.length ? 'border-gray-400 text-gray' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}>
+                    {page === totalPages.length ? (
+                        <p>
+                            <ChevronRightIcon className='text-gray-400 translate-x-[1px]'/>
+                        </p>        
+                    ) : (
+                        <a href="#paginationTop">
+                            <ChevronRightIcon className='text-primary translate-x-[1px] hover:text-white transition duration-300'/>
+                        </a>
+                    )}
                 </p>
             </button>
         </div>

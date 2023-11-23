@@ -9,7 +9,6 @@ import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
-import PathogenDiseaseRelationshipCard from '../components/PathogenDiseaseRelationshipCard'
 import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
@@ -101,11 +100,6 @@ export default function Visualise() {
                     <GrantsPerResearchCategoryByRegion
                         globallyFilteredDataset={globallyFilteredDataset}
                         selectedFilters={selectedFilters}
-                    />
-
-                    <PathogenDiseaseRelationshipCard
-                        selectedFilters={selectedFilters}
-                        globallyFilteredDataset={globallyFilteredDataset}
                     />
 
                     <RegionalFlowOfGrantsCard

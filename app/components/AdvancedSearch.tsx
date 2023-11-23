@@ -2,7 +2,7 @@ import { useState } from "react"
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
 import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
-import AnimateHeight from 'react-animate-height'
+import Button from './Button'
 
 const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
@@ -35,7 +35,7 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
     ].join(' ')
 
     const andButtonDivClasses = [
-        localRow.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] md:-translate-x-[40px] transition duration-300'
+        !localRow.logicalAnd && '-translate-x-[48px] md:-translate-x-[37px] lg:-translate-x-[40px] xl:-translate-x-[42px]'
     ].join(' ')
 
     const onSelectChange = (value: string) => {
@@ -85,8 +85,8 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
     }
 
     return (
-        <div className="flex space-x-8">
-            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg p-3">
+        <div className="flex">
+            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
                 <Select value={localRow.field} onValueChange={onSelectChange} enableClear={false}>
                     {selectItems.map((key, index) => {
                         return (
@@ -116,16 +116,18 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
                 </MultiSelect>
 
                 <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-40 rounded-full">
-                        <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+                        <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute right-1 transition-transform duration-300`}></div>
 
                         <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
                             {localRow.logicalAnd ? 'and' : 'or'}
                         </p>
                 </button>
             </div>
-            <div className={`${index === 0 && 'invisible pr-8'} flex items-center`}>
-                {children}
-            </div>
+            {children && (
+                <div className={`${index === 0 && 'invisible pr-8'} flex items-center`}>
+                    {children}
+                </div>
+            )}
         </div>
     )
 }
@@ -153,32 +155,22 @@ const AdvancedSearch = () => {
     const addRow = () => {
         setRows([...rows, defaultRow()])
     }
-    console.log(rows.length)
+    
+    const paddingClasses = 'md:pr-[100px]'
 
     return (
         <section className="p-4">
-                <div className='flex justify-between pb-4'>
-                    <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:items-center md:space-x-2  md:pr-[148px]">
-                        <p className="text-secondary uppercase text-sm">
-                            Set the global and/or functionality: 
-                        </p>
-                        <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
-                                <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+                <div className="pb-4 flex flex-col space-y-2 md:space-y-0 md:flex-row md:items-center md:space-x-2  md:pr-[148px]">
+                    <p className="text-secondary uppercase text-sm">
+                        Set the global and/or functionality: 
+                    </p>
+                    <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
+                            <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
-                                <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
-                                    {globalAnd ? 'and' : 'or'}
-                                </p>
-                        </button>
-                    </div>
-
-                    {rows.length < 6 && (
-                        <button
-                            className=" h-8 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                            onClick={addRow}
-                        >
-                            <PlusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
-                        </button>
-                    )}
+                            <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
+                                {globalAnd ? 'and' : 'or'}
+                            </p>
+                    </button>
                 </div>
                 <div className="flex flex-col gap-2">
                     {rows.map((row: Row, index: number) => {
@@ -191,20 +183,19 @@ const AdvancedSearch = () => {
                         
                         return (
                             <>  
-                                <div key={row.key}>
+                                <div key={row.key} className="relative w-full">
                                     {index > 0 && (
-                                        <p className="text-center uppercase tracking-wider py-1 pr-[70px] md:pr-[148px]">
+                                        <p className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}>
                                             {globalAnd ? 'and' : 'or'}
                                         </p>
                                     )}
                                     <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
-                                        {/* Add remove button function here */}
                                         {index > 0 && (
                                             <button
-                                            className="flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                            onClick={() => removeRow(index)}
+                                                className="absolute right-0 translate-x-1/2 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                                onClick={() => removeRow(index)}
                                             >
-                                                <MinusIcon className="w-8 aspect-square text-primary active:scale-90 transition duration-200" />
+                                                <MinusIcon className="w-6 aspect-square text-primary active:scale-90 transition duration-200" />
                                             </button>
                                         )}
                                     </AdvancedInputRow>
@@ -212,6 +203,17 @@ const AdvancedSearch = () => {
                             </>
                         )
                     })}
+                    {rows.length < 6 && (
+                        <div className={`${paddingClasses} flex justify-center`}>
+                            <Button
+                                size="xsmall"
+                                customClasses="mt-3 flex items-center gap-1"
+                                onClick={addRow}
+                            >
+                                Add a row <PlusIcon className="w-5 h-5" aria-hidden="true" />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </section>
     )
