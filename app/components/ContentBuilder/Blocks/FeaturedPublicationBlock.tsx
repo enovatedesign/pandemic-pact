@@ -65,7 +65,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 									alt={image.altText}
 									width={image.width}
 									height={image.height}
-									className="w-full"
+									className="w-full h-full"
 									loading="lazy"
 								/>
 							</ConditionalWrapper>
