@@ -35,12 +35,12 @@ export default function FeaturedPublicationBlock({ block }: Props) {
             <BlockWrapper>
                 <div className="relative rounded-2xl border-dotted border-2 border-primary p-6 lg:p-12 mx-auto max-w-6xl">
 					<p className="absolute inset-x-0 -mt-10 lg:-mt-16 text-center">
-						<span className="mx-auto inline-block px-3 py-1 text-secondary rounded-full font-bold tracking-widest uppercase bg-gray-50">
+						<span className="mx-auto inline-block px-3 py-1 text-gray-500 rounded-full font-bold tracking-widest uppercase bg-gray-50">
 							Featured Publication
 						</span>
 					</p>
                     
-					<article className={`border-2 border-gray-200 rounded-2xl overflow-hidden bg-white grid sm:grid-cols-3 xl:grid-cols-4 ${hoverClasses}`}>
+					<article className={`border border-gray-200 rounded-2xl overflow-hidden bg-white grid sm:grid-cols-3 xl:grid-cols-4 shadow ${hoverClasses}`}>
 
 						<div className="relative">
 							{type && (
@@ -67,7 +67,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 
 							<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
 
-								<h2 className="text-xl md:text-2xl">
+								<h2 className="text-secondary text-xl md:text-2xl">
 									<ConditionalWrapper
 										condition={url}
 										wrapper={children => <a href={url}>{children}</a>}

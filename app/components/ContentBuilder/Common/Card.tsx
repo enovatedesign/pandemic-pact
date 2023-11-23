@@ -88,7 +88,7 @@ const Card = ({entry, tags = false, children, image, hover = true}: Props) => {
             <div className="flex flex-col gap-3 p-6 h-full">
                 
                 {title && (
-                    <h3 className="text-xl md:text-2xl">
+                    <h3 className="text-secondary text-xl md:text-2xl">
                         <ConditionalWrapper
                             condition={url}
                             wrapper={children => <a href={url}>{children}</a>}
