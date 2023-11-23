@@ -70,7 +70,7 @@ export default function Visualise() {
         <Layout
             title="Interactive Charts"
             showSummary={true}
-            summary="Explore the historical and near real time data on research funding for infectious disease with a pandemic potential using extensive filters and search functionality."
+            summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
             sidebar={sidebar}
         >
 
