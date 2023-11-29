@@ -136,7 +136,7 @@ export default function Header({className}: {className?: string}) {
                             </ul>
                         </nav>
 
-                        <div className={`${mobileTransitionClasses} h-screen w-full lg:hidden bg-secondary absolute inset-0 z-20`}>
+                        <div className={`${mobileTransitionClasses} h-d-screen w-full lg:hidden bg-secondary absolute inset-0 z-20`}>
                             <ul className="pb-20 pl-12 absolute bottom-0 flex-row space-y-10">
                                 {links.map((link, index) => (
                                     <li key={index} className={`${mobileAnimationClasses} w-full`}>

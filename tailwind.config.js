@@ -81,6 +81,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-figtree)", "sans-serif"],
       },
+      height: {
+        "d-screen": "100dvh"
+      }
     },
   },
   safelist: [
