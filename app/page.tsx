@@ -96,7 +96,7 @@ export default function Home() {
 
                             <div className="flex flex-col md:flex-row justify-between items-center">
                                 
-                                <FooterCopyrightStatement showCredit={false} className="text-center md:text-left text-gray-300" />
+                                <FooterCopyrightStatement showCreditOnly={true} className="uppercase text-center md:text-left text-gray-300" />
 
                                 <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline"/>
 
