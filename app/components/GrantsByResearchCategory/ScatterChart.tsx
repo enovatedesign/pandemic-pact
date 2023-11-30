@@ -57,18 +57,17 @@ export default function ScatterChart({chartData}: Props) {
                     type="number"
                     dataKey="Amount Committed"
                     tickFormatter={dollarValueFormatter}
-
-                >
-                    <Label
-                        value="Amount Committed (USD)"
-                        position="left"
-                        angle={-90}
-                        style={{textAnchor: 'middle'}}
-                        offset={10}
-                    />
-                </YAxis>
+                    label={{
+                        value: "Amount Committed (USD)",
+                        position: "left",
+                        angle: -90,
+                        style: {textAnchor: 'middle'},
+                        offset: 10,
+                    }}
+                />
 
                 <Tooltip
+                    isAnimationActive={false}
                     cursor={{strokeDasharray: '3 3'}}
                     formatter={
                         (value: number, name: string) => [
@@ -90,6 +89,6 @@ export default function ScatterChart({chartData}: Props) {
                     ))}
                 </Scatter>
             </RechartScatterChart >
-        </ResponsiveContainer>
+        </ResponsiveContainer >
     )
 }
