@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export default function FooterCopyrightStatement({className, showCreditOnly = false}: {className?: string, showCreditOnly: boolean}) {
+export default function FooterCopyrightStatement({className, showCreditOnly = false}: {className?: string, showCreditOnly?: boolean}) {
 
     className = className ?? 'text-center xl:text-left text-gray-700'
 
