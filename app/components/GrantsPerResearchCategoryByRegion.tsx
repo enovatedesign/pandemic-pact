@@ -106,9 +106,8 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
                                     name={label}
                                     dataKey={label}
                                     stroke={colours[index]}
-                                    strokeWidth={1.5}
-                                    fill={colours[index]}
-                                    fillOpacity={0.075}
+                                    strokeWidth={2}
+                                    fillOpacity={0}
                                 />
                             ))}
 
