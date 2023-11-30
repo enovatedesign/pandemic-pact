@@ -9,17 +9,17 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
     const tabs = [
         {
             tab: {
-                icon: ChartBarIcon,
-                label: "Bars",
-            },
-            content: <BarChart globallyFilteredDataset={globallyFilteredDataset} />,
-        },
-        {
-            tab: {
                 icon: ClockIcon,
                 label: "Temporal",
             },
             content: <TemporalChart globallyFilteredDataset={globallyFilteredDataset} />,
+        },
+        {
+            tab: {
+                icon: ChartBarIcon,
+                label: "Bars",
+            },
+            content: <BarChart globallyFilteredDataset={globallyFilteredDataset} />,
         },
     ]
 

@@ -74,13 +74,13 @@
         "7": "Not known"
     },
     "AgeGroups": {
-        "1": "Adolescent",
-        "2": "Adult",
-        "3": "Aged",
-        "4": "Frail Elderly",
-        "5": "Child",
-        "6": "Infant",
-        "7": "Newborn",
+        "1": "Newborn",
+        "2": "Infant",
+        "3": "Child",
+        "4": "Adolescent",
+        "5": "Adult",
+        "6": "Aged",
+        "7": "Frail Elderly",
         "8": "Other",
         "9": "Unspecified",
         "10": "Not applicable",
@@ -191,9 +191,9 @@
         "406597005": "Nipah and henipaviral disease",
         "402917003": "Rift Valley Fever",
         "3928002": "Zika",
-        "1": "Unspecified",
-        "2": "Not applicable",
-        "3": "Not known"
+        "9999999999999": "Unspecified",
+        "99999999999999": "Not applicable",
+        "999999999999999": "Not known"
     },
     "Pathogen": {
         "1263733001": "SARS-CoV",
@@ -220,9 +220,9 @@
         "28375005": "Flavivirus Genus",
         "243602009": "Family Flaviviridae (including Dengue)",
         "449024000": "Pandemic influenza A (H1N1)",
-        "1": "Unspecified",
-        "2": "Not applicable",
-        "3": "Not known"
+        "9999999999999": "Unspecified",
+        "99999999999999": "Not applicable",
+        "999999999999999": "Not known"
     },
     "ResearchCat": {
         "1": "Pathogen: natural history, transmission and diagnostics",
