@@ -1,4 +1,4 @@
-import {ScatterChart as RechartScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell, Label} from 'recharts';
+import {ScatterChart as RechartScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Cell, Label} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 
 interface Props {
@@ -32,64 +32,64 @@ export default function ScatterChart({chartData}: Props) {
     ]
 
     return (
-        <RechartScatterChart
-            width={400}
-            height={400}
-            margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-            }}
-        >
-            <CartesianGrid />
-
-            <XAxis
-                type="number"
-                dataKey="Total Number Of Grants"
-                allowDecimals={false}
-                label={{
-                    value: "Grants",
-                    position: "bottom",
+        <ResponsiveContainer width="100%" height={800}>
+            <RechartScatterChart
+                margin={{
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20,
                 }}
-            />
-
-            <YAxis
-                type="number"
-                dataKey="Amount Committed"
-                tickFormatter={dollarValueFormatter}
-
             >
-                <Label
-                    value="Amount Committed (USD)"
-                    position="left"
-                    angle={-90}
-                    style={{textAnchor: 'middle'}}
-                    offset={10}
+                <CartesianGrid />
+
+                <XAxis
+                    type="number"
+                    dataKey="Total Number Of Grants"
+                    allowDecimals={false}
+                    label={{
+                        value: "Grants",
+                        position: "bottom",
+                    }}
                 />
-            </YAxis>
 
-            <Tooltip
-                cursor={{strokeDasharray: '3 3'}}
-                formatter={
-                    (value: number, name: string) => [
-                        (name === "Amount Committed") ? dollarValueFormatter(value) : value,
-                        name,
-                    ]
-                }
-            />
+                <YAxis
+                    type="number"
+                    dataKey="Amount Committed"
+                    tickFormatter={dollarValueFormatter}
 
-            <Scatter
-                data={chartData}
-                fill="#8884d8"
-            >
-                {chartData.map((_, index) => (
-                    <Cell
-                        key={`cell-${index}`}
-                        fill={colours[index % colours.length]}
+                >
+                    <Label
+                        value="Amount Committed (USD)"
+                        position="left"
+                        angle={-90}
+                        style={{textAnchor: 'middle'}}
+                        offset={10}
                     />
-                ))}
-            </Scatter>
-        </RechartScatterChart >
+                </YAxis>
+
+                <Tooltip
+                    cursor={{strokeDasharray: '3 3'}}
+                    formatter={
+                        (value: number, name: string) => [
+                            (name === "Amount Committed") ? dollarValueFormatter(value) : value,
+                            name,
+                        ]
+                    }
+                />
+
+                <Scatter
+                    data={chartData}
+                    fill="#8884d8"
+                >
+                    {chartData.map((_, index) => (
+                        <Cell
+                            key={`cell-${index}`}
+                            fill={colours[index % colours.length]}
+                        />
+                    ))}
+                </Scatter>
+            </RechartScatterChart >
+        </ResponsiveContainer>
     )
 }
