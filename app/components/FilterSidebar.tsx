@@ -1,4 +1,4 @@
-import {Flex, Text, Subtitle} from "@tremor/react"
+import {Flex, Text} from "@tremor/react"
 import {XIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
@@ -37,7 +37,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
         <div className="flex flex-col items-start justify-start gap-y-4">
 
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
-        
+
                 <p className="flex flex-col gap-1">
                     {
                         (globallyFilteredDataset.length < completeDataset.length) ? (
@@ -49,7 +49,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                                 </span>
                             </>
                         ) : (
-                            <>  
+                            <>
                                 <span className="text-xs font-bold text-gray-300 uppercase">Total Number Of Grants</span>
                                 <span className="text-4xl font-bold text-primary">{completeDataset.length}</span>
                             </>
