@@ -81,7 +81,7 @@ export default function ScatterChart({chartData}: Props) {
                     data={chartData}
                     fill="#8884d8"
                 >
-                    {chartData.map((_, index) => (
+                    {chartData.map((_: any, index: number) => (
                         <Cell
                             key={`cell-${index}`}
                             fill={colours[index % colours.length]}
