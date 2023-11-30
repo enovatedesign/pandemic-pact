@@ -52,7 +52,9 @@ export default function Home() {
                             </Link>
 
                             <small>
-                                <p className="text-center text-white/60 text-sm">The Pandemic PACT tracker data is made available free for use under a Creative Commons CC BY 4.0 licence (<Link href="/about" className="underline">citation details</Link>).</p>
+                                <p className="text-center text-white/60 text-sm max-w-3xl mx-auto">
+                                    All visualizations and, data, and articles produced by Pandemic PACT are open access under the <Link href="http://creativecommons.org/licenses/by/4.0/" className="underline" target="_blank" rel="license noopener noreferrer">Creative Commons BY license</Link>. You have permission to use, distribute, and reproduce these in any medium, provided the source and authors are credited. All the software and code that we write is open source and made available via GitHub under the MIT license.
+                                </p>
                             </small>
 
                         </article>
@@ -94,7 +96,7 @@ export default function Home() {
 
                             <div className="flex flex-col md:flex-row justify-between items-center">
                                 
-                                <FooterCopyrightStatement showCredit={false} className="text-center md:text-left text-gray-300" />
+                                <FooterCopyrightStatement showCreditOnly={true} className="uppercase text-center md:text-left text-gray-300" />
 
                                 <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline"/>
 

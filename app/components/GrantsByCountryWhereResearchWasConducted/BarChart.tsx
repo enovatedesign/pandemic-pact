@@ -106,7 +106,7 @@ export default function BarChart({dataset}: Props) {
                 />
 
                 <Subtitle className="text-gray-500">
-                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand.'}
+                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand to countries'}
                 </Subtitle>
             </div>
 

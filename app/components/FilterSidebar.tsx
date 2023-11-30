@@ -1,5 +1,6 @@
-import {Flex, Text, Subtitle} from "@tremor/react"
-import {XIcon} from "@heroicons/react/solid"
+import {useState} from "react"
+import {Flex, Text} from "@tremor/react"
+import {XIcon, ChevronUpIcon, ChevronDownIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
 import Button from './Button'
@@ -15,7 +16,11 @@ interface FilterSidebarProps {
 }
 
 export default function FilterSidebar({selectedFilters, setSelectedFilters, completeDataset, globallyFilteredDataset}: FilterSidebarProps) {
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
+
     const filters = availableFilters()
+
+    const visibleFilters = showAdvancedFilters ? filters : filters.filter(({advanced}) => !advanced)
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = {...selectedFilters}
@@ -37,7 +42,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
         <div className="flex flex-col items-start justify-start gap-y-4">
 
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
-        
+
                 <p className="flex flex-col gap-1">
                     {
                         (globallyFilteredDataset.length < completeDataset.length) ? (
@@ -49,7 +54,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                                 </span>
                             </>
                         ) : (
-                            <>  
+                            <>
                                 <span className="text-xs font-bold text-gray-300 uppercase">Total Number Of Grants</span>
                                 <span className="text-4xl font-bold text-primary">{completeDataset.length}</span>
                             </>
@@ -58,7 +63,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                 </p>
             </div>
 
-            {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
+            {visibleFilters.map(({field, label, excludeGrantsWithMultipleItems}) => (
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
@@ -85,13 +90,27 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                 </Flex>
             ))}
 
-            <Button
-                size="xsmall"
-                customClasses="mt-3 self-end flex items-center gap-1"
-                onClick={() => setSelectedFilters(emptyFilters())}
-            >
-                Clear All <XIcon className="w-5 h-5" />
-            </Button>
+            <div className="flex items-center justify-between w-full">
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                >
+                    {showAdvancedFilters ? (
+                        <>Hide Advanced <ChevronUpIcon className="w-5 h-5" /></>
+                    ) : (
+                        <>Show Advanced <ChevronDownIcon className="w-5 h-5" /></>
+                    )}
+                </Button>
+
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setSelectedFilters(emptyFilters())}
+                >
+                    Clear All <XIcon className="w-5 h-5" />
+                </Button>
+            </div>
         </div>
     )
 }

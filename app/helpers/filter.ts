@@ -37,26 +37,31 @@ export function availableFilters() {
         {
             label: 'Study Subject',
             field: 'StudySubject',
+            advanced: true,
         },
 
         {
             label: 'Study Type',
             field: 'StudyType',
+            advanced: true,
         },
 
         {
             label: 'Age Group',
             field: 'AgeGroups',
+            advanced: true,
         },
 
         {
             label: 'Vulnerable Populations',
             field: 'VulnerablePopulations',
+            advanced: true,
         },
 
         {
             label: 'Occupations of Interest',
             field: 'OccupationalGroups',
+            advanced: true,
         }
     ]
 }
