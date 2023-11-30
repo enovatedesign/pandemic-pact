@@ -1,5 +1,6 @@
+import {useState} from "react"
 import {Flex, Text} from "@tremor/react"
-import {XIcon} from "@heroicons/react/solid"
+import {XIcon, ChevronUpIcon, ChevronDownIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
 import Button from './Button'
@@ -15,7 +16,11 @@ interface FilterSidebarProps {
 }
 
 export default function FilterSidebar({selectedFilters, setSelectedFilters, completeDataset, globallyFilteredDataset}: FilterSidebarProps) {
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
+
     const filters = availableFilters()
+
+    const visibleFilters = showAdvancedFilters ? filters : filters.filter(({advanced}) => !advanced)
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = {...selectedFilters}
@@ -58,7 +63,7 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                 </p>
             </div>
 
-            {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
+            {visibleFilters.map(({field, label, excludeGrantsWithMultipleItems}) => (
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
@@ -85,13 +90,27 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                 </Flex>
             ))}
 
-            <Button
-                size="xsmall"
-                customClasses="mt-3 self-end flex items-center gap-1"
-                onClick={() => setSelectedFilters(emptyFilters())}
-            >
-                Clear All <XIcon className="w-5 h-5" />
-            </Button>
+            <div className="flex items-center justify-between w-full">
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                >
+                    {showAdvancedFilters ? (
+                        <>Hide Advanced <ChevronUpIcon className="w-5 h-5" /></>
+                    ) : (
+                        <>Show Advanced <ChevronDownIcon className="w-5 h-5" /></>
+                    )}
+                </Button>
+
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setSelectedFilters(emptyFilters())}
+                >
+                    Clear All <XIcon className="w-5 h-5" />
+                </Button>
+            </div>
         </div>
     )
 }
