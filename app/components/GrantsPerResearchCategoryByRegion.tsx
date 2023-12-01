@@ -74,7 +74,7 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
             id="grant-per-research-category-by-region"
             title="Regional Distribution of Funding for Research Category"
             subtitle="Each research category is shown in a different colour"
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
         >
             <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between ignore-in-image-export">

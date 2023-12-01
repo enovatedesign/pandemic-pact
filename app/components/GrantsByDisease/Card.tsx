@@ -37,7 +37,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
             id="grants-by-disease"
             title="Global annual funding for research on diseases with a pandemic potential"
             subtitle="Total number of grants and US dollars committed for each disease"
-            footnote="Please note Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Funding amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
             tabs={tabs}
         />

@@ -98,7 +98,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard({selec
             id="amount-committed-to-each-research-category-over-time-card"
             title="Global Annual Funding For Research Categories"
             subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             tabs={tabs}
         >
             <Flex

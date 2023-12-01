@@ -61,7 +61,7 @@ export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: 
             id="grants-by-research-category"
             title="Global distribution of funding for research categories"
             subtitle="Total number of grants and US dollars committed for research across research categories"
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
             tabs={tabs}
         />
