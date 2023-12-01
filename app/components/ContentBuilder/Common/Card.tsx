@@ -7,7 +7,7 @@ import ConditionalWrapper from "../../ConditionalWrapper"
 type Props = {
     entry: any,
     tags?: boolean, 
-    children: any,
+    children?: any,
     image?: {
         altText: string,
         url: string, 
@@ -54,7 +54,6 @@ const Card = ({entry, tags = false, children, image}: Props) => {
             once: true,
         }
     );
-
     return (
         <animated.article key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden ${hoverClasses}`}
@@ -117,13 +116,11 @@ const Card = ({entry, tags = false, children, image}: Props) => {
                     <RichText text={text} customClasses='' invert={false} typeScale={""}/>
                 )}
 
-                <p className="mt-auto self-end">
-                    {children && (
-                        <>
+                {children && (
+                    <p className="mt-auto self-end">
                             {children}
-                        </>
-                    )}
-                </p>
+                    </p>
+                )}
                 
                 {tags && (
                     <NewsTags />

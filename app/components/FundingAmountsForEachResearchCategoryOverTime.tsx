@@ -11,7 +11,7 @@ import {CardWithOwnFiltersProps} from "../types/card-props"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function FundingAmountsforEachResearchCategoryOverTimeCard({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
+export default function FundingAmountsForEachResearchCategoryOverTimeCard({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
