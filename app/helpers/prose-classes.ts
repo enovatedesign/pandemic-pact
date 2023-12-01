@@ -4,8 +4,8 @@ export const defaultProseClasses = [
     'lg:prose-lg',
     'prose-headings:font-normal',
     'prose-a:underline',
-    'prose-a:text-primary',
-    'prose-headings:text-primary',
+    'prose-a:text-secondary',
+    'prose-headings:text-secondary',
     'prose-gray',
     'mx-auto',
 ]
