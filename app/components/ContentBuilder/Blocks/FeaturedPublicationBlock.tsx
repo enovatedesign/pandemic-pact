@@ -39,7 +39,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
         url ? 'hover:shadow-lg transition duration-300' : ''
     ].join(' ')
 
-	if (title && summary && image) {
+	if (title && summary) {
 		return (
             <BlockWrapper >
 				<div className="flex justify-center -mx-6">
@@ -62,14 +62,25 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 									condition={urlCondition}
 									wrapper={children => <a href={url}>{children}</a>}
 								>
-									<Image 
-										src={image.url}
-										alt={image.altText}
-										width={image.width}
-										height={image.height}
-										className="w-full h-full"
-										loading="lazy"
-									/>
+									{image?.url ? (
+										<Image 
+											src={image.url}
+											alt={image.altText}
+											width={image.width}
+											height={image.height}
+											className="w-full"
+											loading="lazy"
+										/>    
+									) : (
+										<Image 
+											src='/images/card-fallback/card-fallback.svg'
+											alt=''
+											width='480'
+											height='480'
+											className="w-full"
+											loading="lazy"
+										/>
+									)}
 								</ConditionalWrapper>
 							</div>
 
