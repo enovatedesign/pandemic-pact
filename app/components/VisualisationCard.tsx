@@ -19,8 +19,7 @@ interface Props {
 export default function VisualisationCard({filteredDataset, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    return <Card id={id} className="relative w-full h-[calc(100vh-50px)]">
-
+    return <Card id={id}>
         <Flex
             flexDirection="col"
             alignItems="start"
