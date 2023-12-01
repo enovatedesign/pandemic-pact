@@ -86,12 +86,12 @@ export function filterGrants(grants: any, filters: any) {
             ({values, excludeGrantsWithMultipleItems}, key) => {
                 // if the grant has multiple items in the field and the switch is on, exclude it
                 if (excludeGrantsWithMultipleItems && grant[key].length > 1) {
-                    return false;
+                    return false
                 }
 
                 // if no filter values are selected, all grants match
                 if (values.length === 0) {
-                    return true;
+                    return true
                 }
 
                 // if the grant has a single value in the field, check if it matches any of the filter values
@@ -108,4 +108,10 @@ export function filterGrants(grants: any, filters: any) {
     )
 }
 
-export const GlobalFilterContext = createContext<Filters>(emptyFilters())
+export const GlobalFilterContext = createContext<{
+    filters: Filters,
+    grants: any[],
+}>({
+    filters: emptyFilters(),
+    grants: [],
+})
