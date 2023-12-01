@@ -1,6 +1,6 @@
 "use client"
 
-import {useMemo, useState} from "react"
+import {useMemo, useState, useEffect} from "react"
 import {Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
@@ -19,6 +19,8 @@ import completeDataset from '../../data/dist/filterable-dataset.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import Button from "../components/Button"
 import {ChevronRightIcon} from "@heroicons/react/solid"
+import {throttle, debounce} from 'lodash';
+import AnimateHeight from "react-animate-height"
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
@@ -73,7 +75,7 @@ export default function Visualise() {
         {
             title: 'Disease',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            href:'#disease',
+            id:'#disease',
             image: {
                 url: '/images/visualisation-card/vis-bar-chart.png',
                 altText: 'Disease card',
@@ -84,7 +86,7 @@ export default function Visualise() {
         {
             title: 'Research Categories',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            href: '#research-category',
+            id: '#research-category',
             image: {
                 url: '/images/visualisation-card/vis-category-chart.png',
                 altText: 'Visualisations Card',
@@ -95,7 +97,7 @@ export default function Visualise() {
         {
             title: 'Geographical Distribution',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            href: '#geographical-distribution',
+            id: '#geographical-distribution',
             image: {
                 url: '/images/visualisation-card/vis-radar-chart.png',
                 altText: 'Graphical distribution and flow card',
@@ -106,7 +108,7 @@ export default function Visualise() {
         {
             title: 'Annual Trends',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            href: '#annual-trends',
+            id: '#annual-trends',
             image: {
                 url: '/images/visualisation-card/vis-line-chart.png',
                 altText: 'Visualisations Card',
@@ -116,7 +118,40 @@ export default function Visualise() {
         },
     ]
 
-    const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12'
+    const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
+    
+    const [dropdownVisible, setDropdownVisible] = useState(false)
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 1024) {
+                setDropdownVisible(true)
+            } else {
+                setDropdownVisible(false)
+            }
+        }
+
+        const debouncedHandleResize = debounce(handleResize, 200)
+        window.addEventListener('resize', debouncedHandleResize)
+
+        const handleDropdown = () => {
+            if (window.innerWidth > 1024) {
+                if (window.scrollY > 1000) {
+                    setDropdownVisible(true)
+                } else {
+                    setDropdownVisible(false)
+                }
+            }
+        }
+        const throttledHandleDropdown = throttle(handleDropdown, 200)
+        window.addEventListener('scroll', throttledHandleDropdown)
+
+        return () => {
+            window.removeEventListener('scroll', throttledHandleDropdown)
+            window.removeEventListener('resize', debouncedHandleResize)
+        }
+    }, [dropdownVisible])
+
 
     return (
         <Layout
@@ -125,10 +160,15 @@ export default function Visualise() {
             summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
             sidebar={sidebar}
         >
+            <AnimateHeight
+                duration={300}
+                height={dropdownVisible ? 'auto' : 0}
+                className="sticky w-full z-20 top-0 bg-primary-lighter"
+            >
+                <JumpMenu cardData={cardData}/>
+            </AnimateHeight>
 
-            <JumpMenu />
-
-            <section className="container mx-auto my-6 lg:my-12">
+            <section className="hidden lg:block container mx-auto my-6 lg:my-12">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {cardData.map((card, index) => 
                         (
@@ -139,11 +179,10 @@ export default function Visualise() {
                                 image={card.image}
                             >
                                 <Button 
-                                    href={card.href}
+                                    href={card.id}
                                     size="small"
-                                    customClasses=""
                                 >
-                                    <ChevronRightIcon className="text-white w-6 h-6" />
+                                    <ChevronRightIcon className="text-white w-6 h-6"/>
                                 </Button>
                             </Card>
                         )

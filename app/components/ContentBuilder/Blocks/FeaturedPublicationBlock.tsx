@@ -39,7 +39,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
         url ? 'hover:shadow-lg transition duration-300' : ''
     ].join(' ')
 
-	if (title && summary) {
+	if (title) {
 		return (
             <BlockWrapper >
 				<div className="flex justify-center -mx-6">

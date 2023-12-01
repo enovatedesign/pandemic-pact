@@ -19,15 +19,12 @@ interface Props {
 export default function VisualisationCard({filteredDataset, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    return <Card id={id} className="relative">
-
-        {/* Offset the anchor position to allow for the sticky JumpMenu bar */}
-        <a id={`${id}-anchor`} className="absolute top-0 lg:-top-20"></a>
+    return <Card id={id} className="relative w-full h-[calc(100vh-50px)]">
 
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="gap-y-6"
+            className="gap-y-6 h-full w-full"
         >
             <Flex
                 flexDirection="col"
