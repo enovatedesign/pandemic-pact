@@ -19,7 +19,7 @@ import completeDataset from '../../data/dist/filterable-dataset.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import Button from "../components/Button"
 import {ChevronRightIcon} from "@heroicons/react/solid"
-import {throttle, debounce} from 'lodash';
+import {throttle, debounce} from 'lodash'
 import AnimateHeight from "react-animate-height"
 
 export default function Visualise() {
@@ -154,7 +154,7 @@ export default function Visualise() {
 
 
     return (
-        <GlobalFilterContext.Provider value={selectedFilters}>
+        <GlobalFilterContext.Provider value={{filters: selectedFilters, grants: globallyFilteredDataset}}>
             <Layout
                 title="Interactive Charts"
                 showSummary={true}
