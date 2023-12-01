@@ -11,6 +11,7 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
 import {debounce} from 'lodash';
+import InfoModal from "../../components/InfoModal"
 
 interface Props {
     grant: any
@@ -85,10 +86,12 @@ export default function StaticPage({grant}: Props) {
         {
             text: 'Age Group',
             metric: grant.AgeGroups,
+            infoModalText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
         },
         {
             text: 'Vulnerable Population',
             metric: grant.VulnerablePopulations,
+            infoModalText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
         },
         {
             text: 'Occupations of Interest',
@@ -299,12 +302,36 @@ export default function StaticPage({grant}: Props) {
                                             ].join(' ')
                                             return (
                                                 <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
-                                                    <p className='uppercase text-xs tracking-widest font-bold'>
-                                                        {subHeading.text}
-                                                    </p>
-                                                    <p className='font-bold text-lg lg:text-xl'>
-                                                        {subHeading.metric}
-                                                    </p>
+
+                                                    {subHeading.infoModalText ? (
+                                                        <div className="flex items-center space-x-2">
+                                                            {subHeading.text && (
+                                                                <p className='uppercase text-xs tracking-widest font-bold'>
+                                                                    {subHeading.text}
+                                                                </p>
+                                                            )}
+                                                            <InfoModal>
+                                                                <p>
+                                                                    {subHeading.infoModalText}
+                                                                </p>
+                                                            </InfoModal>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {subHeading.text && (
+                                                                <p className='uppercase text-xs tracking-widest font-bold'>
+                                                                    {subHeading.text}
+                                                                </p>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                    
+                                                    {subHeading.metric && (
+                                                        <p className='font-bold text-lg lg:text-xl'>
+                                                            {subHeading.metric}
+                                                        </p>
+                                                    )}
+
                                                 </li>
                                             )
                                         })}
