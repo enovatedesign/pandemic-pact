@@ -14,7 +14,7 @@ import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
 import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
-import {emptyFilters, filterGrants} from "../helpers/filter"
+import {emptyFilters, filterGrants, GlobalFilterContext} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import Button from "../components/Button"
@@ -75,7 +75,7 @@ export default function Visualise() {
         {
             title: 'Disease',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            id:'#disease',
+            id: '#disease',
             image: {
                 url: '/images/visualisation-card/vis-bar-chart.png',
                 altText: 'Disease card',
@@ -119,7 +119,7 @@ export default function Visualise() {
     ]
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
-    
+
     const [dropdownVisible, setDropdownVisible] = useState(false)
 
     useEffect(() => {
@@ -154,122 +154,122 @@ export default function Visualise() {
 
 
     return (
-        <Layout
-            title="Interactive Charts"
-            showSummary={true}
-            summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
-            sidebar={sidebar}
-        >
-            <AnimateHeight
-                duration={300}
-                height={dropdownVisible ? 'auto' : 0}
-                className="sticky w-full z-20 top-0 bg-primary-lighter"
+        <GlobalFilterContext.Provider value={selectedFilters}>
+            <Layout
+                title="Interactive Charts"
+                showSummary={true}
+                summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+                sidebar={sidebar}
             >
-                <JumpMenu cardData={cardData}/>
-            </AnimateHeight>
+                <AnimateHeight
+                    duration={300}
+                    height={dropdownVisible ? 'auto' : 0}
+                    className="sticky w-full z-20 top-0 bg-primary-lighter"
+                >
+                    <JumpMenu cardData={cardData} />
+                </AnimateHeight>
 
-            <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {cardData.map((card, index) => 
+                <section className="hidden lg:block container mx-auto my-6 lg:my-12">
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {cardData.map((card, index) =>
                         (
-                            <Card 
-                                key={index} 
-                                entry={card} 
-                                tags={false} 
+                            <Card
+                                key={index}
+                                entry={card}
+                                tags={false}
                                 image={card.image}
                             >
-                                <Button 
+                                <Button
                                     href={card.id}
                                     size="small"
                                 >
-                                    <ChevronRightIcon className="text-white w-6 h-6"/>
+                                    <ChevronRightIcon className="text-white w-6 h-6" />
                                 </Button>
                             </Card>
                         )
-                    )}
-                        
-                </div>
-            </section>
+                        )}
 
-            <div className="container relative z-10 mx-auto my-6 lg:my-12">
-                <div
-                    className={`${gridClasses} mt-6`}
-                >
-                    <div id='disease' className={gridClasses}>
-                        <GrantsByDiseaseCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
                     </div>
-                    
-                    <div id='research-category' className={gridClasses}>
-                        <GrantsByResearchCategoryCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </div>
-                    
-                    <div id='geographical-distribution' className={gridClasses}>
-                        <GrantsByCountryWhereResearchWasConductedCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
+                </section>
 
-                        <GrantsPerResearchCategoryByRegion
-                            globallyFilteredDataset={globallyFilteredDataset}
-                            selectedFilters={selectedFilters}
-                        />
-
-                        <RegionalFlowOfGrantsCard
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </div>
-
-                    <div id='annual-trends'>
-                        <FundingAmountsForEachResearchCategoryOverTime
-                            selectedFilters={selectedFilters}
-                            globallyFilteredDataset={globallyFilteredDataset}
-                        />
-                    </div>
-                    
-                    <VisualisationCard
-                        filteredDataset={globallyFilteredDataset}
-                        id="disease-word-cloud"
-                        title="Word cloud showing the funding for infectious diseases with a pandemic potential"
+                <div className="container relative z-10 mx-auto my-6 lg:my-12">
+                    <div
+                        className={`${gridClasses} mt-6`}
                     >
-                        <div className="w-full">
-                            <WordCloud
-                                filterKey="Disease"
-                                randomSeedString="2324234234"
+                        <div id='disease' className={gridClasses}>
+                            <GrantsByDiseaseCard
+                                globallyFilteredDataset={globallyFilteredDataset}
                             />
                         </div>
 
-                        <div>
-                            <Text>
-                                The amount of funding is represented by the size of the word
-                            </Text>
-                        </div>
-                    </VisualisationCard>
-
-                    <VisualisationCard
-                        filteredDataset={globallyFilteredDataset}
-                        id="pathogen-word-cloud"
-                        title="Word cloud showing the funding for priority pathogens"
-                    >
-                        <div className="w-full">
-                            <WordCloud
-                                filterKey="Pathogen"
-                                randomSeedString="2324234234"
+                        <div id='research-category' className={gridClasses}>
+                            <GrantsByResearchCategoryCard
+                                globallyFilteredDataset={globallyFilteredDataset}
                             />
                         </div>
 
-                        <div>
-                            <Text>
-                                The amount of funding is represented by the size of the word
-                            </Text>
-                        </div>
-                    </VisualisationCard>
+                        <div id='geographical-distribution' className={gridClasses}>
+                            <GrantsByCountryWhereResearchWasConductedCard
+                                globallyFilteredDataset={globallyFilteredDataset}
+                            />
 
-                    
+                            <GrantsPerResearchCategoryByRegion
+                                globallyFilteredDataset={globallyFilteredDataset}
+                                selectedFilters={selectedFilters}
+                            />
+
+                            <RegionalFlowOfGrantsCard
+                                globallyFilteredDataset={globallyFilteredDataset}
+                            />
+                        </div>
+
+                        <div id='annual-trends'>
+                            <FundingAmountsForEachResearchCategoryOverTime
+                                selectedFilters={selectedFilters}
+                                globallyFilteredDataset={globallyFilteredDataset}
+                            />
+                        </div>
+
+                        <VisualisationCard
+                            filteredDataset={globallyFilteredDataset}
+                            id="disease-word-cloud"
+                            title="Word cloud showing the funding for infectious diseases with a pandemic potential"
+                        >
+                            <div className="w-full">
+                                <WordCloud
+                                    filterKey="Disease"
+                                    randomSeedString="2324234234"
+                                />
+                            </div>
+
+                            <div>
+                                <Text>
+                                    The amount of funding is represented by the size of the word
+                                </Text>
+                            </div>
+                        </VisualisationCard>
+
+                        <VisualisationCard
+                            filteredDataset={globallyFilteredDataset}
+                            id="pathogen-word-cloud"
+                            title="Word cloud showing the funding for priority pathogens"
+                        >
+                            <div className="w-full">
+                                <WordCloud
+                                    filterKey="Pathogen"
+                                    randomSeedString="2324234234"
+                                />
+                            </div>
+
+                            <div>
+                                <Text>
+                                    The amount of funding is represented by the size of the word
+                                </Text>
+                            </div>
+                        </VisualisationCard>
+                    </div>
                 </div>
-            </div>
-        </Layout>
+            </Layout>
+        </GlobalFilterContext.Provider>
     )
 }

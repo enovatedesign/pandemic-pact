@@ -1,4 +1,6 @@
+import {createContext} from 'react'
 import {every} from 'lodash'
+import {Filters} from '../types/filters'
 
 export function availableFilters() {
     return [
@@ -105,3 +107,5 @@ export function filterGrants(grants: any, filters: any) {
         )
     )
 }
+
+export const GlobalFilterContext = createContext<Filters>(emptyFilters())
