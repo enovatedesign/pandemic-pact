@@ -26,7 +26,7 @@ type Props = {
 
 const ListTeamMembersBlock = ({block}: Props) => {
 
-    const heading = block.heading ?? 'Meet the team'
+    const heading = block.heading ?? null
     const summary = block.summary ?? null
     const customEntries = block.customEntries ?? null
     
