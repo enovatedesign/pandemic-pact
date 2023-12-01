@@ -6,7 +6,7 @@ import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
 
 interface Props {
-    filteredDataset: any[],
+    grants: any[],
     id: string
     title: string
     subtitle?: string
@@ -16,7 +16,7 @@ interface Props {
     tabs?: Array<{tab: {icon: ElementType, label: string}, content: ReactNode}>
 }
 
-export default function VisualisationCard({filteredDataset, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
+export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     return <Card id={id}>
@@ -63,7 +63,7 @@ export default function VisualisationCard({filteredDataset, id, title, subtitle,
                     imageFilename={id}
                     dataFilename={id}
                     meilisearchRequestBody={
-                        exportRequestBodyFilteredToMatchingGrants(filteredDataset)
+                        exportRequestBodyFilteredToMatchingGrants(grants)
                     }
                 />
 

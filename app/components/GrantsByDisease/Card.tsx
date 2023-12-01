@@ -1,25 +1,28 @@
+import {useContext} from "react"
 import {Title, Text} from "@tremor/react"
 import {ChartBarIcon, ClockIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
 import TemporalChart from "./TemporalChart"
-import {type CardProps} from "../../types/card-props"
+import {GlobalFilterContext} from "../../helpers/filter"
 
-export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
+export default function GrantsByDisease() {
+    const {grants} = useContext(GlobalFilterContext)
+
     const tabs = [
         {
             tab: {
                 icon: ClockIcon,
                 label: "Temporal",
             },
-            content: <TemporalChart globallyFilteredDataset={globallyFilteredDataset} />,
+            content: <TemporalChart />,
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: "Bars",
             },
-            content: <BarChart globallyFilteredDataset={globallyFilteredDataset} />,
+            content: <BarChart />,
         },
     ]
 
@@ -33,7 +36,7 @@ export default function GrantsByDisease({globallyFilteredDataset}: CardProps) {
 
     return (
         <VisualisationCard
-            filteredDataset={globallyFilteredDataset}
+            grants={grants}
             id="grants-by-disease"
             title="Global annual funding for research on diseases with a pandemic potential"
             subtitle="Total number of grants and US dollars committed for each disease"

@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
 import {Text} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
@@ -7,8 +7,11 @@ import {type CardWithOwnFiltersProps} from "../types/card-props"
 import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/filterable-dataset.json'
 import {filterGrants} from "../helpers/filter"
+import {GlobalFilterContext} from "../helpers/filter";
 
-export default function GrantsPerResearchCategoryByRegion({globallyFilteredDataset, selectedFilters}: CardWithOwnFiltersProps) {
+export default function GrantsPerResearchCategoryByRegion({selectedFilters}: CardWithOwnFiltersProps) {
+    const {grants: globalGrants} = useContext(GlobalFilterContext)
+
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(['1', '2', '7'])
 
     const filteredDataset = filterGrants(
@@ -70,7 +73,7 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
 
     return (
         <VisualisationCard
-            filteredDataset={filteredDataset}
+            grants={filteredDataset}
             id="grant-per-research-category-by-region"
             title="Regional Distribution of Funding for Research Category"
             subtitle="Each research category is shown in a different colour"
@@ -86,7 +89,7 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
                         className="max-w-xs ignore-in-image-export"
                     />
 
-                    {filteredDataset.length < globallyFilteredDataset.length &&
+                    {filteredDataset.length < globalGrants.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </div>

@@ -1,4 +1,4 @@
-import {useState, useMemo} from 'react'
+import {useState, useMemo, useContext} from 'react'
 import {useRouter} from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
@@ -6,6 +6,7 @@ import DoubleLabelSwitch from "../DoubleLabelSwitch"
 import {scaleLinear} from "d3-scale"
 import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
+import {GlobalFilterContext} from "../../helpers/filter"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -13,11 +14,9 @@ import {sumNumericGrantAmounts} from "../../helpers/reducers"
 
 const ColourScale = dynamic(() => import('./ColourScale'), {ssr: false})
 
-interface Props {
-    dataset: any[]
-}
+export default function Map() {
+    const {grants: dataset} = useContext(GlobalFilterContext)
 
-export default function Map({dataset}: Props) {
     const router = useRouter()
 
     const [tooltipContent, setTooltipContent] = useState('')

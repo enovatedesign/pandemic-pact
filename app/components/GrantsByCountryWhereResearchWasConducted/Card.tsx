@@ -1,30 +1,33 @@
+import {useContext} from "react"
 import VisualisationCard from "../VisualisationCard"
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
+import {GlobalFilterContext} from "../../helpers/filter"
 import Map from "./Map"
 import BarChart from "./BarChart"
-import {type CardProps} from "../../types/card-props"
 
-export default function GrantsByCountryWhereResearchWasConductedCard({globallyFilteredDataset}: CardProps) {
+export default function GrantsByCountryWhereResearchWasConductedCard() {
+    const {grants} = useContext(GlobalFilterContext)
+
     const tabs = [
         {
             tab: {
                 icon: GlobeIcon,
                 label: "Map",
             },
-            content: <Map dataset={globallyFilteredDataset} />
+            content: <Map />
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: "Bars",
             },
-            content: <BarChart dataset={globallyFilteredDataset} />
+            content: <BarChart />
         },
     ]
 
     return (
         <VisualisationCard
-            filteredDataset={globallyFilteredDataset}
+            grants={grants}
             id="grants-by-country-where-research-was-conducted"
             title="Global Map Showing Locations of Research Funders or Where Research Will Be Conducted"
             subtitle="The information on the research location was collected where available from the grant application, and can be different to the location of research institution."

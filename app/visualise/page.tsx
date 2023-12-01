@@ -197,41 +197,27 @@ export default function Visualise() {
                         className={`${gridClasses} mt-6`}
                     >
                         <div id='disease' className={gridClasses}>
-                            <GrantsByDiseaseCard
-                                globallyFilteredDataset={globallyFilteredDataset}
-                            />
+                            <GrantsByDiseaseCard />
                         </div>
 
                         <div id='research-category' className={gridClasses}>
-                            <GrantsByResearchCategoryCard
-                                globallyFilteredDataset={globallyFilteredDataset}
-                            />
+                            <GrantsByResearchCategoryCard />
                         </div>
 
                         <div id='geographical-distribution' className={gridClasses}>
-                            <GrantsByCountryWhereResearchWasConductedCard
-                                globallyFilteredDataset={globallyFilteredDataset}
-                            />
+                            <GrantsByCountryWhereResearchWasConductedCard />
 
-                            <GrantsPerResearchCategoryByRegion
-                                globallyFilteredDataset={globallyFilteredDataset}
-                                selectedFilters={selectedFilters}
-                            />
+                            <GrantsPerResearchCategoryByRegion selectedFilters={selectedFilters} />
 
-                            <RegionalFlowOfGrantsCard
-                                globallyFilteredDataset={globallyFilteredDataset}
-                            />
+                            <RegionalFlowOfGrantsCard />
                         </div>
 
                         <div id='annual-trends'>
-                            <FundingAmountsForEachResearchCategoryOverTime
-                                selectedFilters={selectedFilters}
-                                globallyFilteredDataset={globallyFilteredDataset}
-                            />
+                            <FundingAmountsForEachResearchCategoryOverTime selectedFilters={selectedFilters} />
                         </div>
 
                         <VisualisationCard
-                            filteredDataset={globallyFilteredDataset}
+                            grants={globallyFilteredDataset}
                             id="disease-word-cloud"
                             title="Word cloud showing the funding for infectious diseases with a pandemic potential"
                         >
@@ -250,7 +236,7 @@ export default function Visualise() {
                         </VisualisationCard>
 
                         <VisualisationCard
-                            filteredDataset={globallyFilteredDataset}
+                            grants={globallyFilteredDataset}
                             id="pathogen-word-cloud"
                             title="Word cloud showing the funding for priority pathogens"
                         >
