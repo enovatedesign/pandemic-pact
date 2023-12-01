@@ -50,7 +50,7 @@ export default function Header({className}: {className?: string}) {
             alt="Pandemic Pact"
             width={192}
             height={95}
-            className="w-36 h-auto lg:w-48"
+            className="-ml-2.5 lg:-ml-4 w-36 h-auto lg:w-48"
         />
     )
 
