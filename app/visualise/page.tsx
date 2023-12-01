@@ -9,13 +9,16 @@ import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
-import FundingAmountsforEachResearchCategoryOverTime from "../components/FundingAmountsforEachResearchCategoryOverTime"
+import FundingAmountsForEachResearchCategoryOverTime from "../components/FundingAmountsForEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
 import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
+import Card from "../components/ContentBuilder/Common/Card"
+import Button from "../components/Button"
+import {ChevronRightIcon} from "@heroicons/react/solid"
 
 export default function Visualise() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
@@ -66,6 +69,55 @@ export default function Visualise() {
         }
     }, [selectedFilters, globallyFilteredDataset])
 
+    const cardData = [
+        {
+            title: 'Disease',
+            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            href:'#disease',
+            image: {
+                url: '/images/visualisation-card/vis-bar-chart.png',
+                altText: 'Disease card',
+                width: 480,
+                height: 480,
+            }
+        },
+        {
+            title: 'Research Categories',
+            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            href: '#research-category',
+            image: {
+                url: '/images/visualisation-card/vis-category-chart.png',
+                altText: 'Visualisations Card',
+                width: 480,
+                height: 480,
+            }
+        },
+        {
+            title: 'Geographical Distribution',
+            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            href: '#geographical-distribution',
+            image: {
+                url: '/images/visualisation-card/vis-radar-chart.png',
+                altText: 'Graphical distribution and flow card',
+                width: 480,
+                height: 480,
+            }
+        },
+        {
+            title: 'Annual Trends',
+            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            href: '#annual-trends',
+            image: {
+                url: '/images/visualisation-card/vis-line-chart.png',
+                altText: 'Visualisations Card',
+                width: 480,
+                height: 480,
+            }
+        },
+    ]
+
+    const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12'
+
     return (
         <Layout
             title="Interactive Charts"
@@ -76,36 +128,68 @@ export default function Visualise() {
 
             <JumpMenu />
 
+            <section className="container mx-auto my-6 lg:my-12">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {cardData.map((card, index) => 
+                        (
+                            <Card 
+                                key={index} 
+                                entry={card} 
+                                tags={false} 
+                                image={card.image}
+                            >
+                                <Button 
+                                    href={card.href}
+                                    size="small"
+                                    customClasses=""
+                                >
+                                    <ChevronRightIcon className="text-white w-6 h-6" />
+                                </Button>
+                            </Card>
+                        )
+                    )}
+                        
+                </div>
+            </section>
+
             <div className="container relative z-10 mx-auto my-6 lg:my-12">
                 <div
-                    className="mt-6 grid grid-cols-1 gap-6 lg:gap-12"
+                    className={`${gridClasses} mt-6`}
                 >
-                    <GrantsByDiseaseCard
-                        globallyFilteredDataset={globallyFilteredDataset}
-                    />
+                    <div id='disease' className={gridClasses}>
+                        <GrantsByDiseaseCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </div>
+                    
+                    <div id='research-category' className={gridClasses}>
+                        <GrantsByResearchCategoryCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </div>
+                    
+                    <div id='geographical-distribution' className={gridClasses}>
+                        <GrantsByCountryWhereResearchWasConductedCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
 
-                    <GrantsByResearchCategoryCard
-                        globallyFilteredDataset={globallyFilteredDataset}
-                    />
+                        <GrantsPerResearchCategoryByRegion
+                            globallyFilteredDataset={globallyFilteredDataset}
+                            selectedFilters={selectedFilters}
+                        />
 
-                    <GrantsByCountryWhereResearchWasConductedCard
-                        globallyFilteredDataset={globallyFilteredDataset}
-                    />
+                        <RegionalFlowOfGrantsCard
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </div>
 
-                    <FundingAmountsforEachResearchCategoryOverTime
-                        selectedFilters={selectedFilters}
-                        globallyFilteredDataset={globallyFilteredDataset}
-                    />
-
-                    <GrantsPerResearchCategoryByRegion
-                        globallyFilteredDataset={globallyFilteredDataset}
-                        selectedFilters={selectedFilters}
-                    />
-
-                    <RegionalFlowOfGrantsCard
-                        globallyFilteredDataset={globallyFilteredDataset}
-                    />
-
+                    <div id='annual-trends'>
+                        <FundingAmountsForEachResearchCategoryOverTime
+                            selectedFilters={selectedFilters}
+                            globallyFilteredDataset={globallyFilteredDataset}
+                        />
+                    </div>
+                    
                     <VisualisationCard
                         filteredDataset={globallyFilteredDataset}
                         id="disease-word-cloud"
@@ -143,6 +227,8 @@ export default function Visualise() {
                             </Text>
                         </div>
                     </VisualisationCard>
+
+                    
                 </div>
             </div>
         </Layout>

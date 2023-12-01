@@ -7,7 +7,7 @@ import ConditionalWrapper from "../../ConditionalWrapper"
 type Props = {
     entry: any,
     tags?: boolean, 
-    children: any,
+    children?: any,
     image?: {
         altText: string,
         url: string, 
@@ -31,7 +31,7 @@ const Card = ({entry, tags = false, children, image}: Props) => {
         thumbnailImage,
     } = entry
 
-    const cardImage = thumbnailImage ? thumbnailImage[0] : image 
+    const cardImage = thumbnailImage ? thumbnailImage[0] : image
 
     const urlCondition = url?.startsWith('http');
 
@@ -54,7 +54,6 @@ const Card = ({entry, tags = false, children, image}: Props) => {
             once: true,
         }
     );
-
     return (
         <animated.article key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden ${hoverClasses}`}
@@ -64,14 +63,14 @@ const Card = ({entry, tags = false, children, image}: Props) => {
             <ConditionalWrapper
                 condition={urlCondition}
                 wrapper={children => <a href={url}>{children}</a>}
-            >
-                {cardImage?.url && (
-                    <div className="relative">
-                        {imageLabel && (
-                            <div className="absolute top-6 left-0 bg-black/50 text-white ring-2 ring-white/20 text-sm font-bold tracking-widest uppercase px-6 py-2 rounded-r-full">
-                                {imageLabel}
-                            </div>
-                        )}
+            >   
+                <div className="relative">
+                    {imageLabel && (
+                        <div className="absolute top-6 left-0 bg-black/50 text-white ring-2 ring-white/20 text-sm font-bold tracking-widest uppercase px-6 py-2 rounded-r-full">
+                            {imageLabel}
+                        </div>
+                    )}
+                    {cardImage?.url ? (
                         <Image 
                             src={cardImage.url}
                             alt={cardImage.altText}
@@ -79,9 +78,18 @@ const Card = ({entry, tags = false, children, image}: Props) => {
                             height={cardImage.height}
                             className="w-full"
                             loading="lazy"
+                        />    
+                    ) : (
+                        <Image 
+                            src='/images/card-fallback/card-fallback.svg'
+                            alt=''
+                            width='480'
+                            height='480'
+                            className="w-full"
+                            loading="lazy"
                         />
-                    </div>
-                )}
+                    )}
+                </div>                
             </ConditionalWrapper>
             
             <div className="flex flex-col gap-3 p-6 h-full">
@@ -108,13 +116,11 @@ const Card = ({entry, tags = false, children, image}: Props) => {
                     <RichText text={text} customClasses='' invert={false} typeScale={""}/>
                 )}
 
-                <p className="mt-auto self-end">
-                    {children && (
-                        <>
+                {children && (
+                    <p className="mt-auto self-end">
                             {children}
-                        </>
-                    )}
-                </p>
+                    </p>
+                )}
                 
                 {tags && (
                     <NewsTags />

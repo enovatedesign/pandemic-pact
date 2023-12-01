@@ -24,12 +24,16 @@ export const links = {
         href: '/about',
         subPages: [
             {
+                label: 'Overview', 
+                href: '/about/overview',
+            },
+            {
                 label: 'Meet the Team',
                 href: '/about/meet-the-team',
             },
             {
                 label: 'Funders',
-                href: '/funders',
+                href: '/about/funders',
             },
         ],
     },

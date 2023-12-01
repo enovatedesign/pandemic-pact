@@ -10,10 +10,6 @@ export const seomaticQuery = `
   }
 `
 
-export const newsEntriesQuery = `
-    
-`
-
 export const contentBuilderQuery = `
     bodyContent(status: "enabled") {
         ... on bodyContent_richText_BlockType {
