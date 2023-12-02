@@ -48,7 +48,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                     </Flex>
 
                     {numberOfActiveFilters > 0 &&
-                        <p class="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
+                        <p className="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
                     }
                 </Flex>
 
