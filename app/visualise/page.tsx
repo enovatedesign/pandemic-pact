@@ -1,17 +1,16 @@
 "use client"
 
 import {useMemo, useState, useEffect, useRef} from "react"
-import {Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
-import VisualisationCard from "../components/VisualisationCard"
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import FundingAmountsForEachResearchCategoryOverTime from "../components/FundingAmountsForEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
-import WordCloud from "../components/WordCloud"
+import DiseaseWordCloud from "../components/DiseaseWordCloud"
+import PathogenWordCloud from "../components/PathogenWordCloud"
 import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
 import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
@@ -217,43 +216,9 @@ export default function Visualise() {
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
 
-                            <VisualisationCard
-                                grants={globallyFilteredDataset}
-                                id="disease-word-cloud"
-                                title="Word cloud showing the funding for infectious diseases with a pandemic potential"
-                            >
-                                <div className="w-full">
-                                    <WordCloud
-                                        filterKey="Disease"
-                                        randomSeedString="2324234234"
-                                    />
-                                </div>
+                            <DiseaseWordCloud />
 
-                                <div>
-                                    <Text>
-                                        The amount of funding is represented by the size of the word
-                                    </Text>
-                                </div>
-                            </VisualisationCard>
-
-                            <VisualisationCard
-                                grants={globallyFilteredDataset}
-                                id="pathogen-word-cloud"
-                                title="Word cloud showing the funding for priority pathogens"
-                            >
-                                <div className="w-full">
-                                    <WordCloud
-                                        filterKey="Pathogen"
-                                        randomSeedString="2324234234"
-                                    />
-                                </div>
-
-                                <div>
-                                    <Text>
-                                        The amount of funding is represented by the size of the word
-                                    </Text>
-                                </div>
-                            </VisualisationCard>
+                            <PathogenWordCloud />
                         </div>
 
                         <Tooltip
