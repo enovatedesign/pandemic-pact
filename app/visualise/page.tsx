@@ -14,7 +14,7 @@ import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloud from "../components/WordCloud"
 import JumpMenu from "../components/JumpMenu"
 import {type Filters} from "../types/filters"
-import {emptyFilters, filterGrants, GlobalFilterContext} from "../helpers/filter"
+import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import completeDataset from '../../data/dist/filterable-dataset.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import Button from "../components/Button"
@@ -33,10 +33,7 @@ export default function Visualise() {
     )
 
     const sidebar = useMemo(() => {
-        const numberOfActiveFilters = Object.values(selectedFilters).filter(
-            filter => filter.values.length > 0,
-        ).length
-
+        const numberOfActiveFilters = countActiveFilters(selectedFilters)
         return {
             openContent: (
                 <FilterSidebar
