@@ -51,8 +51,6 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
         }
     })
 
-    console.log(data);
-
     // Ensures the word cloud displays the same on page refresh
     const fixedRandom = seedrandom(randomSeedString)
 
