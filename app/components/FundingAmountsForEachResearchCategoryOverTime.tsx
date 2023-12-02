@@ -8,12 +8,11 @@ import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
-import {CardWithOwnFiltersProps} from "../types/card-props"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function FundingAmountsForEachResearchCategoryOverTimeCard({selectedFilters}: CardWithOwnFiltersProps) {
-    const {grants: globalGrants} = useContext(GlobalFilterContext)
+export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
+    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
 
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 

@@ -3,14 +3,13 @@ import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContain
 import {Text} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
-import {type CardWithOwnFiltersProps} from "../types/card-props"
 import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/filterable-dataset.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
 
-export default function GrantsPerResearchCategoryByRegion({selectedFilters}: CardWithOwnFiltersProps) {
-    const {grants: globalGrants} = useContext(GlobalFilterContext)
+export default function GrantsPerResearchCategoryByRegion() {
+    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
 
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(['1', '2', '7'])
 
