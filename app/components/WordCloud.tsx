@@ -3,9 +3,11 @@
 import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
 import WordCloudComponent from 'react-d3-cloud'
+import {uniq} from 'lodash'
 import {GlobalFilterContext} from "../helpers/filter"
 import {TooltipContext} from '../helpers/tooltip'
-
+import {dollarValueFormatter} from "../helpers/value-formatters"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
 import font from '../globals/font'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
@@ -19,7 +21,7 @@ interface Props {
 
 export default function WordCloud({filterKey, randomSeedString, width = 500, height = 300}: Props) {
     const {tooltipRef} = useContext(TooltipContext)
-    const {grants: dataset} = useContext(GlobalFilterContext)
+    const {grants: globalGrants} = useContext(GlobalFilterContext)
 
     const [isMounted, setIsMounted] = useState(false)
 
@@ -30,26 +32,26 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
 
     if (!filterKey || !randomSeedString) return null
 
-    const results = dataset.reduce((acc, obj) => {
-        const filterValue = obj[filterKey as keyof typeof obj]
+    const options = uniq(
+        globalGrants.map((grant: any) => grant[filterKey]).flat()
+    )
 
-        if (Array.isArray(filterValue)) {
-            filterValue.forEach((item: any) => {
-                if (!acc[item]) {
-                    acc[item] = []
-                }
+    const data = options.map(function (option) {
+        const grants = globalGrants.filter(
+            (grant: any) => grant[filterKey].includes(option)
+        )
 
-                acc[item].push(obj.GrantID);
-            })
+        const moneyCommitted = grants.reduce(...sumNumericGrantAmounts)
+
+        return {
+            text: option,
+            value: grants.length * 75,
+            "Total Number Of Grants": grants.length,
+            "Amount Committed": moneyCommitted,
         }
+    })
 
-        return acc
-    }, {} as {[key: string]: number[]})
-
-    const data = Object.keys(results).map((key) => ({
-        text: key,
-        value: results[key as keyof typeof results].length * 75
-    }))
+    console.log(data);
 
     // Ensures the word cloud displays the same on page refresh
     const fixedRandom = seedrandom(randomSeedString)
@@ -100,7 +102,8 @@ function TooltipContent({data}: any) {
     return (
         <div className="flex flex-col">
             <p className="text-lg font-bold">{data.text}</p>
-            <p className="text-md">{data.value} grants</p>
+            <p className="text-md">Grants: {data['Total Number Of Grants']}</p>
+            <p className="text-md">Amount Committed: {dollarValueFormatter(data['Amount Committed'] || 0)}</p>
         </div>
     )
 }
