@@ -98,8 +98,8 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
 function TooltipContent({data}: any) {
     return (
         <div className="flex flex-col">
-            <span className="text-lg font-bold">{data.text}</span>
-            <span className="text-sm">{data.value} grants</span>
+            <p className="text-lg font-bold">{data.text}</p>
+            <p className="text-md">{data.value} grants</p>
         </div>
     )
 }
