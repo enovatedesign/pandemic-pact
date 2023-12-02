@@ -204,13 +204,13 @@ export default function Visualise() {
                         <div id='geographical-distribution' className={gridClasses}>
                             <GrantsByCountryWhereResearchWasConductedCard />
 
-                            <GrantsPerResearchCategoryByRegion selectedFilters={selectedFilters} />
+                            <GrantsPerResearchCategoryByRegion />
 
                             <RegionalFlowOfGrantsCard />
                         </div>
 
                         <div id='annual-trends'>
-                            <FundingAmountsForEachResearchCategoryOverTime selectedFilters={selectedFilters} />
+                            <FundingAmountsForEachResearchCategoryOverTime />
                         </div>
 
                         <VisualisationCard
