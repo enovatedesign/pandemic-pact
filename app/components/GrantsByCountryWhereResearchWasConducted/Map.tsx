@@ -72,14 +72,13 @@ export default function Map() {
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const onGeoMouseEnterOrMove = (event: MouseEvent<SVGPathElement>, geo: any) => {
+    const onGeoMouseEnter = (event: MouseEvent<SVGPathElement>, geo: any) => {
         tooltipRef?.current?.open({
             position: {
                 x: event.clientX,
                 y: event.clientY,
             },
-            place: 'bottom',
-            content: 'Where am I? 😕😕',
+            content: <TooltipContent geo={geo} displayWhoRegions={displayWhoRegions} />,
         })
     }
 
@@ -108,8 +107,8 @@ export default function Map() {
                                 strokeWidth={1}
                                 className="cursor-pointer"
                                 onClick={() => onGeoClick(geo)}
-                                onMouseEnter={event => onGeoMouseEnterOrMove(event, geo)}
-                                onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
+                                onMouseEnter={event => onGeoMouseEnter(event, geo)}
+                                onMouseMove={event => onGeoMouseEnter(event, geo)}
                                 onMouseLeave={onGeoMouseLeave}
                             />
                         ))
@@ -141,6 +140,21 @@ export default function Map() {
                 </div>
             </div>
         </div >
+    )
+}
+
+function TooltipContent({geo, displayWhoRegions}: {geo: any, displayWhoRegions: boolean}) {
+    return (
+        <div className="flex flex-col gap-y-4">
+            <p className="font-bold text-lg">{geo.properties.NAME}</p>
+
+            <div>
+                <p className="text-md">Grants: {geo.properties.totalGrants || 0}</p>
+                <p className="text-md">Amount Committed: {dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+            </div>
+
+            <p className="text-md italic">Click to explore grants in this {displayWhoRegions ? 'region' : 'country'}</p>
+        </div>
     )
 }
 

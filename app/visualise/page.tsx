@@ -259,6 +259,11 @@ export default function Visualise() {
                         <Tooltip
                             ref={tooltipRef}
                             imperativeModeOnly
+                            noArrow
+                            place="right-start"
+                            offset={10}
+                            variant="light"
+                            className="!px-3 !py-2 text-left"
                         />
                     </div>
                 </Layout>
