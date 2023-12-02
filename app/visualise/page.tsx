@@ -1,6 +1,6 @@
 "use client"
 
-import {useMemo, useState, useEffect} from "react"
+import {useMemo, useState, useEffect, useRef} from "react"
 import {Text} from "@tremor/react"
 import Layout from "../components/Layout"
 import FilterSidebar from "../components/FilterSidebar"
@@ -21,8 +21,12 @@ import Button from "../components/Button"
 import {ChevronRightIcon} from "@heroicons/react/solid"
 import {throttle, debounce} from 'lodash'
 import AnimateHeight from "react-animate-height"
+import {Tooltip, TooltipRefProps} from 'react-tooltip'
+import {TooltipContext} from '../helpers/tooltip'
 
 export default function Visualise() {
+    const tooltipRef = useRef<TooltipRefProps>(null)
+
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
         emptyFilters(),
     )
@@ -149,110 +153,117 @@ export default function Visualise() {
         }
     }, [dropdownVisible])
 
-
     return (
         <GlobalFilterContext.Provider value={{filters: selectedFilters, grants: globallyFilteredDataset}}>
-            <Layout
-                title="Interactive Charts"
-                showSummary={true}
-                summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
-                sidebar={sidebar}
-            >
-                <AnimateHeight
-                    duration={300}
-                    height={dropdownVisible ? 'auto' : 0}
-                    className="sticky w-full z-20 top-0 bg-primary-lighter"
+            <TooltipContext.Provider value={{tooltipRef}}>
+                <Layout
+                    title="Interactive Charts"
+                    showSummary={true}
+                    summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+                    sidebar={sidebar}
                 >
-                    <JumpMenu cardData={cardData} />
-                </AnimateHeight>
-
-                <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {cardData.map((card, index) =>
-                        (
-                            <Card
-                                key={index}
-                                entry={card}
-                                tags={false}
-                                image={card.image}
-                            >
-                                <Button
-                                    href={card.id}
-                                    size="small"
-                                >
-                                    <ChevronRightIcon className="text-white w-6 h-6" />
-                                </Button>
-                            </Card>
-                        )
-                        )}
-
-                    </div>
-                </section>
-
-                <div className="container relative z-10 mx-auto my-6 lg:my-12">
-                    <div
-                        className={`${gridClasses} mt-6`}
+                    <AnimateHeight
+                        duration={300}
+                        height={dropdownVisible ? 'auto' : 0}
+                        className="sticky w-full z-20 top-0 bg-primary-lighter"
                     >
-                        <div id='disease' className={gridClasses}>
-                            <GrantsByDiseaseCard />
+                        <JumpMenu cardData={cardData} />
+                    </AnimateHeight>
+
+                    <section className="hidden lg:block container mx-auto my-6 lg:my-12">
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {cardData.map((card, index) =>
+                            (
+                                <Card
+                                    key={index}
+                                    entry={card}
+                                    tags={false}
+                                    image={card.image}
+                                >
+                                    <Button
+                                        href={card.id}
+                                        size="small"
+                                    >
+                                        <ChevronRightIcon className="text-white w-6 h-6" />
+                                    </Button>
+                                </Card>
+                            )
+                            )}
+
                         </div>
+                    </section>
 
-                        <div id='research-category' className={gridClasses}>
-                            <GrantsByResearchCategoryCard />
-                        </div>
-
-                        <div id='geographical-distribution' className={gridClasses}>
-                            <GrantsByCountryWhereResearchWasConductedCard />
-
-                            <GrantsPerResearchCategoryByRegion />
-
-                            <RegionalFlowOfGrantsCard />
-                        </div>
-
-                        <div id='annual-trends'>
-                            <FundingAmountsForEachResearchCategoryOverTime />
-                        </div>
-
-                        <VisualisationCard
-                            grants={globallyFilteredDataset}
-                            id="disease-word-cloud"
-                            title="Word cloud showing the funding for infectious diseases with a pandemic potential"
+                    <div className="container relative z-10 mx-auto my-6 lg:my-12">
+                        <div
+                            className={`${gridClasses} mt-6`}
                         >
-                            <div className="w-full">
-                                <WordCloud
-                                    filterKey="Disease"
-                                    randomSeedString="2324234234"
-                                />
+                            <div id='disease' className={gridClasses}>
+                                <GrantsByDiseaseCard />
                             </div>
 
-                            <div>
-                                <Text>
-                                    The amount of funding is represented by the size of the word
-                                </Text>
-                            </div>
-                        </VisualisationCard>
-
-                        <VisualisationCard
-                            grants={globallyFilteredDataset}
-                            id="pathogen-word-cloud"
-                            title="Word cloud showing the funding for priority pathogens"
-                        >
-                            <div className="w-full">
-                                <WordCloud
-                                    filterKey="Pathogen"
-                                    randomSeedString="2324234234"
-                                />
+                            <div id='research-category' className={gridClasses}>
+                                <GrantsByResearchCategoryCard />
                             </div>
 
-                            <div>
-                                <Text>
-                                    The amount of funding is represented by the size of the word
-                                </Text>
+                            <div id='geographical-distribution' className={gridClasses}>
+                                <GrantsByCountryWhereResearchWasConductedCard />
+
+                                <GrantsPerResearchCategoryByRegion />
+
+                                <RegionalFlowOfGrantsCard />
                             </div>
-                        </VisualisationCard>
+
+                            <div id='annual-trends'>
+                                <FundingAmountsForEachResearchCategoryOverTime />
+                            </div>
+
+                            <VisualisationCard
+                                grants={globallyFilteredDataset}
+                                id="disease-word-cloud"
+                                title="Word cloud showing the funding for infectious diseases with a pandemic potential"
+                            >
+                                <div className="w-full">
+                                    <WordCloud
+                                        filterKey="Disease"
+                                        randomSeedString="2324234234"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Text>
+                                        The amount of funding is represented by the size of the word
+                                    </Text>
+                                </div>
+                            </VisualisationCard>
+
+                            <VisualisationCard
+                                grants={globallyFilteredDataset}
+                                id="pathogen-word-cloud"
+                                title="Word cloud showing the funding for priority pathogens"
+                            >
+                                <div className="w-full">
+                                    <WordCloud
+                                        filterKey="Pathogen"
+                                        randomSeedString="2324234234"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Text>
+                                        The amount of funding is represented by the size of the word
+                                    </Text>
+                                </div>
+                            </VisualisationCard>
+                        </div>
+
+                        <Tooltip
+                            ref={tooltipRef}
+                            imperativeModeOnly
+                        />
                     </div>
-                </div>
-            </Layout>
+                </Layout>
+            </TooltipContext.Provider>
         </GlobalFilterContext.Provider>
+
     )
 }
