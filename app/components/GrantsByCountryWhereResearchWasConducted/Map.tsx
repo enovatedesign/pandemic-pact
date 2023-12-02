@@ -1,26 +1,25 @@
-import {useState, useMemo} from 'react'
+import {useState, useMemo, useContext, MouseEvent} from 'react'
 import {useRouter} from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import DoubleLabelSwitch from "../DoubleLabelSwitch"
 import {scaleLinear} from "d3-scale"
-import {Tooltip} from 'react-tooltip'
 import {groupBy} from 'lodash'
+import {GlobalFilterContext} from "../../helpers/filter"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {TooltipContext} from '../../helpers/tooltip'
 
 const ColourScale = dynamic(() => import('./ColourScale'), {ssr: false})
 
-interface Props {
-    dataset: any[]
-}
+export default function Map() {
+    const {tooltipRef} = useContext(TooltipContext)
 
-export default function Map({dataset}: Props) {
+    const {grants: dataset} = useContext(GlobalFilterContext)
+
     const router = useRouter()
-
-    const [tooltipContent, setTooltipContent] = useState('')
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
@@ -73,17 +72,18 @@ export default function Map({dataset}: Props) {
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const onGeoMouseEnter = (geo: any) => {
-        setTooltipContent(`
-            <div>
-                <p class="font-bold text-lg mb-4">${geo.properties.NAME}</p>
+    const onGeoMouseEnter = (event: MouseEvent<SVGPathElement>, geo: any) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: <TooltipContent geo={geo} displayWhoRegions={displayWhoRegions} />,
+        })
+    }
 
-                <p class="text-md">Grants: ${geo.properties.totalGrants || 0}</p>
-                <p class="text-md">Amount Committed: ${dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
-
-                <p class="text-md italic mt-4">Click to explore grants in this ${displayWhoRegions ? 'region' : 'country'}</p>
-            </div>
-        `)
+    const onGeoMouseLeave = () => {
+        tooltipRef?.current?.close()
     }
 
     return (
@@ -107,9 +107,9 @@ export default function Map({dataset}: Props) {
                                 strokeWidth={1}
                                 className="cursor-pointer"
                                 onClick={() => onGeoClick(geo)}
-                                onMouseEnter={() => onGeoMouseEnter(geo)}
-                                onMouseLeave={() => setTooltipContent('')}
-                                data-tooltip-id="country-tooltip"
+                                onMouseEnter={event => onGeoMouseEnter(event, geo)}
+                                onMouseMove={event => onGeoMouseEnter(event, geo)}
+                                onMouseLeave={onGeoMouseLeave}
                             />
                         ))
                     }
@@ -139,20 +139,22 @@ export default function Map({dataset}: Props) {
                     />
                 </div>
             </div>
-
-            <Tooltip
-                id="country-tooltip"
-                float={true}
-                isOpen={tooltipContent !== ''}
-                noArrow={true}
-                place="right-start"
-                offset={10}
-                className="!px-3 !py-2 text-left"
-                variant="light"
-            >
-                <div dangerouslySetInnerHTML={{__html: tooltipContent}} />
-            </Tooltip>
         </div >
+    )
+}
+
+function TooltipContent({geo, displayWhoRegions}: {geo: any, displayWhoRegions: boolean}) {
+    return (
+        <div className="flex flex-col gap-y-4">
+            <p className="font-bold text-lg">{geo.properties.NAME}</p>
+
+            <div>
+                <p className="text-md">Grants: {geo.properties.totalGrants || 0}</p>
+                <p className="text-md">Amount Committed: {dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+            </div>
+
+            <p className="text-md italic">Click to explore grants in this {displayWhoRegions ? 'region' : 'country'}</p>
+        </div>
     )
 }
 
