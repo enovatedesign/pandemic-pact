@@ -11,9 +11,7 @@ import selectOptions from "../../../data/dist/select-options.json"
 export default function GrantsByResearchCategoryCard() {
     const {grants} = useContext(GlobalFilterContext)
 
-    const researchCategoryOptions = selectOptions.ResearchCat
-
-    const chartData = researchCategoryOptions.map(function (researchCategory) {
+    const chartData = selectOptions.ResearchCat.map(function (researchCategory) {
         const grantsWithKnownAmounts = grants
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
