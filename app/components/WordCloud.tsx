@@ -1,10 +1,10 @@
 "use client"
 
-import {useState, useEffect} from "react"
-import {groupBy} from 'lodash'
+import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
 import dataset from '../../data/dist/filterable-dataset.json'
 import WordCloudComponent from 'react-d3-cloud'
+import {TooltipContext} from '../helpers/tooltip'
 
 import font from '../globals/font'
 import resolveConfig from 'tailwindcss/resolveConfig'
@@ -17,7 +17,9 @@ interface Props {
     height?: number
 }
 
-export default function WordCloud({ filterKey, randomSeedString, width = 500, height = 300 }: Props) {
+export default function WordCloud({filterKey, randomSeedString, width = 500, height = 300}: Props) {
+    const {tooltipRef} = useContext(TooltipContext)
+
     const [isMounted, setIsMounted] = useState(false)
 
     // d3-cloud requires the DOM to be loaded before it can render
@@ -26,7 +28,7 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
     }, [setIsMounted])
 
     if (!filterKey || !randomSeedString) return null
-    
+
     const results = dataset.reduce((acc, obj) => {
         const filterValue = obj[filterKey as keyof typeof obj]
 
@@ -64,15 +66,40 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
         tailwindColours.rose['500'],
     ]
 
+    const onWordMouseOver = (event: MouseEvent<SVGPathElement>, data: any) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: <TooltipContent data={data} />,
+        })
+    }
+
+    const onWordMouseOut = () => {
+        tooltipRef?.current?.close()
+    }
+
     return isMounted ?
-        <WordCloudComponent 
-            data={data} 
+        <WordCloudComponent
+            data={data}
             width={width}
             height={height}
             rotate={0}
-            fill={(word, index) => colours[index % colours.length]}
+            fill={(_, index) => colours[index % colours.length]}
             font={font.style.fontFamily}
             random={fixedRandom.quick}
+            onWordMouseOver={onWordMouseOver}
+            onWordMouseOut={onWordMouseOut}
         />
-    : null
+        : null
+}
+
+function TooltipContent({data}: any) {
+    return (
+        <div className="flex flex-col">
+            <span className="text-lg font-bold">{data.text}</span>
+            <span className="text-sm">{data.value} grants</span>
+        </div>
+    )
 }
