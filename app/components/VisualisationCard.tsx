@@ -1,7 +1,8 @@
-import {ElementType, ReactNode, useState} from "react"
+import {ElementType, ReactNode, useState, useContext} from "react"
 import {Tab} from '@headlessui/react'
 import {Flex, Card, Title, Subtitle} from "@tremor/react"
 import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearch"
+import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
 
@@ -17,6 +18,10 @@ interface Props {
 }
 
 export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
+    const {filters} = useContext(GlobalFilterContext)
+
+    const numberOfActiveFilters = countActiveFilters(filters)
+
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
     return <Card id={id}>
@@ -41,6 +46,10 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                             <InfoModal>{infoModalContents}</InfoModal>
                         }
                     </Flex>
+
+                    {numberOfActiveFilters > 0 &&
+                        <p class="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
+                    }
                 </Flex>
 
                 {subtitle &&

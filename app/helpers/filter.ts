@@ -108,6 +108,12 @@ export function filterGrants(grants: any, filters: any) {
     )
 }
 
+export function countActiveFilters(filters: Filters) {
+    return Object.values(filters).filter(
+        filter => filter.values.length > 0,
+    ).length
+}
+
 export const GlobalFilterContext = createContext<{
     filters: Filters,
     grants: any[],
