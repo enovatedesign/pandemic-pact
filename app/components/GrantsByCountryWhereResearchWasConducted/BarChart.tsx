@@ -61,16 +61,21 @@ export default function BarChart() {
         ])
     }
 
-    data = data.sort(
-        ([countryA, grantsA]: [string, any], [countryB, grantsB]: [string, any]) => grantsB.length - grantsA.length
-    )
-
     data = data.map(([country, grants]: [string, any]) => {
         return {
             country,
             'Amount Committed': grants.reduce(...sumNumericGrantAmounts),
         }
     })
+
+    type DataPoint = {
+        country: string
+        'Amount Committed': number
+    }
+
+    data = data.sort(
+        (a: DataPoint, b: DataPoint) => b['Amount Committed'] - a['Amount Committed']
+    )
 
     const stacks = Object.keys(data[0]).filter(key => key !== 'country')
 
