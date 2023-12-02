@@ -2,8 +2,8 @@
 
 import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
-import dataset from '../../data/dist/filterable-dataset.json'
 import WordCloudComponent from 'react-d3-cloud'
+import {GlobalFilterContext} from "../helpers/filter"
 import {TooltipContext} from '../helpers/tooltip'
 
 import font from '../globals/font'
@@ -19,6 +19,7 @@ interface Props {
 
 export default function WordCloud({filterKey, randomSeedString, width = 500, height = 300}: Props) {
     const {tooltipRef} = useContext(TooltipContext)
+    const {grants: dataset} = useContext(GlobalFilterContext)
 
     const [isMounted, setIsMounted] = useState(false)
 
