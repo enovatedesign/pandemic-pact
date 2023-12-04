@@ -36,7 +36,7 @@ const Card = ({entry, tags = false, children, image}: Props) => {
     const urlCondition = url?.startsWith('http');
 
     const hoverClasses = [
-        urlCondition ? 'hover:shadow-lg transition duration-300' : ''
+        urlCondition ? 'hover:shadow-lg transition-shadow duration-300' : ''
     ].join(' ')
 
     const [ref, springs] = useInView(

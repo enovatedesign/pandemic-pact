@@ -51,7 +51,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                             url: entry.externalLink,
                             thumbnailImage: entry.thumbnailImage,
                         }
-
+                        
                         return (
                             <Card entry={cardData} key={index}>
                                 <Button 
@@ -62,7 +62,6 @@ const ListPublicationsBlock = ({block}: Props) => {
                                     Read More <ExternalLinkIcon className="w-4 h-4" />
                                 </Button>
                             </Card>
-
                         )
                     })}
 
