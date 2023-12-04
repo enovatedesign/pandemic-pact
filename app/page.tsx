@@ -108,7 +108,7 @@ export default function Home() {
 
                 </div>
                 
-                <InteractiveBackground className={`absolute inset-0 h-screen masthead-background ${styles.background}`}></InteractiveBackground>
+                <InteractiveBackground className={`absolute inset-0 masthead-background ${styles.background}`}></InteractiveBackground>
 
             </div>
 
