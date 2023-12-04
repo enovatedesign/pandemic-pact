@@ -7,6 +7,7 @@ import Button from './Button'
 import {type Filters} from "../types/filters"
 import {availableFilters, emptyFilters} from "../helpers/filter"
 import selectOptions from '../../data/dist/select-options.json'
+import AnimateHeight from "react-animate-height"
 
 interface FilterSidebarProps {
     selectedFilters: Filters,
@@ -19,8 +20,8 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
     const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
 
     const filters = availableFilters()
-
-    const visibleFilters = showAdvancedFilters ? filters : filters.filter(({advanced}) => !advanced)
+    const standardFilters = filters.filter(f => !f.advanced)
+    const advancedFilters = filters.filter(f => f.advanced)
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = {...selectedFilters}
@@ -62,8 +63,73 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     }
                 </p>
             </div>
+            
 
-            {visibleFilters.map(({field, label, excludeGrantsWithMultipleItems}) => (
+            <FilterBlock 
+                filters={standardFilters} 
+                selectedFilters={selectedFilters} 
+                setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField} 
+                setSelectedOptions={setSelectedOptions}
+            />
+
+            <AnimateHeight
+                duration={300}
+                height={showAdvancedFilters ? 'auto' : 0}
+                className="w-full"
+            >   
+                <div className="flex flex-col items-start justify-start gap-y-4">
+                    <FilterBlock 
+                        filters={advancedFilters} 
+                        selectedFilters={selectedFilters} 
+                        setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField} 
+                        setSelectedOptions={setSelectedOptions}
+                    />
+                </div>
+            </AnimateHeight>
+
+            <div className="flex items-center justify-between w-full">
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                >
+                    {showAdvancedFilters ? (
+                        <>Hide Advanced <ChevronUpIcon className="w-5 h-5" /></>
+                    ) : (
+                        <>Show Advanced <ChevronDownIcon className="w-5 h-5" /></>
+                    )}
+                </Button>
+
+                <Button
+                    size="xsmall"
+                    customClasses="mt-3 flex items-center gap-1"
+                    onClick={() => setSelectedFilters(emptyFilters())}
+                >
+                    Clear All <XIcon className="w-5 h-5" />
+                </Button>
+            </div>
+        </div>
+    )
+}
+
+
+interface filterBlockProps {
+    filters: {
+        field: string, 
+        label: string,
+        advanced?: boolean,
+        excludeGrantsWithMultipleItems?: { label: string },
+    }[],   
+    selectedFilters: Filters,
+    setSelectedOptions: (field: keyof Filters, options: string[]) => void,
+    setExcludeGrantsWithMultipleItemsInField: (field: keyof Filters, value: boolean) => void
+}
+
+const FilterBlock = ({filters, selectedFilters, setExcludeGrantsWithMultipleItemsInField, setSelectedOptions} : filterBlockProps) => {
+
+    return (
+        <>
+            {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
@@ -89,28 +155,6 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     }
                 </Flex>
             ))}
-
-            <div className="flex items-center justify-between w-full">
-                <Button
-                    size="xsmall"
-                    customClasses="mt-3 flex items-center gap-1"
-                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                >
-                    {showAdvancedFilters ? (
-                        <>Hide Advanced <ChevronUpIcon className="w-5 h-5" /></>
-                    ) : (
-                        <>Show Advanced <ChevronDownIcon className="w-5 h-5" /></>
-                    )}
-                </Button>
-
-                <Button
-                    size="xsmall"
-                    customClasses="mt-3 flex items-center gap-1"
-                    onClick={() => setSelectedFilters(emptyFilters())}
-                >
-                    Clear All <XIcon className="w-5 h-5" />
-                </Button>
-            </div>
-        </div>
+        </>
     )
 }

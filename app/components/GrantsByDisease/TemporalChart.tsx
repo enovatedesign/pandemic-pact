@@ -1,16 +1,16 @@
+import {useContext} from "react"
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 
-interface Props {
-    globallyFilteredDataset: any,
-}
+export default function TemporalChart() {
+    const {grants} = useContext(GlobalFilterContext)
 
-export default function TemporalChart({globallyFilteredDataset}: Props) {
     const datasetGroupedByYear = groupBy(
-        globallyFilteredDataset.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
+        grants.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
         'GrantStartYear',
     )
 

@@ -1,21 +1,22 @@
+import {useContext} from "react"
 import {Title, Text} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
 import ScatterChart from "./ScatterChart"
-import {type CardProps} from "../../types/card-props"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 
-export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: CardProps) {
-    const researchCategoryOptions = selectOptions.ResearchCat
+export default function GrantsByResearchCategoryCard() {
+    const {grants} = useContext(GlobalFilterContext)
 
-    const chartData = researchCategoryOptions.map(function (researchCategory) {
-        const grantsWithKnownAmounts = globallyFilteredDataset
+    const chartData = selectOptions.ResearchCat.map(function (researchCategory) {
+        const grantsWithKnownAmounts = grants
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
 
-        const grantsWithUnspecifiedAmounts = globallyFilteredDataset
+        const grantsWithUnspecifiedAmounts = grants
             .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
             .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
 
@@ -57,11 +58,11 @@ export default function GrantsByResearchCategoryCard({globallyFilteredDataset}: 
 
     return (
         <VisualisationCard
-            filteredDataset={globallyFilteredDataset}
+            grants={grants}
             id="grants-by-research-category"
             title="Global distribution of funding for research categories"
             subtitle="Total number of grants and US dollars committed for research across research categories"
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
             tabs={tabs}
         />

@@ -130,9 +130,7 @@ export default function BarChart({chartData}: Props) {
                             <p className="text-xs text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
                         </div>
                     </Fragment >
-                ))
-                }
-
+                ))}
             </div>
         </>
     )

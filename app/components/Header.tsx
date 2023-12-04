@@ -12,7 +12,7 @@ import AnimateHeight from 'react-animate-height'
 export default function Header({className}: {className?: string}) {
     const pathname = usePathname()
     const links = getLinksArray()
-    
+
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
@@ -42,7 +42,7 @@ export default function Header({className}: {className?: string}) {
             {link.label}
         </Link>
     )
-    
+
 
     const Logo = () => (
         <Image
@@ -61,7 +61,7 @@ export default function Header({className}: {className?: string}) {
     const mobileTransitionClasses = [
         showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000 delay-300'
     ].join(' ')
-    
+
     const navRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
@@ -102,9 +102,9 @@ export default function Header({className}: {className?: string}) {
                         <nav className="hidden px-10 py-3 lg:block" ref={navRef}>
                             <ul className="flex space-x-10">
                                 {links.map((link, index) => {
-                                    
+
                                     const handleClickShow = (event: any) => {
-                                        event.preventDefault() 
+                                        event.preventDefault()
                                         setIsVisible(!isVisible)
                                         setActiveIndex(index)
                                     }
@@ -124,13 +124,13 @@ export default function Header({className}: {className?: string}) {
                                                     {(isVisible && activeIndex === index) && (
                                                         <>
                                                             <ul className={`${isVisible ? 'absolute top-12 -right-5 lg:w-60 lg:shadow-xl' : 'hidden'} flex flex-col bg-white rounded-2xl p-2`} >
-                                                                {link.subPages.map((subPage, index) => <NavSubPages key={index} subPage={subPage} pathname={pathname} /> )}
+                                                                {link.subPages.map((subPage, index) => <NavSubPages key={index} subPage={subPage} pathname={pathname} />)}
                                                             </ul>
                                                         </>
                                                     )}
                                                 </>
                                             )}
-                               
+
                                         </li>
                                     )
                                 })}
@@ -147,23 +147,27 @@ export default function Header({className}: {className?: string}) {
                                     return (
                                         <li key={index} className={`${mobileAnimationClasses}`}>
                                             <button onClick={handleClick} className='flex justify-between w-full'>
-                                                <NavItem key={link.label} {...link}/>
+                                                <NavItem key={link.label} {...link} />
                                                 {link.subPages && (
-                                                    <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300`}/>
+                                                    <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300`} />
                                                 )}
                                             </button>
-    
+
                                             {link.subPages && (
                                                 <AnimateHeight
                                                     duration={300}
                                                     height={activeIndex === index ? 'auto' : 0}
                                                 >
                                                     <ul>
-                                                        {link.subPages.map((subPage, index) => {
+                                                        {link.subPages.filter(
+                                                            (subPage) => subPage.label !== 'About'
+                                                        ).map((subPage, index) => {
                                                             return (
-                                                                <>
-                                                                    {subPage.label !== 'About' && <NavSubPages key={index} subPage={subPage} pathname={pathname} />}
-                                                                </>
+                                                                <NavSubPages
+                                                                    key={index}
+                                                                    subPage={subPage}
+                                                                    pathname={pathname}
+                                                                />
                                                             )
                                                         })}
                                                     </ul>
@@ -171,7 +175,7 @@ export default function Header({className}: {className?: string}) {
                                             )}
                                         </li>
                                     )
-                                } )}
+                                })}
                             </ul>
                         </div>
                     </div>

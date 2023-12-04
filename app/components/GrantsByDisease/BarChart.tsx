@@ -1,20 +1,20 @@
+import {useContext} from "react"
 import {Flex, Subtitle, Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 
-interface Props {
-    globallyFilteredDataset: any,
-}
+export default function BarChart() {
+    const {grants} = useContext(GlobalFilterContext)
 
-export default function BarChart({globallyFilteredDataset}: Props) {
     const chartData = selectOptions.Disease.map(function (disease) {
-        const grantsWithKnownAmounts = globallyFilteredDataset
+        const grantsWithKnownAmounts = grants
             .filter((grant: any) => grant.Disease.includes(disease.value))
             .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
 
-        const grantsWithUnspecifiedAmounts = globallyFilteredDataset
+        const grantsWithUnspecifiedAmounts = grants
             .filter((grant: any) => grant.Disease.includes(disease.value))
             .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
 
