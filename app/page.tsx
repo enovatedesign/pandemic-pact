@@ -24,7 +24,7 @@ export default function Home() {
                 </a>
             </div>
 
-            <div className="flex flex-col h-full min-h-screen relative">
+            <div className={`masthead-background ${styles.background} flex flex-col h-full min-h-screen relative`}>
 
                 <Header className="w-full relative z-20" />
 
@@ -108,7 +108,7 @@ export default function Home() {
 
                 </div>
                 
-                <InteractiveBackground className={`absolute inset-0 masthead-background ${styles.background}`}></InteractiveBackground>
+                <InteractiveBackground className={`absolute inset-0`}></InteractiveBackground>
 
             </div>
 
