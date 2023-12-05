@@ -35,6 +35,10 @@ export const links = {
                 label: 'Funders',
                 href: '/about/funders',
             },
+            {
+                label: 'Our Data',
+                href: '/about/our-data',
+            },
         ],
     },
 }
