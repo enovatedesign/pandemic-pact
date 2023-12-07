@@ -10,10 +10,6 @@ export const seomaticQuery = `
   }
 `
 
-export const newsEntriesQuery = `
-    
-`
-
 export const contentBuilderQuery = `
     bodyContent(status: "enabled") {
         ... on bodyContent_richText_BlockType {
@@ -153,6 +149,7 @@ export const contentBuilderQuery = `
                     width
                   }
                 }
+                publicationType(label: true)
               }
             }
           }
@@ -360,6 +357,27 @@ export const contentBuilderQuery = `
             }
             reverse
             text
+          }
+          ... on bodyContent_featuredPublication_BlockType {
+            id
+            typeHandle
+            featuredPublication {
+              ... on publications_publication_Entry {
+                id
+                title
+                summary
+                externalLink
+                thumbnailImage  @transform(transform: "c480x480") {
+                  ... on contentAssets_Asset {
+                    alt
+                    height
+                    url
+                    width
+                  }
+                }
+                publicationType(label: true)
+              }
+            }
           }
           
     }

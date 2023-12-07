@@ -15,7 +15,7 @@ const RichText = (props: Props) => {
         'prose',
         'prose-headings:font-normal prose-a:underline',
         typeScale,
-        !invert ? 'prose-a:text-primary prose-headings:text-primary' : '',
+        !invert ? 'prose-a:text-secondary prose-headings:text-secondary' : '',
         invert ? 'prose-invert' : 'prose-gray',
         customClasses,
     ].join(' ') 

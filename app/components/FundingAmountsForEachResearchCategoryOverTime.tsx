@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import {Flex, BarChart as TremorBarChart, LineChart as TremorLineChart, Text, Color, Subtitle} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import VisualisationCard from "./VisualisationCard"
@@ -6,12 +6,14 @@ import MultiSelect from "./MultiSelect"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
+import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
-import {CardWithOwnFiltersProps} from "../types/card-props"
 import dataset from '../../data/dist/filterable-dataset.json'
 import selectOptions from '../../data/dist/select-options.json'
 
-export default function FundingAmountsforEachResearchCategoryOverTimeCard({selectedFilters, globallyFilteredDataset}: CardWithOwnFiltersProps) {
+export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
+    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
+
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
@@ -78,27 +80,27 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
     const tabs = [
         {
             tab: {
-                icon: PresentationChartLineIcon,
-                label: "Lines",
-            },
-            content: <LineChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
-        },
-        {
-            tab: {
                 icon: PresentationChartBarIcon,
                 label: "Bar",
             },
             content: <BarChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
         },
+        {
+            tab: {
+                icon: PresentationChartLineIcon,
+                label: "Lines",
+            },
+            content: <LineChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+        },
     ]
 
     return (
         <VisualisationCard
-            filteredDataset={filteredDataset}
+            grants={filteredDataset}
             id="amount-committed-to-each-research-category-over-time-card"
             title="Global Annual Funding For Research Categories"
             subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             tabs={tabs}
         >
             <Flex
@@ -114,7 +116,7 @@ export default function FundingAmountsforEachResearchCategoryOverTimeCard({selec
                     className="max-w-xs ignore-in-image-export"
                 />
 
-                {filteredDataset.length < globallyFilteredDataset.length &&
+                {filteredDataset.length < globalGrants.length &&
                     <Text>Filtered Grants: {filteredDataset.length}</Text>
                 }
             </Flex>

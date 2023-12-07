@@ -1,9 +1,46 @@
 export const links = {
-    home: { label: 'Home', href: '/' },
-    visualise: { label: 'Visualise', href: '/visualise' },
-    explore: { label: 'Explore', href: '/grants' },
-    publications: { label: 'Publications', href: '/publications' },
-    about: { label: 'About', href: '/about' },
+    home: { 
+        label: 'Home', 
+        href: '/' ,
+        subPages: null,
+    },
+    visualise: { 
+        label: 'Visualise', 
+        href: '/visualise' ,
+        subPages: null,
+    },
+    explore: { 
+        label: 'Explore', 
+        href: '/grants', 
+        subPages: null,
+    },
+    publications: { 
+        label: 'Publications', 
+        href: '/publications' ,
+        subPages: null,
+    },
+    about: { 
+        label: 'About', 
+        href: '/about',
+        subPages: [
+            {
+                label: 'Overview', 
+                href: '/about/overview',
+            },
+            {
+                label: 'Meet the Team',
+                href: '/about/meet-the-team',
+            },
+            {
+                label: 'Funders',
+                href: '/about/funders',
+            },
+            {
+                label: 'Our Data',
+                href: '/about/our-data',
+            },
+        ],
+    },
 }
 
 export const getLinksArray = () => {

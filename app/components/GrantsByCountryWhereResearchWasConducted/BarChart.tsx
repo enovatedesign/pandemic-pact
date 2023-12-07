@@ -1,20 +1,19 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import {Icon, Subtitle} from "@tremor/react"
 import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {GlobalFilterContext} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import iso2aToCountryNameMapping from '../../../data/source/iso2a-to-country-name-mapping.json'
 
-interface Props {
-    dataset: any[],
-}
-
 type Iso2aCode = keyof typeof iso2aToCountryNameMapping
 
-export default function BarChart({dataset}: Props) {
+export default function BarChart() {
+    const {grants: dataset} = useContext(GlobalFilterContext)
+
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
 
     const colours = [
@@ -62,16 +61,21 @@ export default function BarChart({dataset}: Props) {
         ])
     }
 
-    data = data.sort(
-        ([countryA, grantsA]: [string, any], [countryB, grantsB]: [string, any]) => grantsB.length - grantsA.length
-    )
-
     data = data.map(([country, grants]: [string, any]) => {
         return {
             country,
             'Amount Committed': grants.reduce(...sumNumericGrantAmounts),
         }
     })
+
+    type DataPoint = {
+        country: string
+        'Amount Committed': number
+    }
+
+    data = data.sort(
+        (a: DataPoint, b: DataPoint) => b['Amount Committed'] - a['Amount Committed']
+    )
 
     const stacks = Object.keys(data[0]).filter(key => key !== 'country')
 
@@ -106,7 +110,7 @@ export default function BarChart({dataset}: Props) {
                 />
 
                 <Subtitle className="text-gray-500">
-                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand.'}
+                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand to countries'}
                 </Subtitle>
             </div>
 

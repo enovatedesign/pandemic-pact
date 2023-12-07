@@ -1,12 +1,13 @@
-import {ElementType, ReactNode, useState} from "react"
+import {ElementType, ReactNode, useState, useContext} from "react"
 import {Tab} from '@headlessui/react'
 import {Flex, Card, Title, Subtitle} from "@tremor/react"
 import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearch"
+import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
 
 interface Props {
-    filteredDataset: any[],
+    grants: any[],
     id: string
     title: string
     subtitle?: string
@@ -16,18 +17,18 @@ interface Props {
     tabs?: Array<{tab: {icon: ElementType, label: string}, content: ReactNode}>
 }
 
-export default function VisualisationCard({filteredDataset, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
+export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
+    const {filters} = useContext(GlobalFilterContext)
+
+    const numberOfActiveFilters = countActiveFilters(filters)
+
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    return <Card id={id} className="relative">
-
-        {/* Offset the anchor position to allow for the sticky JumpMenu bar */}
-        <a id={`${id}-anchor`} className="absolute top-0 lg:-top-20"></a>
-
+    return <Card id={id}>
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="gap-y-6"
+            className="gap-y-6 h-full w-full"
         >
             <Flex
                 flexDirection="col"
@@ -45,6 +46,10 @@ export default function VisualisationCard({filteredDataset, id, title, subtitle,
                             <InfoModal>{infoModalContents}</InfoModal>
                         }
                     </Flex>
+
+                    {numberOfActiveFilters > 0 &&
+                        <p className="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
+                    }
                 </Flex>
 
                 {subtitle &&
@@ -67,7 +72,7 @@ export default function VisualisationCard({filteredDataset, id, title, subtitle,
                     imageFilename={id}
                     dataFilename={id}
                     meilisearchRequestBody={
-                        exportRequestBodyFilteredToMatchingGrants(filteredDataset)
+                        exportRequestBodyFilteredToMatchingGrants(grants)
                     }
                 />
 

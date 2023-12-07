@@ -11,6 +11,7 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
 import Button from '@/app/components/Button';
 import '../../css/components/results-table.css'
 import {debounce} from 'lodash';
+import InfoModal from "../../components/InfoModal"
 
 interface Props {
     grant: any
@@ -22,32 +23,40 @@ export default function StaticPage({grant}: Props) {
         {
             text: 'Disease',
             metric: grant.Disease.join(', '),
+            classes: ''
         },
 
         {
             text: 'Start & end year',
             startMetric: grant.GrantStartYear,
             endMetric: grant.GrantEndYear,
+            classes: ''
         },
         {
             text: 'Amount Committed (USD)',
             metric: (typeof grant.GrantAmountConverted === 'number') ?
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,
+                classes: ''
         },
         {
             text: 'Research Location',
             metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+            classes: ''
         },
         {
             text: 'Lead Research Institution',
             metric: grant.ResearchInstitutionName[0],
+            classes: ''
         },
         {
             text: 'Partner Institution',
-            metric: grant.ResearchInstitutionName[1]
+            metric: grant.ResearchInstitutionName[1],
+            classes: ''
         },
     ]
+
+    const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
 
     const keyFactsSubHeadings = [
         {
@@ -77,10 +86,12 @@ export default function StaticPage({grant}: Props) {
         {
             text: 'Age Group',
             metric: grant.AgeGroups,
+            infoModalText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
         },
         {
             text: 'Vulnerable Population',
             metric: grant.VulnerablePopulations,
+            infoModalText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
         },
         {
             text: 'Occupations of Interest',
@@ -105,9 +116,8 @@ export default function StaticPage({grant}: Props) {
 
     useEffect(() => {
         const abstract = document.getElementById('abstract')
-
         const checkHeight = () => {
-            setReadMore((abstract?.offsetHeight || 0) > 200)
+            setReadMore((abstract?.offsetHeight || 0) > 230)
         }
 
         const debouncedCheckHeight = debounce(checkHeight, 200)
@@ -163,22 +173,24 @@ export default function StaticPage({grant}: Props) {
                             <span className="sr-only">
                                 Total publications:
                             </span>
-                            <a href="#publications" className="z-50 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
+                            <a href="#publications" className="z-10 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
                                 {grant.PubMedLinks?.length ?? '0'} publications
                             </a>
 
                         </li>
                     </ul>
-
-                    <p className="text-white/80">
-                        Grant number: <span className="text-white/60 font-bold uppercase">{grant.PubMedGrantId}</span>
-                    </p>
+                    {grant.PubMedGrantId && (
+                        <p className="text-white/80">
+                            Grant number: <span className="text-white/60 font-bold uppercase">{grant.PubMedGrantId}</span>
+                        </p>
+                    )}
 
                 </div>
             </>
         )
     }
 
+    
     return (
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
             <div className="container mx-auto my-12 relative">
@@ -203,7 +215,7 @@ export default function StaticPage({grant}: Props) {
                                 className='relative'
                             >
                                 <div id='abstract'>
-                                    <RichText text={grant.Abstract} customClasses='min-w-full text-tremor-emphasis tracking-wider' invert={false} typeScale={''} />
+                                    <RichText text={grant.Abstract} customClasses='max-w-none' />
                                     {backgroundShow && !abstractShow && (
                                         <div className='absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300' />
                                     )}
@@ -225,26 +237,35 @@ export default function StaticPage({grant}: Props) {
                                     Key facts
                                 </h3>
                                 <div className='w-full bg-primary text-secondary'>
-                                    <ul className="grid grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50% ">
-                                        {keyFactsHeadings.map((heading, index) => {
+                                    <ul className="grid grid-cols-2 md:grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                                        {filteredKeyFactsHeadings.map((heading, index) => {
                                             const borderClasses = [
                                                 index === 0 && 'border-r-2',
-                                                index === 2 && 'border-l-2',
-                                                index === 3 && 'border-r-2',
-                                                index === 5 && heading.metric && 'border-l-2',
+                                                index === 2 && 'border-r-2 md:border-l-2',
+                                                index === 3 && 'md:border-r-2',
+                                                index === 4 && '',
+                                                index === 5 && heading.metric && 'border-l-2 -translate-x-0.5 md:translate-x-0',
                                                 index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
+                                            
                                             const metricClasses = [
                                                 index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'
                                             ].join(' ')
+                                            
+                                            let colSpanClass = ''
 
+                                            if (index === filteredKeyFactsHeadings.length - 1 && (filteredKeyFactsHeadings.length % 3) !== 0) {
+                                                const numberOfMissingItems = keyFactsHeadings.length - filteredKeyFactsHeadings.length
+                                                if (numberOfMissingItems !== 0) {
+                                                    colSpanClass = `col-span-${numberOfMissingItems +1} border-r-0`
+                                                }
+                                            } 
+                                            
                                             return (
-                                                <li key={index} className={`${borderClasses} p-4 py-6 flex flex-col justify-between space-y-2  border-secondary/10`}>
-                                                    {(heading.metric || heading.startMetric) && (
-                                                        <p className='uppercase text-xs tracking-widest font-bold'>
-                                                            {heading.text}
-                                                        </p>
-                                                    )}
+                                                <li key={index} className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}>
+                                                    <p className='uppercase text-xs tracking-widest font-bold'>
+                                                        {heading.text}
+                                                    </p>
                                                     {heading.startMetric && heading.endMetric ? (
                                                         <div className="flex gap-1 items-center ">
                                                             <span className={metricClasses}>
@@ -261,34 +282,56 @@ export default function StaticPage({grant}: Props) {
                                                         </div>
                                                     ) : (
                                                         <>
-                                                            {heading.metric !== null && (
-                                                                <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
-                                                            )}
+                                                            <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
                                                         </>
                                                     )}
                                                 </li>
                                             )
                                         })}
                                     </ul>
-                                    <ul className="grid grid-cols-3 bg-primary-lightest">
+                                    <ul className="grid grid-cols-2 md:grid-cols-3 bg-primary-lightest">
                                         {keyFactsSubHeadings.map((subHeading, index) => {
                                             const borderClasses = [
-                                                index === 0 && 'border-r-2',
-                                                index === 2 && 'border-l-2',
-                                                index === 3 && 'border-r-2',
-                                                index === 5 && 'border-l-2',
+                                                index === 0 && 'border-r-2 md:border-r-2',
+                                                index === 2 && 'border-r-2 md:border-l-2 md:border-r-0',
+                                                index === 3 && 'md:border-r-2',
+                                                index === 4 && 'border-r-2 md:border-r-0',
+                                                index === 5 && 'md:border-l-2',
                                                 index === 6 && 'border-r-2',
-                                                index === 8 && 'border-l-2',
-                                                index < 6 && 'border-b-2'
+                                                index === 8 && 'col-span-2 md:col-span-1 md:border-l-2',
                                             ].join(' ')
                                             return (
-                                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
-                                                    <p className='uppercase text-xs tracking-widest font-bold'>
-                                                        {subHeading.text}
-                                                    </p>
-                                                    <p className='font-bold text-lg lg:text-xl'>
-                                                        {subHeading.metric}
-                                                    </p>
+                                                <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
+
+                                                    {subHeading.infoModalText ? (
+                                                        <div className="flex items-center space-x-2">
+                                                            {subHeading.text && (
+                                                                <p className='uppercase text-xs tracking-widest font-bold'>
+                                                                    {subHeading.text}
+                                                                </p>
+                                                            )}
+                                                            <InfoModal>
+                                                                <p>
+                                                                    {subHeading.infoModalText}
+                                                                </p>
+                                                            </InfoModal>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {subHeading.text && (
+                                                                <p className='uppercase text-xs tracking-widest font-bold'>
+                                                                    {subHeading.text}
+                                                                </p>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                    
+                                                    {subHeading.metric && (
+                                                        <p className='font-bold text-lg lg:text-xl'>
+                                                            {subHeading.metric}
+                                                        </p>
+                                                    )}
+
                                                 </li>
                                             )
                                         })}
@@ -311,7 +354,7 @@ export default function StaticPage({grant}: Props) {
                         }
 
                         {publicationList?.length > 0 &&
-                            <div className='flex flex-col space-y-4'>
+                            <div className='flex flex-col space-y-4' id="paginationTop">
                                 <h2 className={titleClasses} id='publications'>Publications</h2>
 
                                 <div>
@@ -390,15 +433,6 @@ export default function StaticPage({grant}: Props) {
                                         />
                                     )}
                                 </div>
-
-                                {grant.PubMedLinks?.length > 10 && (
-                                    <Pagination
-                                        totalPosts={grant.PubMedLinks?.length}
-                                        postsPerPage={limit}
-                                        setFirstItemIndex={setFirstItemIndex}
-                                        setLastItemIndex={setLastItemIndex}
-                                    />
-                                )}
                             </div>
 
                         }

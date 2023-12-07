@@ -1,13 +1,15 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import VisualisationCard from "./VisualisationCard"
 import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {groupBy} from "lodash"
-import {type CardProps} from "../types/card-props"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
+import {GlobalFilterContext} from "../helpers/filter";
 import {dollarValueFormatter} from "../helpers/value-formatters"
 
-export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: CardProps) {
+export default function RegionalFlowOfGrantsCard() {
+    const {grants} = useContext(GlobalFilterContext)
+
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const colours = {
@@ -59,7 +61,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
 
     const nodes = nodeGroups.map(
         ({field, names}, group) => names.filter(
-            name => globallyFilteredDataset.some(
+            name => grants.some(
                 grant => grant[field] === name
             )
         ).map(
@@ -78,7 +80,7 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
 
         links = links.concat(
             Object.entries(
-                groupBy(globallyFilteredDataset, sourceField)
+                groupBy(grants, sourceField)
             ).map(
                 ([sourceFieldValue, grants]) => Object.entries(
                     groupBy(grants, targetField)
@@ -95,10 +97,11 @@ export default function RegionalFlowOfGrantsCard({globallyFilteredDataset}: Card
 
     return (
         <VisualisationCard
-            filteredDataset={globallyFilteredDataset}
+            grants={grants}
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
             subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
+            footnote="Please note: Funding amounts are included only when they have been published by the funder."
         >
             <div className="w-full">
                 {links.length > 0 &&
@@ -209,7 +212,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2}
                 fontSize="16"
-                fill="#fff"
+                fill="#000"
             >
                 {name}
             </text>
@@ -219,7 +222,7 @@ function SankeyNode(props: any) {
                 x={isLastNode ? x - 6 : x + width + 6}
                 y={y + height / 2 + 16}
                 fontSize="14"
-                fill="#fff"
+                fill="#000"
                 fillOpacity="0.8"
             >
                 {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}

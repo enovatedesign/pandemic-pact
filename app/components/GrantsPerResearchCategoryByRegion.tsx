@@ -1,14 +1,16 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
 import {Text} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
-import {type CardWithOwnFiltersProps} from "../types/card-props"
 import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/filterable-dataset.json'
 import {filterGrants} from "../helpers/filter"
+import {GlobalFilterContext} from "../helpers/filter";
 
-export default function GrantsPerResearchCategoryByRegion({globallyFilteredDataset, selectedFilters}: CardWithOwnFiltersProps) {
+export default function GrantsPerResearchCategoryByRegion() {
+    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
+
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(['1', '2', '7'])
 
     const filteredDataset = filterGrants(
@@ -70,11 +72,11 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
 
     return (
         <VisualisationCard
-            filteredDataset={filteredDataset}
+            grants={filteredDataset}
             id="grant-per-research-category-by-region"
             title="Regional Distribution of Funding for Research Category"
             subtitle="Each research category is shown in a different colour"
-            footnote="Please note that grants may fall under more than one Research Category, and Funding Amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
         >
             <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between ignore-in-image-export">
@@ -86,7 +88,7 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
                         className="max-w-xs ignore-in-image-export"
                     />
 
-                    {filteredDataset.length < globallyFilteredDataset.length &&
+                    {filteredDataset.length < globalGrants.length &&
                         <Text>Filtered Grants: {filteredDataset.length}</Text>
                     }
                 </div>
@@ -106,9 +108,8 @@ export default function GrantsPerResearchCategoryByRegion({globallyFilteredDatas
                                     name={label}
                                     dataKey={label}
                                     stroke={colours[index]}
-                                    strokeWidth={1.5}
-                                    fill={colours[index]}
-                                    fillOpacity={0.075}
+                                    strokeWidth={2}
+                                    fillOpacity={0}
                                 />
                             ))}
 

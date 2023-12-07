@@ -1,0 +1,3 @@
+# robots.txt for https://www.pandemicpact.org/
+
+sitemap: https://www.pandemicpact.org/sitemap.xml

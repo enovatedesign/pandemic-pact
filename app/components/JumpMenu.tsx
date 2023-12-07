@@ -1,136 +1,106 @@
-import { Fragment, useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
+import {useState, useEffect, useRef} from 'react'
+import {ChevronDownIcon} from '@heroicons/react/solid'
+import Image from "next/image"
+import AnimateHeight from 'react-animate-height';
 
-interface IVisualisation {
-    id: string;
-    title: string;
-    current: boolean;
+interface Props {
+    dropdownVisible?: boolean,
+    cardData: {
+        title?: string,
+        image?: {
+            url?: string,
+            altText?: string,
+            height?: number,
+            width?: number,
+        },
+        id?: string,
+    }[]
 }
 
-const visualisations = [
-    {
-        id: 'grants-by-disease-anchor',
-        title: 'Global annual funding for research on diseases with a pandemic potential',
-        current: true,
-    },
-    {
-        id: 'grants-by-research-category-anchor',
-        title: 'Global distribution of funding for research categories',
-        current: false,
-    },
-    {
-        id: 'grants-by-country-where-research-was-conducted-anchor',
-        title: 'Global Map Showing Where Research Was Conducted',
-        current: false,
-    },
-    {
-        id: 'amount-committed-to-each-research-category-over-time-card-anchor',
-        title: 'Global Annual Funding For Research Categories',
-        current: false,
-    },
-    {
-        id: 'grant-per-research-category-by-region-anchor',
-        title: 'Regional Distribution of Funding for Research Category',
-        current: false,
-    },
-    {
-        id: 'grants-by-pathogen-and-disease-anchor',
-        title: 'Grants By Pathogen and Disease',
-        current: false,
-    },
-    {
-        id: 'regional-flow-of-grants-anchor',
-        title: 'Regional Flow of Research Grants',
-        current: false,
-    },
-    {
-        id: 'disease-word-cloud-anchor',
-        title: 'Word cloud showing the funding for infectious diseases with a pandemic potential',
-        current: false,
-    },
-    {
-        id: 'pathogen-word-cloud-anchor',
-        title: 'Word cloud showing the funding for priority pathogens',
-        current: false,
-    },
-];
+export default function JumpMenu({cardData}: Props) {
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
+    const [isOpen, setIsOpen] = useState<Boolean>(false)
 
-export default function JumpMenu() {
-    const [selected, setSelected] = useState<IVisualisation>({id: '', title: '', current: false})
-    const router = useRouter()
-    const pathname = usePathname()
+    const dropdown = useRef<HTMLLIElement>(null)
 
     useEffect(() => {
-        if (!selected.id) return
-        const url = new URL(pathname, window.location.origin)
-        router.replace(`#${selected.id}`)
-    }, [
-        selected,
-        pathname,
-        router
-    ])
+        const handleDocumentClick = (e: any) => {
+            if (!dropdown.current?.contains(e.target)) {
+                setIsOpen(false)
+            }
+        }
+        document.addEventListener("click", handleDocumentClick)
+
+        return () => {
+            document.removeEventListener('click', handleDocumentClick)
+        }
+    })
 
     return (
-        <div className="sticky w-full z-20 top-0 bg-primary-lighter">
-            <div className="container mx-auto py-3 flex justify-end">
-                <Listbox value={selected} onChange={setSelected}>
-                    {({ open }) => (
-                        <>
-                            <Listbox.Label className="sr-only">
-                                Jump to a visualisation on this page
-                            </Listbox.Label>
-                            <div className="relative">
-                                <div className="inline-flex">
-                                    <Listbox.Button className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none">
-                                        <span className="text-sm font-medium">
-                                            Jump to a visualisation
-                                        </span>
-                                        <ChevronDownIcon
-                                            className="h-5 w-5"
-                                            aria-hidden="true"
-                                        />
-                                    </Listbox.Button>
-                                </div>
 
-                                <Transition
-                                    show={open}
-                                    as={Fragment}
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                >
-                                    <Listbox.Options className="absolute right-0 z-10 mt-2 w-80 lg:w-96 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        {visualisations.map((option) => (
-                                            <Listbox.Option
-                                                key={option.title}
-                                                className={({ active }) =>
-                                                    classNames(
-                                                        active
-                                                            ? 'bg-secondary text-white'
-                                                            : 'text-gray-900',
-                                                        'cursor-default select-none px-4 py-2 text-sm'
-                                                    )
-                                                }
-                                                value={option}
+        <div className="">
+            <div className="container mx-auto h-[50px] flex justify-end items-center">
+                <span className="sr-only">Jump to a visualisation on this page</span>
+                <div className="relative">
+                    <div className="inline-flex">
+                        <button onClick={() => setIsOpen(true)} className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none">
+                            <span className="text-sm font-medium">
+                                Jump to a visualisation collection
+                            </span>
+                            <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                    </div>
+
+
+                    {cardData && (
+                        <div className="absolute right-0 z-10 mt-2 w-80 lg:w-96 origin-top-right bg-white rounded-b-lg shadow-2xl">
+                            <AnimateHeight
+                                duration={300}
+                                height={isOpen ? 'auto' : 0}
+                            >
+                                <ul className="grid grid-cols-2 gap-2 p-4">
+
+                                    {cardData.filter(
+                                        (card: any) => card.id
+                                    ).map((card: any, index: number) => {
+                                        const {title, image, id} = card
+
+                                        return (
+                                            <li
+                                                ref={dropdown}
+                                                key={index}
+                                                className="hover:bg-primary-lightest transition-colors duration-300 p-2 rounded-lg h-full"
                                             >
-                                                {({ selected, active }) => (
-                                                    <>{option.title}</>
-                                                )}
-                                            </Listbox.Option>
-                                        ))}
-                                    </Listbox.Options>
-                                </Transition>
-                            </div>
-                        </>
+                                                <a href={id}>
+                                                    <button onClick={() => setIsOpen(false)}>
+                                                        {image && (
+                                                            <Image
+                                                                src={image.url}
+                                                                alt={image.altText}
+                                                                width={image.width}
+                                                                height={image.height}
+                                                                className="w-full rounded-lg"
+                                                                loading="lazy"
+                                                            />
+                                                        )}
+                                                        {title && (
+                                                            <p className='text-left pt-4'>
+                                                                {title}
+                                                            </p>
+                                                        )}
+                                                    </button>
+                                                </a>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </AnimateHeight>
+                        </div>
                     )}
-                </Listbox>
+
+                </div>
             </div>
         </div>
+
     );
 }

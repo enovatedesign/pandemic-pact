@@ -89,8 +89,8 @@ export default function Header() {
                 </div>
 
                 <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200">
-                    <div className="grid gap-4 xl:gap-10 xl:grid-cols-2 xl:items-center xl:justify-between">
-                        <FooterCopyrightStatement showCredit={true} />
+                    <div className="grid grid-cols-1 gap-4 xl:gap-10 xl:grid-cols-3 xl:items-center xl:justify-between">
+                        <FooterCopyrightStatement className="col-span-2 text-center xl:text-left text-gray-700" />
                         <div className="print:hidden">
                             <FooterMenu />
                         </div>

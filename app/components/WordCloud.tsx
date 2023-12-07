@@ -1,11 +1,13 @@
 "use client"
 
-import {useState, useEffect} from "react"
-import {groupBy} from 'lodash'
+import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
-import dataset from '../../data/dist/filterable-dataset.json'
 import WordCloudComponent from 'react-d3-cloud'
-
+import {uniq} from 'lodash'
+import {GlobalFilterContext} from "../helpers/filter"
+import {TooltipContext} from '../helpers/tooltip'
+import {dollarValueFormatter} from "../helpers/value-formatters"
+import {sumNumericGrantAmounts} from "../helpers/reducers"
 import font from '../globals/font'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
@@ -17,7 +19,10 @@ interface Props {
     height?: number
 }
 
-export default function WordCloud({ filterKey, randomSeedString, width = 500, height = 300 }: Props) {
+export default function WordCloud({filterKey, randomSeedString, width = 500, height = 300}: Props) {
+    const {tooltipRef} = useContext(TooltipContext)
+    const {grants: globalGrants} = useContext(GlobalFilterContext)
+
     const [isMounted, setIsMounted] = useState(false)
 
     // d3-cloud requires the DOM to be loaded before it can render
@@ -26,27 +31,25 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
     }, [setIsMounted])
 
     if (!filterKey || !randomSeedString) return null
-    
-    const results = dataset.reduce((acc, obj) => {
-        const filterValue = obj[filterKey as keyof typeof obj]
 
-        if (Array.isArray(filterValue)) {
-            filterValue.forEach((item: any) => {
-                if (!acc[item]) {
-                    acc[item] = []
-                }
+    const options = uniq(
+        globalGrants.map((grant: any) => grant[filterKey]).flat()
+    )
 
-                acc[item].push(obj.GrantID);
-            })
+    const data = options.map(function (option) {
+        const grants = globalGrants.filter(
+            (grant: any) => grant[filterKey].includes(option)
+        )
+
+        const moneyCommitted = grants.reduce(...sumNumericGrantAmounts)
+
+        return {
+            text: option,
+            value: grants.length * 75,
+            "Total Number Of Grants": grants.length,
+            "Amount Committed": moneyCommitted,
         }
-
-        return acc
-    }, {} as {[key: string]: number[]})
-
-    const data = Object.keys(results).map((key) => ({
-        text: key,
-        value: results[key as keyof typeof results].length * 75
-    }))
+    })
 
     // Ensures the word cloud displays the same on page refresh
     const fixedRandom = seedrandom(randomSeedString)
@@ -64,15 +67,41 @@ export default function WordCloud({ filterKey, randomSeedString, width = 500, he
         tailwindColours.rose['500'],
     ]
 
+    const onWordMouseOver = (event: MouseEvent<SVGPathElement>, data: any) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: <TooltipContent data={data} />,
+        })
+    }
+
+    const onWordMouseOut = () => {
+        tooltipRef?.current?.close()
+    }
+
     return isMounted ?
-        <WordCloudComponent 
-            data={data} 
+        <WordCloudComponent
+            data={data}
             width={width}
             height={height}
             rotate={0}
-            fill={(word, index) => colours[index % colours.length]}
+            fill={(_, index) => colours[index % colours.length]}
             font={font.style.fontFamily}
             random={fixedRandom.quick}
+            onWordMouseOver={onWordMouseOver}
+            onWordMouseOut={onWordMouseOut}
         />
-    : null
+        : null
+}
+
+function TooltipContent({data}: any) {
+    return (
+        <div className="flex flex-col">
+            <p className="text-lg font-bold">{data.text}</p>
+            <p className="text-md">Grants: {data['Total Number Of Grants']}</p>
+            <p className="text-md">Amount Committed: {dollarValueFormatter(data['Amount Committed'] || 0)}</p>
+        </div>
+    )
 }

@@ -1,8 +1,8 @@
 import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
-import { useInView, animated } from '@react-spring/web'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Button from "../../Button"
+import { ExternalLinkIcon } from '@heroicons/react/outline'
 
 type Props = {
     block: {
@@ -20,60 +20,52 @@ type Props = {
                 url: string,
                 width: number,
             }[],
+            publicationType: string,
         }[],
     }
 }
 
 const ListPublicationsBlock = ({block}: Props) => {
 
-    const heading = block.heading ?? 'Publications'
+    const heading = block.heading ?? null
     const customEntries = block.customEntries ?? null
-
-    const [ref, springs] = useInView(
-        () => ({
-            from: {
-                opacity: 0,
-                y: 100,
-            },
-            to: {
-                opacity: 1,
-                y: 0,
-            },
-        }),
-        {
-            once: true,
-        }
-    );
 
     return (
         <>
             <BlockWrapper>
-                <animated.div ref={ref} style={springs}>
+                {heading && (
+                    <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
+                        <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
+                    </div>
+                )}
 
-                    {heading && (
-                        <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
-                            <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
-                        </div>
-                    )}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    
+                    {customEntries.map((entry, index: number) => {
 
-                    <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        const cardData = {
+                            title: entry.title,
+                            imageLabel: entry.publicationType,
+                            summary: entry.summary,
+                            summaryClasses: '',
+                            url: entry.externalLink,
+                            thumbnailImage: entry.thumbnailImage,
+                        }
                         
-                        {customEntries.map((entry, index: number) => {
-                            return (
-                                <Card entry={entry} key={index}>
-                                    <Button 
-                                        href={entry.externalLink}
-                                        size="small"
-                                    >
-                                        Read More
-                                    </Button>
-                                </Card>
+                        return (
+                            <Card entry={cardData} key={index}>
+                                <Button 
+                                    href={entry.externalLink}
+                                    size="small"
+                                    customClasses="mt-3 self-end flex items-center gap-1"
+                                >
+                                    Read More <ExternalLinkIcon className="w-4 h-4" />
+                                </Button>
+                            </Card>
+                        )
+                    })}
 
-                            )
-                        })}
-
-                    </ul>
-                </animated.div>
+                </div>
             </BlockWrapper>
         </>
     )

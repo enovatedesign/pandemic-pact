@@ -1,141 +1,111 @@
-import {Fragment} from "react"
-import {Flex, Subtitle} from "@tremor/react"
-import {ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Scatter, ResponsiveContainer} from 'recharts'
+import {useContext} from "react"
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts'
+import {groupBy} from 'lodash'
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {sumNumericGrantAmounts} from "../../helpers/reducers"
+import {GlobalFilterContext} from "../../helpers/filter"
+import selectOptions from "../../../data/dist/select-options.json"
 
-interface Props {
-    globallyFilteredDataset: any,
-}
+export default function TemporalChart() {
+    const {grants} = useContext(GlobalFilterContext)
 
-export default function TemporalChart({globallyFilteredDataset}: Props) {
-    const data = [
-        {
-            year: '2020',
-            "COVID": {
-                "Total Grants": 2400,
-                "Amount Committed (USD)": 100000,
-            },
-            "Zika Virus": {
-                "Total Grants": 1000,
-                "Amount Committed (USD)": 50000,
-            },
-        },
-        {
-            year: '2021',
-            "COVID": {
-                "Total Grants": 3500,
-                "Amount Committed (USD)": 150000,
-            },
-            "Zika Virus": {
-                "Total Grants": 500,
-                "Amount Committed (USD)": 5000,
-            },
-        },
-        {
-            year: '2022',
-            "COVID": {
-                "Total Grants": 7000,
-                "Amount Committed (USD)": 200000,
-            },
-            "Zika Virus": {
-                "Total Grants": 100,
-                "Amount Committed (USD)": 1000,
-            },
-        },
-    ]
+    const datasetGroupedByYear = groupBy(
+        grants.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
+        'GrantStartYear',
+    )
 
-    const diseases = [
-        {name: "COVID", colour: "red"},
-        {name: "Zika Virus", colour: "blue"},
+    const amountCommittedToEachDiseaseOverTime = Object.keys(
+        datasetGroupedByYear
+    ).map(year => {
+        const grants = datasetGroupedByYear[year]
+
+        let dataPoint: {[key: string]: string | number} = {year}
+
+        selectOptions.Disease.forEach(({value, label}) => {
+            dataPoint[label] = grants
+                .filter(grant => grant.Disease.includes(value))
+                .reduce(...sumNumericGrantAmounts)
+        })
+
+        return dataPoint
+    })
+
+    const colours = [
+        '#3b82f6',
+        '#f59e0b',
+        '#6b7280',
+        '#ef4444',
+        '#71717a',
+        '#64748b',
+        '#22c55e',
+        '#14b8a6',
+        '#10b981',
+        '#ec4899',
+        '#f43f5e',
+        '#0ea5e9',
+        '#a855f7',
+        '#eab308',
+        '#737373',
+        '#6366f1',
+        '#d946ef',
+        '#06b6d4',
+        '#84cc16',
+        '#8b5cf6',
+        '#f97316',
+        '#78716c',
     ]
 
     return (
-        <Flex
-            flexDirection="row"
-        >
-            <div className="w-8">
-                <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black flex items-center gap-x-2">
-                    <span>&#9679;</span> Grants
-                </Subtitle>
-            </div>
+        <ResponsiveContainer width="100%" height={700}>
+            <LineChart
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                }}
+                data={amountCommittedToEachDiseaseOverTime}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
 
-            <div className="w-full h-[700px]">
-                <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart
-                        width={500}
-                        height={400}
-                        data={data}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid stroke="#f5f5f5" />
+                <XAxis
+                    type="category"
+                    dataKey="year"
+                    label={{
+                        value: "Year",
+                        position: "bottom",
+                        offset: 0,
+                    }}
+                />
 
-                        <Tooltip
-                            formatter={(value: any, name: any, props: any) => {
-                                let newValue = value
+                <YAxis
+                    type="number"
+                    tickFormatter={dollarValueFormatter}
+                    label={{
+                        value: "Amount Committed (USD)",
+                        position: "left",
+                        angle: -90,
+                        style: {textAnchor: 'middle'},
+                        offset: 10,
+                    }}
+                />
 
-                                if (name.includes("Amount Committed (USD)")) {
-                                    newValue = dollarValueFormatter(value)
-                                }
+                <Tooltip
+                    formatter={dollarValueFormatter}
+                    isAnimationActive={false}
+                />
 
-                                return [
-                                    newValue,
-                                    name.split(".").join(" "),
-                                    props,
-                                ]
-                            }}
-                        />
-
-                        <Legend
-                            formatter={value => value.split(".")[0]}
-                        />
-
-                        <XAxis dataKey="year" type="category" />
-
-                        <YAxis
-                            yAxisId="left"
-                            orientation="left"
-                            type="number"
-                        />
-
-                        <YAxis
-                            yAxisId="right"
-                            orientation="right"
-                            tickFormatter={dollarValueFormatter}
-                        />
-
-                        {diseases.map(({name, colour}) =>
-                            <Fragment key={name}>
-                                <Scatter
-                                    dataKey={`${name}.Total Grants`}
-                                    fill={colour}
-                                    yAxisId="left"
-                                />
-
-                                <Line
-                                    dataKey={`${name}.Amount Committed (USD)`}
-                                    stroke={colour}
-                                    dot={false}
-                                    activeDot={false}
-                                    legendType="none"
-                                    yAxisId="right"
-                                    strokeDasharray="5 5"
-                                />
-                            </Fragment>
-                        )}
-                    </ComposedChart>
-                </ResponsiveContainer>
-            </div>
-
-            <div className="w-8">
-                <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black flex items-center gap-x-2">
-                    <span className="text-4xl block">&#9476;</span> Amount Committed (USD)
-                </Subtitle>
-            </div>
-        </Flex>
+                {selectOptions.Disease.map(({label}, index) => (
+                    <Line
+                        key={label}
+                        type="monotone"
+                        dataKey={label}
+                        stroke={colours[index % colours.length]}
+                        strokeWidth={2}
+                        dot={false}
+                    />
+                ))}
+            </LineChart>
+        </ResponsiveContainer>
     )
 }
