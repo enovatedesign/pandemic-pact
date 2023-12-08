@@ -14,6 +14,10 @@ fs.removeSync('./data/dump')
 
 console.log(chalk.blue(`Removed ./data/dump (if it existed)`));
 
+fs.removeSync('./data/download')
+
+console.log(chalk.blue(`Removed ./data/download (if it existed)`));
+
 // Don't try to remove the search index if MeiliSearch is not configured
 if (typeof process.env['MEILISEARCH_HOST'] === 'undefined') {
     process.exit(0)
