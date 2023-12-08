@@ -22,7 +22,7 @@ async function main() {
 async function downloadCsvAndConvertToJson(url: string, outputFileName: string) {
     const buffer = await fetch(url).then(res => res.arrayBuffer())
 
-    console.log(chalk.blue(`Fetched file from ${url}`));
+    console.log(chalk.blue(`Fetched file from ${url}`))
 
     const workbook = read(buffer, {raw: true})
 
@@ -36,5 +36,5 @@ async function downloadCsvAndConvertToJson(url: string, outputFileName: string) 
 
     fs.writeJsonSync(outputFilePath, data)
 
-    console.log(chalk.blue(`Converted spreadsheet to ${outputFilePath} (${getHumanReadableFileSize(outputFilePath)})`));
+    console.log(chalk.blue(`Converted spreadsheet to ${outputFilePath} (${getHumanReadableFileSize(outputFilePath)})`))
 }
