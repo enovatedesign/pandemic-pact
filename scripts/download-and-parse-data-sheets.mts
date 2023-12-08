@@ -32,9 +32,9 @@ async function downloadCsvAndConvertToJson(url: string, outputFileName: string) 
 
     const data = utils.sheet_to_json(sheet)
 
-    const outputFilePath = `data/download/${outputFileName}`
+    const outputPathname = `data/download/${outputFileName}`
 
-    fs.writeJsonSync(outputFilePath, data)
+    fs.writeJsonSync(outputPathname, data)
 
-    console.log(chalk.blue(`Converted spreadsheet to ${outputFilePath} (${getHumanReadableFileSize(outputFilePath)})`));
+    console.log(chalk.blue(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`));
 }
