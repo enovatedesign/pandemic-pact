@@ -1,28 +1,30 @@
 import fs from 'fs-extra'
 import {read, utils} from 'xlsx'
 import chalk from 'chalk'
-import {getHumanReadableFileSize} from './helpers/files.mjs'
+import {getHumanReadableFileSize} from '../helpers/files.mjs'
 
-main()
+export default async function () {
+    console.log(chalk.white(`Fetching data sheets\n`))
 
-async function main() {
     fs.ensureDirSync('data/download')
 
-    downloadCsvAndConvertToJson(
+    await downloadCsvAndConvertToJson(
         'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/dictionary.csv',
         'dictionary.json'
     )
 
-    downloadCsvAndConvertToJson(
+    await downloadCsvAndConvertToJson(
         'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/raw-grant-data.csv',
         'raw-grant-data.json'
     )
+
+    console.log()
 }
 
 async function downloadCsvAndConvertToJson(url: string, outputFileName: string) {
     const buffer = await fetch(url).then(res => res.arrayBuffer())
 
-    console.log(chalk.blue(`Fetched file from ${url}`));
+    console.log(chalk.grey(`Fetched file from ${url}`))
 
     const workbook = read(buffer, {raw: true})
 
@@ -36,5 +38,5 @@ async function downloadCsvAndConvertToJson(url: string, outputFileName: string) 
 
     fs.writeJsonSync(outputPathname, data)
 
-    console.log(chalk.blue(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`));
+    console.log(chalk.grey(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`))
 }
