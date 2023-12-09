@@ -19,7 +19,7 @@ export default async function () {
             info(`Fetched publications for ${i}/${sourceGrants.length} grants`)
         }
 
-        if (grantHasValidPubmedId(sourceGrant)) {
+        if (grantHasValidPubMedId(sourceGrant)) {
             const PubMedLinks = await getPubMedLinks(sourceGrant.PubMedGrantId as string)
             grants.push({...sourceGrant, PubMedLinks})
         } else {
@@ -32,7 +32,7 @@ export default async function () {
     printWrittenFileStats(pathname)
 }
 
-function grantHasValidPubmedId(grant: ProcessedGrant): boolean {
+function grantHasValidPubMedId(grant: ProcessedGrant): boolean {
     if (!grant.PubMedGrantId) {
         return false
     }
