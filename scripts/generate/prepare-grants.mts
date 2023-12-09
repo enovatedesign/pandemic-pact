@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {RawGrant, ProcessedGrant} from '../types/generate'
+import {convertSourceKeysToOurKeys} from '../helpers/key-mapping.mjs'
 import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 
 export default function () {
@@ -102,51 +103,4 @@ function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
     ).map(
         ([key]) => key.split('___')[1].replace(/^_/, '-')
     )
-}
-
-function convertSourceKeysToOurKeys(processedGrant: ProcessedGrant) {
-    // Note that some of the columns in the source spreadsheets are not included
-    // here because we don't need them.
-
-    const keyMapping: {[key: string]: string} = {
-        'pactid': 'GrantID',
-        'grant_number': 'PubMedGrantId',
-        'grant_title_eng': 'GrantTitleEng',
-        'award_amount_converted': 'GrantAmountConverted',
-        'abstract': 'Abstract',
-        'grant_start_year': 'GrantStartYear',
-        'study_subject': 'StudySubject',
-        'ethnicity': 'Ethnicity',
-        'age_groups': 'AgeGroups',
-        'rurality': 'Rurality',
-        'vulnerable_population': 'VulnerablePopulations',
-        'occupational_groups': 'OccupationalGroups',
-        'study_type': 'StudyType',
-        'clinical_trial': 'ClinicalTrial',
-        'pathogen': 'Pathogen',
-        'disease': 'Disease',
-        'funder_name': 'FundingOrgName',
-        'funder_country': 'FunderCountry',
-        'funder_region': 'FunderRegion',
-        'research_institition_name': 'ResearchInstitutionName',
-        'research_institution_region': 'ResearchInstitutionRegion',
-        'research_institution_country_iso': 'ResearchInstitutionCountry',
-        'research_location_region': 'ResearchLocationRegion',
-        'research_location_country_iso': 'ResearchLocationCountry',
-        'main_research_priority_area_number_new': 'ResearchCat',
-        'main_research_sub_priority_number_new': 'ResearchSubcat',
-        'tags': 'Tags',
-    };
-
-    const newGrant: ProcessedGrant = {};
-
-    for (const [key, value] of Object.entries(processedGrant)) {
-        if (keyMapping[key] === undefined) {
-            continue;
-        }
-
-        newGrant[keyMapping[key]] = value;
-    }
-
-    return newGrant;
 }

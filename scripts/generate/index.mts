@@ -2,7 +2,8 @@ import clean from './clean.mjs'
 import downloadAndParseDataSheets from './download-and-parse-data-sheets.mjs'
 import prepareSelectOptions from './prepare-select-options.mjs'
 import prepareGrants from './prepare-grants.mjs'
-import fetchPubmedData from './fetch-pubmed-data.mjs'
+import fetchPubMedData from './fetch-pub-med-data.mjs'
+import prepareIndividualGrantFiles from './prepare-individual-grant-files.mjs'
 
 main()
 
@@ -15,5 +16,7 @@ async function main() {
 
     prepareGrants()
 
-    await fetchPubmedData()
+    await fetchPubMedData()
+
+    prepareIndividualGrantFiles()
 }

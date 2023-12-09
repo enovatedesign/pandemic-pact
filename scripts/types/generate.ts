@@ -7,3 +7,11 @@ export interface ProcessedGrant {
 }
 
 export type Grant = ProcessedGrant
+
+export interface SelectOption {
+    [key: string]: string
+}
+
+export interface SelectOptions {
+    [key: string]: SelectOption
+}

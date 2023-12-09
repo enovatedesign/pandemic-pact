@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
-import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
+import {title, printWrittenFileStats} from '../helpers/log.mjs'
+import {convertSourceKeysToOurKeys} from '../helpers/key-mapping.mjs'
 
 type Row = {[key: string]: string}
 
@@ -25,9 +26,9 @@ export default function () {
 
     fs.ensureDirSync(path)
 
-    const pathname = `${path}/selectOptions.json`
+    const pathname = `${path}/select-options.json`
 
-    fs.writeJsonSync(pathname, selectOptions)
+    fs.writeJsonSync(pathname, convertSourceKeysToOurKeys(selectOptions))
 
     printWrittenFileStats(pathname)
 }

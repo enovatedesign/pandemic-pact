@@ -8,7 +8,7 @@ export default async function () {
 
     const pathname = './data/dist/grants.json'
 
-    const sourceGrants: ProcessedGrant[] = await fs.readJson(pathname)
+    const sourceGrants: ProcessedGrant[] = fs.readJsonSync(pathname)
 
     const grants: Grant[] = []
 
