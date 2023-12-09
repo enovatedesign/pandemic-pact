@@ -35,7 +35,11 @@ export default function () {
         ].includes(field)
     )
 
-    const grants = rawGrants.map(rawGrant => {
+    const grants = rawGrants.map((rawGrant, index, array) => {
+        if (index > 0 && (index % 500 === 0 || index === array.length - 1)) {
+            info(`Processed ${index} of ${array.length} grants`)
+        }
+
         const textFieldValues = _.pick(rawGrant, textFields)
 
         const checkBoxFieldValues = Object.fromEntries(
