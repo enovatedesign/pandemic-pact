@@ -2,22 +2,22 @@ import dotenv from 'dotenv'
 import {MeiliSearch} from 'meilisearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
-import chalk from 'chalk'
-import {StringDictionary} from './types/dictionary'
-import {getMeilisearchIndexName} from './helpers/meilisearch.mjs'
+import {getMeilisearchIndexName} from '../helpers/meilisearch.mjs'
+import {Grant} from '../types/generate'
+import {title, info} from '../helpers/log.mjs'
 
-dotenv.config({path: './.env.local'})
+export default async function () {
+    dotenv.config({path: './.env.local'})
 
-const host = process.env.MEILISEARCH_HOST
-const masterApiKey = process.env.MEILISEARCH_MASTER_API_KEY
+    const host = process.env.MEILISEARCH_HOST
 
-main()
-
-async function main() {
     // Don't try to add the search index if MeiliSearch is not configured
-    if (!host) {
-        return
+    if (typeof host === 'undefined') {
+        return;
     }
+
+    const masterApiKey = process.env.MEILISEARCH_MASTER_API_KEY
+
     const client = new MeiliSearch({
         host,
         apiKey: masterApiKey,
@@ -25,7 +25,9 @@ async function main() {
 
     // Add documents to search indexes
 
-    const data: Array<StringDictionary> = fs.readJsonSync('./data/dist/complete-dataset.json')
+    title('Indexing data in MeiliSearch')
+
+    const data: Grant[] = fs.readJsonSync('./data/dist/grants.json')
 
     await addDocumentsToSearchIndex(client, data, 'grants')
 
@@ -39,7 +41,7 @@ async function main() {
     await updateEnvFile(client)
 }
 
-async function addDocumentsToSearchIndex(client: MeiliSearch, data: Array<StringDictionary>, indexName: string, settings?: any) {
+async function addDocumentsToSearchIndex(client: MeiliSearch, data: Grant[], indexName: string, settings?: any) {
     const defaultSettings = {
         displayedAttributes: [
             'GrantID',
@@ -83,7 +85,7 @@ async function addDocumentsToSearchIndex(client: MeiliSearch, data: Array<String
 
     const response = await index.addDocuments(documents, {primaryKey: 'GrantID'})
 
-    console.log(chalk.blue(`Triggered task '${response.taskUid}'[status: ${response.status}]to add ${documents.length} documents to search index '${response.indexUid}'`))
+    info(`Triggered task '${response.taskUid}'[status: ${response.status}]to add ${documents.length} documents to search index '${response.indexUid}'`)
 
     // Dump the settings and documents for debugging/reference purposes
 
@@ -96,13 +98,15 @@ async function addDocumentsToSearchIndex(client: MeiliSearch, data: Array<String
     fs.writeJsonSync(`${dumpDir}/${docDumpFilename}`, documents, {spaces: 2})
     fs.writeJsonSync(`${dumpDir}/${settingsDumpFilename}`, mergedSettings, {spaces: 2})
 
-    console.log(chalk.blue(`Dumped index settings to ${dumpDir}/${settingsDumpFilename} and documents to ${dumpDir}/${docDumpFilename}`))
+    info(`Dumped index settings to ${dumpDir}/${settingsDumpFilename} and documents to ${dumpDir}/${docDumpFilename}`)
 }
 
 async function updateEnvFile(client: MeiliSearch) {
     // Get the Default Search API Key from Meilisearch if a Master Key is configured
 
     let searchApiKey = ''
+
+    const masterApiKey = process.env.MEILISEARCH_MASTER_API_KEY
 
     if (masterApiKey) {
         const keys = await client.getKeys()
@@ -118,7 +122,7 @@ async function updateEnvFile(client: MeiliSearch) {
     if (!fs.existsSync('./.env.local')) {
         fs.writeFileSync('./.env.local', environmentVariablesToWrite(searchApiKey))
 
-        console.log(chalk.blue(`Added NEXT_PUBLIC_MEILISEARCH_ * environment variables to new.env.local`))
+        info(`Added NEXT_PUBLIC_MEILISEARCH_ * environment variables to new.env.local`)
 
         return
     }
@@ -139,10 +143,12 @@ async function updateEnvFile(client: MeiliSearch) {
 
     fs.writeFileSync('./.env.local', nextPublicEnv)
 
-    console.log(chalk.blue(`Added Or Updated NEXT_PUBLIC_MEILISEARCH_ * environment variables in existing.env.local`))
+    info(`Added Or Updated NEXT_PUBLIC_MEILISEARCH_ * environment variables in existing.env.local`)
 }
 
 function environmentVariablesToWrite(searchApiKey: string) {
+    const host = process.env.MEILISEARCH_HOST
+
     const variablesToWrite = [
         `NEXT_PUBLIC_MEILISEARCH_HOST = ${host}`,
         `NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY = ${searchApiKey}`,
