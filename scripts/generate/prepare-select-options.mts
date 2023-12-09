@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import {getHumanReadableFileSize} from '../helpers/files.mjs'
-import {title, info, newline} from '../helpers/log.mjs'
+import {title, info} from '../helpers/log.mjs'
 
 type Row = {[key: string]: string}
 
@@ -30,9 +30,7 @@ export default function () {
 
     fs.writeJsonSync(pathname, selectOptions)
 
-    info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})`)
-
-    newline()
+    info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})\n`)
 }
 
 function parseSelectOptionsFromChoices(choices: string) {

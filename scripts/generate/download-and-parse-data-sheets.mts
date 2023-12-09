@@ -15,7 +15,7 @@ export default async function () {
 
     await downloadCsvAndConvertToJson(
         'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/raw-grant-data.csv',
-        'raw-grant-data.json'
+        'grants.json'
     )
 
     newline()
