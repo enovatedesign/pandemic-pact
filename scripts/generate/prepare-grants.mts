@@ -1,9 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import {RawGrant, ProcessedGrant} from '../types/generate'
 import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
-
-type RawGrant = {[key: string]: string}
-type ProcessedGrant = {[key: string]: string | string[] | number}
 
 export default function () {
     title('Preparing grants')
