@@ -10,6 +10,8 @@ export default function () {
 
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync('./data/dist/grants.json')
 
+    const path = './data/dist/grants'
+
     for (let i = 0; i < sourceGrants.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
             info(`Processed ${i} of ${sourceGrants.length} grants`)
@@ -33,12 +35,15 @@ export default function () {
             )
         )
 
-        const path = './data/dist/grants'
-
         fs.ensureDirSync(path)
 
         const pathname = `${path}/${grantWithFullText['GrantID']}.json`
 
         fs.writeJsonSync(pathname, grantWithFullText)
     }
+
+    fs.writeJsonSync(
+        `${path}/index.json`,
+        sourceGrants.map(grant => grant['GrantID']),
+    )
 }
