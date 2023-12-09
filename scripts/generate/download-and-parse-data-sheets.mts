@@ -1,10 +1,10 @@
 import fs from 'fs-extra'
 import {read, utils} from 'xlsx'
-import chalk from 'chalk'
 import {getHumanReadableFileSize} from '../helpers/files.mjs'
+import {title, info, newline} from '../helpers/log.mjs'
 
 export default async function () {
-    console.log(chalk.white(`Fetching data sheets\n`))
+    title('Fetching data sheets')
 
     fs.ensureDirSync('data/download')
 
@@ -18,13 +18,13 @@ export default async function () {
         'raw-grant-data.json'
     )
 
-    console.log()
+    newline()
 }
 
 async function downloadCsvAndConvertToJson(url: string, outputFileName: string) {
     const buffer = await fetch(url).then(res => res.arrayBuffer())
 
-    console.log(chalk.grey(`Fetched file from ${url}`))
+    info(`Fetched file from ${url}`)
 
     const workbook = read(buffer, {raw: true})
 
@@ -38,5 +38,5 @@ async function downloadCsvAndConvertToJson(url: string, outputFileName: string) 
 
     fs.writeJsonSync(outputPathname, data)
 
-    console.log(chalk.grey(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`))
+    info(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`)
 }

@@ -1,11 +1,11 @@
 import fs from 'fs-extra'
-import chalk from 'chalk'
 import {getHumanReadableFileSize} from '../helpers/files.mjs'
+import {title, info, newline} from '../helpers/log.mjs'
 
 type Row = {[key: string]: string}
 
 export default function () {
-    console.log(chalk.white(`Generating select options\n`))
+    title('Generating select options')
 
     const data: Row[] = fs.readJsonSync('./data/download/dictionary.json')
 
@@ -30,7 +30,9 @@ export default function () {
 
     fs.writeJsonSync(pathname, selectOptions)
 
-    console.log(chalk.grey(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})`))
+    info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})`)
+
+    newline()
 }
 
 function parseSelectOptionsFromChoices(choices: string) {
