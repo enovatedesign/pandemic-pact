@@ -1,7 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import {getHumanReadableFileSize} from '../helpers/files.mjs'
-import {title, info} from '../helpers/log.mjs'
+import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 
 type RawGrant = {[key: string]: string}
 
@@ -71,7 +70,7 @@ export default function () {
 
     fs.writeJsonSync(pathname, grants)
 
-    info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})\n`)
+    printWrittenFileStats(pathname)
 }
 
 function convertCommaSeparatedValueFieldToArray(grant: RawGrant, field: string) {

@@ -1,7 +1,6 @@
 import fs from 'fs-extra'
 import {read, utils} from 'xlsx'
-import {getHumanReadableFileSize} from '../helpers/files.mjs'
-import {title, info, newline} from '../helpers/log.mjs'
+import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 
 export default async function () {
     title('Fetching data sheets')
@@ -17,8 +16,6 @@ export default async function () {
         'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/raw-grant-data.csv',
         'grants.json'
     )
-
-    newline()
 }
 
 async function downloadCsvAndConvertToJson(url: string, outputFileName: string) {
@@ -38,5 +35,5 @@ async function downloadCsvAndConvertToJson(url: string, outputFileName: string) 
 
     fs.writeJsonSync(outputPathname, data)
 
-    info(`Converted spreadsheet to ${outputPathname} (${getHumanReadableFileSize(outputPathname)})`)
+    printWrittenFileStats(outputPathname)
 }

@@ -1,13 +1,14 @@
 import chalk from 'chalk'
+import {getHumanReadableFileSize} from '../helpers/files.mjs'
 
 export function title(message: string) {
-    console.log(chalk.blue(`${message}\n`))
+    console.log(chalk.blue(`\n${message}\n`))
 }
 
 export function info(message: string) {
     console.log(chalk.white(`${message}`))
 }
 
-export function newline() {
-    console.log()
+export function printWrittenFileStats(pathname: string) {
+    info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})`)
 }
