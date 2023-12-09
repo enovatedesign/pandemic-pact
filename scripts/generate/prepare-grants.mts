@@ -3,7 +3,7 @@ import _ from 'lodash'
 import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 
 type RawGrant = {[key: string]: string}
-type ProcessedGrant = {[key: string]: string | string[]}
+type ProcessedGrant = {[key: string]: string | string[] | number}
 
 export default function () {
     title('Preparing grants')
@@ -35,12 +35,25 @@ export default function () {
         ].includes(field)
     )
 
+    const [numericFields, stringFields] = _.partition(
+        textFields,
+        field => field === 'award_amount_converted'
+    )
+
     const grants = rawGrants.map((rawGrant, index, array) => {
         if (index > 0 && (index % 500 === 0 || index === array.length - 1)) {
             info(`Processed ${index} of ${array.length} grants`)
         }
 
-        const textFieldValues = _.pick(rawGrant, textFields)
+        const stringFieldValues = _.pick(rawGrant, stringFields)
+
+        const numericFieldValues = Object.fromEntries(
+            Object.entries(
+                _.pick(rawGrant, numericFields)
+            ).map(
+                ([key, value]) => [key, parseFloat(value)]
+            )
+        )
 
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(
@@ -61,7 +74,8 @@ export default function () {
         )
 
         return convertSourceKeysToOurKeys({
-            ...textFieldValues,
+            ...stringFieldValues,
+            ...numericFieldValues,
             ...checkBoxFieldValues,
             ...commaSeparatedFieldValues,
         })
