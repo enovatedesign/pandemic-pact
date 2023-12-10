@@ -8,7 +8,7 @@ import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
-import dataset from '../../data/dist/filterable-dataset.json'
+import dataset from '../../data/dist/grants.json'
 import selectOptions from '../../data/dist/select-options.json'
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
