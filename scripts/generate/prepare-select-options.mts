@@ -34,16 +34,14 @@ export default function () {
 }
 
 function parseSelectOptionsFromChoices(choices: string) {
-    return Object.fromEntries(
-        choices.split(' | ').map(choice => {
-            const [id, ...rest] = choice.split(',')
+    return choices.split(' | ').map(choice => {
+        const [id, ...rest] = choice.split(',')
 
-            return [
-                id.trim(),
-                rest.join(',')
-                    .replace(/<[^>]*>?/gm, '') // remove html tags (if any)
-                    .trim()
-            ]
-        })
-    )
+        return {
+            value: id.trim(),
+            label: rest.join(',')
+                .replace(/<[^>]*>?/gm, '') // remove html tags (if any)
+                .trim()
+        }
+    })
 }
