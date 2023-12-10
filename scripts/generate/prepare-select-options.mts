@@ -24,7 +24,14 @@ export default function () {
 
     const pathname = `${path}/select-options.json`
 
-    fs.writeJsonSync(pathname, convertSourceKeysToOurKeys(selectOptions))
+    const optionsWithConvertedKeys = convertSourceKeysToOurKeys(selectOptions)
+
+    fs.writeJsonSync(pathname, {
+        ...optionsWithConvertedKeys,
+        ResearchInstitutionCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
+        ResearchLocationCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
+        ResearchInstitutionRegion: _.cloneDeep(optionsWithConvertedKeys.FunderRegion),
+    })
 
     printWrittenFileStats(pathname)
 }
