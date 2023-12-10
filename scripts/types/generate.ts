@@ -9,9 +9,10 @@ export interface ProcessedGrant {
 export type Grant = ProcessedGrant
 
 export interface SelectOption {
-    [key: string]: string
+    value: string
+    label: string
 }
 
 export interface SelectOptions {
-    [key: string]: SelectOption
+    [key: string]: SelectOption[]
 }

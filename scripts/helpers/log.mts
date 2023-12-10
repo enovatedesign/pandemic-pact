@@ -6,7 +6,11 @@ export function title(message: string) {
 }
 
 export function info(message: string) {
-    console.log(chalk.white(`${message}`))
+    console.log(chalk.white(message))
+}
+
+export function warn(message: string) {
+    console.warn(chalk.yellow(message))
 }
 
 export function printWrittenFileStats(pathname: string) {
