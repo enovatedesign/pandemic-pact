@@ -24,13 +24,13 @@ export default function GrantsPerResearchCategoryByRegion() {
             researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
         )
 
-    const regionOptions = selectOptions.Regions.filter(
+    const regionOptions = selectOptions.ResearchLocationRegion.filter(
         regionOption => !["Not known", "Unspecified"].includes(regionOption.value)
     )
 
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset
-            .filter((grant: any) => grant.GrantRegion === regionOption.value)
+            .filter((grant: any) => grant.ResearchLocationRegion === regionOption.value)
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
             researchCategoryOptions.map(({label, value}: any) => ([
