@@ -30,7 +30,7 @@ export default function () {
         ...optionsWithConvertedKeys,
         ResearchInstitutionCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
         ResearchLocationCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
-        ResearchInstitutionRegion: _.cloneDeep(optionsWithConvertedKeys.FunderRegion),
+        ResearchLocationRegion: _.cloneDeep(optionsWithConvertedKeys.FunderRegion),
     })
 
     printWrittenFileStats(pathname)
