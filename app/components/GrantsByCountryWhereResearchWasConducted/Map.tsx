@@ -26,7 +26,7 @@ export default function Map() {
     const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
 
     const [filteredGeojson, colourScale] = useMemo(() => {
-        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIso2(dataset, displayWhoRegions, usingFunderLocation)
+        const geojsonPropertiesToAssign: {[key: string]: any} = getGeojsonPropertiesByIsoNumeric(dataset, displayWhoRegions, usingFunderLocation)
 
         const filteredGeojson = {...geojson}
 
@@ -34,7 +34,7 @@ export default function Map() {
             const existingProperties: any = country.properties
 
             const propertiesToAssign: any = geojsonPropertiesToAssign.find(
-                (properties: any) => properties.iso2.includes(existingProperties.ISO_A2_EH)
+                (properties: any) => properties.isoNumeric.includes(existingProperties.ISO_N3_EH)
             )
 
             const newProperties = propertiesToAssign?.properties || {}
@@ -66,7 +66,7 @@ export default function Map() {
         if (displayWhoRegions) {
             queryFilters[usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'] = [geo.properties.NAME]
         } else {
-            queryFilters[usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'] = [geo.properties.ISO_A2_EH]
+            queryFilters[usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'] = [geo.properties.ISO_N3_EH]
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
@@ -158,7 +158,7 @@ function TooltipContent({geo, displayWhoRegions}: {geo: any, displayWhoRegions: 
     )
 }
 
-function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean, usingFunderLocation: boolean) {
+function getGeojsonPropertiesByIsoNumeric(dataset: any[], displayWhoRegions: boolean, usingFunderLocation: boolean) {
     if (displayWhoRegions) {
         const whoRegions = Object.keys(regionToCountryMapping)
 
@@ -175,7 +175,7 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean, 
             const totalAmountCommitted = grants?.reduce(...sumNumericGrantAmounts) ?? 0
 
             return {
-                iso2: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
+                isoNumeric: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
                 properties: {
                     NAME: region,
                     totalGrants,
@@ -192,7 +192,7 @@ function getGeojsonPropertiesByIso2(dataset: any[], displayWhoRegions: boolean, 
         )
     ).map(
         ([country, grants]) => ({
-            iso2: [country],
+            isoNumeric: [country.padStart(3, '0')],
             properties: {
                 totalGrants: grants.length,
                 totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
