@@ -11,6 +11,7 @@ import regionToCountryMapping from '../../../data/source/region-to-country-mappi
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {TooltipContext} from '../../helpers/tooltip'
+import selectOptions from '../../../data/dist/select-options.json'
 
 const ColourScale = dynamic(() => import('./ColourScale'), {ssr: false})
 
@@ -64,7 +65,7 @@ export default function Map() {
         let queryFilters: any = {}
 
         if (displayWhoRegions) {
-            queryFilters[usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'] = [geo.properties.NAME]
+            queryFilters[usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'] = [geo.properties.regionValue]
         } else {
             queryFilters[usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'] = [geo.properties.ISO_N3_EH]
         }
@@ -162,10 +163,9 @@ function getGeojsonPropertiesByIsoNumeric(dataset: any[], displayWhoRegions: boo
     if (displayWhoRegions) {
         const whoRegions = Object.keys(regionToCountryMapping)
 
-        const grantsGroupedByRegion = groupBy(
-            dataset,
-            usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'
-        )
+        const regionKey = usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'
+
+        const grantsGroupedByRegion = groupBy(dataset, regionKey)
 
         return whoRegions.map(region => {
             const grants = grantsGroupedByRegion[region]
@@ -174,10 +174,13 @@ function getGeojsonPropertiesByIsoNumeric(dataset: any[], displayWhoRegions: boo
 
             const totalAmountCommitted = grants?.reduce(...sumNumericGrantAmounts) ?? 0
 
+            const regionName = selectOptions[regionKey].find(option => option.value === region)?.label
+
             return {
                 isoNumeric: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
                 properties: {
-                    NAME: region,
+                    NAME: regionName,
+                    regionValue: region,
                     totalGrants,
                     totalAmountCommitted,
                 }
