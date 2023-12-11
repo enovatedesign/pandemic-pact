@@ -94,6 +94,10 @@ export function filterGrants(grants: any, filters: any) {
                     return true
                 }
 
+                if (typeof grant[key] === "undefined") {
+                    return false
+                }
+
                 // if the grant has a single value in the field, check if it matches any of the filter values
                 if (typeof grant[key] === "string") {
                     return values.includes(grant[key])

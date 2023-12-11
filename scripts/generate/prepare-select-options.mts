@@ -31,6 +31,8 @@ export default function () {
         ResearchInstitutionCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
         ResearchLocationCountry: _.cloneDeep(optionsWithConvertedKeys.FunderCountry),
         ResearchLocationRegion: _.cloneDeep(optionsWithConvertedKeys.FunderRegion),
+        GrantStartYear: getUniqueValuesFromRawGrants('grant_start_year'),
+        ResearchInstitutionName: getUniqueValuesFromRawGrants('research_institition_name'),
     })
 
     printWrittenFileStats(pathname)
@@ -91,4 +93,17 @@ function parseResearchCategoriesAndSubcategories(researchCategoryMapping: Row[])
         ['main_research_priority_area_number_new', researchCategoryOptions],
         ['main_research_sub_priority_number_new', researchSubCategoryOptions],
     ]
+}
+
+function getUniqueValuesFromRawGrants(key: string) {
+    const grants: Row[] = fs.readJsonSync('./data/download/grants.json')
+
+    const values = grants.map(grant => grant[key])
+
+    return _.uniq(values).filter(
+        value => value
+    ).sort().map(value => ({
+        value,
+        label: value,
+    }))
 }
