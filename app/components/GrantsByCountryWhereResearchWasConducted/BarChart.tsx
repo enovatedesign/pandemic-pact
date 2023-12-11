@@ -97,9 +97,11 @@ export default function BarChart() {
         }
     }
 
-    const countryOrRegionFormatter = (label: string) => selectOptions[
-        selectedRegion ? 'ResearchInstitutionCountry' : 'ResearchInstitutionRegion'
-    ].find(option => option.value === label)?.label
+    const countryOrRegionFormatter = (label: string) => {
+        return (selectOptions[
+            selectedRegion ? 'ResearchInstitutionCountry' : 'ResearchInstitutionRegion'
+        ].find(option => option.value === label)?.label) as string
+    }
 
     const selectedRegionName = selectOptions.ResearchInstitutionRegion.find(option => option.value === selectedRegion)?.label
 
