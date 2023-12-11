@@ -54,13 +54,10 @@ const ListPublicationsBlock = ({block}: Props) => {
                         
                         return (
                             <Card entry={cardData} key={index}>
-                                <Button 
-                                    href={entry.externalLink}
-                                    size="small"
-                                    customClasses="mt-3 self-end flex items-center gap-1"
-                                >
-                                    Read More <ExternalLinkIcon className="w-4 h-4" />
-                                </Button>
+                                <span className="sr-only">(external link)</span> 
+                                <span className="rounded-full bg-primary flex justify-center items-center p-4" aria-hidden="true">
+                                    <ExternalLinkIcon className="w-4 h-4" />
+                                </span>
                             </Card>
                         )
                     })}
