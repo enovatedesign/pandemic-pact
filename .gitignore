@@ -37,6 +37,7 @@ next-env.d.ts
 # downloaded and dumped data
 /data/dist
 /data/dump
+/data/download
 
 # sample data spreadsheets
 sample-real-data.csv

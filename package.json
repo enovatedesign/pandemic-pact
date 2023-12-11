@@ -8,10 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "clean": "ts-node --esm scripts/clean.mts",
-        "prepare-data": "ts-node --esm scripts/prepare-data.mts",
-        "prepare-meilisearch": "ts-node --esm scripts/prepare-meilisearch.mts",
-        "generate": "npm run clean && npm run prepare-data && npm run prepare-meilisearch"
+        "generate": "ts-node --esm scripts/generate/index.mts"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.433.0",

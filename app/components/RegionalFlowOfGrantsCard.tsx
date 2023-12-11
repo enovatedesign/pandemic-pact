@@ -6,6 +6,13 @@ import {groupBy} from "lodash"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {GlobalFilterContext} from "../helpers/filter";
 import {dollarValueFormatter} from "../helpers/value-formatters"
+import selectOptions from '../../data/dist/select-options.json'
+
+function getRegions(key: string) {
+    return selectOptions[key as keyof typeof selectOptions].filter(
+        regionOption => "Unspecified" !== regionOption.label
+    )
+}
 
 export default function RegionalFlowOfGrantsCard() {
     const {grants} = useContext(GlobalFilterContext)
@@ -13,59 +20,46 @@ export default function RegionalFlowOfGrantsCard() {
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const colours = {
-        "Africa": "#3b82f6",
-        "Americas": "#f59e0b",
-        "South-East Asia": "#6b7280",
-        "Europe": "#ef4444",
-        "Eastern Mediterranean": "#71717a",
-        "Western Pacific": "#64748b",
+        "1": "#3b82f6",
+        "2": "#f59e0b",
+        "5": "#6b7280",
+        "99999": "#ef4444",
+        "9999": "#71717a",
+        "999999": "#000000",
+        "9999999": "#111111",
     }
 
     const nodeGroups = [
         {
             field: 'FunderRegion',
-            names: [
-                "Africa",
-                "Americas",
-                "South-East Asia",
-                "Europe",
-                "Eastern Mediterranean",
-                "Western Pacific",
-            ]
+            options: selectOptions['FunderRegion'],
         },
 
         {
             field: 'ResearchInstitutionRegion',
-            names: [
-                "Africa",
-                "Americas",
-                "South-East Asia",
-                "Europe",
-                "Eastern Mediterranean",
-                "Western Pacific",
-            ]
+            options: selectOptions['ResearchInstitutionRegion'],
         },
 
         {
             field: 'ResearchLocationRegion',
-            names: [
-                "Africa",
-                "Americas",
-                "South-East Asia",
-                "Europe",
-                "Eastern Mediterranean",
-                "Western Pacific",
-            ]
+            options: selectOptions['ResearchLocationRegion'],
         },
     ]
 
+    const grantsWithRegions = grants.filter(
+        grant => grant.FunderRegion.length === 1 &&
+            grant.ResearchInstitutionRegion.length === 1 &&
+            grant.ResearchLocationRegion.length === 1
+    )
+
     const nodes = nodeGroups.map(
-        ({field, names}, group) => names.filter(
-            name => grants.some(
-                grant => grant[field] === name
+        ({field, options}, group) => options.filter(
+            (option: any) => grantsWithRegions.some(
+                // TODO why does === not work here?
+                grant => grant[field] == option.value
             )
         ).map(
-            name => ({name, group})
+            (option: any) => ({option, group})
         )
     ).flat(1)
 
@@ -80,15 +74,15 @@ export default function RegionalFlowOfGrantsCard() {
 
         links = links.concat(
             Object.entries(
-                groupBy(grants, sourceField)
+                groupBy(grantsWithRegions, sourceField)
             ).map(
-                ([sourceFieldValue, grants]) => Object.entries(
-                    groupBy(grants, targetField)
+                ([sourceFieldValue, grantsWithRegions]) => Object.entries(
+                    groupBy(grantsWithRegions, targetField)
                 ).map(
-                    ([targetFieldValue, grants]) => ({
-                        source: nodes.findIndex(node => node.name === sourceFieldValue && node.group === sourceGroup),
-                        target: nodes.findIndex(node => node.name === targetFieldValue && node.group === targetGroup),
-                        value: displayTotalMoneyCommitted ? grants.reduce(...sumNumericGrantAmounts) : grants.length,
+                    ([targetFieldValue, grantsWithRegions]) => ({
+                        source: nodes.findIndex(node => node.option.value === sourceFieldValue && node.group === sourceGroup),
+                        target: nodes.findIndex(node => node.option.value === targetFieldValue && node.group === targetGroup),
+                        value: displayTotalMoneyCommitted ? grantsWithRegions.reduce(...sumNumericGrantAmounts) : grantsWithRegions.length,
                     })
                 )
             ).flat(2)
@@ -97,7 +91,7 @@ export default function RegionalFlowOfGrantsCard() {
 
     return (
         <VisualisationCard
-            grants={grants}
+            grants={grantsWithRegions}
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
             subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
@@ -190,11 +184,11 @@ export default function RegionalFlowOfGrantsCard() {
 function SankeyNode(props: any) {
     const {x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups} = props;
 
-    const {name, value, group} = payload;
+    const {option, value, group} = payload;
 
     const isLastNode = group === totalNodeGroups - 1
 
-    const fill = colours[name as keyof typeof colours]
+    const fill = colours[option.value as keyof typeof colours]
 
     return (
         <Layer key={`RegionalFlowOfGrantsCardNode${index}`}>
@@ -214,7 +208,7 @@ function SankeyNode(props: any) {
                 fontSize="16"
                 fill="#000"
             >
-                {name}
+                {option.label}
             </text>
 
             <text
@@ -235,8 +229,8 @@ function SankeyNode(props: any) {
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
 function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
     const gradientId = `regionalFlowOfGrantsCardGradient${index}`
-    const sourceColour = colours[payload.source.name as keyof typeof colours]
-    const targetColour = colours[payload.target.name as keyof typeof colours]
+    const sourceColour = colours[payload.source.option.value as keyof typeof colours]
+    const targetColour = colours[payload.target.option.value as keyof typeof colours]
 
     return <Layer key={`RegionalFlowOfGrantsCardLink${index}`}>
         <defs>
