@@ -7,6 +7,7 @@ export const keyMapping: {[key: string]: string} = {
     'award_amount_converted': 'GrantAmountConverted',
     'abstract': 'Abstract',
     'grant_start_year': 'GrantStartYear',
+    'grant_end_year': 'GrantEndYear',
     'study_subject': 'StudySubject',
     'ethnicity': 'Ethnicity',
     'age_groups': 'AgeGroups',
@@ -29,7 +30,6 @@ export const keyMapping: {[key: string]: string} = {
     'main_research_sub_priority_number_new': 'ResearchSubcat',
     'tags': 'Tags',
 };
-
 
 export function convertSourceKeysToOurKeys(originalObject: {[key: string]: any}) {
     const convertedObject: {[key: string]: any} = {}
