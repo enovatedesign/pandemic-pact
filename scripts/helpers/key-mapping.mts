@@ -14,7 +14,7 @@ export const keyMapping: {[key: string]: string} = {
     'rurality': 'Rurality',
     'vulnerable_population': 'VulnerablePopulations',
     'occupational_groups': 'OccupationalGroups',
-    'study_type': 'StudyType',
+    'study_type_main': 'StudyType',
     'clinical_trial': 'ClinicalTrial',
     'pathogen': 'Pathogen',
     'disease': 'Disease',
