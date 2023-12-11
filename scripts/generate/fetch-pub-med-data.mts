@@ -1,10 +1,18 @@
+import dotenv from 'dotenv'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {ProcessedGrant, Grant} from '../types/generate'
-import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
+import {title, info, printWrittenFileStats, warn} from '../helpers/log.mjs'
 
 export default async function () {
+    dotenv.config({path: './.env.local'})
+
     title('Fetching publication data from PubMed')
+
+    if (process.env.SKIP_FETCHING_PUBMED_DATA) {
+        warn('Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present')
+        return
+    }
 
     const pathname = './data/dist/grants.json'
 
