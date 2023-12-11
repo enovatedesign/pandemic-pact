@@ -106,7 +106,7 @@ export default function Header({className}: {className?: string}) {
                         <nav ref={navRef}
                             className={`${mobileTransitionClasses} h-screen w-full bg-secondary absolute inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
                         >
-                            <ul className="pb-20 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-4 lg:space-y-0  lg:py-3">
+                            <ul className="pb-20 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-10 lg:space-y-0  lg:py-3">
                                 {links.map((link, index) => {
 
                                     const handleClick = (event: any) => {
