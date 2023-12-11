@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import {RawGrant, ProcessedGrant} from '../types/generate'
+import {RawGrant} from '../types/generate'
 import {convertSourceKeysToOurKeys} from '../helpers/key-mapping.mjs'
 import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 
