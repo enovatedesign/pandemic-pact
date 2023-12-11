@@ -8,17 +8,17 @@ export default async function () {
     fs.ensureDirSync('data/download')
 
     await downloadCsvAndConvertToJson(
-        'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/dictionary.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/dictionary.csv',
         'dictionary.json'
     )
 
     await downloadCsvAndConvertToJson(
-        'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/research-categories.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/research-categories.csv',
         'research-category-mapping.json'
     )
 
     await downloadCsvAndConvertToJson(
-        'https://gitlab.enovate.co.uk/public-projects/pandemic-pact-sample-data/-/raw/main/raw-grant-data.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/raw-grant-data.csv',
         'grants.json'
     )
 }
