@@ -68,7 +68,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 											alt={image.altText}
 											width={image.width}
 											height={image.height}
-											className="w-full"
+											className="w-full h-full"
 											loading="lazy"
 										/>    
 									) : (
@@ -77,14 +77,14 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 											alt=''
 											width='480'
 											height='480'
-											className="w-full"
+											className="w-full h-full"
 											loading="lazy"
 										/>
 									)}
 								</ConditionalWrapper>
 							</div>
 
-							<div className="sm:col-span-2 xl:col-span-3 flex justify-center items-center">
+							<div className="sm:col-span-2 lg:col-span-3 flex justify-center items-center">
 
 								<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
 
