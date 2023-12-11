@@ -18,7 +18,7 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/raw-grant-data.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/raw-grant-data-2023-12-11.csv',
         'grants.json'
     )
 }
