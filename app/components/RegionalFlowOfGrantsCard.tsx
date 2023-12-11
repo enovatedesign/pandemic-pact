@@ -55,8 +55,7 @@ export default function RegionalFlowOfGrantsCard() {
     const nodes = nodeGroups.map(
         ({field, options}, group) => options.filter(
             (option: any) => grantsWithRegions.some(
-                // TODO why does === not work here?
-                grant => grant[field] == option.value
+                grant => grant[field].includes(option.value)
             )
         ).map(
             (option: any) => ({option, group})
