@@ -1,7 +1,6 @@
 import Button from "../../Button"
 import Image from "next/image";
 import BlockWrapper from "../BlockWrapper"
-import ConditionalWrapper from "../../ConditionalWrapper"
 import { ExternalLinkIcon } from "@heroicons/react/outline"
 
 interface Props {
@@ -33,7 +32,6 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 	const image = pub.thumbnailImage[0];
 	const type = pub.publicationType;
 	const url = pub.externalLink;
-	const urlCondition = url?.startsWith('http');
 
 	const hoverClasses = [
         url ? 'hover:shadow-lg transition duration-300' : ''
@@ -41,8 +39,9 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 
 	if (title) {
 		return (
-            <BlockWrapper >
-				<div className="flex justify-center -mx-6">
+            <BlockWrapper>
+
+				<a href={url} target="_blank" rel="nofollow noopener noreferrer" className="flex justify-center -mx-6">
 					<div className="relative rounded-2xl border-dotted border-2 border-primary p-6 lg:p-12 mx-6 max-w-6xl">
 						<p className="absolute inset-x-0 -mt-10 lg:-mt-16 text-center">
 							<span className="mx-auto inline-block px-3 py-1 text-gray-500 rounded-full font-bold tracking-widest uppercase bg-gray-50">
@@ -58,30 +57,25 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 										{type}
 									</div>
 								)}
-								<ConditionalWrapper
-									condition={urlCondition}
-									wrapper={children => <a href={url}>{children}</a>}
-								>
-									{image?.url ? (
-										<Image 
-											src={image.url}
-											alt={image.altText}
-											width={image.width}
-											height={image.height}
-											className="w-full h-full"
-											loading="lazy"
-										/>    
-									) : (
-										<Image 
-											src='/images/card-fallback/card-fallback.svg'
-											alt=''
-											width='480'
-											height='480'
-											className="w-full h-full"
-											loading="lazy"
-										/>
-									)}
-								</ConditionalWrapper>
+								{image?.url ? (
+									<Image 
+										src={image.url}
+										alt={image.altText}
+										width={image.width}
+										height={image.height}
+										className="w-full h-full object-cover"
+										loading="lazy"
+									/>    
+								) : (
+									<Image 
+										src='/images/card-fallback/card-fallback.svg'
+										alt=''
+										width='480'
+										height='480'
+										className="w-full h-full object-cover"
+										loading="lazy"
+									/>
+								)}
 							</div>
 
 							<div className="sm:col-span-2 lg:col-span-3 flex justify-center items-center">
@@ -89,25 +83,18 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 								<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
 
 									<h2 className="text-secondary text-xl md:text-2xl">
-										<ConditionalWrapper
-											condition={urlCondition}
-											wrapper={children => <a href={url}>{children}</a>}
-										>
-											{title}
-										</ConditionalWrapper>
+										{title}
 									</h2>
+
 									<p className="lg:text-lg">{summary}</p>
-									{urlCondition && (
-										<p className="mt-auto self-end">
-											<Button 
-												href={url}
-												size="small"
-												customClasses="mt-3 self-end flex items-center gap-1"
-											>
-												Read More <ExternalLinkIcon className="w-4 h-4" />
-											</Button>
-										</p>
-									)}	
+
+									<p className="mt-auto self-end">
+										<span className="sr-only">(external link)</span> 
+										<span className="rounded-full bg-primary flex justify-center items-center p-4" aria-hidden="true">
+											<ExternalLinkIcon className="w-4 h-4" />
+										</span>
+									</p>
+								
 								</div>
 
 							</div>
@@ -115,7 +102,8 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 						</article>
 
 					</div>
-				</div>
+				</a>
+
             </BlockWrapper>
 		);
 	} else {
