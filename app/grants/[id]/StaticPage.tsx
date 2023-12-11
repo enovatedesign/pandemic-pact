@@ -18,7 +18,6 @@ interface Props {
 }
 
 export default function StaticPage({grant}: Props) {
-
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -37,24 +36,30 @@ export default function StaticPage({grant}: Props) {
             metric: (typeof grant.GrantAmountConverted === 'number') ?
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,
-                classes: ''
+            classes: ''
         },
         {
             text: 'Research Location',
             metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
             classes: ''
         },
-        {
+    ]
+
+    if (grant.ResearchInstitutionName?.length > 0) {
+        keyFactsHeadings.push({
             text: 'Lead Research Institution',
             metric: grant.ResearchInstitutionName[0],
             classes: ''
-        },
-        {
+        })
+    }
+
+    if (grant.ResearchInstitutionName?.length > 1) {
+        keyFactsHeadings.push({
             text: 'Partner Institution',
             metric: grant.ResearchInstitutionName[1],
             classes: ''
-        },
-    ]
+        })
+    }
 
     const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
 
@@ -190,7 +195,7 @@ export default function StaticPage({grant}: Props) {
         )
     }
 
-    
+
     return (
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
             <div className="container mx-auto my-12 relative">
@@ -247,20 +252,20 @@ export default function StaticPage({grant}: Props) {
                                                 index === 5 && heading.metric && 'border-l-2 -translate-x-0.5 md:translate-x-0',
                                                 index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
-                                            
+
                                             const metricClasses = [
                                                 index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'
                                             ].join(' ')
-                                            
+
                                             let colSpanClass = ''
 
                                             if (index === filteredKeyFactsHeadings.length - 1 && (filteredKeyFactsHeadings.length % 3) !== 0) {
                                                 const numberOfMissingItems = keyFactsHeadings.length - filteredKeyFactsHeadings.length
                                                 if (numberOfMissingItems !== 0) {
-                                                    colSpanClass = `col-span-${numberOfMissingItems +1} border-r-0`
+                                                    colSpanClass = `col-span-${numberOfMissingItems + 1} border-r-0`
                                                 }
-                                            } 
-                                            
+                                            }
+
                                             return (
                                                 <li key={index} className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}>
                                                     <p className='uppercase text-xs tracking-widest font-bold'>
@@ -273,7 +278,7 @@ export default function StaticPage({grant}: Props) {
                                                             </span>
                                                             <div className='flex gap-1 items-end h-full'>
                                                                 <div className='flex items-center gap-1'>
-                                                                    <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" /> 
+                                                                    <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" />
                                                                     <span className='text-md md:text-xl lg:text-2xl font-bold'>
                                                                         {grant.GrantEndYear}
                                                                     </span>
@@ -325,7 +330,7 @@ export default function StaticPage({grant}: Props) {
                                                             )}
                                                         </>
                                                     )}
-                                                    
+
                                                     {subHeading.metric && (
                                                         <p className='font-bold text-lg lg:text-xl'>
                                                             {subHeading.metric}
