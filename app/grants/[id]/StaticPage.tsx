@@ -18,6 +18,7 @@ interface Props {
 }
 
 export default function StaticPage({grant}: Props) {
+
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -43,23 +44,17 @@ export default function StaticPage({grant}: Props) {
             metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
             classes: ''
         },
-    ]
-
-    if (grant.ResearchInstitutionName?.length > 0) {
-        keyFactsHeadings.push({
+        {
             text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName[0],
+            metric: grant.ResearchInstitutionName,
             classes: ''
-        })
-    }
-
-    if (grant.ResearchInstitutionName?.length > 1) {
-        keyFactsHeadings.push({
+        },
+        {
             text: 'Partner Institution',
-            metric: grant.ResearchInstitutionName[1],
+            metric: '',
             classes: ''
-        })
-    }
+        },
+    ]
 
     const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
 
