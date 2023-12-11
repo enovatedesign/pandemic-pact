@@ -88,7 +88,7 @@ export default function RegionalFlowOfGrantsCard() {
         )
     }
 
-    const tooltipFormatter = (value, name, {payload}) => {
+    const tooltipFormatter = (value: any, _: string, {payload}: any) => {
         const details = payload.payload
 
         const label = details.option ?
