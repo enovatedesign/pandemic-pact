@@ -88,6 +88,19 @@ export default function RegionalFlowOfGrantsCard() {
         )
     }
 
+    const tooltipFormatter = (value, name, {payload}) => {
+        const details = payload.payload
+
+        const label = details.option ?
+            details.option.label :
+            `${details.source.option.label} → ${details.target.option.label}`
+
+        return [
+            displayTotalMoneyCommitted ? dollarValueFormatter(details.value) : details.value,
+            label,
+        ]
+    }
+
     return (
         <VisualisationCard
             grants={grantsWithRegions}
@@ -124,7 +137,7 @@ export default function RegionalFlowOfGrantsCard() {
                             >
                                 <Tooltip
                                     isAnimationActive={false}
-                                    formatter={displayTotalMoneyCommitted ? dollarValueFormatter : undefined}
+                                    formatter={tooltipFormatter}
                                 />
 
                                 <text
