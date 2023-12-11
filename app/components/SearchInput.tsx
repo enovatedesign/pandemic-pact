@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Grid, Col } from '@tremor/react';
-import { SearchIcon, SwitchHorizontalIcon } from '@heroicons/react/solid';
+import {useEffect, useMemo, useState} from 'react';
+import {useRouter, usePathname, useSearchParams} from 'next/navigation';
+import {Grid, Col} from '@tremor/react';
+import {SearchIcon, SwitchHorizontalIcon} from '@heroicons/react/solid';
 import ExportToCsvButton from './ExportToCsvButton';
 import MultiSelect from './MultiSelect';
 import selectOptions from '../../data/dist/select-options.json';
-import { type SearchResponse } from '../types/search';
+import {type SearchResponse} from '../types/search';
 import {
     meilisearchRequest,
     exportRequestBody,
@@ -29,7 +29,7 @@ export interface Filters {
     FunderRegion: string[];
 }
 
-export default function SearchInput({ setSearchResponse }: Props) {
+export default function SearchInput({setSearchResponse}: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -42,13 +42,13 @@ export default function SearchInput({ setSearchResponse }: Props) {
         filtersFromUrl
             ? JSON.parse(filtersFromUrl)
             : {
-                  Disease: [],
-                  Pathogen: [],
-                  ResearchInstitutionCountry: [],
-                  ResearchInstitutionRegion: [],
-                  FunderCountry: [],
-                  FunderRegion: [],
-              }
+                Disease: [],
+                Pathogen: [],
+                ResearchInstitutionCountry: [],
+                ResearchInstitutionRegion: [],
+                FunderCountry: [],
+                FunderRegion: [],
+            }
     );
 
     const [totalHits, setTotalHits] = useState<number>(0);
@@ -95,8 +95,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
                 filters.Pathogen.length === 1
                     ? `Pathogen = "${filters.Pathogen[0]}"`
                     : filters.Pathogen.map(
-                          (pathogen) => `Pathogen = "${pathogen}"`
-                      )
+                        (pathogen) => `Pathogen = "${pathogen}"`
+                    )
             );
         }
 
@@ -105,9 +105,9 @@ export default function SearchInput({ setSearchResponse }: Props) {
                 filters.ResearchInstitutionCountry.length === 1
                     ? `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"`
                     : filters.ResearchInstitutionCountry.map(
-                          (country) =>
-                              `ResearchInstitutionCountry = "${country}"`
-                      )
+                        (country) =>
+                            `ResearchInstitutionCountry = "${country}"`
+                    )
             );
         }
 
@@ -116,8 +116,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
                 filters.ResearchInstitutionRegion.length === 1
                     ? `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"`
                     : filters.ResearchInstitutionRegion.map(
-                          (region) => `ResearchInstitutionRegion = "${region}"`
-                      )
+                        (region) => `ResearchInstitutionRegion = "${region}"`
+                    )
             );
         }
 
@@ -126,8 +126,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
                 filters.FunderCountry.length === 1
                     ? `FunderCountry = "${filters.FunderCountry[0]}"`
                     : filters.FunderCountry.map(
-                          (country) => `FunderCountry = "${country}"`
-                      )
+                        (country) => `FunderCountry = "${country}"`
+                    )
             );
         }
 
@@ -136,8 +136,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
                 filters.FunderRegion.length === 1
                     ? `FunderRegion = "${filters.FunderRegion[0]}"`
                     : filters.FunderRegion.map(
-                          (region) => `FunderRegion = "${region}"`
-                      )
+                        (region) => `FunderRegion = "${region}"`
+                    )
             );
         }
 
@@ -198,21 +198,19 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
-                                className={`${
-                                    !advancedSearchShow
+                                className={`${!advancedSearchShow
                                         ? 'bg-white rounded-t-lg'
                                         : 'bg-transparent'
-                                } uppercase px-4 py-2 text-xs md:text-sm`}
+                                    } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Standard Search
                             </button>
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
-                                className={`${
-                                    advancedSearchShow
+                                className={`${advancedSearchShow
                                         ? 'bg-white rounded-t-lg'
                                         : 'bg-transparent'
-                                } uppercase px-4 py-2 text-xs md:text-sm`}
+                                    } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Advanced Search
                             </button>
@@ -279,7 +277,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                                             placeholder="All Research Institution Countries"
                                         />
                                         <MultiSelect
-                                            options={selectOptions.Regions}
+                                            options={selectOptions.ResearchInstitutionRegion}
                                             selectedOptions={
                                                 filters.ResearchInstitutionRegion
                                             }
@@ -313,7 +311,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                                             placeholder="All Funder Countries"
                                         />
                                         <MultiSelect
-                                            options={selectOptions.Regions}
+                                            options={selectOptions.FunderRegion}
                                             selectedOptions={
                                                 filters.FunderRegion
                                             }
