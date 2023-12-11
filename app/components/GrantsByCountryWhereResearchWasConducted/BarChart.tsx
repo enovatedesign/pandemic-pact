@@ -7,9 +7,7 @@ import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {GlobalFilterContext} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
-import iso2aToCountryNameMapping from '../../../data/source/iso2a-to-country-name-mapping.json'
-
-type Iso2aCode = keyof typeof iso2aToCountryNameMapping
+import selectOptions from '../../../data/dist/select-options.json'
 
 export default function BarChart() {
     const {grants: dataset} = useContext(GlobalFilterContext)
@@ -46,10 +44,12 @@ export default function BarChart() {
     if (selectedRegion) {
         data = Object.entries(
             groupBy(
-                dataset.filter((grant: any) => grant.ResearchInstitutionRegion === selectedRegion),
+                dataset.filter((grant: any) => grant.ResearchInstitutionRegion.includes(selectedRegion)),
                 'ResearchInstitutionCountry',
             )
         )
+
+        console.log(data);
     } else {
         const whoRegions = Object.keys(regionToCountryMapping)
 
@@ -90,12 +90,18 @@ export default function BarChart() {
             return
         }
 
-        const totalGrantsInClickedRegion = dataset.filter((grant: any) => grant.ResearchInstitutionRegion === event.activeLabel).length
+        const totalGrantsInClickedRegion = dataset.filter((grant: any) => grant.ResearchInstitutionRegion.includes(event.activeLabel)).length
 
         if (totalGrantsInClickedRegion > 0) {
             setSelectedRegion(event.activeLabel)
         }
     }
+
+    const countryOrRegionFormatter = (label: string) => selectOptions[
+        selectedRegion ? 'ResearchInstitutionCountry' : 'ResearchInstitutionRegion'
+    ].find(option => option.value === label)?.label
+
+    const selectedRegionName = selectOptions.ResearchInstitutionRegion.find(option => option.value === selectedRegion)?.label
 
     return (
         <div className="w-full">
@@ -110,7 +116,7 @@ export default function BarChart() {
                 />
 
                 <Subtitle className="text-gray-500">
-                    {selectedRegion ? `Viewing Countries in ${selectedRegion}.` : 'Click a region bar to expand to countries'}
+                    {selectedRegion ? `Viewing Countries in ${selectedRegionName}.` : 'Click a region bar to expand to countries'}
                 </Subtitle>
             </div>
 
@@ -134,12 +140,12 @@ export default function BarChart() {
                             dataKey="country"
                             type="category"
                             width={100}
-                            tickFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label as Iso2aCode] : label}
+                            tickFormatter={countryOrRegionFormatter}
                         />
 
                         <Tooltip
                             formatter={dollarValueFormatter}
-                            labelFormatter={(label: string) => selectedRegion ? iso2aToCountryNameMapping[label as Iso2aCode] : label}
+                            labelFormatter={countryOrRegionFormatter}
                             isAnimationActive={false}
                             cursor={{fill: 'transparent'}}
                         />
