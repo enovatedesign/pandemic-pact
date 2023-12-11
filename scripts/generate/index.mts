@@ -17,7 +17,7 @@ async function main() {
 
     prepareGrants()
 
-    // await fetchPubMedData()
+    await fetchPubMedData()
 
     prepareIndividualGrantFiles()
 
