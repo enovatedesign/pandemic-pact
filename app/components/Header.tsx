@@ -17,7 +17,6 @@ export default function Header({className}: {className?: string}) {
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
-    console.log('activeIndex', activeIndex, 'isVisible', isVisible)
     const navItemClick = () => {
         const bodyEl = document.querySelector('body')
         bodyEl?.classList.remove('overflow-y-hidden')
