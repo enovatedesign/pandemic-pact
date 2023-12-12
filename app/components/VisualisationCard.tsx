@@ -28,7 +28,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
             <div className="flex flex-col items-start space-y-6">
                 <div className="w-full flex justify-between items-center">
                     <div className="flex justify-start space-x-3">
-                        <h2 className="text-lg">{title}</h2>
+                        <h2 className="text-lg capitalize">{title}</h2>
 
                         {infoModalContents &&
                             <InfoModal>{infoModalContents}</InfoModal>
