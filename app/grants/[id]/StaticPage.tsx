@@ -22,7 +22,7 @@ export default function StaticPage({grant}: Props) {
     const keyFactsHeadings = [
         {
             text: 'Disease',
-            metric: grant.Disease.join(', '),
+            metric: grant.Disease,
             classes: ''
         },
 
@@ -263,9 +263,12 @@ export default function StaticPage({grant}: Props) {
 
                                             return (
                                                 <li key={index} className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}>
-                                                    <p className='uppercase text-xs tracking-widest font-bold'>
-                                                        {heading.text}
-                                                    </p>
+                                                    <div className="flex items-center space-x-2">
+                                                        <p className='uppercase text-xs tracking-widest font-bold'>
+                                                            {heading.text}
+                                                        </p>
+                                                    </div>
+                                                
                                                     {heading.startMetric && heading.endMetric ? (
                                                         <div className="flex gap-1 items-center ">
                                                             <span className={metricClasses}>
@@ -282,7 +285,20 @@ export default function StaticPage({grant}: Props) {
                                                         </div>
                                                     ) : (
                                                         <>
-                                                            <p className={`${metricClasses} font-bold`}>{heading.metric}</p>
+                                                            {(heading.metric?.length > 3 && Array.isArray(heading?.metric)) ? (
+                                                                <div className={`${metricClasses} font-bold`}>
+                                                                    {heading.metric.slice(0, 2).join(', ')}… <InfoModal
+                                                                        customButton={ <button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full px-2 py-0.5 lg:-translate-y-1 text-sm'> {heading?.metric.length -2} more</button>}
+                                                                    >
+                                                                        <p>
+                                                                            {heading?.metric.join(', ')}
+                                                                        </p>
+                                                                    </InfoModal>
+                                                                    
+                                                                </div>
+                                                            ) : (
+                                                                <p className={`${metricClasses} font-bold`}>{heading?.metric}</p>
+                                                            )}
                                                         </>
                                                     )}
                                                 </li>
@@ -300,6 +316,8 @@ export default function StaticPage({grant}: Props) {
                                                 index === 6 && 'border-r-2',
                                                 index === 8 && 'col-span-2 md:col-span-1 md:border-l-2',
                                             ].join(' ')
+
+                                            console.log(subHeading.metric)
                                             return (
                                                 <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
 
@@ -310,7 +328,8 @@ export default function StaticPage({grant}: Props) {
                                                                     {subHeading.text}
                                                                 </p>
                                                             )}
-                                                            <InfoModal>
+                                                            <InfoModal customButton={null}                                                                
+                                                            >
                                                                 <p>
                                                                     {subHeading.infoModalText}
                                                                 </p>
@@ -326,11 +345,9 @@ export default function StaticPage({grant}: Props) {
                                                         </>
                                                     )}
 
-                                                    {subHeading.metric && (
-                                                        <p className='font-bold text-lg lg:text-xl'>
-                                                            {subHeading.metric}
-                                                        </p>
-                                                    )}
+                                                    <p className='font-bold text-lg lg:text-xl'>
+                                                        {subHeading.metric?.length > 0 ? subHeading.metric : "N/A"}
+                                                    </p>
 
                                                 </li>
                                             )
