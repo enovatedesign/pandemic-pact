@@ -1,6 +1,5 @@
 import {ElementType, ReactNode, useState, useContext} from "react"
 import {Tab} from '@headlessui/react'
-import {Flex, Card, Title, Subtitle} from "@tremor/react"
 import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearch"
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
@@ -24,49 +23,33 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
 
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    return <Card id={id}>
-        <Flex
-            flexDirection="col"
-            alignItems="start"
-            className="gap-y-6 h-full w-full"
-        >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="gap-y-2"
-            >
-                <Flex
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Flex justifyContent="start" className="gap-x-3">
-                        <Title>{title}</Title>
+    return <div id={id}>
+        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 rounded-2xl">
+            <div className="flex flex-col items-start space-y-6">
+                <div className="w-full flex justify-between items-center">
+                    <div className="flex justify-start space-x-3">
+                        <h2 className="text-lg">{title}</h2>
 
                         {infoModalContents &&
                             <InfoModal>{infoModalContents}</InfoModal>
                         }
-                    </Flex>
+                    </div>
 
                     {numberOfActiveFilters > 0 &&
                         <p className="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
                     }
-                </Flex>
+                </div>
 
                 {subtitle &&
-                    <Subtitle>{subtitle}</Subtitle>
+                    <p className="text-brand-grey-500">{subtitle}</p>
                 }
-            </Flex>
+            </div>
 
             {children}
 
             {tabs && tabs[selectedTabIndex].content}
 
-            <Flex
-                flexDirection="row-reverse"
-                justifyContent="between"
-                alignItems="center"
-                className="ignore-in-image-export"
-            >
+            <div className="w-full flex flex-row-reverse justify-between items-center ignore-in-image-export">
                 <ExportMenu
                     chartSelector={`#${id}`}
                     imageFilename={id}
@@ -105,11 +88,11 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                         </Tab.List>
                     </Tab.Group>
                 }
-            </Flex>
+            </div>
 
             {footnote &&
                 <p className="text-sm text-gray-500">{footnote}</p>
             }
-        </Flex>
-    </Card >
+        </div>
+    </div >
 }

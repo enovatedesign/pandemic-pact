@@ -1,7 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useRouter, usePathname, useSearchParams} from 'next/navigation';
-import {Grid, Col} from '@tremor/react';
-import {SearchIcon, SwitchHorizontalIcon} from '@heroicons/react/solid';
+import {SearchIcon} from '@heroicons/react/solid';
 import ExportToCsvButton from './ExportToCsvButton';
 import MultiSelect from './MultiSelect';
 import selectOptions from '../../data/dist/select-options.json';
@@ -169,30 +168,28 @@ export default function SearchInput({setSearchResponse}: Props) {
 
     return (
         <div>
-            <div className="grid grid-cols-2 gap-3">
-                <div className='col-span-2'>
-                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
-                        <input
-                            type="search"
-                            placeholder="Search..."
-                            onInput={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                            ) => setSearchQuery(event.target.value)}
-                            value={searchQuery}
-                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
-                        />
-                        <Button
-                            size="xsmall"
-                            colour="grey"
-                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
-                        >
-                            <span className="sr-only">Search</span>
-                            <SearchIcon className="w-6 h-6 text-secondary" />
-                        </Button>
-                    </div>
+            <div className="space-y-3">
+                <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
+                    <input
+                        type="search"
+                        placeholder="Search..."
+                        onInput={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => setSearchQuery(event.target.value)}
+                        value={searchQuery}
+                        className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                    />
+                    <Button
+                        size="xsmall"
+                        colour="grey"
+                        customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
+                    >
+                        <span className="sr-only">Search</span>
+                        <SearchIcon className="w-6 h-6 text-secondary" />
+                    </Button>
                 </div>
 
-                <section className="col-span-2 w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
+                <section className="w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
                     <div className="flex items-center justify-between gap-2 mx-4">
                         <h2 className="text-secondary uppercase tracking-widest font-bold">Search Filters</h2>
                         <div className="flex space-x-1 text-sm text-secondary">
@@ -217,9 +214,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                         </div>
                     </div>
 
-                    <div
-                        className={`rounded-lg col-span-2 bg-white p-3`}
-                    >
+                    <div className="rounded-lg col-span-2 bg-white p-3">
                         {!advancedSearchShow ? (
                             <AnimateHeight
                                 duration={400}
@@ -340,10 +335,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </div>
                 </section>
 
-                <Col
-                    numColSpan={2}
-                    className="flex justify-between items-center"
-                >
+                <div className="flex justify-between items-center">
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
                         <span>Total Hits:</span>
                         <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
@@ -351,17 +343,15 @@ export default function SearchInput({setSearchResponse}: Props) {
                         </span>
                     </p>
 
-                    <div className="grow flex flex-row justify-end gap-2">
-                        <ExportToCsvButton
-                            meilisearchRequestBody={exportRequestBody(
-                                sharedRequestBody
-                            )}
-                            filename="search-results-export"
-                            title="Download Data"
-                            size="xsmall"
-                        ></ExportToCsvButton>
-                    </div>
-                </Col>
+                    <ExportToCsvButton
+                        meilisearchRequestBody={exportRequestBody(
+                            sharedRequestBody
+                        )}
+                        filename="search-results-export"
+                        title="Download Data"
+                        size="xsmall"
+                    />
+                </div>
             </div>
         </div>
     );

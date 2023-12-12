@@ -1,5 +1,5 @@
 import {Fragment} from "react"
-import {Subtitle, Legend} from "@tremor/react"
+import {Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 
@@ -22,11 +22,11 @@ export default function BarChart({chartData}: Props) {
 
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
-                    <Subtitle className="text-sm">Number of projects</Subtitle>
+                    <p className="text-sm text-brand-grey-500">Number of projects</p>
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <Subtitle className="text-sm">Known amount committed (USD)</Subtitle>
+                    <p className="text-sm text-brand-grey-500">Known amount committed (USD)</p>
                 </div>
 
                 {chartData.map((data: any) => (

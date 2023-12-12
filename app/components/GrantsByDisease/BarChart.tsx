@@ -1,5 +1,5 @@
 import {useContext} from "react"
-import {Flex, Subtitle, Legend} from "@tremor/react"
+import {Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {dollarValueFormatter} from "../../helpers/value-formatters"
@@ -38,11 +38,9 @@ export default function BarChart() {
                 />
             </div>
 
-            <Flex
-                flexDirection="row"
-            >
+            <div className="flex w-full relative">
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap -rotate-90 text-black">Grants</Subtitle>
+                    <p className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap -rotate-90 text-black">Grants</p>
                 </div>
 
                 <div className="w-full h-[700px]">
@@ -106,9 +104,9 @@ export default function BarChart() {
                 </div>
 
                 <div className="w-8">
-                    <Subtitle className="absolute whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</Subtitle>
+                    <p className="absolute top-1/2 whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</p>
                 </div>
-            </Flex>
+            </div>
         </>
     )
 }

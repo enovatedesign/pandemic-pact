@@ -1,5 +1,4 @@
 import {Switch as HeadlessUISwitch} from '@headlessui/react'
-import {Text} from "@tremor/react"
 
 interface Props {
     checked: boolean
@@ -24,7 +23,7 @@ export default function Switch({checked, onChange, label, className, textClassNa
                 />
             </HeadlessUISwitch>
 
-            <Text className={textClassName}>{label}</Text>
+            <p className={textClassName}>{label}</p>
         </div>
     )
 }

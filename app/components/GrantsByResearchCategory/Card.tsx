@@ -1,5 +1,4 @@
 import {useContext} from "react"
-import {Title, Text} from "@tremor/react"
 import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
@@ -50,9 +49,9 @@ export default function GrantsByResearchCategoryCard() {
 
     const infoModalContents = (
         <>
-            <Title>Global distribution of funding for research categories</Title>
+            <h3>Global distribution of funding for research categories</h3>
 
-            <Text>We developed a classification of research categories with 13 broad categories by expanding &ldquo;A Coordinated Global Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the R&amp;D Blue Print. All collected funding data are summarised and assigned into a broad category.</Text>
+            <p className="text-brand-grey-500">We developed a classification of research categories with 13 broad categories by expanding &ldquo;A Coordinated Global Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the R&amp;D Blue Print. All collected funding data are summarised and assigned into a broad category.</p>
         </>
     )
 

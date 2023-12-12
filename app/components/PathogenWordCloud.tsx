@@ -1,5 +1,4 @@
 import {useContext} from "react"
-import {Text} from "@tremor/react"
 import {GlobalFilterContext} from "../helpers/filter"
 import VisualisationCard from "../components/VisualisationCard"
 import WordCloud from "../components/WordCloud"
@@ -20,11 +19,9 @@ export default function PathogenWordCloud() {
                 />
             </div>
 
-            <div>
-                <Text>
-                    The amount of funding is represented by the size of the word
-                </Text>
-            </div>
+            <p className="text-brand-grey-500">
+                The amount of funding is represented by the size of the word
+            </p>
         </VisualisationCard>
     )
 }
