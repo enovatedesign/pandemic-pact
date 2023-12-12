@@ -16,12 +16,11 @@ import {Filters} from "../types/filters"
 import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import completeDataset from '../../data/dist/grants.json'
 import Card from "../components/ContentBuilder/Common/Card"
-import Button from "../components/Button"
-import {ChevronRightIcon} from "@heroicons/react/solid"
 import {throttle, debounce} from 'lodash'
 import AnimateHeight from "react-animate-height"
 import {Tooltip, TooltipRefProps} from 'react-tooltip'
 import {TooltipContext} from '../helpers/tooltip'
+import { ChevronDownIcon } from "@heroicons/react/solid"
 
 export default function Visualise() {
     const tooltipRef = useRef<TooltipRefProps>(null)
@@ -75,7 +74,7 @@ export default function Visualise() {
         {
             title: 'Disease',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            id: '#disease',
+            url: '#disease',
             image: {
                 url: '/images/visualisation-card/vis-bar-chart.png',
                 altText: 'Disease card',
@@ -86,7 +85,7 @@ export default function Visualise() {
         {
             title: 'Research Categories',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            id: '#research-category',
+            url: '#research-category',
             image: {
                 url: '/images/visualisation-card/vis-category-chart.png',
                 altText: 'Visualisations Card',
@@ -97,7 +96,7 @@ export default function Visualise() {
         {
             title: 'Geographical Distribution',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            id: '#geographical-distribution',
+            url: '#geographical-distribution',
             image: {
                 url: '/images/visualisation-card/vis-radar-chart.png',
                 altText: 'Graphical distribution and flow card',
@@ -108,9 +107,20 @@ export default function Visualise() {
         {
             title: 'Annual Trends',
             summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            id: '#annual-trends',
+            url: '#annual-trends',
             image: {
                 url: '/images/visualisation-card/vis-line-chart.png',
+                altText: 'Visualisations Card',
+                width: 480,
+                height: 480,
+            }
+        },
+        {
+            title: 'Word Clouds',
+            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            url: '#word-clouds',
+            image: {
+                url: '/images/visualisation-card/vis-word-cloud.png',
                 altText: 'Visualisations Card',
                 width: 480,
                 height: 480,
@@ -170,25 +180,20 @@ export default function Visualise() {
                     </AnimateHeight>
 
                     <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {cardData.map((card, index) =>
-                            (
-                                <Card
-                                    key={index}
-                                    entry={card}
-                                    tags={false}
-                                    image={card.image}
-                                >
-                                    <Button
-                                        href={card.id}
-                                        size="small"
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                            {cardData.map((card, index) => {
+                                
+                                return (
+                                    <Card
+                                        key={index}
+                                        entry={card}
+                                        tags={false}
+                                        image={card.image}
                                     >
-                                        <ChevronRightIcon className="text-white w-6 h-6" />
-                                    </Button>
-                                </Card>
-                            )
-                            )}
-
+                                        <ChevronDownIcon className="w-6 h-6"/>
+                                    </Card>
+                                )
+                            })}
                         </div>
                     </section>
 
@@ -212,13 +217,15 @@ export default function Visualise() {
                                 <RegionalFlowOfGrantsCard />
                             </div>
 
-                            <div id='annual-trends'>
+                            <div id='annual-trends' className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
+                            
+                            <div id='word-clouds' className={gridClasses}>
+                                <DiseaseWordCloud />
 
-                            <DiseaseWordCloud />
-
-                            <PathogenWordCloud />
+                                <PathogenWordCloud />
+                            </div>
                         </div>
 
                         <Tooltip

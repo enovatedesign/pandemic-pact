@@ -60,18 +60,16 @@ export default function JumpMenu({cardData}: Props) {
                             >
                                 <ul className="grid grid-cols-2 gap-2 p-4">
 
-                                    {cardData.filter(
-                                        (card: any) => card.id
-                                    ).map((card: any, index: number) => {
-                                        const {title, image, id} = card
+                                    {cardData.filter((card: any) => card.url).map((card: any, index: number) => {
+                                        
+                                        const {title, image, url} = card
 
                                         return (
-                                            <li
-                                                ref={dropdown}
+                                            <li ref={dropdown}
                                                 key={index}
                                                 className="hover:bg-primary-lightest transition-colors duration-300 p-2 rounded-lg h-full"
                                             >
-                                                <a href={id}>
+                                                <a href={url}>
                                                     <button onClick={() => setIsOpen(false)}>
                                                         {image && (
                                                             <Image
@@ -97,10 +95,8 @@ export default function JumpMenu({cardData}: Props) {
                             </AnimateHeight>
                         </div>
                     )}
-
                 </div>
             </div>
         </div>
-
     );
 }
