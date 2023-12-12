@@ -1,7 +1,6 @@
 import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
-import Button from "../../Button"
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 
 type Props = {
@@ -54,10 +53,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                         
                         return (
                             <Card entry={cardData} key={index}>
-                                <span className="sr-only">(external link)</span> 
-                                <span className="rounded-full bg-primary flex justify-center items-center p-4" aria-hidden="true">
-                                    <ExternalLinkIcon className="w-4 h-4" />
-                                </span>
+                                <ExternalLinkIcon className="w-6 h-6" />
                             </Card>
                         )
                     })}
