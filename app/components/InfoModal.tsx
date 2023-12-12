@@ -1,7 +1,7 @@
 import {useState} from 'react'
-import {Button} from '@tremor/react'
 import {Dialog} from '@headlessui/react'
 import {InformationCircleIcon} from "@heroicons/react/solid"
+import Button from './Button'
 
 export default function InfoModal({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -10,7 +10,7 @@ export default function InfoModal({ children }: { children: React.ReactNode }) {
         <>
             <button onClick={() => setIsOpen(!isOpen)}>
                 <span className="sr-only">Information</span>
-                <InformationCircleIcon className="w-6 h-6 text-blue-500" />
+                <InformationCircleIcon className="w-6 h-6 text-secondary" />
             </button>
 
             <Dialog
@@ -25,7 +25,7 @@ export default function InfoModal({ children }: { children: React.ReactNode }) {
                         </div>
 
                         <div className="flex justify-end">
-                            <Button onClick={() => setIsOpen(false)} className="self-end">Close</Button>
+                            <Button onClick={() => setIsOpen(false)} customClasses="self-end" size="small">Close</Button>
                         </div>
                     </Dialog.Panel>
                 </div>

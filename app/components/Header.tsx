@@ -10,13 +10,14 @@ import NavSubPages from './NavSubPages'
 import AnimateHeight from 'react-animate-height'
 
 export default function Header({className}: {className?: string}) {
+    
     const pathname = usePathname()
     const links = getLinksArray()
 
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
-
+    console.log('activeIndex', activeIndex, 'isVisible', isVisible)
     const navItemClick = () => {
         const bodyEl = document.querySelector('body')
         bodyEl?.classList.remove('overflow-y-hidden')
@@ -29,10 +30,7 @@ export default function Header({className}: {className?: string}) {
         bodyEl?.classList.toggle('overflow-y-hidden')
     }
 
-    const mobileAnimationClasses = [
-        showMobileNav ? 'translate-x-none transition duration-300 delay-[1100ms]' : '-translate-x-[800px] transition duration-300'
-    ].join(' ')
-
+    
     const NavItem = (link: {label: string, href: string, subPages: any}) => (
         <Link
             onClick={navItemClick}
@@ -42,8 +40,8 @@ export default function Header({className}: {className?: string}) {
             {link.label}
         </Link>
     )
-
-
+    
+    
     const Logo = () => (
         <Image
             src="/logo.svg"
@@ -53,13 +51,17 @@ export default function Header({className}: {className?: string}) {
             className="-ml-2.5 lg:-ml-4 w-36 h-auto lg:w-48"
         />
     )
-
+        
     const buttonClasses = [
         showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1200ms]' : 'transparent rounded-full transition duration-300'
     ].join(' ')
-
+    
     const mobileTransitionClasses = [
         showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000 delay-300'
+    ].join(' ')
+
+    const mobileAnimationClasses = [
+        showMobileNav ? 'translate-x-none transition duration-300 delay-[1100ms]' : '-translate-x-[1000px] transition duration-300'
     ].join(' ')
 
     const navRef = useRef<HTMLElement>(null)
@@ -68,6 +70,7 @@ export default function Header({className}: {className?: string}) {
         const handleDocumentClick = (e: any) => {
             if (!navRef.current?.contains(e.target)) {
                 setIsVisible(false)
+                setActiveIndex(-1)
             }
         }
         document.addEventListener("click", handleDocumentClick)
@@ -81,6 +84,7 @@ export default function Header({className}: {className?: string}) {
         <header className={className}>
             <div className="container relative">
                 <div className="py-8 flex flex-row items-center justify-between">
+                    
                     {pathname === '/' ?
                         <h1>
                             <span className="sr-only">Pandemic Pact</span>
@@ -99,69 +103,38 @@ export default function Header({className}: {className?: string}) {
                             <MenuIcon className="w-8 h-8 text-white" />
                         </button>
 
-                        <nav className="hidden px-10 py-3 lg:block" ref={navRef}>
-                            <ul className="flex space-x-10">
+                        <nav ref={navRef}
+                            className={`${mobileTransitionClasses} h-screen w-full bg-secondary absolute inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
+                        >
+                            <ul className="pb-20 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-10 lg:space-y-0  lg:py-3">
                                 {links.map((link, index) => {
 
-                                    const handleClickShow = (event: any) => {
-                                        event.preventDefault()
-                                        setIsVisible(!isVisible)
-                                        setActiveIndex(index)
-                                    }
-
-                                    return (
-                                        <li key={index} className="flex relative">
-                                            <Link
-                                                onClick={link.subPages ? handleClickShow : navItemClick}
-                                                href={link.href}
-                                                className={`flex uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'}`}
-                                            >
-                                                {link.label}
-                                            </Link>
-
-                                            {link.subPages && (
-                                                <>
-                                                    {(isVisible && activeIndex === index) && (
-                                                        <>
-                                                            <ul className={`${isVisible ? 'absolute top-12 -right-5 lg:w-60 lg:shadow-xl' : 'hidden'} flex flex-col bg-white rounded-2xl p-2`} >
-                                                                {link.subPages.map((subPage, index) => <NavSubPages key={index} subPage={subPage} pathname={pathname} />)}
-                                                            </ul>
-                                                        </>
-                                                    )}
-                                                </>
-                                            )}
-
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </nav>
-
-                        <div className={`${mobileTransitionClasses} h-screen w-full lg:hidden bg-secondary absolute inset-0 z-20`}>
-                            <ul className="pb-20 px-12 absolute bottom-0 flex-row space-y-10 w-full">
-                                {links.map((link, index) => {
                                     const handleClick = (event: any) => {
                                         event.preventDefault()
                                         activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
                                     }
-                                    return (
-                                        <li key={index} className={`${mobileAnimationClasses}`}>
-                                            <button onClick={handleClick} className='flex justify-between w-full'>
-                                                <NavItem key={link.label} {...link} />
-                                                {link.subPages && (
-                                                    <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300`} />
-                                                )}
-                                            </button>
 
-                                            {link.subPages && (
+                                    return (
+                                        <li key={index} className={`${mobileAnimationClasses} lg:-translate-x-0 lg:translate-y-0 lg:duration-0 `}>
+
+                                            {link.subPages ? (
+                                                <button onClick={handleClick} className='flex justify-between w-full'>
+                                                    <span className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'} `}>
+                                                        {link.label}
+                                                    </span>
+                                                    <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300 lg:hidden`} />
+                                                </button>
+                                            ) : (
+                                                <NavItem key={link.label} {...link} />
+                                            )}
+
+                                            {link.subPages && (activeIndex === index || isVisible) && (
                                                 <AnimateHeight
                                                     duration={300}
-                                                    height={activeIndex === index ? 'auto' : 0}
+                                                    height={activeIndex === index || isVisible ? 'auto' : 0}
                                                 >
-                                                    <ul>
-                                                        {link.subPages.filter(
-                                                            (subPage) => subPage.label !== 'About'
-                                                        ).map((subPage, index) => {
+                                                    <ul className='lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-60 lg:shadow-xl lg:flex lg:flex-col lg:rounded-2xl lg:p-2'>
+                                                        {link.subPages.map((subPage, index) => {
                                                             return (
                                                                 <NavSubPages
                                                                     key={index}
@@ -173,14 +146,17 @@ export default function Header({className}: {className?: string}) {
                                                     </ul>
                                                 </AnimateHeight>
                                             )}
+
                                         </li>
                                     )
                                 })}
                             </ul>
-                        </div>
+                        </nav>
+
                     </div>
                 </div>
             </div>
         </header>
+        
     )
 }

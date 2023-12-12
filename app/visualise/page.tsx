@@ -12,9 +12,9 @@ import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import DiseaseWordCloud from "../components/DiseaseWordCloud"
 import PathogenWordCloud from "../components/PathogenWordCloud"
 import JumpMenu from "../components/JumpMenu"
-import {type Filters} from "../types/filters"
+import {Filters} from "../types/filters"
 import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
-import completeDataset from '../../data/dist/filterable-dataset.json'
+import completeDataset from '../../data/dist/grants.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import Button from "../components/Button"
 import {ChevronRightIcon} from "@heroicons/react/solid"

@@ -4,7 +4,7 @@ import {Text} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
 import selectOptions from '../../data/dist/select-options.json'
-import dataset from '../../data/dist/filterable-dataset.json'
+import dataset from '../../data/dist/grants.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
 
@@ -24,13 +24,13 @@ export default function GrantsPerResearchCategoryByRegion() {
             researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
         )
 
-    const regionOptions = selectOptions.Regions.filter(
-        regionOption => !["Not known", "Unspecified"].includes(regionOption.value)
+    const regionOptions = selectOptions.ResearchLocationRegion.filter(
+        regionOption => !["Unspecified"].includes(regionOption.label)
     )
 
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset
-            .filter((grant: any) => grant.GrantRegion === regionOption.value)
+            .filter((grant: any) => grant.ResearchLocationRegion.includes(regionOption.value))
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
             researchCategoryOptions.map(({label, value}: any) => ([

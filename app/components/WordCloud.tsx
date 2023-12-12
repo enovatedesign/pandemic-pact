@@ -3,7 +3,6 @@
 import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
 import WordCloudComponent from 'react-d3-cloud'
-import {uniq} from 'lodash'
 import {GlobalFilterContext} from "../helpers/filter"
 import {TooltipContext} from '../helpers/tooltip'
 import {dollarValueFormatter} from "../helpers/value-formatters"
@@ -11,6 +10,7 @@ import {sumNumericGrantAmounts} from "../helpers/reducers"
 import font from '../globals/font'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
+import selectOptions from '../../data/dist/select-options.json'
 
 interface Props {
     filterKey: string
@@ -32,20 +32,16 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
 
     if (!filterKey || !randomSeedString) return null
 
-    const options = uniq(
-        globalGrants.map((grant: any) => grant[filterKey]).flat()
-    )
-
-    const data = options.map(function (option) {
+    const data = selectOptions[filterKey as keyof typeof selectOptions].map(function ({value, label}) {
         const grants = globalGrants.filter(
-            (grant: any) => grant[filterKey].includes(option)
+            (grant: any) => grant[filterKey].includes(value)
         )
 
         const moneyCommitted = grants.reduce(...sumNumericGrantAmounts)
 
         return {
-            text: option,
-            value: grants.length * 75,
+            text: label,
+            value: grants.length * 0.25,
             "Total Number Of Grants": grants.length,
             "Amount Committed": moneyCommitted,
         }
