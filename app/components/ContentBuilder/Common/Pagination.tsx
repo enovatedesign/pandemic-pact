@@ -51,88 +51,106 @@ const Pagination = ({
         setPage(number)
         updateSearchParams(number)
     }
+    
+    const handleChange = (target: number) => {
+            updatePage(target)
+            window.location.hash = "#paginationTop"
+    }
 
-    const iconClasses = 'w-8 h-8 transition duration-300 border-2 rounded-full'
+    const iconClasses = 'w-8 h-8 border-2 rounded-full'
 
-    const leftFullStopClasses = [
-        page >= 4 ? 'block' : 'invisible'
-    ].join(' ')
-
-    const rightFullStopClasses = [
-        page < totalPages.length - 2 ? 'block' : 'invisible'
-    ].join(' ')
+    const ellipsesClasses = 'flex text-primary space-x-2 text-4xl items-end'
+    const leftEllipsesClasses = (page >= 4)
+    const rightEllipsesClasses = (page < (totalPages.length - 2))
 
     return (
-        <div className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
-            <button
-                onClick={() => updatePage(page - 1)}
-                disabled={page === 1 ? true : false}
-                className="flex items-center space-x-4 disabled:cursor-not-allowed"
-            >
-                <p className={`${iconClasses} ${page === 1 ? 'border-gray-400 text-gray' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}>
-                    {page === 1 ? (
-                        <p>
-                            <ChevronLeftIcon className='text-gray-400 -translate-x-[1px]'/>
-                        </p>        
-                    ) : (
-                        <a href="#paginationTop">
-                            <ChevronLeftIcon className='text-primary -translate-x-[1px] hover:text-white transition duration-300'/>
-                        </a>
+        <nav aria-label="Pagination">
+
+            <ul className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
+                <li>
+
+                    {/* Previous page button */}
+                    {page !== 1 ? (
+                        <button
+                            onClick={() => handleChange(page-1)}
+                            className={`${page === 1 ? 'text-gray-400' : 'text-secondary'} uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed`}
+                            disabled={page === 1}
+                            title='Previous page' aria-hidden={page === 1} aria-label={`Go to the previous page`}
+                        >
+                            <ChevronLeftIcon className={`${iconClasses} ${page === 1 ? 'text-gray-400 border-gray-400' : 'text-primary border-primary hover:bg-primary hover:text-white' } transition duration-300`}/>
+                            <span>Previous</span>
+                        </button>
+                    ): (
+                        <span
+                            className="text-gray-400 uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
+                        >
+                            <ChevronLeftIcon className={`${iconClasses} text-gray-400 border-gray-400 `}/>
+                            <span>Previous</span>
+                        </span>
                     )}
-                </p>
-                <span className={`${page === 1 ? 'text-gray-400' : 'text-secondary'} hidden md:block  uppercase font-bold`}>
-                    Previous
-                </span>
-            </button>
 
-            <div className="flex space-x-2 md:space-x-4 lg:space-x-6 xl-space-x-8">
-                <p className={`${leftFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                    …
-                </p>
-                <div className="hidden md:flex md:space-x-4 ">
-                    {filteredPages.map(number => {
-                        const activeButtonClasses = [
-                            page === number ? "bg-primary text-white" : "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
-                        ].join(' ')
+                </li>
+                <li>
 
-                        return (
-                            <>
-                                <a href="#paginationTop">
-                                    <button key={number} onClick={() => updatePage(number)} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
-                                        {number}
-                                    </button>
-                                </a>
-                            </>
-                        )
-                    })}
-                </div>
-                <p className={`${rightFullStopClasses} hidden md:flex text-primary space-x-2 text-4xl items-end`}>
-                    …
-                </p>
-            </div>
+                    {/* Page number buttons */}
+                    <ul className="hidden md:flex md:space-x-4">
 
+                        {leftEllipsesClasses && (<li className={ellipsesClasses}>…</li>)}
 
-            <button
-                onClick={() => updatePage(page + 1)}
-                disabled={page === totalPages.length}
-                className="flex items-center space-x-4 disabled:cursor-not-allowed"
-            >
-                <span className="hidden md:block text-secondary uppercase font-bold">
-                    Next
-                </span>
-                <p className={`${iconClasses} ${page === totalPages.length ? 'border-gray-400 text-gray' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}>
-                    {page === totalPages.length ? (
-                        <p>
-                            <ChevronRightIcon className='text-gray-400 translate-x-[1px]'/>
-                        </p>        
+                        {filteredPages.map(number => {
+                            
+                            const activeButtonClasses = [
+                                page === number ? "bg-primary text-white" : "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
+                            ].join(' ')
+
+                            return (
+                                <li key={number}>
+                                    {page !== number ? (
+                                        <button
+                                            onClick={() => handleChange(number)}
+                                            className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}
+                                            title={`Go to page ${number}`} aria-label={`Go to page ${number}`}
+                                        >
+                                            {number}
+                                        </button>
+                                    ) : (   
+                                        <span aria-label={`You are currently on page ${number}`} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
+                                            {number}
+                                        </span>
+                                    )}
+                                </li>
+                            )
+                        })}
+
+                        {rightEllipsesClasses && (<li className={ellipsesClasses}>…</li>)}
+
+                    </ul>
+
+                </li>
+                <li>
+
+                    {/* Next page button */}
+                    {page !== totalPages.length ? (
+                        <button
+                            onClick={() => handleChange(page + 1)}
+                            className={`${page === totalPages.length ? 'text-gray-400' : 'text-secondary'}  uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed`}
+                            disabled={page === totalPages.length}
+                            title='Next page' aria-hidden={page === totalPages.length} aria-label={`Go to the next page`}
+                        >
+                            <span>Next</span>
+                            <ChevronRightIcon className={`${iconClasses} ${page === totalPages.length ? 'text-gray-400 border-gray-400' : 'text-primary border-primary hover:bg-primary hover:text-white' } transition duration-300`}/>
+                        </button>
                     ) : (
-                        <a href="#paginationTop">
-                            <ChevronRightIcon className='text-primary translate-x-[1px] hover:text-white transition duration-300'/>
-                        </a>
+                        <span className="text-gray-400  uppercase font-bold flex items-center space-x-2 md:space-x-4">
+                            <span>Next</span>
+                            <ChevronRightIcon className={`${iconClasses} text-gray-400 border-gray-400`}/>
+                        </span>
                     )}
-                </p>
-            </button>
-        </div>
+
+                </li>
+            </ul>
+            
+        </nav>
 
     )
 }
