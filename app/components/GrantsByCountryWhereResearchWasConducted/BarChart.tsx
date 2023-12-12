@@ -1,5 +1,5 @@
 import {useState, useContext} from "react"
-import {Icon, Subtitle} from "@tremor/react"
+import {Icon} from "@tremor/react"
 import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
@@ -117,9 +117,9 @@ export default function BarChart() {
                     onClick={handleIconClick}
                 />
 
-                <Subtitle className="text-gray-500">
+                <p className="text-gray-500">
                     {selectedRegion ? `Viewing Countries in ${selectedRegionName}.` : 'Click a region bar to expand to countries'}
-                </Subtitle>
+                </p>
             </div>
 
             <div className="w-full h-[600px] mt-4">

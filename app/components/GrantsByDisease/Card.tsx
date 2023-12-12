@@ -1,5 +1,4 @@
 import {useContext} from "react"
-import {Title, Text} from "@tremor/react"
 import {ChartBarIcon, ClockIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
@@ -28,9 +27,9 @@ export default function GrantsByDisease() {
 
     const infoModalContents = (
         <>
-            <Title>Global annual funding for research on diseases with a pandemic potential</Title>
+            <h3>Global annual funding for research on diseases with a pandemic potential</h3>
 
-            <Text>The list contains the WHO priority diseases plus pandemic influenza, Mpox and plague</Text>
+            <p className="text-brand-grey-500">The list contains the WHO priority diseases plus pandemic influenza, Mpox and plague</p>
         </>
     )
 
