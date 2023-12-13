@@ -318,7 +318,6 @@ export default function StaticPage({grant}: Props) {
                                                 index === 8 && 'col-span-2 md:col-span-1 md:border-l-2',
                                             ].join(' ')
 
-                                            console.log(subHeading.metric)
                                             return (
                                                 <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
 

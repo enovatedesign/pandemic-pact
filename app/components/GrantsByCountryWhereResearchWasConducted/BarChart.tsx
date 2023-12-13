@@ -48,8 +48,6 @@ export default function BarChart() {
                 'ResearchInstitutionCountry',
             )
         )
-
-        console.log(data);
     } else {
         const whoRegions = Object.keys(regionToCountryMapping)
 
