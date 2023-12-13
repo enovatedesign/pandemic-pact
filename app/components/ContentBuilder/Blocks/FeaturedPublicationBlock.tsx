@@ -91,16 +91,16 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 										<p className="lg:text-lg">{summary}</p>
 
 										<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
-											<p className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-300 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] text-white ">
-												<span className="group-hover:[transform:rotateY(180deg)] transition-all duration-200">
-													<ExternalLinkIcon className="w-6 h-6" />
-												</span>
-											</p>
-											<p className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-300 group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden]  text-white">
+											<div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
 												<span>
 													<ExternalLinkIcon className="w-6 h-6" />
 												</span>
-											</p>
+											</div>
+											<div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+												<span>
+													<ExternalLinkIcon className="w-6 h-6" />
+												</span>
+											</div>
 										</div>
 									
 									</div>
