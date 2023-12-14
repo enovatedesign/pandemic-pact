@@ -175,7 +175,7 @@ export default function StaticPage({grant}: Props) {
                             <span className="sr-only">
                                 Total publications:
                             </span>
-                            <a href="#publications" className="z-10 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
+                            <a href="#publications" className="z-10 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary whitespace-nowrap">
                                 {grant.PubMedLinks?.length ?? '0'} publications
                             </a>
 
