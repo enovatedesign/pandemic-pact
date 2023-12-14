@@ -447,6 +447,7 @@ export default function StaticPage({grant}: Props) {
                                             postsPerPage={limit}
                                             setLastItemIndex={setLastItemIndex}
                                             setFirstItemIndex={setFirstItemIndex}
+                                            setActiveIndex={setActiveIndex}
                                         />
                                     )}
                                 </div>
