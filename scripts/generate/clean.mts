@@ -1,4 +1,3 @@
-import dotenv from 'dotenv'
 import {MeiliSearch} from 'meilisearch'
 import fs from 'fs-extra'
 import {getMeilisearchIndexName} from '../helpers/meilisearch.mjs'
@@ -6,8 +5,6 @@ import {title, info} from '../helpers/log.mjs'
 
 export default async function () {
     title('Removing files and search indices from previous run')
-
-    dotenv.config({path: './.env.local'})
 
     fs.removeSync('./data/dist')
 

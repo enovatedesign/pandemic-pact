@@ -1,4 +1,3 @@
-import dotenv from 'dotenv'
 import {MeiliSearch} from 'meilisearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
@@ -7,8 +6,6 @@ import {Grant} from '../types/generate'
 import {title, info} from '../helpers/log.mjs'
 
 export default async function () {
-    dotenv.config({path: './.env.local'})
-
     const host = process.env.MEILISEARCH_HOST
 
     // Don't try to add the search index if MeiliSearch is not configured

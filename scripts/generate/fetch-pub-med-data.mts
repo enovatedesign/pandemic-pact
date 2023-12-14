@@ -1,12 +1,10 @@
-import dotenv from 'dotenv'
 import fs from 'fs-extra'
 import _ from 'lodash'
+import {kv} from "@vercel/kv"
 import {ProcessedGrant, Grant} from '../types/generate'
 import {title, info, printWrittenFileStats, warn} from '../helpers/log.mjs'
 
 export default async function () {
-    dotenv.config({path: './.env.local'})
-
     title('Fetching publication data from PubMed')
 
     if (process.env.SKIP_FETCHING_PUBMED_DATA) {
@@ -51,13 +49,21 @@ function grantHasValidPubMedId(grant: ProcessedGrant): boolean {
 }
 
 async function getPubMedLinks(pubMedGrantId: string) {
+    const kvKey = `pub-med-${pubMedGrantId}`
+
+    const value = await kv.get(kvKey)
+
+    if (value) {
+        return value
+    }
+
     const query = encodeURIComponent(`GRANT_ID:"${pubMedGrantId}"`)
 
     const data = await fetch(
         `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
     ).then(response => response.json())
 
-    return data.resultList.result.map(
+    const results = data.resultList.result.map(
         (result: any) => _.pick(result, [
             'title',
             'source',
@@ -68,4 +74,16 @@ async function getPubMedLinks(pubMedGrantId: string) {
             'journalInfo.journal.title',
         ])
     )
+
+    const oneWeekInSeconds = 60 * 60 * 24 * 7
+
+    // The third argument is an object of Redis SET options, which are documented here:
+    // https://redis.io/commands/set
+    await kv.set(
+        kvKey,
+        results,
+        {ex: oneWeekInSeconds, nx: true},
+    )
+
+    return results
 }
