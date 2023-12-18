@@ -1,5 +1,4 @@
 import {Switch as HeadlessUISwitch} from '@headlessui/react'
-import {Text} from "@tremor/react"
 
 interface Props {
     checked: boolean
@@ -13,7 +12,7 @@ interface Props {
 export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLabel, screenReaderLabel, className}: Props) {
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
-            <Text className={opaqueTextIf(!checked)}>{leftLabel}</Text>
+            <p className={checked ? 'text-brand-grey-500' : 'text-black'}>{leftLabel}</p>
 
             <HeadlessUISwitch
                 checked={checked}
@@ -27,11 +26,7 @@ export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLa
                 />
             </HeadlessUISwitch>
 
-            <Text className={opaqueTextIf(checked)}>{rightLabel}</Text>
+            <p className={!checked ? 'text-brand-grey-500' : 'text-black'}>{rightLabel}</p>
         </div>
     )
-}
-
-function opaqueTextIf(condition: boolean) {
-    return condition ? 'opacity-100 text-black' : 'opacity-75'
 }

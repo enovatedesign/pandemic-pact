@@ -34,9 +34,9 @@ const Card = ({entry, tags = false, children, image}: Props) => {
 
     const cardImage = thumbnailImage ? thumbnailImage[0] : image
 
-    const urlCondition = url?.startsWith('http');
-    const targetAttr = urlCondition ? '_blank' : 'false';
-    const relAttr = urlCondition ? 'nofollow noopener noreferrer' : 'false';
+    const urlCondition = url?.startsWith('http') || url?.startsWith('#') ;
+    const targetAttr = url?.startsWith('http') ? '_blank' : undefined;
+    const relAttr = urlCondition ? 'nofollow noopener noreferrer' : undefined;
 
     const hoverClasses = [
         urlCondition ? 'hover:shadow-lg transition-shadow duration-300' : ''
@@ -59,7 +59,7 @@ const Card = ({entry, tags = false, children, image}: Props) => {
     );
     return (
         <animated.article key={index} 
-            className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden ${hoverClasses}`}
+            className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden [perspective:1000px] group ${hoverClasses}`}
             ref={ref}
             style={springs}
         >   
@@ -117,9 +117,18 @@ const Card = ({entry, tags = false, children, image}: Props) => {
                         )}
 
                         {children && (
-                            <p className="mt-auto self-end">
-                                {children}
-                            </p>
+                            <div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
+                                <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
+                                    <span>
+                                        {children}
+                                    </span>
+                                </div>
+                                <div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+                                    <span>
+                                        {children}
+                                    </span>
+                                </div>
+                            </div>
                         )}
                         
                         {tags && (

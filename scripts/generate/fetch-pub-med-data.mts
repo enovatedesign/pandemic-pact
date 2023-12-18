@@ -1,12 +1,10 @@
-import dotenv from 'dotenv'
 import fs from 'fs-extra'
 import _ from 'lodash'
+import {put} from "@vercel/blob"
 import {ProcessedGrant, Grant} from '../types/generate'
 import {title, info, printWrittenFileStats, warn} from '../helpers/log.mjs'
 
 export default async function () {
-    dotenv.config({path: './.env.local'})
-
     title('Fetching publication data from PubMed')
 
     if (process.env.SKIP_FETCHING_PUBMED_DATA) {
@@ -14,38 +12,93 @@ export default async function () {
         return
     }
 
-    const pathname = './data/dist/grants.json'
+    const grantsDistPathname = './data/dist/grants.json'
 
-    const sourceGrants: ProcessedGrant[] = fs.readJsonSync(pathname)
+    const sourceGrants: ProcessedGrant[] = fs.readJsonSync(grantsDistPathname)
 
-    const grants: Grant[] = []
+    const publications = await getPublications(
+        sourceGrants.map(grant => grant.PubMedGrantId as string)
+    )
 
-    for (let i = 0; i < sourceGrants.length; i++) {
-        const sourceGrant = sourceGrants[i]
+    const grants = sourceGrants.map((grant: Grant) => {
+        const PubMedLinks = publications[grant.PubMedGrantId as string] ?? []
 
-        if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
-            info(`Fetched publications for ${i}/${sourceGrants.length} grants`)
-        }
+        return {...grant, PubMedLinks}
+    })
 
-        if (grantHasValidPubMedId(sourceGrant)) {
-            const PubMedLinks = await getPubMedLinks(sourceGrant.PubMedGrantId as string)
-            grants.push({...sourceGrant, PubMedLinks})
-        } else {
-            grants.push(sourceGrant)
-        }
-    }
+    fs.writeJsonSync(grantsDistPathname, grants)
 
-    fs.writeJsonSync(pathname, grants)
-
-    printWrittenFileStats(pathname)
+    printWrittenFileStats(grantsDistPathname)
 }
 
-function grantHasValidPubMedId(grant: ProcessedGrant): boolean {
-    if (!grant.PubMedGrantId) {
-        return false
+async function getPublications(pubMedGrantIds: string[]) {
+    const grantIds = _.uniq(
+        pubMedGrantIds.filter(idIsValidPubMedGrantId)
+    )
+
+    const cacheFilename = 'cached-pub-med-publications.json';
+
+    const cacheUrl = `https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/${cacheFilename}`
+
+    const cacheResponse = await fetch(cacheUrl)
+
+    if (!cacheResponse.ok && cacheResponse.status !== 404) {
+        throw new Error(`Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`)
     }
 
-    const id = grant.PubMedGrantId as string
+    if (cacheResponse.ok) {
+        const cache = await cacheResponse.json()
+
+        if (cache.expiresAt && cache.publications) {
+            const cachedGrantIds = Object.keys(cache.publications)
+
+            // check if all grant IDs are in the cache
+            const allIdsInCache = grantIds.every(id => cachedGrantIds.includes(id))
+
+            // check expired date has not passed
+            const cacheHasNotExpired = cache.expiresAt > Date.now()
+
+            if (allIdsInCache && cacheHasNotExpired) {
+                info('Using cached PubMed data')
+                return cache.publications
+            }
+        }
+    }
+
+    info('Cached PubMed data is not available or has expired, fetching new data via API')
+
+    // Fetch new PubMed data for each Grant ID
+    const publications: {[key: string]: string} = {}
+
+    for (let i = 0; i < grantIds.length; i++) {
+        if (i > 0 && (i % 500 === 0 || i === grantIds.length - 1)) {
+            info(`Fetched ${i}/${grantIds.length} PubMed publications`)
+        }
+
+        const id = grantIds[i]
+
+        publications[id] = await getPubMedLinks(id)
+    }
+
+    // Cache the data for 1 week
+    const expiresAt = Date.now() + (1000 * 60 * 60 * 24 * 7) // 1 week
+
+    // Store it at Vercel Blob
+    await put(
+        cacheFilename,
+        JSON.stringify({publications, expiresAt}),
+        {access: 'public', addRandomSuffix: false}
+    )
+
+    info(`Stored PubMed data in cache file ${cacheFilename} until ${new Date(expiresAt).toLocaleString()}`)
+
+    return publications
+}
+
+function idIsValidPubMedGrantId(id?: string): boolean {
+    if (typeof id !== 'string') {
+        return false
+    }
 
     return !['', 'unknown', 'not applicable'].includes(id.trim())
 }

@@ -1,5 +1,5 @@
 import {useState, useContext} from "react"
-import {Flex, BarChart as TremorBarChart, LineChart as TremorLineChart, Text, Color, Subtitle} from "@tremor/react"
+import { BarChart as TremorBarChart, LineChart as TremorLineChart, Color} from "@tremor/react"
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
@@ -103,11 +103,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             tabs={tabs}
         >
-            <Flex
-                justifyContent="between"
-                alignItems="center"
-                className="mb-6 ignore-in-image-export"
-            >
+            <div className=" flex w-full justify-between items-start mb-6 ignore-in-image-export">
                 <MultiSelect
                     options={selectOptions.ResearchCat}
                     selectedOptions={selectedResearchCategories}
@@ -117,9 +113,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
                 />
 
                 {filteredDataset.length < globalGrants.length &&
-                    <Text>Filtered Grants: {filteredDataset.length}</Text>
+                    <p>Filtered Grants: {filteredDataset.length}</p>
                 }
-            </Flex>
+            </div>
         </VisualisationCard>
     )
 }
@@ -132,17 +128,12 @@ interface ChartProps {
 
 function BarChart({data, categories, colours}: ChartProps) {
     return (
-        <Flex
-            flexDirection="row"
-        >
+        <div className="w-full h-full flex relative">
             <div className="w-16">
-                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Amount Committed (USD)</p>
             </div>
 
-            <Flex
-                flexDirection="col"
-                className="gap-y-2"
-            >
+            <div className="flex flex-col space-y-2 w-full">
                 <TremorBarChart
                     data={data}
                     index="year"
@@ -153,25 +144,20 @@ function BarChart({data, categories, colours}: ChartProps) {
                     className="h-[36rem] -ml-2"
                 />
 
-                <Subtitle>Year</Subtitle>
-            </Flex>
-        </Flex>
+                <p className="text-brand-grey-500">Year</p>
+            </div>
+        </div>
     )
 }
 
 function LineChart({data, categories, colours}: ChartProps) {
     return (
-        <Flex
-            flexDirection="row"
-        >
+        <div className="w-full h-full flex">
             <div className="w-16">
-                <Subtitle className="absolute whitespace-nowrap -rotate-90 -translate-x-1/3">Amount Committed (USD)</Subtitle>
+                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Amount Committed (USD)</p>
             </div>
 
-            <Flex
-                flexDirection="col"
-                className="gap-y-2"
-            >
+            <div className="flex flex-col space-y-2 w-full">
                 <TremorLineChart
                     data={data}
                     index="year"
@@ -182,8 +168,8 @@ function LineChart({data, categories, colours}: ChartProps) {
                     className="h-[36rem] -ml-2"
                 />
 
-                <Subtitle>Year</Subtitle>
-            </Flex>
-        </Flex>
+                <p className="text-brand-grey-500">Year</p>
+            </div>
+        </div>
     )
 }

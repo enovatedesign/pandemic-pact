@@ -95,7 +95,7 @@ const TableBlock = ({block}: Props) => {
                                                                 const tdClasses = [
                                                                     'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
                                                                 ].join(' ')
-                                                                console.log(cell)
+
                                                                 return (
                                                                     <>
                                                                         <td className={ tdClasses }>

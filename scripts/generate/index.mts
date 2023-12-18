@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import clean from './clean.mjs'
 import downloadAndParseDataSheets from './download-and-parse-data-sheets.mjs'
 import prepareSelectOptions from './prepare-select-options.mjs'
@@ -9,6 +10,8 @@ import prepareMeilisearch from './prepare-meilisearch.mjs'
 main()
 
 async function main() {
+    dotenv.config({path: './.env.local'})
+
     await clean()
 
     await downloadAndParseDataSheets()

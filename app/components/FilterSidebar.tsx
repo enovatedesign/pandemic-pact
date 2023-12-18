@@ -1,5 +1,4 @@
 import {useState} from "react"
-import {Flex, Text} from "@tremor/react"
 import {XIcon, ChevronUpIcon, ChevronDownIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
@@ -130,14 +129,8 @@ const FilterBlock = ({filters, selectedFilters, setExcludeGrantsWithMultipleItem
     return (
         <>
             {filters.map(({field, label, excludeGrantsWithMultipleItems}) => (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="start"
-                    alignItems="start"
-                    className="gap-y-2"
-                    key={field}
-                >
-                    <Text className="text-white">Filter by {label}</Text>
+                <div className="flex flex-col space-y-2 w-full" key={field}>
+                    <p className="text-white">Filter by {label}</p>
 
                     <MultiSelect
                         options={selectOptions[field as keyof typeof selectOptions]}
@@ -153,7 +146,7 @@ const FilterBlock = ({filters, selectedFilters, setExcludeGrantsWithMultipleItem
                             textClassName="text-white"
                         />
                     }
-                </Flex>
+                </div>
             ))}
         </>
     )

@@ -1,7 +1,7 @@
-import Button from "../../Button"
 import Image from "next/image";
 import BlockWrapper from "../BlockWrapper"
 import { ExternalLinkIcon } from "@heroicons/react/outline"
+
 
 interface Props {
 	block: {
@@ -41,7 +41,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 		return (
             <BlockWrapper>
 
-				<a href={url} target="_blank" rel="nofollow noopener noreferrer" className="flex justify-center -mx-6">
+				<div className="flex justify-center -mx-6 ">
 					<div className="relative rounded-2xl border-dotted border-2 border-primary p-6 lg:p-12 mx-6 max-w-6xl">
 						<p className="absolute inset-x-0 -mt-10 lg:-mt-16 text-center">
 							<span className="mx-auto inline-block px-3 py-1 text-gray-500 rounded-full font-bold tracking-widest uppercase bg-gray-50">
@@ -49,60 +49,69 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 							</span>
 						</p>
 						
-						<article className={`-mx-12 md:-mx-0 md:border md:border-gray-200 md:rounded-2xl overflow-hidden bg-white grid sm:grid-cols-3 lg:grid-cols-4 shadow ${hoverClasses}`}>
+						<a href={url} target="_blank" rel="nofollow noopener noreferrer">
 
-							<div className="relative ">
-								{type && (
-									<div className="absolute top-6 lg:top-10 left-0 bg-black/50 text-white ring-2 ring-white/20 text-sm font-bold tracking-widest uppercase px-6 py-2 rounded-r-full">
-										{type}
-									</div>
-								)}
-								{image?.url ? (
-									<Image 
-										src={image.url}
-										alt={image.altText}
-										width={image.width}
-										height={image.height}
-										className="w-full h-full object-cover"
-										loading="lazy"
-									/>    
-								) : (
-									<Image 
-										src='/images/card-fallback/card-fallback.svg'
-										alt=''
-										width='480'
-										height='480'
-										className="w-full h-full object-cover"
-										loading="lazy"
-									/>
-								)}
-							</div>
+							<article className={`-mx-12 md:-mx-0 md:border md:border-gray-200 md:rounded-2xl overflow-hidden bg-white grid sm:grid-cols-3 lg:grid-cols-4 shadow [perspective:1000px] group  ${hoverClasses}`}>
 
-							<div className="sm:col-span-2 lg:col-span-3 flex justify-center items-center">
-
-								<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
-
-									<h2 className="text-secondary text-xl md:text-2xl">
-										{title}
-									</h2>
-
-									<p className="lg:text-lg">{summary}</p>
-
-									<p className="mt-auto self-end">
-										<span className="sr-only">(external link)</span> 
-										<span className="rounded-full bg-primary flex justify-center items-center p-4" aria-hidden="true">
-											<ExternalLinkIcon className="w-4 h-4" />
-										</span>
-									</p>
-								
+								<div className="relative ">
+									{type && (
+										<div className="absolute top-6 lg:top-10 left-0 bg-black/50 text-white ring-2 ring-white/20 text-sm font-bold tracking-widest uppercase px-6 py-2 rounded-r-full">
+											{type}
+										</div>
+									)}
+									{image?.url ? (
+										<Image 
+											src={image.url}
+											alt={image.altText}
+											width={image.width}
+											height={image.height}
+											className="w-full h-full object-cover"
+											loading="lazy"
+										/>    
+									) : (
+										<Image 
+											src='/images/card-fallback/card-fallback.svg'
+											alt=''
+											width='480'
+											height='480'
+											className="w-full h-full object-cover"
+											loading="lazy"
+										/>
+									)}
 								</div>
 
-							</div>
+								<div className="sm:col-span-2 lg:col-span-3 flex justify-center items-center">
 
-						</article>
+									<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
+
+										<h2 className="text-secondary text-xl md:text-2xl">
+											{title}
+										</h2>
+
+										<p className="lg:text-lg">{summary}</p>
+
+										<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
+											<div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
+												<span>
+													<ExternalLinkIcon className="w-6 h-6" />
+												</span>
+											</div>
+											<div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+												<span>
+													<ExternalLinkIcon className="w-6 h-6" />
+												</span>
+											</div>
+										</div>
+									
+									</div>
+
+								</div>
+
+							</article>
+						</a>
 
 					</div>
-				</a>
+				</div>
 
             </BlockWrapper>
 		);

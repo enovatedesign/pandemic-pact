@@ -4,7 +4,6 @@ import {useState, useEffect} from 'react'
 import AnimateHeight from 'react-animate-height';
 import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
 import Link from 'next/link'
-import {Grid, Col, Card, Title, Subtitle, Text, } from '@tremor/react'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
@@ -112,12 +111,15 @@ export default function StaticPage({grant}: Props) {
     const publicationList = grant.PubMedLinks?.slice(firstItemIndex, lastItemIndex)
     const [readMore, setReadMore] = useState(false)
     const [backgroundShow, setBackgroundShow] = useState(true)
-
+    const [animateHeight, setAnimateHeight] = useState<'auto' | number>('auto')
 
     useEffect(() => {
         const abstract = document.getElementById('abstract')
+        const hasReadMore = (abstract?.offsetHeight || 0) > 230
+        
         const checkHeight = () => {
-            setReadMore((abstract?.offsetHeight || 0) > 230)
+            setReadMore(hasReadMore)
+            setAnimateHeight(hasReadMore ? 230 : 'auto')
         }
 
         const debouncedCheckHeight = debounce(checkHeight, 200)
@@ -173,7 +175,7 @@ export default function StaticPage({grant}: Props) {
                             <span className="sr-only">
                                 Total publications:
                             </span>
-                            <a href="#publications" className="z-10 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary">
+                            <a href="#publications" className="z-10 inline-block bg-primary px-2.5 rounded-lg tracking-wider font-bold py-0.5 text-sm uppercase text-secondary whitespace-nowrap">
                                 {grant.PubMedLinks?.length ?? '0'} publications
                             </a>
 
@@ -202,16 +204,15 @@ export default function StaticPage({grant}: Props) {
                     <span className="uppercase tracking-wider font-medium">Grant search</span>
                 </Link>
 
-                <Grid numItemsLg={1} className="gap-6">
-                    <Col
-                        numColSpanLg={1}
+                <div className="gap-6">
+                    <div
                         className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200"
                     >
                         <div className="grant-abstract flex flex-col space-y-4">
-                            <Title className={titleClasses}>Abstract</Title>
+                            <h3 className={titleClasses}>Abstract</h3>
                             <AnimateHeight
                                 duration={300}
-                                height={abstractShow ? 'auto' : 230}
+                                height={abstractShow ? 'auto' : animateHeight}
                                 className='relative'
                             >
                                 <div id='abstract'>
@@ -231,7 +232,7 @@ export default function StaticPage({grant}: Props) {
                             )}
                         </div>
 
-                        <div className="my-2 lg:my-8 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
+                        <div className="my-2 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
                             <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
                                 <h3 className={`self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] ${titleClasses}`}>
                                     Key facts
@@ -317,7 +318,6 @@ export default function StaticPage({grant}: Props) {
                                                 index === 8 && 'col-span-2 md:col-span-1 md:border-l-2',
                                             ].join(' ')
 
-                                            console.log(subHeading.metric)
                                             return (
                                                 <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
 
@@ -360,14 +360,14 @@ export default function StaticPage({grant}: Props) {
                         </div>
 
                         {grant.LaySummary &&
-                            <Card className="grant-lay-summary">
-                                <Title>Lay Summary</Title>
+                            <div className="grant-lay-summary">
+                                <h3>Lay Summary</h3>
 
                                 <div
                                     className="mt-2"
                                     dangerouslySetInnerHTML={{__html: grant.LaySummary}}
                                 />
-                            </Card>
+                            </div>
                         }
 
                         {publicationList?.length > 0 &&
@@ -447,16 +447,15 @@ export default function StaticPage({grant}: Props) {
                                             postsPerPage={limit}
                                             setLastItemIndex={setLastItemIndex}
                                             setFirstItemIndex={setFirstItemIndex}
+                                            setActiveIndex={setActiveIndex}
                                         />
                                     )}
                                 </div>
                             </div>
 
                         }
-                    </Col >
-
-
-                </Grid>
+                    </div>
+                </div>
             </div>
         </Layout>
     )

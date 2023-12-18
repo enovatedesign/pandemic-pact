@@ -8,6 +8,7 @@ interface Props {
     totalPosts: number,
     setFirstItemIndex: ((index: number) => void)
     setLastItemIndex: ((index: number) => void)
+    setActiveIndex?: ((index: number) => void)
 }
 
 const Pagination = ({
@@ -15,6 +16,7 @@ const Pagination = ({
     totalPosts,
     setFirstItemIndex,
     setLastItemIndex,
+    setActiveIndex,
 }: Props) => {
 
     const router = useRouter()
@@ -55,6 +57,9 @@ const Pagination = ({
     const handleChange = (target: number) => {
             updatePage(target)
             window.location.hash = "#paginationTop"
+            if (setActiveIndex) {
+                setActiveIndex(-1)
+            }
     }
 
     const iconClasses = 'w-8 h-8 border-2 rounded-full'

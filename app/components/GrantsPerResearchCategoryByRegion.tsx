@@ -1,6 +1,5 @@
 import {useState, useContext} from "react"
 import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
-import {Text} from "@tremor/react"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
 import selectOptions from '../../data/dist/select-options.json'
@@ -89,7 +88,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                     />
 
                     {filteredDataset.length < globalGrants.length &&
-                        <Text>Filtered Grants: {filteredDataset.length}</Text>
+                        <p>Filtered Grants: {filteredDataset.length}</p>
                     }
                 </div>
 
