@@ -130,7 +130,7 @@ function BarChart({data, categories, colours}: ChartProps) {
     return (
         <div className="w-full h-full flex relative">
             <div className="w-16">
-                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Amount Committed (USD)</p>
+                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Known Financial Commitments (USD)</p>
             </div>
 
             <div className="flex flex-col space-y-2 w-full">
@@ -154,7 +154,7 @@ function LineChart({data, categories, colours}: ChartProps) {
     return (
         <div className="w-full h-full flex">
             <div className="w-16">
-                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Amount Committed (USD)</p>
+                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Known Financial Commitments (USD)</p>
             </div>
 
             <div className="flex flex-col space-y-2 w-full">
