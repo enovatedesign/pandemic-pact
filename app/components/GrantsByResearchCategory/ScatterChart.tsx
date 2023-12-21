@@ -5,6 +5,18 @@ interface Props {
     chartData: any,
 }
 
+const CustomDot = (props: any) => {
+    const { cx, cy, fill } = props;
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={6}
+        fill={fill}
+      />
+    );
+  };
+
 export default function ScatterChart({chartData}: Props) {
     const colours = [
         '#3b82f6',
@@ -35,10 +47,10 @@ export default function ScatterChart({chartData}: Props) {
         <ResponsiveContainer width="100%" height={800}>
             <RechartScatterChart
                 margin={{
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 20,
+                    top: 30,
+                    right: 30,
+                    bottom: 30,
+                    left: 30,
                 }}
             >
                 <CartesianGrid />
@@ -51,6 +63,7 @@ export default function ScatterChart({chartData}: Props) {
                         value: "Grants",
                         position: "bottom",
                     }}
+                    className='text-lg'
                 />
 
                 <YAxis
@@ -62,8 +75,9 @@ export default function ScatterChart({chartData}: Props) {
                         position: "left",
                         angle: -90,
                         style: {textAnchor: 'middle'},
-                        offset: 10,
+                        offset: 20,
                     }}
+                    className='text-lg'
                 />
 
                 <Tooltip
@@ -84,7 +98,7 @@ export default function ScatterChart({chartData}: Props) {
 
                 <Scatter
                     data={chartData}
-                    fill="#8884d8"
+                    shape={<CustomDot/>}
                 >
                     {chartData.map((_: any, index: number) => (
                         <Cell

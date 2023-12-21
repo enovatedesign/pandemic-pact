@@ -61,7 +61,7 @@ export default function TemporalChart() {
                 margin={{
                     top: 5,
                     right: 30,
-                    left: 20,
+                    left: 30,
                     bottom: 20,
                 }}
                 data={amountCommittedToEachDiseaseOverTime}
@@ -76,6 +76,7 @@ export default function TemporalChart() {
                         position: "bottom",
                         offset: 0,
                     }}
+                    className="text-lg"
                 />
 
                 <YAxis
@@ -86,8 +87,9 @@ export default function TemporalChart() {
                         position: "left",
                         angle: -90,
                         style: {textAnchor: 'middle'},
-                        offset: 10,
+                        offset: 20,
                     }}
+                    className="text-lg"
                 />
 
                 <Tooltip
