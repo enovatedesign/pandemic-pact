@@ -4,6 +4,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearc
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
+import { useInView, animated } from '@react-spring/web';
 
 interface Props {
     grants: any[],
@@ -23,7 +24,23 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
 
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
-    return <div id={id}>
+    const [ref, springs] = useInView(
+        () => ({
+            from: {
+                opacity: 0,
+                y: 100,
+            },
+            to: {
+                opacity: 1,
+                y: 0,
+            },
+        }),
+        {
+            once: true,
+        }
+    );
+
+    return <animated.div id={id} ref={ref} style={springs}>
         <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 rounded-2xl">
             <div className="flex flex-col items-start space-y-6">
                 <div className="w-full flex justify-between items-center">
@@ -94,5 +111,5 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                 <p className="text-sm text-gray-500">{footnote}</p>
             }
         </div>
-    </div >
+    </animated.div >
 }
