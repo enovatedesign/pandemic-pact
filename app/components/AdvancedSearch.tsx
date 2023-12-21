@@ -135,7 +135,7 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
 const AdvancedSearch = () => {
     
     const defaultRow:() => Row = () => ({
-        field: 'Regions',
+        field: 'StudySubject',
         values: [],
         logicalAnd: false,
         key: new Date().getTime(),
