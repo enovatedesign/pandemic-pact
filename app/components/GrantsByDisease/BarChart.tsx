@@ -22,10 +22,10 @@ export default function BarChart() {
 
         return {
             "Disease": disease.label,
-            "Grants With Known Amount Committed": grantsWithKnownAmounts.length,
-            "Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
+            "Grants With Known Financial Commitments": grantsWithKnownAmounts.length,
+            "Grants With Unspecified Financial Commitments": grantsWithUnspecifiedAmounts.length,
             "Total Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Amount Committed (USD)": moneyCommitted,
+            "Known Financial Commitments (USD)": moneyCommitted,
         }
     }).filter(disease => disease["Total Grants"] > 0)
 
@@ -33,7 +33,7 @@ export default function BarChart() {
         <>
             <div className="flex flex-col gap-y-2">
                 <Legend
-                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    categories={['Grants With Known Financial Commitments', 'Grants With Unspecified Financial Commitments', 'Known Financial Commitments']}
                     colors={['blue', 'orange', 'green']}
                 />
             </div>
@@ -72,7 +72,11 @@ export default function BarChart() {
                             <Tooltip
                                 formatter={(value: any, name: any, props: any) => {
                                     if (name.includes("Amount Committed (USD)")) {
-                                        return [dollarValueFormatter(value), name, props]
+                                        return [
+                                            dollarValueFormatter(value),
+                                            "Known Financial Commitments (USD)",
+                                            props,
+                                        ]
                                     }
 
                                     return [value, name, props]
@@ -81,21 +85,21 @@ export default function BarChart() {
 
                             <Bar
                                 yAxisId="left"
-                                dataKey="Grants With Known Amount Committed"
+                                dataKey="Grants With Known Financial Commitments"
                                 fill="#3b82f6"
                                 stackId="a"
                             />
 
                             <Bar
                                 yAxisId="left"
-                                dataKey="Grants With Unspecified Amount Committed"
+                                dataKey="Grants With Unspecified Financial Commitments"
                                 fill="#f59e0b"
                                 stackId="a"
                             />
 
                             <Bar
                                 yAxisId="right"
-                                dataKey="Amount Committed (USD)"
+                                dataKey="Known Financial Commitments (USD)"
                                 fill="#22c55e"
                                 stackId="b"
                             />
@@ -104,7 +108,7 @@ export default function BarChart() {
                 </div>
 
                 <div className="w-8">
-                    <p className="absolute top-1/2 whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Amount Committed (USD)</p>
+                    <p className="absolute top-1/2 whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Known Financial Commitments (USD)</p>
                 </div>
             </div>
         </>

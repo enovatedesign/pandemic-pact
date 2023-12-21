@@ -43,7 +43,7 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
             text: label,
             value: grants.length * 0.25,
             "Total Number Of Grants": grants.length,
-            "Amount Committed": moneyCommitted,
+            "Known Financial Commitments": moneyCommitted,
         }
     })
 
@@ -97,7 +97,7 @@ function TooltipContent({data}: any) {
         <div className="flex flex-col">
             <p className="text-lg font-bold">{data.text}</p>
             <p className="text-md">Grants: {data['Total Number Of Grants']}</p>
-            <p className="text-md">Amount Committed: {dollarValueFormatter(data['Amount Committed'] || 0)}</p>
+            <p className="text-md">Known Financial Commitments: {dollarValueFormatter(data['Known Financial Commitments'] || 0)}</p>
         </div>
     )
 }

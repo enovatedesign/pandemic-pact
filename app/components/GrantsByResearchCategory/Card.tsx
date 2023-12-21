@@ -23,10 +23,10 @@ export default function GrantsByResearchCategoryCard() {
 
         return {
             "Research Category": researchCategory.label,
-            "Number Of Grants With Known Amount Committed": grantsWithKnownAmounts.length,
-            "Number Of Grants With Unspecified Amount Committed": grantsWithUnspecifiedAmounts.length,
+            "Number Of Grants With Known Financial Commitments": grantsWithKnownAmounts.length,
+            "Number Of Grants With Unspecified Financial Commitments": grantsWithUnspecifiedAmounts.length,
             "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Amount Committed": moneyCommitted,
+            "Known Financial Commitments": moneyCommitted,
         }
     })
 

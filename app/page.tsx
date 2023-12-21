@@ -38,7 +38,7 @@ export default function Home() {
                         <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-12 w-full z-20 container">
                                 
                             <h1 id="page-title" className="inline-block max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
-                                Delivering insights for over: <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants, from <AnimatedCounter finalCount={351} className={counterClasses} /> global funders
+                                Delivering insights from over: <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants, from <AnimatedCounter finalCount={351} className={counterClasses} /> global funders
                             </h1>
 
                             <Link href={links.visualise.href} className={styles.button}>

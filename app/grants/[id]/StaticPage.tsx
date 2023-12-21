@@ -32,7 +32,7 @@ export default function StaticPage({grant}: Props) {
             classes: ''
         },
         {
-            text: 'Amount Committed (USD)',
+            text: 'Known Financial Commitments (USD)',
             metric: (typeof grant.GrantAmountConverted === 'number') ?
                 `$ ${grant.GrantAmountConverted.toLocaleString()}`
                 : grant.GrantAmountConverted,

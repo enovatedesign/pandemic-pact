@@ -151,7 +151,7 @@ function TooltipContent({geo, displayWhoRegions}: {geo: any, displayWhoRegions: 
 
             <div>
                 <p className="text-md">Grants: {geo.properties.totalGrants || 0}</p>
-                <p className="text-md">Amount Committed: {dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
+                <p className="text-md">Known Financial Commitments: {dollarValueFormatter(geo.properties.totalAmountCommitted || 0)}</p>
             </div>
 
             <p className="text-md italic">Click to explore grants in this {displayWhoRegions ? 'region' : 'country'}</p>
