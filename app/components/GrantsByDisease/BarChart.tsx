@@ -40,7 +40,7 @@ export default function BarChart() {
 
             <div className="flex w-full relative">
                 <div className="w-8">
-                    <p className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap -rotate-90 text-black">Grants</p>
+                    <p className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap -rotate-90 text-brand-grey-500 text-lg">Grants</p>
                 </div>
 
                 <div className="w-full h-[700px]">
@@ -61,12 +61,14 @@ export default function BarChart() {
                             <YAxis
                                 yAxisId="left"
                                 orientation="left"
+                                className="text-lg"
                             />
 
                             <YAxis
                                 yAxisId="right"
                                 orientation="right"
                                 tickFormatter={dollarValueFormatter}
+                                className="text-lg"
                             />
 
                             <Tooltip
@@ -108,7 +110,7 @@ export default function BarChart() {
                 </div>
 
                 <div className="w-8">
-                    <p className="absolute top-1/2 whitespace-nowrap rotate-90 -translate-x-1/2 text-black">Known Financial Commitments (USD)</p>
+                    <p className="absolute top-1/2 whitespace-nowrap rotate-90 -translate-x-1/2  text-brand-grey-500 text-lg">Known Financial Commitments (USD)</p>
                 </div>
             </div>
         </>

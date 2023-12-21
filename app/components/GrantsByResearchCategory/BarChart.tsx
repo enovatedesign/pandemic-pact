@@ -22,11 +22,11 @@ export default function BarChart({chartData}: Props) {
 
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
-                    <p className="text-sm text-brand-grey-500">Number of grants</p>
+                    <p className="text-lg text-brand-grey-500">Number of grants</p>
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <p className="text-sm text-brand-grey-500">Known amount committed (USD)</p>
+                    <p className="text-lg text-brand-grey-500">Known amount committed (USD)</p>
                 </div>
 
                 {chartData.map((data: any) => (
