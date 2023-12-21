@@ -15,14 +15,14 @@ export default function BarChart({chartData}: Props) {
         <>
             <div className="flex flex-col gap-y-2">
                 <Legend
-                    categories={['Grants With Known Amount Committed', 'Grants With Unspecified Amount Committed', 'Amount Committed']}
+                    categories={['Grants With Known Financial Commitments', 'Grants With Unspecified Financial Commitments', 'Known Financial Commitments']}
                     colors={['blue', 'orange', 'green']}
                 />
             </div>
 
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
-                    <p className="text-sm text-brand-grey-500">Number of projects</p>
+                    <p className="text-sm text-brand-grey-500">Number of grants</p>
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
@@ -68,14 +68,14 @@ export default function BarChart({chartData}: Props) {
                                     />
 
                                     <Bar
-                                        dataKey="Number Of Grants With Known Amount Committed"
+                                        dataKey="Number Of Grants With Known Financial Commitments"
                                         fill="#3b82f6"
                                         stackId="a"
                                         background={{fill: '#eee'}}
                                     />
 
                                     <Bar
-                                        dataKey="Number Of Grants With Unspecified Amount Committed"
+                                        dataKey="Number Of Grants With Unspecified Financial Commitments"
                                         fill="#f59e0b"
                                         stackId="a"
                                     />
@@ -118,7 +118,7 @@ export default function BarChart({chartData}: Props) {
                                     />
 
                                     <Bar
-                                        dataKey="Amount Committed"
+                                        dataKey="Known Financial Commitments"
                                         fill="#22c55e"
                                         background={{fill: '#eee'}}
                                     />

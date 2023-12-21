@@ -82,7 +82,7 @@ export default function TemporalChart() {
                     type="number"
                     tickFormatter={dollarValueFormatter}
                     label={{
-                        value: "Amount Committed (USD)",
+                        value: "Known Financial Commitments (USD)",
                         position: "left",
                         angle: -90,
                         style: {textAnchor: 'middle'},

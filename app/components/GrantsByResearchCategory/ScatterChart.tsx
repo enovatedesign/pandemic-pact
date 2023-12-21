@@ -55,10 +55,10 @@ export default function ScatterChart({chartData}: Props) {
 
                 <YAxis
                     type="number"
-                    dataKey="Amount Committed"
+                    dataKey="Known Financial Commitments"
                     tickFormatter={dollarValueFormatter}
                     label={{
-                        value: "Amount Committed (USD)",
+                        value: "Known Financial Commitments (USD)",
                         position: "left",
                         angle: -90,
                         style: {textAnchor: 'middle'},
@@ -69,12 +69,17 @@ export default function ScatterChart({chartData}: Props) {
                 <Tooltip
                     isAnimationActive={false}
                     cursor={{strokeDasharray: '3 3'}}
-                    formatter={
-                        (value: number, name: string) => [
-                            (name === "Amount Committed") ? dollarValueFormatter(value) : value,
-                            name,
-                        ]
-                    }
+                    formatter={(value: any, name: any, props: any) => {
+                        if (name.includes("Amount Committed")) {
+                            return [
+                                dollarValueFormatter(value),
+                                "Known Financial Commitments",
+                                props,
+                            ]
+                        }
+                
+                        return [value, name, props]
+                    }}
                 />
 
                 <Scatter
