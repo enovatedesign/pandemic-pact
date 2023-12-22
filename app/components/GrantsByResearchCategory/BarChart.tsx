@@ -1,7 +1,7 @@
 import {Fragment} from "react"
-import {Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {researchCategoryColours, researchCategoryDimColours} from "../../helpers/colours"
 
 interface Props {
     chartData: any,
@@ -9,24 +9,17 @@ interface Props {
 
 export default function BarChart({chartData}: Props) {
     const maxTotalNumberOfGrants = Math.max(...chartData.map((data: any) => data["Total Number Of Grants"]))
-    const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Amount Committed"]))
+    const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Known Financial Commitments"]))
 
     return (
         <>
-            <div className="flex flex-col gap-y-2">
-                <Legend
-                    categories={['Grants With Known Financial Commitments', 'Grants With Unspecified Financial Commitments', 'Known Financial Commitments']}
-                    colors={['blue', 'orange', 'green']}
-                />
-            </div>
-
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
                     <p className="text-lg text-brand-grey-500">Number of grants</p>
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <p className="text-lg text-brand-grey-500">Known amount committed (USD)</p>
+                    <p className="text-lg text-brand-grey-500">Known Financial Commitments (USD)</p>
                 </div>
 
                 {chartData.map((data: any) => (
@@ -69,14 +62,14 @@ export default function BarChart({chartData}: Props) {
 
                                     <Bar
                                         dataKey="Number Of Grants With Known Financial Commitments"
-                                        fill="#3b82f6"
+                                        fill={researchCategoryColours[data["Research Category Value"]]}
                                         stackId="a"
                                         background={{fill: '#eee'}}
                                     />
 
                                     <Bar
                                         dataKey="Number Of Grants With Unspecified Financial Commitments"
-                                        fill="#f59e0b"
+                                        fill={researchCategoryDimColours[data["Research Category Value"]]}
                                         stackId="a"
                                     />
                                 </RechartBarChart>
@@ -119,7 +112,7 @@ export default function BarChart({chartData}: Props) {
 
                                     <Bar
                                         dataKey="Known Financial Commitments"
-                                        fill="#22c55e"
+                                        fill={researchCategoryColours[data["Research Category Value"]]}
                                         background={{fill: '#eee'}}
                                     />
                                 </RechartBarChart >
@@ -127,7 +120,7 @@ export default function BarChart({chartData}: Props) {
                         </div >
 
                         <div className="self-center pl-2 col-span-1 md:col-span-1 justify-self-end">
-                            <p className="text-xs text-gray-600">{dollarValueFormatter(data["Amount Committed"])}</p>
+                            <p className="text-xs text-gray-600">{dollarValueFormatter(data["Known Financial Commitments"])}</p>
                         </div>
                     </Fragment >
                 ))}

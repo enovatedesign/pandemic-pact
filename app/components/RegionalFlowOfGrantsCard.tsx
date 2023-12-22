@@ -6,13 +6,8 @@ import {groupBy} from "lodash"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {GlobalFilterContext} from "../helpers/filter";
 import {dollarValueFormatter} from "../helpers/value-formatters"
+import {brandColours} from "../helpers/colours"
 import selectOptions from '../../data/dist/select-options.json'
-
-function getRegions(key: string) {
-    return selectOptions[key as keyof typeof selectOptions].filter(
-        regionOption => "Unspecified" !== regionOption.label
-    )
-}
 
 export default function RegionalFlowOfGrantsCard() {
     const {grants} = useContext(GlobalFilterContext)
@@ -20,13 +15,13 @@ export default function RegionalFlowOfGrantsCard() {
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
 
     const colours = {
-        "1": "#3b82f6",
-        "2": "#f59e0b",
-        "5": "#6b7280",
-        "99999": "#ef4444",
-        "9999": "#71717a",
-        "999999": "#000000",
-        "9999999": "#111111",
+        "1": brandColours.blue['500'],
+        "2": brandColours.green['500'],
+        "5": brandColours.orange['500'],
+        "99999": brandColours.teal['400'],
+        "9999": brandColours.blue.DEFAULT,
+        "999999": brandColours.teal['800'],
+        "9999999": brandColours.orange['900'],
     }
 
     const nodeGroups = [

@@ -20,7 +20,7 @@ import {throttle, debounce} from 'lodash'
 import AnimateHeight from "react-animate-height"
 import {Tooltip, TooltipRefProps} from 'react-tooltip'
 import {TooltipContext} from '../helpers/tooltip'
-import { ChevronDownIcon } from "@heroicons/react/solid"
+import {ChevronDownIcon} from "@heroicons/react/solid"
 
 export default function Visualise() {
     const tooltipRef = useRef<TooltipRefProps>(null)
@@ -182,7 +182,7 @@ export default function Visualise() {
                     <section className="hidden lg:block container mx-auto my-6 lg:my-12">
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                             {cardData.map((card, index) => {
-                                
+
                                 return (
                                     <Card
                                         key={index}
@@ -190,7 +190,7 @@ export default function Visualise() {
                                         tags={false}
                                         image={card.image}
                                     >
-                                        <ChevronDownIcon className="w-6 h-6"/>
+                                        <ChevronDownIcon className="w-6 h-6" />
                                     </Card>
                                 )
                             })}
@@ -220,7 +220,7 @@ export default function Visualise() {
                             <div id='annual-trends' className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
-                            
+
                             <div id='word-clouds' className={gridClasses}>
                                 <DiseaseWordCloud />
 

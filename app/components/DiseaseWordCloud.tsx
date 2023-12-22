@@ -2,6 +2,7 @@ import {useContext} from "react"
 import {GlobalFilterContext} from "../helpers/filter"
 import VisualisationCard from "../components/VisualisationCard"
 import WordCloud from "../components/WordCloud"
+import {diseaseColours} from "../helpers/colours"
 
 export default function DiseaseWordCloud() {
     const {grants} = useContext(GlobalFilterContext)
@@ -16,6 +17,7 @@ export default function DiseaseWordCloud() {
                 <WordCloud
                     filterKey="Disease"
                     randomSeedString="2324234234"
+                    colours={diseaseColours}
                 />
             </div>
 

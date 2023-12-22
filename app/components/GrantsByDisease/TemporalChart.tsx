@@ -5,6 +5,7 @@ import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
+import {diseaseColours} from "../../helpers/colours"
 
 export default function TemporalChart() {
     const {grants} = useContext(GlobalFilterContext)
@@ -29,31 +30,6 @@ export default function TemporalChart() {
 
         return dataPoint
     })
-
-    const colours = [
-        '#3b82f6',
-        '#f59e0b',
-        '#6b7280',
-        '#ef4444',
-        '#71717a',
-        '#64748b',
-        '#22c55e',
-        '#14b8a6',
-        '#10b981',
-        '#ec4899',
-        '#f43f5e',
-        '#0ea5e9',
-        '#a855f7',
-        '#eab308',
-        '#737373',
-        '#6366f1',
-        '#d946ef',
-        '#06b6d4',
-        '#84cc16',
-        '#8b5cf6',
-        '#f97316',
-        '#78716c',
-    ]
 
     return (
         <ResponsiveContainer width="100%" height={700}>
@@ -97,12 +73,12 @@ export default function TemporalChart() {
                     isAnimationActive={false}
                 />
 
-                {selectOptions.Disease.map(({label}, index) => (
+                {selectOptions.Disease.map(({value, label}) => (
                     <Line
                         key={label}
                         type="monotone"
                         dataKey={label}
-                        stroke={colours[index % colours.length]}
+                        stroke={diseaseColours[value]}
                         strokeWidth={2}
                         dot={false}
                     />

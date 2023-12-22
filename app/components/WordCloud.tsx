@@ -8,18 +8,18 @@ import {TooltipContext} from '../helpers/tooltip'
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import font from '../globals/font'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config.js'
+import {Colours} from '../helpers/colours'
 import selectOptions from '../../data/dist/select-options.json'
 
 interface Props {
     filterKey: string
     randomSeedString: string
+    colours: Colours
     width?: number
     height?: number
 }
 
-export default function WordCloud({filterKey, randomSeedString, width = 500, height = 300}: Props) {
+export default function WordCloud({filterKey, randomSeedString, colours, width = 500, height = 300}: Props) {
     const {tooltipRef} = useContext(TooltipContext)
     const {grants: globalGrants} = useContext(GlobalFilterContext)
 
@@ -32,36 +32,24 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
 
     if (!filterKey || !randomSeedString) return null
 
-    const data = selectOptions[filterKey as keyof typeof selectOptions].map(function ({value, label}) {
+    const data = selectOptions[filterKey as keyof typeof selectOptions].map(function ({value: categoryValue, label}) {
         const grants = globalGrants.filter(
-            (grant: any) => grant[filterKey].includes(value)
+            (grant: any) => grant[filterKey].includes(categoryValue)
         )
 
         const moneyCommitted = grants.reduce(...sumNumericGrantAmounts)
 
         return {
+            categoryValue,
             text: label,
             value: grants.length * 0.25,
             "Total Number Of Grants": grants.length,
             "Known Financial Commitments": moneyCommitted,
         }
-    })
+    }).sort((a: any, b: any) => a.value - b.value)
 
     // Ensures the word cloud displays the same on page refresh
     const fixedRandom = seedrandom(randomSeedString)
-
-    const fullConfig: any = resolveConfig(tailwindConfig)
-    const tailwindColours = fullConfig.theme.colors
-
-    const colours = [
-        tailwindColours.slate['500'],
-        tailwindColours.amber['500'],
-        tailwindColours.emerald['500'],
-        tailwindColours.sky['500'],
-        tailwindColours.indigo['500'],
-        tailwindColours.fuchsia['500'],
-        tailwindColours.rose['500'],
-    ]
 
     const onWordMouseOver = (event: MouseEvent<SVGPathElement>, data: any) => {
         tooltipRef?.current?.open({
@@ -83,7 +71,7 @@ export default function WordCloud({filterKey, randomSeedString, width = 500, hei
             width={width}
             height={height}
             rotate={0}
-            fill={(_, index) => colours[index % colours.length]}
+            fill={(d: any) => colours[d.categoryValue]}
             font={font.style.fontFamily}
             random={fixedRandom.quick}
             onWordMouseOver={onWordMouseOver}

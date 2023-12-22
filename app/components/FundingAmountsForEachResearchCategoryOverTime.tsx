@@ -1,5 +1,5 @@
 import {useState, useContext} from "react"
-import { BarChart as TremorBarChart, LineChart as TremorLineChart, Color} from "@tremor/react"
+import {BarChart as RechartBarChart, Bar, LineChart as RechartLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
@@ -10,6 +10,7 @@ import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import dataset from '../../data/dist/grants.json'
 import selectOptions from '../../data/dist/select-options.json'
+import {researchCategoryColours} from "../helpers/colours";
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -58,39 +59,26 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         return dataPoint
     })
 
-    const colours: Color[] = [
-        'blue',
-        'lime',
-        'cyan',
-        'violet',
-        'orange',
-        'emerald',
-        'indigo',
-        'purple',
-        'amber',
-        'green',
-        'red',
-        'fuchsia',
-        'yellow',
-        'neutral',
-    ]
-
-    const researchCategories = selectedResearchCategoryOptions.map(selectedResearchCategoryOption => selectedResearchCategoryOption.label)
-
     const tabs = [
         {
             tab: {
                 icon: PresentationChartBarIcon,
                 label: "Bar",
             },
-            content: <BarChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+            content: <BarChart
+                data={amountCommittedToEachResearchCategoryOverTime}
+                categories={selectedResearchCategoryOptions}
+            />,
         },
         {
             tab: {
                 icon: PresentationChartLineIcon,
                 label: "Lines",
             },
-            content: <LineChart data={amountCommittedToEachResearchCategoryOverTime} categories={researchCategories} colours={colours} />,
+            content: <LineChart
+                data={amountCommittedToEachResearchCategoryOverTime}
+                categories={selectedResearchCategoryOptions}
+            />,
         },
     ]
 
@@ -122,54 +110,112 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
 interface ChartProps {
     data: any[],
-    categories: string[],
-    colours: Color[],
+    categories: {value: string, label: string}[],
 }
 
-function BarChart({data, categories, colours}: ChartProps) {
+function BarChart({data, categories}: ChartProps) {
     return (
-        <div className="w-full h-full flex relative">
-            <div className="w-16">
-                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Known Financial Commitments (USD)</p>
-            </div>
+        <ResponsiveContainer width="100%" height={800}>
+            <RechartBarChart
+                data={data}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
 
-            <div className="flex flex-col space-y-2 w-full">
-                <TremorBarChart
-                    data={data}
-                    index="year"
-                    categories={categories}
-                    valueFormatter={dollarValueFormatter}
-                    colors={colours}
-                    showLegend={false}
-                    className="h-[36rem] -ml-2"
+                <XAxis
+                    dataKey="year"
+                    label={{
+                        value: "Year",
+                        position: "bottom",
+                        offset: 0,
+                    }}
                 />
 
-                <p className="text-brand-grey-500">Year</p>
-            </div>
-        </div>
+                <YAxis
+                    tickFormatter={dollarValueFormatter}
+                    label={{
+                        value: "Known Financial Commitments (USD)",
+                        position: "left",
+                        angle: -90,
+                        style: {textAnchor: 'middle'},
+                        offset: 10,
+                    }}
+                />
+
+                <Tooltip
+                    formatter={dollarValueFormatter}
+                    isAnimationActive={false}
+                />
+
+                {categories.map(({value, label}) => (
+                    <Bar
+                        key={`bar-${value}`}
+                        dataKey={label}
+                        fill={researchCategoryColours[value]}
+                    />
+                ))}
+            </RechartBarChart>
+        </ResponsiveContainer>
     )
 }
 
-function LineChart({data, categories, colours}: ChartProps) {
+function LineChart({data, categories}: ChartProps) {
     return (
-        <div className="w-full h-full flex">
-            <div className="w-16">
-                <p className="absolute top-1/2 whitespace-nowrap -rotate-90 -translate-x-1/3 text-brand-grey-500">Known Financial Commitments (USD)</p>
-            </div>
+        <ResponsiveContainer width="100%" height={700}>
+            <RechartLineChart
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                }}
+                data={data}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
 
-            <div className="flex flex-col space-y-2 w-full">
-                <TremorLineChart
-                    data={data}
-                    index="year"
-                    categories={categories}
-                    valueFormatter={dollarValueFormatter}
-                    colors={colours}
-                    showLegend={false}
-                    className="h-[36rem] -ml-2"
+                <XAxis
+                    type="category"
+                    dataKey="year"
+                    label={{
+                        value: "Year",
+                        position: "bottom",
+                        offset: 0,
+                    }}
                 />
 
-                <p className="text-brand-grey-500">Year</p>
-            </div>
-        </div>
+                <YAxis
+                    type="number"
+                    tickFormatter={dollarValueFormatter}
+                    label={{
+                        value: "Known Financial Commitments (USD)",
+                        position: "left",
+                        angle: -90,
+                        style: {textAnchor: 'middle'},
+                        offset: 10,
+                    }}
+                />
+
+                <Tooltip
+                    formatter={dollarValueFormatter}
+                    isAnimationActive={false}
+                />
+
+                {categories.map(({value, label}) => (
+                    <Line
+                        key={`line-${value}`}
+                        type="monotone"
+                        dataKey={label}
+                        stroke={researchCategoryColours[value]}
+                        strokeWidth={2}
+                        dot={false}
+                    />
+                ))}
+            </RechartLineChart>
+        </ResponsiveContainer>
     )
 }
