@@ -86,7 +86,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                                     key={`${id}-tab-${index}`}
                                     className={({selected}) => `
                                         w-full rounded-md px-2 py-1 text-sm font-medium leading-5
-                                        ${selected ? 'bg-blue-500 text-white shadow cursor-default' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'}
+                                        ${selected ? 'bg-brand-teal-600 text-white shadow cursor-default' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'}
                                     `}
                                 >
                                     <div className="flex items-center">

@@ -17,7 +17,7 @@ export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLa
             <HeadlessUISwitch
                 checked={checked}
                 onChange={onChange}
-                className="relative inline-flex items-center h-6 bg-blue-600 rounded-full w-11"
+                className="relative inline-flex items-center h-6 bg-brand-teal-600 rounded-full w-11"
             >
                 <span className="sr-only">{screenReaderLabel}</span>
 

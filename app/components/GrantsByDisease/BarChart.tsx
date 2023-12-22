@@ -1,12 +1,19 @@
 import {useContext} from "react"
-import {Legend} from "@tremor/react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
+import Legend from "../Legend"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
+import {grantsAndAmountsBarChartColours} from "../../helpers/colours"
 
 export default function BarChart() {
+    const {
+        grantsWithKnownAmountsColour,
+        grantsWithUnspecifiedAmountsColour,
+        amountCommittedColour
+    } = grantsAndAmountsBarChartColours
+
     const {grants} = useContext(GlobalFilterContext)
 
     const chartData = selectOptions.Disease.map(function (disease) {
@@ -34,7 +41,7 @@ export default function BarChart() {
             <div className="flex flex-col gap-y-2">
                 <Legend
                     categories={['Grants With Known Financial Commitments', 'Grants With Unspecified Financial Commitments', 'Known Financial Commitments']}
-                    colors={['blue', 'orange', 'green']}
+                    colours={[grantsWithKnownAmountsColour, grantsWithUnspecifiedAmountsColour, amountCommittedColour]}
                 />
             </div>
 
@@ -88,21 +95,21 @@ export default function BarChart() {
                             <Bar
                                 yAxisId="left"
                                 dataKey="Grants With Known Financial Commitments"
-                                fill="#3b82f6"
+                                fill={grantsWithKnownAmountsColour}
                                 stackId="a"
                             />
 
                             <Bar
                                 yAxisId="left"
                                 dataKey="Grants With Unspecified Financial Commitments"
-                                fill="#f59e0b"
+                                fill={grantsWithUnspecifiedAmountsColour}
                                 stackId="a"
                             />
 
                             <Bar
                                 yAxisId="right"
                                 dataKey="Known Financial Commitments (USD)"
-                                fill="#22c55e"
+                                fill={amountCommittedColour}
                                 stackId="b"
                             />
                         </RechartBarChart>
