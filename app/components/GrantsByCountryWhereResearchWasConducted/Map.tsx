@@ -11,6 +11,7 @@ import regionToCountryMapping from '../../../data/source/region-to-country-mappi
 import {dollarValueFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {TooltipContext} from '../../helpers/tooltip'
+import {brandColours} from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 
 const ColourScale = dynamic(() => import('./ColourScale'), {ssr: false})
@@ -56,7 +57,7 @@ export default function Map() {
 
         const colourScale = scaleLinear<string>()
             .domain([0, Math.max(...allTotalGrants)])
-            .range(["#dbeafe", "#3b82f6"])
+            .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [filteredGeojson, colourScale]
     }, [dataset, displayWhoRegions, usingFunderLocation])

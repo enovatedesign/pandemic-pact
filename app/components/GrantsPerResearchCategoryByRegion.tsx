@@ -6,6 +6,7 @@ import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/grants.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
+import {researchCategoryColours} from "../helpers/colours";
 
 export default function GrantsPerResearchCategoryByRegion() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -44,31 +45,6 @@ export default function GrantsPerResearchCategoryByRegion() {
         }
     })
 
-    const colours = [
-        '#3b82f6',
-        '#f59e0b',
-        '#6b7280',
-        '#ef4444',
-        '#71717a',
-        '#64748b',
-        '#22c55e',
-        '#14b8a6',
-        '#10b981',
-        '#ec4899',
-        '#f43f5e',
-        '#0ea5e9',
-        '#a855f7',
-        '#eab308',
-        '#737373',
-        '#6366f1',
-        '#d946ef',
-        '#06b6d4',
-        '#84cc16',
-        '#8b5cf6',
-        '#f97316',
-        '#78716c',
-    ]
-
     return (
         <VisualisationCard
             grants={filteredDataset}
@@ -101,13 +77,13 @@ export default function GrantsPerResearchCategoryByRegion() {
                                 dataKey="Region"
                             />
 
-                            {researchCategoryOptions.map(({label}: any, index: number) => (
+                            {researchCategoryOptions.map(({value, label}) => (
                                 <Radar
                                     key={`${label} Radar`}
                                     name={label}
                                     dataKey={label}
-                                    stroke={colours[index]}
-                                    strokeWidth={2}
+                                    stroke={researchCategoryColours[value]}
+                                    strokeWidth={2.5}
                                     fillOpacity={0}
                                 />
                             ))}
