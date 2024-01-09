@@ -58,15 +58,6 @@ export const contentBuilderQuery = `
               }
             }
           }
-          ... on bodyContent_form_BlockType {
-            id
-            form {
-              ... on contactForm_Form {
-                id
-                handle
-              }
-            }
-          }
           ... on bodyContent_googleMap_BlockType {
             id
             typeHandle
