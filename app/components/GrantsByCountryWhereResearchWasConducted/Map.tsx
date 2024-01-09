@@ -74,7 +74,7 @@ export default function Map() {
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const onGeoMouseEnter = (event: MouseEvent<SVGPathElement>, geo: any) => {
+    const onGeoMouseEnterOrMove = (event: MouseEvent<SVGPathElement>, geo: any) => {
         tooltipRef?.current?.open({
             position: {
                 x: event.clientX,
@@ -113,8 +113,8 @@ export default function Map() {
                                 strokeWidth={displayWhoRegions ? 0.5 : 1.0}
                                 className="cursor-pointer"
                                 onClick={() => onGeoClick(geo)}
-                                onMouseEnter={event => onGeoMouseEnter(event, geo)}
-                                onMouseMove={event => onGeoMouseEnter(event, geo)}
+                                onMouseEnter={event => onGeoMouseEnterOrMove(event, geo)}
+                                onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
                                 onMouseLeave={onGeoMouseLeave}
                             />
                         ))
