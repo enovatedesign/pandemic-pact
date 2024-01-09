@@ -8,6 +8,7 @@ export async function generateStaticParams() {
 		`{
 			entries(
 				status: "enabled",
+				uri: ":notempty:"
 			) {
 				slug
 				sectionHandle
