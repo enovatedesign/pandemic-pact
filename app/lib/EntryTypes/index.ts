@@ -14,9 +14,11 @@ interface EntryTemplateAndQuery {
 const EntryTypes: EntryTemplateAndQuery = {
     templates: {
         page: PageTemplate,
+        testPage: PageTemplate,
     },
     queries: {
         page: PageQuery,
+        testPage: PageQuery,
     }
 }
 
