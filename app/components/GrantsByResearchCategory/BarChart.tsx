@@ -136,8 +136,9 @@ export default function BarChart({chartData}: Props) {
 function TooltipContent({nextState}: any) {
     return (
         <div className="flex flex-col gap-y-2">
-            {nextState.activePayload.map((payload: any) => (
+            {nextState.activePayload.map((payload: any, index: number) => (
                 <p
+                    key={`grants-by-research-category-tooltip-${index}-${payload.name}`}
                     style={{color: payload.color}}
                 >
                     <span>{payload.name}:</span>
