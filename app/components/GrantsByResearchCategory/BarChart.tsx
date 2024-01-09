@@ -1,6 +1,7 @@
-import {Fragment} from "react"
-import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
+import {Fragment, useContext, MouseEvent} from "react"
+import {BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer} from 'recharts';
 import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {TooltipContext} from '../../helpers/tooltip'
 import {researchCategoryColours, researchCategoryDimColours} from "../../helpers/colours"
 
 interface Props {
@@ -8,8 +9,24 @@ interface Props {
 }
 
 export default function BarChart({chartData}: Props) {
+    const {tooltipRef} = useContext(TooltipContext)
+
     const maxTotalNumberOfGrants = Math.max(...chartData.map((data: any) => data["Total Number Of Grants"]))
     const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Known Financial Commitments"]))
+
+    const onChartMouseEnterOrMove = (nextState: any, event: MouseEvent<SVGPathElement>) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: <TooltipContent nextState={nextState} />,
+        })
+    }
+
+    const onChartMouseLeave = () => {
+        tooltipRef?.current?.close()
+    }
 
     return (
         <>
@@ -34,6 +51,9 @@ export default function BarChart({chartData}: Props) {
                                     data={[data]}
                                     layout="vertical"
                                     margin={{top: 0, right: 0, bottom: 0, left: 0}}
+                                    onMouseEnter={(nextState, event) => onChartMouseEnterOrMove(nextState, event)}
+                                    onMouseMove={(nextState, event) => onChartMouseEnterOrMove(nextState, event)}
+                                    onMouseLeave={onChartMouseLeave}
                                 >
                                     <XAxis
                                         type="number"
@@ -47,17 +67,7 @@ export default function BarChart({chartData}: Props) {
                                         axisLine={false}
                                         tickLine={false}
                                         hide={true}
-                                    />
-
-                                    <Tooltip
-                                        wrapperStyle={{zIndex: 99}}
-                                        cursor={{fill: 'transparent'}}
-                                        labelStyle={{display: 'none'}}
-                                        contentStyle={{fontSize: '.9rem'}}
-                                        formatter={(value: any, name: any, props: any) => {
-                                            return [value, name.replace("Number Of ", ""), props]
-                                        }}
-                                        isAnimationActive={false}
+                                        onMouseEnter={() => console.log("mouse enter")}
                                     />
 
                                     <Bar
@@ -86,6 +96,9 @@ export default function BarChart({chartData}: Props) {
                                     data={[data]}
                                     layout="vertical"
                                     margin={{left: 0, right: 0, top: 0, bottom: 0}}
+                                    onMouseEnter={(nextState, event) => onChartMouseEnterOrMove(nextState, event)}
+                                    onMouseMove={(nextState, event) => onChartMouseEnterOrMove(nextState, event)}
+                                    onMouseLeave={onChartMouseLeave}
                                 >
                                     <XAxis
                                         type="number"
@@ -99,15 +112,6 @@ export default function BarChart({chartData}: Props) {
                                         axisLine={false}
                                         tickLine={false}
                                         hide={true}
-                                    />
-
-                                    <Tooltip
-                                        wrapperStyle={{zIndex: 99}}
-                                        formatter={dollarValueFormatter}
-                                        labelStyle={{display: 'none'}}
-                                        contentStyle={{fontSize: '.9rem'}}
-                                        cursor={{fill: 'transparent'}}
-                                        isAnimationActive={false}
                                     />
 
                                     <Bar
@@ -126,5 +130,24 @@ export default function BarChart({chartData}: Props) {
                 ))}
             </div>
         </>
+    )
+}
+
+function TooltipContent({nextState}: any) {
+    return (
+        <div className="flex flex-col gap-y-2">
+            {nextState.activePayload.map((payload: any) => (
+                <p
+                    style={{color: payload.color}}
+                >
+                    <span>{payload.name}:</span>
+                    <span className="ml-2">{
+                        payload.dataKey === 'Known Financial Commitments' ?
+                            dollarValueFormatter(payload.payload[payload.dataKey]) :
+                            payload.payload[payload.dataKey]
+                    }</span>
+                </p>
+            ))}
+        </div>
     )
 }
