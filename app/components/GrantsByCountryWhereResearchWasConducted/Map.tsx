@@ -88,6 +88,10 @@ export default function Map() {
         tooltipRef?.current?.close()
     }
 
+    const getColourOfGeo = (geo: any) => {
+        return geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"
+    }
+
     return (
         <div className="w-full h-full">
             <ComposableMap
@@ -104,9 +108,9 @@ export default function Map() {
                             <Geography
                                 key={geo.rsmKey}
                                 geography={geo}
-                                fill={geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"}
-                                stroke="#FFFFFF"
-                                strokeWidth={1}
+                                fill={getColourOfGeo(geo)}
+                                stroke={displayWhoRegions ? getColourOfGeo(geo) : "#FFFFFF"}
+                                strokeWidth={displayWhoRegions ? 0.5 : 1.0}
                                 className="cursor-pointer"
                                 onClick={() => onGeoClick(geo)}
                                 onMouseEnter={event => onGeoMouseEnter(event, geo)}
