@@ -120,5 +120,8 @@ async function getPubMedLinks(pubMedGrantId: string) {
             'pubYear',
             'journalInfo.journal.title',
         ])
-    )
+    ).map((result: any) => ({
+        ...result,
+        updated_at: new Date().toISOString(),
+    }))
 }
