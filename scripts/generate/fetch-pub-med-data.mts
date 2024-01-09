@@ -7,6 +7,10 @@ import {title, info, printWrittenFileStats, warn} from '../helpers/log.mjs'
 export default async function () {
     title('Fetching publication data from PubMed')
 
+    const timeLogLabel = 'Fetched publication data from PubMed'
+
+    console.time(timeLogLabel)
+
     if (process.env.SKIP_FETCHING_PUBMED_DATA) {
         warn('Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present')
         return
@@ -29,6 +33,8 @@ export default async function () {
     fs.writeJsonSync(grantsDistPathname, grants)
 
     printWrittenFileStats(grantsDistPathname)
+
+    console.timeEnd(timeLogLabel)
 }
 
 async function getPublications(pubMedGrantIds: string[]) {
