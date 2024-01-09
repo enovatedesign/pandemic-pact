@@ -1,15 +1,16 @@
 "use client"
 
 import {useState, useEffect} from 'react'
-import AnimateHeight from 'react-animate-height';
+import AnimateHeight from 'react-animate-height'
 import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
+import {debounce} from 'lodash'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
-import Pagination from '@/app/components/ContentBuilder/Common/Pagination';
-import Button from '@/app/components/Button';
+import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
+import Button from '@/app/components/Button'
 import '../../css/components/results-table.css'
-import {debounce} from 'lodash';
 import InfoModal from "../../components/InfoModal"
 
 interface Props {
@@ -116,7 +117,7 @@ export default function StaticPage({grant}: Props) {
     useEffect(() => {
         const abstract = document.getElementById('abstract')
         const hasReadMore = (abstract?.offsetHeight || 0) > 230
-        
+
         const checkHeight = () => {
             setReadMore(hasReadMore)
             setAnimateHeight(hasReadMore ? 230 : 'auto')
@@ -269,7 +270,7 @@ export default function StaticPage({grant}: Props) {
                                                             {heading.text}
                                                         </p>
                                                     </div>
-                                                
+
                                                     {heading.startMetric && heading.endMetric ? (
                                                         <div className="flex gap-1 items-center ">
                                                             <span className={metricClasses}>
@@ -289,13 +290,13 @@ export default function StaticPage({grant}: Props) {
                                                             {(heading.metric?.length > 3 && Array.isArray(heading?.metric)) ? (
                                                                 <div className={`${metricClasses} font-bold`}>
                                                                     {heading.metric.slice(0, 2).join(', ')}… <InfoModal
-                                                                        customButton={ <button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full px-2 py-0.5 lg:-translate-y-1 text-sm'> {heading?.metric.length -2} more</button>}
+                                                                        customButton={<button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full px-2 py-0.5 lg:-translate-y-1 text-sm'> {heading?.metric.length - 2} more</button>}
                                                                     >
                                                                         <p>
                                                                             {heading?.metric.join(', ')}
                                                                         </p>
                                                                     </InfoModal>
-                                                                    
+
                                                                 </div>
                                                             ) : (
                                                                 <p className={`${metricClasses} font-bold`}>{heading?.metric}</p>
@@ -328,7 +329,7 @@ export default function StaticPage({grant}: Props) {
                                                                     {subHeading.text}
                                                                 </p>
                                                             )}
-                                                            <InfoModal customButton={null}                                                                
+                                                            <InfoModal customButton={null}
                                                             >
                                                                 <p>
                                                                     {subHeading.infoModalText}
@@ -372,7 +373,10 @@ export default function StaticPage({grant}: Props) {
 
                         {publicationList?.length > 0 &&
                             <div className='flex flex-col space-y-4' id="paginationTop">
-                                <h2 className={titleClasses} id='publications'>Publications</h2>
+                                <div className="flex items-center justify-between gap-x-4">
+                                    <h2 className={titleClasses} id='publications'>Publications</h2>
+                                    <p className="text-gray-900 text-sm">Last Updated: {dayjs(publicationList[0].updated_at).format('DD MMM YYYY')}</p>
+                                </div>
 
                                 <div>
 
