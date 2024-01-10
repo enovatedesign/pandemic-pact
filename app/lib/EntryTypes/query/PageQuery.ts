@@ -1,18 +1,18 @@
 import GraphQL from '../../GraphQl'
 import { contentBuilderQuery, seomaticQuery } from '../../Queries'
 
-export default async function PageQuery(slug: string, entryType: string = 'page') {
+export default async function PageQuery(slug: string, entryType: string = 'page', sectionHandle: string = 'pages') {
 
 	const data = await GraphQL(
 		`
 			query($slug:[String]){
-				entry: entry(status: "enabled", section: "pages", slug: $slug) {
+				entry: entry(status: "enabled", slug: $slug) {
                     id
                     title
                     typeHandle
                     postDate
                     slug
-                    ... on pages_${entryType}_Entry {
+                    ... on ${sectionHandle}_${entryType}_Entry {
                         summary
                         showSummary
                         imageMasthead {

@@ -15,7 +15,11 @@ import {researchCategoryColours} from "../helpers/colours";
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
 
-    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
+    const researchCategoryOptions = selectOptions.ResearchCat
+
+    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(
+        researchCategoryOptions.map(({value}) => value)
+    )
 
     const filteredDataset = filterGrants(
         dataset,
@@ -27,17 +31,11 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         'GrantStartYear',
     )
 
-    const researchCategoryOptions = selectOptions.ResearchCat
-
     const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
         [{value: 'All Research Categories', label: 'All Research Categories'}] :
         researchCategoryOptions.filter(
             researchCategory => selectedResearchCategories.includes(researchCategory.value)
         )
-
-    for (let i = 0; i < 13; i++) {
-        selectedResearchCategories[i - 1] = i.toString();
-    }
 
     const amountCommittedToEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear

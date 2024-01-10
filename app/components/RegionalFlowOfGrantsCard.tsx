@@ -215,18 +215,7 @@ function SankeyNode(props: any) {
                 fontSize="16"
                 fill="#000"
             >
-                {option.label}
-            </text>
-
-            <text
-                textAnchor={isLastNode ? 'end' : 'start'}
-                x={isLastNode ? x - 6 : x + width + 6}
-                y={y + height / 2 + 16}
-                fontSize="14"
-                fill="#000"
-                fillOpacity="0.8"
-            >
-                {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}
+                {option.label}: {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}
             </text>
         </Layer>
     );

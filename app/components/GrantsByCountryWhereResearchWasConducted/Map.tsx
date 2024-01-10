@@ -74,7 +74,7 @@ export default function Map() {
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const onGeoMouseEnter = (event: MouseEvent<SVGPathElement>, geo: any) => {
+    const onGeoMouseEnterOrMove = (event: MouseEvent<SVGPathElement>, geo: any) => {
         tooltipRef?.current?.open({
             position: {
                 x: event.clientX,
@@ -86,6 +86,10 @@ export default function Map() {
 
     const onGeoMouseLeave = () => {
         tooltipRef?.current?.close()
+    }
+
+    const getColourOfGeo = (geo: any) => {
+        return geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"
     }
 
     return (
@@ -104,13 +108,13 @@ export default function Map() {
                             <Geography
                                 key={geo.rsmKey}
                                 geography={geo}
-                                fill={geo.properties.totalGrants ? colourScale(geo.properties.totalGrants) : "#D6D6DA"}
-                                stroke="#FFFFFF"
-                                strokeWidth={1}
+                                fill={getColourOfGeo(geo)}
+                                stroke={displayWhoRegions ? getColourOfGeo(geo) : "#FFFFFF"}
+                                strokeWidth={displayWhoRegions ? 0.5 : 1.0}
                                 className="cursor-pointer"
                                 onClick={() => onGeoClick(geo)}
-                                onMouseEnter={event => onGeoMouseEnter(event, geo)}
-                                onMouseMove={event => onGeoMouseEnter(event, geo)}
+                                onMouseEnter={event => onGeoMouseEnterOrMove(event, geo)}
+                                onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
                                 onMouseLeave={onGeoMouseLeave}
                             />
                         ))

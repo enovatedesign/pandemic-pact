@@ -7,16 +7,18 @@ interface EntryTemplateAndQuery {
         [key: string]: ComponentType<{data: any}>,
     },
     queries: {
-        [key: string]: (slug: string, entryType: string) => any
+        [key: string]: (slug: string, entryType: string, sectionHandle: string) => any
     }
 }
 
 const EntryTypes: EntryTemplateAndQuery = {
     templates: {
         page: PageTemplate,
+        testPage: PageTemplate,
     },
     queries: {
         page: PageQuery,
+        testPage: PageQuery,
     }
 }
 

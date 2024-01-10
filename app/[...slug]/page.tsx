@@ -7,10 +7,11 @@ export async function generateStaticParams() {
 	const craftResponse = await GraphQL(
 		`{
 			entries(
-				status: "enabled", 
-				section: "pages"
+				status: "enabled",
+				uri: ":notempty:"
 			) {
 				slug
+				sectionHandle
 				ancestors {
 					slug
 				}
@@ -19,27 +20,24 @@ export async function generateStaticParams() {
 	);
 
     const entries = craftResponse.entries;
-
+	
 	interface Entry {
-		slug: string, 
-		ancestors: Entry[]
+		slug: string,
+		sectionHandle: string,
+		ancestors?: Entry[]
 	}
 
 	return entries.map(({ slug, ancestors }: Entry) => {
-		const slugs = [...ancestors.map(({ slug }) => slug), slug]
+		if (!slug) return
+
+		let slugs = [slug]
+
+		if (ancestors && ancestors.length > 0) {
+			slugs = [...(ancestors).map(({ slug }) => slug), slug]
+		}
+
 		return ({ slug: slugs })
 	})
-
-	// return {
-	// 	paths: entries.map(({ slug, ancestors }) => {
-    //         const slugs = [...ancestors.map(({ slug }) => slug), slug]
-
-    //         return ({
-    //             params: { slug: slugs }
-    //         })
-    //     }),
-	// 	fallback: 'blocking',
-	// };
 }
 interface Parameters {
 	preview?: {token: string},
@@ -54,8 +52,9 @@ async function getPageContent(context: Parameters) {
 
 	const entryTypeData = await GraphQL(
 		`query($slug:[String]){
-			entry: entry(status: "enabled", section: "pages", slug: $slug) {
+			entry: entry(status: "enabled", slug: $slug) {
 				typeHandle
+				sectionHandle
 			}
 		}`,
 		{ slug },
@@ -67,21 +66,13 @@ async function getPageContent(context: Parameters) {
 	}
 
     const entryType = entryTypeData.entry.typeHandle
+    const sectionHandle = entryTypeData.entry.sectionHandle
 
     const entryQuery = EntryTypes.queries[entryType]
 
-    const data = await entryQuery(slug, entryType)
+    const data = await entryQuery(slug, entryType, sectionHandle)
 
     return data;
-
-	// return {
-	// 	props: {
-	// 		key: data?.entry?.id,
-	// 		data: data
-	// 	},
-    //     revalidate: 60,
-	// 	notFound: data.entry === null,
-	// };
 }
 
 interface PageParameters {
