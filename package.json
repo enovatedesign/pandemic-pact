@@ -8,7 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "ts-node --esm scripts/generate/index.mts"
+        "generate": "node --loader ts-node/esm scripts/generate/index.mts"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.433.0",
