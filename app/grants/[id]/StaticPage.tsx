@@ -5,6 +5,7 @@ import AnimateHeight from 'react-animate-height'
 import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
 import {debounce} from 'lodash'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import Link from 'next/link'
 import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
@@ -12,6 +13,8 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
 import Button from '@/app/components/Button'
 import '../../css/components/results-table.css'
 import InfoModal from "../../components/InfoModal"
+
+dayjs.extend(relativeTime)
 
 interface Props {
     grant: any
@@ -373,9 +376,17 @@ export default function StaticPage({grant}: Props) {
 
                         {publicationList?.length > 0 &&
                             <div className='flex flex-col space-y-4' id="paginationTop">
-                                <div className="flex items-center justify-between gap-x-4">
+                                <div className="flex items-baseline gap-x-4">
                                     <h2 className={titleClasses} id='publications'>Publications</h2>
-                                    <p className="text-gray-900 text-sm">Last Updated: {dayjs(publicationList[0].updated_at).format('DD MMM YYYY')}</p>
+                                    <p className="text-gray-900 text-sm uppercase">
+                                        <span>Last Updated:</span>
+                                        <span
+                                            className="ml-1"
+                                            title={dayjs(publicationList[0].updated_at).toString()}
+                                        >
+                                            {dayjs(publicationList[0].updated_at).fromNow()}
+                                        </span>
+                                    </p>
                                 </div>
 
                                 <div>
