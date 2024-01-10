@@ -15,13 +15,17 @@ export default function BarChart({chartData}: Props) {
     const maxAmountCommitted = Math.max(...chartData.map((data: any) => data["Known Financial Commitments"]))
 
     const onChartMouseEnterOrMove = (nextState: any, event: MouseEvent<SVGPathElement>) => {
-        tooltipRef?.current?.open({
-            position: {
-                x: event.clientX,
-                y: event.clientY,
-            },
-            content: <TooltipContent nextState={nextState} />,
-        })
+        if (nextState) {
+            tooltipRef?.current?.open({
+                position: {
+                    x: event.clientX,
+                    y: event.clientY,
+                },
+                content: <TooltipContent nextState={nextState} />,
+            })
+        } else {
+            onChartMouseLeave()
+        }
     }
 
     const onChartMouseLeave = () => {
@@ -67,7 +71,6 @@ export default function BarChart({chartData}: Props) {
                                         axisLine={false}
                                         tickLine={false}
                                         hide={true}
-                                        onMouseEnter={() => console.log("mouse enter")}
                                     />
 
                                     <Bar
