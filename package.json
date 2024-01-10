@@ -28,6 +28,7 @@
         "@types/three": "^0.157.2",
         "@vercel/blob": "^0.16.1",
         "autoprefixer": "10.4.16",
+        "dayjs": "^1.11.10",
         "dotenv": "^16.3.1",
         "encoding": "^0.1.13",
         "eslint": "8.52.0",
