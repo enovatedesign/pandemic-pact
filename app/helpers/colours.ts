@@ -45,6 +45,8 @@ export const researchCategoryDimColours: Colours = {
     "13": brandColours.teal['600'],
 }
 
+export const allResearchCategoriesColour = brandColours.blue['DEFAULT']
+
 export const diseaseColours: Colours = {
     "840539006": brandColours.blue['400'],
     "43489008": brandColours.teal['400'],

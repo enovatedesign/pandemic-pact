@@ -6,7 +6,7 @@ import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/grants.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
-import {researchCategoryColours} from "../helpers/colours";
+import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
 
 export default function GrantsPerResearchCategoryByRegion() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -24,15 +24,15 @@ export default function GrantsPerResearchCategoryByRegion() {
 
     let researchCategoryOptions: {value: string, label: string}[];
 
-    if (selectedResearchCategories.length === 0) {
+    const showingAllResearchCategories = (selectedResearchCategories.length === 0)
+
+    if (showingAllResearchCategories) {
         researchCategoryOptions = [{value: 'All', label: 'All Research Categories'}]
     } else {
         researchCategoryOptions = selectOptions.ResearchCat.filter(
             researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
         )
     }
-
-    const showingAllResearchCategories = researchCategoryOptions.length === 1 && researchCategoryOptions[0].value === 'All'
 
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset
@@ -95,7 +95,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                                     key={`${label} Radar`}
                                     name={label}
                                     dataKey={label}
-                                    stroke={showingAllResearchCategories ? '#333333' : researchCategoryColours[value]}
+                                    stroke={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
                                     strokeWidth={2.5}
                                     fillOpacity={0}
                                 />
