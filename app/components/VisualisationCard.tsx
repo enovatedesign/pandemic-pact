@@ -4,7 +4,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearc
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
-import { useInView, animated } from '@react-spring/web';
+import {useInView, animated} from '@react-spring/web';
 
 interface Props {
     grants: any[],
@@ -95,7 +95,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                                         />
 
                                         <span
-                                            className="ml-2"
+                                            className="ml-2 whitespace-nowrap"
                                         >
                                             {tab.label}
                                         </span>
