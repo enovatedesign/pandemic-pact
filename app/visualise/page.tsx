@@ -235,7 +235,8 @@ export default function Visualise() {
                             place="right-start"
                             offset={10}
                             variant="light"
-                            className="!px-3 !py-2 text-left !opacity-100 border border-gray-200"
+                            className="!px-3 !py-2 text-left border border-gray-200"
+                            opacity={1}
                         />
                     </div>
                 </Layout>
