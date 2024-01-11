@@ -4,7 +4,7 @@ import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearc
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
-import { useInView, animated } from '@react-spring/web';
+import {useInView, animated} from '@react-spring/web';
 
 interface Props {
     grants: any[],
@@ -15,9 +15,10 @@ interface Props {
     infoModalContents?: ReactNode
     children?: ReactNode
     tabs?: Array<{tab: {icon: ElementType, label: string}, content: ReactNode}>
+    tabPrefixLabel?: string
 }
 
-export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs}: Props) {
+export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs, tabPrefixLabel}: Props) {
     const {filters} = useContext(GlobalFilterContext)
 
     const numberOfActiveFilters = countActiveFilters(filters)
@@ -76,35 +77,41 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                     }
                 />
 
-                {tabs &&
-                    <Tab.Group
-                        onChange={setSelectedTabIndex}
-                    >
-                        <Tab.List className="flex text-center space-x-1 rounded-lg bg-gray-100 p-1">
-                            {tabs.map(({tab}, index) => (
-                                <Tab
-                                    key={`${id}-tab-${index}`}
-                                    className={({selected}) => `
-                                        w-full rounded-md px-2 py-1 text-sm font-medium leading-5
-                                        ${selected ? 'bg-brand-teal-600 text-white shadow cursor-default' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'}
-                                    `}
-                                >
-                                    <div className="flex items-center">
-                                        <tab.icon
-                                            className="w-5 h-5"
-                                        />
+                {tabs && (
+                    <div className="flex gap-x-2 items-center">
+                        {tabPrefixLabel && (
+                            <p>{tabPrefixLabel}</p>
+                        )}
 
-                                        <span
-                                            className="ml-2"
-                                        >
-                                            {tab.label}
-                                        </span>
-                                    </div>
-                                </Tab>
-                            ))}
-                        </Tab.List>
-                    </Tab.Group>
-                }
+                        <Tab.Group
+                            onChange={setSelectedTabIndex}
+                        >
+                            <Tab.List className="flex text-center space-x-1 rounded-lg bg-gray-100 p-1">
+                                {tabs.map(({tab}, index) => (
+                                    <Tab
+                                        key={`${id}-tab-${index}`}
+                                        className={({selected}) => `
+                                            w-full rounded-md px-2 py-1 text-sm font-medium leading-5
+                                            ${selected ? 'bg-brand-teal-600 text-white shadow cursor-default' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'}
+                                        `}
+                                    >
+                                        <div className="flex items-center">
+                                            <tab.icon
+                                                className="w-5 h-5"
+                                            />
+
+                                            <span
+                                                className="ml-2 whitespace-nowrap"
+                                            >
+                                                {tab.label}
+                                            </span>
+                                        </div>
+                                    </Tab>
+                                ))}
+                            </Tab.List>
+                        </Tab.Group>
+                    </div>
+                )}
             </div>
 
             {footnote &&

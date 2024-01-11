@@ -9,8 +9,7 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import FundingAmountsForEachResearchCategoryOverTime from "../components/FundingAmountsForEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
-import DiseaseWordCloud from "../components/DiseaseWordCloud"
-import PathogenWordCloud from "../components/PathogenWordCloud"
+import WordCloudsCard from "../components/WordClouds/Card"
 import JumpMenu from "../components/JumpMenu"
 import {Filters} from "../types/filters"
 import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
@@ -222,9 +221,7 @@ export default function Visualise() {
                             </div>
 
                             <div id='word-clouds' className={gridClasses}>
-                                <DiseaseWordCloud />
-
-                                <PathogenWordCloud />
+                                <WordCloudsCard />
                             </div>
                         </div>
 
