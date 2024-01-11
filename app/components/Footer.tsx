@@ -31,7 +31,7 @@ export default function Header() {
     )
 
     return (
-        <footer className="pt-12 pb-12 bg-gradient-to-t from-primary/30 to-70% to-transparent">
+        <footer className="pt-12 pb-24 bg-gradient-to-t from-primary/30 to-70% to-transparent">
             <div className="container">
 
                 <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-12 md:gap-24">

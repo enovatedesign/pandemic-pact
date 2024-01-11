@@ -122,10 +122,10 @@ export default function Map() {
                 </Geographies>
             </ComposableMap>
 
-            <div className="grid grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3">
                 <ColourScale colourScale={colourScale} />
 
-                <div className="justify-self-center mt-4">
+                <div className="justify-self-center">
                     <DoubleLabelSwitch
                         checked={displayWhoRegions}
                         onChange={setDisplayWhoRegions}
@@ -135,7 +135,7 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="justify-self-center mt-4">
+                <div className="justify-self-center">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
                         onChange={setUsingFunderLocation}

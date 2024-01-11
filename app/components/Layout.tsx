@@ -10,6 +10,7 @@ import Header from './Header'
 import Footer from './Footer'
 import PageTitle from './PageTitle'
 import InteractiveBackground from './InteractiveBackground'
+import UtilityBar from './UtilityBar'
 
 type Props = {
     sidebar?: {
@@ -28,20 +29,26 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
     const sidebarWidth = 400;
     const duration = 50;
 
+    const [showMobileNav, setShowMobileNav] = useState(false)
+
+    const baseAnimationConfig = {
+        delay: sidebarOpen ? 0 : duration,
+        config: { duration }
+    } 
+
+    const transformAnimationProps = useSpring({
+        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        ...baseAnimationConfig
+    })
+
     const widthAnimationProps = useSpring({
         width: sidebarOpen ? sidebarWidth : 0,
-        delay: sidebarOpen ? 0 : duration,
-        config: {
-            duration
-        }
+        ...baseAnimationConfig
     })
 
     const opacityAnimationProps = useSpring({
         opacity: sidebarOpen ? 1 : 0,
-        delay: sidebarOpen ? duration : 0,
-        config: {
-            duration
-        }
+        ...baseAnimationConfig
     })
 
     return (
@@ -53,9 +60,20 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
                     </span>
                 </a>
             </div>
+
+            <UtilityBar 
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+                showMobileNav={showMobileNav}
+                setShowMobileNav={setShowMobileNav}
+            />
+
             <div className={`${sidebar && "flex"}`}>
                 {sidebar &&
-                    <aside className="relative bg-secondary border-r border-primary/25">
+                    <animated.aside 
+                        className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
+                        style={transformAnimationProps}
+                    >
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
                             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6 text-primary hover:text-white duration-300 transition-colors">
                                 <span className="sr-only">Filters</span>
@@ -65,7 +83,7 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
                             {!sidebarOpen && sidebar.closedContent}
 
                             <animated.div
-                                className={`grow pb-6 px-6 overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
+                                className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
                                 style={widthAnimationProps}
                             >
                                 <animated.div style={opacityAnimationProps}>
@@ -73,11 +91,14 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
                                 </animated.div>
                             </animated.div>
                         </div>
-                    </aside>
+                    </animated.aside>
                 }
 
                 <div className="w-full relative">
-                    <Header className="absolute w-full left-0 z-50" />
+                    <Header 
+                        className="absolute w-full left-0 z-50" 
+                        showMobileNav={showMobileNav}
+                    />
 
                     <main id="content">
 

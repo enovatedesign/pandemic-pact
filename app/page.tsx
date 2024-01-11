@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 import styles from "./css/components/masthead.module.css"
 import Link from "next/link"
 import { links } from "./helpers/nav"
@@ -7,11 +8,12 @@ import Header from './components/Header'
 import AnimatedCounter from "./components/AnimatedCounter"
 import InteractiveBackground from "./components/InteractiveBackground"
 import RotatingGlobe from "./components/RotatingGlobe"
-import Footer from "./components/Footer"
 import FooterMenu from "./components/FooterMenu"
 import FooterCopyrightStatement from "./components/FooterCopyrightStatement"
+import UtilityBar from "./components/UtilityBar"
 
 export default function Home() {
+    const [showMobileNav, setShowMobileNav] = useState(false)
     const counterClasses = "text-primary font-bold"
 
     return (
@@ -24,9 +26,14 @@ export default function Home() {
                 </a>
             </div>
 
-            <div className={`masthead-background ${styles.background} flex flex-col h-full min-h-screen relative`}>
+            <UtilityBar 
+                showMobileNav={showMobileNav}
+                setShowMobileNav={setShowMobileNav}
+            />
 
-                <Header className="w-full relative z-20" />
+            <div className={`masthead-background ${styles.background} flex flex-col h-full min-h-screen relative pb-24 md:pb-28 lg:pb-12`}>
+
+                <Header className="w-full relative z-20" showMobileNav={showMobileNav} />
 
                 <RotatingGlobe className="!absolute inset-x bottom-0 z-10" />
 
@@ -64,7 +71,7 @@ export default function Home() {
                     {/* Footer */}
                     <footer className="container relative z-20 mt-10 lg:mt-20">
 
-                        <div className="w-full flex flex-col item-center justify-center gap-6 mb-6 sm:gap-0 lg:mb-12">
+                        <div className="w-full flex flex-col item-center justify-center gap-6 sm:gap-0">
 
                             <div className="max-w-[12rem] md:max-w-[20rem] mx-auto grid grid-rows-2 grid-cols-2 items-center gap-y-3 gap-x-6 md:gap-y-6 md:gap-x-12 xl:-mb-8">
 

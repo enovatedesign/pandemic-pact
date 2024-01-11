@@ -196,7 +196,7 @@ export default function Visualise() {
                         </div>
                     </section>
 
-                    <div className="container relative z-10 mx-auto my-6 lg:my-12">
+                    <div className="relative z-10 mx-auto my-6 lg:my-12 lg:container">
                         <div
                             className={`${gridClasses} mt-6`}
                         >
