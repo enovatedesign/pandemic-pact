@@ -10,7 +10,7 @@ import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import dataset from '../../data/dist/grants.json'
 import selectOptions from '../../data/dist/select-options.json'
-import {researchCategoryColours} from "../helpers/colours";
+import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -31,7 +31,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         'GrantStartYear',
     )
 
-    const selectedResearchCategoryOptions: {value: string, label: string}[] = selectedResearchCategories.length === 0 ?
+    const showingAllResearchCategories = (selectedResearchCategories.length === 0)
+
+    const selectedResearchCategoryOptions: {value: string, label: string}[] = showingAllResearchCategories ?
         [{value: 'All Research Categories', label: 'All Research Categories'}] :
         researchCategoryOptions.filter(
             researchCategory => selectedResearchCategories.includes(researchCategory.value)
@@ -44,7 +46,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
         let dataPoint: {[key: string]: string | number} = {year}
 
-        if (selectedResearchCategories.length === 0) {
+        if (showingAllResearchCategories) {
             dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
         } else {
             selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
@@ -66,6 +68,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
             content: <BarChart
                 data={amountCommittedToEachResearchCategoryOverTime}
                 categories={selectedResearchCategoryOptions}
+                showingAllResearchCategories={showingAllResearchCategories}
             />,
         },
         {
@@ -76,6 +79,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
             content: <LineChart
                 data={amountCommittedToEachResearchCategoryOverTime}
                 categories={selectedResearchCategoryOptions}
+                showingAllResearchCategories={showingAllResearchCategories}
             />,
         },
     ]
@@ -109,9 +113,10 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 interface ChartProps {
     data: any[],
     categories: {value: string, label: string}[],
+    showingAllResearchCategories: boolean,
 }
 
-function BarChart({data, categories}: ChartProps) {
+function BarChart({data, categories, showingAllResearchCategories}: ChartProps) {
     return (
         <ResponsiveContainer width="100%" height={800}>
             <RechartBarChart
@@ -154,7 +159,7 @@ function BarChart({data, categories}: ChartProps) {
                     <Bar
                         key={`bar-${value}`}
                         dataKey={label}
-                        fill={researchCategoryColours[value]}
+                        fill={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
                     />
                 ))}
             </RechartBarChart>
@@ -162,7 +167,7 @@ function BarChart({data, categories}: ChartProps) {
     )
 }
 
-function LineChart({data, categories}: ChartProps) {
+function LineChart({data, categories, showingAllResearchCategories}: ChartProps) {
     return (
         <ResponsiveContainer width="100%" height={700}>
             <RechartLineChart
@@ -208,7 +213,7 @@ function LineChart({data, categories}: ChartProps) {
                         key={`line-${value}`}
                         type="monotone"
                         dataKey={label}
-                        stroke={researchCategoryColours[value]}
+                        stroke={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
                         strokeWidth={2}
                         dot={false}
                     />

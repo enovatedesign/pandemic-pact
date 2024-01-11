@@ -6,31 +6,44 @@ import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/grants.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
-import {researchCategoryColours} from "../helpers/colours";
+import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
 
 export default function GrantsPerResearchCategoryByRegion() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
 
-    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(['1', '2', '7'])
+    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(
         dataset,
         {...selectedFilters, ResearchCat: selectedResearchCategories},
     )
 
-    const researchCategoryOptions = selectedResearchCategories.length === 0 ?
-        selectOptions.ResearchCat :
-        selectOptions.ResearchCat.filter(
-            researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
-        )
-
     const regionOptions = selectOptions.ResearchLocationRegion.filter(
         regionOption => !["Unspecified"].includes(regionOption.label)
     )
 
+    let researchCategoryOptions: {value: string, label: string}[];
+
+    const showingAllResearchCategories = (selectedResearchCategories.length === 0)
+
+    if (showingAllResearchCategories) {
+        researchCategoryOptions = [{value: 'All', label: 'All Research Categories'}]
+    } else {
+        researchCategoryOptions = selectOptions.ResearchCat.filter(
+            researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
+        )
+    }
+
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset
             .filter((grant: any) => grant.ResearchLocationRegion.includes(regionOption.value))
+
+        if (showingAllResearchCategories) {
+            return {
+                "Region": regionOption.label,
+                "All Research Categories": grantsInRegion.length,
+            }
+        }
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
             researchCategoryOptions.map(({label, value}: any) => ([
@@ -82,7 +95,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                                     key={`${label} Radar`}
                                     name={label}
                                     dataKey={label}
-                                    stroke={researchCategoryColours[value]}
+                                    stroke={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
                                     strokeWidth={2.5}
                                     fillOpacity={0}
                                 />
