@@ -38,7 +38,7 @@ export default function BarChart() {
 
     return (
         <>
-            <div className="flex flex-col gap-y-2">
+            <div className="flex flex-col gap-y-2 w-full">
                 <Legend
                     categories={['Grants With Known Financial Commitments', 'Grants With Unspecified Financial Commitments', 'Known Financial Commitments']}
                     colours={[grantsWithKnownAmountsColour, grantsWithUnspecifiedAmountsColour, amountCommittedColour]}
