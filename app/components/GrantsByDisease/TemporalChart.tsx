@@ -1,7 +1,7 @@
 import {useContext} from "react"
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
-import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
@@ -57,7 +57,7 @@ export default function TemporalChart() {
 
                 <YAxis
                     type="number"
-                    tickFormatter={dollarValueFormatter}
+                    tickFormatter={axisDollarFormatter}
                     label={{
                         value: "Known Financial Commitments (USD)",
                         position: "left",

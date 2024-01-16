@@ -5,7 +5,7 @@ import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
 import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {dollarValueFormatter} from "../helpers/value-formatters"
+import {dollarValueFormatter, axisDollarFormatter} from "../helpers/value-formatters"
 import {GlobalFilterContext} from "../helpers/filter"
 import {groupBy} from 'lodash'
 import dataset from '../../data/dist/grants.json'
@@ -140,7 +140,7 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
                 />
 
                 <YAxis
-                    tickFormatter={dollarValueFormatter}
+                    tickFormatter={axisDollarFormatter}
                     label={{
                         value: "Known Financial Commitments (USD)",
                         position: "left",
@@ -193,7 +193,7 @@ function LineChart({data, categories, showingAllResearchCategories}: ChartProps)
 
                 <YAxis
                     type="number"
-                    tickFormatter={dollarValueFormatter}
+                    tickFormatter={axisDollarFormatter}
                     label={{
                         value: "Known Financial Commitments (USD)",
                         position: "left",

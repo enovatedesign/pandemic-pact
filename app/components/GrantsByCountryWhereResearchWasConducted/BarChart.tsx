@@ -3,7 +3,7 @@ import {Icon} from "@tremor/react"
 import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
-import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {GlobalFilterContext} from "../../helpers/filter"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {regionColours} from "../../helpers/colours"
@@ -107,7 +107,7 @@ export default function BarChart() {
                     >
                         <XAxis
                             type="number"
-                            tickFormatter={dollarValueFormatter}
+                            tickFormatter={axisDollarFormatter}
                         />
 
                         <YAxis
