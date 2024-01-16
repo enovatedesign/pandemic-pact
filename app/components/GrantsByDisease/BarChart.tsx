@@ -2,7 +2,7 @@ import {useContext} from "react"
 import {BarChart as RechartBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import Legend from "../Legend"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 import {grantsAndAmountsBarChartColours} from "../../helpers/colours"
@@ -74,7 +74,7 @@ export default function BarChart() {
                             <YAxis
                                 yAxisId="right"
                                 orientation="right"
-                                tickFormatter={dollarValueFormatter}
+                                tickFormatter={axisDollarFormatter}
                                 className="text-lg"
                             />
 
