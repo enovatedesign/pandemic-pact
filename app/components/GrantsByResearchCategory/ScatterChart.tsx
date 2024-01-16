@@ -1,5 +1,5 @@
 import {ScatterChart as RechartScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Cell} from 'recharts';
-import {dollarValueFormatter} from "../../helpers/value-formatters"
+import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {researchCategoryColours} from "../../helpers/colours"
 
 interface Props {
@@ -45,7 +45,7 @@ export default function ScatterChart({chartData}: Props) {
                 <YAxis
                     type="number"
                     dataKey="Known Financial Commitments"
-                    tickFormatter={dollarValueFormatter}
+                    tickFormatter={axisDollarFormatter}
                     label={{
                         value: "Known Financial Commitments (USD)",
                         position: "left",

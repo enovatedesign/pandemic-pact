@@ -4,17 +4,20 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
-import {MenuIcon, ChevronDownIcon} from '@heroicons/react/solid'
+import {ChevronDownIcon} from '@heroicons/react/solid'
 import {useState, useEffect, useRef} from 'react'
 import NavSubPages from './NavSubPages'
 import AnimateHeight from 'react-animate-height'
 
-export default function Header({className}: {className?: string}) {
-    
+type Props = {
+    className?: string,
+    showMobileNav?: boolean
+}
+
+export default function Header({ className, showMobileNav }: Props ) {
     const pathname = usePathname()
     const links = getLinksArray()
 
-    const [showMobileNav, setShowMobileNav] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
     const navItemClick = () => {
@@ -22,13 +25,6 @@ export default function Header({className}: {className?: string}) {
         bodyEl?.classList.remove('overflow-y-hidden')
         setIsVisible(false)
     }
-
-    const handleNav = () => {
-        setShowMobileNav(!showMobileNav)
-        const bodyEl = document.querySelector('body')
-        bodyEl?.classList.toggle('overflow-y-hidden')
-    }
-
     
     const NavItem = (link: {label: string, href: string, subPages: any}) => (
         <Link
@@ -40,7 +36,6 @@ export default function Header({className}: {className?: string}) {
         </Link>
     )
     
-    
     const Logo = () => (
         <Image
             src="/logo.svg"
@@ -51,12 +46,8 @@ export default function Header({className}: {className?: string}) {
         />
     )
         
-    const buttonClasses = [
-        showMobileNav ? 'bg-primary rounded-full transition duration-300 delay-[1200ms]' : 'transparent rounded-full transition duration-300'
-    ].join(' ')
-    
     const mobileTransitionClasses = [
-        showMobileNav ? 'translate-y-none transition duration-1000' : '-translate-y-full transition duration-1000 delay-300'
+        showMobileNav ? 'translate-y-none transition duration-1000' : 'translate-y-full transition duration-1000 delay-300'
     ].join(' ')
 
     const mobileAnimationClasses = [
@@ -97,15 +88,10 @@ export default function Header({className}: {className?: string}) {
                     }
 
                     <div className="flex items-center rounded-full border border-primary/25 inner-glow">
-                        <button className={`${buttonClasses} z-50 p-3 lg:hidden`} onClick={handleNav}>
-                            <span className="sr-only">Menu</span>
-                            <MenuIcon className="w-8 h-8 text-white" />
-                        </button>
-
                         <nav ref={navRef}
-                            className={`${mobileTransitionClasses} h-screen w-full bg-secondary absolute inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
+                            className={`${mobileTransitionClasses} h-screen w-full bg-secondary fixed top-0 inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
                         >
-                            <ul className="pb-20 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-10 lg:space-y-0  lg:py-3">
+                            <ul className="pb-24 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-10 lg:space-y-0  lg:py-3">
                                 {links.map((link, index) => {
 
                                     const handleClick = (event: any) => {

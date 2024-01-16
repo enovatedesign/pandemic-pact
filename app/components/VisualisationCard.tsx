@@ -42,7 +42,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
     );
 
     return <animated.div id={id} ref={ref} style={springs}>
-        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 rounded-2xl">
+        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 lg:rounded-2xl">
             <div className="flex flex-col items-start space-y-6">
                 <div className="w-full flex justify-between items-center">
                     <div className="flex justify-start space-x-3">
@@ -67,7 +67,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
 
             {tabs && tabs[selectedTabIndex].content}
 
-            <div className="w-full flex flex-row-reverse justify-between items-center ignore-in-image-export">
+            <div className="w-full flex flex-col-reverse space-y-3 space-y-reverse justify-between items-center ignore-in-image-export md:flex-row-reverse md:space-y-0">
                 <ExportMenu
                     chartSelector={`#${id}`}
                     imageFilename={id}
