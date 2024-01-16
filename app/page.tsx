@@ -1,8 +1,8 @@
 "use client"
-import { useState } from "react"
+import {useState} from "react"
 import styles from "./css/components/masthead.module.css"
 import Link from "next/link"
-import { links } from "./helpers/nav"
+import {links} from "./helpers/nav"
 import Image from "next/image"
 import Header from './components/Header'
 import AnimatedCounter from "./components/AnimatedCounter"
@@ -11,6 +11,7 @@ import RotatingGlobe from "./components/RotatingGlobe"
 import FooterMenu from "./components/FooterMenu"
 import FooterCopyrightStatement from "./components/FooterCopyrightStatement"
 import UtilityBar from "./components/UtilityBar"
+import homepageTotals from "../data/dist/homepage-totals.json"
 
 export default function Home() {
     const [showMobileNav, setShowMobileNav] = useState(false)
@@ -26,7 +27,7 @@ export default function Home() {
                 </a>
             </div>
 
-            <UtilityBar 
+            <UtilityBar
                 showMobileNav={showMobileNav}
                 setShowMobileNav={setShowMobileNav}
             />
@@ -43,18 +44,18 @@ export default function Home() {
 
                         {/* Top content section */}
                         <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-12 w-full z-20 container">
-                                
+
                             <h1 id="page-title" className="inline-block max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
-                                Delivering insights from over: <AnimatedCounter prefix="$" suffix=" billion" finalCount={5} className={counterClasses} /> in research funding across <AnimatedCounter finalCount={21000} className={counterClasses} /> grants, from <AnimatedCounter finalCount={351} className={counterClasses} /> global funders
+                                Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants, from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> global funders
                             </h1>
 
                             <Link href={links.visualise.href} className={styles.button}>
                                 <span>{links.visualise.label}</span>
 
                                 <svg className={styles['chart-icon']} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                    <path d="M0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272z"/>
-                                    <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z"/>
-                                    <path d="M368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
+                                    <path d="M0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272z" />
+                                    <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z" />
+                                    <path d="M368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z" />
                                 </svg>
                             </Link>
 
@@ -102,10 +103,10 @@ export default function Home() {
                             </div>
 
                             <div className="flex flex-col md:flex-row justify-between items-center">
-                                
+
                                 <FooterCopyrightStatement showCreditOnly={true} className="uppercase text-center md:text-left text-gray-300" />
 
-                                <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline"/>
+                                <FooterMenu className="flex flex-row flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 md:justify-end" linkClassName="text-gray-300 text-xs uppercase hover:underline" />
 
                             </div>
 
@@ -114,7 +115,7 @@ export default function Home() {
                     </footer>
 
                 </div>
-                
+
                 <InteractiveBackground className={`absolute inset-0`}></InteractiveBackground>
 
             </div>
