@@ -65,19 +65,24 @@ export default function WordCloud({filterKey, randomSeedString, colours, width =
         tooltipRef?.current?.close()
     }
 
-    return isMounted ?
-        <WordCloudComponent
-            data={data}
-            width={width}
-            height={height}
-            rotate={0}
-            fill={(d: any) => colours[d.categoryValue]}
-            font={font.style.fontFamily}
-            random={fixedRandom.quick}
-            onWordMouseOver={onWordMouseOver}
-            onWordMouseOut={onWordMouseOut}
-        />
-        : null
+    return (
+        <div style={{ aspectRatio: `${width} / ${height}` }}>
+            {isMounted ?
+                <WordCloudComponent
+                    data={data}
+                    width={width}
+                    height={height}
+                    rotate={0}
+                    fill={(d: any) => colours[d.categoryValue]}
+                    font={font.style.fontFamily}
+                    random={fixedRandom.quick}
+                    onWordMouseOver={onWordMouseOver}
+                    onWordMouseOut={onWordMouseOut}
+                />
+                : null
+            }
+        </div>
+    )
 }
 
 function TooltipContent({data}: any) {
