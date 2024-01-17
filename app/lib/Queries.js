@@ -134,7 +134,7 @@ export const contentBuilderQuery = `
                 externalLink
                 thumbnailImage  @transform(transform: "c480x480") {
                   ... on contentAssets_Asset {
-                    alt
+                    altText
                     height
                     url
                     width
