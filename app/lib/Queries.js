@@ -126,7 +126,7 @@ export const contentBuilderQuery = `
             id
             typeHandle
             heading
-            customEntries {
+            customEntries (orderBy: "postDate DESC") {
               ... on publications_publication_Entry {
                 id
                 title
