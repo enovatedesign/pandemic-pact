@@ -89,7 +89,7 @@ export default function Header({ className, showMobileNav }: Props ) {
 
                     <div className="flex items-center rounded-full border border-primary/25 inner-glow">
                         <nav ref={navRef}
-                            className={`${mobileTransitionClasses} h-screen w-full bg-secondary fixed top-0 inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
+                            className={`${mobileTransitionClasses} h-d-screen w-full bg-secondary fixed top-0 inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
                         >
                             <ul className="pb-24 px-12 absolute bottom-0 space-y-10 w-full lg:px-10 lg:relative lg:flex lg:space-x-10 lg:space-y-0  lg:py-3">
                                 {links.map((link, index) => {
