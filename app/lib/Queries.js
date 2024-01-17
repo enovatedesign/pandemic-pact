@@ -188,7 +188,7 @@ export const contentBuilderQuery = `
                 slideHeading
                 slideText
                 slideImage @transform(transform: "c2000xauto") {
-                  alt
+                  altText
                   width
                   url
                   height
@@ -232,7 +232,7 @@ export const contentBuilderQuery = `
                   width
                   url
                   height
-                  alt
+                  altText
                 }
               }
             }
@@ -252,7 +252,7 @@ export const contentBuilderQuery = `
                   width
                   url
                   height
-                  alt
+                  altText
                 }
               }
             }
