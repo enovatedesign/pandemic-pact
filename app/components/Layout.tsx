@@ -51,6 +51,15 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
         ...baseAnimationConfig
     })
 
+    let optionalUtilityBarAttributes = null
+
+    if (sidebar !== undefined) {
+        optionalUtilityBarAttributes = {
+            sidebarOpen,
+            setSidebarOpen
+        }
+    }
+
     return (
         <>
             <div id="skiplink-container">
@@ -61,12 +70,7 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
                 </a>
             </div>
 
-            <UtilityBar 
-                sidebarOpen={sidebarOpen}
-                setSidebarOpen={setSidebarOpen}
-                showMobileNav={showMobileNav}
-                setShowMobileNav={setShowMobileNav}
-            />
+            <UtilityBar showMobileNav={showMobileNav} setShowMobileNav={setShowMobileNav} {...optionalUtilityBarAttributes} />
 
             <div className={`${sidebar && "flex"}`}>
                 {sidebar &&
