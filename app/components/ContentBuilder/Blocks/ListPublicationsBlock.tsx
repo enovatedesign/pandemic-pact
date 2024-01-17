@@ -20,6 +20,7 @@ type Props = {
                 width: number,
             }[],
             publicationType: string,
+            dateCreated: any,
         }[],
     }
 }
@@ -41,7 +42,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     
                     {customEntries.map((entry, index: number) => {
-
+                        
                         const cardData = {
                             title: entry.title,
                             imageLabel: entry.publicationType,
@@ -50,7 +51,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                             url: entry.externalLink,
                             thumbnailImage: entry.thumbnailImage,
                         }
-                        
+
                         return (
                             <Card entry={cardData} key={index}>
                                 <ExternalLinkIcon className="w-6 h-6" />

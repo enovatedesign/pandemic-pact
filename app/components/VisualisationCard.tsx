@@ -42,7 +42,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
     );
 
     return <animated.div id={id} ref={ref} style={springs}>
-        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 lg:rounded-2xl">
+        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 border-y-2 border-gray-200 lg:rounded-xl lg:border-2">
             <div className="flex flex-col items-start space-y-6">
                 <div className="w-full flex justify-between items-center">
                     <div className="flex justify-start space-x-3">

@@ -45,7 +45,7 @@ export default function Visualise() {
                 />
             ),
             closedContent: (
-                <dl className="flex items-center justify-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
+                <dl className="flex items-center justify-center self-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
                     {(globallyFilteredDataset.length < completeDataset.length) ? (
                         <>
                             <dt className="text-white uppercase">Filtered Grants Total</dt>
