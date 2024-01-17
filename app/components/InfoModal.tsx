@@ -23,7 +23,7 @@ export default function InfoModal({ children, customButton = null}: { children: 
             <Dialog
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
-                className="relative z-50"
+                className="relative z-[80]"
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6">
                     <Dialog.Panel className="grid gap-y-6 w-full max-w-3xl rounded bg-white p-6">

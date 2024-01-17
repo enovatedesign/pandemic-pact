@@ -5,7 +5,9 @@ type Props = {
     sidebarOpen?: boolean,
     setSidebarOpen?: (sidebarOpen: boolean) => void,
     showMobileNav: boolean,
-    setShowMobileNav: (showMobileNav: boolean) => void
+    setShowMobileNav: (showMobileNav: boolean) => void,
+    searchOpen?: boolean,
+    setSearchOpen?: (searchOpen: boolean) => void
 }
 
 type AnimatedIconProps = {
@@ -53,7 +55,7 @@ const AnimatedIcons = ({ Icon, state }: AnimatedIconsProps) => {
     )
 }
 
-const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileNav }: Props) => {
+const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileNav, searchOpen, setSearchOpen }: Props) => {
     const toggleSlideOut = (
         state: boolean, 
         stateSetter: (state: boolean) => void,
@@ -72,8 +74,8 @@ const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileN
     }
 
     return (
-        <nav className="fixed bottom-0 inset-x-0 bg-primary-lightest z-[9999] py-3 lg:hidden">
-            <ul className="flex items-center justify-between container">
+        <nav className="fixed bottom-0 inset-x-0 bg-primary-lightest z-[70] py-3 lg:hidden">
+            <ul className="flex items-center justify-between container min-h-8 lg:min-h-9">
                 {sidebarOpen !== undefined && setSidebarOpen !== undefined &&
                     <li>
                         <button 
@@ -96,12 +98,14 @@ const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileN
                     </button>
                 </li>
 
-                <li className="ml-auto">
-                    <button className="block">
-                        <span className="sr-only">Search</span>
-                        <AnimatedIcons Icon={SearchIcon} state={false} />
-                    </button>
-                </li>
+                {searchOpen !== undefined && setSearchOpen !== undefined &&
+                    <li className="ml-auto">
+                        <button className="block">
+                            <span className="sr-only">Search</span>
+                            <AnimatedIcons Icon={SearchIcon} state={false} />
+                        </button>
+                    </li>
+                }
             </ul>
         </nav>
     )
