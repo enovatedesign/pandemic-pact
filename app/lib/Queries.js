@@ -126,7 +126,7 @@ export const contentBuilderQuery = `
             id
             typeHandle
             heading
-            customEntries {
+            customEntries (orderBy: "postDate DESC") {
               ... on publications_publication_Entry {
                 id
                 title
@@ -188,10 +188,12 @@ export const contentBuilderQuery = `
                 slideHeading
                 slideText
                 slideImage @transform(transform: "c2000xauto") {
-                  altText
-                  width
-                  url
-                  height
+                  ... on contentAssets_Asset {
+                    altText
+                    width
+                    url
+                    height
+                  }
                 }
                 slideButton {
                   url
@@ -232,7 +234,7 @@ export const contentBuilderQuery = `
                   width
                   url
                   height
-                  altText
+                  alt
                 }
               }
             }
@@ -249,10 +251,12 @@ export const contentBuilderQuery = `
                 }
                 text
                 image @transform(transform: "c480x480") {
-                  width
-                  url
-                  height
-                  altText
+                  ... on contentAssets_Asset {
+                    width
+                    url
+                    height
+                    altText
+                  }
                 }
               }
             }
@@ -360,7 +364,7 @@ export const contentBuilderQuery = `
                 externalLink
                 thumbnailImage  @transform(transform: "c480x480") {
                   ... on contentAssets_Asset {
-                    alt
+                    altText
                     height
                     url
                     width
