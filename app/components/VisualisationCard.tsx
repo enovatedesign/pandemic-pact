@@ -83,9 +83,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                             <p>{tabPrefixLabel}</p>
                         )}
 
-                        <Tab.Group
-                            onChange={setSelectedTabIndex}
-                        >
+                        <Tab.Group onChange={setSelectedTabIndex}>
                             <Tab.List className="flex text-center space-x-1 rounded-lg bg-gray-100 p-1">
                                 {tabs.map(({tab}, index) => (
                                     <Tab
@@ -96,13 +94,9 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                                         `}
                                     >
                                         <div className="flex items-center">
-                                            <tab.icon
-                                                className="w-5 h-5"
-                                            />
+                                            <tab.icon className="w-5 h-5"/>
 
-                                            <span
-                                                className="ml-2 whitespace-nowrap"
-                                            >
+                                            <span className="ml-2 whitespace-nowrap">
                                                 {tab.label}
                                             </span>
                                         </div>

@@ -6,6 +6,7 @@ import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-for
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 import {grantsAndAmountsBarChartColours} from "../../helpers/colours"
+import {baseTooltipProps} from "../../helpers/tooltip"
 
 export default function BarChart() {
     const {
@@ -90,6 +91,7 @@ export default function BarChart() {
 
                                     return [value, name, props]
                                 }}
+                                {...baseTooltipProps}
                             />
 
                             <Bar

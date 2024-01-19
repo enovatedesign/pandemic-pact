@@ -1,6 +1,7 @@
 import {ScatterChart as RechartScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Cell} from 'recharts';
 import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {researchCategoryColours} from "../../helpers/colours"
+import {baseTooltipProps} from "../../helpers/tooltip"
 
 interface Props {
     chartData: any,
@@ -70,6 +71,7 @@ export default function ScatterChart({chartData}: Props) {
 
                         return [value, name, props]
                     }}
+                    {...baseTooltipProps}
                 />
 
                 <Scatter

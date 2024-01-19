@@ -9,6 +9,7 @@ import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {regionColours} from "../../helpers/colours"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import selectOptions from '../../../data/dist/select-options.json'
+import {baseTooltipProps} from "../../helpers/tooltip"
 
 export default function BarChart() {
     const {grants: dataset} = useContext(GlobalFilterContext)
@@ -122,6 +123,7 @@ export default function BarChart() {
                             labelFormatter={countryOrRegionFormatter}
                             isAnimationActive={false}
                             cursor={{fill: 'transparent'}}
+                            {...baseTooltipProps}
                         />
 
                         <Bar

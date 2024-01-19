@@ -11,6 +11,7 @@ import {groupBy} from 'lodash'
 import dataset from '../../data/dist/grants.json'
 import selectOptions from '../../data/dist/select-options.json'
 import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
+import {baseTooltipProps} from "../helpers/tooltip"
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -153,6 +154,7 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
                 <Tooltip
                     formatter={dollarValueFormatter}
                     isAnimationActive={false}
+                    {...baseTooltipProps}
                 />
 
                 {categories.map(({value, label}) => (
@@ -206,6 +208,7 @@ function LineChart({data, categories, showingAllResearchCategories}: ChartProps)
                 <Tooltip
                     formatter={dollarValueFormatter}
                     isAnimationActive={false}
+                    {...baseTooltipProps}
                 />
 
                 {categories.map(({value, label}) => (

@@ -6,6 +6,7 @@ import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {GlobalFilterContext} from "../../helpers/filter"
 import selectOptions from "../../../data/dist/select-options.json"
 import {diseaseColours} from "../../helpers/colours"
+import {baseTooltipProps} from "../../helpers/tooltip"
 
 export default function TemporalChart() {
     const {grants} = useContext(GlobalFilterContext)
@@ -71,6 +72,7 @@ export default function TemporalChart() {
                 <Tooltip
                     formatter={dollarValueFormatter}
                     isAnimationActive={false}
+                    {...baseTooltipProps}
                 />
 
                 {selectOptions.Disease.map(({value, label}) => (

@@ -7,6 +7,7 @@ import dataset from '../../data/dist/grants.json'
 import {filterGrants} from "../helpers/filter"
 import {GlobalFilterContext} from "../helpers/filter";
 import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
+import {baseTooltipProps} from "../helpers/tooltip"
 
 export default function GrantsPerResearchCategoryByRegion() {
     const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
@@ -103,6 +104,7 @@ export default function GrantsPerResearchCategoryByRegion() {
 
                             <Tooltip
                                 isAnimationActive={false}
+                                {...baseTooltipProps}
                             />
                         </RadarChart>
                     </ResponsiveContainer>
