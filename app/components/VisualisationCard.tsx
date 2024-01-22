@@ -78,7 +78,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                 />
 
                 {tabs && (
-                    <div className="flex gap-x-2 items-center">
+                    <div className="flex flex-col items-center md:flex-row gap-2">
                         {tabPrefixLabel && (
                             <p>{tabPrefixLabel}</p>
                         )}

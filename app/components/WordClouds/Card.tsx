@@ -32,7 +32,7 @@ export default function WordCloudsCard() {
             title="Word Clouds"
             footnote="The amount of funding is represented by the size of the word"
             tabs={tabs}
-            tabPrefixLabel="Funding for"
+            tabPrefixLabel="Funding for:"
         />
     )
 }
