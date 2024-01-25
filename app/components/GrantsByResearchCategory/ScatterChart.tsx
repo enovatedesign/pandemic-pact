@@ -1,9 +1,11 @@
 import {ScatterChart as RechartScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Cell} from 'recharts';
 import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {researchCategoryColours} from "../../helpers/colours"
+import {baseTooltipProps} from "../../helpers/tooltip"
+import {GrantAndFinancialCommitmentBarListData} from "../GrantAndFinancialCommitmentBarList"
 
 interface Props {
-    chartData: any,
+    chartData: GrantAndFinancialCommitmentBarListData,
 }
 
 const CustomDot = (props: any) => {
@@ -33,7 +35,7 @@ export default function ScatterChart({chartData}: Props) {
 
                 <XAxis
                     type="number"
-                    dataKey="Total Number Of Grants"
+                    dataKey="Total Grants"
                     allowDecimals={false}
                     label={{
                         value: "Grants",
@@ -44,7 +46,7 @@ export default function ScatterChart({chartData}: Props) {
 
                 <YAxis
                     type="number"
-                    dataKey="Known Financial Commitments"
+                    dataKey="Known Financial Commitments (USD)"
                     tickFormatter={axisDollarFormatter}
                     label={{
                         value: "Known Financial Commitments (USD)",
@@ -60,16 +62,17 @@ export default function ScatterChart({chartData}: Props) {
                     isAnimationActive={false}
                     cursor={{strokeDasharray: '3 3'}}
                     formatter={(value: any, name: any, props: any) => {
-                        if (name.includes("Known Financial Commitments")) {
+                        if (name.includes("Known Financial Commitments (USD)")) {
                             return [
                                 dollarValueFormatter(value),
-                                "Known Financial Commitments",
+                                "Known Financial Commitments (USD)",
                                 props,
                             ]
                         }
 
                         return [value, name, props]
                     }}
+                    {...baseTooltipProps}
                 />
 
                 <Scatter
@@ -79,7 +82,7 @@ export default function ScatterChart({chartData}: Props) {
                     {chartData.map((datum: any, index: number) => (
                         <Cell
                             key={`cell-${index}`}
-                            fill={researchCategoryColours[datum["Research Category Value"]]}
+                            fill={researchCategoryColours[datum["Category Value"]]}
                         />
                     ))}
                 </Scatter>

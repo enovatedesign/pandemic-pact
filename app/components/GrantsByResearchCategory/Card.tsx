@@ -22,12 +22,12 @@ export default function GrantsByResearchCategoryCard() {
         const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
 
         return {
-            "Research Category Value": researchCategory.value,
-            "Research Category": researchCategory.label,
-            "Number Of Grants With Known Financial Commitments": grantsWithKnownAmounts.length,
-            "Number Of Grants With Unspecified Financial Commitments": grantsWithUnspecifiedAmounts.length,
-            "Total Number Of Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Known Financial Commitments": moneyCommitted,
+            "Category Value": researchCategory.value,
+            "Category Label": researchCategory.label,
+            "Grants With Known Financial Commitments": grantsWithKnownAmounts.length,
+            "Grants With Unspecified Financial Commitments": grantsWithUnspecifiedAmounts.length,
+            "Total Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
+            "Known Financial Commitments (USD)": moneyCommitted,
         }
     })
 

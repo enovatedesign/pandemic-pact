@@ -8,6 +8,7 @@ import {GlobalFilterContext} from "../helpers/filter";
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {brandColours} from "../helpers/colours"
 import selectOptions from '../../data/dist/select-options.json'
+import {baseTooltipProps} from "../helpers/tooltip"
 
 export default function RegionalFlowOfGrantsCard() {
     const {grants} = useContext(GlobalFilterContext)
@@ -133,6 +134,7 @@ export default function RegionalFlowOfGrantsCard() {
                                 <Tooltip
                                     isAnimationActive={false}
                                     formatter={tooltipFormatter}
+                                    {...baseTooltipProps}
                                 />
 
                                 <text
