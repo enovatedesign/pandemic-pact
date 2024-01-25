@@ -67,6 +67,26 @@ export const diseaseColours: Colours = {
     "-9999": brandColours.green['800'],
 }
 
+export const diseaseDimColours: Colours = {
+    "840539006": brandColours.blue['200'],
+    "43489008": brandColours.teal['200'],
+    "37109004": brandColours.green['200'],
+    "77504002": brandColours.orange['200'],
+    "19065005": brandColours.grey['200'],
+    "651000146102": brandColours.red['200'],
+    "398447004": brandColours.yellow['200'],
+    "406597005": brandColours.blue['500'],
+    "402917003": brandColours.teal['500'],
+    "3928002": brandColours.green['500'],
+    "762725007": brandColours.orange['500'],
+    "359814004": brandColours.grey['500'],
+    "58750007": brandColours.red['500'],
+    "6142004": brandColours.yellow['500'],
+    "dx001": brandColours.blue['600'],
+    "-88": brandColours.teal['600'],
+    "-9999": brandColours.green['600'],
+}
+
 export const pathogenColours: Colours = {
     "243624009": brandColours.blue['400'],
     "243615000": brandColours.teal['400'],
