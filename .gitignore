@@ -48,3 +48,6 @@ sample-real-data.xlsx
 
 # ElasticSearch Testing JSON requests 
 /elasticsearch-test-requests/
+
+# ElasticSearch CA Cert
+*.crt
