@@ -13,6 +13,10 @@ export function warn(message: string) {
     console.warn(chalk.yellow(message))
 }
 
+export function error(message: string) {
+    console.error(chalk.red(message))
+}
+
 export function printWrittenFileStats(pathname: string) {
     info(`Wrote file ${pathname} (${getHumanReadableFileSize(pathname)})`)
 }

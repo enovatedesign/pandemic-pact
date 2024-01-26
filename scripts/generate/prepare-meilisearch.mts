@@ -1,9 +1,11 @@
+// TODO we also need to delete documents that are no longer in the data
+
 import {Client} from '@elastic/elasticsearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {getMeilisearchIndexName} from '../helpers/meilisearch.mjs'
 import {Grant} from '../types/generate'
-import {title, info} from '../helpers/log.mjs'
+import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
     // Don't try to add the search index if ElasticSearch is not configured
@@ -12,25 +14,16 @@ export default async function () {
     }
 
     const client = new Client({
-        node: 'http://localhost:9200',
+        node: 'https://localhost:9200',
         auth: {
             username: 'elastic',
             password: process.env.ELASTIC_PASSWORD,
         },
         tls: {
-            //ca: process.env.elasticsearch_certificate,
+            ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
         },
-        // The following options were copied from the 'Basic Configuration' docs
-        // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/basic-config.html
-        maxRetries: 5,
-        requestTimeout: 60000,
-        sniffOnStart: true
     })
-
-    const meep = await client.ping()
-    console.log(meep);
-    return;
 
     // Add documents to search indexes
 
@@ -55,30 +48,60 @@ export default async function () {
         ])
     )
 
-    const grantsBulkIndexResponse = await bulkIndex(
+    await bulkIndex(
         client,
-        'grants',
+        getMeilisearchIndexName('grants'),
         filterableGrantData,
     )
 
-    console.log('grantBulkIndexResponse', Object.keys(grantsBulkIndexResponse));
-
-    // const exportsBulkIndexResponse = await bulkIndex(
-    //     client,
-    //     'exports',
-    //     data,
-    // )
-
-    // console.log('exportsBulkIndexResponse', exportsBulkIndexResponse);
+    await bulkIndex(
+        client,
+        getMeilisearchIndexName('exports'),
+        data,
+    )
 }
 
 async function bulkIndex(client: Client, indexName: string, docs: any[]) {
-    return client.helpers.bulk({
+    const grantsIndexExists = await client.indices.exists({
+        index: indexName,
+    })
+
+    if (!grantsIndexExists) {
+        info(`Creating index ${indexName}...`)
+
+        await client.indices.create({
+            index: indexName,
+            mappings: {
+                properties: {
+                    GrantID: {type: 'keyword'},
+                    GrantTitleEng: {type: 'text'},
+                    Abstract: {type: 'text'},
+                    LaySummary: {type: 'text'},
+                    GrantAmountConverted: {type: 'long'},
+                    GrantStartYear: {type: 'integer'},
+                    Disease: {type: 'keyword'},
+                    Pathogen: {type: 'keyword'},
+                    ResearchInstitutionCountry: {type: 'keyword'},
+                    ResearchInstitutionRegion: {type: 'keyword'},
+                    FunderCountry: {type: 'keyword'},
+                    FunderRegion: {type: 'keyword'},
+                }
+            }
+        }).catch(e => {
+            error(`Error creating index ${indexName}: ${e}`)
+        })
+
+        info(`Created index ${indexName}`)
+    }
+
+    info(`Bulk indexing ${indexName} with upserts...`)
+
+    const response = await client.helpers.bulk({
         datasource: docs,
         onDocument: doc => ([
             {
                 update: {
-                    _index: getMeilisearchIndexName(indexName),
+                    _index: indexName,
                     _id: doc.GrantID
                 }
             },
@@ -86,8 +109,9 @@ async function bulkIndex(client: Client, indexName: string, docs: any[]) {
                 doc_as_upsert: true
             }
         ]),
-        onDrop: (doc) => {
-            console.log(doc)
-        },
+    }).catch(e => {
+        error(`Error indexing grants: ${e}`)
     })
+
+    info(`Bulk Indexed ${indexName} with upserts. Response: ${JSON.stringify(response)}`)
 }
