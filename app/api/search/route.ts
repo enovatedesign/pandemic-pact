@@ -17,13 +17,47 @@ export async function POST(request: Request) {
             username: 'elastic',
             password: process.env.ELASTIC_PASSWORD,
         },
+        // TODO only config tls in dev
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
         },
     })
 
-    const body = await request.json()
+    // TODO properly validate and parse input
+    const parameters = await request.json()
+
+    const {q, filter} = parameters
+
+    let mustClause = {}
+
+    if (q) {
+        mustClause = {
+            must: {
+                simple_query_string: {
+                    query: q,
+                    fields: [
+                        "GrantTitleEng^4",
+                        "Abstract^2",
+                        "LaySummary"
+                    ],
+                    default_operator: "and"
+                }
+            }
+        }
+    }
+
+    let filterClause = {}
+
+    if (filter) {
+        filterClause = {
+            filter: Object.entries(filter).map(
+                ([key, value]) => ({
+                    "terms": {[key]: value}
+                })
+            )
+        }
+    }
 
     const result = await client.search({
         index: 'grants',
@@ -33,7 +67,14 @@ export async function POST(request: Request) {
             'Abstract',
         ],
         size: 20,
-        body
+        body: {
+            query: {
+                bool: {
+                    ...mustClause,
+                    ...filterClause,
+                }
+            }
+        }
     })
 
     return Response.json(result)

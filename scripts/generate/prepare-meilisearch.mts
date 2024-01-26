@@ -19,6 +19,7 @@ export default async function () {
             username: 'elastic',
             password: process.env.ELASTIC_PASSWORD,
         },
+        // Only configure TLS in dev
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
