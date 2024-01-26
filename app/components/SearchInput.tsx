@@ -77,72 +77,8 @@ export default function SearchInput({setSearchResponse}: Props) {
     const sharedRequestBody = useMemo(() => {
         let body: MeilisearchRequestBody = {
             q: searchQuery,
+            filters,
         };
-
-        const filter = [];
-
-        if (filters.Disease?.length > 0) {
-            filter.push(
-                filters.Disease.length === 1
-                    ? `Disease = "${filters.Disease[0]}"`
-                    : filters.Disease.map((disease) => `Disease = "${disease}"`)
-            );
-        }
-
-        if (filters.Pathogen?.length > 0) {
-            filter.push(
-                filters.Pathogen.length === 1
-                    ? `Pathogen = "${filters.Pathogen[0]}"`
-                    : filters.Pathogen.map(
-                        (pathogen) => `Pathogen = "${pathogen}"`
-                    )
-            );
-        }
-
-        if (filters.ResearchInstitutionCountry?.length > 0) {
-            filter.push(
-                filters.ResearchInstitutionCountry.length === 1
-                    ? `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"`
-                    : filters.ResearchInstitutionCountry.map(
-                        (country) =>
-                            `ResearchInstitutionCountry = "${country}"`
-                    )
-            );
-        }
-
-        if (filters.ResearchInstitutionRegion?.length > 0) {
-            filter.push(
-                filters.ResearchInstitutionRegion.length === 1
-                    ? `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"`
-                    : filters.ResearchInstitutionRegion.map(
-                        (region) => `ResearchInstitutionRegion = "${region}"`
-                    )
-            );
-        }
-
-        if (filters.FunderCountry?.length > 0) {
-            filter.push(
-                filters.FunderCountry.length === 1
-                    ? `FunderCountry = "${filters.FunderCountry[0]}"`
-                    : filters.FunderCountry.map(
-                        (country) => `FunderCountry = "${country}"`
-                    )
-            );
-        }
-
-        if (filters.FunderRegion?.length > 0) {
-            filter.push(
-                filters.FunderRegion.length === 1
-                    ? `FunderRegion = "${filters.FunderRegion[0]}"`
-                    : filters.FunderRegion.map(
-                        (region) => `FunderRegion = "${region}"`
-                    )
-            );
-        }
-
-        if (filter.length > 0) {
-            body.filter = filter;
-        }
 
         return body;
     }, [searchQuery, filters]);
@@ -196,8 +132,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
                                 className={`${!advancedSearchShow
-                                        ? 'bg-white rounded-t-lg'
-                                        : 'bg-transparent'
+                                    ? 'bg-white rounded-t-lg'
+                                    : 'bg-transparent'
                                     } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Standard Search
@@ -205,8 +141,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
                                 className={`${advancedSearchShow
-                                        ? 'bg-white rounded-t-lg'
-                                        : 'bg-transparent'
+                                    ? 'bg-white rounded-t-lg'
+                                    : 'bg-transparent'
                                     } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Advanced Search

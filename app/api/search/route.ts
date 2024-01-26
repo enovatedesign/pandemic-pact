@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // TODO properly validate and parse input
     const parameters = await request.json()
 
-    const {q, filter} = parameters
+    const {q, filter, highlight} = parameters
 
     let mustClause = {}
 
@@ -59,6 +59,20 @@ export async function POST(request: Request) {
         }
     }
 
+    let highlightClause = {}
+
+    if (highlight) {
+        highlightClause = {
+            highlight: {
+                fields: {
+                    GrantTitleEng: {},
+                    Abstract: {},
+                    LaySummary: {},
+                }
+            }
+        }
+    }
+
     const result = await client.search({
         index: 'grants',
         _source: [
@@ -73,7 +87,8 @@ export async function POST(request: Request) {
                     ...mustClause,
                     ...filterClause,
                 }
-            }
+            },
+            ...highlightClause,
         }
     })
 
