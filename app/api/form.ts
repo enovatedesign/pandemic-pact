@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import {SendEmailCommand, SendEmailRequest} from '@aws-sdk/client-ses'
-import {sesClient} from '../../lib/SesClient'
+import {sesClient} from '../lib/SesClient'
 
 async function checkRecaptchaToken(recaptchaToken: string) {
     // console.log('Checking recaptcha token:', recaptchaToken);
