@@ -4,7 +4,6 @@ import {Client} from '@elastic/elasticsearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {getMeilisearchIndexName} from '../helpers/meilisearch.mjs'
-import {Grant} from '../types/generate'
 import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
@@ -19,7 +18,7 @@ export default async function () {
             username: 'elastic',
             password: process.env.ELASTIC_PASSWORD,
         },
-        // Only configure TLS in dev
+        // TODO Only configure TLS in dev
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
@@ -30,44 +29,13 @@ export default async function () {
 
     title('Indexing data in ElasticSearch')
 
-    const data: Grant[] = fs.readJsonSync('./data/dist/grants.json')
+    const indexName = getMeilisearchIndexName('grants')
 
-    const filterableGrantData = data.map(
-        (grant) => _.pick(grant, [
-            'GrantID',
-            'GrantTitleEng',
-            'Abstract',
-            'LaySummary',
-            'GrantAmountConverted',
-            'GrantStartYear',
-            'Disease',
-            'Pathogen',
-            'ResearchInstitutionCountry',
-            'ResearchInstitutionRegion',
-            'FunderCountry',
-            'FunderRegion',
-        ])
-    )
+    const indexExists = await client.indices.exists({index: indexName})
 
-    await bulkIndex(
-        client,
-        getMeilisearchIndexName('grants'),
-        filterableGrantData,
-    )
-
-    await bulkIndex(
-        client,
-        getMeilisearchIndexName('exports'),
-        data,
-    )
-}
-
-async function bulkIndex(client: Client, indexName: string, docs: any[]) {
-    const grantsIndexExists = await client.indices.exists({
-        index: indexName,
-    })
-
-    if (!grantsIndexExists) {
+    if (indexExists) {
+        info(`Index ${indexName} already exists, skipping creation`)
+    } else {
         info(`Creating index ${indexName}...`)
 
         await client.indices.create({
@@ -97,6 +65,23 @@ async function bulkIndex(client: Client, indexName: string, docs: any[]) {
 
     info(`Bulk indexing ${indexName} with upserts...`)
 
+    const docs: any[] = fs.readJsonSync('./data/dist/grants.json').map(
+        (grant: any) => _.pick(grant, [
+            'GrantID',
+            'GrantTitleEng',
+            'Abstract',
+            'LaySummary',
+            'GrantAmountConverted',
+            'GrantStartYear',
+            'Disease',
+            'Pathogen',
+            'ResearchInstitutionCountry',
+            'ResearchInstitutionRegion',
+            'FunderCountry',
+            'FunderRegion',
+        ])
+    )
+
     const response = await client.helpers.bulk({
         datasource: docs,
         onDocument: doc => ([
@@ -114,5 +99,9 @@ async function bulkIndex(client: Client, indexName: string, docs: any[]) {
         error(`Error indexing grants: ${e}`)
     })
 
-    info(`Bulk Indexed ${indexName} with upserts. Response: ${JSON.stringify(response)}`)
+    info(`Bulk Indexed ${indexName} with upserts. Results:`)
+
+    Object.entries({...response}).forEach(([key, value]) => {
+        info(`${key}: ${value}`)
+    })
 }
