@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // TODO properly validate and parse input
     const parameters = await request.json()
 
-    const {q, filter, highlight} = parameters
+    const {q, filters, highlight} = parameters
 
     let mustClause = {}
 
@@ -49,9 +49,11 @@ export async function POST(request: Request) {
 
     let filterClause = {}
 
-    if (filter) {
+    if (filters) {
         filterClause = {
-            filter: Object.entries(filter).map(
+            filter: Object.entries(filters).filter(
+                ([key, value]) => value.length > 0
+            ).map(
                 ([key, value]) => ({
                     'terms': {[key]: value}
                 })
@@ -83,6 +85,8 @@ export async function POST(request: Request) {
     const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
         `${process.env.SEARCH_INDEX_PREFIX}-` :
         ''
+
+    console.log(filterClause);
 
     const result = await client.search({
         index: `${indexPrefix}grants`,
