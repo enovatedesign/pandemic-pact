@@ -1,6 +1,5 @@
 import {ElementType, ReactNode, useState, useContext} from "react"
 import {Tab} from '@headlessui/react'
-import {exportRequestBodyFilteredToMatchingGrants} from "./../helpers/meilisearch"
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
@@ -72,9 +71,6 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                     chartSelector={`#${id}`}
                     imageFilename={id}
                     dataFilename={id}
-                    meilisearchRequestBody={
-                        exportRequestBodyFilteredToMatchingGrants(grants)
-                    }
                 />
 
                 {tabs && (
@@ -94,7 +90,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                                         `}
                                     >
                                         <div className="flex items-center">
-                                            <tab.icon className="w-5 h-5"/>
+                                            <tab.icon className="w-5 h-5" />
 
                                             <span className="ml-2 whitespace-nowrap">
                                                 {tab.label}

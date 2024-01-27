@@ -1,15 +1,15 @@
-import Button from "./Button"
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import {DownloadIcon} from '@heroicons/react/solid'
-import {meilisearchRequest} from "../..//helpers/meilisearch"
-import {utils, writeFile} from 'xlsx'
+import {countActiveFilters, GlobalFilterContext} from "../../helpers/filter"
+import Button from "./Button"
 
 interface Props {
-    dataFilename: string,
-    meilisearchRequestBody: any,
+    dataFilename: string
 }
 
-export default function ExportDataMenuItem({dataFilename, meilisearchRequestBody}: Props) {
+export default function ExportDataMenuItem({dataFilename}: Props) {
+    const {filters, grants} = useContext(GlobalFilterContext)
+
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
@@ -19,17 +19,60 @@ export default function ExportDataMenuItem({dataFilename, meilisearchRequestBody
 
         setExportingCsv(true)
 
-        meilisearchRequest('exports', meilisearchRequestBody).then(data => {
-            const worksheet = utils.json_to_sheet(data.hits)
-            const workbook = utils.book_new()
-            utils.book_append_sheet(workbook, worksheet, "Grants")
-            writeFile(workbook, `${dataFilename}.csv`, {bookType: 'csv'})
+        fetch('https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/labelled-grant-data-2023-11-23.csv').then(
+            response => response.text()
+        ).then(
+            csv => {
+                console.log(`Downloaded CSV of size ${csv.length} characters`)
 
-            setExportingCsv(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingCsv(false)
-        })
+                const grantIDs = grants.map(grant => grant.GrantID)
+
+                console.log(grantIDs);
+
+                let filteredCsv = csv;
+
+                if (countActiveFilters(filters) > 0) {
+                    // Rather than attempting to parse the CSV, we can take advantage of
+                    // the fact that the first column is the Grant ID, and filter based on that,
+                    // thereby improving performance.
+                    filteredCsv = filteredCsv.split('\n')
+                        .filter((line, index) => {
+                            // Always include the header row
+                            if (index === 0) {
+                                return true
+                            }
+
+                            // Check if the first column contains one of our filtered Grant IDs
+                            return grantIDs.some(
+                                id => line.startsWith(`${id},`)
+                            )
+                        }).join('\n')
+
+                    console.log(`Filtered CSV down to ${filteredCsv.length} characters`)
+                } else {
+                    console.log('No filters are active, so we will use the original CSV data instead of parsing and filtering it')
+                }
+
+                const blob = new Blob([filteredCsv], {type: 'text/csv'})
+                const url = window.URL.createObjectURL(blob)
+
+                const a = document.createElement('a')
+                a.href = url
+                a.download = dataFilename
+                a.click()
+
+                window.URL.revokeObjectURL(url)
+                a.remove()
+
+                setExportingCsv(false)
+            }
+        ).catch(
+            error => {
+                console.error(error)
+
+                setExportingCsv(false)
+            }
+        )
     }
 
     return (
