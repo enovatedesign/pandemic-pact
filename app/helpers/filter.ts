@@ -1,6 +1,14 @@
 import {createContext} from 'react'
 import {every} from 'lodash'
-import {Filters} from '../types/filters'
+
+export interface Filter {
+    values: string[]
+    excludeGrantsWithMultipleItems: boolean
+}
+
+export interface Filters {
+    [key: string]: Filter
+}
 
 export function availableFilters() {
     return [

@@ -4,28 +4,13 @@ import {SearchIcon} from '@heroicons/react/solid';
 import ExportToCsvButton from './ExportToCsvButton';
 import MultiSelect from './MultiSelect';
 import selectOptions from '../../data/dist/select-options.json';
-import {type SearchResponse} from '../types/search';
-import {
-    meilisearchRequest,
-    exportRequestBody,
-    highlightedResultsRequestBody,
-    type MeilisearchRequestBody,
-} from '../helpers/meilisearch';
+import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search';
 import Button from './Button';
 import AnimateHeight from 'react-animate-height';
 import AdvancedSearch from './AdvancedSearch';
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void;
-}
-
-export interface Filters {
-    Disease: string[];
-    Pathogen: string[];
-    ResearchInstitutionCountry: string[];
-    ResearchInstitutionRegion: string[];
-    FunderCountry: string[];
-    FunderRegion: string[];
 }
 
 export default function SearchInput({setSearchResponse}: Props) {
@@ -37,7 +22,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl);
 
-    const [filters, setFilters] = useState<Filters>(
+    const [filters, setFilters] = useState<SearchFilters>(
         filtersFromUrl
             ? JSON.parse(filtersFromUrl)
             : {
@@ -74,31 +59,17 @@ export default function SearchInput({setSearchResponse}: Props) {
         router.replace(url.href);
     }, [searchQuery, filters, pathname, router]);
 
-    const sharedRequestBody = useMemo(() => {
-        let body: MeilisearchRequestBody = {
+    useEffect(() => {
+        searchRequest({
             q: searchQuery,
             filters,
-        };
-
-        return body;
-    }, [searchQuery, filters]);
-
-    useEffect(() => {
-        const searchRequestBody = highlightedResultsRequestBody({
-            ...sharedRequestBody,
-            attributesToCrop: ['Abstract'],
-            cropLength: 50,
+        }).then((data) => {
+            setSearchResponse(data);
+            setTotalHits(data.estimatedTotalHits);
+        }).catch((error) => {
+            console.error('Error:', error);
         });
-
-        meilisearchRequest('grants', searchRequestBody)
-            .then((data) => {
-                setSearchResponse(data);
-                setTotalHits(data.estimatedTotalHits);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }, [sharedRequestBody, setTotalHits, setSearchResponse]);
+    }, [searchQuery, filters, setTotalHits, setSearchResponse]);
 
     const [advancedSearchShow, setAdvancedSearchShow] = useState(false);
 
@@ -279,6 +250,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                         </span>
                     </p>
 
+                    {/* TODO get this working again
                     <ExportToCsvButton
                         meilisearchRequestBody={exportRequestBody(
                             sharedRequestBody
@@ -287,6 +259,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                         title="Download Data"
                         size="xsmall"
                     />
+                    */}
                 </div>
             </div>
         </div>
