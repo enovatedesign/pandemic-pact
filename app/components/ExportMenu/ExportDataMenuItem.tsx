@@ -23,11 +23,7 @@ export default function ExportDataMenuItem({dataFilename}: Props) {
             response => response.text()
         ).then(
             csv => {
-                console.log(`Downloaded CSV of size ${csv.length} characters`)
-
                 const grantIDs = grants.map(grant => grant.GrantID)
-
-                console.log(grantIDs);
 
                 let filteredCsv = csv;
 
@@ -47,10 +43,6 @@ export default function ExportDataMenuItem({dataFilename}: Props) {
                                 id => line.startsWith(`${id},`)
                             )
                         }).join('\n')
-
-                    console.log(`Filtered CSV down to ${filteredCsv.length} characters`)
-                } else {
-                    console.log('No filters are active, so we will use the original CSV data instead of parsing and filtering it')
                 }
 
                 const blob = new Blob([filteredCsv], {type: 'text/csv'})
