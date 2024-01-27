@@ -20,7 +20,7 @@ export default function () {
 
     const path = './data/dist'
 
-    fs.ensureDirSync(path)
+    fs.emptyDirSync(path)
 
     const pathname = `${path}/select-options.json`
 

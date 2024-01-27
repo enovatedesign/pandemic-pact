@@ -51,7 +51,7 @@ export default function () {
             )
         )
 
-        fs.ensureDirSync(path)
+        fs.emptyDirSync(path)
 
         const pathname = `${path}/${grantWithFullText['GrantID']}.json`
 

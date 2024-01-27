@@ -5,7 +5,7 @@ import {title, info, printWrittenFileStats} from '../helpers/log.mjs'
 export default async function () {
     title('Fetching data sheets')
 
-    fs.ensureDirSync('data/download')
+    fs.emptyDirSync('data/download')
 
     await downloadCsvAndConvertToJson(
         'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/dictionary.csv',
