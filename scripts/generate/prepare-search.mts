@@ -3,13 +3,12 @@
 import {Client} from '@elastic/elasticsearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
-import {getMeilisearchIndexName} from '../helpers/meilisearch.mjs'
 import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
     // Don't try to add the search index if ElasticSearch is not configured
     if (typeof process.env.ELASTIC_PASSWORD === 'undefined') {
-        return;
+        return
     }
 
     const client = new Client({
@@ -25,11 +24,13 @@ export default async function () {
         },
     })
 
-    // Add documents to search indexes
-
     title('Indexing data in ElasticSearch')
 
-    const indexName = getMeilisearchIndexName('grants')
+    const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
+        `${process.env.SEARCH_INDEX_PREFIX}-` :
+        ''
+
+    const indexName = `${indexPrefix}grants`
 
     const indexExists = await client.indices.exists({index: indexName})
 

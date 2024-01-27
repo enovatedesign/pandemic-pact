@@ -5,7 +5,7 @@ import prepareGrants from './prepare-grants.mjs'
 import prepareHomepageTotals from './prepare-homepage-totals.mjs'
 import fetchPubMedData from './fetch-pub-med-data.mjs'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files.mjs'
-import prepareMeilisearch from './prepare-meilisearch.mjs'
+import prepareSearch from './prepare-search.mjs'
 
 main()
 
@@ -24,5 +24,5 @@ async function main() {
 
     prepareIndividualGrantFiles()
 
-    await prepareMeilisearch()
+    await prepareSearch()
 }
