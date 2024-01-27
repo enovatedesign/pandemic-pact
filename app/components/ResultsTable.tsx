@@ -38,7 +38,7 @@ export default function ResultsTable({searchResponse}: Props) {
                             className="flex flex-col space-y-2 lg:space-y-6"
                         >
                             <h3>
-                                {result.highlight.GrantTitleEng ? (
+                                {result.highlight?.GrantTitleEng ? (
                                     <a
                                         href={href}
                                         className={linkClasses}
