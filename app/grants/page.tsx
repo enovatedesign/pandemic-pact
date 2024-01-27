@@ -4,7 +4,7 @@ import {Suspense, useState} from "react"
 import Layout from "../components/Layout"
 import SearchInput from "../components/SearchInput"
 import ResultsTable from "../components/ResultsTable"
-import {type SearchResponse} from '../types/search'
+import {SearchResponse} from '../helpers/search'
 
 export default function Explore() {
     const [searchResponse, setSearchResponse] = useState<SearchResponse>({

@@ -1,10 +1,10 @@
 'use client';
 
 import '../css/components/results-table.css';
-import { SearchResponse, SearchResult } from '../types/search';
-import { links } from '../helpers/nav';
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import {SearchResponse, SearchResult} from '../helpers/search';
+import {links} from '../helpers/nav';
+import {EyeIcon, EyeOffIcon} from '@heroicons/react/solid';
+import {useState} from 'react';
 import AnimateHeight from 'react-animate-height';
 import RichText from './ContentBuilder/Common/RichText';
 import Button from './Button';
@@ -13,7 +13,7 @@ interface Props {
     searchResponse: SearchResponse;
 }
 
-export default function ResultsTable({ searchResponse }: Props) {
+export default function ResultsTable({searchResponse}: Props) {
     const [activeIndex, setActiveIndex] = useState(-1);
 
     return (
@@ -26,26 +26,36 @@ export default function ResultsTable({ searchResponse }: Props) {
                 {searchResponse.hits.map((result, index) => {
                     const query = searchResponse.query;
                     const href =
-                        `${links.explore.href}/${result.GrantID}` +
+                        `${links.explore.href}/${result._source.GrantID}` +
                         (query ? `?q=${query}` : '');
-                    const data = { index, activeIndex, setActiveIndex };
+                    const data = {index, activeIndex, setActiveIndex};
+
+                    const linkClasses = "hover:underline font-semibold text-base lg:text-2xl"
 
                     return (
                         <article
-                            key={result.GrantID}
+                            key={result._source.GrantID}
                             className="flex flex-col space-y-2 lg:space-y-6"
                         >
                             <h3>
-                                <a
-                                    href={href}
-                                    className="hover:underline font-semibold text-base lg:text-2xl"
-                                    dangerouslySetInnerHTML={{
-                                        __html: result._formatted.GrantTitleEng,
-                                    }}
-                                ></a>
+                                {result.highlight.GrantTitleEng ? (
+                                    <a
+                                        href={href}
+                                        className={linkClasses}
+                                        dangerouslySetInnerHTML={{__html: result.highlight.GrantTitleEng[0], }}
+                                    ></a>
+                                ) : (
+                                    <a
+                                        href={href}
+                                        className={linkClasses}
+                                    >
+                                        {result._source.GrantTitleEng}
+                                    </a>
+                                )}
+
                             </h3>
 
-                            {searchResponse.query && (
+                            {result.highlight && (
                                 <SearchMatches result={result} {...data} />
                             )}
                         </article>
@@ -69,49 +79,48 @@ function SearchMatches({
     activeIndex,
     setActiveIndex,
 }: SearchMatchesProps) {
+    const countMatches = (highlights: string[]) => {
+        return highlights.reduce((total, highlight) => {
+            return total + (highlight.match(
+                /class="highlighted-search-result-token">/g
+            )?.length ?? 0)
+        }, 0);
+    }
+
     let matches = [
         {
             label: 'Title',
-            count:
-                result._formatted.GrantTitleEng?.match(
-                    /class="highlighted-search-result-token">/g
-                )?.length ?? 0,
+            count: countMatches(result.highlight.GrantTitleEng ?? []),
         },
         {
             label: 'Abstract',
-            count:
-                result._formatted.Abstract?.match(
-                    /class="highlighted-search-result-token">/g
-                )?.length ?? 0,
+            count: countMatches(result.highlight.Abstract ?? []),
         },
         {
             label: 'Lay Summary',
-            count:
-                result._formatted.LaySummary?.match(
-                    /class="highlighted-search-result-token">/g
-                )?.length ?? 0,
+            count: countMatches(result.highlight.LaySummary ?? []),
         },
     ];
 
     matches.push({
         label: 'Total',
-        count: matches.reduce((total, { count }) => total + count, 0),
+        count: matches.reduce((total, {count}) => total + count, 0),
     });
 
     const titleMatchText = matches
         .filter((label) => label.label === 'Title')
-        .filter(({ count }) => count > 0)
-        .map(({ label, count }) => `${count} in ${label}`);
+        .filter(({count}) => count > 0)
+        .map(({label, count}) => `${count} in ${label}`);
 
     const abstractMatchText = matches
         .filter((label) => label.label === 'Abstract')
-        .filter(({ count }) => count > 0)
-        .map(({ label, count }) => `${count} in ${label}`);
+        .filter(({count}) => count > 0)
+        .map(({label, count}) => `${count} in ${label}`);
 
     const totalMatchText = matches
         .filter((label) => label.label === 'Total')
-        .filter(({ count }) => count > 0)
-        .map(({ count }) => count);
+        .filter(({count}) => count > 0)
+        .map(({count}) => count);
 
     const matchText = [titleMatchText, abstractMatchText];
 
@@ -122,9 +131,9 @@ function SearchMatches({
     };
 
     const grantAmountConverted =
-        typeof result.GrantAmountConverted === 'number'
-            ? `$ ${result.GrantAmountConverted.toLocaleString()}`
-            : result.GrantAmountConverted;
+        typeof result._source.GrantAmountConverted === 'number'
+            ? `$ ${result._source.GrantAmountConverted.toLocaleString()}`
+            : result._source.GrantAmountConverted;
 
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
@@ -189,7 +198,7 @@ function SearchMatches({
                             Abstract Excerpt
                         </p>
                         <RichText
-                            text={result._formatted.Abstract}
+                            text={result.highlight.Abstract}
                             customClasses="max-w-none"
                         />
                     </div>
@@ -207,7 +216,7 @@ function SearchMatches({
                                 Start Year
                             </p>
                             <p className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
-                                {result.GrantStartYear}
+                                {result._source.GrantStartYear}
                             </p>
                         </div>
                     </div>

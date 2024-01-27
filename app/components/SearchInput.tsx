@@ -1,26 +1,26 @@
-import {useEffect, useMemo, useState} from 'react';
-import {useRouter, usePathname, useSearchParams} from 'next/navigation';
-import {SearchIcon} from '@heroicons/react/solid';
-import ExportToCsvButton from './ExportToCsvButton';
-import MultiSelect from './MultiSelect';
-import selectOptions from '../../data/dist/select-options.json';
-import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search';
-import Button from './Button';
-import AnimateHeight from 'react-animate-height';
-import AdvancedSearch from './AdvancedSearch';
+import {useEffect, useMemo, useState} from 'react'
+import {useRouter, usePathname, useSearchParams} from 'next/navigation'
+import {SearchIcon} from '@heroicons/react/solid'
+import ExportToCsvButton from './ExportToCsvButton'
+import MultiSelect from './MultiSelect'
+import selectOptions from '../../data/dist/select-options.json'
+import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search'
+import Button from './Button'
+import AnimateHeight from 'react-animate-height'
+import AdvancedSearch from './AdvancedSearch'
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void;
+    setSearchResponse: (searchResponse: SearchResponse) => void
 }
 
 export default function SearchInput({setSearchResponse}: Props) {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const searchQueryFromUrl = searchParams.get('q') ?? '';
-    const filtersFromUrl = searchParams.get('filters') ?? null;
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const searchQueryFromUrl = searchParams.get('q') ?? ''
+    const filtersFromUrl = searchParams.get('filters') ?? null
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl);
+    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
     const [filters, setFilters] = useState<SearchFilters>(
         filtersFromUrl
@@ -33,45 +33,46 @@ export default function SearchInput({setSearchResponse}: Props) {
                 FunderCountry: [],
                 FunderRegion: [],
             }
-    );
+    )
 
-    const [totalHits, setTotalHits] = useState<number>(0);
+    const [totalHits, setTotalHits] = useState<number>(0)
 
     useEffect(() => {
-        const url = new URL(pathname, window.location.origin);
+        const url = new URL(pathname, window.location.origin)
 
         if (searchQuery) {
-            url.searchParams.set('q', searchQuery);
+            url.searchParams.set('q', searchQuery)
         } else {
-            url.searchParams.delete('q');
+            url.searchParams.delete('q')
         }
 
         const anyFiltersAreSet = Object.values(filters).some(
             (selectedOptions) => selectedOptions.length > 0
-        );
+        )
 
         if (anyFiltersAreSet) {
-            url.searchParams.set('filters', JSON.stringify(filters));
+            url.searchParams.set('filters', JSON.stringify(filters))
         } else {
-            url.searchParams.delete('filters');
+            url.searchParams.delete('filters')
         }
 
-        router.replace(url.href);
-    }, [searchQuery, filters, pathname, router]);
+        router.replace(url.href)
+    }, [searchQuery, filters, pathname, router])
 
     useEffect(() => {
         searchRequest({
             q: searchQuery,
             filters,
+            highlight: true,
         }).then((data) => {
-            setSearchResponse(data);
-            setTotalHits(data.estimatedTotalHits);
+            setSearchResponse(data)
+            setTotalHits(data.total.value)
         }).catch((error) => {
-            console.error('Error:', error);
-        });
-    }, [searchQuery, filters, setTotalHits, setSearchResponse]);
+            console.error('Error:', error)
+        })
+    }, [searchQuery, filters, setTotalHits, setSearchResponse])
 
-    const [advancedSearchShow, setAdvancedSearchShow] = useState(false);
+    const [advancedSearchShow, setAdvancedSearchShow] = useState(false)
 
     return (
         <div>
@@ -263,5 +264,5 @@ export default function SearchInput({setSearchResponse}: Props) {
                 </div>
             </div>
         </div>
-    );
+    )
 }

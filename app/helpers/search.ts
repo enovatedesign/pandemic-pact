@@ -1,16 +1,20 @@
 export interface SearchResult {
-    GrantID: number,
-    GrantTitleEng: string,
-    Abstract: string,
-    LaySummary: string,
-    GrantAmountConverted?: number,
-    GrantStartYear: string,
-    _formatted: {
+    _index: string,
+    _id: string,
+    _score: number,
+    _source: {
+        GrantID: string,
         GrantTitleEng: string,
         Abstract: string,
         LaySummary: string,
+        GrantAmountConverted: number,
+        GrantStartYear: string,
+    },
+    highlight: {
+        GrantTitleEng: string[],
+        Abstract: string[],
+        LaySummary: string[],
     }
-    _rankingScore?: number,
 }
 
 export type SearchResults = Array<SearchResult>
@@ -33,10 +37,10 @@ export interface SearchFilters {
 export interface SearchRequestBody {
     q: string,
     filters: SearchFilters,
+    highlight: boolean,
 }
 
 export async function searchRequest(body: SearchRequestBody) {
-    console.log('searchRequest', body);
     return fetch('/api/search', {
         method: 'POST',
         body: JSON.stringify(body),

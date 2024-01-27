@@ -37,11 +37,11 @@ export async function POST(request: Request) {
                 simple_query_string: {
                     query: q,
                     fields: [
-                        "GrantTitleEng^4",
-                        "Abstract^2",
-                        "LaySummary"
+                        'GrantTitleEng^4',
+                        'Abstract^2',
+                        'LaySummary'
                     ],
-                    default_operator: "and"
+                    default_operator: 'and'
                 }
             }
         }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         filterClause = {
             filter: Object.entries(filter).map(
                 ([key, value]) => ({
-                    "terms": {[key]: value}
+                    'terms': {[key]: value}
                 })
             )
         }
@@ -62,23 +62,37 @@ export async function POST(request: Request) {
     let highlightClause = {}
 
     if (highlight) {
+        const highlightSettings = {
+            pre_tags: ['<span class="highlighted-search-result-token">'],
+            post_tags: ['</span>']
+        }
+
         highlightClause = {
             highlight: {
                 fields: {
-                    GrantTitleEng: {},
-                    Abstract: {},
-                    LaySummary: {},
+                    GrantTitleEng: highlightSettings,
+                    Abstract: highlightSettings,
+                    LaySummary: highlightSettings,
                 }
             }
         }
     }
 
+    // TODO refactor this into a shared module used by both
+    // this and the generate script, if possible?
+    const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
+        `${process.env.SEARCH_INDEX_PREFIX}-` :
+        ''
+
     const result = await client.search({
-        index: 'grants',
+        index: `${indexPrefix}grants`,
         _source: [
             'GrantID',
             'GrantTitleEng',
             'Abstract',
+            'LaySummary',
+            'GrantAmountConverted',
+            'GrantStartYear',
         ],
         size: 20,
         body: {
@@ -92,5 +106,5 @@ export async function POST(request: Request) {
         }
     })
 
-    return Response.json(result)
+    return Response.json(result.hits)
 }
