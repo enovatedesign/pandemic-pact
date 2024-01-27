@@ -63,7 +63,6 @@ export default function SearchInput({setSearchResponse}: Props) {
         searchRequest({
             q: searchQuery,
             filters,
-            highlight: true,
         }).then((data) => {
             setSearchResponse(data)
             setTotalHits(data.total.value)

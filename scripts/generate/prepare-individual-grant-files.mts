@@ -12,6 +12,8 @@ export default function () {
 
     const path = './data/dist/grants'
 
+    fs.emptyDirSync(path)
+
     for (let i = 0; i < sourceGrants.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
             info(`Processed ${i} of ${sourceGrants.length} grants`)
@@ -50,8 +52,6 @@ export default function () {
                 }
             )
         )
-
-        fs.emptyDirSync(path)
 
         const pathname = `${path}/${grantWithFullText['GrantID']}.json`
 

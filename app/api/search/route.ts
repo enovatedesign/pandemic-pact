@@ -24,12 +24,13 @@ export async function POST(request: Request) {
         },
     })
 
-    // TODO properly validate and parse input
+    // TODO properly validate and parse input - consider using Zod
     const parameters = await request.json()
 
-    const {q, filters, highlight} = parameters
+    const {q, filters} = parameters
 
     let mustClause = {}
+    let highlightClause = {}
 
     if (q) {
         mustClause = {
@@ -42,6 +43,21 @@ export async function POST(request: Request) {
                         'LaySummary'
                     ],
                     default_operator: 'and'
+                }
+            }
+        }
+
+        const highlightSettings = {
+            pre_tags: ['<span class="highlighted-search-result-token">'],
+            post_tags: ['</span>']
+        }
+
+        highlightClause = {
+            highlight: {
+                fields: {
+                    GrantTitleEng: highlightSettings,
+                    Abstract: highlightSettings,
+                    LaySummary: highlightSettings,
                 }
             }
         }
@@ -61,32 +77,11 @@ export async function POST(request: Request) {
         }
     }
 
-    let highlightClause = {}
-
-    if (highlight) {
-        const highlightSettings = {
-            pre_tags: ['<span class="highlighted-search-result-token">'],
-            post_tags: ['</span>']
-        }
-
-        highlightClause = {
-            highlight: {
-                fields: {
-                    GrantTitleEng: highlightSettings,
-                    Abstract: highlightSettings,
-                    LaySummary: highlightSettings,
-                }
-            }
-        }
-    }
-
     // TODO refactor this into a shared module used by both
     // this and the generate script, if possible?
     const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
         `${process.env.SEARCH_INDEX_PREFIX}-` :
         ''
-
-    console.log(filterClause);
 
     const result = await client.search({
         index: `${indexPrefix}grants`,
@@ -110,5 +105,8 @@ export async function POST(request: Request) {
         }
     })
 
-    return Response.json(result.hits)
+    return Response.json({
+        query: q,
+        ...result.hits,
+    })
 }
