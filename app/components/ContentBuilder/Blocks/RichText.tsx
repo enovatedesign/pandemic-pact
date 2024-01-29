@@ -4,13 +4,16 @@ import { defaultProseClasses } from '@/app/helpers/prose-classes';
 interface Props {
 	block: {
 		text: string,
-		textAlign: string
+		textAlign: string,
+		firstBlock: boolean,
+		lastBlock: boolean
 	}
 }
 
 export default function RichTextBlock({ block }: Props) {
 	const text = block.text;
 	const textAlign = block.textAlign;
+	const {firstBlock, lastBlock} = block
 
 	if (text && textAlign) {
 		const blockClasses = [
@@ -19,7 +22,7 @@ export default function RichTextBlock({ block }: Props) {
 		].join(" ");
 
 		return (
-			<BlockWrapper>
+			<BlockWrapper options={{firstBlock, lastBlock}}>
 				<div
 					className={blockClasses}
 					dangerouslySetInnerHTML={{ __html: text }}

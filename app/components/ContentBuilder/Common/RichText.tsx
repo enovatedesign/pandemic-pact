@@ -3,12 +3,14 @@ interface Props {
     typeScale?: string,
     customClasses?: string,
     text: string
+    noMaxWidth?: boolean,
 }
 
 const RichText = (props: Props) => {
 
     const invert = props.invert ?? false 
-    const typeScale = props.typeScale ?? 'lg:prose-lg' 
+    const typeScale = props.typeScale ?? 'lg:prose-lg'
+    const noMaxWidth = props.noMaxWidth ?? false
     const customClasses = props.customClasses ?? '' 
 
     const classes = [
@@ -18,6 +20,7 @@ const RichText = (props: Props) => {
         !invert ? 'prose-a:text-secondary prose-headings:text-secondary' : '',
         invert ? 'prose-invert' : 'prose-gray',
         customClasses,
+        noMaxWidth ? 'max-w-none' : ''
     ].join(' ') 
 
     return (
