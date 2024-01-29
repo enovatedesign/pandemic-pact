@@ -7,7 +7,7 @@ import {
     searchIsNotEnabled,
     searchUnavailableResponse,
     validateRequest
-} from '../helpers/search'
+} from '../../helpers/search'
 
 export async function POST(request: NextRequest) {
     if (searchIsNotEnabled()) {
@@ -51,7 +51,6 @@ export async function POST(request: NextRequest) {
         index,
 
         _source: [
-            'GrantID',
             'GrantTitleEng',
             'Abstract',
             'LaySummary',
