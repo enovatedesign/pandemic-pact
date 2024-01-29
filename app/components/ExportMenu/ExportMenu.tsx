@@ -39,7 +39,7 @@ export default function ExportMenu({chartSelector, imageFilename, dataFilename}:
                     />
 
                     <ExportDataMenuItem
-                        dataFilename={dataFilename}
+                        filename={dataFilename}
                     />
                 </Menu.Items>
             </Transition>
