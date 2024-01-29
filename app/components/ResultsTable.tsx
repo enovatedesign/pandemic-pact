@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import '../css/components/results-table.css';
-import {SearchResponse, SearchResult} from '../helpers/search';
-import {links} from '../helpers/nav';
-import {EyeIcon, EyeOffIcon} from '@heroicons/react/solid';
-import {useState} from 'react';
-import AnimateHeight from 'react-animate-height';
-import RichText from './ContentBuilder/Common/RichText';
-import Button from './Button';
+import '../css/components/results-table.css'
+import {SearchResponse, SearchResult} from '../helpers/search'
+import {links} from '../helpers/nav'
+import {EyeIcon, EyeOffIcon} from '@heroicons/react/solid'
+import {useState} from 'react'
+import AnimateHeight from 'react-animate-height'
+import RichText from './ContentBuilder/Common/RichText'
+import Button from './Button'
 
 interface Props {
-    searchResponse: SearchResponse;
+    searchResponse: SearchResponse
 }
 
 export default function ResultsTable({searchResponse}: Props) {
-    const [activeIndex, setActiveIndex] = useState(-1);
+    const [activeIndex, setActiveIndex] = useState(-1)
 
     return (
         <div>
@@ -24,17 +24,19 @@ export default function ResultsTable({searchResponse}: Props) {
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
                 {searchResponse.hits.map((result, index) => {
-                    const query = searchResponse.query;
+                    const query = searchResponse.query
+
                     const href =
-                        `${links.explore.href}/${result._source.GrantID}` +
-                        (query ? `?q=${query}` : '');
-                    const data = {index, activeIndex, setActiveIndex};
+                        `${links.explore.href}/${result._id}` +
+                        (query ? `?q=${query}` : '')
+
+                    const data = {index, activeIndex, setActiveIndex}
 
                     const linkClasses = "hover:underline font-semibold text-base lg:text-2xl"
 
                     return (
                         <article
-                            key={result._source.GrantID}
+                            key={result._id}
                             className="flex flex-col space-y-2 lg:space-y-6"
                         >
                             <h3>
@@ -56,21 +58,24 @@ export default function ResultsTable({searchResponse}: Props) {
                             </h3>
 
                             {result.highlight && (
-                                <SearchMatches result={result} {...data} />
+                                <SearchMatches
+                                    result={result}
+                                    {...data}
+                                />
                             )}
                         </article>
-                    );
+                    )
                 })}
             </div>
         </div>
-    );
+    )
 }
 
 interface SearchMatchesProps {
-    result: SearchResult;
-    index: number;
-    activeIndex: number;
-    setActiveIndex: any;
+    result: SearchResult
+    index: number
+    activeIndex: number
+    setActiveIndex: any
 }
 
 function SearchMatches({
@@ -84,7 +89,7 @@ function SearchMatches({
             return total + (highlight.match(
                 /class="highlighted-search-result-token">/g
             )?.length ?? 0)
-        }, 0);
+        }, 0)
     }
 
     let matches = [
@@ -100,40 +105,40 @@ function SearchMatches({
             label: 'Lay Summary',
             count: countMatches(result.highlight.LaySummary ?? []),
         },
-    ];
+    ]
 
     matches.push({
         label: 'Total',
         count: matches.reduce((total, {count}) => total + count, 0),
-    });
+    })
 
     const titleMatchText = matches
         .filter((label) => label.label === 'Title')
         .filter(({count}) => count > 0)
-        .map(({label, count}) => `${count} in ${label}`);
+        .map(({label, count}) => `${count} in ${label}`)
 
     const abstractMatchText = matches
         .filter((label) => label.label === 'Abstract')
         .filter(({count}) => count > 0)
-        .map(({label, count}) => `${count} in ${label}`);
+        .map(({label, count}) => `${count} in ${label}`)
 
     const totalMatchText = matches
         .filter((label) => label.label === 'Total')
         .filter(({count}) => count > 0)
-        .map(({count}) => count);
+        .map(({count}) => count)
 
-    const matchText = [titleMatchText, abstractMatchText];
+    const matchText = [titleMatchText, abstractMatchText]
 
-    const iconClasses = 'w-4 h-4 lg:w-6 lg:h-6 text-white';
+    const iconClasses = 'w-4 h-4 lg:w-6 lg:h-6 text-white'
 
     const handleClick = () => {
-        activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1);
-    };
+        activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
+    }
 
     const grantAmountConverted =
         typeof result._source.GrantAmountConverted === 'number'
             ? `$ ${result._source.GrantAmountConverted.toLocaleString()}`
-            : result._source.GrantAmountConverted;
+            : result._source.GrantAmountConverted
 
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
@@ -144,20 +149,14 @@ function SearchMatches({
                         Matches:
                     </span>
                     <ul className="flex gap-2">
-                        {matchText.map((text, index) => {
-                            return (
-                                <>
-                                    {text.length > 0 && (
-                                        <li
-                                            key={index}
-                                            className="bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap text-sm lg:text-md"
-                                        >
-                                            {text}
-                                        </li>
-                                    )}
-                                </>
-                            );
-                        })}
+                        {matchText.filter(text => text.length > 0).map((text, index) => (
+                            <li
+                                key={index}
+                                className="bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap text-sm lg:text-md"
+                            >
+                                {text}
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1">
@@ -223,5 +222,5 @@ function SearchMatches({
                 </div>
             </AnimateHeight>
         </div>
-    );
+    )
 }
