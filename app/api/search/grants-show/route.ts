@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
     let highlightClause = {}
 
     if (q) {
-        const highlightTags = {
+        const highlightOptions = {
+            number_of_fragments: 0,
             pre_tags: ['<span class="highlighted-search-result-token">'],
             post_tags: ['</span>'],
         }
@@ -28,15 +29,9 @@ export async function POST(request: NextRequest) {
             highlight: {
                 encoder: 'html',
                 fields: {
-                    GrantTitleEng: {
-                        number_of_fragments: 0,
-                        ...highlightTags
-                    },
-                    Abstract: {
-                        number_of_fragments: 0,
-                        ...highlightTags
-                    },
-                    LaySummary: highlightTags,
+                    GrantTitleEng: highlightOptions,
+                    Abstract: highlightOptions,
+                    LaySummary: highlightOptions,
                 }
             }
         }
