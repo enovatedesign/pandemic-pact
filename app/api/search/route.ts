@@ -1,52 +1,24 @@
-import {Client} from '@elastic/elasticsearch'
-import fs from 'fs'
+import {NextRequest, NextResponse} from 'next/server'
 
-export async function POST(request: Request) {
-    if (typeof process.env.ELASTIC_PASSWORD === 'undefined') {
-        return Response.json({
-            error: 'Service Unavailable',
-        }, {
-            status: 503,
-            statusText: 'Service Unavailable',
-        })
+import {
+    getIndexName,
+    getBooleanQuery,
+    getSearchClient,
+    searchIsNotEnabled,
+    searchUnavailableResponse,
+    validateRequest
+} from '../helpers/search'
+
+export async function POST(request: NextRequest) {
+    if (searchIsNotEnabled()) {
+        return searchUnavailableResponse()
     }
 
-    const client = new Client({
-        node: 'https://localhost:9200',
-        auth: {
-            username: 'elastic',
-            password: process.env.ELASTIC_PASSWORD,
-        },
-        // TODO only config tls in dev
-        tls: {
-            ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
-            rejectUnauthorized: false,
-        },
-    })
+    const {q, filters} = await validateRequest(request)
 
-    // TODO properly validate and parse input - consider using Zod
-    const parameters = await request.json()
-
-    const {q, filters} = parameters
-
-    let mustClause = {}
     let highlightClause = {}
 
     if (q) {
-        mustClause = {
-            must: {
-                simple_query_string: {
-                    query: q,
-                    fields: [
-                        'GrantTitleEng^4',
-                        'Abstract^2',
-                        'LaySummary'
-                    ],
-                    default_operator: 'and'
-                }
-            }
-        }
-
         const highlightSettings = {
             pre_tags: ['<span class="highlighted-search-result-token">'],
             post_tags: ['</span>']
@@ -63,28 +35,15 @@ export async function POST(request: Request) {
         }
     }
 
-    let filterClause = {}
+    const client = getSearchClient()
 
-    if (filters) {
-        filterClause = {
-            filter: Object.entries(filters).filter(
-                ([key, value]) => value.length > 0
-            ).map(
-                ([key, value]) => ({
-                    'terms': {[key]: value}
-                })
-            )
-        }
-    }
+    const index = getIndexName()
 
-    // TODO refactor this into a shared module used by both
-    // this and the generate script, if possible?
-    const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
-        `${process.env.SEARCH_INDEX_PREFIX}-` :
-        ''
+    const query = getBooleanQuery(q, filters);
 
-    const result = await client.search({
-        index: `${indexPrefix}grants`,
+    const results = await client.search({
+        index,
+
         _source: [
             'GrantID',
             'GrantTitleEng',
@@ -93,20 +52,17 @@ export async function POST(request: Request) {
             'GrantAmountConverted',
             'GrantStartYear',
         ],
+
         size: 20,
+
         body: {
-            query: {
-                bool: {
-                    ...mustClause,
-                    ...filterClause,
-                }
-            },
+            query,
             ...highlightClause,
         }
     })
 
-    return Response.json({
+    return NextResponse.json({
         query: q,
-        ...result.hits,
+        ...results.hits,
     })
 }
