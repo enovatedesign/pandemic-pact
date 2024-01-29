@@ -3,6 +3,7 @@ import Button from './Button'
 import {searchRequest, SearchRequestBody, queryOrFiltersAreSet} from '../helpers/search'
 import {fetchCsv, filterCsv, downloadCsv} from "../helpers/export"
 import {CloudDownloadIcon} from '@heroicons/react/outline'
+import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
 
 interface Props {
     searchRequestBody: SearchRequestBody
@@ -17,6 +18,10 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
+        if (exportingCsv) {
+            return
+        }
+
         setExportingCsv(true)
 
         Promise.all([
@@ -45,9 +50,10 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
         })
     }
 
+    const iconClasses = 'w-5 h-5'
+
     return (
         <Button
-            loading={exportingCsv}
             disabled={exportingCsv}
             onClick={exportCsv}
             colour="grey"
@@ -55,7 +61,12 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
             {...props}
         >
             <span>Download Data</span>
-            <CloudDownloadIcon className="w-5 h-5" />
+
+            {exportingCsv ? (
+                <LoadingSpinner className={`${iconClasses} animate-spin shrink-0`} />
+            ) : (
+                <CloudDownloadIcon className={iconClasses} />
+            )}
         </Button>
     )
 }

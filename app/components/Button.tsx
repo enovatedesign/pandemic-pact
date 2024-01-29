@@ -7,7 +7,6 @@ interface Props {
     children: any,
     href?: string,
     onClick?: (() => void),
-    loading?: boolean,
     disabled?: boolean,
     rel?: string,
     target?: string,
