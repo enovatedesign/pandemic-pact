@@ -24,6 +24,10 @@
         @apply pb-16
     }
 
+    .swiper-slide {
+        @apply !h-auto
+    }
+
     .swiper-button-prev {
         @apply text-secondary-lighter left-0 hidden md:flex absolute top-1/2 z-10 border-2 border-secondary hover:bg-secondary hover:text-white duration-200 rounded-full size-12 -mt-8 items-center justify-center;
     }
