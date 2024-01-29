@@ -197,7 +197,7 @@ function SearchMatches({
                             Abstract Excerpt
                         </p>
                         <RichText
-                            text={result.highlight.Abstract}
+                            text={result.highlight.Abstract[0]}
                             customClasses="max-w-none"
                         />
                     </div>
