@@ -10,7 +10,6 @@ export default function Explore() {
     const [searchResponse, setSearchResponse] = useState<SearchResponse>({
         hits: [],
         query: "",
-        estimatedTotalHits: 0,
     })
 
     return (

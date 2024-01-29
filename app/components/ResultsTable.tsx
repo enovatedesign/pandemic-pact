@@ -196,10 +196,12 @@ function SearchMatches({
                         <p className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
                             Abstract Excerpt
                         </p>
-                        <RichText
-                            text={result.highlight.Abstract?.at(0) ?? ''}
-                            customClasses="max-w-none"
-                        />
+                        {result.highlight.Abstract?.length > 1 && (
+                            <RichText
+                                text={'&#8230; ' + result.highlight.Abstract.join(' &#8230; ') + ' &#8230;'}
+                                customClasses="max-w-none"
+                            />
+                        )}
                     </div>
                     <div className="col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col">
                         <div className="bg-primary text-secondary rounded-xl p-4">
