@@ -47,3 +47,9 @@ export async function searchRequest(body: SearchRequestBody) {
         response => response.json()
     )
 }
+
+export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
+    return searchRequestBody.q !== '' || Object.values(searchRequestBody.filters).some(
+        filter => filter?.length > 0
+    )
+}

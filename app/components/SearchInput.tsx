@@ -59,17 +59,20 @@ export default function SearchInput({setSearchResponse}: Props) {
         router.replace(url.href)
     }, [searchQuery, filters, pathname, router])
 
+    const searchRequestBody = useMemo(() => ({
+        q: searchQuery,
+        filters,
+    }), [searchQuery, filters])
+
     useEffect(() => {
-        searchRequest({
-            q: searchQuery,
-            filters,
-        }).then((data) => {
-            setSearchResponse(data)
-            setTotalHits(data.total.value)
-        }).catch((error) => {
-            console.error('Error:', error)
-        })
-    }, [searchQuery, filters, setTotalHits, setSearchResponse])
+        searchRequest(searchRequestBody)
+            .then(data => {
+                setSearchResponse(data)
+                setTotalHits(data.total.value)
+            }).catch(error => {
+                console.error(error)
+            })
+    }, [searchRequestBody, setTotalHits, setSearchResponse])
 
     const [advancedSearchShow, setAdvancedSearchShow] = useState(false)
 
@@ -250,16 +253,12 @@ export default function SearchInput({setSearchResponse}: Props) {
                         </span>
                     </p>
 
-                    {/* TODO get this working again
                     <ExportToCsvButton
-                        meilisearchRequestBody={exportRequestBody(
-                            sharedRequestBody
-                        )}
+                        searchRequestBody={searchRequestBody}
                         filename="search-results-export"
                         title="Download Data"
                         size="xsmall"
                     />
-                    */}
                 </div>
             </div>
         </div>
