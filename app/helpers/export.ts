@@ -1,4 +1,3 @@
-
 export function fetchCsv() {
     return fetch(
         'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/labelled-grant-data-2023-11-23.csv'
