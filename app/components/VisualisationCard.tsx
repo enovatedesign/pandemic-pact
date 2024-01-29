@@ -1,6 +1,6 @@
 import {ElementType, ReactNode, useState, useContext} from "react"
 import {Tab} from '@headlessui/react'
-import {GlobalFilterContext, countActiveFilters} from "../helpers/filter"
+import {GlobalFilterContext, countActiveFilters} from "../helpers/filters"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
 import {useInView, animated} from '@react-spring/web';

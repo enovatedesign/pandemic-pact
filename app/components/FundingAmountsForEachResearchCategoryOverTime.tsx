@@ -3,10 +3,9 @@ import {BarChart as RechartBarChart, Bar, LineChart as RechartLineChart, Line, X
 import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
 import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
-import {filterGrants} from "../helpers/filter"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
 import {dollarValueFormatter, axisDollarFormatter} from "../helpers/value-formatters"
-import {GlobalFilterContext} from "../helpers/filter"
+import {filterGrants, GlobalFilterContext} from "../helpers/filters"
 import {groupBy} from 'lodash'
 import dataset from '../../data/dist/grants.json'
 import selectOptions from '../../data/dist/select-options.json'

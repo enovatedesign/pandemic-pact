@@ -11,8 +11,7 @@ import FundingAmountsForEachResearchCategoryOverTime from "../components/Funding
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
 import WordCloudsCard from "../components/WordClouds/Card"
 import JumpMenu from "../components/JumpMenu"
-import {Filters} from "../types/filters"
-import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters} from "../helpers/filter"
+import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters, Filters} from "../helpers/filters"
 import completeDataset from '../../data/dist/grants.json'
 import Card from "../components/ContentBuilder/Common/Card"
 import {throttle, debounce} from 'lodash'

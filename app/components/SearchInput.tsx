@@ -25,14 +25,7 @@ export default function SearchInput({setSearchResponse}: Props) {
     const [filters, setFilters] = useState<SearchFilters>(
         filtersFromUrl
             ? JSON.parse(filtersFromUrl)
-            : {
-                Disease: [],
-                Pathogen: [],
-                ResearchInstitutionCountry: [],
-                ResearchInstitutionRegion: [],
-                FunderCountry: [],
-                FunderRegion: [],
-            }
+            : {}
     )
 
     const [totalHits, setTotalHits] = useState<number>(0)
@@ -137,7 +130,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         <MultiSelect
                                             options={selectOptions.Disease}
-                                            selectedOptions={filters.Disease}
+                                            selectedOptions={filters.Disease ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>
@@ -151,7 +144,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
                                         <MultiSelect
                                             options={selectOptions.Pathogen}
-                                            selectedOptions={filters.Pathogen}
+                                            selectedOptions={filters.Pathogen ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>
@@ -167,9 +160,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                             options={
                                                 selectOptions.ResearchInstitutionCountry
                                             }
-                                            selectedOptions={
-                                                filters.ResearchInstitutionCountry
-                                            }
+                                            selectedOptions={filters.ResearchInstitutionCountry ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>
@@ -183,9 +174,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                         />
                                         <MultiSelect
                                             options={selectOptions.ResearchInstitutionRegion}
-                                            selectedOptions={
-                                                filters.ResearchInstitutionRegion
-                                            }
+                                            selectedOptions={filters.ResearchInstitutionRegion ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>
@@ -201,9 +190,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                             options={
                                                 selectOptions.FunderCountry
                                             }
-                                            selectedOptions={
-                                                filters.FunderCountry
-                                            }
+                                            selectedOptions={filters.FunderCountry ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>
@@ -217,9 +204,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                         />
                                         <MultiSelect
                                             options={selectOptions.FunderRegion}
-                                            selectedOptions={
-                                                filters.FunderRegion
-                                            }
+                                            selectedOptions={filters.FunderRegion ?? []}
                                             setSelectedOptions={(
                                                 selectedOptions
                                             ) =>

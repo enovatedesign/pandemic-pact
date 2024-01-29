@@ -4,7 +4,7 @@ import DoubleLabelSwitch from "./DoubleLabelSwitch"
 import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
 import {groupBy} from "lodash"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {GlobalFilterContext} from "../helpers/filter";
+import {GlobalFilterContext} from "../helpers/filters";
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {brandColours} from "../helpers/colours"
 import selectOptions from '../../data/dist/select-options.json'

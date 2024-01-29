@@ -1,6 +1,6 @@
 import {useState, useContext} from 'react'
 import {DownloadIcon} from '@heroicons/react/solid'
-import {countActiveFilters, GlobalFilterContext} from "../../helpers/filter"
+import {countActiveFilters, GlobalFilterContext} from "../../helpers/filters"
 import {fetchCsv, filterCsv, downloadCsv} from "../../helpers/export"
 import Button from "./Button"
 

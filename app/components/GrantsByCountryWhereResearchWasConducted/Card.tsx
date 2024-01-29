@@ -1,7 +1,7 @@
 import {useContext} from "react"
 import VisualisationCard from "../VisualisationCard"
 import {ChartBarIcon, GlobeIcon} from "@heroicons/react/solid"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import Map from "./Map"
 import BarChart from "./BarChart"
 

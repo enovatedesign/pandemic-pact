@@ -3,7 +3,7 @@ import {BeakerIcon, ExclamationCircleIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import DiseaseWordCloud from "./Disease"
 import PathogenWordCloud from "./Pathogen"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 
 export default function WordCloudsCard() {
     const {grants} = useContext(GlobalFilterContext)

@@ -3,7 +3,7 @@ import {ChartBarIcon, ClockIcon} from "@heroicons/react/solid"
 import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
 import TemporalChart from "./TemporalChart"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 
 export default function GrantsByDisease() {
     const {grants} = useContext(GlobalFilterContext)

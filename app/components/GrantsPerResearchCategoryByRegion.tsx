@@ -4,8 +4,7 @@ import VisualisationCard from "./VisualisationCard"
 import MultiSelect from "./MultiSelect"
 import selectOptions from '../../data/dist/select-options.json'
 import dataset from '../../data/dist/grants.json'
-import {filterGrants} from "../helpers/filter"
-import {GlobalFilterContext} from "../helpers/filter";
+import {filterGrants, GlobalFilterContext} from "../helpers/filters";
 import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
 import {baseTooltipProps} from "../helpers/tooltip"
 
