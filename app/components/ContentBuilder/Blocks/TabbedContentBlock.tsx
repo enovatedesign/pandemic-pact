@@ -44,34 +44,38 @@ const TabbedContentBlock = ( {block}: Props ) => {
             <animated.div ref={ref} style={springs}>
 
                 {tabs && (
-                    <div className='w-full'>
-                        <ul role="tablist"
-                            className="overflow-x-hidden flex justify-center items-stretch space-x-1 lg:space-x-2"
-                        >
-                            {tabs.map((tab, index: number) => {
-                                
-                                const handleClick = () => {
-                                    setActiveIndex(index)
-                                }
+                    <div className='w-full breakout'>
+                        <div className="overflow-x-auto md:overflow-visible">
+                            <div className="inline-block min-w-full px-6">
+                                <ul role="tablist"
+                                    className="overflow-x-hidden flex justify-center items-stretch space-x-1 lg:space-x-2"
+                                >
+                                    {tabs.map((tab, index: number) => {
+                                        
+                                        const handleClick = () => {
+                                            setActiveIndex(index)
+                                        }
 
-                                const conditionalClasses = [
-                                    activeIndex === index ? 'bg-white' : 'bg-gray-200'
-                                ].join(' ');
+                                        const conditionalClasses = [
+                                            activeIndex === index ? 'bg-white' : 'bg-gray-200'
+                                        ].join(' ');
 
-                                return(
-                                    <li key={index}>
-                                        <button
-                                            type="button"
-                                            className={`${conditionalClasses} whitespace-nowrap md:whitespace-normal inline-flex px-4 py-2 border-t border-gray-300 border-l border-r rounded-t-md`}
-                                            role="tab"
-                                            onClick={handleClick}
-                                        >
-                                            { tab.heading }
-                                        </button>
-                                    </li>
-                                )
-                            })}
-                        </ul>
+                                        return(
+                                            <li key={index}>
+                                                <button
+                                                    type="button"
+                                                    className={`${conditionalClasses} whitespace-nowrap md:whitespace-normal inline-flex px-4 py-2 border-t border-gray-300 border-l border-r rounded-t-md`}
+                                                    role="tab"
+                                                    onClick={handleClick}
+                                                >
+                                                    { tab.heading }
+                                                </button>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        </div>
                         
                         <div className="flex justify-center">
                             <div className="bg-white md:rounded-md shadow-lg w-full">

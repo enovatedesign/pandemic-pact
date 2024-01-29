@@ -16,9 +16,10 @@ type Props = {
         height: number,
     },
     hover?: boolean,
+    customImageClasses?: string,
 }
 
-const Card = ({entry, tags = false, children, image}: Props) => {
+const Card = ({entry, tags = false, children, image, customImageClasses = "w-full"}: Props) => {
     
     const {
         index,
@@ -82,7 +83,7 @@ const Card = ({entry, tags = false, children, image}: Props) => {
                                 alt={cardImage.altText}
                                 width={cardImage.width}
                                 height={cardImage.height}
-                                className="w-full"
+                                className={customImageClasses}
                                 loading="lazy"
                             />    
                         ) : (

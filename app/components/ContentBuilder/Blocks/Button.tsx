@@ -1,3 +1,4 @@
+import BlockWrapper from '../BlockWrapper';
 import Button from "../../Button";
 
 interface Props {
@@ -15,14 +16,16 @@ export default function ButtonBlock({ block }: Props) {
 
 	if (button && colour && position) {
 		return (
-			<div className={"text-" + position}>
-				<Button
-					colour={colour}
-					href={"/" + button.element.uri}
-				>
-					{button.text}
-				</Button>
-			</div>
+			<BlockWrapper>
+				<div className={"text-" + position}>
+					<Button
+						colour={colour}
+						href={"/" + button.element.uri}
+					>
+						{button.text}
+					</Button>
+				</div>
+			</BlockWrapper>
 		);
 	} else {
 		return null;
