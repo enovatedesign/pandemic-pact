@@ -48,6 +48,15 @@ export async function searchRequest(body: SearchRequestBody) {
     )
 }
 
+export async function exportSearchRequest(body: SearchRequestBody) {
+    return fetch('/api/export-search', {
+        method: 'POST',
+        body: JSON.stringify(body),
+    }).then(
+        response => response.json()
+    )
+}
+
 export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
     return searchRequestBody.q !== '' || Object.values(searchRequestBody.filters).some(
         filter => filter?.length > 0

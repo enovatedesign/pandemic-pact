@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import Button from './Button'
-import {searchRequest, SearchRequestBody, queryOrFiltersAreSet} from '../helpers/search'
+import {exportSearchRequest, SearchRequestBody, queryOrFiltersAreSet} from '../helpers/search'
 import {fetchCsv, filterCsv, downloadCsv} from "../helpers/export"
 import {CloudDownloadIcon} from '@heroicons/react/outline'
 import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
@@ -27,7 +27,7 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
         Promise.all([
             fetchCsv(),
             queryOrFiltersAreSet(searchRequestBody) ?
-                searchRequest(searchRequestBody) :
+                exportSearchRequest(searchRequestBody) :
                 Promise.resolve(null),
         ]).then(responses => {
             const [csv, searchResponse] = responses
@@ -37,7 +37,7 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
             if (searchResponse !== null) {
                 filteredCsv = filterCsv(
                     filteredCsv,
-                    searchResponse.hits.map((doc: {_id: string}) => doc._id),
+                    searchResponse.grantIDs,
                 )
             }
 
