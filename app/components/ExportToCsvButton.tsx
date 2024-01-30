@@ -27,7 +27,7 @@ export default function ExportToCsvButton({searchRequestBody, filename, title, .
         Promise.all([
             fetchCsv(),
             queryOrFiltersAreSet(searchRequestBody) ?
-                searchRequest('grants-export', searchRequestBody) :
+                searchRequest('export', searchRequestBody) :
                 Promise.resolve(null),
         ]).then(responses => {
             const [csv, searchResponse] = responses

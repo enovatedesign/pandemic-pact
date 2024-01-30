@@ -6,7 +6,7 @@ import {
     getSearchClient,
     searchUnavailableResponse,
     validateRequest
-} from '../../helpers/search'
+} from '../../../helpers/search'
 
 export async function POST(request: NextRequest) {
     const client = getSearchClient()

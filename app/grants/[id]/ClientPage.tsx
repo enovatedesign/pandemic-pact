@@ -31,7 +31,7 @@ export default function GrantLandingPage({grant}: Props) {
             return
         }
 
-        searchRequest('grants-show', {
+        searchRequest('show', {
             q: searchQueryFromUrl,
             filters: {
                 GrantID: [grant.GrantID],

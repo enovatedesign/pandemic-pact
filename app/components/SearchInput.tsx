@@ -58,7 +58,7 @@ export default function SearchInput({setSearchResponse}: Props) {
     }), [searchQuery, filters])
 
     useEffect(() => {
-        searchRequest('grants-index', searchRequestBody)
+        searchRequest('index', searchRequestBody)
             .then(data => {
                 setSearchResponse(data)
                 setTotalHits(data.total.value)

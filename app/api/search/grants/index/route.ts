@@ -6,7 +6,7 @@ import {
     getSearchClient,
     searchUnavailableResponse,
     validateRequest
-} from '../../helpers/search'
+} from '../../../helpers/search'
 
 export async function POST(request: NextRequest) {
     const client = getSearchClient()
@@ -26,8 +26,7 @@ export async function POST(request: NextRequest) {
     let highlightClause = {}
 
     if (q) {
-        const highlightOptions = {
-            number_of_fragments: 0,
+        const highlightTags = {
             pre_tags: ['<span class="highlighted-search-result-token">'],
             post_tags: ['</span>'],
         }
@@ -36,9 +35,14 @@ export async function POST(request: NextRequest) {
             highlight: {
                 encoder: 'html',
                 fields: {
-                    GrantTitleEng: highlightOptions,
-                    Abstract: highlightOptions,
-                    LaySummary: highlightOptions,
+                    GrantTitleEng: {
+                        number_of_fragments: 0,
+                        ...highlightTags
+                    },
+                    Abstract: {
+                        ...highlightTags
+                    },
+                    LaySummary: highlightTags,
                 }
             }
         }
@@ -55,9 +59,11 @@ export async function POST(request: NextRequest) {
             'GrantTitleEng',
             'Abstract',
             'LaySummary',
+            'GrantAmountConverted',
+            'GrantStartYear',
         ],
 
-        size: 1,
+        size: 20,
 
         body: {
             query,
