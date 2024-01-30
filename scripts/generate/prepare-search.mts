@@ -86,6 +86,7 @@ export default async function () {
     )
 
     const response = await client.helpers.bulk({
+        concurrency: 1,
         datasource: docs,
         onDocument: doc => ([
             {
