@@ -22,8 +22,8 @@ stop_review:
   script:
     - |
         curl -X DELETE \
-             -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}" \
-             "${ELASTIC_HOST}/${CI_COMMIT_REF_NAME}-grants"
+             -u "${SEARCH_USERNAME}:${SEARCH_PASSWORD}" \
+             "${SEARCH_HOST}/${CI_COMMIT_REF_NAME}-grants"
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
