@@ -10,12 +10,6 @@ export function getIndexName() {
     return `${prefix}grants`
 }
 
-export function searchIsNotEnabled() {
-    return !process.env.ELASTIC_HOST
-        || !process.env.ELASTIC_USERNAME
-        || !process.env.ELASTIC_PASSWORD
-}
-
 export function searchUnavailableResponse() {
     return NextResponse.json({
         error: 'Service Unavailable',
@@ -75,6 +69,14 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
 }
 
 export function getSearchClient() {
+    if (
+        !process.env.ELASTIC_HOST ||
+        !process.env.ELASTIC_USERNAME ||
+        !process.env.ELASTIC_PASSWORD
+    ) {
+        return null
+    }
+
     const tlsOptions = process.env.ELASTIC_HOST?.includes('://localhost') ? {
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),

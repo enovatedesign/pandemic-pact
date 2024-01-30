@@ -4,13 +4,14 @@ import {
     getIndexName,
     getBooleanQuery,
     getSearchClient,
-    searchIsNotEnabled,
     searchUnavailableResponse,
     validateRequest
 } from '../../helpers/search'
 
 export async function POST(request: NextRequest) {
-    if (searchIsNotEnabled()) {
+    const client = getSearchClient()
+
+    if (!client) {
         return searchUnavailableResponse()
     }
 
@@ -36,8 +37,6 @@ export async function POST(request: NextRequest) {
             }
         }
     }
-
-    const client = getSearchClient()
 
     const index = getIndexName()
 
