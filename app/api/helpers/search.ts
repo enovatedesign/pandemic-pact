@@ -20,11 +20,65 @@ export function searchUnavailableResponse() {
 }
 
 export async function validateRequest(request: Request) {
-    // TODO properly validate and parse input - consider using Zod
-
     const parameters = await request.json()
 
-    return parameters
+    const errors = []
+
+    if (typeof parameters.q === 'undefined') {
+        errors.push({
+            field: 'q',
+            message: 'The q parameter is required',
+        });
+    }
+
+    if (typeof parameters.q !== 'string') {
+        errors.push({
+            field: 'q',
+            message: 'The q parameter must be a string',
+        });
+    }
+
+    if (typeof parameters.filters === 'undefined') {
+        errors.push({
+            field: 'filters',
+            message: 'The filters parameter is required',
+        });
+    }
+
+    if (typeof parameters.filters !== 'object') {
+        errors.push({
+            field: 'filters',
+            message: 'The filters parameter must be an object',
+        });
+    }
+
+    Object.entries(parameters.filters).forEach(
+        ([key, value]) => {
+            const isStringArray = Array.isArray(value) && value.every(
+                (item) => typeof item === 'string'
+            )
+
+            if (!isStringArray) {
+                errors.push({
+                    field: `filters.${key}`,
+                    message: `The filters.${key} parameter must be an array of strings`,
+                });
+            }
+        }
+    )
+
+    if (errors.length > 0) {
+        return {
+            errorResponse: NextResponse.json({
+                errors,
+            }, {
+                status: 400,
+                statusText: 'Bad Request',
+            })
+        }
+    }
+
+    return {values: parameters}
 }
 
 export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {

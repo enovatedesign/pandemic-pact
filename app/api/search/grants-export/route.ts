@@ -15,7 +15,13 @@ export async function POST(request: NextRequest) {
         return searchUnavailableResponse()
     }
 
-    const {q, filters} = await validateRequest(request)
+    const {errorResponse, values} = await validateRequest(request)
+
+    if (errorResponse) {
+        return errorResponse
+    }
+
+    const {q, filters} = values
 
     const index = getIndexName()
 
