@@ -2,7 +2,7 @@ import {NextRequest} from 'next/server'
 import { draftMode, cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
-    const token = req.nextUrl.searchParams.get("token");
+    const token = req.nextUrl.searchParams.get("x-craft-live-preview");
     const uri = req.nextUrl.searchParams.get("uri");
 
     console.log(token, uri);
