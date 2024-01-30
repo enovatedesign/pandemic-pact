@@ -332,8 +332,7 @@ export default function StaticPage({grant}: Props) {
                                                                     {subHeading.text}
                                                                 </p>
                                                             )}
-                                                            <InfoModal customButton={null}
-                                                            >
+                                                            <InfoModal>
                                                                 <p>
                                                                     {subHeading.infoModalText}
                                                                 </p>
