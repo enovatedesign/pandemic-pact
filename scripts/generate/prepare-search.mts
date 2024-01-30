@@ -1,38 +1,30 @@
 // TODO we also need to delete documents that are no longer in the data
 
-import {Client} from '@elastic/elasticsearch'
+import {Client} from '@opensearch-project/opensearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
     // Don't try to add the search index if we don't have access to all the
-    // necessary ElasticSearch details
+    // necessary OpenSearch details
     if (
-        !process.env.ELASTIC_HOST ||
-        !process.env.ELASTIC_USERNAME ||
-        !process.env.ELASTIC_PASSWORD
+        !process.env.SEARCH_HOST ||
+        !process.env.SEARCH_USERNAME ||
+        !process.env.SEARCH_PASSWORD
     ) {
         return
     }
 
-    const tlsOptions = process.env.ELASTIC_HOST.includes('://localhost') ? {
-        tls: {
-            ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
-            rejectUnauthorized: false,
-        }
-    } : {}
-
     const client = new Client({
-        node: process.env.ELASTIC_HOST,
+        node: process.env.SEARCH_HOST,
         auth: {
-            username: process.env.ELASTIC_USERNAME,
-            password: process.env.ELASTIC_PASSWORD,
+            username: process.env.SEARCH_USERNAME,
+            password: process.env.SEARCH_PASSWORD,
         },
-        ...tlsOptions,
     })
 
-    title('Indexing data in ElasticSearch')
+    title('Indexing data in OpenSearch')
 
     const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
         `${process.env.SEARCH_INDEX_PREFIX}-` :
@@ -49,20 +41,22 @@ export default async function () {
 
         await client.indices.create({
             index: indexName,
-            mappings: {
-                properties: {
-                    GrantID: {type: 'keyword'},
-                    GrantTitleEng: {type: 'text'},
-                    Abstract: {type: 'text'},
-                    LaySummary: {type: 'text'},
-                    GrantAmountConverted: {type: 'long'},
-                    GrantStartYear: {type: 'integer'},
-                    Disease: {type: 'keyword'},
-                    Pathogen: {type: 'keyword'},
-                    ResearchInstitutionCountry: {type: 'keyword'},
-                    ResearchInstitutionRegion: {type: 'keyword'},
-                    FunderCountry: {type: 'keyword'},
-                    FunderRegion: {type: 'keyword'},
+            body: {
+                mappings: {
+                    properties: {
+                        GrantID: {type: 'keyword'},
+                        GrantTitleEng: {type: 'text'},
+                        Abstract: {type: 'text'},
+                        LaySummary: {type: 'text'},
+                        GrantAmountConverted: {type: 'long'},
+                        GrantStartYear: {type: 'integer'},
+                        Disease: {type: 'keyword'},
+                        Pathogen: {type: 'keyword'},
+                        ResearchInstitutionCountry: {type: 'keyword'},
+                        ResearchInstitutionRegion: {type: 'keyword'},
+                        FunderCountry: {type: 'keyword'},
+                        FunderRegion: {type: 'keyword'},
+                    }
                 }
             }
         }).catch(e => {

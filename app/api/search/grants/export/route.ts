@@ -31,16 +31,16 @@ export async function POST(request: NextRequest) {
 
     const size = 1000
 
-    let results = null
+    let hits = []
 
     let searchAfterClause = {}
 
     do {
-        results = await client.search({
+        const results = await client.search({
             index,
 
-            // Don't return any document because we only need the _id from elasticsearch
-            _source: false,
+            // Don't return any document because we only need the _id from OpenSearch
+            _source: [],
 
             size,
 
@@ -48,23 +48,25 @@ export async function POST(request: NextRequest) {
                 query,
 
                 sort: [
-                    {GrantID: 'asc'}
+                    {
+                        "GrantID.keyword": {order: 'asc'}
+                    }
                 ],
 
                 ...searchAfterClause,
             }
         })
 
-        for (const hit of results.hits.hits) {
+        hits = results.body.hits.hits
+
+        for (const hit of hits) {
             grantIDs.push(hit._id)
         }
 
         searchAfterClause = {
-            search_after: results.hits.hits[
-                results.hits.hits.length - 1
-            ].sort,
+            search_after: hits[hits.length - 1].sort,
         }
-    } while (results.hits.hits.length === size);
+    } while (hits.length === size);
 
     console.log(`Found ${grantIDs.length} grants`);
 

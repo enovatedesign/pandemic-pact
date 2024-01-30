@@ -1,6 +1,5 @@
 import {NextResponse} from 'next/server'
-import fs from 'fs'
-import {Client} from '@elastic/elasticsearch'
+import {Client} from '@opensearch-project/opensearch'
 
 export function getIndexName() {
     const prefix = process.env.SEARCH_INDEX_PREFIX ?
@@ -124,26 +123,18 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
 
 export function getSearchClient() {
     if (
-        !process.env.ELASTIC_HOST ||
-        !process.env.ELASTIC_USERNAME ||
-        !process.env.ELASTIC_PASSWORD
+        !process.env.SEARCH_HOST ||
+        !process.env.SEARCH_USERNAME ||
+        !process.env.SEARCH_PASSWORD
     ) {
         return null
     }
 
-    const tlsOptions = process.env.ELASTIC_HOST?.includes('://localhost') ? {
-        tls: {
-            ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
-            rejectUnauthorized: false,
-        }
-    } : {}
-
     return new Client({
-        node: process.env.ELASTIC_HOST,
+        node: process.env.SEARCH_HOST,
         auth: {
-            username: process.env.ELASTIC_USERNAME as string,
-            password: process.env.ELASTIC_PASSWORD as string,
+            username: process.env.SEARCH_USERNAME as string,
+            password: process.env.SEARCH_PASSWORD as string,
         },
-        ...tlsOptions,
     })
 }

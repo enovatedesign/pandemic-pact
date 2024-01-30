@@ -73,6 +73,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
         query: q,
-        ...results.hits,
+        ...results.body.hits,
     })
 }
