@@ -1,5 +1,5 @@
 import {NextRequest} from 'next/server'
-import { draftMode, cookies } from 'next/headers'
+import { draftMode } from 'next/headers'
 
 export async function GET(req: NextRequest) {
     const token = req.nextUrl.searchParams.get("x-craft-live-preview");
