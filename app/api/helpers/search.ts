@@ -13,8 +13,8 @@ export function getSearchClient() {
     return new Client({
         node: process.env.SEARCH_HOST,
         auth: {
-            username: process.env.SEARCH_USERNAME as string,
-            password: process.env.SEARCH_PASSWORD as string,
+            username: process.env.SEARCH_USERNAME,
+            password: process.env.SEARCH_PASSWORD,
         },
     })
 }
