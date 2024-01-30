@@ -64,12 +64,17 @@ const Block = (props: any) => {
 const Blocks = ({blocks}: any) => {
 
 	// console.log('Content Builder Data: ', blocks)
+	const totalBlocks = blocks.length;
 
 	return (
 		<>
-			{blocks.map((block: any) => (
-				<Block block={block} key={block.id} />
-			))}
+			{blocks.map((block: any, index: number) => {
+
+				block.firstBlock = (index === 0)
+				block.lastBlock = (index === totalBlocks - 1)
+
+				return <Block block={block} key={block.id} />
+			})}
 		</>
 	);
 };

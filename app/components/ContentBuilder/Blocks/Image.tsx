@@ -64,7 +64,7 @@ export default function ImageBlock({ block }: Props) {
             <BlockWrapper>
                 <animated.div ref={ref} style={springs}>
                     <figure
-                        className={`${imageWidthLookup[width as keyof typeof imageWidthLookup].classes} mx-auto`}
+                        className={`${imageWidthLookup[width as keyof typeof imageWidthLookup].classes} px-0 mx-auto`}
                     >
                         <div className="breakout">
                             <Image

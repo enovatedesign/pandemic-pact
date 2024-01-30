@@ -19,8 +19,8 @@ export default function BlockWrapper({ children, options = {} }) {
     ]
 
     const spacingValues = {
-        mobile: reducedSpacing ? '6' : '6',
-        desktop: reducedSpacing ? '6' : '12'
+        mobile: reducedSpacing ? '12' : '12',
+        desktop: reducedSpacing ? '24' : '24'
     }
 
     const blockClasses = [
@@ -29,8 +29,8 @@ export default function BlockWrapper({ children, options = {} }) {
         padded && !fill ? `pb-${spacingValues.mobile} lg:pb-${spacingValues.desktop}` : '',
         fill ? bgColourClass : '',
         (margin || fill) && !lastBlock ? `mb-${spacingValues.mobile} lg:mb-${spacingValues.desktop}` : '',
-        // firstBlock && !fill ? `mt-${spacingValues.mobile} lg:mt-${spacingValues.desktop}` : '',
-        !fill ? `mt-${spacingValues.mobile} lg:mt-${spacingValues.desktop}` : '',
+        firstBlock && !fill ? `mt-${spacingValues.mobile} lg:mt-${spacingValues.desktop}` : '',
+        // !fill ? `mt-${spacingValues.mobile} lg:mt-${spacingValues.desktop}` : '',
         clipOverflowX ? 'overflow-x-clip' : ''
     ].join(' ');
     return (

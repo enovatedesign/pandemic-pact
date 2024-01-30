@@ -309,6 +309,13 @@ export const contentBuilderQuery = `
           ... on bodyContent_embeddedMedia_BlockType {
             id
             typeHandle
+            width
+            media {
+              embeddedAsset {
+                code
+                type
+              }
+            }
           }
           ... on bodyContent_funderLogoAndStatement_BlockType {
             id

@@ -30,36 +30,47 @@ const ContentSliderBlock = ({block}: Props ) => {
     return (
         <BlockWrapper
         >
-            {slides && (
-                <Swiper
-                    modules={[Navigation, Pagination]}
-                    spaceBetween={30}
-                    slidesPerView={4}
-                    navigation
-                >
-                    {slides.map((slide, index: number) => {
-                        
-                        const button = slide.button ?? null
+            <div className="relative lg:px-20">
+                {slides && (
+                    <Swiper
+                        modules={[Navigation, Pagination]}
+                        spaceBetween={30}
+                        breakpoints={{
+                            640: {
+                                slidesPerView: 2,
+                            },
+                            1024: {
+                                slidesPerView: 3,
+                            },
+                        }}
+                        navigation
+                        pagination
+                        id="content-slider-swiper"
+                    >
+                        {slides.map((slide, index: number) => {
+                            
+                            const button = slide.button ?? null
 
-                        return (
-                            <>
-                                <SwiperSlide key={index}>
-                                    <Card entry={slide} image={slide.image[0]} hover={false}>
-                                        {button?.url && (
-                                            <Button
-                                                size="small"
-                                                href={button.url}
-                                            >
-                                                Read more
-                                            </Button>
-                                        )}
-                                    </Card>
-                                </SwiperSlide>
-                            </>
-                        )
-                    })}
-                </Swiper>
-            )}
+                            return (
+                                <>
+                                    <SwiperSlide key={index}>
+                                        <Card entry={slide} image={slide.image[0]} hover={false}>
+                                            {button?.url && (
+                                                <Button
+                                                    size="small"
+                                                    href={button.url}
+                                                >
+                                                    Read more
+                                                </Button>
+                                            )}
+                                        </Card>
+                                    </SwiperSlide>
+                                </>
+                            )
+                        })}
+                    </Swiper>
+                )}
+            </div>
         </BlockWrapper>
     )
 }

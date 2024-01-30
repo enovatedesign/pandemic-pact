@@ -33,7 +33,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
     return (
         <BlockWrapper>
 
-                <div className="flex flex-col items-center space-y-4 pb-8">
+                <div className="flex flex-col items-center pb-8 space-y-4">
                     {heading && (
                         <div className={`${defaultProseClasses.join(" ")}`}>
                             <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
@@ -58,16 +58,14 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
 
                         return (
-                            <>
-                                <div key={index}>
-                                    <Card
-                                        entry={cardData} 
-                                        tags={false} 
-                                        hover={false} 
-                                    >
-                                    </Card>  
-                                </div>
-                            </>
+                            <div key={index}>
+                                <Card
+                                    entry={cardData} 
+                                    tags={false} 
+                                    hover={false} 
+                                >
+                                </Card>  
+                            </div>
                         )
                     })}
 
