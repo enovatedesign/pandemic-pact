@@ -125,7 +125,7 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
                 ([_, value]) => value.length > 0
             ).map(
                 ([key, value]) => ({
-                    'terms': {[key]: value}
+                    'terms': {[`${key}.keyword`]: value}
                 })
             )
         }
