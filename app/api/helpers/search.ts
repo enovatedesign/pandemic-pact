@@ -11,7 +11,9 @@ export function getIndexName() {
 }
 
 export function searchIsNotEnabled() {
-    return typeof process.env.ELASTIC_PASSWORD === 'undefined'
+    return !process.env.ELASTIC_HOST
+        || !process.env.ELASTIC_USERNAME
+        || !process.env.ELASTIC_PASSWORD
 }
 
 export function searchUnavailableResponse() {
@@ -73,16 +75,19 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
 }
 
 export function getSearchClient() {
-    return new Client({
-        node: 'https://localhost:9200',
-        auth: {
-            username: 'elastic',
-            password: process.env.ELASTIC_PASSWORD as string,
-        },
-        // TODO only config tls in dev
+    const tlsOptions = process.env.ELASTIC_HOST?.includes('://localhost') ? {
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
+        }
+    } : {}
+
+    return new Client({
+        node: process.env.ELASTIC_HOST,
+        auth: {
+            username: process.env.ELASTIC_USERNAME as string,
+            password: process.env.ELASTIC_PASSWORD as string,
         },
+        ...tlsOptions,
     })
 }

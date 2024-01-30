@@ -6,22 +6,30 @@ import _ from 'lodash'
 import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
-    // Don't try to add the search index if ElasticSearch is not configured
-    if (typeof process.env.ELASTIC_PASSWORD === 'undefined') {
+    // Don't try to add the search index if we don't have access to all the
+    // necessary ElasticSearch details
+    if (
+        !process.env.ELASTIC_HOST ||
+        !process.env.ELASTIC_USERNAME ||
+        !process.env.ELASTIC_PASSWORD
+    ) {
         return
     }
 
-    const client = new Client({
-        node: 'https://localhost:9200',
-        auth: {
-            username: 'elastic',
-            password: process.env.ELASTIC_PASSWORD,
-        },
-        // TODO Only configure TLS in dev
+    const tlsOptions = process.env.ELASTIC_HOST.includes('://localhost') ? {
         tls: {
             ca: fs.readFileSync('./elasticsearch_http_ca.crt'),
             rejectUnauthorized: false,
+        }
+    } : {}
+
+    const client = new Client({
+        node: process.env.ELASTIC_HOST,
+        auth: {
+            username: process.env.ELASTIC_USERNAME,
+            password: process.env.ELASTIC_PASSWORD,
         },
+        ...tlsOptions,
     })
 
     title('Indexing data in ElasticSearch')
