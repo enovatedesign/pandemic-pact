@@ -1,6 +1,24 @@
 import {NextResponse} from 'next/server'
 import {Client} from '@opensearch-project/opensearch'
 
+export function getSearchClient() {
+    if (
+        !process.env.SEARCH_HOST ||
+        !process.env.SEARCH_USERNAME ||
+        !process.env.SEARCH_PASSWORD
+    ) {
+        return null
+    }
+
+    return new Client({
+        node: process.env.SEARCH_HOST,
+        auth: {
+            username: process.env.SEARCH_USERNAME as string,
+            password: process.env.SEARCH_PASSWORD as string,
+        },
+    })
+}
+
 export function getIndexName() {
     const prefix = process.env.SEARCH_INDEX_PREFIX ?
         `${process.env.SEARCH_INDEX_PREFIX}-` :
@@ -119,22 +137,4 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
             ...filterClause,
         }
     }
-}
-
-export function getSearchClient() {
-    if (
-        !process.env.SEARCH_HOST ||
-        !process.env.SEARCH_USERNAME ||
-        !process.env.SEARCH_PASSWORD
-    ) {
-        return null
-    }
-
-    return new Client({
-        node: process.env.SEARCH_HOST,
-        auth: {
-            username: process.env.SEARCH_USERNAME as string,
-            password: process.env.SEARCH_PASSWORD as string,
-        },
-    })
 }
