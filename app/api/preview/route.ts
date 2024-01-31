@@ -3,10 +3,11 @@ import {draftMode} from 'next/headers'
 import GraphQL from '../../lib/GraphQl'
 
 export async function GET(req: NextRequest) {
+    const craftLivePreview = req.nextUrl.searchParams.get("x-craft-live-preview")
     const token = req.nextUrl.searchParams.get("token")
     const slug = req.nextUrl.searchParams.get("uri")
 
-    if (!token || !slug) {
+    if (!craftLivePreview || !token || !slug) {
         return unauthorized()
     }
 
