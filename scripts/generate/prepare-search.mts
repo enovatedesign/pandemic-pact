@@ -21,6 +21,7 @@ export default async function () {
 
     const client = new Client({
         node: process.env.SEARCH_HOST,
+        sniffOnStart: true,
         auth: {
             username: process.env.SEARCH_USERNAME,
             password: process.env.SEARCH_PASSWORD,
