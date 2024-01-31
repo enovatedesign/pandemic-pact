@@ -24,6 +24,12 @@ export default async function () {
         },
     })
 
+    const pingResponse = await client.ping()
+
+    console.log(pingResponse);
+
+    process.exit(1);
+
     title('Indexing data in OpenSearch')
 
     const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?

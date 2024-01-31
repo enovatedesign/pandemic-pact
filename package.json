@@ -4,11 +4,10 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "prebuild": "npm run generate",
-        "build": "next build",
+        "build": "node --loader ts-node/esm test.mts",
         "start": "next start",
         "lint": "next lint",
-        "generate": "node --loader ts-node/esm scripts/generate/index.mts"
+        "generate": "node --loader ts-node/esm test.mts"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.485.0",
