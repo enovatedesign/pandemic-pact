@@ -10,7 +10,6 @@
         "generate": "node test.mjs"
     },
     "dependencies": {
-        "@aws-sdk/client-ses": "^3.485.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^1.0.6",
@@ -44,7 +43,6 @@
         "react-animate-height": "^3.2.3",
         "react-d3-cloud": "^1.0.6",
         "react-dom": "18.2.0",
-        "react-google-recaptcha-v3": "^1.10.1",
         "react-simple-maps": "^3.0.0",
         "react-tooltip": "^5.25.1",
         "seedrandom": "^3.0.5",
