@@ -39,7 +39,7 @@ export interface SearchRequestBody {
     filters: SearchFilters
 }
 
-export async function searchRequest(endpoint: string = 'index', body: SearchRequestBody) {
+export async function searchRequest(endpoint: string = 'list', body: SearchRequestBody) {
     return fetch(`/api/search/grants/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify(body),

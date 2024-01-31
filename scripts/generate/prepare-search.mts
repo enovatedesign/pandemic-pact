@@ -100,7 +100,7 @@ export default async function () {
             }
         ]),
         onDrop: (doc: any) => {
-            error(`Error indexing grant: ${JSON.stringify(doc.GrantID, null, 2)}`)
+            error(`Error indexing grant: ${JSON.stringify(doc, null, 2)}`)
         }
     }).catch(e => {
         error(`Error indexing grants: ${e}`)

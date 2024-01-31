@@ -37,7 +37,13 @@ export function searchUnavailableResponse() {
 }
 
 export async function validateRequest(request: Request) {
-    const parameters = await request.json()
+    let parameters;
+
+    try {
+        parameters = await request.json()
+    } catch (error) {
+        parameters = {}
+    }
 
     const errors = []
 
@@ -67,22 +73,22 @@ export async function validateRequest(request: Request) {
             field: 'filters',
             message: 'The filters parameter must be an object',
         });
-    }
+    } else {
+        Object.entries(parameters.filters).forEach(
+            ([key, value]) => {
+                const isStringArray = Array.isArray(value) && value.every(
+                    (item) => typeof item === 'string'
+                )
 
-    Object.entries(parameters.filters).forEach(
-        ([key, value]) => {
-            const isStringArray = Array.isArray(value) && value.every(
-                (item) => typeof item === 'string'
-            )
-
-            if (!isStringArray) {
-                errors.push({
-                    field: `filters.${key}`,
-                    message: `The filters.${key} parameter must be an array of strings`,
-                });
+                if (!isStringArray) {
+                    errors.push({
+                        field: `filters.${key}`,
+                        message: `The filters.${key} parameter must be an array of strings`,
+                    });
+                }
             }
-        }
-    )
+        )
+    }
 
     if (errors.length > 0) {
         return {
