@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         `,
         {slug},
         token
-    );
+    )
 
     if (!data.entry) {
         return unauthorized()
