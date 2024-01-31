@@ -4,10 +4,10 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "node --loader ts-node/esm test.mts",
+        "build": "node test.mjs",
         "start": "next start",
         "lint": "next lint",
-        "generate": "node --loader ts-node/esm test.mts"
+        "generate": "node test.mjs"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.485.0",
