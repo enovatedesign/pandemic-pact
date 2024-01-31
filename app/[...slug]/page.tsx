@@ -1,7 +1,6 @@
 import GraphQL from '../lib/GraphQl'
 import EntryTypes from '../lib/EntryTypes'
 import PageClient from './pageClient'
-import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
@@ -40,18 +39,16 @@ export async function generateStaticParams() {
 		return ({ slug: slugs })
 	})
 }
+
 interface Parameters {
-	preview?: {token: string},
 	slug: string[]
 }
 
-async function getPageContent(context: Parameters) {
-    const previewToken = cookies().get('craftPreviewToken')?.value ?? undefined;
-
+async function getPageContent(context: Parameters, previewToken?: string) {
     const slug = context.slug[context.slug.length - 1] ?? undefined;
 
-    console.log("Preview: ", previewToken);
-    console.log("Slug: ", slug);
+    console.log('Slug: ', slug);
+    console.log('Preview Token: ', previewToken);
 
 	const entryTypeData = await GraphQL(
 		`query($slug:[String]){
@@ -78,12 +75,8 @@ async function getPageContent(context: Parameters) {
     return data;
 }
 
-interface PageParameters {
-	params: any
-}
-
-export default async function Page({params}: PageParameters) {
-    const data = await getPageContent(params)
+export default async function Page({ params, searchParams }: { params: Parameters; searchParams: { token: string } }) {
+    const data = await getPageContent(params, searchParams.token)
     return <PageClient data={data} />
 }
 
