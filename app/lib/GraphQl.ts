@@ -18,6 +18,8 @@ export default async function craft(query: string, variables: Record<string, unk
 
     if (previewToken) {
         (request.headers as any)['X-Craft-Token'] = previewToken;
+
+        console.log(request);
     }
 
     const response = await fetch(API_URL as string, request);
