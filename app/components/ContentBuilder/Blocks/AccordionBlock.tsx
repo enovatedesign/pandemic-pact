@@ -4,6 +4,7 @@ import { useState } from "react"
 import AnimateHeight from 'react-animate-height';
 import { useInView, animated } from '@react-spring/web';
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
+import { defaultProseClasses } from '@/app/helpers/prose-classes';
 
 type Props = {
     block: {
@@ -20,6 +21,11 @@ const AccordionBlock = ( {block}: Props ) => {
     
     const accordions = block.accordions ?? null
     const headingLevel = block.headingLevel ?? 2
+
+    const textClasses = [
+        'mx-auto w-full border-2 border-gray-200 rounded-2xl bg-white max-w-prose',
+        defaultProseClasses
+    ].join(' ')
     
     const [activeIndex, setActiveIndex] = useState(-1)
 
@@ -60,18 +66,18 @@ const AccordionBlock = ( {block}: Props ) => {
                                 {accordionData && (
 
                                     <li className="space-y-4" key={index}>
-                                        <div role="region" className="mx-auto w-full border border-gray-400 rounded">
+                                        <div role="region" className={textClasses}>
                                             
                                                 <button
                                                     className="flex items-center justify-between w-full px-6 py-4"
                                                     onClick={handleClick}
                                                 >
                                                     {headingLevel === 2 ? (
-                                                        <h2 className="mb-0 text-left text-primary text-4xl font-bold">
+                                                        <h2 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
                                                                 { accordionHeading }
                                                         </h2>
                                                     ) : (
-                                                        <h3 className="mb-0 text-left text-primary text-4xl font-bold">
+                                                        <h3 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
                                                             { accordionHeading }
                                                         </h3>
                                                     )}
@@ -88,7 +94,7 @@ const AccordionBlock = ( {block}: Props ) => {
                                                 duration={300}
                                                 height={activeIndex === index ? 'auto' : 0}
                                             >   
-                                                    <RichText customClasses="p-6 pt-3" text={accordionContent} invert={false} typeScale={""} />
+                                                    <RichText customClasses="p-6 pt-3" text={accordionContent} invert={false} typeScale={""} noMaxWidth={true} />
                                             </AnimateHeight>
                                         </div>
 

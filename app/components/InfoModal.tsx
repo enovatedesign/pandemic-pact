@@ -3,22 +3,24 @@ import {Dialog} from '@headlessui/react'
 import {InformationCircleIcon} from "@heroicons/react/solid"
 import Button from './Button'
 
+
+
 export default function InfoModal({ children, customButton = null}: { children: React.ReactNode, customButton?: React.ReactNode}) {
     
     const [isOpen, setIsOpen] = useState(false)
 
     return (
         <>
-            <button onClick={() => setIsOpen(!isOpen)}>
-                <span className="sr-only">Information</span>
-                {customButton ? (
-                    <>
-                        {customButton}
-                    </>
-                ) : (
+            {customButton ? (
+                <>
+                    {customButton}
+                </>
+            ) : (
+                <button onClick={() => setIsOpen(!isOpen)}>
+                    <span className="sr-only">Information</span>
                     <InformationCircleIcon className="w-6 h-6 text-secondary" />
-                )}
-            </button>
+                </button>
+            )}
 
             <Dialog
                 open={isOpen}

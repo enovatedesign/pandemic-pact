@@ -43,11 +43,11 @@ const PullQuoteBlock = ({block}: Props) => {
                 <BlockWrapper options={{padded: true, fill: true}}>
                     <animated.div className="flex flex-col space-y-4 md:space-y-6 md:items-center" ref={ref} style={springs}>
                         <div>
-                            <RichText text={text} customClasses="md:text-center" invert={false} typeScale={""}/>
+                            <RichText text={text} customClasses="md:text-center prose-lg lg:prose-2xl" invert={false} typeScale={""}/>
                         </div>
                         <div className="text-right md:text-center">
                             {quoteName && (
-                                <p className="text-gray-700 "><strong>{quoteName}</strong></p>
+                                <p className="text-gray-700"><strong>{quoteName}</strong></p>
                             )}
 
                             {quoteCite ? (

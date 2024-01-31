@@ -1,3 +1,5 @@
+import BlockWrapper from "../BlockWrapper";
+
 interface Props {
 	block: {
 		colour: string,
@@ -37,10 +39,12 @@ export default function HighlightedRichTextBlock({ block }: Props) {
 		].join(" ");
 
 		return (
-			<div
-				className={blockClasses}
-				dangerouslySetInnerHTML={{ __html: text }}
-			/>
+			<BlockWrapper options={{ clipOverflowX: false }}>
+				<div
+					className={blockClasses}
+					dangerouslySetInnerHTML={{ __html: text }}
+				/>
+			</BlockWrapper>
 		);
 	} else {
 		return null;
