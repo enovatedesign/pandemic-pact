@@ -1,5 +1,6 @@
 // TODO we also need to delete documents that are no longer in the data
 
+import {Client} from '@opensearch-project/opensearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {title, info, error} from '../helpers/log.mjs'
@@ -18,19 +19,18 @@ export default async function () {
     console.log('SEARCH_HOST', process.env.SEARCH_HOST)
     console.log('SEARCH_USERNAME', process.env.SEARCH_USERNAME)
 
-    const basicAuth = Buffer.from(`${process.env.SEARCH_USERNAME}:${process.env.SEARCH_PASSWORD}`).toString('base64')
+    const client = new Client({
+        node: process.env.SEARCH_HOST,
+        sniffOnStart: true,
+        auth: {
+            username: process.env.SEARCH_USERNAME,
+            password: process.env.SEARCH_PASSWORD,
+        },
+    })
 
-    const catHealthResponse = fetch(
-        `${process.env.SEARCH_HOST}/_cat/health`,
-        {
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${basicAuth}`
-            })
-        }
-    ).then(response => response.text())
+    const pingResponse = await client.ping()
 
-    console.log(catHealthResponse);
+    console.log(pingResponse);
 
     process.exit(1);
 
@@ -110,12 +110,12 @@ export default async function () {
             }
         ]),
     }).catch(e => {
-        error(`Error indexing grants: ${e} `)
+        error(`Error indexing grants: ${e}`)
     })
 
-    info(`Bulk Indexed ${indexName} with upserts.Results: `)
+    info(`Bulk Indexed ${indexName} with upserts. Results:`)
 
     Object.entries({...response}).forEach(([key, value]) => {
-        info(`${key}: ${value} `)
+        info(`${key}: ${value}`)
     })
 }
