@@ -1,24 +1,41 @@
 import {NextRequest} from 'next/server'
 import {draftMode} from 'next/headers'
+import GraphQL from '../../lib/GraphQl'
 
 export async function GET(req: NextRequest) {
-    const token = req.nextUrl.searchParams.get("token");
-    const uri = req.nextUrl.searchParams.get("uri");
+    const token = req.nextUrl.searchParams.get("token")
+    const slug = req.nextUrl.searchParams.get("uri")
 
-    if (token === null) {
-        return new Response('No Preview token', {status: 401})
+    if (!token || !slug) {
+        return unauthorized()
     }
 
-    if (uri === null) {
-        return new Response('No URI provided', {status: 401})
+    const data = await GraphQL(
+        `
+            query ($slug: [String]) {
+              entry: entry(status: "enabled", slug: $slug) {
+                slug
+              }
+            }
+        `,
+        {slug},
+        token
+    );
+
+    if (!data.entry) {
+        return unauthorized()
     }
 
-    draftMode().enable();
+    draftMode().enable()
 
     return new Response(null, {
         status: 307,
         headers: {
-            Location: `${uri}?token=${token}`,
+            Location: `${data.entry.slug}?token=${token}`,
         },
     })
+}
+
+function unauthorized() {
+    return new Response('Unauthorized', {status: 401})
 }
