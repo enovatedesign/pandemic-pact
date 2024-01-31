@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     return new Response(null, {
         status: 307,
         headers: {
-            Location: uri,
+            Location: `${uri}?token=${token}`,
         },
     })
 }
