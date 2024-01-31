@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const token = req.nextUrl.searchParams.get("token")
     const slug = req.nextUrl.searchParams.get("uri")
 
-    if (!craftLivePreview || !token || !slug) {
+    if (!craftLivePreview || !slug) {
         return unauthorized()
     }
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
             }
         `,
         {slug},
-        token
+        token ?? undefined
     )
 
     if (!data.entry) {
