@@ -6,8 +6,8 @@ import _ from 'lodash'
 import {title, info, error} from '../helpers/log.mjs'
 
 export default async function () {
-    // Don't try to add the search index if we don't have access to all the
-    // necessary OpenSearch details
+    // Don't try to populate OpenSearch index if we don't have access to all the
+    // necessary details
     if (
         !process.env.SEARCH_HOST ||
         !process.env.SEARCH_USERNAME ||
@@ -16,23 +16,13 @@ export default async function () {
         return
     }
 
-    console.log('SEARCH_HOST', process.env.SEARCH_HOST)
-    console.log('SEARCH_USERNAME', process.env.SEARCH_USERNAME)
-
     const client = new Client({
         node: process.env.SEARCH_HOST,
-        sniffOnStart: true,
         auth: {
             username: process.env.SEARCH_USERNAME,
             password: process.env.SEARCH_PASSWORD,
         },
     })
-
-    const pingResponse = await client.ping()
-
-    console.log(pingResponse);
-
-    process.exit(1);
 
     title('Indexing data in OpenSearch')
 

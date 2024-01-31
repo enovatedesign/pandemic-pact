@@ -4,10 +4,11 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "node --loader ts-node/esm test.mts",
+        "prebuild": "npm run generate",
+        "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "node --loader ts-node/esm test.mts"
+        "generate": "node --loader ts-node/esm scripts/generate/index.mts"
     },
     "dependencies": {
         "@fortawesome/react-fontawesome": "^0.2.0",
