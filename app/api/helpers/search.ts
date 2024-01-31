@@ -37,13 +37,9 @@ export function searchUnavailableResponse() {
 }
 
 export async function validateRequest(request: Request) {
-    let parameters;
+    const parameters = await request.json().catch(() => Promise.resolve({}))
 
-    try {
-        parameters = await request.json()
-    } catch (error) {
-        parameters = {}
-    }
+    console.log('parameters', parameters);
 
     const errors = []
 
