@@ -99,6 +99,9 @@ export default async function () {
                 doc_as_upsert: true
             }
         ]),
+        onDrop: (doc: any) => {
+            error(`Error indexing grant: ${JSON.stringify(doc.GrantID, null, 2)}`)
+        }
     }).catch(e => {
         error(`Error indexing grants: ${e}`)
     })
