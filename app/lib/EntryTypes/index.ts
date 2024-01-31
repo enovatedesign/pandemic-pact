@@ -7,7 +7,7 @@ interface EntryTemplateAndQuery {
         [key: string]: ComponentType<{data: any}>,
     },
     queries: {
-        [key: string]: (slug: string, entryType: string, sectionHandle: string) => any
+        [key: string]: (slug: string, entryType: string, sectionHandle: string, previewToken?: string) => any
     }
 }
 

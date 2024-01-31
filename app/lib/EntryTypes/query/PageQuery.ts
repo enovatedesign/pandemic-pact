@@ -1,10 +1,10 @@
 import GraphQL from '../../GraphQl'
-import { contentBuilderQuery, seomaticQuery } from '../../Queries'
+import {contentBuilderQuery, seomaticQuery} from '../../Queries'
 
-export default async function PageQuery(slug: string, entryType: string = 'page', sectionHandle: string = 'pages') {
+export default async function PageQuery(slug: string, entryType: string = 'page', sectionHandle: string = 'pages', previewToken?: string) {
 
-	const data = await GraphQL(
-		`
+    const data = await GraphQL(
+        `
 			query($slug:[String]){
 				entry: entry(status: "enabled", slug: $slug) {
                     id
@@ -58,10 +58,11 @@ export default async function PageQuery(slug: string, entryType: string = 'page'
                 }
 			}
 		`,
-		{
-			slug
-		}
-	)
+        {
+            slug
+        },
+        previewToken,
+    )
 
     return data
 }
