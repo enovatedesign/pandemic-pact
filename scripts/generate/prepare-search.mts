@@ -16,6 +16,9 @@ export default async function () {
         return
     }
 
+    console.log('SEARCH_HOST', process.env.SEARCH_HOST)
+    console.log('SEARCH_USERNAME', process.env.SEARCH_USERNAME)
+
     const client = new Client({
         node: process.env.SEARCH_HOST,
         auth: {
