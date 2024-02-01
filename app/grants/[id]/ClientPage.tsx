@@ -57,6 +57,7 @@ export default function GrantLandingPage({grant}: Props) {
     }, [
         searchParams,
         grant,
+        searchableFieldResults,
         setSearchableFieldResults,
     ])
 
