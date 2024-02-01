@@ -164,7 +164,11 @@ const AdvancedSearch = () => {
                 <p className="text-secondary uppercase text-sm">
                     Set the global and/or functionality:
                 </p>
-                <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
+
+                <button
+                    onClick={() => setGlobalAnd(!globalAnd)}
+                    className="h-8 relative flex items-center bg-secondary w-20 rounded-full"
+                >
                     <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
                     <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
@@ -174,7 +178,6 @@ const AdvancedSearch = () => {
             </div>
             <div className="flex flex-col gap-2">
                 {rows.map((row: Row, index: number) => {
-
                     const removeRow = (index: number) => {
                         const updatedRows = [...rows]
                         updatedRows.splice(index, 1)
@@ -188,7 +191,13 @@ const AdvancedSearch = () => {
                                     {globalAnd ? 'and' : 'or'}
                                 </p>
                             )}
-                            <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
+
+                            <AdvancedInputRow
+                                row={row}
+                                rows={rows}
+                                setRows={setRows}
+                                index={index}
+                            >
                                 {index > 0 && (
                                     <button
                                         className="absolute right-0 translate-x-1/2 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
