@@ -93,12 +93,13 @@ export default async function () {
                     }
                 },
                 {
-                    doc: _.pick(grant, Object.keys(mappingProperties))
+                    doc: _.pick(grant, Object.keys(mappingProperties)),
+                    doc_as_upsert: true,
                 }
             ])
         ).flat()
 
-        await client.bulk({
+        const response = await client.bulk({
             body: bulkOperations,
         }).catch(e => {
             error(e)
