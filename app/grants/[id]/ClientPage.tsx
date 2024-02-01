@@ -34,7 +34,14 @@ export default function GrantLandingPage({grant}: Props) {
         searchRequest('show', {
             q: searchQueryFromUrl,
             filters: {
-                GrantID: [grant.GrantID],
+                logicalAnd: false,
+                filters: [
+                    {
+                        field: 'GrantID',
+                        values: [grant.GrantID],
+                        logicalAnd: false,
+                    }
+                ]
             },
         }).then(data => {
             const hit = data.hits[0]

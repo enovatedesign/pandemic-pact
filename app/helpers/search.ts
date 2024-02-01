@@ -25,13 +25,12 @@ export interface SearchResponse {
 }
 
 export interface SearchFilters {
-    GrantID?: string[]
-    Disease?: string[]
-    Pathogen?: string[]
-    ResearchInstitutionCountry?: string[]
-    ResearchInstitutionRegion?: string[]
-    FunderCountry?: string[]
-    FunderRegion?: string[]
+    logicalAnd: boolean,
+    filters: {
+        field: string,
+        values: string[],
+        logicalAnd: boolean,
+    }[]
 }
 
 export interface SearchRequestBody {

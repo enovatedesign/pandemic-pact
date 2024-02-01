@@ -1,5 +1,6 @@
 import {NextResponse} from 'next/server'
 import {Client} from '@opensearch-project/opensearch'
+import {SearchFilters} from '../../helpers/search'
 
 export function getSearchClient() {
     if (
@@ -68,20 +69,21 @@ export async function validateRequest(request: Request) {
             message: 'The filters parameter must be an object',
         });
     } else {
-        Object.entries(parameters.filters).forEach(
-            ([key, value]) => {
-                const isStringArray = Array.isArray(value) && value.every(
-                    (item) => typeof item === 'string'
-                )
+        // TODO update validation logic to work with advanced filters
+        // Object.entries(parameters.filters).forEach(
+        //     ([key, value]) => {
+        //         const isStringArray = Array.isArray(value) && value.every(
+        //             (item) => typeof item === 'string'
+        //         )
 
-                if (!isStringArray) {
-                    errors.push({
-                        field: `filters.${key}`,
-                        message: `The filters.${key} parameter must be an array of strings`,
-                    });
-                }
-            }
-        )
+        //         if (!isStringArray) {
+        //             errors.push({
+        //                 field: `filters.${key}`,
+        //                 message: `The filters.${key} parameter must be an array of strings`,
+        //             });
+        //         }
+        //     }
+        // )
     }
 
     if (errors.length > 0) {
@@ -98,7 +100,7 @@ export async function validateRequest(request: Request) {
     return {values: parameters}
 }
 
-export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
+export function getBooleanQuery(q: string, filters: SearchFilters) {
     let mustClause = {}
 
     if (q) {
@@ -120,14 +122,30 @@ export function getBooleanQuery(q: string, filters: {[key: string]: string[]}) {
     let filterClause = {}
 
     if (filters) {
+        const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
+
         filterClause = {
-            filter: Object.entries(filters).filter(
-                ([_, value]) => value.length > 0
-            ).map(
-                ([key, value]) => ({
-                    'terms': {[`${key}.keyword`]: value}
-                })
-            )
+            filter: {
+                bool: {
+                    [outerBoolOperator]: filters.filters.map(
+                        ({field, values, logicalAnd}) => {
+                            const innerBoolOperator = logicalAnd ? 'must' : 'should'
+
+                            return {
+                                bool: {
+                                    [innerBoolOperator]: values.map(
+                                        (value) => ({
+                                            term: {
+                                                [`${field}.keyword`]: value
+                                            }
+                                        })
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 

@@ -13,6 +13,15 @@ interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void
 }
 
+interface SelectedFilters {
+    Disease?: string[]
+    Pathogen?: string[]
+    ResearchInstitutionCountry?: string[]
+    ResearchInstitutionRegion?: string[]
+    FunderCountry?: string[]
+    FunderRegion?: string[]
+}
+
 export default function SearchInput({setSearchResponse}: Props) {
     const router = useRouter()
     const pathname = usePathname()
@@ -22,7 +31,7 @@ export default function SearchInput({setSearchResponse}: Props) {
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [filters, setFilters] = useState<SearchFilters>(
+    const [filters, setFilters] = useState<SelectedFilters>(
         filtersFromUrl
             ? JSON.parse(filtersFromUrl)
             : {}
@@ -52,10 +61,21 @@ export default function SearchInput({setSearchResponse}: Props) {
         router.replace(url.href)
     }, [searchQuery, filters, pathname, router])
 
-    const searchRequestBody = useMemo(() => ({
-        q: searchQuery,
-        filters,
-    }), [searchQuery, filters])
+    const searchRequestBody = useMemo(() => {
+        const searchFilters: SearchFilters = {
+            logicalAnd: true,
+            filters: Object.entries(filters).map(([field, values]) => ({
+                field,
+                values,
+                logicalAnd: false,
+            }))
+        }
+
+        return {
+            q: searchQuery,
+            filters: searchFilters,
+        }
+    }, [searchQuery, filters])
 
     useEffect(() => {
         searchRequest('list', searchRequestBody)
