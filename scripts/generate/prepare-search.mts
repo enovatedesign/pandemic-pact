@@ -32,7 +32,23 @@ export default async function () {
 
     const indexName = `${indexPrefix}grants`
 
-    const indexExists = await client.indices.exists({index: indexName})
+    const {body: indexExists} = await client.indices.exists({index: indexName})
+
+    const selectOptions = fs.readJsonSync('./data/dist/select-options.json')
+
+    const mappingProperties = {
+        GrantID: {type: 'keyword'},
+        GrantTitleEng: {type: 'text'},
+        Abstract: {type: 'text'},
+        LaySummary: {type: 'text'},
+        GrantAmountConverted: {type: 'long'},
+
+        ...Object.fromEntries(
+            Object.keys(selectOptions).map(
+                field => [field, {type: 'keyword'}]
+            )
+        )
+    }
 
     if (indexExists) {
         info(`Index ${indexName} already exists, skipping creation`)
@@ -43,20 +59,7 @@ export default async function () {
             index: indexName,
             body: {
                 mappings: {
-                    properties: {
-                        GrantID: {type: 'keyword'},
-                        GrantTitleEng: {type: 'text'},
-                        Abstract: {type: 'text'},
-                        LaySummary: {type: 'text'},
-                        GrantAmountConverted: {type: 'long'},
-                        GrantStartYear: {type: 'integer'},
-                        Disease: {type: 'keyword'},
-                        Pathogen: {type: 'keyword'},
-                        ResearchInstitutionCountry: {type: 'keyword'},
-                        ResearchInstitutionRegion: {type: 'keyword'},
-                        FunderCountry: {type: 'keyword'},
-                        FunderRegion: {type: 'keyword'},
-                    }
+                    properties: mappingProperties,
                 }
             }
         }).catch(e => {
@@ -69,20 +72,7 @@ export default async function () {
     info(`Bulk indexing ${indexName} with upserts...`)
 
     const docs: any[] = fs.readJsonSync('./data/dist/grants.json').map(
-        (grant: any) => _.pick(grant, [
-            'GrantID',
-            'GrantTitleEng',
-            'Abstract',
-            'LaySummary',
-            'GrantAmountConverted',
-            'GrantStartYear',
-            'Disease',
-            'Pathogen',
-            'ResearchInstitutionCountry',
-            'ResearchInstitutionRegion',
-            'FunderCountry',
-            'FunderRegion',
-        ])
+        (grant: any) => _.pick(grant, Object.keys(mappingProperties))
     )
 
     const response = await client.helpers.bulk({

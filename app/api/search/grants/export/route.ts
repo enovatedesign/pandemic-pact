@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
                 sort: [
                     {
-                        "GrantID.keyword": {order: 'asc'}
+                        "GrantID": {order: 'asc'}
                     }
                 ],
 

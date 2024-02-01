@@ -3,6 +3,11 @@ import {PlusIcon, MinusIcon} from "@heroicons/react/solid"
 import {Select, SelectItem, MultiSelect, MultiSelectItem} from "@tremor/react";
 import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
+import {SearchFilters} from "../helpers/search";
+
+interface Props {
+    setSearchFilters: (searchFilters: SearchFilters) => void
+}
 
 interface Row {
     field: string,
@@ -11,7 +16,12 @@ interface Row {
     key: number
 }
 
-export default function AdvancedSearch() {
+interface SelectedFilters {
+    rows: Row[],
+    logicalAnd: boolean,
+}
+
+export default function AdvancedSearch({setSearchFilters}: Props) {
     const defaultRow: () => Row = () => ({
         field: 'StudySubject',
         values: [],
@@ -19,19 +29,63 @@ export default function AdvancedSearch() {
         key: new Date().getTime(),
     })
 
-    const [rows, setRows] = useState<Row[]>([defaultRow()])
-    const [globalAnd, setGlobalAnd] = useState(true)
+    const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
+        rows: [defaultRow()],
+        logicalAnd: true,
+    })
 
     const globalAndButtonTextClasses = [
-        globalAnd ? 'order-first left-3' : 'order-last right-4'
+        selectedFilters.logicalAnd ? 'order-first left-3' : 'order-last right-4'
     ].join(' ')
 
     const globalAndButtonDivClasses = [
-        globalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] transition duration-300'
+        selectedFilters.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] transition duration-300'
     ].join(' ')
 
+    const updateSearchFiltersFromSelectedFilters = (newSelectedFilters: SelectedFilters) => {
+        setSearchFilters({
+            logicalAnd: newSelectedFilters.logicalAnd,
+            filters: newSelectedFilters
+                .rows
+                .filter(row => row.values.length > 0)
+                .map(row => ({
+                    field: row.field,
+                    values: row.values,
+                    logicalAnd: row.logicalAnd,
+                })),
+        })
+    }
+
+    const toggleLogicalAnd = () => {
+        const newSelectedFilters = {
+            ...selectedFilters,
+            logicalAnd: !selectedFilters.logicalAnd,
+        }
+
+        updateSearchFiltersFromSelectedFilters(newSelectedFilters)
+
+        setSelectedFilters(newSelectedFilters)
+    }
+
+    const setRows = (rows: Row[]) => {
+        const newSelectedFilters = {
+            ...selectedFilters,
+            rows,
+        }
+
+        updateSearchFiltersFromSelectedFilters(newSelectedFilters)
+
+        setSelectedFilters(newSelectedFilters)
+    }
+
     const addRow = () => {
-        setRows([...rows, defaultRow()])
+        setRows([...selectedFilters.rows, defaultRow()])
+    }
+
+    const removeRow = (index: number) => {
+        setRows(
+            selectedFilters.rows.filter((_, i) => i !== index)
+        )
     }
 
     const paddingClasses = 'md:pr-[100px]'
@@ -44,35 +98,29 @@ export default function AdvancedSearch() {
                 </p>
 
                 <button
-                    onClick={() => setGlobalAnd(!globalAnd)}
+                    onClick={() => toggleLogicalAnd()}
                     className="h-8 relative flex items-center bg-secondary w-20 rounded-full"
                 >
                     <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
                     <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
-                        {globalAnd ? 'and' : 'or'}
+                        {selectedFilters.logicalAnd ? 'and' : 'or'}
                     </p>
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {rows.map((row: Row, index: number) => {
-                    const removeRow = (index: number) => {
-                        const updatedRows = [...rows]
-                        updatedRows.splice(index, 1)
-                        setRows(updatedRows)
-                    }
-
+                {selectedFilters.rows.map((row: Row, index: number) => {
                     return (
                         <div key={row.key} className="relative w-full">
                             {index > 0 && (
                                 <p className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}>
-                                    {globalAnd ? 'and' : 'or'}
+                                    {selectedFilters.logicalAnd ? 'and' : 'or'}
                                 </p>
                             )}
 
                             <AdvancedInputRow
                                 row={row}
-                                rows={rows}
+                                rows={selectedFilters.rows}
                                 setRows={setRows}
                                 index={index}
                             >
@@ -89,7 +137,7 @@ export default function AdvancedSearch() {
                     )
                 })}
 
-                {rows.length < 6 && (
+                {selectedFilters.rows.length < 6 && (
                     <div className={`${paddingClasses} flex justify-center`}>
                         <Button
                             size="xsmall"

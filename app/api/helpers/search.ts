@@ -136,7 +136,7 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
                                     [innerBoolOperator]: values.map(
                                         (value) => ({
                                             term: {
-                                                [`${field}.keyword`]: value
+                                                [field]: value
                                             }
                                         })
                                     )

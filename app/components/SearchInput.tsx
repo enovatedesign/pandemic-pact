@@ -112,7 +112,9 @@ export default function SearchInput({setSearchResponse}: Props) {
                                 duration={400}
                                 height={advancedSearchShow && 'auto'}
                             >
-                                <AdvancedSearch />
+                                <AdvancedSearch
+                                    setSearchFilters={setSearchFilters}
+                                />
                             </AnimateHeight>
                         ) : (
                             <AnimateHeight
