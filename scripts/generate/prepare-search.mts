@@ -71,34 +71,39 @@ export default async function () {
 
     info(`Bulk indexing ${indexName} with upserts...`)
 
-    const docs: any[] = fs.readJsonSync('./data/dist/grants.json').map(
-        (grant: any) => _.pick(grant, Object.keys(mappingProperties))
-    )
+    const allGrants = fs.readJsonSync('./data/dist/grants.json')
 
-    const response = await client.helpers.bulk({
-        concurrency: 1,
-        datasource: docs,
-        onDocument: doc => ([
-            {
-                update: {
-                    _index: indexName,
-                    _id: doc.GrantID
-                }
-            },
-            {
-                doc_as_upsert: true
-            }
-        ]),
-        onDrop: (doc: any) => {
-            error(`Error indexing grant: ${JSON.stringify(doc, null, 2)}`)
+    const chunkSize = 1000
+
+    const chunkedGrants = _.chunk(allGrants, chunkSize)
+
+    for (let i = 0; i < chunkedGrants.length; i++) {
+        if (i > 0) {
+            console.log(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
         }
-    }).catch(e => {
-        error(`Error indexing grants: ${e}`)
-    })
 
-    info(`Bulk Indexed ${indexName} with upserts. Results:`)
+        const grants = chunkedGrants[i]
 
-    Object.entries({...response}).forEach(([key, value]) => {
-        info(`${key}: ${value}`)
-    })
+        const bulkOperations: any[] = grants.map(
+            (grant: any) => ([
+                {
+                    update: {
+                        _index: indexName,
+                        _id: grant.GrantID,
+                    }
+                },
+                {
+                    doc: _.pick(grant, Object.keys(mappingProperties))
+                }
+            ])
+        ).flat()
+
+        await client.bulk({
+            body: bulkOperations,
+        }).catch(e => {
+            error(e)
+        })
+    }
+
+    info(`Bulk Indexed ${indexName} with upserts`)
 }
