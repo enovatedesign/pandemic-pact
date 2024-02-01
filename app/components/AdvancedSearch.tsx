@@ -1,8 +1,8 @@
 import {useState} from "react"
 import {PlusIcon, MinusIcon} from "@heroicons/react/solid"
-import selectOptions from '../../data/dist/select-options.json'
 import {Select, SelectItem, MultiSelect, MultiSelectItem} from "@tremor/react";
 import Button from './Button'
+import selectOptions from '../../data/dist/select-options.json'
 
 interface Row {
     field: string,
