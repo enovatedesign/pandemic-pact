@@ -111,9 +111,9 @@ export default async function () {
     if (process.env.CI) {
         fs.appendFileSync(
             '.env.local',
-            `\nSEARCH_INDEX_NAME=${indexName}`
+            `\nSEARCH_INDEX_PREFIX=${indexName}`
         )
 
-        console.log(`Wrote SEARCH_INDEX_NAME ${indexName} to .env.local`);
+        console.log(`Wrote SEARCH_INDEX_PREFIX ${indexPrefix} to .env.local`);
     }
 }
