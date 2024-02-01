@@ -1,35 +1,35 @@
-import { useState } from "react"
-import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
+import {useState} from "react"
+import {PlusIcon, MinusIcon} from "@heroicons/react/solid"
 import selectOptions from '../../data/dist/select-options.json'
-import { Select, SelectItem, MultiSelect, MultiSelectItem } from "@tremor/react";
+import {Select, SelectItem, MultiSelect, MultiSelectItem} from "@tremor/react";
 import Button from './Button'
 
 const camelToSentence = (word: string) => {
     const result = word.replace(/([A-Z])/g, ' $1');
     return result.charAt(0).toUpperCase() + result.slice(1);
-  }
+}
 
-  interface Row {
+interface Row {
     field: string,
     values: string[],
     logicalAnd: boolean,
     key: number
-  }
+}
 
-  type AdvancedRowProps = {
+type AdvancedRowProps = {
     children: any,
     row: Row,
     rows: Row[],
     setRows: ((rows: Row[]) => void),
     index: number,
-  }
+}
 
-const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowProps) => {
-    
-    const [ localRow, setLocalRow ] = useState<Row>(row)
-    
+const AdvancedInputRow = ({children, row, rows, setRows, index}: AdvancedRowProps) => {
+
+    const [localRow, setLocalRow] = useState<Row>(row)
+
     const selectItems = Object.keys(selectOptions)
-    
+
     const andButtonTextClasses = [
         localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4'
     ].join(' ')
@@ -49,7 +49,7 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
 
         setRows(
             rows.map(
-                globalRow =>  (globalRow.key === newRow.key) ? newRow : globalRow
+                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
             ),
         )
     }
@@ -64,7 +64,7 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
 
         setRows(
             rows.map(
-                globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow
+                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
             )
         )
     }
@@ -76,10 +76,10 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
         }
 
         setLocalRow(newRow)
-        
+
         setRows(
             rows.map(
-                globalRow => (globalRow.key === newRow.key) ?  newRow : globalRow
+                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
             )
         )
     }
@@ -116,11 +116,11 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
                 </MultiSelect>
 
                 <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-40 rounded-full">
-                        <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute right-1 transition-transform duration-300`}></div>
+                    <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute right-1 transition-transform duration-300`}></div>
 
-                        <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
-                            {localRow.logicalAnd ? 'and' : 'or'}
-                        </p>
+                    <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
+                        {localRow.logicalAnd ? 'and' : 'or'}
+                    </p>
                 </button>
             </div>
             {children && (
@@ -133,8 +133,8 @@ const AdvancedInputRow = ({children, row, rows, setRows, index} : AdvancedRowPro
 }
 
 const AdvancedSearch = () => {
-    
-    const defaultRow:() => Row = () => ({
+
+    const defaultRow: () => Row = () => ({
         field: 'StudySubject',
         values: [],
         logicalAnd: false,
@@ -155,67 +155,66 @@ const AdvancedSearch = () => {
     const addRow = () => {
         setRows([...rows, defaultRow()])
     }
-    
+
     const paddingClasses = 'md:pr-[100px]'
 
     return (
         <section className="p-4">
-                <div className="pb-4 flex flex-col space-y-2 md:space-y-0 md:flex-row md:items-center md:space-x-2  md:pr-[148px]">
-                    <p className="text-secondary uppercase text-sm">
-                        Set the global and/or functionality: 
-                    </p>
-                    <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
-                            <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+            <div className="pb-4 flex flex-col space-y-2 md:space-y-0 md:flex-row md:items-center md:space-x-2  md:pr-[148px]">
+                <p className="text-secondary uppercase text-sm">
+                    Set the global and/or functionality:
+                </p>
+                <button onClick={() => setGlobalAnd(!globalAnd)} className="h-8 relative flex items-center bg-secondary w-20 rounded-full">
+                    <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
 
-                            <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
-                                {globalAnd ? 'and' : 'or'}
-                            </p>
-                    </button>
-                </div>
-                <div className="flex flex-col gap-2">
-                    {rows.map((row: Row, index: number) => {
-                        
-                        const removeRow = (index: number) => {
-                            const updatedRows = [...rows]
-                            updatedRows.splice(index, 1)
-                            setRows(updatedRows)
-                        }
-                        
-                        return (
-                            <>  
-                                <div key={row.key} className="relative w-full">
-                                    {index > 0 && (
-                                        <p className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}>
-                                            {globalAnd ? 'and' : 'or'}
-                                        </p>
-                                    )}
-                                    <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
-                                        {index > 0 && (
-                                            <button
-                                                className="absolute right-0 translate-x-1/2 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
-                                                onClick={() => removeRow(index)}
-                                            >
-                                                <MinusIcon className="w-6 aspect-square text-primary active:scale-90 transition duration-200" />
-                                            </button>
-                                        )}
-                                    </AdvancedInputRow>
-                                </div>
-                            </>
-                        )
-                    })}
-                    {rows.length < 6 && (
-                        <div className={`${paddingClasses} flex justify-center`}>
-                            <Button
-                                size="xsmall"
-                                customClasses="mt-3 flex items-center gap-1"
-                                onClick={addRow}
-                            >
-                                Add a row <PlusIcon className="w-5 h-5" aria-hidden="true" />
-                            </Button>
+                    <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
+                        {globalAnd ? 'and' : 'or'}
+                    </p>
+                </button>
+            </div>
+            <div className="flex flex-col gap-2">
+                {rows.map((row: Row, index: number) => {
+
+                    const removeRow = (index: number) => {
+                        const updatedRows = [...rows]
+                        updatedRows.splice(index, 1)
+                        setRows(updatedRows)
+                    }
+
+                    return (
+                        <div key={row.key} className="relative w-full">
+                            {index > 0 && (
+                                <p className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}>
+                                    {globalAnd ? 'and' : 'or'}
+                                </p>
+                            )}
+                            <AdvancedInputRow row={row} rows={rows} setRows={setRows} index={index}>
+                                {index > 0 && (
+                                    <button
+                                        className="absolute right-0 translate-x-1/2 flex items-center justify-center bg-secondary rounded-full active:bg-secondary-lighter active:scale-75 transition duration-200"
+                                        onClick={() => removeRow(index)}
+                                    >
+                                        <MinusIcon className="w-6 aspect-square text-primary active:scale-90 transition duration-200" />
+                                    </button>
+                                )}
+                            </AdvancedInputRow>
                         </div>
-                    )}
-                </div>
-            </section>
+                    )
+                })}
+
+                {rows.length < 6 && (
+                    <div className={`${paddingClasses} flex justify-center`}>
+                        <Button
+                            size="xsmall"
+                            customClasses="mt-3 flex items-center gap-1"
+                            onClick={addRow}
+                        >
+                            Add a row <PlusIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </section>
     )
 }
 
