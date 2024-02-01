@@ -2,24 +2,14 @@ import {useEffect, useMemo, useState} from 'react'
 import {useRouter, usePathname, useSearchParams} from 'next/navigation'
 import {SearchIcon} from '@heroicons/react/solid'
 import ExportToCsvButton from './ExportToCsvButton'
-import MultiSelect from './MultiSelect'
-import selectOptions from '../../data/dist/select-options.json'
 import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search'
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
+import StandardSearchFilters from './StandardSearchFilters'
 import AdvancedSearch from './AdvancedSearch'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void
-}
-
-interface SelectedFilters {
-    Disease?: string[]
-    Pathogen?: string[]
-    ResearchInstitutionCountry?: string[]
-    ResearchInstitutionRegion?: string[]
-    FunderCountry?: string[]
-    FunderRegion?: string[]
 }
 
 export default function SearchInput({setSearchResponse}: Props) {
@@ -27,15 +17,13 @@ export default function SearchInput({setSearchResponse}: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [filters, setFilters] = useState<SelectedFilters>(
-        filtersFromUrl
-            ? JSON.parse(filtersFromUrl)
-            : {}
-    )
+    const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+        logicalAnd: true,
+        filters: [],
+    })
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
@@ -48,34 +36,15 @@ export default function SearchInput({setSearchResponse}: Props) {
             url.searchParams.delete('q')
         }
 
-        const anyFiltersAreSet = Object.values(filters).some(
-            (selectedOptions) => selectedOptions.length > 0
-        )
-
-        if (anyFiltersAreSet) {
-            url.searchParams.set('filters', JSON.stringify(filters))
-        } else {
-            url.searchParams.delete('filters')
-        }
-
         router.replace(url.href)
-    }, [searchQuery, filters, pathname, router])
+    }, [searchQuery, pathname, router])
 
     const searchRequestBody = useMemo(() => {
-        const searchFilters: SearchFilters = {
-            logicalAnd: true,
-            filters: Object.entries(filters).map(([field, values]) => ({
-                field,
-                values,
-                logicalAnd: false,
-            }))
-        }
-
         return {
             q: searchQuery,
             filters: searchFilters,
         }
-    }, [searchQuery, filters])
+    }, [searchQuery, searchFilters])
 
     useEffect(() => {
         searchRequest('list', searchRequestBody)
@@ -138,113 +107,21 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </div>
 
                     <div className="rounded-lg col-span-2 bg-white p-3">
-                        {!advancedSearchShow ? (
-                            <AnimateHeight
-                                duration={400}
-                                height={!advancedSearchShow && 'auto'}
-                            >
-                                <section className=" bg-white p-3">
-                                    <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
-                                        Advanced Search
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                        <MultiSelect
-                                            options={selectOptions.Disease}
-                                            selectedOptions={filters.Disease ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    Disease: selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Diseases"
-                                        />
-
-                                        <MultiSelect
-                                            options={selectOptions.Pathogen}
-                                            selectedOptions={filters.Pathogen ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    Pathogen: selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Pathogens"
-                                        />
-
-                                        <MultiSelect
-                                            options={
-                                                selectOptions.ResearchInstitutionCountry
-                                            }
-                                            selectedOptions={filters.ResearchInstitutionCountry ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    ResearchInstitutionCountry:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Research Institution Countries"
-                                        />
-                                        <MultiSelect
-                                            options={selectOptions.ResearchInstitutionRegion}
-                                            selectedOptions={filters.ResearchInstitutionRegion ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    ResearchInstitutionRegion:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Research Institution Regions"
-                                        />
-                                        <MultiSelect
-                                            options={
-                                                selectOptions.FunderCountry
-                                            }
-                                            selectedOptions={filters.FunderCountry ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    FunderCountry:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Funder Countries"
-                                        />
-                                        <MultiSelect
-                                            options={selectOptions.FunderRegion}
-                                            selectedOptions={filters.FunderRegion ?? []}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    FunderRegion:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Funder Regions"
-                                        />
-                                    </div>
-                                </section>
-                            </AnimateHeight>
-                        ) : (
+                        {advancedSearchShow ? (
                             <AnimateHeight
                                 duration={400}
                                 height={advancedSearchShow && 'auto'}
                             >
                                 <AdvancedSearch />
+                            </AnimateHeight>
+                        ) : (
+                            <AnimateHeight
+                                duration={400}
+                                height={!advancedSearchShow && 'auto'}
+                            >
+                                <StandardSearchFilters
+                                    setSearchFilters={setSearchFilters}
+                                />
                             </AnimateHeight>
                         )}
                     </div>
