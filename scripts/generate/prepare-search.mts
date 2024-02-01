@@ -107,4 +107,11 @@ export default async function () {
     }
 
     info(`Bulk Indexed ${indexName} with upserts`)
+
+    if (process.env.CI) {
+        fs.appendFileSync(
+            '.env',
+            `\nSEARCH_INDEX_NAME=${indexName}`
+        )
+    }
 }
