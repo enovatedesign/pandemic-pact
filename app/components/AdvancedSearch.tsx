@@ -191,14 +191,14 @@ function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProp
                 </Select>
 
                 <MultiSelect value={localRow.values} onValueChange={onMultiSelectChange}>
-                    {selectOptions[localRow.field as keyof typeof selectOptions].map((value: {value: string}, index: number) => {
+                    {selectOptions[localRow.field as keyof typeof selectOptions].map((value, index: number) => {
                         return (
                             <MultiSelectItem
                                 value={value.value}
                                 key={index}
                                 className="cursor-pointer"
                             >
-                                {value.value}
+                                {value.label}
                             </MultiSelectItem>
                         )
                     })}
