@@ -113,7 +113,7 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
                         'Abstract^2',
                         'LaySummary'
                     ],
-                    default_operator: 'and'
+                    flags: "AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE",
                 }
             }
         }
