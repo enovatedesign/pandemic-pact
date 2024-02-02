@@ -95,7 +95,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                             <li><code>|</code> the OR operator, which matches either term, e.g. <code>bats | dogs</code></li>
                             <li><code>-</code> the NOT operator, which negates the term directly after it, e.g. <code>bats -dogs</code></li>
                             <li><code>( )</code> the parentheses operator, which groups terms together for precedence, e.g. <code>(bats | dogs) + (cats | rats)</code></li>
-                            <li><code>" "</code> the quotes operator, which matches the exact phrase, e.g. <code>"bats and dogs"</code></li>
+                            <li><code>&quot; &quot;</code> the quotes operator, which matches the exact phrase, e.g. <code>&quot;bats and dogs&quot;</code></li>
                             <li><code>\</code> the escape character, which allows you to search for special characters, e.g. <code>bat \+ dogs</code></li>
                         </ul>
                     </InfoModal>
