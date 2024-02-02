@@ -108,12 +108,14 @@ export default async function () {
 
     info(`Bulk Indexed ${indexName} with upserts`)
 
-    if (process.env.CI) {
+    if (process.env.CI && process.env.SEARCH_INDEX_PREFIX) {
+        const searchIndexPrefix = process.env.SEARCH_INDEX_PREFIX
+
         fs.appendFileSync(
             '.env',
-            `\nSEARCH_INDEX_PREFIX=${indexPrefix}`
+            `\nSEARCH_INDEX_PREFIX=${searchIndexPrefix}`
         )
 
-        console.log(`Wrote SEARCH_INDEX_PREFIX ${indexPrefix} to .env`);
+        console.log(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`);
     }
 }
