@@ -5,6 +5,7 @@ import ExportToCsvButton from './ExportToCsvButton'
 import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search'
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
+import InfoModal from './InfoModal'
 import StandardSearchFilters from './StandardSearchFilters'
 import AdvancedSearch from './AdvancedSearch'
 
@@ -61,24 +62,42 @@ export default function SearchInput({setSearchResponse}: Props) {
     return (
         <div>
             <div className="space-y-3">
-                <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
-                    <input
-                        type="search"
-                        placeholder="Search..."
-                        onInput={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                        ) => setSearchQuery(event.target.value)}
-                        value={searchQuery}
-                        className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
-                    />
-                    <Button
-                        size="xsmall"
-                        colour="grey"
-                        customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
-                    >
-                        <span className="sr-only">Search</span>
-                        <SearchIcon className="w-6 h-6 text-secondary" />
-                    </Button>
+                <div className="flex gap-x-4">
+                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
+                        <input
+                            type="search"
+                            placeholder="Search..."
+                            onInput={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => setSearchQuery(event.target.value)}
+                            value={searchQuery}
+                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                        />
+                        <Button
+                            size="xsmall"
+                            colour="grey"
+                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
+                        >
+                            <span className="sr-only">Search</span>
+                            <SearchIcon className="w-6 h-6 text-secondary" />
+                        </Button>
+                    </div>
+
+                    <InfoModal>
+                        <h3>Search Operators</h3>
+
+                        <p>By default, search queries are split by whitespace and matched with OR. For example, if you search for <code>bats dogs</code>, this will match grants that contain either the word <code>bats</code> or the word <code>dogs</code> in their Title, Abstract or Lay Summary fields.</p>
+
+                        <p>For more complex searches, you can use the following operators:</p>
+
+                        <ul>
+                            <li><code>+</code> the AND operator, which matches both words, e.g. <code>bats + dogs</code></li>
+                            <li><code>|</code> the OR operator, which matches either words, e.g. <code>bats | dogs</code></li>
+                            <li><code>-</code> the NOT operator, which negates the term directly after it, e.g. <code>bats -dogs</code></li>
+                            <li><code>( )</code> the parentheses operator, which groups terms together for precedence, e.g. <code>(bats | dogs) + (cats | rats)</code></li>
+                            <li><code>\</code> the escape character, which allows you to search for special characters, e.g. <code>bat \+ dogs</code></li>
+                        </ul>
+                    </InfoModal>
                 </div>
 
                 <section className="w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
