@@ -47,9 +47,9 @@ export default function GrantLandingPage({grant}: Props) {
             const hit = data.hits[0]
 
             setSearchableFieldResults({
-                GrantTitleEng: hit.highlight.GrantTitleEng ?? searchableFieldResults.GrantTitleEng,
-                Abstract: hit.highlight.Abstract ?? searchableFieldResults.Abstract,
-                LaySummary: hit.highlight.LaySummary ?? searchableFieldResults.LaySummary,
+                GrantTitleEng: hit.highlight.GrantTitleEng ?? grant.GrantTitleEng,
+                Abstract: hit.highlight.Abstract ?? grant.Abstract,
+                LaySummary: hit.highlight.LaySummary ?? grant.LaySummary,
             })
         }).catch((error) => {
             console.error('Error:', error)
@@ -57,7 +57,6 @@ export default function GrantLandingPage({grant}: Props) {
     }, [
         searchParams,
         grant,
-        searchableFieldResults,
         setSearchableFieldResults,
     ])
 
