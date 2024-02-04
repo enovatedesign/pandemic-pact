@@ -156,3 +156,52 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
         }
     }
 }
+
+export async function fetchAllGrantIDsMatchingBooleanQuery(client: Client, q: string, filters: SearchFilters) {
+    const index = getIndexName()
+
+    const query = getBooleanQuery(q, filters);
+
+    const grantIDs = []
+
+    const size = 1000
+
+    let hits = []
+
+    let searchAfterClause = {}
+
+    do {
+        const results = await client.search({
+            index,
+
+            // Don't return any document because we only need the _id from OpenSearch
+            _source: [],
+
+            size,
+
+            body: {
+                query,
+
+                sort: [
+                    {
+                        "GrantID": {order: 'asc'}
+                    }
+                ],
+
+                ...searchAfterClause,
+            }
+        })
+
+        hits = results.body.hits.hits
+
+        for (const hit of hits) {
+            grantIDs.push(hit._id)
+        }
+
+        searchAfterClause = {
+            search_after: hits[hits.length - 1].sort,
+        }
+    } while (hits.length === size);
+
+    return grantIDs;
+}
