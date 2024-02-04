@@ -1,36 +1,21 @@
 // TODO we also need to delete documents that are no longer in the data
 
-import {Client} from '@opensearch-project/opensearch'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {title, info, error} from '../helpers/log'
+import {getIndexName, getSearchClient} from '../../app/api/helpers/search'
 
 export default async function () {
-    // Don't try to populate OpenSearch index if we don't have access to all the
-    // necessary details
-    if (
-        !process.env.SEARCH_HOST ||
-        !process.env.SEARCH_USERNAME ||
-        !process.env.SEARCH_PASSWORD
-    ) {
+    const client = getSearchClient()
+
+    if (!client) {
+        info("OpenSearch not configured, skipping indexing")
         return
     }
 
-    const client = new Client({
-        node: process.env.SEARCH_HOST,
-        auth: {
-            username: process.env.SEARCH_USERNAME,
-            password: process.env.SEARCH_PASSWORD,
-        },
-    })
-
     title('Indexing data in OpenSearch')
 
-    const indexPrefix = process.env.SEARCH_INDEX_PREFIX ?
-        `${process.env.SEARCH_INDEX_PREFIX}-` :
-        ''
-
-    const indexName = `${indexPrefix}grants`
+    const indexName = getIndexName()
 
     const {body: indexExists} = await client.indices.exists({index: indexName})
 
