@@ -1,9 +1,11 @@
-// TODO we also need to delete documents that are no longer in the data
-
 import fs from 'fs-extra'
 import _ from 'lodash'
 import {title, info, error} from '../helpers/log'
-import {getIndexName, getSearchClient} from '../../app/api/helpers/search'
+import {
+    getIndexName,
+    getSearchClient,
+    fetchAllGrantIDsInIndex,
+} from '../../app/api/helpers/search'
 
 export default async function () {
     const client = getSearchClient()
@@ -69,8 +71,8 @@ export default async function () {
 
         const grants = chunkedGrants[i]
 
-        const bulkOperations: any[] = grants.map(
-            (grant: any) => ([
+        const bulkOperations: any[] = grants.map((grant: any) => {
+            return [
                 {
                     update: {
                         _index: indexName,
@@ -81,8 +83,8 @@ export default async function () {
                     doc: _.pick(grant, Object.keys(mappingProperties)),
                     doc_as_upsert: true,
                 }
-            ])
-        ).flat()
+            ]
+        }).flat()
 
         const response = await client.bulk({
             body: bulkOperations,
@@ -92,6 +94,43 @@ export default async function () {
     }
 
     info(`Bulk Indexed ${indexName} with upserts`)
+
+    const allGrantIDsInIndex = await fetchAllGrantIDsInIndex(client)
+
+    const grantIDsInData = allGrants.map((grant: any) => grant.GrantID)
+
+    const grantIDsToDelete = _.difference(allGrantIDsInIndex, grantIDsInData)
+
+    if (grantIDsToDelete.length > 0) {
+        info(`Removing documents that are no longer in the data...`);
+
+        const chunkedGrantIDsToDelete = _.chunk(grantIDsToDelete, chunkSize)
+
+        for (let i = 0; i < chunkedGrantIDsToDelete.length; i++) {
+            if (i > 0) {
+                console.log(`Deleted ${i * chunkSize}/${grantIDsToDelete.length} documents`)
+            }
+
+            const grantIDs = chunkedGrantIDsToDelete[i]
+
+            const bulkOperations: any[] = grantIDs.map((grantID: string) => {
+                return {
+                    delete: {
+                        _index: indexName,
+                        _id: grantID,
+                    }
+                }
+            })
+
+            const response = await client.bulk({
+                body: bulkOperations,
+            }).catch(e => {
+                error(e)
+            })
+        }
+
+        info(`Removed ${grantIDsToDelete.length} documents that are no longer in the data`);
+    }
 
     if (process.env.CI && process.env.SEARCH_INDEX_PREFIX) {
         const searchIndexPrefix = process.env.SEARCH_INDEX_PREFIX

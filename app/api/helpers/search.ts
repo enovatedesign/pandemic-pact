@@ -157,6 +157,13 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
     }
 }
 
+export async function fetchAllGrantIDsInIndex(client: Client) {
+    return fetchAllGrantIDsMatchingBooleanQuery(client, '', {
+        filters: [],
+        logicalAnd: false,
+    })
+}
+
 export async function fetchAllGrantIDsMatchingBooleanQuery(client: Client, q: string, filters: SearchFilters) {
     const index = getIndexName()
 
