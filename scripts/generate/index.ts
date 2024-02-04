@@ -12,17 +12,17 @@ main()
 async function main() {
     dotenv.config({path: './.env.local'})
 
-    // await downloadAndParseDataSheets()
+    await downloadAndParseDataSheets()
 
-    // prepareSelectOptions()
+    prepareSelectOptions()
 
-    // prepareGrants()
+    prepareGrants()
 
-    // prepareHomepageTotals()
+    prepareHomepageTotals()
 
-    // await fetchPubMedData()
+    await fetchPubMedData()
 
-    // prepareIndividualGrantFiles()
+    prepareIndividualGrantFiles()
 
     await prepareSearch()
 }
