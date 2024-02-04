@@ -1,0 +1,19 @@
+{
+    "source": {
+        "query": {
+            "match": {
+                "message": "{{#list}}{{word}} {{/list}}"
+            }
+        }
+    },
+    "params": {
+        "list": [
+            {
+                "word": "hello"
+            },
+            {
+                "word": "world"
+            }
+        ]
+    }
+}

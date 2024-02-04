@@ -39,15 +39,12 @@ next-env.d.ts
 /data/dump
 /data/download
 
+# typescript output
+/scripts/dist/
+
 # sample data spreadsheets
 sample-real-data.csv
 sample-real-data.xlsx
 
 # JQ scripts
 *.jq
-
-# ElasticSearch Testing JSON requests 
-/elasticsearch-test-requests/
-
-# ElasticSearch CA Cert
-*.crt

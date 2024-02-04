@@ -1,0 +1,25 @@
+{
+    "name": "grants_and_exports_search_api_key",
+    "role_descriptors": {
+        "grants_and_exports_search_role": {
+            "indices": [
+                {
+                    "names": [
+                        "grants"
+                    ],
+                    "privileges": [
+                        "read"
+                    ]
+                },
+                {
+                    "names": [
+                        "exports"
+                    ],
+                    "privileges": [
+                        "read"
+                    ]
+                }
+            ]
+        }
+    }
+}
