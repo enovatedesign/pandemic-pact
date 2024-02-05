@@ -32,6 +32,8 @@ export default function StandardSearchFilters({setSearchFilters}: Props) {
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
 
+        url.search = searchParams.toString()
+
         const anyFiltersAreSet = Object.values(filters).some(
             (selectedOptions) => selectedOptions.length > 0
         )
