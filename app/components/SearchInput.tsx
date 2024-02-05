@@ -31,6 +31,8 @@ export default function SearchInput({setSearchResponse}: Props) {
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
 
+        url.search = searchParams.toString()
+
         if (searchQuery) {
             url.searchParams.set('q', searchQuery)
         } else {
