@@ -3,7 +3,7 @@
 import {useState, useEffect, useContext, MouseEvent} from "react"
 import seedrandom from 'seedrandom'
 import WordCloudComponent from 'react-d3-cloud'
-import {GlobalFilterContext} from "../helpers/filter"
+import {GlobalFilterContext} from "../helpers/filters"
 import {TooltipContext} from '../helpers/tooltip'
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../helpers/reducers"
@@ -66,7 +66,7 @@ export default function WordCloud({filterKey, randomSeedString, colours, width =
     }
 
     return (
-        <div style={{ aspectRatio: `${width} / ${height}` }}>
+        <div style={{aspectRatio: `${width} / ${height}`}}>
             {isMounted ?
                 <WordCloudComponent
                     data={data}

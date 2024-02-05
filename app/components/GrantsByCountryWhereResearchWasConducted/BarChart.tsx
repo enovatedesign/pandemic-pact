@@ -4,7 +4,7 @@ import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
 import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
 import {regionColours} from "../../helpers/colours"
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'

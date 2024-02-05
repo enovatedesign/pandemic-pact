@@ -3,7 +3,7 @@ import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContain
 import {groupBy} from 'lodash'
 import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import selectOptions from "../../../data/dist/select-options.json"
 import {diseaseColours} from "../../helpers/colours"
 import {baseTooltipProps} from "../../helpers/tooltip"

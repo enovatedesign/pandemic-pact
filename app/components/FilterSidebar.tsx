@@ -3,8 +3,7 @@ import {XIcon, ChevronUpIcon, ChevronDownIcon} from "@heroicons/react/solid"
 import MultiSelect from "./MultiSelect"
 import Switch from './Switch'
 import Button from './Button'
-import {type Filters} from "../types/filters"
-import {availableFilters, emptyFilters} from "../helpers/filter"
+import {availableFilters, emptyFilters, Filters} from "../helpers/filters"
 import selectOptions from '../../data/dist/select-options.json'
 import AnimateHeight from "react-animate-height"
 
@@ -62,12 +61,12 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                     }
                 </p>
             </div>
-            
 
-            <FilterBlock 
-                filters={standardFilters} 
-                selectedFilters={selectedFilters} 
-                setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField} 
+
+            <FilterBlock
+                filters={standardFilters}
+                selectedFilters={selectedFilters}
+                setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField}
                 setSelectedOptions={setSelectedOptions}
             />
 
@@ -75,12 +74,12 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
                 duration={300}
                 height={showAdvancedFilters ? 'auto' : 0}
                 className="w-full"
-            >   
+            >
                 <div className="flex flex-col items-start justify-start gap-y-4">
-                    <FilterBlock 
-                        filters={advancedFilters} 
-                        selectedFilters={selectedFilters} 
-                        setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField} 
+                    <FilterBlock
+                        filters={advancedFilters}
+                        selectedFilters={selectedFilters}
+                        setExcludeGrantsWithMultipleItemsInField={setExcludeGrantsWithMultipleItemsInField}
                         setSelectedOptions={setSelectedOptions}
                     />
                 </div>
@@ -114,17 +113,17 @@ export default function FilterSidebar({selectedFilters, setSelectedFilters, comp
 
 interface filterBlockProps {
     filters: {
-        field: string, 
+        field: string,
         label: string,
         advanced?: boolean,
-        excludeGrantsWithMultipleItems?: { label: string },
-    }[],   
+        excludeGrantsWithMultipleItems?: {label: string},
+    }[],
     selectedFilters: Filters,
     setSelectedOptions: (field: keyof Filters, options: string[]) => void,
     setExcludeGrantsWithMultipleItemsInField: (field: keyof Filters, value: boolean) => void
 }
 
-const FilterBlock = ({filters, selectedFilters, setExcludeGrantsWithMultipleItemsInField, setSelectedOptions} : filterBlockProps) => {
+const FilterBlock = ({filters, selectedFilters, setExcludeGrantsWithMultipleItemsInField, setSelectedOptions}: filterBlockProps) => {
 
     return (
         <>

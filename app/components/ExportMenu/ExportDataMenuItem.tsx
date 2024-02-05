@@ -1,15 +1,16 @@
-import Button from "./Button"
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import {DownloadIcon} from '@heroicons/react/solid'
-import {meilisearchRequest} from "../..//helpers/meilisearch"
-import {utils, writeFile} from 'xlsx'
+import {countActiveFilters, GlobalFilterContext} from "../../helpers/filters"
+import {fetchCsv, filterCsv, downloadCsv} from "../../helpers/export"
+import Button from "./Button"
 
 interface Props {
-    dataFilename: string,
-    meilisearchRequestBody: any,
+    filename: string
 }
 
-export default function ExportDataMenuItem({dataFilename, meilisearchRequestBody}: Props) {
+export default function ExportDataMenuItem({filename}: Props) {
+    const {filters, grants} = useContext(GlobalFilterContext)
+
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
@@ -19,17 +20,28 @@ export default function ExportDataMenuItem({dataFilename, meilisearchRequestBody
 
         setExportingCsv(true)
 
-        meilisearchRequest('exports', meilisearchRequestBody).then(data => {
-            const worksheet = utils.json_to_sheet(data.hits)
-            const workbook = utils.book_new()
-            utils.book_append_sheet(workbook, worksheet, "Grants")
-            writeFile(workbook, `${dataFilename}.csv`, {bookType: 'csv'})
+        fetchCsv().then(
+            csv => {
+                let filteredCsv = csv
 
-            setExportingCsv(false)
-        }).catch((error) => {
-            console.error('Error:', error)
-            setExportingCsv(false)
-        })
+                if (countActiveFilters(filters) > 0) {
+                    filteredCsv = filterCsv(
+                        filteredCsv,
+                        grants.map(grant => grant.GrantID),
+                    )
+                }
+
+                downloadCsv(filteredCsv, filename)
+
+                setExportingCsv(false)
+            }
+        ).catch(
+            error => {
+                console.error(error)
+
+                setExportingCsv(false)
+            }
+        )
     }
 
     return (

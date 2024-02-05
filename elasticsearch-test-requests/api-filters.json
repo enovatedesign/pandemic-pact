@@ -1,0 +1,22 @@
+{
+    "q": "",
+    "filters": {
+        "logicalAnd": true,
+        "filters": [
+            {
+                "field": "Disease",
+                "values": [
+                    "840539006"
+                ],
+                "logicalAnd": false
+            },
+            {
+                "field": "FunderRegion",
+                "values": [
+                    "99999"
+                ],
+                "logicalAnd": false
+            }
+        ]
+    }
+}

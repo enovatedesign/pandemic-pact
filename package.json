@@ -8,13 +8,13 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "node --loader ts-node/esm scripts/generate/index.mts"
+        "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate"
     },
     "dependencies": {
-        "@aws-sdk/client-ses": "^3.485.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^1.0.6",
+        "@opensearch-project/opensearch": "^2.5.0",
         "@react-spring/web": "^9.7.3",
         "@react-three/drei": "^9.93.0",
         "@react-three/fiber": "^8.15.13",
@@ -28,6 +28,7 @@
         "@types/three": "^0.160.0",
         "@vercel/blob": "^0.16.1",
         "autoprefixer": "10.4.16",
+        "chalk": "^4.1.2",
         "dayjs": "^1.11.10",
         "dotenv": "^16.3.1",
         "encoding": "^0.1.13",
@@ -44,22 +45,18 @@
         "react-animate-height": "^3.2.3",
         "react-d3-cloud": "^1.0.6",
         "react-dom": "18.2.0",
-        "react-google-recaptcha-v3": "^1.10.1",
         "react-simple-maps": "^3.0.0",
         "react-tooltip": "^5.25.1",
         "seedrandom": "^3.0.5",
         "swiper": "^11.0.5",
         "tailwindcss": "3.4.1",
         "three": "^0.160.0",
-        "ts-node": "^10.9.2",
         "typescript": "5.3.3",
         "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.3.1",
         "@tailwindcss/typography": "^0.5.10",
-        "@types/seedrandom": "^3.0.8",
-        "chalk": "^5.3.0",
-        "meilisearch": "^0.36.0"
+        "@types/seedrandom": "^3.0.8"
     }
 }

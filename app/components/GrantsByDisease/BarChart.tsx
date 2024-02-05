@@ -1,6 +1,6 @@
 import {useContext} from "react"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import selectOptions from "../../../data/dist/select-options.json"
 import {grantsAndAmountsBarChartColours} from "../../helpers/colours"
 import {diseaseColours, diseaseDimColours} from "../../helpers/colours"

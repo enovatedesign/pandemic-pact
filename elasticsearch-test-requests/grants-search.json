@@ -1,0 +1,39 @@
+{
+    "query": {
+        "bool": {
+            "filter": {
+                "bool": {
+                    "must": [
+                        {
+                            "bool": {
+                                "should": [
+                                    {
+                                        "terms": {
+                                            "ResearchInstitutionCountry.keyword": [
+                                                "826"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "terms": {
+                                            "ResearchInstitutionCountry.keyword": [
+                                                "276"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "terms": {
+                                "Disease.keyword": [
+                                    "398447004"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

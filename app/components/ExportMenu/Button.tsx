@@ -37,8 +37,7 @@ export default function Button({Icon, label, onClick, className, loading}: Props
 
                     {label}
                 </button>
-            )
-            }
+            )}
         </Menu.Item >
     )
 }

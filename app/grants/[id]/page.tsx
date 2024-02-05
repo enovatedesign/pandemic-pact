@@ -1,5 +1,6 @@
 import {Suspense} from 'react'
 import fs from 'fs-extra'
+import {notFound} from 'next/navigation'
 import StaticPage from './StaticPage'
 import ClientPage from './ClientPage'
 
@@ -10,7 +11,13 @@ export async function generateStaticParams() {
 }
 
 export default function Page({params}: {params: {id: string}}) {
-    const grant = fs.readJsonSync(`./data/dist/grants/${params.id}.json`)
+    const path = `./data/dist/grants/${params.id}.json`
+
+    if (!fs.existsSync(path)) {
+        notFound()
+    }
+
+    const grant = fs.readJsonSync(path)
 
     // Note that the `Suspense` here is to avoid the following error:
     // https://nextjs.org/docs/messages/deopted-into-client-rendering
