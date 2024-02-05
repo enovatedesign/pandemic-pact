@@ -1,12 +1,12 @@
 import {useState} from 'react'
 import Button from './Button'
-import {meilisearchRequest} from "../helpers/meilisearch"
-import {utils, writeFile} from 'xlsx'
-import { propagateServerField } from 'next/dist/server/lib/render-server'
-import { CloudDownloadIcon } from '@heroicons/react/outline'
+import {searchRequest, SearchRequestBody, queryOrFiltersAreSet} from '../helpers/search'
+import {fetchCsv, filterCsv, downloadCsv} from "../helpers/export"
+import {CloudDownloadIcon} from '@heroicons/react/outline'
+import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
 
 interface Props {
-    meilisearchRequestBody: any
+    searchRequestBody: SearchRequestBody
     filename: string
     children?: React.ReactNode
     title: string
@@ -14,28 +14,46 @@ interface Props {
     size?: string
 }
 
-export default function ExportToCsvButton({meilisearchRequestBody, filename, title, ...props}: Props) {
+export default function ExportToCsvButton({searchRequestBody, filename, title, ...props}: Props) {
     const [exportingCsv, setExportingCsv] = useState(false)
 
     const exportCsv = () => {
+        if (exportingCsv) {
+            return
+        }
+
         setExportingCsv(true)
 
-        meilisearchRequest('exports', meilisearchRequestBody).then(data => {
-            const worksheet = utils.json_to_sheet(data.hits)
-            const workbook = utils.book_new()
-            utils.book_append_sheet(workbook, worksheet, "Grants")
-            writeFile(workbook, `${filename}.csv`, {bookType: 'csv'})
+        Promise.all([
+            fetchCsv(),
+            queryOrFiltersAreSet(searchRequestBody) ?
+                searchRequest('export', searchRequestBody) :
+                Promise.resolve(null),
+        ]).then(responses => {
+            const [csv, searchResponse] = responses
+
+            let filteredCsv = csv
+
+            if (searchResponse !== null) {
+                filteredCsv = filterCsv(
+                    filteredCsv,
+                    searchResponse.grantIDs,
+                )
+            }
+
+            downloadCsv(filteredCsv, filename)
 
             setExportingCsv(false)
-        }).catch((error) => {
-            console.error('Error:', error)
+        }).catch(error => {
+            console.error(error)
             setExportingCsv(false)
         })
     }
 
+    const iconClasses = 'w-5 h-5'
+
     return (
         <Button
-            loading={exportingCsv}
             disabled={exportingCsv}
             onClick={exportCsv}
             colour="grey"
@@ -43,7 +61,12 @@ export default function ExportToCsvButton({meilisearchRequestBody, filename, tit
             {...props}
         >
             <span>Download Data</span>
-            <CloudDownloadIcon className="w-5 h-5"/>
+
+            {exportingCsv ? (
+                <LoadingSpinner className={`${iconClasses} animate-spin shrink-0`} />
+            ) : (
+                <CloudDownloadIcon className={iconClasses} />
+            )}
         </Button>
     )
 }

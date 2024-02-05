@@ -1,192 +1,104 @@
-import {useEffect, useMemo, useState} from 'react';
-import {useRouter, usePathname, useSearchParams} from 'next/navigation';
-import {SearchIcon} from '@heroicons/react/solid';
-import ExportToCsvButton from './ExportToCsvButton';
-import MultiSelect from './MultiSelect';
-import selectOptions from '../../data/dist/select-options.json';
-import {type SearchResponse} from '../types/search';
-import {
-    meilisearchRequest,
-    exportRequestBody,
-    highlightedResultsRequestBody,
-    type MeilisearchRequestBody,
-} from '../helpers/meilisearch';
-import Button from './Button';
-import AnimateHeight from 'react-animate-height';
-import AdvancedSearch from './AdvancedSearch';
+import {useEffect, useMemo, useState} from 'react'
+import {useRouter, usePathname, useSearchParams} from 'next/navigation'
+import {SearchIcon} from '@heroicons/react/solid'
+import ExportToCsvButton from './ExportToCsvButton'
+import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search'
+import Button from './Button'
+import AnimateHeight from 'react-animate-height'
+import InfoModal from './InfoModal'
+import StandardSearchFilters from './StandardSearchFilters'
+import AdvancedSearch from './AdvancedSearch'
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void;
-}
-
-export interface Filters {
-    Disease: string[];
-    Pathogen: string[];
-    ResearchInstitutionCountry: string[];
-    ResearchInstitutionRegion: string[];
-    FunderCountry: string[];
-    FunderRegion: string[];
+    setSearchResponse: (searchResponse: SearchResponse) => void
 }
 
 export default function SearchInput({setSearchResponse}: Props) {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const searchQueryFromUrl = searchParams.get('q') ?? '';
-    const filtersFromUrl = searchParams.get('filters') ?? null;
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const searchQueryFromUrl = searchParams.get('q') ?? ''
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl);
+    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [filters, setFilters] = useState<Filters>(
-        filtersFromUrl
-            ? JSON.parse(filtersFromUrl)
-            : {
-                Disease: [],
-                Pathogen: [],
-                ResearchInstitutionCountry: [],
-                ResearchInstitutionRegion: [],
-                FunderCountry: [],
-                FunderRegion: [],
-            }
-    );
+    const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+        logicalAnd: true,
+        filters: [],
+    })
 
-    const [totalHits, setTotalHits] = useState<number>(0);
+    const [totalHits, setTotalHits] = useState<number>(0)
 
     useEffect(() => {
-        const url = new URL(pathname, window.location.origin);
+        const url = new URL(pathname, window.location.origin)
 
         if (searchQuery) {
-            url.searchParams.set('q', searchQuery);
+            url.searchParams.set('q', searchQuery)
         } else {
-            url.searchParams.delete('q');
+            url.searchParams.delete('q')
         }
 
-        const anyFiltersAreSet = Object.values(filters).some(
-            (selectedOptions) => selectedOptions.length > 0
-        );
+        router.replace(url.href)
+    }, [searchQuery, pathname, router])
 
-        if (anyFiltersAreSet) {
-            url.searchParams.set('filters', JSON.stringify(filters));
-        } else {
-            url.searchParams.delete('filters');
-        }
-
-        router.replace(url.href);
-    }, [searchQuery, filters, pathname, router]);
-
-    const sharedRequestBody = useMemo(() => {
-        let body: MeilisearchRequestBody = {
+    const searchRequestBody = useMemo(() => {
+        return {
             q: searchQuery,
-        };
-
-        const filter = [];
-
-        if (filters.Disease?.length > 0) {
-            filter.push(
-                filters.Disease.length === 1
-                    ? `Disease = "${filters.Disease[0]}"`
-                    : filters.Disease.map((disease) => `Disease = "${disease}"`)
-            );
+            filters: searchFilters,
         }
-
-        if (filters.Pathogen?.length > 0) {
-            filter.push(
-                filters.Pathogen.length === 1
-                    ? `Pathogen = "${filters.Pathogen[0]}"`
-                    : filters.Pathogen.map(
-                        (pathogen) => `Pathogen = "${pathogen}"`
-                    )
-            );
-        }
-
-        if (filters.ResearchInstitutionCountry?.length > 0) {
-            filter.push(
-                filters.ResearchInstitutionCountry.length === 1
-                    ? `ResearchInstitutionCountry = "${filters.ResearchInstitutionCountry[0]}"`
-                    : filters.ResearchInstitutionCountry.map(
-                        (country) =>
-                            `ResearchInstitutionCountry = "${country}"`
-                    )
-            );
-        }
-
-        if (filters.ResearchInstitutionRegion?.length > 0) {
-            filter.push(
-                filters.ResearchInstitutionRegion.length === 1
-                    ? `ResearchInstitutionRegion = "${filters.ResearchInstitutionRegion[0]}"`
-                    : filters.ResearchInstitutionRegion.map(
-                        (region) => `ResearchInstitutionRegion = "${region}"`
-                    )
-            );
-        }
-
-        if (filters.FunderCountry?.length > 0) {
-            filter.push(
-                filters.FunderCountry.length === 1
-                    ? `FunderCountry = "${filters.FunderCountry[0]}"`
-                    : filters.FunderCountry.map(
-                        (country) => `FunderCountry = "${country}"`
-                    )
-            );
-        }
-
-        if (filters.FunderRegion?.length > 0) {
-            filter.push(
-                filters.FunderRegion.length === 1
-                    ? `FunderRegion = "${filters.FunderRegion[0]}"`
-                    : filters.FunderRegion.map(
-                        (region) => `FunderRegion = "${region}"`
-                    )
-            );
-        }
-
-        if (filter.length > 0) {
-            body.filter = filter;
-        }
-
-        return body;
-    }, [searchQuery, filters]);
+    }, [searchQuery, searchFilters])
 
     useEffect(() => {
-        const searchRequestBody = highlightedResultsRequestBody({
-            ...sharedRequestBody,
-            attributesToCrop: ['Abstract'],
-            cropLength: 50,
-        });
-
-        meilisearchRequest('grants', searchRequestBody)
-            .then((data) => {
-                setSearchResponse(data);
-                setTotalHits(data.estimatedTotalHits);
+        searchRequest('list', searchRequestBody)
+            .then(data => {
+                setSearchResponse(data)
+                setTotalHits(data.total.value)
+            }).catch(error => {
+                console.error(error)
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }, [sharedRequestBody, setTotalHits, setSearchResponse]);
+    }, [searchRequestBody, setTotalHits, setSearchResponse])
 
-    const [advancedSearchShow, setAdvancedSearchShow] = useState(false);
+    const [advancedSearchShow, setAdvancedSearchShow] = useState(false)
 
     return (
         <div>
             <div className="space-y-3">
-                <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4">
-                    <input
-                        type="search"
-                        placeholder="Search..."
-                        onInput={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                        ) => setSearchQuery(event.target.value)}
-                        value={searchQuery}
-                        className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
-                    />
-                    <Button
-                        size="xsmall"
-                        colour="grey"
-                        customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
-                    >
-                        <span className="sr-only">Search</span>
-                        <SearchIcon className="w-6 h-6 text-secondary" />
-                    </Button>
+                <div className="flex gap-x-4">
+                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
+                        <input
+                            type="search"
+                            placeholder="Search..."
+                            onInput={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => setSearchQuery(event.target.value)}
+                            value={searchQuery}
+                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                        />
+                        <Button
+                            size="xsmall"
+                            colour="grey"
+                            customClasses="flex items-center justify-center self-start gap-2 rounded-lg"
+                        >
+                            <span className="sr-only">Search</span>
+                            <SearchIcon className="w-6 h-6 text-secondary" />
+                        </Button>
+                    </div>
+
+                    <InfoModal>
+                        <h3>Search Operators</h3>
+
+                        <p>By default, search queries are split by whitespace and matched with OR. For example, if you search for <code>bats dogs</code>, this will match grants that contain either the word <code>bats</code> or the word <code>dogs</code> in their Title, Abstract or Lay Summary fields.</p>
+
+                        <p>For more complex searches, you can use the following operators:</p>
+
+                        <ul>
+                            <li><code>+</code> the AND operator, which matches both terms, e.g. <code>bats + dogs</code></li>
+                            <li><code>|</code> the OR operator, which matches either term, e.g. <code>bats | dogs</code></li>
+                            <li><code>-</code> the NOT operator, which negates the term directly after it, e.g. <code>bats -dogs</code></li>
+                            <li><code>( )</code> the parentheses operator, which groups terms together for precedence, e.g. <code>(bats | dogs) + (cats | rats)</code></li>
+                            <li><code>&quot; &quot;</code> the quotes operator, which matches the exact phrase, e.g. <code>&quot;bats and dogs&quot;</code></li>
+                            <li><code>\</code> the escape character, which allows you to search for special characters, e.g. <code>bat \+ dogs</code></li>
+                        </ul>
+                    </InfoModal>
                 </div>
 
                 <section className="w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
@@ -196,8 +108,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
                                 className={`${!advancedSearchShow
-                                        ? 'bg-white rounded-t-lg'
-                                        : 'bg-transparent'
+                                    ? 'bg-white rounded-t-lg'
+                                    : 'bg-transparent'
                                     } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Standard Search
@@ -205,8 +117,8 @@ export default function SearchInput({setSearchResponse}: Props) {
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
                                 className={`${advancedSearchShow
-                                        ? 'bg-white rounded-t-lg'
-                                        : 'bg-transparent'
+                                    ? 'bg-white rounded-t-lg'
+                                    : 'bg-transparent'
                                     } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Advanced Search
@@ -215,121 +127,23 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </div>
 
                     <div className="rounded-lg col-span-2 bg-white p-3">
-                        {!advancedSearchShow ? (
-                            <AnimateHeight
-                                duration={400}
-                                height={!advancedSearchShow && 'auto'}
-                            >
-                                <section className=" bg-white p-3">
-                                    <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
-                                        Advanced Search
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                        <MultiSelect
-                                            options={selectOptions.Disease}
-                                            selectedOptions={filters.Disease}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    Disease: selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Diseases"
-                                        />
-
-                                        <MultiSelect
-                                            options={selectOptions.Pathogen}
-                                            selectedOptions={filters.Pathogen}
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    Pathogen: selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Pathogens"
-                                        />
-
-                                        <MultiSelect
-                                            options={
-                                                selectOptions.ResearchInstitutionCountry
-                                            }
-                                            selectedOptions={
-                                                filters.ResearchInstitutionCountry
-                                            }
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    ResearchInstitutionCountry:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Research Institution Countries"
-                                        />
-                                        <MultiSelect
-                                            options={selectOptions.ResearchInstitutionRegion}
-                                            selectedOptions={
-                                                filters.ResearchInstitutionRegion
-                                            }
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    ResearchInstitutionRegion:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Research Institution Regions"
-                                        />
-                                        <MultiSelect
-                                            options={
-                                                selectOptions.FunderCountry
-                                            }
-                                            selectedOptions={
-                                                filters.FunderCountry
-                                            }
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    FunderCountry:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Funder Countries"
-                                        />
-                                        <MultiSelect
-                                            options={selectOptions.FunderRegion}
-                                            selectedOptions={
-                                                filters.FunderRegion
-                                            }
-                                            setSelectedOptions={(
-                                                selectedOptions
-                                            ) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    FunderRegion:
-                                                        selectedOptions,
-                                                })
-                                            }
-                                            placeholder="All Funder Regions"
-                                        />
-                                    </div>
-                                </section>
-                            </AnimateHeight>
-                        ) : (
+                        {advancedSearchShow ? (
                             <AnimateHeight
                                 duration={400}
                                 height={advancedSearchShow && 'auto'}
                             >
-                                <AdvancedSearch />
+                                <AdvancedSearch
+                                    setSearchFilters={setSearchFilters}
+                                />
+                            </AnimateHeight>
+                        ) : (
+                            <AnimateHeight
+                                duration={400}
+                                height={!advancedSearchShow && 'auto'}
+                            >
+                                <StandardSearchFilters
+                                    setSearchFilters={setSearchFilters}
+                                />
                             </AnimateHeight>
                         )}
                     </div>
@@ -344,9 +158,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                     </p>
 
                     <ExportToCsvButton
-                        meilisearchRequestBody={exportRequestBody(
-                            sharedRequestBody
-                        )}
+                        searchRequestBody={searchRequestBody}
                         filename="search-results-export"
                         title="Download Data"
                         size="xsmall"
@@ -354,5 +166,5 @@ export default function SearchInput({setSearchResponse}: Props) {
                 </div>
             </div>
         </div>
-    );
+    )
 }

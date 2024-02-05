@@ -39,6 +39,10 @@ next-env.d.ts
 /data/dump
 /data/download
 
+# typescript output
+/scripts/dist/
+/compiled-scripts
+
 # sample data spreadsheets
 sample-real-data.csv
 sample-real-data.xlsx

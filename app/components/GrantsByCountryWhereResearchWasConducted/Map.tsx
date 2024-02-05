@@ -5,7 +5,7 @@ import {ComposableMap, Geographies, Geography} from 'react-simple-maps'
 import DoubleLabelSwitch from "../DoubleLabelSwitch"
 import {scaleLinear} from "d3-scale"
 import {groupBy} from 'lodash'
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import {dollarValueFormatter} from "../../helpers/value-formatters"

@@ -3,10 +3,7 @@ import {Dialog} from '@headlessui/react'
 import {InformationCircleIcon} from "@heroicons/react/solid"
 import Button from './Button'
 
-
-
-export default function InfoModal({ children, customButton = null}: { children: React.ReactNode, customButton?: React.ReactNode}) {
-    
+export default function InfoModal({children, customButton = null}: {children: React.ReactNode, customButton?: React.ReactNode}) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (

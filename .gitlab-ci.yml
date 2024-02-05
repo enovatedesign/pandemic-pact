@@ -8,7 +8,7 @@ deploy_review:
   script:
     - npm install --global vercel
     - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-    - vercel deploy --build-env "MEILISEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" --token=$VERCEL_TOKEN | sed -e 's/^/DYNAMIC_ENVIRONMENT_URL=/' > deploy.env
+    - vercel deploy --build-env "SEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" --token=$VERCEL_TOKEN | sed -e 's/^/DYNAMIC_ENVIRONMENT_URL=/' > deploy.env
   artifacts:
     reports:
       dotenv: deploy.env
@@ -21,12 +21,9 @@ stop_review:
   stage: deploy
   script:
     - |
-      for index_name in grants exports
-      do
         curl -X DELETE \
-             -H "Authorization: Bearer $MEILISEARCH_MASTER_API_KEY" \
-             "${MEILISEARCH_HOST}/indexes/${CI_COMMIT_REF_NAME}-${index_name}"
-      done
+             -u "${SEARCH_USERNAME}:${SEARCH_PASSWORD}" \
+             "${SEARCH_HOST}/${CI_COMMIT_REF_NAME}-grants"
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop

@@ -4,7 +4,7 @@ import VisualisationCard from "../VisualisationCard"
 import BarChart from "./BarChart"
 import ScatterChart from "./ScatterChart"
 import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {GlobalFilterContext} from "../../helpers/filter"
+import {GlobalFilterContext} from "../../helpers/filters"
 import selectOptions from "../../../data/dist/select-options.json"
 
 export default function GrantsByResearchCategoryCard() {

@@ -8,10 +8,9 @@ interface Props {
     chartSelector: string,
     imageFilename: string,
     dataFilename: string,
-    meilisearchRequestBody: any,
 }
 
-export default function ExportMenu({chartSelector, imageFilename, dataFilename, meilisearchRequestBody}: Props) {
+export default function ExportMenu({chartSelector, imageFilename, dataFilename}: Props) {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -40,8 +39,7 @@ export default function ExportMenu({chartSelector, imageFilename, dataFilename, 
                     />
 
                     <ExportDataMenuItem
-                        dataFilename={dataFilename}
-                        meilisearchRequestBody={meilisearchRequestBody}
+                        filename={dataFilename}
                     />
                 </Menu.Items>
             </Transition>

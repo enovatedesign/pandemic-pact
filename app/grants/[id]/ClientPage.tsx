@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react'
 import {useSearchParams} from 'next/navigation'
 import StaticPage from './StaticPage'
-import {meilisearchRequest, highlightedResultsRequestBody} from '../../helpers/meilisearch'
+import {searchRequest} from '../../helpers/search'
 
 interface SearchableFieldResults {
     GrantTitleEng: string,
@@ -31,18 +31,25 @@ export default function GrantLandingPage({grant}: Props) {
             return
         }
 
-        const searchRequestBody = highlightedResultsRequestBody({
+        searchRequest('show', {
             q: searchQueryFromUrl,
-            filter: `GrantID = ${grant.GrantID}`,
-        })
-
-        meilisearchRequest('grants', searchRequestBody).then(data => {
+            filters: {
+                logicalAnd: false,
+                filters: [
+                    {
+                        field: 'GrantID',
+                        values: [grant.GrantID],
+                        logicalAnd: false,
+                    }
+                ]
+            },
+        }).then(data => {
             const hit = data.hits[0]
 
             setSearchableFieldResults({
-                GrantTitleEng: hit._formatted.GrantTitleEng,
-                Abstract: hit._formatted.Abstract,
-                LaySummary: hit._formatted.LaySummary,
+                GrantTitleEng: hit.highlight.GrantTitleEng ?? grant.GrantTitleEng,
+                Abstract: hit.highlight.Abstract ?? grant.Abstract,
+                LaySummary: hit.highlight.LaySummary ?? grant.LaySummary,
             })
         }).catch((error) => {
             console.error('Error:', error)
