@@ -45,7 +45,7 @@ export default function StandardSearchFilters({setSearchFilters}: Props) {
         }
 
         router.replace(url.href)
-    }, [filters, pathname, router])
+    }, [searchParams, filters, pathname, router])
 
     const setSelectedOptions = (field: string, selectedOptions: string[]) => {
         const newFilters = {
