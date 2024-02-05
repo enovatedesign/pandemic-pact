@@ -40,7 +40,7 @@ export default function SearchInput({setSearchResponse}: Props) {
         }
 
         router.replace(url.href)
-    }, [searchQuery, pathname, router])
+    }, [searchParams, searchQuery, pathname, router])
 
     const searchRequestBody = useMemo(() => {
         return {
