@@ -40,9 +40,9 @@ SEARCH_PASSWORD="%%SEARCH_PASSWORD%%"
 SEARCH_INDEX_PREFIX="%%SEARCH_INDEX_PREFIX%%"
 ```
 
-Replace `SEARCH_HOST`, `SEARCH_USERNAME` and `SEARCH_PASSWORD` with the corresponding values from [the CI/CD settings in Gitlab](https://gitlab.enovate.co.uk/clients/pandemic-pact/-/settings/ci_cd#js-cicd-variables-settings).
+Replace `%%SEARCH_HOST%%`, `%%SEARCH_USERNAME%%` and `%%SEARCH_PASSWORD%%` with the corresponding values from [the CI/CD settings in Gitlab](https://gitlab.enovate.co.uk/clients/pandemic-pact/-/settings/ci_cd#js-cicd-variables-settings).
 
-Replace `SEARCH_INDEX_PREFIX` with something unique so that you don't overwrite indexes of production/staging/other developers. For example mine is set to `"seb_dev"`.
+Replace `%%SEARCH_INDEX_PREFIX%%` with something unique so that you don't overwrite indexes of production/staging/other developers. For example mine is set to `"seb_dev"`.
 
 ### Generate Data
 
