@@ -1,12 +1,13 @@
 This project uses the following technologies and packages:
 
-- [Next.js](https://nextjs.org/)
+- [Next.js](https://nextjs.org)
 - [Vercel](https://vercel.com)
-- [Typescript](https://www.typescriptlang.org/)
-- [Meilisearch](https://www.meilisearch.com/)
-- [Tremor](https://www.tremor.so/)
-- [React Simple Maps](https://www.react-simple-maps.io/)
-- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
+- [Typescript](https://www.typescriptlang.org)
+- [OpenSearch](https://opensearch.org)
+- [Headless UI](https://headlessui.com)
+- [Recharts](https://recharts.org)
+- [React Simple Maps](https://www.react-simple-maps.io)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 
 ## Getting Started
 
