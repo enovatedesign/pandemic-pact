@@ -66,7 +66,7 @@ export default async function () {
 
     for (let i = 0; i < chunkedGrants.length; i++) {
         if (i > 0) {
-            console.log(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
+            info(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
         }
 
         const grants = chunkedGrants[i]
@@ -95,41 +95,43 @@ export default async function () {
 
     info(`Bulk Indexed ${indexName} with upserts`)
 
-    const allGrantIDsInIndex = await fetchAllGrantIDsInIndex(client)
+    if (!indexExists) {
+        const allGrantIDsInIndex = await fetchAllGrantIDsInIndex(client)
 
-    const grantIDsInData = allGrants.map((grant: any) => grant.GrantID)
+        const grantIDsInData = allGrants.map((grant: any) => grant.GrantID)
 
-    const grantIDsToDelete = _.difference(allGrantIDsInIndex, grantIDsInData)
+        const grantIDsToDelete = _.difference(allGrantIDsInIndex, grantIDsInData)
 
-    if (grantIDsToDelete.length > 0) {
-        info(`Removing documents that are no longer in the data...`);
+        if (grantIDsToDelete.length > 0) {
+            info(`Removing documents that are no longer in the data...`);
 
-        const chunkedGrantIDsToDelete = _.chunk(grantIDsToDelete, chunkSize)
+            const chunkedGrantIDsToDelete = _.chunk(grantIDsToDelete, chunkSize)
 
-        for (let i = 0; i < chunkedGrantIDsToDelete.length; i++) {
-            if (i > 0) {
-                console.log(`Deleted ${i * chunkSize}/${grantIDsToDelete.length} documents`)
+            for (let i = 0; i < chunkedGrantIDsToDelete.length; i++) {
+                if (i > 0) {
+                    info(`Deleted ${i * chunkSize}/${grantIDsToDelete.length} documents`)
+                }
+
+                const grantIDs = chunkedGrantIDsToDelete[i]
+
+                const bulkOperations: any[] = grantIDs.map((grantID: string) => {
+                    return {
+                        delete: {
+                            _index: indexName,
+                            _id: grantID,
+                        }
+                    }
+                })
+
+                const response = await client.bulk({
+                    body: bulkOperations,
+                }).catch(e => {
+                    error(e)
+                })
             }
 
-            const grantIDs = chunkedGrantIDsToDelete[i]
-
-            const bulkOperations: any[] = grantIDs.map((grantID: string) => {
-                return {
-                    delete: {
-                        _index: indexName,
-                        _id: grantID,
-                    }
-                }
-            })
-
-            const response = await client.bulk({
-                body: bulkOperations,
-            }).catch(e => {
-                error(e)
-            })
+            info(`Removed ${grantIDsToDelete.length} documents that are no longer in the data`);
         }
-
-        info(`Removed ${grantIDsToDelete.length} documents that are no longer in the data`);
     }
 
     if (process.env.CI && process.env.SEARCH_INDEX_PREFIX) {
@@ -140,6 +142,6 @@ export default async function () {
             `\nSEARCH_INDEX_PREFIX=${searchIndexPrefix}`
         )
 
-        console.log(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`);
+        info(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`);
     }
 }
