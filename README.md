@@ -27,7 +27,7 @@ npm install
 
 The build should run successfully without OpenSearch, but the site relies on it heavily for the Grants Search, so it is recommended that you do set it up. There are two approaches:
 
-#### Connect to the staging instance
+#### 1. Connect to the staging instance
 
 The easiest way to get started is to set up an index on the staging instance.
 
@@ -44,7 +44,7 @@ Replace `%%SEARCH_HOST%%`, `%%SEARCH_USERNAME%%` and `%%SEARCH_PASSWORD%%` with 
 
 Replace `%%SEARCH_INDEX_PREFIX%%` with something unique so that you don't overwrite indexes of production/staging/other developers. For example mine is set to `"seb_dev"`.
 
-#### Run OpenSearch locally using docker
+#### 2. Run OpenSearch locally using docker
 
 If you want to run OpenSearch locally, you can use docker. Note that it is probably easier to use the Staging instance as documented above, unless you are specifically working on OpenSearch-related code (such as the `generate` script or search API routes).
 
