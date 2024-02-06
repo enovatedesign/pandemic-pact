@@ -23,31 +23,30 @@ Install NPM dependencies:
 npm install
 ```
 
-### Meilisearch (optional)
+### OpenSearch
 
-The build should run successfully without Meilisearch, but the site relies on it heavily for search and export features so it is recommended. If you don't have it installed, you can get it with brew:
+The build should run successfully without OpenSearch, but the site relies on it heavily for the Grants Search, so it is recommended that you do set it up. There are two approaches:
 
-```bash
-brew install meilisearch
+#### Connect to the staging instance
+
+The easiest way to get started is to set up an index on the staging instance. This is probably what you want unless you know you need a local docker instance.
+
+Add the following to your `.env.local` file:
+
+```
+SEARCH_HOST="https://search-pandemic-pact-staging-5rjd2m4dzwxsa7xqpuari4ljtm.eu-west-1.es.amazonaws.com"
+SEARCH_USERNAME="edadmin"
+SEARCH_PASSWORD="%%SEARCH_PASSWORD%%"
+SEARCH_INDEX_PREFIX="%%SEARCH_INDEX_PREFIX%%"
 ```
 
-I suggest starting it as a service so that it is always running in the background, even after rebooting your computer:
+Replace `SEARCH_PASSWORD` with the corresponding value from [the CI/CD settings in Gitlab](https://gitlab.enovate.co.uk/clients/pandemic-pact/-/settings/ci_cd#js-cicd-variables-settings).
 
-```bash
-brew services start meilisearch
-```
-
-Finally, you will need to create an env file:
-
-```bash
-cp .env.local.example .env.local
-```
-
-The settings from `.env.local.example` should work automatically with the brew meilisearch service, without any further configuration.
+Replace `SEARCH_INDEX_PREFIX` with something unique so that you don't overwrite indexes of production/staging/other developers. For example mine is set to `"seb_dev"`.
 
 ### Generate Data
 
-Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `/dist/data` directory and sends it to Meilisearch:
+Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `/dist/data` directory and sends it to OpenSearch:
 
 ```bash
 npm run generate
