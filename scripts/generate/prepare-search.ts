@@ -66,7 +66,7 @@ export default async function () {
 
     for (let i = 0; i < chunkedGrants.length; i++) {
         if (i > 0) {
-            console.log(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
+            info(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
         }
 
         const grants = chunkedGrants[i]
@@ -109,7 +109,7 @@ export default async function () {
 
             for (let i = 0; i < chunkedGrantIDsToDelete.length; i++) {
                 if (i > 0) {
-                    console.log(`Deleted ${i * chunkSize}/${grantIDsToDelete.length} documents`)
+                    info(`Deleted ${i * chunkSize}/${grantIDsToDelete.length} documents`)
                 }
 
                 const grantIDs = chunkedGrantIDsToDelete[i]
@@ -142,6 +142,6 @@ export default async function () {
             `\nSEARCH_INDEX_PREFIX=${searchIndexPrefix}`
         )
 
-        console.log(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`);
+        info(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`);
     }
 }
