@@ -34,13 +34,13 @@ The easiest way to get started is to set up an index on the staging instance. Th
 Add the following to your `.env.local` file:
 
 ```
-SEARCH_HOST="https://search-pandemic-pact-staging-5rjd2m4dzwxsa7xqpuari4ljtm.eu-west-1.es.amazonaws.com"
-SEARCH_USERNAME="edadmin"
+SEARCH_HOST="%%SEARCH_HOST%%"
+SEARCH_USERNAME="%%SEARCH_USERNAME%%"
 SEARCH_PASSWORD="%%SEARCH_PASSWORD%%"
 SEARCH_INDEX_PREFIX="%%SEARCH_INDEX_PREFIX%%"
 ```
 
-Replace `SEARCH_PASSWORD` with the corresponding value from [the CI/CD settings in Gitlab](https://gitlab.enovate.co.uk/clients/pandemic-pact/-/settings/ci_cd#js-cicd-variables-settings).
+Replace `SEARCH_HOST`, `SEARCH_USERNAME` and `SEARCH_PASSWORD` with the corresponding values from [the CI/CD settings in Gitlab](https://gitlab.enovate.co.uk/clients/pandemic-pact/-/settings/ci_cd#js-cicd-variables-settings).
 
 Replace `SEARCH_INDEX_PREFIX` with something unique so that you don't overwrite indexes of production/staging/other developers. For example mine is set to `"seb_dev"`.
 
