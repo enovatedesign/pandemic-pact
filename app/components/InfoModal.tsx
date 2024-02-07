@@ -8,16 +8,18 @@ export default function InfoModal({children, customButton = null}: {children: Re
 
     return (
         <>
-            {customButton ? (
-                <>
-                    {customButton}
-                </>
-            ) : (
-                <button onClick={() => setIsOpen(!isOpen)}>
-                    <span className="sr-only">Information</span>
-                    <InformationCircleIcon className="w-6 h-6 text-secondary" />
-                </button>
-            )}
+            <button onClick={() => setIsOpen(!isOpen)}>
+                {customButton ? (
+                    <>
+                        {customButton}
+                    </>
+                ): (
+                    <>
+                        <span className="sr-only">Information</span>
+                        <InformationCircleIcon className="w-6 h-6 text-secondary" />
+                    </>
+                )}
+            </button>
 
             <Dialog
                 open={isOpen}
