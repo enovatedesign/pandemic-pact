@@ -187,7 +187,7 @@ export default function StaticPage({grant}: Props) {
                     </ul>
                     {grant.PubMedGrantId && (
                         <p className="text-white/80">
-                            Grant number: <span className="text-white/60 font-bold uppercase">{grant.PubMedGrantId}</span>
+                            Grant number: <span className="text-white/60 font-bold uppercase whitespace-nowrap">{grant.PubMedGrantId}</span>
                         </p>
                     )}
 
