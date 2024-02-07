@@ -12,6 +12,7 @@ import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
 import Button from '@/app/components/Button'
 import '../../css/components/results-table.css'
 import InfoModal from "../../components/InfoModal"
+import { useSearchParams } from 'next/navigation'
 
 dayjs.extend(relativeTime)
 
@@ -172,6 +173,11 @@ export default function StaticPage({grant}: Props) {
 
     }, [backgroundShow, readMore])
 
+    const queryParams = useSearchParams()
+    const query = queryParams.get('q')
+
+    const grantSearchLink = query ? `/grants?q=${query}` : '/grants'
+
     const mastheadContent = () => {
         return (
             <>
@@ -203,7 +209,7 @@ export default function StaticPage({grant}: Props) {
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
             <div className="container mx-auto my-12 relative">
 
-                <Link href="/grants" className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
+                <Link href={grantSearchLink} className="absolute right-12 lg:right-20 bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 -translate-y-1/2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300">
                     <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
                         <ChevronLeftIcon className="w-4 h-4" />
                     </div>
