@@ -1,5 +1,4 @@
 "use client"
-
 import {useState, useEffect} from 'react'
 import AnimateHeight from 'react-animate-height'
 import {ChevronDownIcon, ChevronLeftIcon, ExternalLinkIcon, ArrowRightIcon} from "@heroicons/react/solid"
@@ -38,13 +37,18 @@ export default function StaticPage({grant}: Props) {
         {
             text: 'Known Financial Commitments (USD)',
             metric: (typeof grant.GrantAmountConverted === 'number') ?
-                `$ ${grant.GrantAmountConverted.toLocaleString()}`
-                : grant.GrantAmountConverted,
+            `$ ${grant.GrantAmountConverted.toLocaleString()}`
+            : grant.GrantAmountConverted,
+            classes: ''
+        },
+        {
+            text: 'Principle Investigator',
+            metric: grant.PrincipleInvestigator ?? 'Pending',
             classes: ''
         },
         {
             text: 'Research Location',
-            metric: `${grant.ResearchInstitutionCountry}, ${grant.ResearchInstitutionRegion}`,
+            metric: [grant.ResearchInstitutionCountry[0], grant.ResearchInstitutionRegion[0]],
             classes: ''
         },
         {
@@ -58,7 +62,7 @@ export default function StaticPage({grant}: Props) {
             classes: ''
         },
     ]
-
+    
     const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
 
     const keyFactsSubHeadings = [
@@ -190,12 +194,10 @@ export default function StaticPage({grant}: Props) {
                             Grant number: <span className="text-white/60 font-bold uppercase whitespace-nowrap">{grant.PubMedGrantId}</span>
                         </p>
                     )}
-
                 </div>
             </>
         )
     }
-
 
     return (
         <Layout title={grant.GrantTitleEng} mastheadContent={mastheadContent()}>
@@ -242,14 +244,16 @@ export default function StaticPage({grant}: Props) {
                                     Key facts
                                 </h3>
                                 <div className='w-full bg-primary text-secondary'>
-                                    <ul className="grid grid-cols-2 md:grid-cols-3 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                                    <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                                         {filteredKeyFactsHeadings.map((heading, index) => {
                                             const borderClasses = [
-                                                index === 0 && 'border-r-2',
-                                                index === 2 && 'border-r-2 md:border-l-2',
-                                                index === 3 && 'md:border-r-2',
-                                                index === 4 && '',
-                                                index === 5 && heading.metric && 'border-l-2 -translate-x-0.5 md:translate-x-0',
+                                                index === 0 && 'border-r-2 md:col-span-3',
+                                                index === 1 && 'md:col-span-3',
+                                                index === 2 && 'border-r-2 md:border-l-2 md:col-span-3',
+                                                index === 3 && 'md:border-r-2 md:col-span-3',
+                                                index === 4 && 'border-r-2 md:col-span-2',
+                                                index === 5 && 'md:col-span-2',
+                                                index === 6 && heading.metric && 'border-l-2 -translate-x-0.5 md:translate-x-0 md:col-span-2',
                                                 index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
 
@@ -266,43 +270,72 @@ export default function StaticPage({grant}: Props) {
                                                 }
                                             }
 
+                                            const metricIsArray = Array.isArray(heading?.metric)
+                                            const filteredMetric = metricIsArray ? heading.metric.filter((m: any) => m) : heading.metric
+                                            const metric = metricIsArray ? filteredMetric.slice(0, 2).join(', ') : heading?.metric
+                                            const infoModalMetric = (metricIsArray && filteredMetric.length > 3) ? heading.metric.join(', ') : ''
+                                            
+                                            let headingText = ''
+
+                                            if (heading.text === 'Start & end year' && heading.endMetric < 0) {
+                                                headingText = 'start year'
+                                            } else {
+                                                headingText = heading.text
+                                            }
+                                            
                                             return (
                                                 <li key={index} className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}>
                                                     <div className="flex items-center space-x-2">
                                                         <p className='uppercase text-xs tracking-widest font-bold'>
-                                                            {heading.text}
+                                                            {headingText}
                                                         </p>
                                                     </div>
 
-                                                    {heading.startMetric && heading.endMetric ? (
+                                                    {heading.startMetric ? (
                                                         <div className="flex gap-1 items-center ">
                                                             <span className={metricClasses}>
-                                                                {grant.GrantStartYear}
+                                                                {heading.startMetric}
                                                             </span>
-                                                            <div className='flex gap-1 items-end h-full'>
-                                                                <div className='flex items-center gap-1'>
-                                                                    <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" />
-                                                                    <span className='text-md md:text-xl lg:text-2xl font-bold'>
-                                                                        {grant.GrantEndYear}
-                                                                    </span>
+                                                            {heading.endMetric && heading.endMetric > 0 && (
+                                                                <div className='flex gap-1 items-end h-full'>
+                                                                    <div className='flex items-center gap-1'>
+                                                                        <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" />
+                                                                        <span className='text-md md:text-xl lg:text-2xl font-bold'>
+                                                                            {heading.endMetric}
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            )}
                                                         </div>
                                                     ) : (
                                                         <>
-                                                            {(heading.metric?.length > 3 && Array.isArray(heading?.metric)) ? (
+                                                            {metric ? (
                                                                 <div className={`${metricClasses} font-bold`}>
-                                                                    {heading.metric.slice(0, 2).join(', ')}… <InfoModal
-                                                                        customButton={<button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full px-2 py-0.5 lg:-translate-y-1 text-sm'> {heading?.metric.length - 2} more</button>}
-                                                                    >
-                                                                        <p>
-                                                                            {heading?.metric.join(', ')}
-                                                                        </p>
-                                                                    </InfoModal>
-
-                                                                </div>
+                                                                    <div>
+                                                                        <span>
+                                                                            {metric}
+                                                                        </span>
+                                                                        {infoModalMetric && (
+                                                                            <div className='inline'>
+                                                                                <span className="pl-1">
+                                                                                    ... 
+                                                                                </span>
+                                                                                <InfoModal
+                                                                                    customButton={<button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full ml-1 px-2 py-0.5 lg:-translate-y-1 text-sm'>{heading ? heading.metric.length - 2 : ''} more</button>}
+                                                                                >
+                                                                                    <p>
+                                                                                        {infoModalMetric}
+                                                                                    </p>
+                                                                                </InfoModal>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                            </div>
+                                                            
                                                             ) : (
-                                                                <p className={`${metricClasses} font-bold`}>{heading?.metric}</p>
+                                                                <p className={`${metricClasses} font-bold`}>
+                                                                    N/A
+                                                                </p>
                                                             )}
                                                         </>
                                                     )}
