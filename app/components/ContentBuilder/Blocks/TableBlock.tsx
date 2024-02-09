@@ -48,7 +48,7 @@ const TableBlock = ({block}: Props) => {
                         <div className="inline-block min-w-full py-2 align-middle p-1">
                             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-10 md:rounded">
 
-                                <table className="min-w-full divide-y divide-gray-300">
+                                <table className="min-w-full bg-white divide-y divide-gray-300">
                                     
                                     {caption && (
                                         <caption className="py-3.5 text-sm text-gray-600">
@@ -57,7 +57,7 @@ const TableBlock = ({block}: Props) => {
                                     )}
 
                                     {columns && (
-                                        <thead className="bg-gray-50">
+                                        <thead>
                                             <tr>
                                                 {columns.map(column => {
                                                     
