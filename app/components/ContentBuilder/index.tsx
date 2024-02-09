@@ -22,6 +22,7 @@ import PullQuoteBlock from "./Blocks/PullQuoteBlock";
 import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
 import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock";
+import BlockIndexWrapper from "./BlockIndexWrapper"
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -63,7 +64,6 @@ const Block = (props: any) => {
 
 const Blocks = ({blocks}: any) => {
 
-	// console.log('Content Builder Data: ', blocks)
 	const totalBlocks = blocks.length;
 
 	return (
@@ -73,7 +73,17 @@ const Blocks = ({blocks}: any) => {
 				block.firstBlock = (index === 0)
 				block.lastBlock = (index === totalBlocks - 1)
 
-				return <Block block={block} key={block.id} />
+				return (
+					<BlockIndexWrapper 
+						options={{ 
+							firstBlock: index === 0,
+							lastBlock: index === totalBlocks - 1,
+						}} 
+						key={block.id}
+					>
+						<Block block={block} />
+					</BlockIndexWrapper>
+				)
 			})}
 		</>
 	);
