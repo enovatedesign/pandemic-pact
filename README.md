@@ -116,7 +116,7 @@ To run the linter:
 npm run lint
 ```
 
-Unlike the TypeScript compiler will print a success message if there are no issues:
+Unlike the TypeScript compiler, the linter will print a success message if there are no issues:
 
 ```
 ✔ No ESLint warnings or errors
