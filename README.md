@@ -102,7 +102,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 When `npm run build` is executed to prepare the production build, the TypeScript compiler and NextJS linter are also run, to catch mistakes at build-time if possible. However, the full build can take a number of minutes, so if you are trying to fix an error or warning emitted by one of these tools it can be useful to run them separately, without having to wait for `npm run build` to run.
 
-To run the TypeScript compiler to check for type errors:
+You can run both of them at once:
+
+```bash
+npm run lint
+```
+
+If, for some reason, you need to run the TypeScript compiler _without_ running the NextJS linter:
 
 ```bash
 npx tsc
@@ -110,10 +116,10 @@ npx tsc
 
 The TypeScript compiler will print **no output** if there are no errors.
 
-To run the linter:
+To run the NextJS Linter _without_ running the TypeScript compiler:
 
 ```bash
-npm run lint
+npx next lint
 ```
 
 Unlike the TypeScript compiler, the linter will print a success message if there are no issues:
