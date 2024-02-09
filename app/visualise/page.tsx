@@ -172,7 +172,7 @@ export default function Visualise() {
                     <AnimateHeight
                         duration={300}
                         height={dropdownVisible ? 'auto' : 0}
-                        className="sticky w-full z-20 top-0 bg-primary-lighter"
+                        className="sticky w-full z-20 top-0 bg-primary-lighter/75 backdrop-blur-sm"
                     >
                         <JumpMenu cardData={cardData} />
                     </AnimateHeight>
