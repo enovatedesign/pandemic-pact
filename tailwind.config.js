@@ -144,6 +144,18 @@ module.exports = {
           },
         },
       },
+      typography: (theme) => ({
+        gray: {
+            css: {
+                '--tw-prose-bullets': theme('colors.primary.DEFAULT'),
+            },
+        },
+        invert: {
+            css: {
+                '--tw-prose-bullets': theme('colors.secondary.DEFAULT'),
+            },
+        },
+      }),
       zIndex: {
         '-1': '-1',
       },
