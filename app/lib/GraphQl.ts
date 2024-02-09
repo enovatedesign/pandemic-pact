@@ -5,7 +5,6 @@ export default async function craft(query: string, variables: Record<string, unk
 
     const request: RequestInit = {
         method: "POST",
-        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${API_TOKEN}`
@@ -18,6 +17,11 @@ export default async function craft(query: string, variables: Record<string, unk
 
     if (previewToken) {
         (request.headers as any)['X-Craft-Token'] = previewToken;
+    }
+
+    // Don't cache GraphQL requests in development or test environments
+    if (process.env.NODE_ENV !== 'production') {
+        request.cache = 'no-store';
     }
 
     const response = await fetch(API_URL as string, request);
