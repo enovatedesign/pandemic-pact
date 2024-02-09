@@ -107,7 +107,6 @@ const FunderItem = ({funder, index}: FunderProps) => {
                     <p className="my-0" dangerouslySetInnerHTML={{ __html: funder.fundingStatement }}></p>
                 </div>
             </div>
-
         </animated.div>
     )
 }
