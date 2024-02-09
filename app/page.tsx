@@ -45,7 +45,7 @@ export default function Home() {
                         {/* Top content section */}
                         <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-12 w-full z-20 container">
 
-                            <h1 id="page-title" className="inline-block max-w-3xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
+                            <h1 id="page-title" className="inline-block max-w-4xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
                                 Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants, from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> global funders
                             </h1>
 
@@ -60,7 +60,7 @@ export default function Home() {
                             </Link>
 
                             <small>
-                                <p className="text-center text-white/60 text-sm max-w-3xl mx-auto">
+                                <p className="text-center text-white/60 text-xs md:text-sm max-w-3xl mx-auto">
                                     All visualizations and data produced by Pandemic PACT are open access under the <Link href="http://creativecommons.org/licenses/by/4.0/" className="underline" target="_blank" rel="license noopener noreferrer">Creative Commons BY license</Link>. You have permission to use, distribute, and reproduce these in any medium, provided the source and authors are credited. All the software and code that we write is open source and made available via GitHub under the MIT license.
                                 </p>
                             </small>

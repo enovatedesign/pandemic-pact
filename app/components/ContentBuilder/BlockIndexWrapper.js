@@ -20,9 +20,7 @@ export default function BlockWrapper({ children, options = {} }) {
 
     return (
         <div className={blockClasses}>
-            {children && (
-                <div className="container">{children}</div>
-            )}
+            {children}
         </div>
     )
 }
