@@ -324,10 +324,10 @@ export default function StaticPage({grant}: Props) {
                                                                         {infoModalMetric && (
                                                                             <div className='inline'>
                                                                                 <span className="pl-1">
-                                                                                    ... 
+                                                                                    … 
                                                                                 </span>
                                                                                 <InfoModal
-                                                                                    customButton={<button className='bg-secondary inline-block whitespace-nowrap text-white rounded-full ml-1 px-2 py-0.5 lg:-translate-y-1 text-sm'>{heading ? heading.metric.length - 2 : ''} more</button>}
+                                                                                    customButton={<span className='bg-secondary inline-block whitespace-nowrap text-white rounded-full ml-1 px-2 py-0.5 lg:-translate-y-1 text-sm'>{heading ? heading.metric.length - 2 : ''} more</span>}
                                                                                 >
                                                                                     <p>
                                                                                         {infoModalMetric}
@@ -336,8 +336,7 @@ export default function StaticPage({grant}: Props) {
                                                                             </div>
                                                                         )}
                                                                     </div>
-                                                            </div>
-                                                            
+                                                                </div>
                                                             ) : (
                                                                 <p className={`${metricClasses} font-bold`}>
                                                                     N/A
