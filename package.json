@@ -8,7 +8,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate"
+        "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate",
+        "ts-lint": "tsc"
     },
     "dependencies": {
         "@fortawesome/react-fontawesome": "^0.2.0",
