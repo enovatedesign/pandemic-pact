@@ -7,7 +7,7 @@
         "prebuild": "npm run generate",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
+        "lint": "tsc; next lint",
         "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate"
     },
     "dependencies": {

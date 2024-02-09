@@ -8,6 +8,7 @@ import {useState} from 'react'
 import AnimateHeight from 'react-animate-height'
 import RichText from './ContentBuilder/Common/RichText'
 import Button from './Button'
+import { dollarValueFormatter } from '../helpers/value-formatters';
 
 interface Props {
     searchResponse: SearchResponse
@@ -137,7 +138,7 @@ function SearchMatches({
 
     const grantAmountConverted =
         typeof result._source.GrantAmountConverted === 'number'
-            ? `$ ${result._source.GrantAmountConverted.toLocaleString()}`
+            ? dollarValueFormatter(result._source.GrantAmountConverted)
             : result._source.GrantAmountConverted
 
     return (
