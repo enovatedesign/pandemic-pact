@@ -10,7 +10,8 @@ import Layout from "../../components/Layout"
 import RichText from '@/app/components/ContentBuilder/Common/RichText'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
 import Button from '@/app/components/Button'
-import '../../css/components/results-table.css'
+import '/app/css/components/results-table.css'
+import '/app/css/components/breakout.css'
 import InfoModal from "../../components/InfoModal"
 import { useSearchParams } from 'next/navigation'
 
@@ -244,7 +245,7 @@ export default function StaticPage({grant}: Props) {
                             )}
                         </div>
 
-                        <div className="my-2 -mx-12 w-[calc(100%+6rem)] md:-mx-10 md:w-[calc(100%+5rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] overflow-hidden">
+                        <div className="my-2 breakout-with-border overflow-hidden">
                             <div className='relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden'>
                                 <h3 className={`self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] ${titleClasses}`}>
                                     Key facts
@@ -253,12 +254,12 @@ export default function StaticPage({grant}: Props) {
                                     <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                                         {filteredKeyFactsHeadings.map((heading, index) => {
                                             const borderClasses = [
-                                                index === 0 && 'border-r-2 md:col-span-3',
-                                                index === 1 && 'md:col-span-3',
-                                                index === 2 && 'border-r-2 md:border-l-2 md:col-span-3',
-                                                index === 3 && 'md:border-r-2 md:col-span-3',
-                                                index === 4 && 'border-r-2 md:col-span-2',
-                                                index === 5 && 'md:col-span-2',
+                                                index === 0 && 'col-span-2 md:col-span-3 md:border-r-2',
+                                                index === 1 && 'border-r-2 md:col-span-3 md:border-r-0',
+                                                index === 2 && 'md:border-r-2 md:col-span-3',
+                                                index === 3 && 'border-r-2 md:col-span-3 md:border-r-0',
+                                                index === 4 && 'md:col-span-2 md:border-r-2',
+                                                index === 5 && 'col-span-2 md:col-span-2',
                                                 index === 6 && heading.metric && 'border-l-2 -translate-x-0.5 md:translate-x-0 md:col-span-2',
                                                 index > 2 ? 'border-b-2' : 'border-b-2',
                                             ].join(' ')
@@ -361,7 +362,7 @@ export default function StaticPage({grant}: Props) {
                                             ].join(' ')
 
                                             return (
-                                                <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col space-y-2 border-secondary/10`}>
+                                                <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}>
 
                                                     {subHeading.infoModalText ? (
                                                         <div className="flex items-center space-x-2">
