@@ -73,11 +73,11 @@ const AccordionBlock = ( {block}: Props ) => {
                                                     onClick={handleClick}
                                                 >
                                                     {headingLevel === 2 ? (
-                                                        <h2 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
+                                                        <h2 className="mb-0 text-left text-secondary text-xl md:text-3xl lg:text-3xl">
                                                                 { accordionHeading }
                                                         </h2>
                                                     ) : (
-                                                        <h3 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
+                                                        <h3 className="mb-0 text-left text-secondary text-xl md:text-3xl lg:text-3xl">
                                                             { accordionHeading }
                                                         </h3>
                                                     )}
