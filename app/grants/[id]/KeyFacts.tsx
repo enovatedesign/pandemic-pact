@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/solid"
 import InfoModal from "../../components/InfoModal"
+import "/app/css/components/breakout.css"
 
 export default function KeyFacts({ grant }: { grant: any }) {
     const keyFactsHeadings = [
