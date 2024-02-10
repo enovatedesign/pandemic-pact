@@ -21,11 +21,11 @@
     position: static;
 
     .swiper-wrapper {
-        @apply pb-16
+        @apply pb-16;
     }
 
     .swiper-slide {
-        @apply !h-auto
+        @apply !h-auto;
     }
 
     .swiper-button-prev {
@@ -37,11 +37,11 @@
     }
 
     .swiper-button-prev:after, .swiper-button-next:after {
-        @apply text-lg
+        @apply text-lg;
     }
 
     .swiper-pagination-bullet {
-        @apply size-5
+        @apply size-5 bg-primary;
     }
 
 }
