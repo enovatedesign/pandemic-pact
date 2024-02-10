@@ -19,3 +19,23 @@
         }
     }
 }
+
+.breakout-with-border {
+
+    margin-left: calc(-3rem - 2px);
+    margin-right: calc(-3rem - 2px);
+    width: calc(100% + 6rem + 4px);
+
+    @screen md {
+        margin-left: calc(-2.5rem - 2px);
+        margin-right: calc(-2.5rem - 2px);
+        width: calc(100% + 5rem + 4px);
+    }
+
+    @screen lg {
+        margin-left: calc(-5rem - 2px);
+        margin-right: calc(-5rem - 2px);
+        width: calc(100% + 10rem + 4px);
+    }
+
+}
