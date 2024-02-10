@@ -41,7 +41,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 		return (
             <BlockWrapper>
 
-				<div className="flex justify-center -mx-6 ">
+				<div className="flex justify-center mx-[calc(-1.5rem-2px)]">
 					<div className="relative rounded-2xl border-dotted border-2 border-primary p-6 lg:p-12 mx-6 max-w-6xl">
 						<p className="absolute inset-x-0 -mt-10 lg:-mt-16 text-center">
 							<span className="mx-auto inline-block px-3 py-1 text-gray-500 rounded-full font-bold tracking-widest uppercase bg-gray-50">
