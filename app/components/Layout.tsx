@@ -1,10 +1,10 @@
 'use client'
 
-import mastheadStyles from "../css/components/masthead.module.css"
+import mastheadStyles from '../css/components/masthead.module.css'
 
-import {useState} from 'react'
-import {useSpring, animated} from '@react-spring/web'
-import {AdjustmentsIcon} from '@heroicons/react/outline'
+import { isValidElement, useState, ReactNode } from 'react'
+import { useSpring, animated } from '@react-spring/web'
+import { AdjustmentsIcon } from '@heroicons/react/outline'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -14,41 +14,48 @@ import UtilityBar from './UtilityBar'
 
 type Props = {
     sidebar?: {
-        openContent?: React.ReactNode
-        closedContent?: React.ReactNode
-    },
-    mastheadContent?: React.ReactNode,
-    children: React.ReactNode,
-    title?: string,
-    summary?: string,
+        openContent?: ReactNode
+        closedContent?: ReactNode
+    }
+    mastheadContent?: ReactNode
+    children: ReactNode
+    title?: string | ReactNode
+    summary?: string
     showSummary?: boolean
 }
 
-const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children}: Props) => {
+const Layout = ({
+    title,
+    summary,
+    showSummary,
+    sidebar,
+    mastheadContent,
+    children,
+}: Props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const sidebarWidth = 400;
-    const duration = 50;
+    const sidebarWidth = 400
+    const duration = 50
 
     const [showMobileNav, setShowMobileNav] = useState(false)
 
     const baseAnimationConfig = {
         delay: sidebarOpen ? 0 : duration,
-        config: { duration }
-    } 
+        config: { duration },
+    }
 
     const transformAnimationProps = useSpring({
         transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-        ...baseAnimationConfig
+        ...baseAnimationConfig,
     })
 
     const widthAnimationProps = useSpring({
         width: sidebarOpen ? sidebarWidth : 0,
-        ...baseAnimationConfig
+        ...baseAnimationConfig,
     })
 
     const opacityAnimationProps = useSpring({
         opacity: sidebarOpen ? 1 : 0,
-        ...baseAnimationConfig
+        ...baseAnimationConfig,
     })
 
     let optionalUtilityBarAttributes = null
@@ -56,38 +63,55 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
     if (sidebar !== undefined) {
         optionalUtilityBarAttributes = {
             sidebarOpen,
-            setSidebarOpen
+            setSidebarOpen,
         }
     }
 
     return (
         <>
             <div id="skiplink-container">
-                <a href="#content" className="block bg-secondary text-center text-white w-full sr-only focus:not-sr-only focus:relative">
+                <a
+                    href="#content"
+                    className="block bg-secondary text-center text-white w-full sr-only focus:not-sr-only focus:relative"
+                >
                     <span className="flex items-center justify-center py-3 lg:py-4 container">
                         Skip to main content
                     </span>
                 </a>
             </div>
 
-            <UtilityBar showMobileNav={showMobileNav} setShowMobileNav={setShowMobileNav} {...optionalUtilityBarAttributes} />
+            <UtilityBar
+                showMobileNav={showMobileNav}
+                setShowMobileNav={setShowMobileNav}
+                {...optionalUtilityBarAttributes}
+            />
 
-            <div className={`${sidebar && "flex"}`}>
-                {sidebar &&
-                    <animated.aside 
+            <div className={`${sidebar && 'flex'}`}>
+                {sidebar && (
+                    <animated.aside
                         className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
                         style={transformAnimationProps}
                     >
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
-                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-6 text-primary hover:text-white duration-300 transition-colors">
+                            <button
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
+                                className="p-6 text-primary hover:text-white duration-300 transition-colors"
+                            >
                                 <span className="sr-only">Filters</span>
-                                <AdjustmentsIcon className="h-8 w-8" aria-hidden="true" />
+                                <AdjustmentsIcon
+                                    className="h-8 w-8"
+                                    aria-hidden="true"
+                                />
                             </button>
 
                             {!sidebarOpen && sidebar.closedContent}
 
                             <animated.div
-                                className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${sidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden'}`}
+                                className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${
+                                    sidebarOpen
+                                        ? 'overflow-y-auto'
+                                        : 'overflow-y-hidden'
+                                }`}
                                 style={widthAnimationProps}
                             >
                                 <animated.div style={opacityAnimationProps}>
@@ -96,40 +120,46 @@ const Layout = ({title, summary, showSummary, sidebar, mastheadContent, children
                             </animated.div>
                         </div>
                     </animated.aside>
-                }
+                )}
 
                 <div className="w-full relative">
-                    <Header 
-                        className="absolute w-full left-0 z-50" 
+                    <Header
+                        className="absolute w-full left-0 z-50"
                         showMobileNav={showMobileNav}
                     />
 
                     <main id="content">
-
                         <article aria-labelledby="page-title">
-
-                            <InteractiveBackground className={`relative masthead-background ${mastheadStyles.background}`}>
-
-                                <div className={`masthead-background ${mastheadStyles.visualise}`}>
-
+                            <InteractiveBackground
+                                className={`relative masthead-background ${mastheadStyles.background}`}
+                            >
+                                <div
+                                    className={`masthead-background ${mastheadStyles.visualise}`}
+                                >
                                     <div className="h-full flex items-end pb-6 lg:pb-12">
-
-                                        {title &&
+                                        {title && (
                                             <div className="container mt-44 lg:mt-52">
-                                                <PageTitle>{title}</PageTitle>
-                                                {summary && showSummary && <p className="mt-2 text-white opacity-50 lg:text-xl">{summary}</p>}
+                                                {isValidElement(title) ? (
+                                                    title
+                                                ) : (
+                                                    <PageTitle>
+                                                        {title}
+                                                    </PageTitle>
+                                                )}
+
+                                                {summary && showSummary && (
+                                                    <p className="mt-2 text-white opacity-50 lg:text-xl">
+                                                        {summary}
+                                                    </p>
+                                                )}
                                                 {mastheadContent}
                                             </div>
-                                        }
-
+                                        )}
                                     </div>
-
                                 </div>
-
                             </InteractiveBackground>
 
                             {children}
-
                         </article>
                     </main>
 

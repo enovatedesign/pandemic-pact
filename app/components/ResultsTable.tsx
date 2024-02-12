@@ -1,20 +1,21 @@
 'use client'
 
-import '../css/components/results-table.css'
-import {SearchResponse, SearchResult} from '../helpers/search'
-import {links} from '../helpers/nav'
-import {EyeIcon, EyeOffIcon} from '@heroicons/react/solid'
-import {useState} from 'react'
+import { SearchResponse, SearchResult } from '../helpers/search'
+import { links } from '../helpers/nav'
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
+import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import RichText from './ContentBuilder/Common/RichText'
 import Button from './Button'
-import { dollarValueFormatter } from '../helpers/value-formatters';
+import { dollarValueFormatter } from '../helpers/value-formatters'
+
+import '../css/components/highlighted-search-results.css'
 
 interface Props {
     searchResponse: SearchResponse
 }
 
-export default function ResultsTable({searchResponse}: Props) {
+export default function ResultsTable({ searchResponse }: Props) {
     const [activeIndex, setActiveIndex] = useState(-1)
 
     return (
@@ -31,9 +32,10 @@ export default function ResultsTable({searchResponse}: Props) {
                         `${links.explore.href}/${result._id}` +
                         (query ? `?q=${query}` : '')
 
-                    const data = {index, activeIndex, setActiveIndex}
+                    const data = { index, activeIndex, setActiveIndex }
 
-                    const linkClasses = "hover:underline font-semibold text-base lg:text-2xl"
+                    const linkClasses =
+                        'hover:underline font-semibold text-base lg:text-2xl'
 
                     return (
                         <article
@@ -45,24 +47,20 @@ export default function ResultsTable({searchResponse}: Props) {
                                     <a
                                         href={href}
                                         className={linkClasses}
-                                        dangerouslySetInnerHTML={{__html: result.highlight.GrantTitleEng[0], }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: result.highlight
+                                                .GrantTitleEng[0],
+                                        }}
                                     ></a>
                                 ) : (
-                                    <a
-                                        href={href}
-                                        className={linkClasses}
-                                    >
+                                    <a href={href} className={linkClasses}>
                                         {result._source.GrantTitleEng}
                                     </a>
                                 )}
-
                             </h3>
 
                             {result.highlight && (
-                                <SearchMatches
-                                    result={result}
-                                    {...data}
-                                />
+                                <SearchMatches result={result} {...data} />
                             )}
                         </article>
                     )
@@ -87,9 +85,11 @@ function SearchMatches({
 }: SearchMatchesProps) {
     const countMatches = (highlights: string[]) => {
         return highlights.reduce((total, highlight) => {
-            return total + (highlight.match(
-                /class="highlighted-search-result-token">/g
-            )?.length ?? 0)
+            return (
+                total +
+                (highlight.match(/class="highlighted-search-result-token">/g)
+                    ?.length ?? 0)
+            )
         }, 0)
     }
 
@@ -110,23 +110,23 @@ function SearchMatches({
 
     matches.push({
         label: 'Total',
-        count: matches.reduce((total, {count}) => total + count, 0),
+        count: matches.reduce((total, { count }) => total + count, 0),
     })
 
     const titleMatchText = matches
         .filter((label) => label.label === 'Title')
-        .filter(({count}) => count > 0)
-        .map(({label, count}) => `${count} in ${label}`)
+        .filter(({ count }) => count > 0)
+        .map(({ label, count }) => `${count} in ${label}`)
 
     const abstractMatchText = matches
         .filter((label) => label.label === 'Abstract')
-        .filter(({count}) => count > 0)
-        .map(({label, count}) => `${count} in ${label}`)
+        .filter(({ count }) => count > 0)
+        .map(({ label, count }) => `${count} in ${label}`)
 
     const totalMatchText = matches
         .filter((label) => label.label === 'Total')
-        .filter(({count}) => count > 0)
-        .map(({count}) => count)
+        .filter(({ count }) => count > 0)
+        .map(({ count }) => count)
 
     const matchText = [titleMatchText, abstractMatchText]
 
@@ -150,14 +150,16 @@ function SearchMatches({
                         Matches:
                     </span>
                     <ul className="flex gap-2">
-                        {matchText.filter(text => text.length > 0).map((text, index) => (
-                            <li
-                                key={index}
-                                className="bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap text-sm lg:text-md"
-                            >
-                                {text}
-                            </li>
-                        ))}
+                        {matchText
+                            .filter((text) => text.length > 0)
+                            .map((text, index) => (
+                                <li
+                                    key={index}
+                                    className="bg-white/60 p-2 md:p-2 rounded-lg whitespace-nowrap text-sm lg:text-md"
+                                >
+                                    {text}
+                                </li>
+                            ))}
                     </ul>
                 </div>
                 <div className="flex flex-row items-center  justify-between row-start-2 row-span-1 lg:row-start-1 lg:justify-end lg:col-start-3 lg:col-span-1">
@@ -199,7 +201,13 @@ function SearchMatches({
                         </p>
                         {result.highlight.Abstract?.length > 1 && (
                             <RichText
-                                text={'&#8230; ' + result.highlight.Abstract.join(' &#8230; ') + ' &#8230;'}
+                                text={
+                                    '&#8230; ' +
+                                    result.highlight.Abstract.join(
+                                        ' &#8230; '
+                                    ) +
+                                    ' &#8230;'
+                                }
                                 customClasses="max-w-none"
                             />
                         )}
