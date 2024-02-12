@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     return new Response(null, {
         status: 307,
         headers: {
-            Location: `preview/${data.entry.slug}?token=${token}`,
+            Location: `/preview/${data.entry.slug}?token=${token}`,
         },
     })
 }
