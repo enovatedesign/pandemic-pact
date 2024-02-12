@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Dialog } from "@headlessui/react"
-import { InformationCircleIcon } from "@heroicons/react/solid"
-import Button from "./Button"
+import { useState } from 'react'
+import { Dialog } from '@headlessui/react'
+import { InformationCircleIcon } from '@heroicons/react/solid'
+import Button from './Button'
 
 export default function InfoModal({
     children,

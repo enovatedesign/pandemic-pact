@@ -47,13 +47,13 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
         }
     }
 
-    const response = await searchRequest("show", {
+    const response = await searchRequest('show', {
         q: query,
         filters: {
             logicalAnd: false,
             filters: [
                 {
-                    field: "GrantID",
+                    field: 'GrantID',
                     values: [grant.GrantID],
                     logicalAnd: false,
                 },
@@ -79,18 +79,18 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
 }
 
 export async function searchRequest(
-    endpoint: string = "list",
+    endpoint: string = 'list',
     body: SearchRequestBody
 ) {
     return fetch(`/api/search/grants/${endpoint}`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(body),
     }).then((response) => response.json())
 }
 
 export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
     return (
-        searchRequestBody.q !== "" ||
+        searchRequestBody.q !== '' ||
         Object.values(searchRequestBody.filters).some(
             (filter) => filter?.length > 0
         )

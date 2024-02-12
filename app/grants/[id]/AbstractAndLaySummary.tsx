@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useState, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import AnimateHeight from "react-animate-height"
-import { ChevronDownIcon } from "@heroicons/react/solid"
-import { debounce } from "lodash"
-import RichText from "@/app/components/ContentBuilder/Common/RichText"
-import { highlightMatchesInGrant } from "../../helpers/search"
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import AnimateHeight from 'react-animate-height'
+import { ChevronDownIcon } from '@heroicons/react/solid'
+import { debounce } from 'lodash'
+import RichText from '@/app/components/ContentBuilder/Common/RichText'
+import { highlightMatchesInGrant } from '../../helpers/search'
 
 interface Props {
     grant: any
@@ -37,7 +37,7 @@ function ClientComponent({ grant }: Props) {
     )
 
     useEffect(() => {
-        highlightMatchesInGrant(grant, searchParams.get("q") || "").then(
+        highlightMatchesInGrant(grant, searchParams.get('q') || '').then(
             ({ Abstract, LaySummary }) => {
                 setAbstract(Abstract)
                 setLaySummary(LaySummary)
@@ -58,30 +58,30 @@ function ServerComponent({
     const [abstractShow, setAbstractShow] = useState(false)
     const [readMore, setReadMore] = useState(false)
     const [backgroundShow, setBackgroundShow] = useState(true)
-    const [animateHeight, setAnimateHeight] = useState<"auto" | number>("auto")
+    const [animateHeight, setAnimateHeight] = useState<'auto' | number>('auto')
 
     useEffect(() => {
-        const abstract = document.getElementById("abstract")
+        const abstract = document.getElementById('abstract')
         const hasReadMore = (abstract?.offsetHeight || 0) > 230
 
         const checkHeight = () => {
             setReadMore(hasReadMore)
-            setAnimateHeight(hasReadMore ? 230 : "auto")
+            setAnimateHeight(hasReadMore ? 230 : 'auto')
         }
 
         const debouncedCheckHeight = debounce(checkHeight, 200)
 
-        if (document.readyState === "complete") {
+        if (document.readyState === 'complete') {
             checkHeight()
         } else {
-            window.addEventListener("load", checkHeight)
+            window.addEventListener('load', checkHeight)
         }
 
-        window.addEventListener("resize", debouncedCheckHeight)
+        window.addEventListener('resize', debouncedCheckHeight)
 
         return () => {
-            window.removeEventListener("load", checkHeight)
-            window.removeEventListener("resize", debouncedCheckHeight)
+            window.removeEventListener('load', checkHeight)
+            window.removeEventListener('resize', debouncedCheckHeight)
         }
     }, [readMore])
 
@@ -96,17 +96,17 @@ function ServerComponent({
 
         const debouncedBackground = debounce(handleBackground, 200)
 
-        if (document.readyState === "complete") {
+        if (document.readyState === 'complete') {
             handleBackground()
         } else {
-            window.addEventListener("load", handleBackground)
+            window.addEventListener('load', handleBackground)
         }
 
-        window.addEventListener("resize", debouncedBackground)
+        window.addEventListener('resize', debouncedBackground)
 
         return () => {
-            window.removeEventListener("load", handleBackground)
-            window.removeEventListener("resize", debouncedBackground)
+            window.removeEventListener('load', handleBackground)
+            window.removeEventListener('resize', debouncedBackground)
         }
     }, [backgroundShow, readMore])
 
@@ -119,7 +119,7 @@ function ServerComponent({
 
                 <AnimateHeight
                     duration={300}
-                    height={abstractShow ? "auto" : animateHeight}
+                    height={abstractShow ? 'auto' : animateHeight}
                     className="relative"
                 >
                     <div id="abstract">
@@ -136,11 +136,11 @@ function ServerComponent({
                         className="w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center"
                     >
                         <span className="inline-flex text-secondary">
-                            {abstractShow ? "read less" : "read more"}
+                            {abstractShow ? 'read less' : 'read more'}
                         </span>
                         <ChevronDownIcon
                             className={`${
-                                abstractShow && "-rotate-180"
+                                abstractShow && '-rotate-180'
                             } transition duration-300 w-8 h-8 text-secondary`}
                         />
                     </button>

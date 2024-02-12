@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useState, Suspense } from "react"
-import AnimateHeight from "react-animate-height"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import { ChevronDownIcon, ExternalLinkIcon } from "@heroicons/react/solid"
-import Pagination from "@/app/components/ContentBuilder/Common/Pagination"
-import Button from "@/app/components/Button"
+import { useState, Suspense } from 'react'
+import AnimateHeight from 'react-animate-height'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/solid'
+import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
+import Button from '@/app/components/Button'
 
 dayjs.extend(relativeTime)
 
@@ -74,7 +74,7 @@ export default function Publications({ grant }: { grant: any }) {
                                         <ChevronDownIcon
                                             className={`${
                                                 activeIndex === index &&
-                                                "-rotate-180"
+                                                '-rotate-180'
                                             } transition duration-300 w-10 h-10`}
                                         />
                                     </button>
@@ -82,7 +82,7 @@ export default function Publications({ grant }: { grant: any }) {
 
                                 <AnimateHeight
                                     duration={300}
-                                    height={activeIndex === index ? "auto" : 0}
+                                    height={activeIndex === index ? 'auto' : 0}
                                 >
                                     <ul className="py-6 flex flex-col gap-4">
                                         <li className="flex flex-col gap-1">

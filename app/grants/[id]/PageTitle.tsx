@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { highlightMatchesInGrant } from "../../helpers/search"
-import BasePageTitle from "../../components/PageTitle"
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { highlightMatchesInGrant } from '../../helpers/search'
+import BasePageTitle from '../../components/PageTitle'
 
 interface Props {
     grant: any
@@ -23,7 +23,7 @@ function ClientComponent({ grant }: Props) {
     const [title, setTitle] = useState<string>(grant.GrantTitleEng)
 
     useEffect(() => {
-        highlightMatchesInGrant(grant, searchParams.get("q") || "").then(
+        highlightMatchesInGrant(grant, searchParams.get('q') || '').then(
             ({ GrantTitleEng }) => {
                 setTitle(GrantTitleEng)
             }

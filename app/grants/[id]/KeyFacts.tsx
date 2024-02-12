@@ -1,50 +1,50 @@
-import { ArrowRightIcon } from "@heroicons/react/solid"
-import InfoModal from "../../components/InfoModal"
-import "/app/css/components/breakout.css"
+import { ArrowRightIcon } from '@heroicons/react/solid'
+import InfoModal from '../../components/InfoModal'
+import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
     const keyFactsHeadings = [
         {
-            text: "Disease",
+            text: 'Disease',
             metric: grant.Disease,
-            classes: "",
+            classes: '',
         },
         {
-            text: "Start & end year",
+            text: 'Start & end year',
             startMetric: grant.GrantStartYear,
             endMetric: grant.GrantEndYear,
-            classes: "",
+            classes: '',
         },
         {
-            text: "Known Financial Commitments (USD)",
+            text: 'Known Financial Commitments (USD)',
             metric:
-                typeof grant.GrantAmountConverted === "number"
-                    ? "$" + grant.GrantAmountConverted.toLocaleString()
+                typeof grant.GrantAmountConverted === 'number'
+                    ? '$' + grant.GrantAmountConverted.toLocaleString()
                     : grant.GrantAmountConverted,
-            classes: "",
+            classes: '',
         },
         {
-            text: "Principle Investigator",
-            metric: grant.PrincipleInvestigator ?? "Pending",
-            classes: "",
+            text: 'Principle Investigator',
+            metric: grant.PrincipleInvestigator ?? 'Pending',
+            classes: '',
         },
         {
-            text: "Research Location",
+            text: 'Research Location',
             metric: [
                 grant.ResearchInstitutionCountry[0],
                 grant.ResearchInstitutionRegion[0],
             ],
-            classes: "",
+            classes: '',
         },
         {
-            text: "Lead Research Institution",
+            text: 'Lead Research Institution',
             metric: grant.ResearchInstitutionName,
-            classes: "",
+            classes: '',
         },
         {
-            text: "Partner Institution",
-            metric: "",
-            classes: "",
+            text: 'Partner Institution',
+            metric: '',
+            classes: '',
         },
     ]
 
@@ -54,43 +54,43 @@ export default function KeyFacts({ grant }: { grant: any }) {
 
     const keyFactsSubHeadings = [
         {
-            text: "Research Category",
+            text: 'Research Category',
             metric: grant.ResearchCat[0],
         },
         {
-            text: "Research Subcategory",
+            text: 'Research Subcategory',
             metric: grant.ResearchSubcat[0],
         },
         {
-            text: "Special Interest Tags",
-            metric: "Gender",
+            text: 'Special Interest Tags',
+            metric: 'Gender',
         },
         {
-            text: "Study Subject",
+            text: 'Study Subject',
             metric: grant.StudyType[0],
         },
         {
-            text: "Clinical Trial Details",
+            text: 'Clinical Trial Details',
             metric: grant.ClinicalTrial[0],
         },
         {
-            text: "Broad Policy Alignment",
-            metric: "100 Days Mission",
+            text: 'Broad Policy Alignment',
+            metric: '100 Days Mission',
         },
         {
-            text: "Age Group",
+            text: 'Age Group',
             metric: grant.AgeGroups,
             infoModalText:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
         },
         {
-            text: "Vulnerable Population",
+            text: 'Vulnerable Population',
             metric: grant.VulnerablePopulations,
             infoModalText:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
         },
         {
-            text: "Occupations of Interest",
+            text: 'Occupations of Interest',
             metric: grant.OccupationalGroups,
         },
     ]
@@ -106,27 +106,27 @@ export default function KeyFacts({ grant }: { grant: any }) {
                         {filteredKeyFactsHeadings.map((heading, index) => {
                             const borderClasses = [
                                 index === 0 &&
-                                    "col-span-2 md:col-span-3 md:border-r-2",
+                                    'col-span-2 md:col-span-3 md:border-r-2',
                                 index === 1 &&
-                                    "border-r-2 md:col-span-3 md:border-r-0",
-                                index === 2 && "md:border-r-2 md:col-span-3",
+                                    'border-r-2 md:col-span-3 md:border-r-0',
+                                index === 2 && 'md:border-r-2 md:col-span-3',
                                 index === 3 &&
-                                    "border-r-2 md:col-span-3 md:border-r-0",
-                                index === 4 && "md:col-span-2 md:border-r-2",
-                                index === 5 && "col-span-2 md:col-span-2",
+                                    'border-r-2 md:col-span-3 md:border-r-0',
+                                index === 4 && 'md:col-span-2 md:border-r-2',
+                                index === 5 && 'col-span-2 md:col-span-2',
                                 index === 6 &&
                                     heading.metric &&
-                                    "border-l-2 -translate-x-0.5 md:translate-x-0 md:col-span-2",
-                                index > 2 ? "border-b-2" : "border-b-2",
-                            ].join(" ")
+                                    'border-l-2 -translate-x-0.5 md:translate-x-0 md:col-span-2',
+                                index > 2 ? 'border-b-2' : 'border-b-2',
+                            ].join(' ')
 
                             const metricClasses = [
                                 index > 2
-                                    ? "text-lg lg:text-xl"
-                                    : "text-lg md:text-3xl lg:text-4xl font-bold",
-                            ].join(" ")
+                                    ? 'text-lg lg:text-xl'
+                                    : 'text-lg md:text-3xl lg:text-4xl font-bold',
+                            ].join(' ')
 
-                            let colSpanClass = ""
+                            let colSpanClass = ''
 
                             if (
                                 index === filteredKeyFactsHeadings.length - 1 &&
@@ -147,20 +147,20 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                 ? heading.metric.filter((m: any) => m)
                                 : heading.metric
                             const metric = metricIsArray
-                                ? filteredMetric.slice(0, 2).join(", ")
+                                ? filteredMetric.slice(0, 2).join(', ')
                                 : heading?.metric
                             const infoModalMetric =
                                 metricIsArray && filteredMetric.length > 3
-                                    ? heading.metric.join(", ")
-                                    : ""
+                                    ? heading.metric.join(', ')
+                                    : ''
 
-                            let headingText = ""
+                            let headingText = ''
 
                             if (
-                                heading.text === "Start & end year" &&
+                                heading.text === 'Start & end year' &&
                                 heading.endMetric < 0
                             ) {
-                                headingText = "start year"
+                                headingText = 'start year'
                             } else {
                                 headingText = heading.text
                             }
@@ -216,7 +216,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                                                                       .metric
                                                                                       .length -
                                                                                   2
-                                                                                : ""}{" "}
+                                                                                : ''}{' '}
                                                                             more
                                                                         </span>
                                                                     }
@@ -247,16 +247,16 @@ export default function KeyFacts({ grant }: { grant: any }) {
                     <ul className="grid grid-cols-2 md:grid-cols-3 bg-primary-lightest">
                         {keyFactsSubHeadings.map((subHeading, index) => {
                             const borderClasses = [
-                                index === 0 && "border-r-2 md:border-r-2",
+                                index === 0 && 'border-r-2 md:border-r-2',
                                 index === 2 &&
-                                    "border-r-2 md:border-l-2 md:border-r-0",
-                                index === 3 && "md:border-r-2",
-                                index === 4 && "border-r-2 md:border-r-0",
-                                index === 5 && "md:border-l-2",
-                                index === 6 && "border-r-2",
+                                    'border-r-2 md:border-l-2 md:border-r-0',
+                                index === 3 && 'md:border-r-2',
+                                index === 4 && 'border-r-2 md:border-r-0',
+                                index === 5 && 'md:border-l-2',
+                                index === 6 && 'border-r-2',
                                 index === 8 &&
-                                    "col-span-2 md:col-span-1 md:border-l-2",
-                            ].join(" ")
+                                    'col-span-2 md:col-span-1 md:border-l-2',
+                            ].join(' ')
 
                             return (
                                 <li
@@ -289,7 +289,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                     <p className="font-bold text-lg lg:text-xl">
                                         {subHeading.metric?.length > 0
                                             ? subHeading.metric
-                                            : "N/A"}
+                                            : 'N/A'}
                                     </p>
                                 </li>
                             )

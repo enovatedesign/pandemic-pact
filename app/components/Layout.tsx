@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
-import mastheadStyles from "../css/components/masthead.module.css"
+import mastheadStyles from '../css/components/masthead.module.css'
 
-import { isValidElement, useState, ReactNode } from "react"
-import { useSpring, animated } from "@react-spring/web"
-import { AdjustmentsIcon } from "@heroicons/react/outline"
+import { isValidElement, useState, ReactNode } from 'react'
+import { useSpring, animated } from '@react-spring/web'
+import { AdjustmentsIcon } from '@heroicons/react/outline'
 
-import Header from "./Header"
-import Footer from "./Footer"
-import PageTitle from "./PageTitle"
-import InteractiveBackground from "./InteractiveBackground"
-import UtilityBar from "./UtilityBar"
+import Header from './Header'
+import Footer from './Footer'
+import PageTitle from './PageTitle'
+import InteractiveBackground from './InteractiveBackground'
+import UtilityBar from './UtilityBar'
 
 type Props = {
     sidebar?: {
@@ -44,7 +44,7 @@ const Layout = ({
     }
 
     const transformAnimationProps = useSpring({
-        transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
         ...baseAnimationConfig,
     })
 
@@ -86,7 +86,7 @@ const Layout = ({
                 {...optionalUtilityBarAttributes}
             />
 
-            <div className={`${sidebar && "flex"}`}>
+            <div className={`${sidebar && 'flex'}`}>
                 {sidebar && (
                     <animated.aside
                         className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
@@ -109,8 +109,8 @@ const Layout = ({
                             <animated.div
                                 className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${
                                     sidebarOpen
-                                        ? "overflow-y-auto"
-                                        : "overflow-y-hidden"
+                                        ? 'overflow-y-auto'
+                                        : 'overflow-y-hidden'
                                 }`}
                                 style={widthAnimationProps}
                             >

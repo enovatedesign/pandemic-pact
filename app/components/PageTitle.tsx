@@ -1,4 +1,4 @@
-import { createElement, ReactNode } from "react"
+import { createElement, ReactNode } from 'react'
 
 type PageTitleProps = {
     level?: string
@@ -13,13 +13,13 @@ type TagProps = {
     }
 }
 
-export default function PageTitle({ level = "1", children }: PageTitleProps) {
+export default function PageTitle({ level = '1', children }: PageTitleProps) {
     const Tag: string = `h${level}`
 
     const tagProps: TagProps = {
         className:
-            "page-title text-white font-medium text-2xl lg:text-4xl max-w-prose",
-        id: "page-title",
+            'page-title text-white font-medium text-2xl lg:text-4xl max-w-prose',
+        id: 'page-title',
         dangerouslySetInnerHTML: { __html: children },
     }
 
