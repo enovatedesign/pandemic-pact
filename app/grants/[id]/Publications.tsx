@@ -1,4 +1,6 @@
-import { useState } from "react"
+"use client"
+
+import { useState, Suspense } from "react"
 import AnimateHeight from "react-animate-height"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -141,13 +143,15 @@ export default function Publications({ grant }: { grant: any }) {
                 </div>
 
                 {grant.PubMedLinks?.length > 10 && (
-                    <Pagination
-                        totalPosts={grant.PubMedLinks?.length}
-                        postsPerPage={limit}
-                        setLastItemIndex={setLastItemIndex}
-                        setFirstItemIndex={setFirstItemIndex}
-                        setActiveIndex={setActiveIndex}
-                    />
+                    <Suspense fallback={null}>
+                        <Pagination
+                            totalPosts={grant.PubMedLinks?.length}
+                            postsPerPage={limit}
+                            setLastItemIndex={setLastItemIndex}
+                            setFirstItemIndex={setFirstItemIndex}
+                            setActiveIndex={setActiveIndex}
+                        />
+                    </Suspense>
                 )}
             </div>
         </div>

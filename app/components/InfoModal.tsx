@@ -1,19 +1,25 @@
-import {useState} from 'react'
-import {Dialog} from '@headlessui/react'
-import {InformationCircleIcon} from "@heroicons/react/solid"
-import Button from './Button'
+"use client"
 
-export default function InfoModal({children, customButton = null}: {children: React.ReactNode, customButton?: React.ReactNode}) {
+import { useState } from "react"
+import { Dialog } from "@headlessui/react"
+import { InformationCircleIcon } from "@heroicons/react/solid"
+import Button from "./Button"
+
+export default function InfoModal({
+    children,
+    customButton = null,
+}: {
+    children: React.ReactNode
+    customButton?: React.ReactNode
+}) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
         <>
             <button onClick={() => setIsOpen(!isOpen)}>
                 {customButton ? (
-                    <>
-                        {customButton}
-                    </>
-                ): (
+                    <>{customButton}</>
+                ) : (
                     <>
                         <span className="sr-only">Information</span>
                         <InformationCircleIcon className="w-6 h-6 text-secondary" />
@@ -28,12 +34,16 @@ export default function InfoModal({children, customButton = null}: {children: Re
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6">
                     <Dialog.Panel className="grid gap-y-6 w-full max-w-3xl rounded bg-white p-6">
-                        <div className="prose lg:prose-lg">
-                            {children}
-                        </div>
+                        <div className="prose lg:prose-lg">{children}</div>
 
                         <div className="flex justify-end">
-                            <Button onClick={() => setIsOpen(false)} customClasses="self-end" size="small">Close</Button>
+                            <Button
+                                onClick={() => setIsOpen(false)}
+                                customClasses="self-end"
+                                size="small"
+                            >
+                                Close
+                            </Button>
                         </div>
                     </Dialog.Panel>
                 </div>

@@ -1,15 +1,60 @@
-import { useState, useEffect } from "react"
+"use client"
+
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import AnimateHeight from "react-animate-height"
 import { ChevronDownIcon } from "@heroicons/react/solid"
 import { debounce } from "lodash"
 import RichText from "@/app/components/ContentBuilder/Common/RichText"
+import { highlightMatchesInGrant } from "../../helpers/search"
 
 interface Props {
-    abstract: string
-    laySummary: string | null
+    grant: any
 }
 
-export default function AbstractAndLaySummary({ abstract, laySummary }: Props) {
+export default function AbstractAndLaySummary({ grant }: Props) {
+    return (
+        <Suspense
+            fallback={
+                <ServerComponent
+                    abstract={grant.Abstract}
+                    laySummary={grant.LaySummary}
+                />
+            }
+        >
+            <ClientComponent grant={grant} />
+        </Suspense>
+    )
+}
+
+function ClientComponent({ grant }: Props) {
+    const searchParams = useSearchParams()
+
+    const [abstract, setAbstract] = useState<string>(grant.Abstract)
+
+    const [laySummary, setLaySummary] = useState<string | null>(
+        grant.LaySummary
+    )
+
+    useEffect(() => {
+        highlightMatchesInGrant(grant, searchParams.get("q") || "").then(
+            ({ Abstract, LaySummary }) => {
+                setAbstract(Abstract)
+                setLaySummary(LaySummary)
+            }
+        )
+    }, [searchParams, grant, setAbstract, setLaySummary])
+
+    return <ServerComponent abstract={abstract} laySummary={laySummary} />
+}
+
+function ServerComponent({
+    abstract,
+    laySummary,
+}: {
+    abstract: string
+    laySummary: string | null
+}) {
     const [abstractShow, setAbstractShow] = useState(false)
     const [readMore, setReadMore] = useState(false)
     const [backgroundShow, setBackgroundShow] = useState(true)
@@ -84,6 +129,7 @@ export default function AbstractAndLaySummary({ abstract, laySummary }: Props) {
                         )}
                     </div>
                 </AnimateHeight>
+
                 {readMore && (
                     <button
                         onClick={() => setAbstractShow(!abstractShow)}

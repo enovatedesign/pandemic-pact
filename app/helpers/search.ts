@@ -9,7 +9,7 @@ export interface SearchResult {
         LaySummary: string
         GrantAmountConverted: number
         GrantStartYear: string
-    },
+    }
     highlight: {
         GrantTitleEng: string[]
         Abstract: string[]
@@ -25,11 +25,11 @@ export interface SearchResponse {
 }
 
 export interface SearchFilters {
-    logicalAnd: boolean,
+    logicalAnd: boolean
     filters: {
-        field: string,
-        values: string[],
-        logicalAnd: boolean,
+        field: string
+        values: string[]
+        logicalAnd: boolean
     }[]
 }
 
@@ -38,17 +38,61 @@ export interface SearchRequestBody {
     filters: SearchFilters
 }
 
-export async function searchRequest(endpoint: string = 'list', body: SearchRequestBody) {
+export async function highlightMatchesInGrant(grant: any, query: string) {
+    if (!query) {
+        return {
+            GrantTitleEng: grant.GrantTitleEng,
+            Abstract: grant.Abstract,
+            LaySummary: grant.LaySummary,
+        }
+    }
+
+    const response = await searchRequest("show", {
+        q: query,
+        filters: {
+            logicalAnd: false,
+            filters: [
+                {
+                    field: "GrantID",
+                    values: [grant.GrantID],
+                    logicalAnd: false,
+                },
+            ],
+        },
+    })
+
+    const hit = response.hits[0]
+
+    if (!hit) {
+        return {
+            GrantTitleEng: grant.GrantTitleEng,
+            Abstract: grant.Abstract,
+            LaySummary: grant.LaySummary,
+        }
+    }
+
+    return {
+        GrantTitleEng: hit.highlight.GrantTitleEng[0] || grant.GrantTitleEng,
+        Abstract: hit.highlight.Abstract[0] || grant.Abstract,
+        LaySummary: (hit.highlight.LaySummary ?? [])[0] || grant.LaySummary,
+    }
+}
+
+export async function searchRequest(
+    endpoint: string = "list",
+    body: SearchRequestBody
+) {
     return fetch(`/api/search/grants/${endpoint}`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(body),
-    }).then(
-        response => response.json()
-    )
+    }).then((response) => response.json())
 }
 
 export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
-    return searchRequestBody.q !== '' || Object.values(searchRequestBody.filters).some(
-        filter => filter?.length > 0
+    return (
+        searchRequestBody.q !== "" ||
+        Object.values(searchRequestBody.filters).some(
+            (filter) => filter?.length > 0
+        )
     )
 }

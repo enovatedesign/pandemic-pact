@@ -1,11 +1,25 @@
+"use client"
+
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { ChevronLeftIcon } from "@heroicons/react/solid"
 
 export default function BackToGrantSearchLink() {
-    const searchParams = useSearchParams()
-    const query = searchParams.get("q")
+    return (
+        <Suspense fallback={<ServerComponent />}>
+            <ClientComponent />
+        </Suspense>
+    )
+}
 
+function ClientComponent() {
+    const searchParams = useSearchParams()
+
+    return <ServerComponent query={searchParams.get("q")} />
+}
+
+function ServerComponent({ query = null }: { query?: string | null }) {
     return (
         <Link
             href={query ? `/grants?q=${query}` : "/grants"}
