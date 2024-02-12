@@ -8,7 +8,6 @@ import AbstractAndLaySummary from './AbstractAndLaySummary'
 import KeyFacts from './KeyFacts'
 import Publications from './Publications'
 import '/app/css/components/results-table.css'
-import '/app/css/components/breakout.css'
 
 export async function generateStaticParams() {
     return fs
@@ -33,10 +32,10 @@ export default function Page({ params }: { params: { id: string } }) {
             <div className="container mx-auto my-12 relative">
                 <BackToGrantSearchLink />
 
-                <AbstractAndLaySummary grant={grant} />
-
                 <div className="gap-6">
                     <div className="flex flex-col gap-6 bg-white p-6 lg:p-12 rounded-2xl border-2 border-gray-200">
+                        <AbstractAndLaySummary grant={grant} />
+
                         <KeyFacts grant={grant} />
 
                         <Publications grant={grant} />
