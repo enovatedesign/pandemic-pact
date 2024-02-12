@@ -3,7 +3,8 @@ import {Tab} from '@headlessui/react'
 import {GlobalFilterContext, countActiveFilters} from "../helpers/filters"
 import ExportMenu from "./ExportMenu/ExportMenu"
 import InfoModal from "./InfoModal"
-import {useInView, animated} from '@react-spring/web';
+import {useInView, animated} from '@react-spring/web'
+import {FilterIcon} from '@heroicons/react/solid'
 
 interface Props {
     grants: any[],
@@ -41,21 +42,27 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
     );
 
     return <animated.div id={id} ref={ref} style={springs}>
-        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 border-y-2 border-gray-200 lg:rounded-xl lg:border-2">
+        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 overflow-hidden relative">
             <div className="flex flex-col items-start space-y-6">
-                <div className="w-full flex justify-between items-center">
-                    <div className="flex justify-start space-x-3">
-                        <h2 className="text-lg capitalize">{title}</h2>
-
-                        {infoModalContents &&
-                            <InfoModal>{infoModalContents}</InfoModal>
-                        }
-                    </div>
-
-                    {numberOfActiveFilters > 0 &&
-                        <p className="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
+                <div className="mr-16">
+                    <h2 className="text-lg capitalize inline">
+                        {title}
+                    </h2> {infoModalContents &&
+                        <InfoModal customButtonClasses="align-middle -translate-y-[2px]">{infoModalContents}</InfoModal>
                     }
                 </div>
+
+                {numberOfActiveFilters > 0 &&
+                    <div>
+                        <div className="absolute -right-16 -top-16 aspect-square size-32 rotate-45 bg-gradient-to-b from-primary"></div>
+                        <div className="absolute right-5 top-5">
+                            <FilterIcon className="size-10 text-secondary" />
+                        </div>
+                        <div className="absolute right-3 top-3 size-6 rounded-full bg-primary flex items-center justify-center font-bold text-white">
+                            {numberOfActiveFilters} <span className="sr-only">Global Filters Applied</span>
+                        </div>
+                    </div>
+                }
 
                 {subtitle &&
                     <p className="text-brand-grey-500">{subtitle}</p>
