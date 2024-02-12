@@ -11,7 +11,11 @@ export default async function Page({
     params: Parameters
     searchParams: { token: string }
 }) {
+    console.log('cms preview page', params.slug)
+
     const data = await getPageContent(params, searchParams.token)
+
+    console.log('cms preview page', params.slug)
 
     if (!data) {
         notFound()
