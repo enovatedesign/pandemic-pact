@@ -7,7 +7,8 @@ import BackToGrantSearchLink from './BackToGrantSearchLink'
 import AbstractAndLaySummary from './AbstractAndLaySummary'
 import KeyFacts from './KeyFacts'
 import Publications from './Publications'
-import '/app/css/components/results-table.css'
+
+import '../../css/components/highlighted-search-results.css'
 
 export async function generateStaticParams() {
     return fs
