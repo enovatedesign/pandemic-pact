@@ -20,7 +20,8 @@ export default async function craft(query: string, variables: Record<string, unk
     }
 
     // Don't cache GraphQL requests in development or test environments
-    if (process.env.NODE_ENV !== 'production') {
+    // or if there's a preview token
+    if (process.env.NODE_ENV !== 'production' || previewToken) {
         request.cache = 'no-store';
     }
 
