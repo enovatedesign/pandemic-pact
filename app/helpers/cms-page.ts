@@ -29,8 +29,8 @@ export async function generateStaticParamsForCmsPages() {
         ancestors?: Entry[]
     }
 
-    return entries.map(({ slug, ancestors }: Entry) => {
-        if (!slug) return
+    return entries.map(({ slug, sectionHandle, ancestors }: Entry) => {
+        if (!slug || sectionHandle === 'homepage') return
 
         let slugs = [slug]
 
