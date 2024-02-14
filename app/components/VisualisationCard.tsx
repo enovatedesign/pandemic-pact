@@ -42,13 +42,19 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
     );
 
     return <animated.div id={id} ref={ref} style={springs}>
-        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 overflow-hidden relative">
-            <div className="flex flex-col items-start space-y-6">
-                <div className="mr-16">
-                    <h2 className="text-lg capitalize inline">
-                        {title}
-                    </h2> {infoModalContents &&
-                        <InfoModal customButtonClasses="align-middle -translate-y-[2px]">{infoModalContents}</InfoModal>
+        <div className="flex flex-col items-start space-y-6 h-full w-full bg-white border-y-2 border-gray-200 lg:rounded-xl lg:border-2 max-lg:container lg:px-6">
+            <div className="flex flex-col items-start space-y-6 pt-8">
+                <div className="w-full flex justify-between items-center">
+                    <div className="flex justify-start space-x-3">
+                        <h2 className="text-lg capitalize">{title}</h2>
+
+                        {infoModalContents &&
+                            <InfoModal>{infoModalContents}</InfoModal>
+                        }
+                    </div>
+
+                    {numberOfActiveFilters > 0 &&
+                        <p className="whitespace-nowrap">{numberOfActiveFilters} Global Filters Active</p>
                     }
                 </div>
 
@@ -112,7 +118,7 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
             </div>
 
             {footnote &&
-                <p className="text-sm text-gray-500">{footnote}</p>
+                <p className="text-sm text-gray-500 pb-8">{footnote}</p>
             }
         </div>
     </animated.div >
