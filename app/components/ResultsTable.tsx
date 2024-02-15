@@ -29,19 +29,17 @@ export default function ResultsTable({ searchResponse }: Props) {
                         (query ? `?q=${query}` : '')
 
                     const linkClasses =
-                        'hover:underline font-semibold text-base lg:text-2xl'
+                        'hover:underline font-semibold lg:text-2xl'
 
                     return (
                         <article
                             key={result._id}
                             className="flex flex-col space-y-2 lg:space-y-6"
                         >   
-                            <div className="flex gap-2 items-start">
-                                <p className="text-secondary font-semibold text-base lg:text-2xl">
-                                    {index + 1}.
-                                </p>
-                                <h3>
-                                    {result.highlight?.GrantTitleEng ? (
+                            <div>
+                                <h3 className="flex gap-2 items-start">
+                                    <span className="block text-gray-400 font-semibold lg:text-2xl">{index + 1}.
+                                    </span> {result.highlight?.GrantTitleEng ? (
                                         <a
                                             href={href}
                                             className={linkClasses}

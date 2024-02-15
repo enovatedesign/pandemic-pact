@@ -113,7 +113,7 @@ export default function SearchResult({
                         <p className="truncate">
                             <span className="font-bold">
                                 Funders: 
-                            </span> <span className="truncate">{funderNames.join(', ')}</span>
+                            </span> {funderNames.join(', ')}
                         </p>
                     </div>
                 )}
@@ -143,43 +143,41 @@ export default function SearchResult({
             >
                 <div className="grid grid-cols-4 gap-4 lg:gap-8 pt-4">
                     
-                        <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-xl">
-                            <p className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
-                                Abstract { result.highlight?.Abstract?.length > 1 && 'Excerpt'}
-                            </p>
-                                {result.highlight?.Abstract?.length > 1 ? (
-                                    <RichText
-                                        text={
-                                            '&#8230; ' +
-                                            result.highlight.Abstract.join(
-                                                ' &#8230; '
-                                            ) +
-                                            ' &#8230;'
-                                        }
-                                        customClasses="max-w-none"
-                                    />
-                                ) : (
-                                        <p className='line-clamp-6'>{result._source.Abstract}</p>
-                                )}
-                        </div>
+                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-xl">
+                        <h4 className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
+                            Abstract { result.highlight?.Abstract?.length > 1 && 'Excerpt'}
+                        </h4>
+                            {result.highlight?.Abstract?.length > 1 ? (
+                                <RichText
+                                    text={
+                                        '&#8230; ' +
+                                        result.highlight.Abstract.join(
+                                            ' &#8230; '
+                                        ) +
+                                        ' &#8230;'
+                                    }
+                                    customClasses="max-w-none"
+                                />
+                            ) : (
+                                    <p className='line-clamp-6'>{result._source.Abstract}</p>
+                            )}
+                    </div>
 
                     <div className="col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col">
-                        <div className="bg-primary text-secondary rounded-xl p-4">
-                            <p className="uppercase text-xs tracking-widest font-bold">
-                                Amount committed (usd)
-                            </p>
-                            <p className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
+                        <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                            <span className="uppercase text-xs tracking-widest font-bold">
+                                Amount committed (USD)<span className="sr-only">:</span>
+                            </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
                                 {grantAmountConverted}
-                            </p>
-                        </div>
-                        <div className="bg-primary text-secondary rounded-xl p-4">
-                            <p className="uppercase text-xs tracking-widest font-bold">
-                                Start Year
-                            </p>
-                            <p className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
+                            </span>
+                        </p>
+                        <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                            <span className="uppercase text-xs tracking-widest font-bold">
+                                Start Year<span className="sr-only">:</span>
+                            </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
                                 {result._source.GrantStartYear}
-                            </p>
-                        </div>
+                            </span>
+                        </p>
                     </div>
                 </div>
             </AnimateHeight>
