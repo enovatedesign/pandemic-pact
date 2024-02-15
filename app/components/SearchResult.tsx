@@ -91,7 +91,7 @@ export default function SearchResult({
 
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
-            <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-12 lg:gap-4">
+            <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-12 lg:gap-8">
                 {totalMatchText > 0 && (
                     <div className="flex items-center gap-2 row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-5 xl:col-span-4 truncate">
                         <p className="inline-flex gap-1"><span className="hidden md:block">Search</span>Matches:</p>
@@ -109,7 +109,7 @@ export default function SearchResult({
                     </div>
                 )}
                 {funderNames && (
-                    <div className={`${totalMatchText > 0 ? 'lg:col-start-6 lg:col-span-5 xl:col-start-5 xl:col-span-6' : 'lg:col-start-1 lg:col-span-10'} lg:row-start-1 text-sm lg:text-lg flex items-center gap-2 overflow-hidden`}>
+                    <div className={`${totalMatchText > 0 ? 'lg:col-start-6 lg:col-span-4 xl:col-start-5 xl:col-span-5' : 'lg:col-start-1 lg:col-span-10'} lg:row-start-1 text-sm lg:text-lg flex items-center gap-2 overflow-hidden`}>
                         <p className="truncate">
                             <span className="font-bold">
                                 Funders: 
@@ -118,7 +118,7 @@ export default function SearchResult({
                     </div>
                 )}
 
-                <div className="row-span-1 lg:row-start-1 lg:col-start-11 lg:col-span-2 flex items-center">
+                <div className="row-span-1 lg:row-start-1 lg:col-start-10 lg:col-span-3 flex items-center">
                     <Button
                         onClick={handleClick}
                         size="xsmall"
