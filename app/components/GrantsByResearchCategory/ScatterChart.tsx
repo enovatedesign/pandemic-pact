@@ -37,29 +37,6 @@ export default function ScatterChart({chartData}: Props) {
         "value": data["Category Value"],
     }))
 
-    useEffect(() => {
-        const windowX = window.innerWidth
-
-        const handleWindowSize = () => {
-            if (windowX > 1024) {
-                setShowLegendButton(false)
-                setShowLegend(true)
-            } else {
-                setShowLegendButton(true)
-            }
-        }
-
-        const debouncedHandleResize = debounce(handleWindowSize, 200)
-
-        if (document.readyState === 'complete') {handleWindowSize()}
-
-        window.addEventListener('resize', debouncedHandleResize)
-
-        return () => {
-            window.removeEventListener('resize', debouncedHandleResize)
-        }
-    })
-
     return (
         <>
             <div className="space-y-2">
@@ -84,7 +61,7 @@ export default function ScatterChart({chartData}: Props) {
                 </AnimateHeight>
             </div>
 
-            <ResponsiveContainer width="100%" height={800}>
+            <ResponsiveContainer width="100%" height={500}>
                 <RechartScatterChart
                     margin={{
                         top: 30,

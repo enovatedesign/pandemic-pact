@@ -9,7 +9,7 @@ interface Props {
     className?: string,
 }
 
-export default function AnimatedCounter({ prefix, suffix, finalCount, duration = 5000, className }: Props) {
+export default function AnimatedCounter({ prefix, suffix, finalCount, duration = 2000, className }: Props) {
     const [count, setCount] = useState<number>(0)
     const reducedMotion = useReducedMotion()
 

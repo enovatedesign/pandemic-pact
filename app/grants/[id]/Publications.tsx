@@ -4,7 +4,7 @@ import { useState, Suspense } from 'react'
 import AnimateHeight from 'react-animate-height'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ExternalLinkIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
 import Button from '@/app/components/Button'
 
@@ -28,22 +28,37 @@ export default function Publications({ grant }: { grant: any }) {
 
     return (
         <div className="flex flex-col space-y-4" id="paginationTop">
-            <div className="flex items-baseline gap-x-4">
+            <div className="flex items-end justify-between gap-x-4">
                 <h2
-                    className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-medium"
+                    className="text-secondary text-base lg:text-lg"
                     id="publications"
                 >
-                    Publications
-                </h2>
-                <p className="text-gray-900 text-sm uppercase">
-                    <span>Last Updated:</span>
-                    <span
-                        className="ml-1"
-                        title={dayjs(publicationList[0].updated_at).toString()}
-                    >
-                        {dayjs(publicationList[0].updated_at).fromNow()}
+                    <span className="uppercase tracking-widest text-lg lg:text-xl font-medium pr-2">
+                        Publications
                     </span>
-                </p>
+                    linked via Europe PMC
+                </h2>
+                <div className="flex items-end gap-4">
+                    <p className="text-gray-900 text-sm uppercase">
+                        <span>Last Updated:</span>
+                        <span
+                            className="ml-1"
+                            title={dayjs(publicationList[0].updated_at).toString()}
+                        >
+                            {dayjs(publicationList[0].updated_at).fromNow()}
+                        </span>
+                    </p>
+                    <a
+                        href="#"
+                        className="bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300 -translate-y-1"
+                    >
+                        View all publications at Europe PMC
+                        <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
+                            <ChevronRightIcon className="w-4 h-4" />
+                        </div>
+                    </a>
+
+                </div>
             </div>
 
             <div>

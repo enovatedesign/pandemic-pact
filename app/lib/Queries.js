@@ -132,7 +132,8 @@ export const contentBuilderQuery = `
                 title
                 summary
                 externalLink
-                thumbnailImage  @transform(transform: "c480x480") {
+                postDate
+                thumbnailImage  @transform(transform: "c480x300") {
                   ... on contentAssets_Asset {
                     altText
                     height
@@ -369,7 +370,8 @@ export const contentBuilderQuery = `
                 title
                 summary
                 externalLink
-                thumbnailImage  @transform(transform: "c480x480") {
+                postDate
+                thumbnailImage  @transform(transform: "c480x300") {
                   ... on contentAssets_Asset {
                     altText
                     height

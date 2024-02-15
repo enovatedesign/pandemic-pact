@@ -14,6 +14,11 @@ export const links = {
         href: '/grants', 
         subPages: null,
     },
+    rrnas: { 
+        label: 'RRNAs', 
+        href: '/rrnas', 
+        subPages: null,
+    },
     publications: { 
         label: 'Publications', 
         href: '/publications' ,
