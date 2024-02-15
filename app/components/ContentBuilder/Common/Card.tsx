@@ -121,7 +121,7 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                         )}
 
                         
-                        <div className="flex items-end justify-between">
+                        <div className={postDate ? "flex items-end justify-between" : "mt-auto self-end"}>
                             {postDate && (
                                 <p>
                                     <time className="text-sm text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
@@ -131,7 +131,7 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                             )}
 
                             {children && (
-                                <div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
+                                <div className="relative h-12 w-12" aria-hidden="true">
                                     <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
                                         <span>
                                             {children}
