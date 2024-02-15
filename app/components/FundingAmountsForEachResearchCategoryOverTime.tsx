@@ -118,7 +118,7 @@ interface ChartProps {
 
 function BarChart({data, categories, showingAllResearchCategories}: ChartProps) {
     return (
-        <ResponsiveContainer width="100%" height={800}>
+        <ResponsiveContainer width="100%" height={500}>
             <RechartBarChart
                 data={data}
                 margin={{
@@ -170,7 +170,7 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
 
 function LineChart({data, categories, showingAllResearchCategories}: ChartProps) {
     return (
-        <ResponsiveContainer width="100%" height={700}>
+        <ResponsiveContainer width="100%" height={500}>
             <RechartLineChart
                 margin={{
                     top: 5,

@@ -4,17 +4,16 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
+    console.log(grant)
     const keyFactsHeadings = [
         {
             text: 'Disease',
             metric: grant.Disease,
-            classes: '',
         },
         {
             text: 'Start & end year',
             startMetric: grant.GrantStartYear,
             endMetric: grant.GrantEndYear,
-            classes: '',
         },
         {
             text: 'Known Financial Commitments (USD)',
@@ -22,12 +21,14 @@ export default function KeyFacts({ grant }: { grant: any }) {
                 typeof grant.GrantAmountConverted === 'number'
                     ? '$' + grant.GrantAmountConverted.toLocaleString()
                     : grant.GrantAmountConverted,
-            classes: '',
+        },
+        {
+            text: 'Funder',
+            metric: grant.FundingOrgName.join(', '),
         },
         {
             text: 'Principle Investigator',
             metric: grant.PrincipleInvestigator ?? 'Pending',
-            classes: '',
         },
         {
             text: 'Research Location',
@@ -35,17 +36,14 @@ export default function KeyFacts({ grant }: { grant: any }) {
                 grant.ResearchInstitutionCountry[0],
                 grant.ResearchInstitutionRegion[0],
             ],
-            classes: '',
         },
         {
             text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName,
-            classes: '',
+            metric: grant.ResearchInstitutionName?? 'test',
         },
         {
             text: 'Partner Institution',
-            metric: '',
-            classes: '',
+            metric: null,
         },
     ]
 
@@ -99,7 +97,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
     return (
         <div className="my-2 breakout-with-border overflow-hidden">
             <div className="relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden">
-                <h3 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] text-secondary uppercase tracking-widest text-lg lg:text-xl font-medium">
+                <h3 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">
                     Key facts
                 </h3>
                 <div className="w-full bg-primary text-secondary">
@@ -109,15 +107,16 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                 index === 0 &&
                                     'col-span-2 md:col-span-3 md:border-r-2',
                                 index === 1 &&
-                                    'border-r-2 md:col-span-3 md:border-r-0',
-                                index === 2 && 'md:border-r-2 md:col-span-3',
+                                    'border-r-2 md:col-span-3 md:border-r-0 mr-0.5 md:mr-0',
+                                index === 2 && 'md:border-r-2 md:col-span-2',
                                 index === 3 &&
-                                    'border-r-2 md:col-span-3 md:border-r-0',
-                                index === 4 && 'md:col-span-2 md:border-r-2',
-                                index === 5 && 'col-span-2 md:col-span-2',
-                                index === 6 &&
-                                    heading.metric &&
-                                    'border-l-2 -translate-x-0.5 md:translate-x-0 md:col-span-2',
+                                    'border-r-2 md:col-span-2 md:border-r-2',
+                                index === 4 && 'md:col-span-2',
+                                index === 5 && 'col-span-1 md:col-span-2 border-r-2',
+                                index === 6 && 'md:col-span-2',
+                                index === 7 && 'col-span-2 md:border-l-2 -ml-0.5 ',
+                                heading.metric &&
+                                    '-translate-x-0.5 md:translate-x-0 md:col-span-2',
                                 index > 2 ? 'border-b-2' : 'border-b-2',
                             ].join(' ')
 
@@ -247,16 +246,10 @@ export default function KeyFacts({ grant }: { grant: any }) {
                     </ul>
                     <ul className="grid grid-cols-2 md:grid-cols-3 bg-primary-lightest">
                         {keyFactsSubHeadings.map((subHeading, index) => {
+                            
                             const borderClasses = [
-                                index === 0 && 'border-r-2 md:border-r-2',
-                                index === 2 &&
-                                    'border-r-2 md:border-l-2 md:border-r-0',
-                                index === 3 && 'md:border-r-2',
-                                index === 4 && 'border-r-2 md:border-r-0',
-                                index === 5 && 'md:border-l-2',
-                                index === 6 && 'border-r-2',
-                                index === 8 &&
-                                    'col-span-2 md:col-span-1 md:border-l-2',
+                                'col-span-2 md:col-span-1',
+                                index % 2 == 0 ? 'border-r-2' : 'md:border-r-2'
                             ].join(' ')
 
                             return (

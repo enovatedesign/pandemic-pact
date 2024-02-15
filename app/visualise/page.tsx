@@ -219,9 +219,6 @@ export default function Visualise() {
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
 
-                            <div id='word-clouds' className={gridClasses}>
-                                <WordCloudsCard />
-                            </div>
                         </div>
 
                         <Tooltip

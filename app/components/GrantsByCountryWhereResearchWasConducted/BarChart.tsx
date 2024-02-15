@@ -95,10 +95,10 @@ export default function BarChart() {
                 </p>
             </div>
 
-            <div className="w-full h-[600px] mt-4">
+            <div className="w-full mt-4">
                 <ResponsiveContainer
                     width="100%"
-                    height="100%"
+                    height={500}
                 >
                     <RechartBarChart
                         data={data}

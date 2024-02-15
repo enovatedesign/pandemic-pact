@@ -153,7 +153,9 @@ export default function SearchInput({setSearchResponse}: Props) {
 
                 <div className="flex justify-between items-center">
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
-                        <span>Total Hits:</span>
+                        <span>
+                            {searchQuery ? 'Total Hits:' : 'Total Grants:'}
+                        </span>
                         <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
                             {totalHits}
                         </span>

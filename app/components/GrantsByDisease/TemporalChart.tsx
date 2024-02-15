@@ -33,7 +33,7 @@ export default function TemporalChart() {
     })
 
     return (
-        <ResponsiveContainer width="100%" height={700}>
+        <ResponsiveContainer width="100%" height={500}>
             <LineChart
                 margin={{
                     top: 5,
