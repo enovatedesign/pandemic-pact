@@ -43,7 +43,7 @@ export default function Home() {
                     <main id="content" className="grow flex justify-center items-center">
 
                         {/* Top content section */}
-                        <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-12 w-full z-20 container">
+                        <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-8 lg:gap-12 w-full z-20 container">
 
                             <h1 id="page-title" className="inline-block max-w-4xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
                                 Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants, from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> global funders
@@ -77,7 +77,10 @@ export default function Home() {
                                 </p>
 
                                 <small>
-                                    <p className="text-center text-white/60 text-pretty">
+                                    <p className="lg:hidden text-center text-white/60 text-pretty">
+                                        All visualizations and data produced by Pandemic PACT are open access, <Link href="/about/our-data" className="underline">license details described here</Link>.
+                                    </p>
+                                    <p className="hidden lg:block text-center text-white/60 text-pretty">
                                         All visualizations and data produced by Pandemic PACT are open access under the <Link href="http://creativecommons.org/licenses/by/4.0/" className="underline" target="_blank" rel="license noopener noreferrer">Creative Commons BY license</Link>. You have permission to use, distribute, and reproduce these in any medium, provided the source and authors are credited. All the software and code that we write is open source and made available via GitHub under the MIT license.
                                     </p>
                                 </small>
@@ -89,7 +92,7 @@ export default function Home() {
                     </main>
 
                     {/* Footer */}
-                    <footer className="container relative z-20 mt-10 lg:mt-20">
+                    <footer className="container relative z-20 mt-8 lg:mt-20">
 
                         <div className="w-full flex flex-col item-center justify-center gap-6 sm:gap-0">
 
