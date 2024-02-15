@@ -15,8 +15,8 @@ export const links = {
         subPages: null,
     },
     rrnas: { 
-        label: 'RRNAs', 
-        href: '/rrnas', 
+        label: 'RRNA', 
+        href: '/rapid-research-needs-appraisals', 
         subPages: null,
     },
     publications: { 
