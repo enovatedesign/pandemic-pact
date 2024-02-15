@@ -4,6 +4,7 @@ import RichText from "./RichText"
 import { useInView, animated } from '@react-spring/web'
 import ConditionalWrapper from "../../ConditionalWrapper"
 import { Fragment } from "react"
+import dayjs from 'dayjs'
 
 type Props = {
     entry: any,
@@ -31,6 +32,7 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
         summaryClasses,
         url,
         thumbnailImage,
+        postDate,
     } = entry
 
     const cardImage = thumbnailImage ? thumbnailImage[0] : image
@@ -58,6 +60,7 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
             once: true,
         }
     );
+
     return (
         <animated.article key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden [perspective:1000px] group ${hoverClasses}`}
@@ -98,7 +101,7 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                         )}
                     </div>                
                 
-                    <div className="flex flex-col gap-3 p-6 h-full">
+                    <div className="p-6 flex flex-col justify-between h-full">
                         
                         {title && (
                             <h3 className="text-secondary text-xl md:text-2xl">
@@ -117,25 +120,35 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                             <RichText text={text} customClasses='' invert={false} typeScale={""}/>
                         )}
 
-                        {children && (
-                            <div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
-                                <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
-                                    <span>
-                                        {children}
-                                    </span>
-                                </div>
-                                <div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
-                                    <span>
-                                        {children}
-                                    </span>
-                                </div>
-                            </div>
-                        )}
                         
+                        <div className={postDate ? "flex items-end justify-between" : "mt-auto self-end"}>
+                            {postDate && (
+                                <p>
+                                    <time className="text-sm text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
+                                        {dayjs(postDate).format('DD MMM, YYYY')}
+                                    </time>
+                                </p>
+                            )}
+
+                            {children && (
+                                <div className="relative h-12 w-12" aria-hidden="true">
+                                    <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
+                                        <span>
+                                            {children}
+                                        </span>
+                                    </div>
+                                    <div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+                                        <span>
+                                            {children}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         {tags && (
                             <NewsTags />
                         )}
-
                     </div>
 
                 </Fragment>

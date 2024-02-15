@@ -1,7 +1,7 @@
 import Image from "next/image";
 import BlockWrapper from "../BlockWrapper"
 import { ExternalLinkIcon } from "@heroicons/react/outline"
-
+import dayjs from 'dayjs'
 
 interface Props {
 	block: {
@@ -12,6 +12,7 @@ interface Props {
             title: string,
             summary: string,
             externalLink: string,
+			postDate: number,
             thumbnailImage: {
                 altText: string,
                 height: number,
@@ -25,13 +26,14 @@ interface Props {
 
 export default function FeaturedPublicationBlock({ block }: Props) {
 
-	const pub = block.featuredPublication[0];
+	const pub = block.featuredPublication[0]
 
-	const title = pub.title;
-	const summary = pub.summary;
-	const image = pub.thumbnailImage[0];
-	const type = pub.publicationType;
-	const url = pub.externalLink;
+	const title = pub.title
+	const summary = pub.summary
+	const image = pub.thumbnailImage[0]
+	const type = pub.publicationType
+	const url = pub.externalLink
+	const postDate = pub.postDate
 
 	const hoverClasses = [
         url ? 'hover:shadow-lg transition duration-300' : ''
@@ -73,7 +75,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 											src='/images/card-fallback/card-fallback.svg'
 											alt=''
 											width='480'
-											height='480'
+											height='300'
 											className="w-full h-full object-cover"
 											loading="lazy"
 										/>
@@ -90,19 +92,27 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 
 										<p className="lg:text-lg">{summary}</p>
 
-										<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
-											<div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
-												<span>
-													<ExternalLinkIcon className="w-6 h-6" />
-												</span>
-											</div>
-											<div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
-												<span>
-													<ExternalLinkIcon className="w-6 h-6" />
-												</span>
+										<div className="flex items-end justify-between">
+											{postDate && (
+												<p>
+													<time className="text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
+														{dayjs(postDate).format('DD MMM, YYYY')}
+													</time>
+												</p>
+											)}
+											<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
+												<div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
+													<span>
+														<ExternalLinkIcon className="w-6 h-6" />
+													</span>
+												</div>
+												<div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+													<span>
+														<ExternalLinkIcon className="w-6 h-6" />
+													</span>
+												</div>
 											</div>
 										</div>
-									
 									</div>
 
 								</div>

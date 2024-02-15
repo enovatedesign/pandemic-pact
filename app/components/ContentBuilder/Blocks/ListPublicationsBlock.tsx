@@ -13,6 +13,7 @@ type Props = {
             title: string,
             summary: string,
             externalLink: string,
+            postDate: number,
             thumbnailImage: {
                 altText: string,
                 height: number,
@@ -50,8 +51,9 @@ const ListPublicationsBlock = ({block}: Props) => {
                             summaryClasses: '',
                             url: entry.externalLink,
                             thumbnailImage: entry.thumbnailImage,
+                            postDate: entry.postDate
                         }
-
+                        
                         return (
                             <Card entry={cardData} key={index}>
                                 <ExternalLinkIcon className="w-6 h-6" />

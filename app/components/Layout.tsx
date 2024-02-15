@@ -32,7 +32,7 @@ const Layout = ({
     mastheadContent,
     children,
 }: Props) => {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(true)
     const sidebarWidth = 400
     const duration = 50
 

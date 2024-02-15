@@ -97,10 +97,10 @@ export default function Map() {
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
-                    scale: 110,
+                    scale: 80,
                     center: [0, 40],
                 }}
-                height={500}
+                height={300}
             >
                 <Geographies geography={filteredGeojson}>
                     {({geographies}) =>

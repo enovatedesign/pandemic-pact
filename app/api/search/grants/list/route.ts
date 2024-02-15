@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
             'LaySummary',
             'GrantAmountConverted',
             'GrantStartYear',
+            'FundingOrgName',
         ],
 
         size: 20,

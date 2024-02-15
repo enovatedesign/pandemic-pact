@@ -9,6 +9,7 @@ export interface SearchResult {
         LaySummary: string
         GrantAmountConverted: number
         GrantStartYear: string
+        FundingOrgName: string[]
     }
     highlight: {
         GrantTitleEng: string[]
