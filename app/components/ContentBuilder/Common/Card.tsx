@@ -123,8 +123,10 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                         
                         <div className="flex items-end justify-between">
                             {postDate && (
-                                <p className="text-sm text-brand-grey-400">
-                                    {dayjs(postDate).format('DD MMM, YYYY')}
+                                <p>
+                                    <time className="text-sm text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
+                                        {dayjs(postDate).format('DD MMM, YYYY')}
+                                    </time>
                                 </p>
                             )}
 

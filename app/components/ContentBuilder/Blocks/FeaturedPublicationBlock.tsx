@@ -94,8 +94,10 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 
 										<div className="flex items-end justify-between">
 											{postDate && (
-												<p className="text-brand-grey-400">
-													{dayjs(postDate).format('DD MMM, YYYY')}
+												<p>
+													<time className="text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
+														{dayjs(postDate).format('DD MMM, YYYY')}
+													</time>
 												</p>
 											)}
 											<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
