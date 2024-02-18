@@ -9,7 +9,6 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import FundingAmountsForEachResearchCategoryOverTime from "../components/FundingAmountsForEachResearchCategoryOverTime"
 import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
-import WordCloudsCard from "../components/WordClouds/Card"
 import JumpMenu from "../components/JumpMenu"
 import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters, Filters} from "../helpers/filters"
 import completeDataset from '../../data/dist/grants.json'
@@ -109,19 +108,8 @@ export default function Visualise() {
             image: {
                 url: '/images/visualisation-card/vis-line-chart.png',
                 altText: 'Visualisations Card',
-                width: 480,
-                height: 480,
-            }
-        },
-        {
-            title: 'Word Clouds',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            url: '#word-clouds',
-            image: {
-                url: '/images/visualisation-card/vis-word-cloud.png',
-                altText: 'Visualisations Card',
-                width: 480,
-                height: 480,
+                width: 300,
+                height: 300,
             }
         },
     ]
@@ -178,7 +166,7 @@ export default function Visualise() {
                     </AnimateHeight>
 
                     <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
                             {cardData.map((card, index) => {
 
                                 return (
