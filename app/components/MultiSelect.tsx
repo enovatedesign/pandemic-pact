@@ -1,38 +1,40 @@
-import {MultiSelect as TremorMultiSelect, MultiSelectItem as TremorMultiSelectItem} from "@tremor/react"
+import { useId } from 'react'
+import Select, { MultiValue } from 'react-select'
 
 interface Option {
-    label: string,
-    value: string,
+    label: string
+    value: string
 }
 
 interface Props {
-    options: Option[],
+    options: Option[]
     selectedOptions: string[]
-    setSelectedOptions: (options: string[]) => void,
-    placeholder?: string,
-    className?: string,
+    setSelectedOptions: (options: string[]) => void
+    placeholder?: string
+    className?: string
 }
 
-export default function MultiSelect({options, selectedOptions, setSelectedOptions, placeholder, className}: Props) {
-    const onChange = (options: string[]) => {
-        setSelectedOptions(options)
+export default function MultiSelect({
+    options,
+    selectedOptions,
+    setSelectedOptions,
+    placeholder,
+    className,
+}: Props) {
+    const id = useId()
+
+    const onChange = (option: MultiValue<Option>) => {
+        setSelectedOptions(option.map(o => o.value))
     }
 
     return (
-        <TremorMultiSelect
-            value={selectedOptions}
-            onValueChange={onChange}
-            placeholder={placeholder ?? "All"}
-            className={className}
-        >
-            {options.map(option => (
-                <TremorMultiSelectItem
-                    key={option.value}
-                    value={option.value}
-                >
-                    {option.label}
-                </TremorMultiSelectItem>
-            ))}
-        </TremorMultiSelect>
+        <Select
+            isMulti
+            options={options}
+            onChange={onChange}
+            placeholder={placeholder ?? 'All'}
+            className={`text-black ${className}`}
+            instanceId={id}
+        />
     )
 }
