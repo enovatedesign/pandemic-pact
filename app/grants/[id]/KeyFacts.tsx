@@ -39,7 +39,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName?? 'test',
+            metric: grant.ResearchInstitutionName,
         },
         {
             text: 'Partner Institution',
@@ -113,10 +113,10 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                     'border-r-2 md:col-span-2 md:border-r-2',
                                 index === 4 && 'md:col-span-2',
                                 index === 5 && 'col-span-1 md:col-span-2 border-r-2',
-                                index === 6 && 'md:col-span-2',
+                                index === 6 && 'col-span-1 md:col-span-2',
                                 index === 7 && 'col-span-2 md:border-l-2 -ml-0.5 ',
                                 heading.metric &&
-                                    '-translate-x-0.5 md:translate-x-0 md:col-span-2',
+                                    '-translate-x-0.5 md:translate-x-0',
                                 index > 2 ? 'border-b-2' : 'border-b-2',
                             ].join(' ')
 
@@ -125,22 +125,6 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                     ? 'text-lg lg:text-xl'
                                     : 'text-lg md:text-3xl lg:text-4xl font-bold',
                             ].join(' ')
-
-                            let colSpanClass = ''
-
-                            if (
-                                index === filteredKeyFactsHeadings.length - 1 &&
-                                filteredKeyFactsHeadings.length % 3 !== 0
-                            ) {
-                                const numberOfMissingItems =
-                                    keyFactsHeadings.length -
-                                    filteredKeyFactsHeadings.length
-                                if (numberOfMissingItems !== 0) {
-                                    colSpanClass = `col-span-${
-                                        numberOfMissingItems + 1
-                                    } border-r-0`
-                                }
-                            }
 
                             const metricIsArray = Array.isArray(heading?.metric)
                             const filteredMetric = metricIsArray
@@ -168,7 +152,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
                             return (
                                 <li
                                     key={index}
-                                    className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}
+                                    className={`${borderClasses} p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}
                                 >
                                     <div className="flex items-center space-x-2">
                                         <p className="uppercase text-xs tracking-widest font-bold">
