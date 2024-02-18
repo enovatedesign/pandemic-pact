@@ -305,8 +305,8 @@ function SingleSelect({ options, value, onSelectChange }: SingleSelectProps) {
         [value, options]
     )
 
-    const onChange = (option: SingleValue<Option>) => {
-        onSelectChange(option.value)
+    const onChange = (option: SingleValue<Option> | null) => {
+        onSelectChange(option ? option.value : '')
     }
 
     return (
