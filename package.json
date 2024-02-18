@@ -45,6 +45,7 @@
         "react-animate-height": "^3.2.3",
         "react-d3-cloud": "^1.0.6",
         "react-dom": "18.2.0",
+        "react-select": "^5.8.0",
         "react-simple-maps": "^3.0.0",
         "react-tooltip": "^5.25.1",
         "seedrandom": "^3.0.5",
