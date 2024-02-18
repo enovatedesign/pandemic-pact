@@ -13,11 +13,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: Parameters }) {
-    console.log('cms frontend page', params.slug)
-
     const data = await getPageContent(params)
-
-    console.log('cms frontend page fetched', params.slug)
 
     if (!data) {
         notFound()
