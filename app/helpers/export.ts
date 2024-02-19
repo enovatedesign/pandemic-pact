@@ -1,5 +1,7 @@
 export function fetchCsv() {
-    return fetch('/export/grants.csv').then(response => response.text())
+    return fetch('/export/pandemic-pact-grants.csv').then(response =>
+        response.text()
+    )
 }
 
 export function filterCsv(csv: string, grantIDs: string[]) {

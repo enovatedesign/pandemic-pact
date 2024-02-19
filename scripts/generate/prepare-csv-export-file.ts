@@ -77,7 +77,7 @@ export default function () {
 
     fs.emptyDirSync(path)
 
-    const pathname = `${path}/grants.csv`
+    const pathname = `${path}/pandemic-pact-grants.csv`
 
     fs.writeFileSync(pathname, csvData, 'utf-8')
 
