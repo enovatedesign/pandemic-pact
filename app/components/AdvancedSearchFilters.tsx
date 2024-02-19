@@ -244,8 +244,8 @@ function AdvancedInputRow({
         selectOptions[localRow.field as keyof typeof selectOptions]
 
     return (
-        <div className="flex">
-            <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
+        <div className="flex justify-start">
+            <div className="w-full text-secondary flex flex-col md:flex-row md:items-start gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
                 <div className="w-full min-w-10">
                     <SingleSelect
                         options={singleSelectOptions}
@@ -277,6 +277,7 @@ function AdvancedInputRow({
                     </p>
                 </button>
             </div>
+
             {children && (
                 <div
                     className={`${
