@@ -1,8 +1,6 @@
 export function fetchCsv() {
-    return fetch(
-        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/labelled-grant-data-2023-11-23.csv'
-    ).then(
-        response => response.text()
+    return fetch('/export/pandemic-pact-grants.csv').then(response =>
+        response.text()
     )
 }
 
@@ -12,23 +10,20 @@ export function filterCsv(csv: string, grantIDs: string[]) {
     // thereby improving performance.
     return csv
         .split('\n')
-        .filter(
-            (line, index) => {
-                // Always include the header row
-                if (index === 0) {
-                    return true
-                }
-
-                // Check if the first column contains one of our filtered Grant IDs
-                return grantIDs.some(
-                    id => line.startsWith(`${id},`)
-                )
+        .filter((line, index) => {
+            // Always include the header row
+            if (index === 0) {
+                return true
             }
-        ).join('\n')
+
+            // Check if the first column contains one of our filtered Grant IDs
+            return grantIDs.some(id => line.startsWith(`${id},`))
+        })
+        .join('\n')
 }
 
 export function downloadCsv(csv: string, filename: string) {
-    const blob = new Blob([csv], {type: 'text/csv'})
+    const blob = new Blob([csv], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
 
     const a = document.createElement('a')

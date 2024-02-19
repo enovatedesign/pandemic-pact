@@ -1,8 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { SearchIcon } from '@heroicons/react/solid'
-import ExportToCsvButton from './ExportToCsvButton'
-import { searchRequest, SearchFilters, SearchResponse } from '../helpers/search'
+import DownloadFullDataButton from './DownloadFullDataButton'
+import DownloadFilteredDataButton from './DownloadFilteredDataButton'
+import {
+    searchRequest,
+    SearchFilters,
+    SearchResponse,
+    queryOrFiltersAreSet,
+} from '../helpers/search'
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
 import InfoModal from './InfoModal'
@@ -198,12 +204,15 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         </span>
                     </p>
 
-                    <ExportToCsvButton
-                        searchRequestBody={searchRequestBody}
-                        filename="search-results-export"
-                        title="Download Data"
-                        size="xsmall"
-                    />
+                    <div className="flex gap-x-4">
+                        {queryOrFiltersAreSet(searchRequestBody) && (
+                            <DownloadFilteredDataButton
+                                searchRequestBody={searchRequestBody}
+                            />
+                        )}
+
+                        <DownloadFullDataButton />
+                    </div>
                 </div>
             </div>
         </div>
