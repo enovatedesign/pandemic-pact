@@ -1,27 +1,27 @@
-import {useState} from "react"
-import {PlusIcon, MinusIcon} from "@heroicons/react/solid"
-import {Select, SelectItem, MultiSelect, MultiSelectItem} from "@tremor/react";
+import { useId, useMemo, useState } from 'react'
+import Select, { SingleValue, MultiValue } from 'react-select'
+import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
-import {SearchFilters} from "../helpers/search";
+import { SearchFilters } from '../helpers/search'
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
 }
 
 interface Row {
-    field: string,
-    values: string[],
-    logicalAnd: boolean,
+    field: string
+    values: string[]
+    logicalAnd: boolean
     key: number
 }
 
 interface SelectedFilters {
-    rows: Row[],
-    logicalAnd: boolean,
+    rows: Row[]
+    logicalAnd: boolean
 }
 
-export default function AdvancedSearch({setSearchFilters}: Props) {
+export default function AdvancedSearch({ setSearchFilters }: Props) {
     const defaultRow: () => Row = () => ({
         field: 'StudySubject',
         values: [],
@@ -35,18 +35,23 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
     })
 
     const globalAndButtonTextClasses = [
-        selectedFilters.logicalAnd ? 'order-first left-3' : 'order-last right-4'
+        selectedFilters.logicalAnd
+            ? 'order-first left-3'
+            : 'order-last right-4',
     ].join(' ')
 
     const globalAndButtonDivClasses = [
-        selectedFilters.logicalAnd ? 'right-1 transition duration-300' : 'right-1 -translate-x-[48px] transition duration-300'
+        selectedFilters.logicalAnd
+            ? 'right-1 transition duration-300'
+            : 'right-1 -translate-x-[48px] transition duration-300',
     ].join(' ')
 
-    const updateSearchFiltersFromSelectedFilters = (newSelectedFilters: SelectedFilters) => {
+    const updateSearchFiltersFromSelectedFilters = (
+        newSelectedFilters: SelectedFilters
+    ) => {
         setSearchFilters({
             logicalAnd: newSelectedFilters.logicalAnd,
-            filters: newSelectedFilters
-                .rows
+            filters: newSelectedFilters.rows
                 .filter(row => row.values.length > 0)
                 .map(row => ({
                     field: row.field,
@@ -83,9 +88,7 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
     }
 
     const removeRow = (index: number) => {
-        setRows(
-            selectedFilters.rows.filter((_, i) => i !== index)
-        )
+        setRows(selectedFilters.rows.filter((_, i) => i !== index))
     }
 
     const paddingClasses = 'md:pr-[100px]'
@@ -101,9 +104,13 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
                     onClick={() => toggleLogicalAnd()}
                     className="h-8 relative flex items-center bg-secondary w-20 rounded-full"
                 >
-                    <div className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}></div>
+                    <div
+                        className={`${globalAndButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute`}
+                    ></div>
 
-                    <p className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}>
+                    <p
+                        className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}
+                    >
                         {selectedFilters.logicalAnd ? 'and' : 'or'}
                     </p>
                 </button>
@@ -113,7 +120,9 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
                     return (
                         <div key={row.key} className="relative w-full">
                             {index > 0 && (
-                                <p className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}>
+                                <p
+                                    className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}
+                                >
                                     {selectedFilters.logicalAnd ? 'and' : 'or'}
                                 </p>
                             )}
@@ -144,7 +153,8 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
                             customClasses="mt-3 flex items-center gap-1"
                             onClick={addRow}
                         >
-                            Add a row <PlusIcon className="w-5 h-5" aria-hidden="true" />
+                            Add a row{' '}
+                            <PlusIcon className="w-5 h-5" aria-hidden="true" />
                         </Button>
                     </div>
                 )}
@@ -154,25 +164,29 @@ export default function AdvancedSearch({setSearchFilters}: Props) {
 }
 
 type AdvancedRowProps = {
-    children: any,
-    row: Row,
-    rows: Row[],
-    setRows: ((rows: Row[]) => void),
-    index: number,
+    children: any
+    row: Row
+    rows: Row[]
+    setRows: (rows: Row[]) => void
+    index: number
 }
 
-function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProps) {
-
+function AdvancedInputRow({
+    children,
+    row,
+    rows,
+    setRows,
+    index,
+}: AdvancedRowProps) {
     const [localRow, setLocalRow] = useState<Row>(row)
 
-    const selectItems = Object.keys(selectOptions)
-
     const andButtonTextClasses = [
-        localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4'
+        localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4',
     ].join(' ')
 
     const andButtonDivClasses = [
-        !localRow.logicalAnd && '-translate-x-[48px] md:-translate-x-[37px] lg:-translate-x-[40px] xl:-translate-x-[42px]'
+        !localRow.logicalAnd &&
+            '-translate-x-[48px] md:-translate-x-[37px] lg:-translate-x-[40px] xl:-translate-x-[42px]',
     ].join(' ')
 
     const onSelectChange = (value: string) => {
@@ -185,9 +199,9 @@ function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProp
         setLocalRow(newRow)
 
         setRows(
-            rows.map(
-                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
-            ),
+            rows.map(globalRow =>
+                globalRow.key === newRow.key ? newRow : globalRow
+            )
         )
     }
 
@@ -200,8 +214,8 @@ function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProp
         setLocalRow(newRow)
 
         setRows(
-            rows.map(
-                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
+            rows.map(globalRow =>
+                globalRow.key === newRow.key ? newRow : globalRow
             )
         )
     }
@@ -215,53 +229,56 @@ function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProp
         setLocalRow(newRow)
 
         setRows(
-            rows.map(
-                globalRow => (globalRow.key === newRow.key) ? newRow : globalRow
+            rows.map(globalRow =>
+                globalRow.key === newRow.key ? newRow : globalRow
             )
         )
     }
 
+    const singleSelectOptions = Object.keys(selectOptions).map(option => ({
+        label: camelToSentence(option),
+        value: option,
+    }))
+
+    const multiSelectOptions =
+        selectOptions[localRow.field as keyof typeof selectOptions]
+
     return (
         <div className="flex">
             <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
-                <Select value={localRow.field} onValueChange={onSelectChange} enableClear={false}>
-                    {selectItems.map((key, index) => {
-                        return (
-                            <SelectItem
-                                value={key}
-                                key={index}
-                                className="cursor-pointer"
-                            >
-                                {camelToSentence(key)}
-                            </SelectItem>
-                        )
-                    })}
-                </Select>
+                <SingleSelect
+                    options={singleSelectOptions}
+                    value={localRow.field}
+                    onSelectChange={onSelectChange}
+                />
 
-                <MultiSelect value={localRow.values} onValueChange={onMultiSelectChange}>
-                    {selectOptions[localRow.field as keyof typeof selectOptions].map((value, index: number) => {
-                        return (
-                            <MultiSelectItem
-                                value={value.value}
-                                key={index}
-                                className="cursor-pointer"
-                            >
-                                {value.label}
-                            </MultiSelectItem>
-                        )
-                    })}
-                </MultiSelect>
+                <MultiSelect
+                    options={multiSelectOptions}
+                    value={localRow.values}
+                    onMultiSelectChange={onMultiSelectChange}
+                />
 
-                <button onClick={onLightSwitchChange} className="h-8 relative flex items-center bg-secondary w-20 md:w-40 rounded-full">
-                    <div className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute right-1 transition-transform duration-300`}></div>
+                <button
+                    onClick={onLightSwitchChange}
+                    className="h-8 relative flex items-center bg-secondary w-20 md:w-40 rounded-full"
+                >
+                    <div
+                        className={`${andButtonDivClasses} w-6 aspect-square bg-primary rounded-full absolute right-1 transition-transform duration-300`}
+                    ></div>
 
-                    <p className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}>
+                    <p
+                        className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}
+                    >
                         {localRow.logicalAnd ? 'and' : 'or'}
                     </p>
                 </button>
             </div>
             {children && (
-                <div className={`${index === 0 && 'invisible pr-8'} flex items-center`}>
+                <div
+                    className={`${
+                        index === 0 && 'invisible pr-8'
+                    } flex items-center`}
+                >
                     {children}
                 </div>
             )}
@@ -269,7 +286,77 @@ function AdvancedInputRow({children, row, rows, setRows, index}: AdvancedRowProp
     )
 }
 
+type Option = {
+    label: string
+    value: string
+}
+
+type SingleSelectProps = {
+    options: Option[]
+    value: string
+    onSelectChange: (value: string) => void
+}
+
+function SingleSelect({ options, value, onSelectChange }: SingleSelectProps) {
+    const id = useId()
+
+    const defaultValue: Option = useMemo(
+        () => options.find(o => o.value === value) as Option,
+        [value, options]
+    )
+
+    const onChange = (option: SingleValue<Option> | null) => {
+        onSelectChange(option ? option.value : '')
+    }
+
+    return (
+        <Select
+            defaultValue={defaultValue}
+            options={options}
+            onChange={onChange}
+            isClearable={false}
+            placeholder="Select..."
+            instanceId={id}
+        />
+    )
+}
+
+type MultiSelectProps = {
+    options: Option[]
+    value: string[]
+    onMultiSelectChange: (value: string[]) => void
+}
+
+function MultiSelect({
+    options,
+    value,
+    onMultiSelectChange,
+}: MultiSelectProps) {
+    const id = useId()
+
+    const defaultValue: Option[] = useMemo(() => {
+        return value.map(option => {
+            return options.find(o => o.value === option)
+        }) as Option[]
+    }, [value, options])
+
+    const onChange = (option: MultiValue<Option>) => {
+        onMultiSelectChange(option.map(o => o.value))
+    }
+
+    return (
+        <Select
+            isMulti
+            options={options}
+            onChange={onChange}
+            defaultValue={defaultValue}
+            placeholder="Select..."
+            instanceId={id}
+        />
+    )
+}
+
 function camelToSentence(word: string) {
-    const result = word.replace(/([A-Z])/g, ' $1');
-    return result.charAt(0).toUpperCase() + result.slice(1);
+    const result = word.replace(/([A-Z])/g, ' $1')
+    return result.charAt(0).toUpperCase() + result.slice(1)
 }
