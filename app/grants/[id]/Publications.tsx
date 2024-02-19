@@ -4,9 +4,9 @@ import { useState, Suspense } from 'react'
 import AnimateHeight from 'react-animate-height'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ChevronDownIcon, ExternalLinkIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/solid'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
-import Button from '@/app/components/Button'
+import Button from '../../components/Button'
 
 dayjs.extend(relativeTime)
 
@@ -28,7 +28,7 @@ export default function Publications({ grant }: { grant: any }) {
 
     return (
         <div className="flex flex-col space-y-4" id="paginationTop">
-            <div className="flex items-end justify-between gap-x-4">
+            <div className="flex flex-col gap-y-4 xl:gap-y-0 xl:flex-row xl:items-end xl:justify-between xl:gap-x-4">
                 <h2
                     className="text-secondary text-base lg:text-lg"
                     id="publications"
@@ -38,7 +38,7 @@ export default function Publications({ grant }: { grant: any }) {
                     </span>
                     linked via Europe PMC
                 </h2>
-                <div className="flex items-end gap-4">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between xl:justify-normal gap-4">
                     <p className="text-gray-900 text-sm uppercase">
                         <span>Last Updated:</span>
                         <span
@@ -48,15 +48,15 @@ export default function Publications({ grant }: { grant: any }) {
                             {dayjs(publicationList[0].updated_at).fromNow()}
                         </span>
                     </p>
-                    <a
+                    <Button
                         href="#"
-                        className="bg-secondary text-white rounded-full px-2 py-1 lg:px-4 lg:py-2 flex items-center gap-2 border-2 border-secondary hover:border-primary transition-colors duration-300 -translate-y-1"
+                        colour='grey'
+                        customClasses="flex items-center justify-between gap-2 lg:-translate-y-1"
+                        size='small'
                     >
-                        View all publications at Europe PMC
-                        <div className="aspect-square rounded-full border-2 border-white flex justify-center items-center">
-                            <ChevronRightIcon className="w-4 h-4" />
-                        </div>
-                    </a>
+                        <span className="text-xs md:text-sm lg:text-base xl:text-base">View all publications at Europe PMC</span>
+                        <ExternalLinkIcon className="size-5" />
+                    </Button>
 
                 </div>
             </div>

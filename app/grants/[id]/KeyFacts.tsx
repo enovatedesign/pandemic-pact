@@ -4,7 +4,6 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
-    console.log(grant)
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -17,10 +16,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Known Financial Commitments (USD)',
-            metric:
-                typeof grant.GrantAmountConverted === 'number'
-                    ? '$' + grant.GrantAmountConverted.toLocaleString()
-                    : grant.GrantAmountConverted,
+            metric: typeof grant.GrantAmountConverted === 'number' ? '$' + grant.GrantAmountConverted.toLocaleString() : grant.GrantAmountConverted,
         },
         {
             text: 'Funder',
@@ -32,14 +28,11 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Research Location',
-            metric: [
-                grant.ResearchInstitutionCountry[0],
-                grant.ResearchInstitutionRegion[0],
-            ],
+            metric: [grant.ResearchInstitutionCountry[0], grant.ResearchInstitutionRegion[0]],
         },
         {
             text: 'Lead Research Institution',
-            metric: grant.ResearchInstitutionName?? 'test',
+            metric: grant.ResearchInstitutionName,
         },
         {
             text: 'Partner Institution',
@@ -47,9 +40,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
     ]
 
-    const filteredKeyFactsHeadings = keyFactsHeadings.filter(
-        (heading) => heading.metric || heading.startMetric
-    )
+    const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
 
     const keyFactsSubHeadings = [
         {
@@ -97,146 +88,80 @@ export default function KeyFacts({ grant }: { grant: any }) {
     return (
         <div className="my-2 breakout-with-border overflow-hidden">
             <div className="relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden">
-                <h3 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">
-                    Key facts
-                </h3>
+                <h3 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">Key facts</h3>
                 <div className="w-full bg-primary text-secondary">
                     <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                         {filteredKeyFactsHeadings.map((heading, index) => {
                             const borderClasses = [
-                                index === 0 &&
-                                    'col-span-2 md:col-span-3 md:border-r-2',
-                                index === 1 &&
-                                    'border-r-2 md:col-span-3 md:border-r-0 mr-0.5 md:mr-0',
+                                index === 0 && 'col-span-2 md:col-span-3 md:border-r-2',
+                                index === 1 && 'border-r-2 md:col-span-3 md:border-r-0 mr-0.5 md:mr-0',
                                 index === 2 && 'md:border-r-2 md:col-span-2',
-                                index === 3 &&
-                                    'border-r-2 md:col-span-2 md:border-r-2',
+                                index === 3 && 'border-r-2 md:col-span-2 md:border-r-2',
                                 index === 4 && 'md:col-span-2',
                                 index === 5 && 'col-span-1 md:col-span-2 border-r-2',
-                                index === 6 && 'md:col-span-2',
+                                index === 6 && 'col-span-1 md:col-span-2',
                                 index === 7 && 'col-span-2 md:border-l-2 -ml-0.5 ',
-                                heading.metric &&
-                                    '-translate-x-0.5 md:translate-x-0 md:col-span-2',
+                                heading.metric && '-translate-x-0.5 md:translate-x-0',
                                 index > 2 ? 'border-b-2' : 'border-b-2',
                             ].join(' ')
 
-                            const metricClasses = [
-                                index > 2
-                                    ? 'text-lg lg:text-xl'
-                                    : 'text-lg md:text-3xl lg:text-4xl font-bold',
-                            ].join(' ')
-
-                            let colSpanClass = ''
-
-                            if (
-                                index === filteredKeyFactsHeadings.length - 1 &&
-                                filteredKeyFactsHeadings.length % 3 !== 0
-                            ) {
-                                const numberOfMissingItems =
-                                    keyFactsHeadings.length -
-                                    filteredKeyFactsHeadings.length
-                                if (numberOfMissingItems !== 0) {
-                                    colSpanClass = `col-span-${
-                                        numberOfMissingItems + 1
-                                    } border-r-0`
-                                }
-                            }
+                            const metricClasses = [index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'].join(' ')
 
                             const metricIsArray = Array.isArray(heading?.metric)
-                            const filteredMetric = metricIsArray
-                                ? heading.metric.filter((m: any) => m)
-                                : heading.metric
-                            const metric = metricIsArray
-                                ? filteredMetric.slice(0, 2).join(', ')
-                                : heading?.metric
-                            const infoModalMetric =
-                                metricIsArray && filteredMetric.length > 3
-                                    ? heading.metric.join(', ')
-                                    : ''
+                            const filteredMetric = metricIsArray ? heading.metric.filter((m: any) => m) : heading.metric
+                            const metric = metricIsArray ? filteredMetric.slice(0, 2).join(', ') : heading?.metric
+                            const infoModalMetric = metricIsArray && filteredMetric.length > 3 ? heading.metric.join(', ') : ''
 
                             let headingText = ''
 
-                            if (
-                                heading.text === 'Start & end year' &&
-                                heading.endMetric < 0
-                            ) {
+                            if (heading.text === 'Start & end year' && heading.endMetric < 0) {
                                 headingText = 'start year'
                             } else {
                                 headingText = heading.text
                             }
 
                             return (
-                                <li
-                                    key={index}
-                                    className={`${borderClasses} ${colSpanClass} p-4 py-5 flex flex-col justify-between space-y-2  border-secondary/10`}
-                                >
+                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}>
                                     <div className="flex items-center space-x-2">
-                                        <p className="uppercase text-xs tracking-widest font-bold">
-                                            {headingText}
-                                        </p>
+                                        <p className="uppercase text-xs tracking-widest font-bold">{headingText}</p>
                                     </div>
 
                                     {heading.startMetric ? (
                                         <div className="flex gap-1 items-center ">
-                                            <span className={metricClasses}>
-                                                {heading.startMetric}
-                                            </span>
-                                            {heading.endMetric &&
-                                                heading.endMetric > 0 && (
-                                                    <div className="flex gap-1 items-end h-full">
-                                                        <div className="flex items-center gap-1">
-                                                            <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" />
-                                                            <span className="text-md md:text-xl lg:text-2xl font-bold">
-                                                                {
-                                                                    heading.endMetric
-                                                                }
-                                                            </span>
-                                                        </div>
+                                            <span className={metricClasses}>{heading.startMetric}</span>
+                                            {heading.endMetric && heading.endMetric > 0 && (
+                                                <div className="flex gap-1 items-end h-full">
+                                                    <div className="flex items-center gap-1">
+                                                        <ArrowRightIcon className="w-4 h-4 md:h-5 md:w-5 opacity-50" />
+                                                        <span className="text-md md:text-xl lg:text-2xl font-bold">{heading.endMetric}</span>
                                                     </div>
-                                                )}
+                                                </div>
+                                            )}
                                         </div>
                                     ) : (
                                         <>
                                             {metric ? (
-                                                <div
-                                                    className={`${metricClasses} font-bold`}
-                                                >
+                                                <div className={`${metricClasses} font-bold`}>
                                                     <div>
                                                         <span>{metric}</span>
                                                         {infoModalMetric && (
                                                             <div className="inline">
-                                                                <span className="pl-1">
-                                                                    …
-                                                                </span>
+                                                                <span className="pl-1">…</span>
                                                                 <InfoModal
                                                                     customButton={
                                                                         <span className="bg-secondary inline-block whitespace-nowrap text-white rounded-full ml-1 px-2 py-0.5 lg:-translate-y-1 text-sm">
-                                                                            {heading
-                                                                                ? heading
-                                                                                      .metric
-                                                                                      .length -
-                                                                                  2
-                                                                                : ''}{' '}
-                                                                            more
+                                                                            {heading ? heading.metric.length - 2 : ''} more
                                                                         </span>
                                                                     }
                                                                 >
-                                                                    <p>
-                                                                        {
-                                                                            infoModalMetric
-                                                                        }
-                                                                    </p>
+                                                                    <p>{infoModalMetric}</p>
                                                                 </InfoModal>
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <p
-                                                    className={`${metricClasses} font-bold`}
-                                                >
-                                                    N/A
-                                                </p>
+                                                <p className={`${metricClasses} font-bold`}>N/A</p>
                                             )}
                                         </>
                                     )}
@@ -246,45 +171,22 @@ export default function KeyFacts({ grant }: { grant: any }) {
                     </ul>
                     <ul className="grid grid-cols-2 md:grid-cols-3 bg-primary-lightest">
                         {keyFactsSubHeadings.map((subHeading, index) => {
-                            
-                            const borderClasses = [
-                                'col-span-2 md:col-span-1',
-                                index % 2 == 0 ? 'border-r-2' : 'md:border-r-2'
-                            ].join(' ')
+                            const borderClasses = ['col-span-2 md:col-span-1', index % 2 == 0 ? 'border-r-2' : 'md:border-r-2'].join(' ')
 
                             return (
-                                <li
-                                    key={index}
-                                    className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}
-                                >
+                                <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}>
                                     {subHeading.infoModalText ? (
                                         <div className="flex items-center space-x-2">
-                                            {subHeading.text && (
-                                                <p className="uppercase text-xs tracking-widest font-bold">
-                                                    {subHeading.text}
-                                                </p>
-                                            )}
+                                            {subHeading.text && <p className="uppercase text-xs tracking-widest font-bold">{subHeading.text}</p>}
                                             <InfoModal>
-                                                <p>
-                                                    {subHeading.infoModalText}
-                                                </p>
+                                                <p>{subHeading.infoModalText}</p>
                                             </InfoModal>
                                         </div>
                                     ) : (
-                                        <>
-                                            {subHeading.text && (
-                                                <p className="uppercase text-xs tracking-widest font-bold">
-                                                    {subHeading.text}
-                                                </p>
-                                            )}
-                                        </>
+                                        <>{subHeading.text && <p className="uppercase text-xs tracking-widest font-bold">{subHeading.text}</p>}</>
                                     )}
 
-                                    <p className="font-bold text-lg lg:text-xl">
-                                        {subHeading.metric?.length > 0
-                                            ? subHeading.metric
-                                            : 'N/A'}
-                                    </p>
+                                    <p className="font-bold text-lg lg:text-xl">{subHeading.metric?.length > 0 ? subHeading.metric : 'N/A'}</p>
                                 </li>
                             )
                         })}

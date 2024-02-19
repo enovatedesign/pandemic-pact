@@ -1,38 +1,71 @@
-import {MultiSelect as TremorMultiSelect, MultiSelectItem as TremorMultiSelectItem} from "@tremor/react"
+import { useId, useMemo, useState } from 'react'
+import Select, { MultiValue } from 'react-select'
 
 interface Option {
-    label: string,
-    value: string,
+    label: string
+    value: string
 }
 
 interface Props {
-    options: Option[],
+    field: string
     selectedOptions: string[]
-    setSelectedOptions: (options: string[]) => void,
-    placeholder?: string,
-    className?: string,
+    setSelectedOptions: (options: string[]) => void
+    placeholder?: string
+    className?: string
 }
 
-export default function MultiSelect({options, selectedOptions, setSelectedOptions, placeholder, className}: Props) {
-    const onChange = (options: string[]) => {
-        setSelectedOptions(options)
+export default function MultiSelect({
+    field,
+    selectedOptions,
+    setSelectedOptions,
+    placeholder,
+    className,
+}: Props) {
+    const [options, setOptions] = useState<Option[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const id = useId()
+
+    const defaultValue: Option[] = useMemo(() => {
+        return selectedOptions.map(option => {
+            return options.find(o => o.value === option)
+        }) as Option[]
+    }, [selectedOptions, options])
+
+    const onChange = (option: MultiValue<Option>) => {
+        setSelectedOptions(option.map(o => o.value))
+    }
+
+    const loadOptions = () => {
+        if (options.length > 0) {
+            return options
+        }
+
+        setIsLoading(true)
+
+        fetch(`/data/select-options/${field}.json`)
+            .then(response => response.json())
+            .then(data => {
+                setOptions(data)
+                setIsLoading(false)
+            })
+            .catch(error => {
+                console.error('Error loading options:', error)
+                setIsLoading(false)
+            })
     }
 
     return (
-        <TremorMultiSelect
-            value={selectedOptions}
-            onValueChange={onChange}
-            placeholder={placeholder ?? "All"}
-            className={className}
-        >
-            {options.map(option => (
-                <TremorMultiSelectItem
-                    key={option.value}
-                    value={option.value}
-                >
-                    {option.label}
-                </TremorMultiSelectItem>
-            ))}
-        </TremorMultiSelect>
+        <Select
+            isMulti
+            options={options}
+            onChange={onChange}
+            defaultValue={defaultValue}
+            placeholder={placeholder ?? 'All'}
+            className={`text-black ${className}`}
+            instanceId={id}
+            onFocus={loadOptions}
+            isLoading={isLoading}
+        />
     )
 }

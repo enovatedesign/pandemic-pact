@@ -109,7 +109,7 @@ export default function SearchResult({
                     </div>
                 )}
                 {funderNames && (
-                    <div className={`${totalMatchText > 0 ? 'lg:col-start-6 lg:col-span-4 xl:col-start-5 xl:col-span-5' : 'lg:col-start-1 lg:col-span-10'} lg:row-start-1 text-sm lg:text-lg flex items-center gap-2 overflow-hidden`}>
+                    <div className={`${totalMatchText > 0 ? 'lg:col-start-6 lg:col-span-4 xl:col-start-5 xl:col-span-5' : 'lg:col-start-1 lg:col-span-9'} lg:row-start-1 text-sm lg:text-lg flex items-center gap-2 overflow-hidden truncate`}>
                         <p className="truncate">
                             <span className="font-bold">
                                 Funders: 

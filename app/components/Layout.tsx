@@ -2,7 +2,8 @@
 
 import mastheadStyles from '../css/components/masthead.module.css'
 
-import { isValidElement, useState, ReactNode } from 'react'
+import { isValidElement, useState, useEffect, ReactNode } from 'react'
+import { debounce } from 'lodash'
 import { useSpring, animated } from '@react-spring/web'
 import { AdjustmentsIcon } from '@heroicons/react/outline'
 
@@ -32,7 +33,7 @@ const Layout = ({
     mastheadContent,
     children,
 }: Props) => {
-    const [sidebarOpen, setSidebarOpen] = useState(true)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const sidebarWidth = 400
     const duration = 50
 
@@ -66,6 +67,31 @@ const Layout = ({
             setSidebarOpen,
         }
     }
+
+    useEffect(() => {
+        const windowX = window.innerWidth
+        
+        const handleSidebar = () => {
+            if (windowX < 1024) {
+                setSidebarOpen(false)
+            } else {
+                setSidebarOpen(true)
+            }
+        }
+
+        const debouncedSidebar = debounce(handleSidebar, 200)
+
+        if (document.readyState === 'complete') {
+            debouncedSidebar()
+        } else {
+            window.addEventListener('load', debouncedSidebar)
+        }
+
+
+        return () => {
+            window.removeEventListener('load', debouncedSidebar)
+        }
+    }, [])
 
     return (
         <>

@@ -1,59 +1,92 @@
-import {useState, useContext} from "react"
-import {BarChart as RechartBarChart, Bar, LineChart as RechartLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
-import {PresentationChartBarIcon, PresentationChartLineIcon} from "@heroicons/react/solid"
-import VisualisationCard from "./VisualisationCard"
-import MultiSelect from "./MultiSelect"
-import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {dollarValueFormatter, axisDollarFormatter} from "../helpers/value-formatters"
-import {filterGrants, GlobalFilterContext} from "../helpers/filters"
-import {groupBy} from 'lodash'
+import { useState, useContext } from 'react'
+import {
+    BarChart as RechartBarChart,
+    Bar,
+    LineChart as RechartLineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts'
+import {
+    PresentationChartBarIcon,
+    PresentationChartLineIcon,
+} from '@heroicons/react/solid'
+import VisualisationCard from './VisualisationCard'
+import MultiSelect from './MultiSelect'
+import { sumNumericGrantAmounts } from '../helpers/reducers'
+import {
+    dollarValueFormatter,
+    axisDollarFormatter,
+} from '../helpers/value-formatters'
+import { filterGrants, GlobalFilterContext } from '../helpers/filters'
+import { groupBy } from 'lodash'
 import dataset from '../../data/dist/grants.json'
-import selectOptions from '../../data/dist/select-options.json'
-import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
-import {baseTooltipProps} from "../helpers/tooltip"
+import researchCategoryOptions from '../../public/data/select-options/ResearchCat.json'
+import {
+    researchCategoryColours,
+    allResearchCategoriesColour,
+} from '../helpers/colours'
+import { baseTooltipProps } from '../helpers/tooltip'
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
-    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
+    const { grants: globalGrants, filters: selectedFilters } =
+        useContext(GlobalFilterContext)
 
-    const researchCategoryOptions = selectOptions.ResearchCat
+    const [selectedResearchCategories, setSelectedResearchCategories] =
+        useState<string[]>(researchCategoryOptions.map(({ value }) => value))
 
-    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>(
-        researchCategoryOptions.map(({value}) => value)
-    )
-
-    const filteredDataset = filterGrants(
-        dataset,
-        {...selectedFilters, ResearchCat: selectedResearchCategories},
-    )
+    const filteredDataset = filterGrants(dataset, {
+        ...selectedFilters,
+        ResearchCat: selectedResearchCategories,
+    })
 
     const datasetGroupedByYear = groupBy(
-        filteredDataset.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
-        'GrantStartYear',
+        filteredDataset.filter((grants: any) =>
+            grants.GrantStartYear?.match(/^\d{4}$/)
+        ),
+        'GrantStartYear'
     )
 
-    const showingAllResearchCategories = (selectedResearchCategories.length === 0)
+    const showingAllResearchCategories = selectedResearchCategories.length === 0
 
-    const selectedResearchCategoryOptions: {value: string, label: string}[] = showingAllResearchCategories ?
-        [{value: 'All Research Categories', label: 'All Research Categories'}] :
-        researchCategoryOptions.filter(
-            researchCategory => selectedResearchCategories.includes(researchCategory.value)
-        )
+    const selectedResearchCategoryOptions: { value: string; label: string }[] =
+        showingAllResearchCategories
+            ? [
+                  {
+                      value: 'All Research Categories',
+                      label: 'All Research Categories',
+                  },
+              ]
+            : researchCategoryOptions.filter(researchCategory =>
+                  selectedResearchCategories.includes(researchCategory.value)
+              )
 
     const amountCommittedToEachResearchCategoryOverTime = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
 
-        let dataPoint: {[key: string]: string | number} = {year}
+        let dataPoint: { [key: string]: string | number } = { year }
 
         if (showingAllResearchCategories) {
-            dataPoint['All Research Categories'] = grants.reduce(...sumNumericGrantAmounts)
+            dataPoint['All Research Categories'] = grants.reduce(
+                ...sumNumericGrantAmounts
+            )
         } else {
-            selectedResearchCategoryOptions.forEach(selectedResearchCategoryOption => {
-                dataPoint[selectedResearchCategoryOption.label] = grants
-                    .filter(grant => grant.ResearchCat.includes(selectedResearchCategoryOption.value))
-                    .reduce(...sumNumericGrantAmounts)
-            })
+            selectedResearchCategoryOptions.forEach(
+                selectedResearchCategoryOption => {
+                    dataPoint[selectedResearchCategoryOption.label] = grants
+                        .filter(grant =>
+                            grant.ResearchCat.includes(
+                                selectedResearchCategoryOption.value
+                            )
+                        )
+                        .reduce(...sumNumericGrantAmounts)
+                }
+            )
         }
 
         return dataPoint
@@ -63,24 +96,28 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         {
             tab: {
                 icon: PresentationChartBarIcon,
-                label: "Bar",
+                label: 'Bar',
             },
-            content: <BarChart
-                data={amountCommittedToEachResearchCategoryOverTime}
-                categories={selectedResearchCategoryOptions}
-                showingAllResearchCategories={showingAllResearchCategories}
-            />,
+            content: (
+                <BarChart
+                    data={amountCommittedToEachResearchCategoryOverTime}
+                    categories={selectedResearchCategoryOptions}
+                    showingAllResearchCategories={showingAllResearchCategories}
+                />
+            ),
         },
         {
             tab: {
                 icon: PresentationChartLineIcon,
-                label: "Lines",
+                label: 'Lines',
             },
-            content: <LineChart
-                data={amountCommittedToEachResearchCategoryOverTime}
-                categories={selectedResearchCategoryOptions}
-                showingAllResearchCategories={showingAllResearchCategories}
-            />,
+            content: (
+                <LineChart
+                    data={amountCommittedToEachResearchCategoryOverTime}
+                    categories={selectedResearchCategoryOptions}
+                    showingAllResearchCategories={showingAllResearchCategories}
+                />
+            ),
         },
     ]
 
@@ -95,28 +132,32 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         >
             <div className=" flex w-full justify-between items-start mb-6 ignore-in-image-export">
                 <MultiSelect
-                    options={selectOptions.ResearchCat}
+                    field="ResearchCat"
                     selectedOptions={selectedResearchCategories}
                     setSelectedOptions={setSelectedResearchCategories}
                     placeholder="All Research Categories"
                     className="max-w-xs ignore-in-image-export"
                 />
 
-                {filteredDataset.length < globalGrants.length &&
+                {filteredDataset.length < globalGrants.length && (
                     <p>Filtered Grants: {filteredDataset.length}</p>
-                }
+                )}
             </div>
         </VisualisationCard>
     )
 }
 
 interface ChartProps {
-    data: any[],
-    categories: {value: string, label: string}[],
-    showingAllResearchCategories: boolean,
+    data: any[]
+    categories: { value: string; label: string }[]
+    showingAllResearchCategories: boolean
 }
 
-function BarChart({data, categories, showingAllResearchCategories}: ChartProps) {
+function BarChart({
+    data,
+    categories,
+    showingAllResearchCategories,
+}: ChartProps) {
     return (
         <ResponsiveContainer width="100%" height={500}>
             <RechartBarChart
@@ -133,8 +174,8 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
                 <XAxis
                     dataKey="year"
                     label={{
-                        value: "Year",
-                        position: "bottom",
+                        value: 'Year',
+                        position: 'bottom',
                         offset: 0,
                     }}
                 />
@@ -142,10 +183,10 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
                 <YAxis
                     tickFormatter={axisDollarFormatter}
                     label={{
-                        value: "Known Financial Commitments (USD)",
-                        position: "left",
+                        value: 'Known Financial Commitments (USD)',
+                        position: 'left',
                         angle: -90,
-                        style: {textAnchor: 'middle'},
+                        style: { textAnchor: 'middle' },
                         offset: 10,
                     }}
                 />
@@ -156,11 +197,15 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
                     {...baseTooltipProps}
                 />
 
-                {categories.map(({value, label}) => (
+                {categories.map(({ value, label }) => (
                     <Bar
                         key={`bar-${value}`}
                         dataKey={label}
-                        fill={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
+                        fill={
+                            showingAllResearchCategories
+                                ? allResearchCategoriesColour
+                                : researchCategoryColours[value]
+                        }
                     />
                 ))}
             </RechartBarChart>
@@ -168,7 +213,11 @@ function BarChart({data, categories, showingAllResearchCategories}: ChartProps) 
     )
 }
 
-function LineChart({data, categories, showingAllResearchCategories}: ChartProps) {
+function LineChart({
+    data,
+    categories,
+    showingAllResearchCategories,
+}: ChartProps) {
     return (
         <ResponsiveContainer width="100%" height={500}>
             <RechartLineChart
@@ -186,8 +235,8 @@ function LineChart({data, categories, showingAllResearchCategories}: ChartProps)
                     type="category"
                     dataKey="year"
                     label={{
-                        value: "Year",
-                        position: "bottom",
+                        value: 'Year',
+                        position: 'bottom',
                         offset: 0,
                     }}
                 />
@@ -196,10 +245,10 @@ function LineChart({data, categories, showingAllResearchCategories}: ChartProps)
                     type="number"
                     tickFormatter={axisDollarFormatter}
                     label={{
-                        value: "Known Financial Commitments (USD)",
-                        position: "left",
+                        value: 'Known Financial Commitments (USD)',
+                        position: 'left',
                         angle: -90,
-                        style: {textAnchor: 'middle'},
+                        style: { textAnchor: 'middle' },
                         offset: 10,
                     }}
                 />
@@ -210,12 +259,16 @@ function LineChart({data, categories, showingAllResearchCategories}: ChartProps)
                     {...baseTooltipProps}
                 />
 
-                {categories.map(({value, label}) => (
+                {categories.map(({ value, label }) => (
                     <Line
                         key={`line-${value}`}
                         type="monotone"
                         dataKey={label}
-                        stroke={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
+                        stroke={
+                            showingAllResearchCategories
+                                ? allResearchCategoriesColour
+                                : researchCategoryColours[value]
+                        }
                         strokeWidth={2}
                         dot={false}
                     />

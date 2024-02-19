@@ -1,19 +1,19 @@
-import {useEffect, useMemo, useState} from 'react'
-import {useRouter, usePathname, useSearchParams} from 'next/navigation'
-import {SearchIcon} from '@heroicons/react/solid'
+import { useEffect, useMemo, useState } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { SearchIcon } from '@heroicons/react/solid'
 import ExportToCsvButton from './ExportToCsvButton'
-import {searchRequest, SearchFilters, SearchResponse} from '../helpers/search'
+import { searchRequest, SearchFilters, SearchResponse } from '../helpers/search'
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
 import InfoModal from './InfoModal'
 import StandardSearchFilters from './StandardSearchFilters'
-import AdvancedSearch from './AdvancedSearch'
+import AdvancedSearchFilters from './AdvancedSearchFilters'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void
 }
 
-export default function SearchInput({setSearchResponse}: Props) {
+export default function SearchInput({ setSearchResponse }: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -54,7 +54,8 @@ export default function SearchInput({setSearchResponse}: Props) {
             .then(data => {
                 setSearchResponse(data)
                 setTotalHits(data.total.value)
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.error(error)
             })
     }, [searchRequestBody, setTotalHits, setSearchResponse])
@@ -88,40 +89,76 @@ export default function SearchInput({setSearchResponse}: Props) {
                     <InfoModal>
                         <h3>Search Operators</h3>
 
-                        <p>By default, search queries are split by whitespace and matched with OR. For example, if you search for <code>bats dogs</code>, this will match grants that contain either the word <code>bats</code> or the word <code>dogs</code> in their Title, Abstract or Lay Summary fields.</p>
+                        <p>
+                            By default, search queries are split by whitespace
+                            and matched with OR. For example, if you search for{' '}
+                            <code>bats dogs</code>, this will match grants that
+                            contain either the word <code>bats</code> or the
+                            word <code>dogs</code> in their Title, Abstract or
+                            Lay Summary fields.
+                        </p>
 
-                        <p>For more complex searches, you can use the following operators:</p>
+                        <p>
+                            For more complex searches, you can use the following
+                            operators:
+                        </p>
 
                         <ul>
-                            <li><code>+</code> the AND operator, which matches both terms, e.g. <code>bats + dogs</code></li>
-                            <li><code>|</code> the OR operator, which matches either term, e.g. <code>bats | dogs</code></li>
-                            <li><code>-</code> the NOT operator, which negates the term directly after it, e.g. <code>bats -dogs</code></li>
-                            <li><code>( )</code> the parentheses operator, which groups terms together for precedence, e.g. <code>(bats | dogs) + (cats | rats)</code></li>
-                            <li><code>&quot; &quot;</code> the quotes operator, which matches the exact phrase, e.g. <code>&quot;bats and dogs&quot;</code></li>
-                            <li><code>\</code> the escape character, which allows you to search for special characters, e.g. <code>bat \+ dogs</code></li>
+                            <li>
+                                <code>+</code> the AND operator, which matches
+                                both terms, e.g. <code>bats + dogs</code>
+                            </li>
+                            <li>
+                                <code>|</code> the OR operator, which matches
+                                either term, e.g. <code>bats | dogs</code>
+                            </li>
+                            <li>
+                                <code>-</code> the NOT operator, which negates
+                                the term directly after it, e.g.{' '}
+                                <code>bats -dogs</code>
+                            </li>
+                            <li>
+                                <code>( )</code> the parentheses operator, which
+                                groups terms together for precedence, e.g.{' '}
+                                <code>(bats | dogs) + (cats | rats)</code>
+                            </li>
+                            <li>
+                                <code>&quot; &quot;</code> the quotes operator,
+                                which matches the exact phrase, e.g.{' '}
+                                <code>&quot;bats and dogs&quot;</code>
+                            </li>
+                            <li>
+                                <code>\</code> the escape character, which
+                                allows you to search for special characters,
+                                e.g. <code>bat \+ dogs</code>
+                            </li>
                         </ul>
                     </InfoModal>
                 </div>
 
                 <section className="w-full rounded-xl border-2 flex flex-col bg-gray-100 p-3">
                     <div className="flex items-center justify-between gap-2 mx-4">
-                        <h2 className="text-secondary uppercase tracking-widest font-bold">Search Filters</h2>
+                        <h2 className="text-secondary uppercase tracking-widest font-bold">
+                            Search Filters
+                        </h2>
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
-                                className={`${!advancedSearchShow
-                                    ? 'bg-white rounded-t-lg'
-                                    : 'bg-transparent'
-                                    } uppercase px-4 py-2 text-xs md:text-sm`}
+                                className={`${
+                                    !advancedSearchShow
+                                        ? 'bg-white rounded-t-lg'
+                                        : 'bg-transparent'
+                                } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Standard Search
                             </button>
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
-                                className={`${advancedSearchShow
-                                    ? 'bg-white rounded-t-lg'
-                                    : 'bg-transparent'
-                                    } uppercase px-4 py-2 text-xs md:text-sm`}
+                                className={`${
+                                    advancedSearchShow
+                                        ? 'bg-white rounded-t-lg'
+                                        : 'bg-transparent'
+                                } uppercase px-4 py-2 text-xs md:text-sm`}
                             >
                                 Advanced Search
                             </button>
@@ -134,7 +171,7 @@ export default function SearchInput({setSearchResponse}: Props) {
                                 duration={400}
                                 height={advancedSearchShow && 'auto'}
                             >
-                                <AdvancedSearch
+                                <AdvancedSearchFilters
                                     setSearchFilters={setSearchFilters}
                                 />
                             </AnimateHeight>
