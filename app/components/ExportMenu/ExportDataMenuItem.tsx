@@ -1,15 +1,17 @@
-import {useState, useContext} from 'react'
-import {DownloadIcon} from '@heroicons/react/solid'
-import {countActiveFilters, GlobalFilterContext} from "../../helpers/filters"
-import {fetchCsv, filterCsv, downloadCsv} from "../../helpers/export"
-import Button from "./Button"
+import { useState, useContext } from 'react'
+import { DownloadIcon } from '@heroicons/react/solid'
+import { countActiveFilters, GlobalFilterContext } from '../../helpers/filters'
+import {
+    fetchCsv,
+    filterCsv,
+    downloadCsv,
+    fullDataFilename,
+    filteredDataFilename,
+} from '../../helpers/export'
+import Button from './Button'
 
-interface Props {
-    filename: string
-}
-
-export default function ExportDataMenuItem({filename}: Props) {
-    const {filters, grants} = useContext(GlobalFilterContext)
+export default function ExportDataMenuItem() {
+    const { filters, grants } = useContext(GlobalFilterContext)
 
     const [exportingCsv, setExportingCsv] = useState(false)
 
@@ -20,28 +22,31 @@ export default function ExportDataMenuItem({filename}: Props) {
 
         setExportingCsv(true)
 
-        fetchCsv().then(
-            csv => {
+        fetchCsv()
+            .then(csv => {
                 let filteredCsv = csv
 
-                if (countActiveFilters(filters) > 0) {
+                const filtersAreActive = countActiveFilters(filters) > 0
+
+                if (filtersAreActive) {
                     filteredCsv = filterCsv(
                         filteredCsv,
-                        grants.map(grant => grant.GrantID),
+                        grants.map(grant => grant.GrantID)
                     )
                 }
 
-                downloadCsv(filteredCsv, filename)
+                downloadCsv(
+                    filteredCsv,
+                    filtersAreActive ? filteredDataFilename : fullDataFilename
+                )
 
                 setExportingCsv(false)
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 console.error(error)
 
                 setExportingCsv(false)
-            }
-        )
+            })
     }
 
     return (

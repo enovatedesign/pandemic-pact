@@ -5,7 +5,12 @@ import {
     SearchRequestBody,
     queryOrFiltersAreSet,
 } from '../helpers/search'
-import { fetchCsv, filterCsv, downloadCsv } from '../helpers/export'
+import {
+    fetchCsv,
+    filterCsv,
+    downloadCsv,
+    filteredDataFilename,
+} from '../helpers/export'
 import { CloudDownloadIcon } from '@heroicons/react/outline'
 import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
 
@@ -43,7 +48,7 @@ export default function DownloadFilteredDataButton({
                     )
                 }
 
-                downloadCsv(filteredCsv, 'pandemic-pact-filtered-grants.csv')
+                downloadCsv(filteredCsv, filteredDataFilename)
 
                 setExportingCsv(false)
             })

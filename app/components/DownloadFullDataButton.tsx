@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Button from './Button'
-import { fetchCsv, downloadCsv } from '../helpers/export'
+import { fetchCsv, downloadCsv, fullDataFilename } from '../helpers/export'
 import { CloudDownloadIcon } from '@heroicons/react/outline'
 import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
 
@@ -16,7 +16,7 @@ export default function DownloadFullDataButton() {
 
         fetchCsv()
             .then(csv => {
-                downloadCsv(csv, 'pandemic-pact-grants.csv')
+                downloadCsv(csv, fullDataFilename)
                 setExportingCsv(false)
             })
             .catch(error => {

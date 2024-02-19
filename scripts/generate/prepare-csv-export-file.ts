@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import { utils } from 'xlsx'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { keyMapping } from '../helpers/key-mapping'
+import { fullDataFilename } from '../../app/helpers/export'
 
 interface SelectOptions {
     [key: string]: { value: string; label: string }[]
@@ -77,7 +78,7 @@ export default function () {
 
     fs.emptyDirSync(path)
 
-    const pathname = `${path}/pandemic-pact-grants.csv`
+    const pathname = `${path}/${fullDataFilename}`
 
     fs.writeFileSync(pathname, csvData, 'utf-8')
 

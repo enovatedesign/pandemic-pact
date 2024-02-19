@@ -1,5 +1,9 @@
+export const fullDataFilename = 'pandemic-pact-grants.csv'
+
+export const filteredDataFilename = 'pandemic-pact-filtered-grants.csv'
+
 export function fetchCsv() {
-    return fetch('/export/pandemic-pact-grants.csv').then(response =>
+    return fetch(`/export/${fullDataFilename}`).then(response =>
         response.text()
     )
 }
