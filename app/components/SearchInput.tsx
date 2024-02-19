@@ -194,7 +194,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                     </div>
                 </section>
 
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row gap-4 justify-between justify-start md:items-center">
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
                         <span>
                             {searchQuery ? 'Total Hits:' : 'Total Grants:'}
@@ -204,7 +204,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         </span>
                     </p>
 
-                    <div className="flex gap-x-4">
+                    <div className="flex flex-col md:flex-row gap-4">
                         {queryOrFiltersAreSet(searchRequestBody) && (
                             <DownloadFilteredDataButton
                                 searchRequestBody={searchRequestBody}
