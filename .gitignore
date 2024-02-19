@@ -49,3 +49,6 @@ sample-real-data.xlsx
 
 # JQ scripts
 *.jq
+
+# prepared data in the public directory
+/public/data
