@@ -1,27 +1,42 @@
-import {ElementType, ReactNode, useState, useContext} from "react"
-import {Tab} from '@headlessui/react'
-import {GlobalFilterContext, countActiveFilters, availableFilters} from "../helpers/filters"
-import ExportMenu from "./ExportMenu/ExportMenu"
-import InfoModal from "./InfoModal"
-import {useInView, animated} from '@react-spring/web'
-import {FilterIcon} from '@heroicons/react/solid'
+import { ElementType, ReactNode, useState, useContext } from 'react'
+import { Tab } from '@headlessui/react'
+import {
+    GlobalFilterContext,
+    countActiveFilters,
+    availableFilters,
+} from '../helpers/filters'
+import ExportMenu from './ExportMenu/ExportMenu'
+import InfoModal from './InfoModal'
+import { useInView, animated } from '@react-spring/web'
+import { FilterIcon } from '@heroicons/react/solid'
 import { Tooltip } from 'react-tooltip'
 
 interface Props {
-    grants: any[],
     id: string
     title: string
     subtitle?: string
     footnote?: string
     infoModalContents?: ReactNode
     children?: ReactNode
-    tabs?: Array<{tab: {icon: ElementType, label: string}, content: ReactNode}>
+    tabs?: Array<{
+        tab: { icon: ElementType; label: string }
+        content: ReactNode
+    }>
     tabPrefixLabel?: string
 }
 
-export default function VisualisationCard({grants, id, title, subtitle, footnote, infoModalContents, children, tabs, tabPrefixLabel}: Props) {
-    const {filters} = useContext(GlobalFilterContext)
-    
+export default function VisualisationCard({
+    id,
+    title,
+    subtitle,
+    footnote,
+    infoModalContents,
+    children,
+    tabs,
+    tabPrefixLabel,
+}: Props) {
+    const { filters } = useContext(GlobalFilterContext)
+
     const numberOfActiveFilters = countActiveFilters(filters)
 
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
@@ -40,16 +55,16 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
         {
             once: true,
         }
-    );
-    
+    )
+
     const toolTipFilters = Object.entries(filters)
         .filter(([_, filter]) => filter.values.length > 0)
         .map(([key]) => key)
-    
+
     const appliedFilterLabels = availableFilters()
         .filter(filter => toolTipFilters.includes(filter.field))
         .map(filter => filter.label)
-        
+
     return (
         <>
             <animated.div id={id} ref={ref} style={springs}>
@@ -58,42 +73,55 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                         <div className="mr-16">
                             <h2 className="text-lg capitalize inline">
                                 {title}
-                            </h2> {infoModalContents &&
-                                <InfoModal customButtonClasses="align-middle -translate-y-[2px]">{infoModalContents}</InfoModal>
-                            }
+                            </h2>{' '}
+                            {infoModalContents && (
+                                <InfoModal customButtonClasses="align-middle -translate-y-[2px]">
+                                    {infoModalContents}
+                                </InfoModal>
+                            )}
                         </div>
-                        
-                        {numberOfActiveFilters > 0 &&
+
+                        {numberOfActiveFilters > 0 && (
                             <div>
                                 <div className="absolute -right-16 -top-16 aspect-square size-32 rotate-45 bg-gradient-to-b from-primary"></div>
                                 <div className="absolute right-5 top-5">
-                                    <FilterIcon className="size-10 text-secondary" data-tooltip-id={`${id}-tooltip`}/>
+                                    <FilterIcon
+                                        className="size-10 text-secondary"
+                                        data-tooltip-id={`${id}-tooltip`}
+                                    />
                                 </div>
                                 <div className="absolute right-3 top-3 size-6 rounded-full bg-primary flex items-center justify-center font-bold text-white">
-                                    {numberOfActiveFilters} <span className="sr-only">Global Filters Applied</span>
+                                    {numberOfActiveFilters}{' '}
+                                    <span className="sr-only">
+                                        Global Filters Applied
+                                    </span>
                                 </div>
                                 {appliedFilterLabels && (
-                                    <Tooltip id={`${id}-tooltip`} className="z-10" key="left">
-                                        <p>
-                                            Currently Active Filters:
-                                        </p>
+                                    <Tooltip
+                                        id={`${id}-tooltip`}
+                                        className="z-10"
+                                        key="left"
+                                    >
+                                        <p>Currently Active Filters:</p>
                                         <ul>
-                                            {appliedFilterLabels.map((filter, index: number) => {
-                                                return (
-                                                    <li key={index}>
-                                                        {`Filter by ${filter}`}
-                                                    </li>
-                                                )
-                                            })}
+                                            {appliedFilterLabels.map(
+                                                (filter, index: number) => {
+                                                    return (
+                                                        <li key={index}>
+                                                            {`Filter by ${filter}`}
+                                                        </li>
+                                                    )
+                                                }
+                                            )}
                                         </ul>
                                     </Tooltip>
                                 )}
                             </div>
-                        }
+                        )}
 
-                        {subtitle &&
+                        {subtitle && (
                             <p className="text-brand-grey-500">{subtitle}</p>
-                        }
+                        )}
                     </div>
 
                     {children}
@@ -104,23 +132,24 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}
-                            dataFilename={id}
                         />
 
                         {tabs && (
                             <div className="flex flex-col items-center md:flex-row gap-2">
-                                {tabPrefixLabel && (
-                                    <p>{tabPrefixLabel}</p>
-                                )}
+                                {tabPrefixLabel && <p>{tabPrefixLabel}</p>}
 
                                 <Tab.Group onChange={setSelectedTabIndex}>
                                     <Tab.List className="flex text-center space-x-1 rounded-lg bg-gray-100 p-1">
-                                        {tabs.map(({tab}, index) => (
+                                        {tabs.map(({ tab }, index) => (
                                             <Tab
                                                 key={`${id}-tab-${index}`}
-                                                className={({selected}) => `
+                                                className={({ selected }) => `
                                                     w-full rounded-md px-2 py-1 text-sm font-medium leading-5
-                                                    ${selected ? 'bg-brand-teal-600 text-white shadow cursor-default' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'}
+                                                    ${
+                                                        selected
+                                                            ? 'bg-brand-teal-600 text-white shadow cursor-default'
+                                                            : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'
+                                                    }
                                                 `}
                                             >
                                                 <div className="flex items-center">
@@ -138,11 +167,11 @@ export default function VisualisationCard({grants, id, title, subtitle, footnote
                         )}
                     </div>
 
-                    {footnote &&
+                    {footnote && (
                         <p className="text-sm text-gray-500">{footnote}</p>
-                    }
+                    )}
                 </div>
-            </animated.div >
+            </animated.div>
         </>
     )
 }

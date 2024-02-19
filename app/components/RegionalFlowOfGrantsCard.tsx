@@ -1,28 +1,35 @@
-import {useState, useContext} from "react"
-import VisualisationCard from "./VisualisationCard"
-import DoubleLabelSwitch from "./DoubleLabelSwitch"
-import {Layer, Rectangle, ResponsiveContainer, Sankey, Tooltip} from 'recharts';
-import {groupBy} from "lodash"
-import {sumNumericGrantAmounts} from "../helpers/reducers"
-import {GlobalFilterContext} from "../helpers/filters";
-import {dollarValueFormatter} from "../helpers/value-formatters"
-import {brandColours} from "../helpers/colours"
+import { useState, useContext } from 'react'
+import VisualisationCard from './VisualisationCard'
+import DoubleLabelSwitch from './DoubleLabelSwitch'
+import {
+    Layer,
+    Rectangle,
+    ResponsiveContainer,
+    Sankey,
+    Tooltip,
+} from 'recharts'
+import { groupBy } from 'lodash'
+import { sumNumericGrantAmounts } from '../helpers/reducers'
+import { GlobalFilterContext } from '../helpers/filters'
+import { dollarValueFormatter } from '../helpers/value-formatters'
+import { brandColours } from '../helpers/colours'
 import selectOptions from '../../data/dist/select-options.json'
-import {baseTooltipProps} from "../helpers/tooltip"
+import { baseTooltipProps } from '../helpers/tooltip'
 
 export default function RegionalFlowOfGrantsCard() {
-    const {grants} = useContext(GlobalFilterContext)
+    const { grants } = useContext(GlobalFilterContext)
 
-    const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] = useState<boolean>(false)
+    const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] =
+        useState<boolean>(false)
 
     const colours = {
-        "1": brandColours.blue['500'],
-        "2": brandColours.green['500'],
-        "5": brandColours.orange['500'],
-        "99999": brandColours.teal['400'],
-        "9999": brandColours.blue.DEFAULT,
-        "999999": brandColours.teal['800'],
-        "9999999": brandColours.orange['900'],
+        '1': brandColours.blue['500'],
+        '2': brandColours.green['500'],
+        '5': brandColours.orange['500'],
+        '99999': brandColours.teal['400'],
+        '9999': brandColours.blue.DEFAULT,
+        '999999': brandColours.teal['800'],
+        '9999999': brandColours.orange['900'],
     }
 
     const nodeGroups = [
@@ -43,74 +50,88 @@ export default function RegionalFlowOfGrantsCard() {
     ]
 
     const grantsWithRegions = grants.filter(
-        grant => grant.FunderRegion.length === 1 &&
+        grant =>
+            grant.FunderRegion.length === 1 &&
             grant.ResearchInstitutionRegion.length === 1 &&
             grant.ResearchLocationRegion.length === 1
     )
 
-    const nodes = nodeGroups.map(
-        ({field, options}, group) => options.filter(
-            (option: any) => grantsWithRegions.some(
-                grant => grant[field].includes(option.value)
-            )
-        ).map(
-            (option: any) => ({option, group})
+    const nodes = nodeGroups
+        .map(({ field, options }, group) =>
+            options
+                .filter((option: any) =>
+                    grantsWithRegions.some(grant =>
+                        grant[field].includes(option.value)
+                    )
+                )
+                .map((option: any) => ({ option, group }))
         )
-    ).flat(1)
+        .flat(1)
 
-    let links: any[] = [];
+    let links: any[] = []
 
     for (let i = 0, len = nodeGroups.length; i < len - 1; i++) {
-        const sourceGroup = i;
-        const targetGroup = i + 1;
+        const sourceGroup = i
+        const targetGroup = i + 1
 
-        const {field: sourceField} = nodeGroups[sourceGroup]
-        const {field: targetField} = nodeGroups[targetGroup]
+        const { field: sourceField } = nodeGroups[sourceGroup]
+        const { field: targetField } = nodeGroups[targetGroup]
 
         links = links.concat(
-            Object.entries(
-                groupBy(grantsWithRegions, sourceField)
-            ).map(
-                ([sourceFieldValue, grantsWithRegions]) => Object.entries(
-                    groupBy(grantsWithRegions, targetField)
-                ).map(
-                    ([targetFieldValue, grantsWithRegions]) => ({
-                        source: nodes.findIndex(node => node.option.value === sourceFieldValue && node.group === sourceGroup),
-                        target: nodes.findIndex(node => node.option.value === targetFieldValue && node.group === targetGroup),
-                        value: displayTotalMoneyCommitted ? grantsWithRegions.reduce(...sumNumericGrantAmounts) : grantsWithRegions.length,
-                    })
+            Object.entries(groupBy(grantsWithRegions, sourceField))
+                .map(([sourceFieldValue, grantsWithRegions]) =>
+                    Object.entries(groupBy(grantsWithRegions, targetField)).map(
+                        ([targetFieldValue, grantsWithRegions]) => ({
+                            source: nodes.findIndex(
+                                node =>
+                                    node.option.value === sourceFieldValue &&
+                                    node.group === sourceGroup
+                            ),
+                            target: nodes.findIndex(
+                                node =>
+                                    node.option.value === targetFieldValue &&
+                                    node.group === targetGroup
+                            ),
+                            value: displayTotalMoneyCommitted
+                                ? grantsWithRegions.reduce(
+                                      ...sumNumericGrantAmounts
+                                  )
+                                : grantsWithRegions.length,
+                        })
+                    )
                 )
-            ).flat(2)
+                .flat(2)
         )
     }
 
-    const tooltipFormatter = (value: any, _: string, {payload}: any) => {
+    const tooltipFormatter = (value: any, _: string, { payload }: any) => {
         const details = payload.payload
 
-        const label = details.option ?
-            details.option.label :
-            `${details.source.option.label} → ${details.target.option.label}`
+        const label = details.option
+            ? details.option.label
+            : `${details.source.option.label} → ${details.target.option.label}`
 
         return [
-            displayTotalMoneyCommitted ? dollarValueFormatter(details.value) : details.value,
+            displayTotalMoneyCommitted
+                ? dollarValueFormatter(details.value)
+                : details.value,
             label,
         ]
     }
 
     return (
         <VisualisationCard
-            grants={grantsWithRegions}
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
             subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
             footnote="Please note: Funding amounts are included only when they have been published by the funder."
         >
             <div className="w-full">
-                {links.length > 0 &&
+                {links.length > 0 && (
                     <div className="flex flex-col justify-center gap-y-8">
                         <ResponsiveContainer width="100%" height={500}>
                             <Sankey
-                                data={{nodes, links}}
+                                data={{ nodes, links }}
                                 nodePadding={30}
                                 margin={{
                                     left: 0,
@@ -121,15 +142,13 @@ export default function RegionalFlowOfGrantsCard() {
                                 node={
                                     <SankeyNode
                                         colours={colours}
-                                        displayTotalMoneyCommitted={displayTotalMoneyCommitted}
+                                        displayTotalMoneyCommitted={
+                                            displayTotalMoneyCommitted
+                                        }
                                         totalNodeGroups={nodeGroups.length}
                                     />
                                 }
-                                link={
-                                    <SankeyLink
-                                        colours={colours}
-                                    />
-                                }
+                                link={<SankeyLink colours={colours} />}
                             >
                                 <Tooltip
                                     isAnimationActive={false}
@@ -178,11 +197,11 @@ export default function RegionalFlowOfGrantsCard() {
                             className="justify-center"
                         />
                     </div>
-                }
+                )}
 
-                {links.length === 0 &&
+                {links.length === 0 && (
                     <p className="p-4 text-center">No Data.</p>
-                }
+                )}
             </div>
         </VisualisationCard>
     )
@@ -191,9 +210,19 @@ export default function RegionalFlowOfGrantsCard() {
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyNode.tsx
 function SankeyNode(props: any) {
-    const {x, y, width, height, index, payload, colours, displayTotalMoneyCommitted, totalNodeGroups} = props;
+    const {
+        x,
+        y,
+        width,
+        height,
+        index,
+        payload,
+        colours,
+        displayTotalMoneyCommitted,
+        totalNodeGroups,
+    } = props
 
-    const {option, value, group} = payload;
+    const { option, value, group } = payload
 
     const isLastNode = group === totalNodeGroups - 1
 
@@ -217,32 +246,49 @@ function SankeyNode(props: any) {
                 fontSize="16"
                 fill="#000"
             >
-                {option.label}: {displayTotalMoneyCommitted ? dollarValueFormatter(value) : value}
+                {option.label}:{' '}
+                {displayTotalMoneyCommitted
+                    ? dollarValueFormatter(value)
+                    : value}
             </text>
         </Layer>
-    );
+    )
 }
 
 // Adapted from:
 // https://github.com/recharts/recharts/blob/master/demo/component/DemoSankeyLink.tsx
-function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, index, payload, colours}: any) {
+function SankeyLink({
+    sourceX,
+    targetX,
+    sourceY,
+    targetY,
+    sourceControlX,
+    targetControlX,
+    linkWidth,
+    index,
+    payload,
+    colours,
+}: any) {
     const gradientId = `regionalFlowOfGrantsCardGradient${index}`
-    const sourceColour = colours[payload.source.option.value as keyof typeof colours]
-    const targetColour = colours[payload.target.option.value as keyof typeof colours]
+    const sourceColour =
+        colours[payload.source.option.value as keyof typeof colours]
+    const targetColour =
+        colours[payload.target.option.value as keyof typeof colours]
 
-    return <Layer key={`RegionalFlowOfGrantsCardLink${index}`}>
-        <defs>
-            <linearGradient id={gradientId}>
-                <stop offset="0%" stopColor={sourceColour} />
-                <stop offset="100%" stopColor={targetColour} />
-            </linearGradient>
-        </defs>
+    return (
+        <Layer key={`RegionalFlowOfGrantsCardLink${index}`}>
+            <defs>
+                <linearGradient id={gradientId}>
+                    <stop offset="0%" stopColor={sourceColour} />
+                    <stop offset="100%" stopColor={targetColour} />
+                </linearGradient>
+            </defs>
 
-        <path
-            fill={`url(#${gradientId})`}
-            fillOpacity="0.25"
-            strokeWidth="0"
-            d={`
+            <path
+                fill={`url(#${gradientId})`}
+                fillOpacity="0.25"
+                strokeWidth="0"
+                d={`
             M${sourceX},${sourceY + linkWidth / 2}
             C${sourceControlX},${sourceY + linkWidth / 2}
               ${targetControlX},${targetY + linkWidth / 2}
@@ -253,6 +299,7 @@ function SankeyLink({sourceX, targetX, sourceY, targetY, sourceControlX, targetC
               ${sourceX},${sourceY - linkWidth / 2}
             Z
           `}
-        />
-    </Layer>
+            />
+        </Layer>
+    )
 }

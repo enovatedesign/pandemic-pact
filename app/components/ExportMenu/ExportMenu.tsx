@@ -1,16 +1,15 @@
-import {Menu, Transition} from '@headlessui/react'
-import {Fragment} from 'react'
-import {ChevronDownIcon} from '@heroicons/react/solid'
+import { Menu, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import ExportImageMenuItem from './ExportImageMenuItem'
 import ExportDataMenuItem from './ExportDataMenuItem'
 
 interface Props {
-    chartSelector: string,
-    imageFilename: string,
-    dataFilename: string,
+    chartSelector: string
+    imageFilename: string
 }
 
-export default function ExportMenu({chartSelector, imageFilename, dataFilename}: Props) {
+export default function ExportMenu({ chartSelector, imageFilename }: Props) {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -38,9 +37,7 @@ export default function ExportMenu({chartSelector, imageFilename, dataFilename}:
                         imageFilename={imageFilename}
                     />
 
-                    <ExportDataMenuItem
-                        filename={dataFilename}
-                    />
+                    <ExportDataMenuItem />
                 </Menu.Items>
             </Transition>
         </Menu>
