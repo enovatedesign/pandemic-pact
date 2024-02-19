@@ -52,3 +52,6 @@ sample-real-data.xlsx
 
 # prepared data in the public directory
 /public/data
+
+# prepared exports in the public directory
+/public/export

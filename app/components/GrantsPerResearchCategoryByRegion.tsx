@@ -81,7 +81,6 @@ export default function GrantsPerResearchCategoryByRegion() {
 
     return (
         <VisualisationCard
-            grants={filteredDataset}
             id="grant-per-research-category-by-region"
             title="Regional Distribution of Funding for Research Category"
             subtitle="Each research category is shown in a different colour"

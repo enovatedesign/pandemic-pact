@@ -123,7 +123,6 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
     return (
         <VisualisationCard
-            grants={filteredDataset}
             id="amount-committed-to-each-research-category-over-time-card"
             title="Global Annual Funding For Research Categories"
             subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."

@@ -1,33 +1,49 @@
-import {useContext} from "react"
-import {ChartBarIcon, SparklesIcon} from "@heroicons/react/solid"
-import VisualisationCard from "../VisualisationCard"
-import BarChart from "./BarChart"
-import ScatterChart from "./ScatterChart"
-import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {GlobalFilterContext} from "../../helpers/filters"
-import selectOptions from "../../../data/dist/select-options.json"
+import { useContext } from 'react'
+import { ChartBarIcon, SparklesIcon } from '@heroicons/react/solid'
+import VisualisationCard from '../VisualisationCard'
+import BarChart from './BarChart'
+import ScatterChart from './ScatterChart'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
+import { GlobalFilterContext } from '../../helpers/filters'
+import selectOptions from '../../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard() {
-    const {grants} = useContext(GlobalFilterContext)
+    const { grants } = useContext(GlobalFilterContext)
 
-    const chartData = selectOptions.ResearchCat.map(function (researchCategory) {
+    const chartData = selectOptions.ResearchCat.map(function (
+        researchCategory
+    ) {
         const grantsWithKnownAmounts = grants
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .filter((grant: any) => typeof grant.GrantAmountConverted === "number")
+            .filter((grant: any) =>
+                grant.ResearchCat.includes(researchCategory.value)
+            )
+            .filter(
+                (grant: any) => typeof grant.GrantAmountConverted === 'number'
+            )
 
         const grantsWithUnspecifiedAmounts = grants
-            .filter((grant: any) => grant.ResearchCat.includes(researchCategory.value))
-            .filter((grant: any) => typeof grant.GrantAmountConverted !== "number")
+            .filter((grant: any) =>
+                grant.ResearchCat.includes(researchCategory.value)
+            )
+            .filter(
+                (grant: any) => typeof grant.GrantAmountConverted !== 'number'
+            )
 
-        const moneyCommitted = grantsWithKnownAmounts.reduce(...sumNumericGrantAmounts)
+        const moneyCommitted = grantsWithKnownAmounts.reduce(
+            ...sumNumericGrantAmounts
+        )
 
         return {
-            "Category Value": researchCategory.value,
-            "Category Label": researchCategory.label,
-            "Grants With Known Financial Commitments": grantsWithKnownAmounts.length,
-            "Grants With Unspecified Financial Commitments": grantsWithUnspecifiedAmounts.length,
-            "Total Grants": grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            "Known Financial Commitments (USD)": moneyCommitted,
+            'Category Value': researchCategory.value,
+            'Category Label': researchCategory.label,
+            'Grants With Known Financial Commitments':
+                grantsWithKnownAmounts.length,
+            'Grants With Unspecified Financial Commitments':
+                grantsWithUnspecifiedAmounts.length,
+            'Total Grants':
+                grantsWithKnownAmounts.length +
+                grantsWithUnspecifiedAmounts.length,
+            'Known Financial Commitments (USD)': moneyCommitted,
         }
     })
 
@@ -35,14 +51,14 @@ export default function GrantsByResearchCategoryCard() {
         {
             tab: {
                 icon: ChartBarIcon,
-                label: "Bars",
+                label: 'Bars',
             },
             content: <BarChart chartData={chartData} />,
         },
         {
             tab: {
                 icon: SparklesIcon,
-                label: "Scatter",
+                label: 'Scatter',
             },
             content: <ScatterChart chartData={chartData} />,
         },
@@ -50,15 +66,22 @@ export default function GrantsByResearchCategoryCard() {
 
     const infoModalContents = (
         <>
-            <h3 className="capitalize">Global distribution of funding for research categories</h3>
+            <h3 className="capitalize">
+                Global distribution of funding for research categories
+            </h3>
 
-            <p className="text-brand-grey-500">We developed a classification of research categories with 13 broad categories by expanding &ldquo;A Coordinated Global Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the R&amp;D Blue Print. All collected funding data are summarised and assigned into a broad category.</p>
+            <p className="text-brand-grey-500">
+                We developed a classification of research categories with 13
+                broad categories by expanding &ldquo;A Coordinated Global
+                Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the
+                R&amp;D Blue Print. All collected funding data are summarised
+                and assigned into a broad category.
+            </p>
         </>
     )
 
     return (
         <VisualisationCard
-            grants={grants}
             id="grants-by-research-category"
             title="Global distribution of funding for research categories"
             subtitle="Total number of grants and US dollars committed for research across research categories"
