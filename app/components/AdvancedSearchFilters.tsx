@@ -246,17 +246,21 @@ function AdvancedInputRow({
     return (
         <div className="flex">
             <div className="w-full text-secondary flex flex-col md:flex-row md:items-center gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
-                <SingleSelect
-                    options={singleSelectOptions}
-                    value={localRow.field}
-                    onSelectChange={onSelectChange}
-                />
+                <div className="w-full min-w-10">
+                    <SingleSelect
+                        options={singleSelectOptions}
+                        value={localRow.field}
+                        onSelectChange={onSelectChange}
+                    />
+                </div>
 
-                <MultiSelect
-                    options={multiSelectOptions}
-                    value={localRow.values}
-                    onMultiSelectChange={onMultiSelectChange}
-                />
+                <div className="w-full min-w-10">
+                    <MultiSelect
+                        options={multiSelectOptions}
+                        value={localRow.values}
+                        onMultiSelectChange={onMultiSelectChange}
+                    />
+                </div>
 
                 <button
                     onClick={onLightSwitchChange}
