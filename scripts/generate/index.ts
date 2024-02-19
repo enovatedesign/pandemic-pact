@@ -5,12 +5,13 @@ import prepareGrants from './prepare-grants'
 import prepareHomepageTotals from './prepare-homepage-totals'
 import fetchPubMedData from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
+import prepareCsvExportFile from './prepare-csv-export-file'
 import prepareSearch from './prepare-search'
 
 main()
 
 async function main() {
-    dotenv.config({path: './.env.local'})
+    dotenv.config({ path: './.env.local' })
 
     await downloadAndParseDataSheets()
 
@@ -23,6 +24,8 @@ async function main() {
     await fetchPubMedData()
 
     prepareIndividualGrantFiles()
+
+    prepareCsvExportFile()
 
     await prepareSearch()
 }
