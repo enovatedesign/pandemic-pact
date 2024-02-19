@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 
 interface Option {
@@ -7,7 +7,7 @@ interface Option {
 }
 
 interface Props {
-    options: Option[]
+    field: string
     selectedOptions: string[]
     setSelectedOptions: (options: string[]) => void
     placeholder?: string
@@ -15,12 +15,15 @@ interface Props {
 }
 
 export default function MultiSelect({
-    options,
+    field,
     selectedOptions,
     setSelectedOptions,
     placeholder,
     className,
 }: Props) {
+    const [options, setOptions] = useState<Option[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
     const id = useId()
 
     const defaultValue: Option[] = useMemo(() => {
@@ -33,6 +36,25 @@ export default function MultiSelect({
         setSelectedOptions(option.map(o => o.value))
     }
 
+    const loadOptions = () => {
+        if (options.length > 0) {
+            return options
+        }
+
+        setIsLoading(true)
+
+        fetch(`/data/select-options/${field}.json`)
+            .then(response => response.json())
+            .then(data => {
+                setOptions(data)
+                setIsLoading(false)
+            })
+            .catch(error => {
+                console.error('Error loading options:', error)
+                setIsLoading(false)
+            })
+    }
+
     return (
         <Select
             isMulti
@@ -42,6 +64,8 @@ export default function MultiSelect({
             placeholder={placeholder ?? 'All'}
             className={`text-black ${className}`}
             instanceId={id}
+            onFocus={loadOptions}
+            isLoading={isLoading}
         />
     )
 }

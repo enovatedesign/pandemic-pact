@@ -1,59 +1,80 @@
-import {useState, useContext} from "react"
-import {Radar, RadarChart, PolarGrid, Tooltip, PolarAngleAxis, ResponsiveContainer} from 'recharts';
-import VisualisationCard from "./VisualisationCard"
-import MultiSelect from "./MultiSelect"
-import selectOptions from '../../data/dist/select-options.json'
+import { useState, useContext } from 'react'
+import {
+    Radar,
+    RadarChart,
+    PolarGrid,
+    Tooltip,
+    PolarAngleAxis,
+    ResponsiveContainer,
+} from 'recharts'
+import VisualisationCard from './VisualisationCard'
+import MultiSelect from './MultiSelect'
+import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
+import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
 import dataset from '../../data/dist/grants.json'
-import {filterGrants, GlobalFilterContext} from "../helpers/filters";
-import {researchCategoryColours, allResearchCategoriesColour} from "../helpers/colours";
-import {baseTooltipProps} from "../helpers/tooltip"
+import { filterGrants, GlobalFilterContext } from '../helpers/filters'
+import {
+    researchCategoryColours,
+    allResearchCategoriesColour,
+} from '../helpers/colours'
+import { baseTooltipProps } from '../helpers/tooltip'
 
 export default function GrantsPerResearchCategoryByRegion() {
-    const {grants: globalGrants, filters: selectedFilters} = useContext(GlobalFilterContext)
+    const { grants: globalGrants, filters: selectedFilters } =
+        useContext(GlobalFilterContext)
 
-    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
+    const [selectedResearchCategories, setSelectedResearchCategories] =
+        useState<string[]>([])
 
-    const filteredDataset = filterGrants(
-        dataset,
-        {...selectedFilters, ResearchCat: selectedResearchCategories},
+    const filteredDataset = filterGrants(dataset, {
+        ...selectedFilters,
+        ResearchCat: selectedResearchCategories,
+    })
+
+    const regionOptions = researchLocationRegionOptions.filter(
+        regionOption => !['Unspecified'].includes(regionOption.label)
     )
 
-    const regionOptions = selectOptions.ResearchLocationRegion.filter(
-        regionOption => !["Unspecified"].includes(regionOption.label)
-    )
+    let researchCategoryOptions: { value: string; label: string }[]
 
-    let researchCategoryOptions: {value: string, label: string}[];
-
-    const showingAllResearchCategories = (selectedResearchCategories.length === 0)
+    const showingAllResearchCategories = selectedResearchCategories.length === 0
 
     if (showingAllResearchCategories) {
-        researchCategoryOptions = [{value: 'All', label: 'All Research Categories'}]
+        researchCategoryOptions = [
+            { value: 'All', label: 'All Research Categories' },
+        ]
     } else {
-        researchCategoryOptions = selectOptions.ResearchCat.filter(
-            researchCategoryOption => selectedResearchCategories.includes(researchCategoryOption.value)
+        researchCategoryOptions = researchCatOptions.filter(
+            researchCategoryOption =>
+                selectedResearchCategories.includes(
+                    researchCategoryOption.value
+                )
         )
     }
 
     const chartData = regionOptions.map(function (regionOption) {
-        const grantsInRegion = filteredDataset
-            .filter((grant: any) => grant.ResearchLocationRegion.includes(regionOption.value))
+        const grantsInRegion = filteredDataset.filter((grant: any) =>
+            grant.ResearchLocationRegion.includes(regionOption.value)
+        )
 
         if (showingAllResearchCategories) {
             return {
-                "Region": regionOption.label,
-                "All Research Categories": grantsInRegion.length,
+                Region: regionOption.label,
+                'All Research Categories': grantsInRegion.length,
             }
         }
 
         const totalGrantsPerResearchCategory = Object.fromEntries(
-            researchCategoryOptions.map(({label, value}: any) => ([
+            researchCategoryOptions.map(({ label, value }: any) => [
                 label,
-                grantsInRegion.filter((grant: any) => grant.ResearchCat.includes(value)).length,
-            ]))
+                grantsInRegion.filter((grant: any) =>
+                    grant.ResearchCat.includes(value)
+                ).length,
+            ])
         )
 
         return {
-            "Region": regionOption.label,
+            Region: regionOption.label,
             ...totalGrantsPerResearchCategory,
         }
     })
@@ -69,33 +90,40 @@ export default function GrantsPerResearchCategoryByRegion() {
             <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between ignore-in-image-export">
                     <MultiSelect
-                        options={selectOptions.ResearchCat}
+                        field="ResearchCat"
                         selectedOptions={selectedResearchCategories}
                         setSelectedOptions={setSelectedResearchCategories}
                         placeholder="All Research Categories"
                         className="max-w-xs ignore-in-image-export"
                     />
 
-                    {filteredDataset.length < globalGrants.length &&
+                    {filteredDataset.length < globalGrants.length && (
                         <p>Filtered Grants: {filteredDataset.length}</p>
-                    }
+                    )}
                 </div>
 
                 <div className="w-full">
                     <ResponsiveContainer width="100%" height={500}>
-                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
+                        <RadarChart
+                            cx="50%"
+                            cy="50%"
+                            outerRadius="80%"
+                            data={chartData}
+                        >
                             <PolarGrid />
 
-                            <PolarAngleAxis
-                                dataKey="Region"
-                            />
+                            <PolarAngleAxis dataKey="Region" />
 
-                            {researchCategoryOptions.map(({value, label}) => (
+                            {researchCategoryOptions.map(({ value, label }) => (
                                 <Radar
                                     key={`${label} Radar`}
                                     name={label}
                                     dataKey={label}
-                                    stroke={showingAllResearchCategories ? allResearchCategoriesColour : researchCategoryColours[value]}
+                                    stroke={
+                                        showingAllResearchCategories
+                                            ? allResearchCategoriesColour
+                                            : researchCategoryColours[value]
+                                    }
                                     strokeWidth={2.5}
                                     fillOpacity={0}
                                 />

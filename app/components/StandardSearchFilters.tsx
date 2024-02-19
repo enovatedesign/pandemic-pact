@@ -1,8 +1,7 @@
-import {useEffect, useState} from 'react'
-import {useRouter, usePathname, useSearchParams} from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MultiSelect from './MultiSelect'
-import {SearchFilters} from '../helpers/search'
-import selectOptions from '../../data/dist/select-options.json'
+import { SearchFilters } from '../helpers/search'
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
@@ -17,16 +16,14 @@ interface SelectedFilters {
     FunderRegion?: string[]
 }
 
-export default function StandardSearchFilters({setSearchFilters}: Props) {
+export default function StandardSearchFilters({ setSearchFilters }: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [filters, setFilters] = useState<SelectedFilters>(
-        filtersFromUrl
-            ? JSON.parse(filtersFromUrl)
-            : {}
+        filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
     )
 
     useEffect(() => {
@@ -35,7 +32,7 @@ export default function StandardSearchFilters({setSearchFilters}: Props) {
         url.search = searchParams.toString()
 
         const anyFiltersAreSet = Object.values(filters).some(
-            (selectedOptions) => selectedOptions.length > 0
+            selectedOptions => selectedOptions.length > 0
         )
 
         if (anyFiltersAreSet) {
@@ -55,25 +52,23 @@ export default function StandardSearchFilters({setSearchFilters}: Props) {
 
         setFilters(newFilters)
 
-        setSearchFilters(
-            {
-                logicalAnd: true,
-                filters: Object.entries(newFilters).map(([field, values]) => ({
-                    field,
-                    values,
-                    logicalAnd: false,
-                }))
-            }
-        )
+        setSearchFilters({
+            logicalAnd: true,
+            filters: Object.entries(newFilters).map(([field, values]) => ({
+                field,
+                values,
+                logicalAnd: false,
+            })),
+        })
     }
 
     const fields = {
-        'Disease': 'Diseases',
-        'Pathogen': 'Pathogens',
-        'ResearchInstitutionCountry': 'Research Institution Countries',
-        'ResearchInstitutionRegion': 'Research Institution Regions',
-        'FunderCountry': 'Funder Countries',
-        'FunderRegion': 'Funder Regions',
+        Disease: 'Diseases',
+        Pathogen: 'Pathogens',
+        ResearchInstitutionCountry: 'Research Institution Countries',
+        ResearchInstitutionRegion: 'Research Institution Regions',
+        FunderCountry: 'Funder Countries',
+        FunderRegion: 'Funder Regions',
     }
 
     return (
@@ -83,17 +78,19 @@ export default function StandardSearchFilters({setSearchFilters}: Props) {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {Object.entries(fields).map(
-                    ([field, label]) => (
-                        <MultiSelect
-                            key={field}
-                            options={selectOptions[field as keyof typeof selectOptions]}
-                            selectedOptions={filters[field as keyof SelectedFilters] ?? []}
-                            setSelectedOptions={(selectedOptions => setSelectedOptions(field, selectedOptions))}
-                            placeholder={`All ${label}`}
-                        />
-                    )
-                )}
+                {Object.entries(fields).map(([field, label]) => (
+                    <MultiSelect
+                        key={field}
+                        field={field}
+                        selectedOptions={
+                            filters[field as keyof SelectedFilters] ?? []
+                        }
+                        setSelectedOptions={selectedOptions =>
+                            setSelectedOptions(field, selectedOptions)
+                        }
+                        placeholder={`All ${label}`}
+                    />
+                ))}
             </div>
         </section>
     )
