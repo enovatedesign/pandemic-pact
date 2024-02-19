@@ -1,4 +1,4 @@
-import {NextRequest, NextResponse} from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import {
     getSearchClient,
@@ -14,17 +14,19 @@ export async function POST(request: NextRequest) {
         return searchUnavailableResponse()
     }
 
-    const {errorResponse, values} = await validateRequest(request)
+    const { errorResponse, values } = await validateRequest(request)
 
     if (errorResponse) {
         return errorResponse
     }
 
-    const {q, filters} = values
+    const { q, filters } = values
 
-    const grantIDs = await fetchAllGrantIDsMatchingBooleanQuery(client, q, filters)
+    const grantIDs = await fetchAllGrantIDsMatchingBooleanQuery(
+        client,
+        q,
+        filters
+    )
 
-    console.log(`Found ${grantIDs.length} grants`);
-
-    return NextResponse.json({grantIDs})
+    return NextResponse.json({ grantIDs })
 }
