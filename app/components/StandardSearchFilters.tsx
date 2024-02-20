@@ -69,6 +69,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         ResearchInstitutionRegion: 'Research Institution Regions',
         FunderCountry: 'Funder Countries',
         FunderRegion: 'Funder Regions',
+        FundingOrgName: 'Funders',
     }
 
     return (
@@ -89,6 +90,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                             setSelectedOptions(field, selectedOptions)
                         }
                         placeholder={`All ${label}`}
+                        className="col-span-1"
                     />
                 ))}
             </div>
