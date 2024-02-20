@@ -67,9 +67,14 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         Pathogen: 'Pathogens',
         ResearchInstitutionCountry: 'Research Institution Countries',
         ResearchInstitutionRegion: 'Research Institution Regions',
+        FundingOrgName: 'Funders',
         FunderCountry: 'Funder Countries',
         FunderRegion: 'Funder Regions',
     }
+
+    const funderFields = Object.keys(fields).filter(field =>
+        field.startsWith('Fund')
+    )
 
     return (
         <section className=" bg-white p-3">
@@ -77,7 +82,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                 Standard Search
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-2">
                 {Object.entries(fields).map(([field, label]) => (
                     <MultiSelect
                         key={field}
@@ -89,6 +94,11 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                             setSelectedOptions(field, selectedOptions)
                         }
                         placeholder={`All ${label}`}
+                        className={`col-span-1 ${
+                            funderFields.includes(field)
+                                ? 'md:col-span-2'
+                                : 'md:col-span-3'
+                        }`}
                     />
                 ))}
             </div>
