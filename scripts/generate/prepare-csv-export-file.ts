@@ -32,8 +32,6 @@ export default function () {
 
     const fieldsForExport = Object.values(keyMapping)
 
-    console.log(fieldsForExport.length)
-
     const rows = grants.map((grant: any, index: number, array: any[]) => {
         if (index > 0 && index % 500 === 0) {
             info(`Processed ${index} of ${array.length} grants`)
