@@ -13,7 +13,7 @@ export async function generateStaticParamsForCmsPages() {
 				uri: ":notempty:"
 			) {
 				slug
-				sectionHandle
+                typeHandle
 				ancestors {
 					slug
 				}
@@ -21,25 +21,27 @@ export async function generateStaticParamsForCmsPages() {
 		}`
     )
 
-    const entries = craftResponse.entries
-
     interface Entry {
         slug: string
-        sectionHandle: string
+        typeHandle: string
         ancestors?: Entry[]
     }
 
-    return entries.map(({ slug, sectionHandle, ancestors }: Entry) => {
-        if (!slug || sectionHandle === 'homepage') return
+    const entries: Entry[] = craftResponse.entries
 
-        let slugs = [slug]
+    return entries
+        .filter(
+            ({ typeHandle }) => EntryTypes.queries[typeHandle] !== undefined
+        )
+        .map(({ slug, ancestors }) => {
+            let slugs = [slug]
 
-        if (ancestors && ancestors.length > 0) {
-            slugs = [...ancestors.map(({ slug }) => slug), slug]
-        }
+            if (ancestors && ancestors.length > 0) {
+                slugs = [...ancestors.map(({ slug }) => slug), slug]
+            }
 
-        return { slug: slugs }
-    })
+            return { slug: slugs }
+        })
 }
 
 export async function getPageContent(
@@ -69,7 +71,7 @@ export async function getPageContent(
     const entryQuery = EntryTypes.queries[entryType]
 
     if (!entryQuery) {
-        throw new Error(`No entry query defined for entry type '${entryType}'`)
+        return null
     }
 
     const data = await entryQuery(slug, entryType, sectionHandle, previewToken)
