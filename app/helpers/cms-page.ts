@@ -68,6 +68,10 @@ export async function getPageContent(
 
     const entryQuery = EntryTypes.queries[entryType]
 
+    if (!entryQuery) {
+        throw new Error(`No entry query defined for entry type '${entryType}'`)
+    }
+
     const data = await entryQuery(slug, entryType, sectionHandle, previewToken)
 
     return data
