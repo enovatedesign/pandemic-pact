@@ -33,7 +33,10 @@ export default function GrantsPerResearchCategoryByRegion() {
 
     const regionOptions = researchLocationRegionOptions.filter(
         regionOption => !['Unspecified'].includes(regionOption.label)
-    )
+    ).map(regionOption => ({
+        ...regionOption,
+        label: (regionOption.label === "International") ? "Multi-Regional" : regionOption.label
+    }))
 
     let researchCategoryOptions: { value: string; label: string }[]
 
@@ -82,7 +85,7 @@ export default function GrantsPerResearchCategoryByRegion() {
     return (
         <VisualisationCard
             id="grant-per-research-category-by-region"
-            title="Regional Distribution of Funding for Research Category"
+            title="Regional Distribution of Funding by Research Areas"
             subtitle="Each research category is shown in a different colour"
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
         >

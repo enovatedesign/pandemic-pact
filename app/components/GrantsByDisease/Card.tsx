@@ -25,12 +25,17 @@ export default function GrantsByDisease() {
         <>
             <h3>
                 Global annual funding for research on diseases with a pandemic
-                potential
+                potential.
             </h3>
 
             <p className="text-brand-grey-500">
                 The list contains the WHO priority diseases plus pandemic
                 influenza, Mpox and plague
+            </p>
+            
+            <p className="text-brand-grey-500">
+                The chart shows the total number of grants awarded and amount 
+                of funding committed for each disease per calendar year. 
             </p>
         </>
     )
@@ -40,7 +45,7 @@ export default function GrantsByDisease() {
             id="grants-by-disease"
             title="Global annual funding for research on diseases with a pandemic potential"
             subtitle="Total number of grants and US dollars committed for each disease"
-            footnote="Please note: Funding amounts are included only when they have been published by the funder."
+            footnote="Please note: Grants may fall under more than one disease. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
             infoModalContents={infoModalContents}
             tabs={tabs}
         />

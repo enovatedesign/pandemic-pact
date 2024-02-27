@@ -123,8 +123,8 @@ export default function RegionalFlowOfGrantsCard() {
         <VisualisationCard
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
-            subtitle="The chart illustrated the flow of research grants by region from funder to research institution to the location where the research is conducted"
-            footnote="Please note: Funding amounts are included only when they have been published by the funder."
+            subtitle="The chart illustrates the flow of research grants by region, tracing it from funder to research institution and ultimately to the location where the research is conducted."
+            footnote="Please note: Funding amounts are included only when they have been published by the funder. Some research projects are undertaken in multiple locations (countries). Where research location is not explicitly specified the default used is the location of the research institution receiving the funds."
         >
             <div className="w-full">
                 {links.length > 0 && (
