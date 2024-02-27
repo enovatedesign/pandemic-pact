@@ -42,23 +42,13 @@ const RichTextColumnsBlock = ({block} : Props) => {
                         const button = column.button ?? null
 
                         return (
-                            <>
-                                <Card 
-                                    entry={column} 
-                                    image={column.image[0]} 
-                                    key={index}
-                                    customImageClasses="aspect-video object-cover w-full"
-                                >
-                                    {button?.url && (
-                                        <Button 
-                                            size="small"
-                                            href={button.url}
-                                        >
-                                            Read more
-                                        </Button>
-                                    )}
-                                </Card>
-                            </>
+                            <Card 
+                                entry={column} 
+                                image={column.image[0]} 
+                                key={index}
+                                customImageClasses="aspect-video object-cover w-full"
+                                cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>Read more</Button>}
+                            />
                         )
                     })}
                 </div>
