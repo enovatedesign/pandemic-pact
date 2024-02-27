@@ -49,7 +49,7 @@ export default function TemporalChart() {
                     type="category"
                     dataKey="year"
                     label={{
-                        value: "Year",
+                        value: "Year of Award Start",
                         position: "bottom",
                         offset: 0,
                     }}

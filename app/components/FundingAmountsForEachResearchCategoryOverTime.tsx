@@ -124,9 +124,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     return (
         <VisualisationCard
             id="amount-committed-to-each-research-category-over-time-card"
-            title="Global Annual Funding For Research Categories"
-            subtitle="Ipsam vero quae beatae quas nemo quae necessitatibus commodi. Fuga laboriosam possimus corrupti dolore eveniet maiores. Porro laboriosam laboriosam assumenda esse porro placeat voluptatum."
-            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
+            title="Annual Trends in New Global Grants for Research Areas "
+            subtitle="The chart shows the total amount of funding allocated to different research areas by calendar year of award start date."
+            footnote="Please note: Grants may fall under more than one research category. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
             tabs={tabs}
         >
             <div className=" flex w-full justify-between items-start mb-6 ignore-in-image-export">
@@ -173,7 +173,7 @@ function BarChart({
                 <XAxis
                     dataKey="year"
                     label={{
-                        value: 'Year',
+                        value: 'Year of Award Start',
                         position: 'bottom',
                         offset: 0,
                     }}

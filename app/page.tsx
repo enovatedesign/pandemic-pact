@@ -73,7 +73,7 @@ export default function Home() {
 
                             <div className="max-w-3xl mx-auto flex flex-col gap-4">
                                 <p className="text-center text-white/80 text-pretty">
-                                   Pandemic PACT tracks and analyses global funding and evidence for research on diseases with pandemic potential and broader preparedness efforts, ready to pivot in response to outbreaks.
+                                    Pandemic PACT tracks and analyses global funding and evidence for research on diseases with pandemic potential and broader research preparedness efforts, ready to pivot in response to outbreaks. 
                                 </p>
 
                                 <small>

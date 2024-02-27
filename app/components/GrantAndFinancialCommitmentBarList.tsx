@@ -3,6 +3,7 @@ import {BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer} fro
 import {dollarValueFormatter} from "../helpers/value-formatters"
 import {TooltipContext} from '../helpers/tooltip'
 import {Colours} from "../helpers/colours"
+import InfoModal from "./InfoModal";
 
 export type GrantAndFinancialCommitmentBarListData = Array<{
     "Known Financial Commitments (USD)": number,
@@ -55,7 +56,18 @@ export function GrantAndFinancialCommitmentBarList({
                 </div>
 
                 <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <p className="text-lg text-brand-grey-500">Known Financial Commitments (USD)</p>
+                    <div className="flex gap-x-1">
+                        <p className="text-lg text-brand-grey-500">
+                            Known Financial Commitments (USD)
+                        </p>
+                        <InfoModal>
+                            <p>
+                                We used historical currency exchange rates from any currency in which the grant was 
+                                awarded converted to the US dollars. The term ‘known’ is used as not all grant 
+                                records have funding amount data.  
+                            </p>
+                        </InfoModal>
+                    </div>
                 </div>
 
                 {data.map((datum: any) => (

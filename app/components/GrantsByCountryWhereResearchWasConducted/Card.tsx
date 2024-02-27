@@ -24,9 +24,9 @@ export default function GrantsByCountryWhereResearchWasConductedCard() {
     return (
         <VisualisationCard
             id="grants-by-country-where-research-was-conducted"
-            title="Global Map Showing Locations of Research Funders or Where Research Will Be Conducted"
+            title="Global Map of Geographical Distribution of Funding Organisations OR Research Locations"
             subtitle="The information on the research location was collected where available from the grant application, and can be different to the location of research institution."
-            footnote="Please note: Grants may fall under more than one research category, funding amounts are included only when they have been published by the funder and some research projects are undertaken in multiple locations (countries)."
+            footnote="Please note: Funding amounts are included only when they have been published by the funder. Some research projects are undertaken in multiple locations (countries) and some are funded by multiple funders. Where research location is not explicitly specified the default used is the location of the research institution receiving the funds."
             tabs={tabs}
         />
     )

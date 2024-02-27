@@ -70,7 +70,7 @@ export default function Visualise() {
     const cardData = [
         {
             title: 'Disease',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            summary: 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, Mpox and Plague.',
             url: '#disease',
             image: {
                 url: '/images/visualisation-card/vis-bar-chart.png',
@@ -81,7 +81,7 @@ export default function Visualise() {
         },
         {
             title: 'Research Categories',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            summary: 'Charts showing the grants assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of grants going into different areas of research.',
             url: '#research-category',
             image: {
                 url: '/images/visualisation-card/vis-category-chart.png',
@@ -92,7 +92,7 @@ export default function Visualise() {
         },
         {
             title: 'Geographical Distribution',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            summary: 'Charts showing the location of funding organisations and where the funding flows to support research activities. charts can be visualised at the level of the WHO regions or individual countries.',
             url: '#geographical-distribution',
             image: {
                 url: '/images/visualisation-card/vis-radar-chart.png',
@@ -103,7 +103,7 @@ export default function Visualise() {
         },
         {
             title: 'Annual Trends',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            summary: 'Charts for trends in research funding for selected diseases, research categories and other items by year starting from 2020, to align with the COVID-19 Pandemic.',
             url: '#annual-trends',
             image: {
                 url: '/images/visualisation-card/vis-line-chart.png',
@@ -112,6 +112,28 @@ export default function Visualise() {
                 height: 300,
             }
         },
+        {
+            title: 'Policy Roadmap Card',
+            summary: 'In progress: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.',
+            url: '#',
+            image: {
+                url: '',
+                altText: 'Policy Roadmap Card ',
+                width: 300,
+                height: 300,
+            }
+        },
+        // {
+        //     title: 'Word Clouds',
+        //     summary: 'Review and download our Word Clouds for your presentations to show the total number of grants and amounts committed to research on specific diseases.',
+        //     url: '#word-clouds',
+        //     image: {
+        //         url: '/images/visualisation-card/vis-word-cloud.png',
+        //         altText: 'Visualisations Card',
+        //         width: 480,
+        //         height: 480,
+        //     }
+        // },
     ]
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
@@ -154,7 +176,7 @@ export default function Visualise() {
                 <Layout
                     title="Interactive Charts"
                     showSummary={true}
-                    summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+                    summary="Visualise expansive data on research grants for infectious disease with a pandemic potential using advanced filters and search functions."
                     sidebar={sidebar}
                 >
                     <AnimateHeight
@@ -166,7 +188,7 @@ export default function Visualise() {
                     </AnimateHeight>
 
                     <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-                        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
+                        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
                             {cardData.map((card, index) => {
 
                                 return (
