@@ -197,9 +197,8 @@ export default function Visualise() {
                                         entry={card}
                                         tags={false}
                                         image={card.image}
-                                    >
-                                        <ChevronDownIcon className="w-6 h-6" />
-                                    </Card>
+                                        animatedIcon={<ChevronDownIcon className="w-6 h-6" />}
+                                    />
                                 )
                             })}
                         </div>

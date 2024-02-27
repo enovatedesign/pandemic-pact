@@ -54,15 +54,12 @@ const ContentSliderBlock = ({block}: Props ) => {
                             return (
                                 <>
                                     <SwiperSlide key={index}>
-                                        <Card entry={slide} image={slide.image[0]} hover={false}>
-                                            {button?.url && (
-                                                <Button
-                                                    size="small"
-                                                    href={button.url}
-                                                >
-                                                    Read more
-                                                </Button>
-                                            )}
+                                        <Card 
+                                            entry={slide} 
+                                            image={slide.image[0]} 
+                                            hover={false} 
+                                            cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>Read more</Button>} 
+                                        >
                                         </Card>
                                     </SwiperSlide>
                                 </>
