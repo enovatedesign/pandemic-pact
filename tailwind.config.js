@@ -81,6 +81,7 @@ module.exports = {
             "700": "#307E7D",
             "800": "#225958",
             "900": "#143433",
+            "richText-h2": "#23807E"
           },
           green: {
             DEFAULT: "#AFD46C",
