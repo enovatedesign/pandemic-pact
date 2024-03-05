@@ -1,5 +1,7 @@
 import GraphQL from '../lib/GraphQl'
 import EntryTypes from '../lib/EntryTypes'
+import {notFound} from 'next/navigation'
+import {getMetadata} from 'next-seomatic'
 
 export interface Parameters {
     slug: string[]
@@ -77,4 +79,31 @@ export async function getPageContent(
     const data = await entryQuery(slug, entryType, sectionHandle, previewToken)
 
     return data
+}
+
+
+export async function fetchMetadataFromCraft(uri: string) {
+    
+    // Fetch the metadata for the current page
+    const metaDataQuery = await GraphQL(
+        `query($uri:[String]){
+            entry: entry(status: "enabled", uri: $uri) {
+                seomatic(asArray: true) {
+                    metaJsonLdContainer
+                    metaLinkContainer
+                    metaScriptContainer
+                    metaSiteVarsContainer
+                    metaTagContainer
+                    metaTitleContainer
+                }
+            }
+        }`,
+        {uri},
+    )
+
+    if (!metaDataQuery.entry) {
+        notFound()
+    }
+   
+    return getMetadata(metaDataQuery.entry.seomatic);
 }

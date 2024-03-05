@@ -7,8 +7,31 @@ import BackToGrantSearchLink from './BackToGrantSearchLink'
 import AbstractAndLaySummary from './AbstractAndLaySummary'
 import KeyFacts from './KeyFacts'
 import Publications from './Publications'
-
+import type {Metadata} from 'next'
 import '../../css/components/highlighted-search-results.css'
+
+type Props = {
+    params: { id: string }
+  }
+
+export async function generateMetadata(
+    { params }: Props,
+  ): Promise<Metadata> {
+
+    const path = `./data/dist/grants/${params.id}.json`
+
+    if (!fs.existsSync(path)) {
+        notFound()
+    }
+
+    const grant = fs.readJsonSync(path)
+
+    const title = `${grant.GrantTitleEng} | Pandemic PACT Tracker`
+   
+    return {
+      title: title,
+    }
+  }
 
 export async function generateStaticParams() {
     return fs
