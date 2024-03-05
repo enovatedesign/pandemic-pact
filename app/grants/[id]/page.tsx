@@ -32,11 +32,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 
     let metaData: Metadata = {
-        title: `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`,
-    };
+        title: `${params.id} | Pandemic PACT Tracker`,
+    }
+    
+    if (grant?.GrantTitleEng) {
+        metaData.title = `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`
+    }
 
     if (grant?.Abstract) {
-        metaData.description = truncateString(grant.Abstract, 300);
+        metaData.description = truncateString(grant.Abstract, 300)
     }
 
     return metaData;
