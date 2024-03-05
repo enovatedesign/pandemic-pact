@@ -7,7 +7,7 @@ const VisualisationCardLinks = () => {
     
     return (
         <section className="hidden lg:block container mx-auto my-6 lg:my-12">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
                 {visualisationCardData.map((card, index) => {
 
                     return (
