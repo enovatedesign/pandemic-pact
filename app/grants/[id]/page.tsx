@@ -1,52 +1,61 @@
-import fs from 'fs-extra'
-import { notFound } from 'next/navigation'
-import Layout from '../../components/Layout'
-import PageTitle from './PageTitle'
-import Masthead from './Masthead'
-import BackToGrantSearchLink from './BackToGrantSearchLink'
-import AbstractAndLaySummary from './AbstractAndLaySummary'
-import KeyFacts from './KeyFacts'
-import Publications from './Publications'
-import type {Metadata} from 'next'
-import '../../css/components/highlighted-search-results.css'
+import fs from 'fs-extra';
+import { notFound } from 'next/navigation';
+import Layout from '../../components/Layout';
+import PageTitle from './PageTitle';
+import Masthead from './Masthead';
+import BackToGrantSearchLink from './BackToGrantSearchLink';
+import AbstractAndLaySummary from './AbstractAndLaySummary';
+import KeyFacts from './KeyFacts';
+import Publications from './Publications';
+import type { Metadata } from 'next';
+import '../../css/components/highlighted-search-results.css';
 
 type Props = {
-    params: { id: string }
-  }
+    params: { id: string };
+};
 
-export async function generateMetadata(
-    { params }: Props,
-  ): Promise<Metadata> {
-
-    const path = `./data/dist/grants/${params.id}.json`
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const path = `./data/dist/grants/${params.id}.json`;
 
     if (!fs.existsSync(path)) {
-        notFound()
+        notFound();
     }
 
-    const grant = fs.readJsonSync(path)
+    const grant = fs.readJsonSync(path);
 
-    const title = `${grant.GrantTitleEng} | Pandemic PACT Tracker`
-   
-    return {
-      title: title,
+    let metaData: Metadata = {
+        title: `${grant.GrantTitleEng} | Pandemic PACT Tracker`,
+    };
+
+    const truncateString = (str: string, maxLength: number) => {
+        if (str.length <= maxLength) {
+            return str;
+        } else {
+            return str.slice(0, maxLength - 1) + '…';
+        }
+    };
+
+    if (grant?.Abstract) {
+        metaData.description = truncateString(grant.Abstract, 300);
     }
-  }
+
+    return metaData;
+}
 
 export async function generateStaticParams() {
     return fs
         .readJsonSync('./data/dist/grants/index.json')
-        .map((grantId: number) => ({ id: `${grantId}` }))
+        .map((grantId: number) => ({ id: `${grantId}` }));
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-    const path = `./data/dist/grants/${params.id}.json`
+    const path = `./data/dist/grants/${params.id}.json`;
 
     if (!fs.existsSync(path)) {
-        notFound()
+        notFound();
     }
 
-    const grant = fs.readJsonSync(path)
+    const grant = fs.readJsonSync(path);
 
     return (
         <Layout
@@ -67,5 +76,5 @@ export default function Page({ params }: { params: { id: string } }) {
                 </div>
             </div>
         </Layout>
-    )
+    );
 }
