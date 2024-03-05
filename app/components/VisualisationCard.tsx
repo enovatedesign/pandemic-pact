@@ -68,8 +68,8 @@ export default function VisualisationCard({
     return (
         <>
             <animated.div id={id} ref={ref} style={springs}>
-                <div className="flex flex-col items-start space-y-6 h-full w-full bg-white p-8 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 overflow-hidden relative">
-                    <div className="flex flex-col items-start space-y-6">
+                <div className="flex flex-col items-start gap-y-6 h-full w-full bg-white p-8 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
+                    <div className="flex flex-col items-start gap-y-6">
                         <div className="mr-16">
                             <h2 className="text-lg capitalize inline">
                                 {title}
@@ -128,7 +128,7 @@ export default function VisualisationCard({
 
                     {tabs && tabs[selectedTabIndex].content}
 
-                    <div className="w-full flex flex-col-reverse space-y-3 space-y-reverse justify-between items-center ignore-in-image-export md:flex-row-reverse md:space-y-0">
+                    <div className="w-full flex flex-col-reverse gap-y-4 justify-between items-center ignore-in-image-export md:flex-row-reverse md:gap-y-0">
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}
@@ -139,7 +139,7 @@ export default function VisualisationCard({
                                 {tabPrefixLabel && <p>{tabPrefixLabel}</p>}
 
                                 <Tab.Group onChange={setSelectedTabIndex}>
-                                    <Tab.List className="flex text-center space-x-1 rounded-lg bg-gray-100 p-1">
+                                    <Tab.List className="flex text-center gap-x-1 rounded-lg bg-gray-100 p-1">
                                         {tabs.map(({ tab }, index) => (
                                             <Tab
                                                 key={`${id}-tab-${index}`}
