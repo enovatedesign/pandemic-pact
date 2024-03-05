@@ -113,11 +113,11 @@ export default function Visualise() {
             }
         },
         {
-            title: 'Policy Roadmap Card',
-            summary: 'In progress: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.',
-            url: '#',
+            title: 'Policy Roadmaps - Coming Soon:',
+            summary: 'Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.',
+            url: null,
             image: {
-                url: '',
+                url: '/images/visualisation-card/vis-road-maps.png',
                 altText: 'Policy Roadmap Card ',
                 width: 300,
                 height: 300,
@@ -197,8 +197,8 @@ export default function Visualise() {
                                         entry={card}
                                         tags={false}
                                         image={card.image}
-                                        animatedIcon={<ChevronDownIcon className="w-6 h-6" />}
-                                    />
+                                        animatedIcon={card.url && <ChevronDownIcon className="w-6 h-6" />}
+                                    />   
                                 )
                             })}
                         </div>
