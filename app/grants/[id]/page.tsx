@@ -23,16 +23,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const grant = fs.readJsonSync(path);
 
-    let metaData: Metadata = {
-        title: `${grant.GrantTitleEng} | Pandemic PACT Tracker`,
-    };
-
     const truncateString = (str: string, maxLength: number) => {
         if (str.length <= maxLength) {
             return str;
         } else {
             return str.slice(0, maxLength - 1) + '…';
         }
+    };
+
+    let metaData: Metadata = {
+        title: `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`,
     };
 
     if (grant?.Abstract) {
