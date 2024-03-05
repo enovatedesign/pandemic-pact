@@ -62,45 +62,41 @@ const AccordionBlock = ( {block}: Props ) => {
                         
                         const iconClasses = 'w-6 h-6 text-primary transition duration-300'
                         return (
-                            <>
+                            <li className="space-y-4" key={index}>
                                 {accordionData && (
-
-                                    <li className="space-y-4" key={index}>
-                                        <div role="region" className={textClasses}>
-                                            
-                                                <button
-                                                    className="flex items-center justify-between w-full px-6 py-4"
-                                                    onClick={handleClick}
-                                                >
-                                                    {headingLevel === 2 ? (
-                                                        <h2 className="mb-0 text-left text-secondary text-xl md:text-3xl lg:text-3xl">
-                                                                { accordionHeading }
-                                                        </h2>
-                                                    ) : (
-                                                        <h3 className="mb-0 text-left text-secondary text-xl md:text-3xl lg:text-3xl">
+                                    <div role="region" className={textClasses}>
+                                        
+                                            <button
+                                                className="flex items-center justify-between w-full px-6 py-4"
+                                                onClick={handleClick}
+                                            >
+                                                {headingLevel === 2 ? (
+                                                    <h2 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
                                                             { accordionHeading }
-                                                        </h3>
-                                                    )}
-                                                        
-                                                    {/* sort icons */}
-                                                    {activeIndex === index ? (
-                                                        <MinusIcon className={iconClasses}/>
-                                                    ) : (
-                                                        <PlusIcon className={iconClasses}/>
-                                                    )}
-                                                </button>
+                                                    </h2>
+                                                ) : (
+                                                    <h3 className="mb-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
+                                                        { accordionHeading }
+                                                    </h3>
+                                                )}
+                                                    
+                                                {/* sort icons */}
+                                                {activeIndex === index ? (
+                                                    <MinusIcon className={iconClasses}/>
+                                                ) : (
+                                                    <PlusIcon className={iconClasses}/>
+                                                )}
+                                            </button>
 
-                                            <AnimateHeight
-                                                duration={300}
-                                                height={activeIndex === index ? 'auto' : 0}
-                                            >   
-                                                    <RichText customClasses="p-6 pt-3" text={accordionContent} invert={false} typeScale={""} noMaxWidth={true} />
-                                            </AnimateHeight>
-                                        </div>
-
-                                    </li>
+                                        <AnimateHeight
+                                            duration={300}
+                                            height={activeIndex === index ? 'auto' : 0}
+                                        >   
+                                                <RichText customClasses="p-6 pt-3" text={accordionContent} noMaxWidth={true} />
+                                        </AnimateHeight>
+                                    </div>
                                 )}
-                            </>
+                            </li>
                         )
                     })}
                 </animated.ul>

@@ -59,7 +59,7 @@ const TableBlock = ({block}: Props) => {
                                     {columns && (
                                         <thead>
                                             <tr>
-                                                {columns.map(column => {
+                                                {columns.map((column, index: number) => {
                                                     
                                                     const columnWidth = column.width ?? null
                                                     const align = column.align ?? null
@@ -70,15 +70,13 @@ const TableBlock = ({block}: Props) => {
 
                                                     // text-left text-center text-right
                                                     return (
-                                                        <>
-                                                            <th scope="col" 
-                                                                className={`${thClasses} text-${align}`}
-                                                                style={{ width: `${columnWidth}%` }}
-                                                            >
-                                                                {column.heading}
-                                                                
-                                                            </th>
-                                                        </>
+                                                        <th scope="col" 
+                                                            className={`${thClasses} text-${align}`}
+                                                            style={{ width: `${columnWidth}%` }}
+                                                            key={index}
+                                                        >
+                                                            {column.heading}
+                                                        </th>
                                                     )
                                                 })}
 
@@ -88,25 +86,22 @@ const TableBlock = ({block}: Props) => {
 
                                     {rows && (
                                         <tbody className="divide-y divide-gray-200">
-                                            {rows.map((row) => {
+                                            {rows.map((row, index: number) => {
                                                 return(
-                                                    <>
-                                                        <tr>
-                                                            {row.map((cell) => {
-                                                                const tdClasses = [
-                                                                    'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
-                                                                ].join(' ')
+                                                    <tr key={index}>
+                                                        {row.map((cell: string, index: number) => {
+                                                            
+                                                            const tdClasses = [
+                                                                'whitespace-nowrap lg:whitespace-normal py-4 px-6 text-sm text-gray-500',
+                                                            ].join(' ')
 
-                                                                return (
-                                                                    <>
-                                                                        <td className={ tdClasses }>
-                                                                            { cell }
-                                                                        </td>
-                                                                    </>
-                                                                )
-                                                            })}
-                                                        </tr>
-                                                    </>
+                                                            return (
+                                                                <td className={tdClasses} key={index}>
+                                                                    {cell}
+                                                                </td>
+                                                            )
+                                                        })}
+                                                    </tr>
                                                 )
                                             })}
                                         </tbody>
