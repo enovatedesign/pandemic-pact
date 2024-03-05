@@ -22,17 +22,25 @@ interface SelectedFilters {
 }
 
 export default function AdvancedSearch({ setSearchFilters }: Props) {
-    const defaultRow: () => Row = () => ({
-        field: 'StudySubject',
+    const defaultRow: (field: string) => Row = (field) => ({
+        field: field,
         values: [],
         logicalAnd: false,
         key: new Date().getTime(),
-    })
-
+    });
+    
+    const defaultRowsArray: (fields: string[]) => Row[] = (fields) => {
+        const rows: Row[] = [];
+        for (let i = 0; i < fields.length; i++) {
+            rows.push(defaultRow(fields[i % fields.length]));
+        }
+        return rows;
+    };
+    
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
-        rows: [defaultRow()],
+        rows: defaultRowsArray(['StudySubject', 'Ethnicity']),
         logicalAnd: true,
-    })
+    });
 
     const globalAndButtonTextClasses = [
         selectedFilters.logicalAnd
@@ -84,7 +92,7 @@ export default function AdvancedSearch({ setSearchFilters }: Props) {
     }
 
     const addRow = () => {
-        setRows([...selectedFilters.rows, defaultRow()])
+        setRows([...selectedFilters.rows, defaultRow('')])
     }
 
     const removeRow = (index: number) => {
