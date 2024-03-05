@@ -66,7 +66,7 @@ export const getFooterLinksArray = () => {
 }
 
 export const footerLinksSecondCollection = [
-    { label: 'Go to the GloPID-R website', href: 'https://www.glopid-r.org/' },
-    { label: 'Go to the UKCDR website', href: 'https://ukcdr.org.uk/' },
-    { label: 'Go to the Pandemic Sciences Institute website', href: 'https://www.psi.ox.ac.uk/' },
+    { label: 'GloPID-R website', href: 'https://www.glopid-r.org/' },
+    { label: 'UKCDR website', href: 'https://ukcdr.org.uk/' },
+    { label: 'Pandemic Sciences Institute website', href: 'https://www.psi.ox.ac.uk/' },
 ]

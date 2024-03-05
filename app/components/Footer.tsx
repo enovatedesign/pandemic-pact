@@ -4,6 +4,7 @@ import FooterMenu from './FooterMenu'
 import {getLinksArray} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
+import { ExternalLinkIcon } from '@heroicons/react/solid'
 
 export default function Header() {
     const linksSecondCollection = footerLinksSecondCollection
@@ -54,8 +55,13 @@ export default function Header() {
                         <div>
                             <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Our partners</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
-                                {linksSecondCollection.map(link => (
-                                    <NavItem key={link.label} {...link} />
+                                {linksSecondCollection.map((link, index) => (
+                                    <li key={index}>
+                                        <a href={link.href} rel="nofollow external noopener noreferrer" target="_blank" className='text-gray-700 hover:underline flex gap-x-1 items-center'>
+                                            {link.label}
+                                            <ExternalLinkIcon className="text-gray-700 size-5" />
+                                        </a>
+                                    </li>
                                 ))}
                             </ul>
                         </div>
