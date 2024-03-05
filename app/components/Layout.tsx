@@ -103,7 +103,7 @@ const Layout = ({
             window.removeEventListener('load', handleResize)
             window.removeEventListener('resize', handleResize);
         }
-    }, [sidebarOpen])
+    }, [])
 
     return (
         <>
