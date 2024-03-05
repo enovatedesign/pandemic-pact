@@ -37,7 +37,7 @@ export const links = {
                 href: '/about/meet-the-team',
             },
             {
-                label: 'Partners and collaborators',
+                label: 'Partners and Collaborators',
                 href: '/about/partners-and-collaborators',
             },
             {
