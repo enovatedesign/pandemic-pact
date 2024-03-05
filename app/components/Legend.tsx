@@ -8,12 +8,12 @@ interface Props {
 export default function Legend({categories, colours, customWrapperClasses, customTextClasses}: Props) {
     return (
         <ol
-            className={customWrapperClasses ? customWrapperClasses : "tremor-Legend-root flex flex-wrap overflow-hidden truncate"}
+            className={customWrapperClasses ? customWrapperClasses : "flex flex-wrap overflow-hidden truncate"}
         >
             {categories.map((category, index) => (
                 <li
                     key={`legend-item-${category}-${index}`}
-                    className="tremor-Legend-legendItem group inline-flex items-start truncate px-2 py-0.5 rounded-tremor-small transition cursor-default text-tremor-content dark:text-dark-tremor-content"
+                    className="group inline-flex items-start truncate px-2 py-0.5 transition cursor-default text-gray-500"
                 >
                     <svg
                         className="flex-none text-blue-500 h-2 w-2 mr-1.5 opacity-100 mt-[5px]"
@@ -24,7 +24,7 @@ export default function Legend({categories, colours, customWrapperClasses, custo
                     </svg>
 
                     <p
-                        className={`${customTextClasses ? customTextClasses : "whitespace-nowrap truncate"} text-tremor-default text-tremor-content dark:text-dark-tremor-content opacity-100"`}
+                        className={`${customTextClasses ? customTextClasses : "whitespace-nowrap truncate"} text-sm text-gray-500 opacity-100"`}
                     >
                         {category}
                     </p>

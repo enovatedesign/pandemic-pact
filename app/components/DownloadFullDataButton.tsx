@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Button from './Button'
 import { fetchCsv, downloadCsv, fullDataFilename } from '../helpers/export'
 import { CloudDownloadIcon } from '@heroicons/react/outline'
-import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
+import LoadingSpinner from './LoadingSpinner'
 
 export default function DownloadFullDataButton() {
     const [exportingCsv, setExportingCsv] = useState(false)

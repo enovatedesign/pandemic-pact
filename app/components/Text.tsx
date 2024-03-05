@@ -5,7 +5,7 @@ type TextProps = {
 const Text = ({ children }: TextProps) => (
     children ?
     <p
-        className="text-tremor-default text-tremor-content"
+        className="text-sm text-gray-500"
         dangerouslySetInnerHTML={{ __html: children }}
     ></p>
     : null

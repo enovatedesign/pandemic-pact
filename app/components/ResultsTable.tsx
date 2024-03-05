@@ -29,7 +29,7 @@ export default function ResultsTable({ searchResponse }: Props) {
                         (query ? `?q=${query}` : '')
 
                     const linkClasses =
-                        'hover:underline font-semibold lg:text-2xl'
+                        'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
 
                     return (
                         <article

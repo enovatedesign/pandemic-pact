@@ -1,6 +1,6 @@
 import {ElementType} from 'react'
 import {Menu} from '@headlessui/react'
-import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
+import LoadingSpinner from '../LoadingSpinner'
 
 interface Props {
     Icon: ElementType

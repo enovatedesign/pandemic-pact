@@ -137,9 +137,9 @@ export default function VisualisePageClient() {
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
 
-                            <div id='word-clouds' className={gridClasses}>
+                            {/* <div id='word-clouds' className={gridClasses}>
                                 <WordCloudsCard />
-                            </div>
+                            </div> */}
                         </div>
 
                         <Tooltip

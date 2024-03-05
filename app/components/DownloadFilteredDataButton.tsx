@@ -12,7 +12,7 @@ import {
     filteredDataFilename,
 } from '../helpers/export'
 import { CloudDownloadIcon } from '@heroicons/react/outline'
-import LoadingSpinner from '@tremor/react/dist/assets/LoadingSpinner'
+import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
     searchRequestBody: SearchRequestBody

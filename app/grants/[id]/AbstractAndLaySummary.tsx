@@ -125,7 +125,7 @@ function ServerComponent({
                     <div id="abstract">
                         <RichText text={abstract} customClasses="max-w-none" />
                         {backgroundShow && !abstractShow && (
-                            <div className="absolute inset-0 top-0 left-0  bg-gradient-to-b from-transparent to-white transition duration-300" />
+                            <div className="absolute inset-0 top-0 left-0 bg-gradient-to-b from-transparent to-white transition duration-300" />
                         )}
                     </div>
                 </AnimateHeight>
@@ -133,7 +133,7 @@ function ServerComponent({
                 {readMore && (
                     <button
                         onClick={() => setAbstractShow(!abstractShow)}
-                        className="w-auto uppercase font-bold text-tremor-emphasis tracking-wider flex items-center"
+                        className="w-auto uppercase font-bold tracking-wider flex items-center"
                     >
                         <span className="inline-flex text-secondary">
                             {abstractShow ? 'read less' : 'read more'}
