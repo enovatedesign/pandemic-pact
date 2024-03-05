@@ -1,11 +1,6 @@
 import './css/globals.css'
 import font from './globals/font'
 
-export const metadata = {
-    title: 'Pandemic PACT',
-    description: '',
-}
-
 export default function RootLayout({
     children,
 }: {
