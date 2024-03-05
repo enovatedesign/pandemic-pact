@@ -37,16 +37,16 @@ export const links = {
                 href: '/about/meet-the-team',
             },
             {
+                label: 'Partners and collaborators',
+                href: '/about/partners-and-collaborators',
+            },
+            {
                 label: 'Funders',
                 href: '/about/funders',
             },
             {
                 label: 'Our Data',
                 href: '/about/our-data',
-            },
-            {
-                label: 'Partners and collaborators',
-                href: '/about/partners-and-collaborators',
             },
         ],
     },
