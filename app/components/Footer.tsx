@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import FooterMenu from './FooterMenu'
-import {footerLinksFirstCollection} from '../helpers/nav'
+import {getLinksArray} from '../helpers/nav'
 import {footerLinksSecondCollection} from '../helpers/nav'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
+import { ExternalLinkIcon } from '@heroicons/react/solid'
 
 export default function Header() {
-    const linksFirstCollection = footerLinksFirstCollection
     const linksSecondCollection = footerLinksSecondCollection
+    const links = getLinksArray()
 
     const NavItem = (link: {label: string, href: string}) => (
         <li key={link.href}>
@@ -39,19 +40,28 @@ export default function Header() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-24">
 
                         <div>
-                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Discover</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
-                                {linksFirstCollection.map(link => (
-                                    <NavItem key={link.label} {...link} />
+                                {links.map((link, index) => (
+                                    <>  
+                                        {link.label !== 'About' && (
+                                            <NavItem key={index} {...link} />
+                                        )}
+                                    </>
                                 ))}
                             </ul>
                         </div>
 
                         <div>
-                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Some Heading</h2>
+                            <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Our partners</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
-                                {linksSecondCollection.map(link => (
-                                    <NavItem key={link.label} {...link} />
+                                {linksSecondCollection.map((link, index) => (
+                                    <li key={index}>
+                                        <a href={link.href} rel="nofollow external noopener noreferrer" target="_blank" className='text-gray-700 hover:underline flex gap-x-1 items-center'>
+                                            {link.label}
+                                            <ExternalLinkIcon className="text-gray-700 size-5" />
+                                        </a>
+                                    </li>
                                 ))}
                             </ul>
                         </div>

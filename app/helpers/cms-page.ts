@@ -1,5 +1,7 @@
 import GraphQL from '../lib/GraphQl'
 import EntryTypes from '../lib/EntryTypes'
+import {notFound} from 'next/navigation'
+import {getMetadata} from 'next-seomatic'
 
 export interface Parameters {
     slug: string[]
@@ -13,7 +15,7 @@ export async function generateStaticParamsForCmsPages() {
 				uri: ":notempty:"
 			) {
 				slug
-				sectionHandle
+                typeHandle
 				ancestors {
 					slug
 				}
@@ -21,25 +23,27 @@ export async function generateStaticParamsForCmsPages() {
 		}`
     )
 
-    const entries = craftResponse.entries
-
     interface Entry {
         slug: string
-        sectionHandle: string
+        typeHandle: string
         ancestors?: Entry[]
     }
 
-    return entries.map(({ slug, sectionHandle, ancestors }: Entry) => {
-        if (!slug || sectionHandle === 'homepage') return
+    const entries: Entry[] = craftResponse.entries
 
-        let slugs = [slug]
+    return entries
+        .filter(
+            ({ typeHandle }) => EntryTypes.queries[typeHandle] !== undefined
+        )
+        .map(({ slug, ancestors }) => {
+            let slugs = [slug]
 
-        if (ancestors && ancestors.length > 0) {
-            slugs = [...ancestors.map(({ slug }) => slug), slug]
-        }
+            if (ancestors && ancestors.length > 0) {
+                slugs = [...ancestors.map(({ slug }) => slug), slug]
+            }
 
-        return { slug: slugs }
-    })
+            return { slug: slugs }
+        })
 }
 
 export async function getPageContent(
@@ -68,7 +72,38 @@ export async function getPageContent(
 
     const entryQuery = EntryTypes.queries[entryType]
 
+    if (!entryQuery) {
+        return null
+    }
+
     const data = await entryQuery(slug, entryType, sectionHandle, previewToken)
 
     return data
+}
+
+
+export async function fetchMetadataFromCraft(uri: string) {
+    
+    // Fetch the metadata for the current page
+    const metaDataQuery = await GraphQL(
+        `query($uri:[String]){
+            entry: entry(status: "enabled", uri: $uri) {
+                seomatic(asArray: true) {
+                    metaJsonLdContainer
+                    metaLinkContainer
+                    metaScriptContainer
+                    metaSiteVarsContainer
+                    metaTagContainer
+                    metaTitleContainer
+                }
+            }
+        }`,
+        {uri},
+    )
+
+    if (!metaDataQuery.entry) {
+        notFound()
+    }
+   
+    return getMetadata(metaDataQuery.entry.seomatic);
 }

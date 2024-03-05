@@ -55,9 +55,7 @@ const ListPublicationsBlock = ({block}: Props) => {
                         }
                         
                         return (
-                            <Card entry={cardData} key={index}>
-                                <ExternalLinkIcon className="w-6 h-6" />
-                            </Card>
+                            <Card entry={cardData} key={index} animatedIcon={<ExternalLinkIcon className="w-6 h-6" />}/>
                         )
                     })}
 

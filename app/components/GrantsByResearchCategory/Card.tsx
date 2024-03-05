@@ -71,7 +71,7 @@ export default function GrantsByResearchCategoryCard() {
             </h3>
 
             <p className="text-brand-grey-500">
-                We developed a classification of research categories with 13
+                We developed a classification of research categories with 12
                 broad categories by expanding &ldquo;A Coordinated Global
                 Research Roadmap: 2019 Novel Coronavirus&rdquo; created by the
                 R&amp;D Blue Print. All collected funding data are summarised
@@ -83,8 +83,8 @@ export default function GrantsByResearchCategoryCard() {
     return (
         <VisualisationCard
             id="grants-by-research-category"
-            title="Global distribution of funding for research categories"
-            subtitle="Total number of grants and US dollars committed for research across research categories"
+            title="Global Distribution of Grants by Research Area"
+            subtitle="The chart shows the total amount of funding allocated for different research areas for all diseases. Use filters on the left for advanced filtering depending on your interests."
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
             tabs={tabs}

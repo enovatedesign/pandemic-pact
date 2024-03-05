@@ -37,6 +37,10 @@ export const links = {
                 href: '/about/meet-the-team',
             },
             {
+                label: 'Partners and collaborators',
+                href: '/about/partners-and-collaborators',
+            },
+            {
                 label: 'Funders',
                 href: '/about/funders',
             },
@@ -61,18 +65,8 @@ export const getFooterLinksArray = () => {
     return Object.values(footerLinks)
 }
 
-export const footerLinksFirstCollection = [
-    { label: 'A link to something', href: '/' },
-    { label: 'Another link to something else', href: '/' },
-    { label: 'Link that goes to a page', href: '/' },
-    { label: 'Another page with link', href: '/' },
-    { label: 'Link again isn\'t it', href: '/' },
-]
-
 export const footerLinksSecondCollection = [
-    { label: 'A link to something', href: '/' },
-    { label: 'Another link to something else', href: '/' },
-    { label: 'Link that goes to a page', href: '/' },
-    { label: 'Another page with link', href: '/' },
-    { label: 'Link again isn\'t it', href: '/' },
+    { label: 'GloPID-R website', href: 'https://www.glopid-r.org/' },
+    { label: 'UKCDR website', href: 'https://ukcdr.org.uk/' },
+    { label: 'Pandemic Sciences Institute website', href: 'https://www.psi.ox.ac.uk/' },
 ]

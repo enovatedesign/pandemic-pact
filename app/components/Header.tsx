@@ -118,7 +118,7 @@ export default function Header({ className, showMobileNav }: Props ) {
                                                     duration={300}
                                                     height={activeIndex === index || isVisible ? 'auto' : 0}
                                                 >
-                                                    <ul className='lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-60 lg:shadow-xl lg:flex lg:flex-col lg:rounded-2xl lg:p-2'>
+                                                    <ul className='lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-64 lg:shadow-xl lg:flex lg:flex-col lg:rounded-2xl lg:p-2'>
                                                         {link.subPages.map((subPage, index) => {
                                                             return (
                                                                 <NavSubPages

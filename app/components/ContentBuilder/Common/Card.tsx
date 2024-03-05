@@ -9,7 +9,8 @@ import dayjs from 'dayjs'
 type Props = {
     entry: any,
     tags?: boolean, 
-    children?: React.ReactNode,
+    animatedIcon?: React.ReactNode,
+    cardBottomContent?: React.ReactNode
     image?: {
         altText: string,
         url: string, 
@@ -20,7 +21,15 @@ type Props = {
     customImageClasses?: string,
 }
 
-const Card = ({entry, tags = false, children, image, customImageClasses = "w-full"}: Props) => {
+const CardBottomContent = ({ cardBottomContent }: { cardBottomContent?: React.ReactNode }) => {
+    return (
+        <>  
+            {cardBottomContent}
+        </>
+    )
+}
+
+const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, customImageClasses = "w-full"}: Props) => {
     
     const {
         index,
@@ -60,7 +69,6 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
             once: true,
         }
     );
-
     return (
         <animated.article key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden [perspective:1000px] group ${hoverClasses}`}
@@ -130,19 +138,25 @@ const Card = ({entry, tags = false, children, image, customImageClasses = "w-ful
                                 </p>
                             )}
 
-                            {children && (
-                                <div className="relative h-12 w-12" aria-hidden="true">
-                                    <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
-                                        <span>
-                                            {children}
-                                        </span>
+                            {cardBottomContent && (
+                                <CardBottomContent cardBottomContent={cardBottomContent}/>
+                            )}
+
+                            {animatedIcon && (
+                                <>
+                                    <div className="relative h-12 w-12" aria-hidden="true">
+                                        <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
+                                            <span>
+                                                {animatedIcon}
+                                            </span>
+                                        </div>
+                                        <div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
+                                            <span>
+                                                {animatedIcon}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
-                                        <span>
-                                            {children}
-                                        </span>
-                                    </div>
-                                </div>
+                                </>
                             )}
                         </div>
 

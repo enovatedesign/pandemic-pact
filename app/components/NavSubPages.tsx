@@ -11,7 +11,7 @@ const NavSubPages = ({subPage, pathname}: Props) => {
     const {label, href} = subPage
     
     const smClasses = 'text-left px-3 py-2'
-    const lgClasses = 'lg:text-right'
+    const lgClasses = 'lg:text-right lg:whitespace-nowrap'
 
     return (
         <li>

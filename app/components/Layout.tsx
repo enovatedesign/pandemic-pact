@@ -33,24 +33,30 @@ const Layout = ({
     mastheadContent,
     children,
 }: Props) => {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
-    const sidebarWidth = 400
-    const duration = 50
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
 
     const [showMobileNav, setShowMobileNav] = useState(false)
 
+    const [sidebarTransitionDuration, setSidebarTransitionDuration] = useState(0)
+    const [sidebarWidth, setSidebarWidth] = useState(0)
+    const [showClosedContent, setShowClosedContent] = useState(false)
+
     const baseAnimationConfig = {
-        delay: sidebarOpen ? 0 : duration,
-        config: { duration },
+        delay: sidebarOpen ? 0 : sidebarTransitionDuration,
+        config: { 
+            duration: sidebarTransitionDuration
+        },
     }
 
     const transformAnimationProps = useSpring({
-        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transform: sidebarOpen && sidebarWidth > 0 ? 'translateX(0)' : 'translateX(-100%)',
         ...baseAnimationConfig,
     })
 
     const widthAnimationProps = useSpring({
-        width: sidebarOpen ? sidebarWidth : 0,
+        width: sidebarOpen ? 400 : sidebarWidth,
         ...baseAnimationConfig,
     })
 
@@ -69,27 +75,33 @@ const Layout = ({
     }
 
     useEffect(() => {
-        const windowX = window.innerWidth
+        const setSidebarBooleanValue = () => setSidebarOpen(window.innerWidth >= 1024);
         
-        const handleSidebar = () => {
-            if (windowX < 1024) {
-                setSidebarOpen(false)
-            } else {
-                setSidebarOpen(true)
-            }
-        }
+        const handleResize = debounce(() => {
+            setSidebarBooleanValue();
+        }, 200);
 
-        const debouncedSidebar = debounce(handleSidebar, 200)
-
+        window.addEventListener('resize', handleResize);
+        
         if (document.readyState === 'complete') {
-            debouncedSidebar()
+            setSidebarBooleanValue()
+            setShowClosedContent(true)
         } else {
-            window.addEventListener('load', debouncedSidebar)
+            window.addEventListener('load', handleResize)
         }
-
-
+        
+        setTimeout(() => {
+            setSidebarTransitionDuration(50)
+            if (sidebarOpen) {
+                setSidebarWidth(400)
+            } else {
+                setSidebarWidth(0)
+            }
+        }, 50)
+        
         return () => {
-            window.removeEventListener('load', debouncedSidebar)
+            window.removeEventListener('load', handleResize)
+            window.removeEventListener('resize', handleResize);
         }
     }, [])
 
@@ -113,7 +125,7 @@ const Layout = ({
             />
 
             <div className={`${sidebar && 'flex'}`}>
-                {sidebar && (
+                {sidebar && showClosedContent && (
                     <animated.aside
                         className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
                         style={transformAnimationProps}
@@ -131,7 +143,7 @@ const Layout = ({
                             </button>
 
                             {!sidebarOpen && sidebar.closedContent}
-
+                            
                             <animated.div
                                 className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${
                                     sidebarOpen
