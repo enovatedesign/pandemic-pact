@@ -15,7 +15,7 @@ const NavSubPages = ({subPage, pathname}: Props) => {
 
     return (
         <li>
-            <a href={href} className={`block ${smClasses} ${lgClasses} ${pathname === href ? 'underline' : ''} text-white lg:text-secondary focus:bg-primary-lightest focus:text-secondary lg:hover:bg-primary-lightest rounded-xl tracking-wider transition-colors duration-300`}>
+            <a href={href} className={`block ${smClasses} ${lgClasses} ${pathname === href ? 'bg-primary-lightest/10' : ''} text-white lg:text-secondary focus:underline lg:hover:bg-primary-lightest rounded-xl tracking-wider transition-colors duration-300`}>
                 {label}
             </a>
         </li>
