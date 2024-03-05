@@ -101,27 +101,27 @@ export default function Publications({ grant }: { grant: any }) {
                                 >
                                     <ul className="py-6 flex flex-col gap-4">
                                         <li className="flex flex-col gap-1">
-                                            <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">
+                                            <h4 className="text-gray-600 uppercase tracking-wider font-bold text-xs">
                                                 Authors
                                             </h4>
-                                            <p className="tracking-wider text-tremor-content-emphasis">
+                                            <p className="tracking-wider text-gray-500">
                                                 {link.authorString}
                                             </p>
                                         </li>
                                         <li className="flex flex-col gap-1">
-                                            <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">
+                                            <h4 className="text-gray-600 uppercase tracking-wider font-bold text-xs">
                                                 Publish Year
                                             </h4>
-                                            <p className="tracking-wider text-tremor-content-emphasis">
+                                            <p className="tracking-wider text-gray-500">
                                                 {link.pubYear}
                                             </p>
                                         </li>
                                         {link.journalInfo?.journal?.title && (
                                             <li className="flex flex-col gap-1">
-                                                <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">
+                                                <h4 className="text-gray-600 uppercase tracking-wider font-bold text-xs">
                                                     Journal
                                                 </h4>
-                                                <p className="tracking-wider text-tremor-content-emphasis">
+                                                <p className="tracking-wider text-gray-500">
                                                     {
                                                         link.journalInfo.journal
                                                             .title
@@ -130,10 +130,10 @@ export default function Publications({ grant }: { grant: any }) {
                                             </li>
                                         )}
                                         <li className="flex flex-col gap-1">
-                                            <h4 className="text-gray-500 uppercase tracking-wider font-bold text-xs">
+                                            <h4 className="text-gray-600 uppercase tracking-wider font-bold text-xs">
                                                 DOI
                                             </h4>
-                                            <p className="tracking-wider text-tremor-content-emphasis">
+                                            <p className="tracking-wider text-gray-500">
                                                 {link.doi}
                                             </p>
                                         </li>

@@ -1,5 +1,4 @@
 import {useState, useContext} from "react"
-import {Icon} from "@tremor/react"
 import {InformationCircleIcon, ArrowLeftIcon} from "@heroicons/react/solid";
 import {BarChart as RechartBarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts'
 import {groupBy} from 'lodash'
@@ -85,17 +84,20 @@ export default function BarChart() {
 
     return (
         <div className="w-full">
-            <div className="flex justify-center items-center">
-                <Icon
-                    size={selectedRegion ? 'md' : 'lg'}
-                    icon={selectedRegion ? ArrowLeftIcon : InformationCircleIcon}
-                    className={selectedRegion ? 'cursor-pointer mr-4' : 'cursor-default'}
-                    variant={selectedRegion ? 'shadow' : 'simple'}
-                    color="slate"
-                    onClick={handleIconClick}
-                />
+            <div className="flex justify-center items-center gap-x-2">
+                <button onClick={handleIconClick} className="flex items-center">
+                    {selectedRegion ? (
+                        <span className="cursor-pointer mr-4 bg-brand-grey-200 p-1.5 rounded-md shadow-lg">
+                            <ArrowLeftIcon className="size-6 text-brand-grey-500"/>
+                        </span>
+                    ) : (
+                        <span className="cursor-default">
+                            <InformationCircleIcon className="size-7 text-brand-grey-500"/>
+                        </span>
+                    )}
+                </button>
 
-                <p className="text-gray-500">
+                <p className="text-brand-grey-500">
                     {selectedRegion ? `Viewing Countries in ${selectedRegionName}.` : 'Click a region bar to expand to countries'}
                 </p>
             </div>

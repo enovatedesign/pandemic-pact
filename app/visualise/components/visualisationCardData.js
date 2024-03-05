@@ -5,7 +5,7 @@ export const visualisationCardData  = [
         url: '#disease',
         image: {
             url: '/images/visualisation-card/vis-bar-chart.png',
-            altText: 'Disease card',
+            altText: 'Illustration of a bar chart',
             width: 480,
             height: 480,
         }
@@ -16,7 +16,7 @@ export const visualisationCardData  = [
         url: '#research-category',
         image: {
             url: '/images/visualisation-card/vis-category-chart.png',
-            altText: 'Visualisations Card',
+            altText: 'Illustration of a horizontal bar chart',
             width: 480,
             height: 480,
         }
@@ -27,7 +27,7 @@ export const visualisationCardData  = [
         url: '#geographical-distribution',
         image: {
             url: '/images/visualisation-card/vis-radar-chart.png',
-            altText: 'Graphical distribution and flow card',
+            altText: 'Illustration of a radar chart',
             width: 480,
             height: 480,
         }
@@ -38,18 +38,18 @@ export const visualisationCardData  = [
         url: '#annual-trends',
         image: {
             url: '/images/visualisation-card/vis-line-chart.png',
-            altText: 'Visualisations Card',
+            altText: 'Illustration of a line chart',
             width: 300,
             height: 300,
         }
     },
     {
-        title: 'Policy Roadmap Card',
-        summary: 'In progress: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.',
+        title: 'Policy Roadmaps',
+        summary: 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.',
         url: null,
         image: {
             url: '/images/visualisation-card/vis-road-maps.png',
-            altText: 'Policy Roadmap Card ',
+            altText: 'Illustration of a road with central road markings going into the distance',
             width: 300,
             height: 300,
         }
