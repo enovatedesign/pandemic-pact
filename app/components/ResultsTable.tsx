@@ -58,9 +58,7 @@ export default function ResultsTable({ searchResponse }: Props) {
 
                             <SearchResult 
                                 result={result} 
-                                index={index} 
-                                activeIndex={activeIndex} 
-                                setActiveIndex={setActiveIndex} 
+                                href={href}
                             />
                             
                         </article>

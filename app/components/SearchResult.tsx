@@ -1,8 +1,7 @@
 'use client'
 
 import { SearchResult } from '../helpers/search'
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
-import AnimateHeight from 'react-animate-height'
+import { EyeIcon } from '@heroicons/react/solid'
 import RichText from './ContentBuilder/Common/RichText'
 import Button from './Button'
 import { dollarValueFormatter } from '../helpers/value-formatters'
@@ -12,16 +11,12 @@ import '../css/components/highlighted-search-results.css'
 
 interface SearchMatchesProps {
     result: SearchResult
-    index: number
-    activeIndex: number
-    setActiveIndex: any
+    href: string
 }
 
 export default function SearchResult({
     result,
-    index,
-    activeIndex,
-    setActiveIndex,
+    href
 }: SearchMatchesProps) {
     const countMatches = (highlights: string[]) => {
         return highlights.reduce((total, highlight) => {
@@ -72,10 +67,6 @@ export default function SearchResult({
 
     const iconClasses = 'w-4 h-4 lg:w-6 lg:h-6 text-white'
 
-    const handleClick = () => {
-        activeIndex !== index ? setActiveIndex(index) : setActiveIndex(-1)
-    }
-
     const grantAmountConverted =
         typeof result._source.GrantAmountConverted === 'number'
             ? dollarValueFormatter(result._source.GrantAmountConverted)
@@ -120,67 +111,58 @@ export default function SearchResult({
 
                 <div className="row-span-1 lg:row-start-1 lg:col-start-10 lg:col-span-3 flex items-center">
                     <Button
-                        onClick={handleClick}
+                        href={href}
                         size="xsmall"
                         colour="secondary"
                         customClasses="w-full uppercase flex justify-between space-x-2 border-2 border-secondary hover:border-primary transition duration-300"
                     >
                         <span className="inline-flex text-white text-sm lg:text-base whitespace-nowrap">
-                            {activeIndex !== index ? 'See more' : 'See less'}
+                            See Full Grant Record
                         </span>
-                        {activeIndex !== index ? (
-                            <EyeIcon className={iconClasses} />
-                        ) : (
-                            <EyeOffIcon className={iconClasses} />
-                        )}
+                        <EyeIcon className={iconClasses} />
                     </Button>
                 </div>
             </div>
 
-            <AnimateHeight
-                duration={300}
-                height={activeIndex === index ? 'auto' : 0}
-            >
-                <div className="grid grid-cols-4 gap-4 lg:gap-8 pt-4">
-                    
-                    <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-xl">
-                        <h4 className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
-                            Abstract { result.highlight?.Abstract?.length > 1 && 'Excerpt'}
-                        </h4>
-                            {result.highlight?.Abstract?.length > 1 ? (
-                                <RichText
-                                    text={
-                                        '&#8230; ' +
-                                        result.highlight.Abstract.join(
-                                            ' &#8230; '
-                                        ) +
-                                        ' &#8230;'
-                                    }
-                                    customClasses="max-w-none"
-                                />
-                            ) : (
-                                    <p className='line-clamp-6'>{result._source.Abstract}</p>
-                            )}
-                    </div>
-
-                    <div className="col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col">
-                        <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
-                            <span className="uppercase text-xs tracking-widest font-bold">
-                                Amount committed (USD)<span className="sr-only">:</span>
-                            </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
-                                {grantAmountConverted}
-                            </span>
-                        </p>
-                        <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
-                            <span className="uppercase text-xs tracking-widest font-bold">
-                                Start Year<span className="sr-only">:</span>
-                            </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
-                                {result._source.GrantStartYear}
-                            </span>
-                        </p>
-                    </div>
+            <div className="grid grid-cols-4 gap-4 lg:gap-8 pt-4">
+                
+                <div className="row-start-2 lg:row-start-1 col-span-4 lg:col-span-3 p-4 bg-white/60 rounded-xl">
+                    <h4 className="pb-2 lg:pb-3 uppercase tracking-widest font-bold text-sm">
+                        Abstract { result.highlight?.Abstract?.length > 1 && 'Excerpt'}
+                    </h4>
+                        {result.highlight?.Abstract?.length > 1 ? (
+                            <RichText
+                                text={
+                                    '&#8230; ' +
+                                    result.highlight.Abstract.join(
+                                        ' &#8230; '
+                                    ) +
+                                    ' &#8230;'
+                                }
+                                customClasses="max-w-none"
+                            />
+                        ) : (
+                                <p className='line-clamp-6'>{result._source.Abstract}</p>
+                        )}
                 </div>
-            </AnimateHeight>
+
+                <div className="col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col">
+                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                        <span className="uppercase text-xs tracking-widest font-bold">
+                            Amount committed (USD)<span className="sr-only">:</span>
+                        </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
+                            {grantAmountConverted}
+                        </span>
+                    </p>
+                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                        <span className="uppercase text-xs tracking-widest font-bold">
+                            Start Year<span className="sr-only">:</span>
+                        </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
+                            {result._source.GrantStartYear}
+                        </span>
+                    </p>
+                </div>
+            </div>
         </div>
     )
 }
