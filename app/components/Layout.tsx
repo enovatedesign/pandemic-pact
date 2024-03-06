@@ -38,25 +38,22 @@ const Layout = ({
 
 
     const [showMobileNav, setShowMobileNav] = useState(false)
-
-    const [sidebarTransitionDuration, setSidebarTransitionDuration] = useState(0)
-    const [sidebarWidth, setSidebarWidth] = useState(0)
     const [showClosedContent, setShowClosedContent] = useState(false)
 
     const baseAnimationConfig = {
-        delay: sidebarOpen ? 0 : sidebarTransitionDuration,
+        delay: 0,
         config: { 
-            duration: sidebarTransitionDuration
+            duration: 200
         },
     }
 
     const transformAnimationProps = useSpring({
-        transform: sidebarOpen && sidebarWidth > 0 ? 'translateX(0)' : 'translateX(-100%)',
+        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
         ...baseAnimationConfig,
     })
 
     const widthAnimationProps = useSpring({
-        width: sidebarOpen ? 400 : sidebarWidth,
+        width: sidebarOpen ? 400 : 0,
         ...baseAnimationConfig,
     })
 
@@ -75,7 +72,10 @@ const Layout = ({
     }
 
     useEffect(() => {
-        const setSidebarBooleanValue = () => setSidebarOpen(window.innerWidth >= 1024);
+        const setSidebarBooleanValue = () => {
+            setSidebarOpen(window.innerWidth >= 1024);
+            setShowClosedContent(window.innerWidth >= 1024)
+        } 
         
         const handleResize = debounce(() => {
             setSidebarBooleanValue();
@@ -85,26 +85,16 @@ const Layout = ({
         
         if (document.readyState === 'complete') {
             setSidebarBooleanValue()
-            setShowClosedContent(true)
         } else {
             window.addEventListener('load', handleResize)
         }
-        
-        setTimeout(() => {
-            setSidebarTransitionDuration(50)
-            if (sidebarOpen) {
-                setSidebarWidth(400)
-            } else {
-                setSidebarWidth(0)
-            }
-        }, 50)
         
         return () => {
             window.removeEventListener('load', handleResize)
             window.removeEventListener('resize', handleResize);
         }
     }, [])
-
+    
     return (
         <>
             <div id="skiplink-container">
@@ -125,7 +115,7 @@ const Layout = ({
             />
 
             <div className={`${sidebar && 'flex'}`}>
-                {sidebar && showClosedContent && (
+                {sidebar && (
                     <animated.aside
                         className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
                         style={transformAnimationProps}
@@ -142,7 +132,7 @@ const Layout = ({
                                 />
                             </button>
 
-                            {!sidebarOpen && sidebar.closedContent}
+                            {showClosedContent && !sidebarOpen && sidebar.closedContent}
                             
                             <animated.div
                                 className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${
