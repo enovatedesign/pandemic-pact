@@ -19,9 +19,15 @@ export default async function craft(query: string, variables: Record<string, unk
         (request.headers as any)['X-Craft-Token'] = previewToken;
     }
 
-    // Don't cache GraphQL requests in development or test environments
-    // or if there's a preview token
-    if (process.env.NODE_ENV !== 'production' || previewToken) {
+    // Don't cache GraphQL requests:
+    // * In dev or test environments
+    // * In the build step
+    // * If there's a preview token
+    if (
+        process.env.NODE_ENV !== 'production' ||
+        process.env.CI ||
+        previewToken
+    ) {
         request.cache = 'no-store';
     }
 
