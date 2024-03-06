@@ -50,6 +50,11 @@ export default function Header({ className, showMobileNav }: Props ) {
         showMobileNav ? 'translate-y-none transition duration-500' : 'translate-y-full transition duration-500 delay-500'
     ].join(' ')
 
+    const navUnorderedListClasses = [
+        "pb-24 px-6 w-full max-h-screen overflow-y-auto mt-auto",
+        "lg:px-10 lg:relative lg:flex lg:gap-x-10 lg:py-3 lg:overflow-y-visible",
+    ].join(' ')
+
     // delay-[50ms] delay-[100ms] delay-[150ms] delay-[200ms] delay-[250ms] delay-[300ms] delay-[350ms] delay-[400ms] delay-[450ms] delay-[500ms] 
     // delay-[550ms] delay-[600ms] delay-[650ms] delay-[700ms] delay-[750ms] delay-[800ms] delay-[850ms] delay-[900ms] delay-[950ms] delay-[1000ms]
 
@@ -88,9 +93,9 @@ export default function Header({ className, showMobileNav }: Props ) {
 
                     <div className="flex items-center rounded-full border border-primary/25 inner-glow">
                         <nav ref={navRef}
-                            className={`${mobileTransitionClasses} h-d-screen w-full bg-secondary fixed top-0 inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
+                            className={`${mobileTransitionClasses} h-d-screen w-full bg-secondary fixed top-0 flex inset-0 z-20 lg:relative lg:bg-transparent lg:h-auto lg:translate-y-0 lg:duration-0`}
                         >
-                            <ul className="pb-24 px-6 absolute bottom-0 w-full lg:px-10 lg:relative lg:flex lg:gap-x-10 lg:py-3">
+                            <ul className={navUnorderedListClasses}>
                                 {links.map((link, index) => {
 
                                     const handleClick = (event: any) => {
