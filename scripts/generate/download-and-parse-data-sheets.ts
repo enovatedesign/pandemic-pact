@@ -8,7 +8,7 @@ export default async function () {
     fs.emptyDirSync('data/download')
 
     await downloadCsvAndConvertToJson(
-        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/dictionary-2024-03-02.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/dictionary-2024-03-07.csv',
         'dictionary.json'
     )
 
@@ -18,7 +18,7 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/raw-grant-data-2024-03-02.csv',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/raw-grant-data-2024-03-07.csv',
         'grants.json'
     )
 }
