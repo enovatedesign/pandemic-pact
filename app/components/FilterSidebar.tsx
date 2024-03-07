@@ -103,7 +103,7 @@ export default function FilterSidebar({
                 </div>
             </AnimateHeight>
 
-            <div className="flex items-center justify-between w-full">
+            <div className="pb-20 lg:pb-0 flex items-center justify-between w-full">
                 <Button
                     size="xsmall"
                     customClasses="mt-3 flex items-center gap-1"

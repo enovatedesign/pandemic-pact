@@ -123,7 +123,7 @@ const Layout = ({
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="p-6 text-primary hover:text-white duration-300 transition-colors"
+                                className="hidden lg:block p-6 text-primary hover:text-white duration-300 transition-colors"
                             >
                                 <span className="sr-only">Filters</span>
                                 <AdjustmentsIcon
@@ -135,7 +135,7 @@ const Layout = ({
                             {showClosedContent && !sidebarOpen && sidebar.closedContent}
                             
                             <animated.div
-                                className={`grow pb-6 px-6 max-w-[100vw] overflow-x-hidden ${
+                                className={`grow p-6 max-w-[100vw] overflow-x-hidden ${
                                     sidebarOpen
                                         ? 'overflow-y-auto'
                                         : 'overflow-y-hidden'
