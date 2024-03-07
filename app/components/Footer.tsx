@@ -57,9 +57,9 @@ export default function Header() {
                             <ul className="flex flex-col gap-2 sm:gap-3">
                                 {linksSecondCollection.map((link, index) => (
                                     <li key={index}>
-                                        <a href={link.href} rel="nofollow external noopener noreferrer" target="_blank" className='text-gray-700 hover:underline flex gap-x-1 items-center'>
+                                        <a href={link.href} rel="nofollow external noopener noreferrer" target="_blank" className='text-gray-700 hover:underline'>
                                             {link.label}
-                                            <ExternalLinkIcon className="text-gray-700 size-5" />
+                                            <ExternalLinkIcon className="inline-block ml-1 -translate-y-0.5 text-gray-700 size-5" />
                                         </a>
                                     </li>
                                 ))}
@@ -99,9 +99,9 @@ export default function Header() {
                 </div>
 
                 <div className="mt-12 bg-white py-6 px-8 rounded-xl border-2 border-gray-200">
-                    <div className="grid grid-cols-1 gap-4 xl:gap-10 xl:grid-cols-3 xl:items-center xl:justify-between">
-                        <FooterCopyrightStatement className="col-span-2 text-center xl:text-left text-gray-700" />
-                        <div className="print:hidden">
+                    <div className="flex flex-col items-center gap-y-4 xl:grid xl:gap-10 xl:grid-cols-5 xl:items-center xl:justify-between">
+                        <FooterCopyrightStatement className="col-span-3 text-center xl:text-left text-gray-700" />
+                        <div className="print:hidden xl:col-span-2">
                             <FooterMenu />
                         </div>
                     </div>
