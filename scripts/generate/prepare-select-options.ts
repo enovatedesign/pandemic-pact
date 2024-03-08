@@ -5,6 +5,7 @@ import { convertSourceKeysToOurKeys } from '../helpers/key-mapping'
 
 type Row = { [key: string]: string }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default function () {
     title('Generating select options')
 

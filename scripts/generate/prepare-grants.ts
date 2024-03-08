@@ -4,12 +4,23 @@ import { RawGrant } from '../types/generate'
 import { convertSourceKeysToOurKeys } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 
+type Row = { [key: string]: string }
+
+// eslint-disable-next-line import/no-anonymous-default-export
 export default function () {
     title('Preparing grants')
 
     const rawGrants: RawGrant[] = fs.readJsonSync('./data/download/grants.json')
 
-    const headings = Object.keys(rawGrants[0])
+    const dictionary: Row[] = fs.readJsonSync('./data/download/dictionary.json')
+
+    // Get the keys from the first grant in our parsed Grants JSON data
+    const dataHeadings = Object.keys(rawGrants[0])
+    // Also, get the keys from the dictionary
+    const dictionaryHeadings = dictionary.map(row => row['Variable / Field Name'])
+
+    // Merge them and remove duplicates
+    const headings = _.uniq([...dictionaryHeadings, ...dataHeadings])
 
     const checkboxAndTextFields = _.partition(headings, heading =>
         heading.includes('___')

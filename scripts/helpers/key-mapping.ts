@@ -8,6 +8,7 @@ export const keyMapping: {[key: string]: string} = {
     'abstract': 'Abstract',
     'grant_start_year': 'GrantStartYear',
     'grant_end_year': 'GrantEndYear',
+    'publication_year_of_award': 'PublicationYearOfAward',
     'study_subject': 'StudySubject',
     'ethnicity': 'Ethnicity',
     'age_groups': 'AgeGroups',
