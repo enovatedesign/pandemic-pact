@@ -45,9 +45,12 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
     const datasetGroupedByYear = groupBy(
         filteredDataset
-            .filter((grant: any) => grant.GrantStartYear?.match(/^\d{4}$/))
-            .filter((grant: any) => Number(grant.GrantStartYear) >= 2020),
-        'GrantStartYear'
+            .filter((grant: any) => 
+                grant?.TrendStartYear && 
+                !isNaN(grant.TrendStartYear) && 
+                grant.TrendStartYear >= 2020
+            ),
+            'TrendStartYear'
     )
 
     const showingAllResearchCategories = selectedResearchCategories.length === 0
