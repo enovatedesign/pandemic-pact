@@ -44,9 +44,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     })
 
     const datasetGroupedByYear = groupBy(
-        filteredDataset.filter((grants: any) =>
-            grants.GrantStartYear?.match(/^\d{4}$/)
-        ),
+        filteredDataset
+            .filter((grant: any) => grant.GrantStartYear?.match(/^\d{4}$/))
+            .filter((grant: any) => Number(grant.GrantStartYear) >= 2020),
         'GrantStartYear'
     )
 
@@ -71,9 +71,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
         let dataPoint: { [key: string]: string | number } = { year }
 
-        if (showingAllResearchCategories) {
-            dataPoint['All Research Categories'] = grants.reduce(
-                ...sumNumericGrantAmounts
+            if (showingAllResearchCategories) {
+                dataPoint['All Research Categories'] = grants.reduce(
+                    ...sumNumericGrantAmounts
             )
         } else {
             selectedResearchCategoryOptions.forEach(
