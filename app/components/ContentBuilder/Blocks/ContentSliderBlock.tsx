@@ -52,17 +52,15 @@ const ContentSliderBlock = ({block}: Props ) => {
                             const button = slide.button ?? null
 
                             return (
-                                <>
-                                    <SwiperSlide key={index}>
-                                        <Card 
-                                            entry={slide} 
-                                            image={slide.image[0]} 
-                                            hover={false} 
-                                            cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>Read more</Button>} 
-                                        >
-                                        </Card>
-                                    </SwiperSlide>
-                                </>
+                                <SwiperSlide key={index}>
+                                    <Card 
+                                        entry={slide} 
+                                        image={slide.image[0]} 
+                                        hover={false} 
+                                        cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>Read more</Button>} 
+                                    >
+                                    </Card>
+                                </SwiperSlide>
                             )
                         })}
                     </Swiper>
