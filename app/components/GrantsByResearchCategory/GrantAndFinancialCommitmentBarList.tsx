@@ -1,4 +1,4 @@
-import { Fragment, useContext, MouseEvent } from 'react'
+import { Fragment, useContext, useState, MouseEvent } from 'react'
 import {
     BarChart as RechartBarChart,
     Bar,
@@ -33,6 +33,8 @@ export function GrantAndFinancialCommitmentBarList({
 }: Props) {
     const { tooltipRef } = useContext(TooltipContext)
 
+    const [selectedCategory, setSelectedCategory] = useState<string | null>()
+
     const maxTotalNumberOfGrants = Math.max(
         ...data.map((data: any) => data['Total Grants'])
     )
@@ -63,7 +65,7 @@ export function GrantAndFinancialCommitmentBarList({
 
     return (
         <>
-            <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
+            <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
                     <p className="text-lg text-brand-grey-500">
                         Number of grants
@@ -87,15 +89,17 @@ export function GrantAndFinancialCommitmentBarList({
                     </div>
                 </div>
 
+                <div className="col-span-1"></div>
+
                 {data.map((datum: any) => (
                     <Fragment key={datum['Category Value']}>
-                        <div className="self-center mt-1 col-span-4 first:mt-0">
+                        <div className="self-center mt-1 col-span-5 first:mt-0">
                             <p className="text-gray-600 text-sm">
                                 {datum['Category Label']}
                             </p>
                         </div>
 
-                        <div className="col-span-3 md:col-span-1">
+                        <div className="col-span-4 md:col-span-1">
                             <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[datum]}
@@ -156,13 +160,13 @@ export function GrantAndFinancialCommitmentBarList({
                             </ResponsiveContainer>
                         </div>
 
-                        <div className="self-center pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
+                        <div className="self-center pl-2 md:pr-6 col-span-1 justify-self-end">
                             <p className="text-xs text-gray-600">
                                 {datum['Total Grants']}
                             </p>
                         </div>
 
-                        <div className="col-span-3 md:col-span-1">
+                        <div className="col-span-4 md:col-span-1">
                             <ResponsiveContainer width="100%" height={20}>
                                 <RechartBarChart
                                     data={[datum]}
@@ -214,12 +218,22 @@ export function GrantAndFinancialCommitmentBarList({
                             </ResponsiveContainer>
                         </div>
 
-                        <div className="self-center pl-2 col-span-1 md:col-span-1 justify-self-end">
+                        <div className="self-center pl-2 col-span-1 justify-self-end">
                             <p className="text-xs text-gray-600">
                                 {dollarValueFormatter(
                                     datum['Known Financial Commitments (USD)']
                                 )}
                             </p>
+                        </div>
+
+                        <div className="self-center pl-2 col-span-1 justify-self-end">
+                            <button
+                                onClick={() =>
+                                    setSelectedCategory(datum['Category Value'])
+                                }
+                            >
+                                Show Subcategories
+                            </button>
                         </div>
                     </Fragment>
                 ))}
