@@ -12,8 +12,13 @@ export default function TemporalChart() {
     const {grants} = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
-        grants.filter((grants: any) => grants.GrantStartYear?.match(/^\d{4}$/)),
-        'GrantStartYear',
+        grants
+            .filter((grant: any) => 
+                grant?.TrendStartYear && 
+                !isNaN(grant.TrendStartYear) && 
+                grant.TrendStartYear >= 2020
+            ),
+            'TrendStartYear'
     )
 
     const amountCommittedToEachDiseaseOverTime = Object.keys(
