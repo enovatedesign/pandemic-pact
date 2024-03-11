@@ -83,9 +83,19 @@ export default function () {
         })
         
         // Add custom data fields of our own
-        const customFields = {
-            // Add 'TrendStartYear' for FundingAmountsForEachResearchCategoryOverTime visualisation
+        let customFields = {
+            // Add 'TrendStartYear' default value if 'grant_start_year' is missing
             TrendStartYear: Number(rawGrant.grant_start_year ?? rawGrant.publication_year_of_award),
+        }        
+
+        // If we have a 'grant_start_year' and it's a valid year, but before 2020
+        // use 'publication_year_of_award' instead. Also, if it's a NaN year 
+        // use 'publication_year_of_award' instead too.
+        if (rawGrant?.grant_start_year) {
+            const year = Number(rawGrant.grant_start_year);
+            if ((!isNaN(year) && year < 2020) || isNaN(year)) {
+                customFields.TrendStartYear = Number(rawGrant.publication_year_of_award)
+            }
         }
 
         return {
