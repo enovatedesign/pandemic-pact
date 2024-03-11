@@ -50,7 +50,7 @@ function SubCategoryBarChart({
     ).map(function (researchSubCategory) {
         const grantsWithKnownAmounts = grants
             .filter((grant: any) =>
-                grant.ResearchCat.includes(researchSubCategory.value)
+                grant.ResearchSubcat.includes(researchSubCategory.value)
             )
             .filter(
                 (grant: any) => typeof grant.GrantAmountConverted === 'number'
@@ -58,7 +58,7 @@ function SubCategoryBarChart({
 
         const grantsWithUnspecifiedAmounts = grants
             .filter((grant: any) =>
-                grant.ResearchCat.includes(researchSubCategory.value)
+                grant.ResearchSubcat.includes(researchSubCategory.value)
             )
             .filter(
                 (grant: any) => typeof grant.GrantAmountConverted !== 'number'
