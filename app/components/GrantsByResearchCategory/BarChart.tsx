@@ -1,18 +1,15 @@
 import {
     GrantAndFinancialCommitmentBarList,
     GrantAndFinancialCommitmentBarListData,
-} from './GrantAndFinancialCommitmentBarList'
+} from "../GrantAndFinancialCommitmentBarList"
 
-import {
-    researchCategoryColours,
-    researchCategoryDimColours,
-} from '../../helpers/colours'
+import {researchCategoryColours, researchCategoryDimColours} from "../../helpers/colours"
 
 interface Props {
-    chartData: GrantAndFinancialCommitmentBarListData
+    chartData: GrantAndFinancialCommitmentBarListData,
 }
 
-export default function BarChart({ chartData }: Props) {
+export default function BarChart({chartData}: Props) {
     return (
         <GrantAndFinancialCommitmentBarList
             data={chartData}
