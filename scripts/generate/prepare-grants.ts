@@ -75,12 +75,23 @@ export default function () {
             ])
         )
 
-        return convertSourceKeysToOurKeys({
+        const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
             ...numericFieldValues,
             ...checkBoxFieldValues,
             ...commaSeparatedFieldValues,
         })
+        
+        // Add custom data fields of our own
+        const customFields = {
+            // Add 'TrendStartYear' for FundingAmountsForEachResearchCategoryOverTime visualisation
+            TrendStartYear: Number(rawGrant.grant_start_year ?? rawGrant.publication_year_of_award),
+        }
+
+        return {
+            ...convertedKeysGrantData,
+            ...customFields,
+        }
     })
 
     const pathname = './data/dist/grants.json'
