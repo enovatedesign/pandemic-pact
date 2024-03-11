@@ -5,7 +5,7 @@ export default async function craft(query: string, variables: Record<string, unk
 
     const request: RequestInit = {
         method: "POST",
-        cache: 'no-store',
+        // cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${API_TOKEN}`
@@ -24,13 +24,13 @@ export default async function craft(query: string, variables: Record<string, unk
     // * In dev or test environments
     // * In the build step
     // * If there's a preview token
-    // if (
-    //     process.env.NODE_ENV !== 'production' ||
-    //     process.env.CI ||
-    //     previewToken
-    // ) {
-    //     request.cache = 'no-store';
-    // }
+    if (
+        process.env.NODE_ENV !== 'production' ||
+        process.env.CI ||
+        previewToken
+    ) {
+        request.cache = 'no-store';
+    }
 
     const response = await fetch(API_URL as string, request);
 
