@@ -17,18 +17,23 @@ interface Props {
 }
 
 export default function BarChart({ chartData }: Props) {
-    const subCharts = chartData.map(data => {
-        return <SubCategoryBarChart researchCategory={data['Category Value']} />
-    })
-
-    console.log(subCharts)
+    const subCharts = Object.fromEntries(
+        chartData.map(data => {
+            return [
+                data['Category Value'],
+                <SubCategoryBarChart
+                    researchCategory={data['Category Value']}
+                />,
+            ]
+        })
+    )
 
     return (
         <GrantAndFinancialCommitmentBarList
             data={chartData}
             brightColours={researchCategoryColours}
             dimColours={researchCategoryDimColours}
-            // subCharts={subCharts}
+            subCharts={subCharts}
         />
     )
 }
