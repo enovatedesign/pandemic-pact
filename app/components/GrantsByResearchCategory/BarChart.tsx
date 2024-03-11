@@ -10,6 +10,8 @@ import selectOptions from '../../../data/dist/select-options.json'
 import {
     researchCategoryColours,
     researchCategoryDimColours,
+    researchSubCategoryColours,
+    researchSubCategoryDimColours,
 } from '../../helpers/colours'
 
 interface Props {
@@ -85,8 +87,8 @@ function SubCategoryBarChart({
     return (
         <GrantAndFinancialCommitmentBarList
             data={chartData}
-            brightColours={researchCategoryColours}
-            dimColours={researchCategoryDimColours}
+            brightColours={researchSubCategoryColours}
+            dimColours={researchSubCategoryDimColours}
         />
     )
 }
