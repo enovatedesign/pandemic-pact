@@ -24,6 +24,7 @@ export default function BarChart({ chartData }: Props) {
             return [
                 data['Category Value'],
                 <SubCategoryBarChart
+                    key={data['Category Value']}
                     researchCategory={data['Category Value']}
                 />,
             ]
