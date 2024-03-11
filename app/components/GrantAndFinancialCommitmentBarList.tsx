@@ -41,6 +41,14 @@ export function GrantAndFinancialCommitmentBarList({
     )
 
     if (subCharts && selectedSubChart) {
+        const selectedParent = data.find(
+            datum => datum['Category Value'] === selectedSubChart
+        )
+
+        const selectedParentLabel = selectedParent
+            ? `of "${selectedParent['Category Label']}"`
+            : ''
+
         return (
             <>
                 <div className="flex justify-center items-center w-full">
@@ -54,7 +62,7 @@ export function GrantAndFinancialCommitmentBarList({
                     </button>
 
                     <p className="text-brand-grey-500">
-                        Viewing Sub-Categories of X.
+                        Viewing Sub-Categories {selectedParentLabel}
                     </p>
                 </div>
 
