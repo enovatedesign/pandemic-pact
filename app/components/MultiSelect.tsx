@@ -26,7 +26,7 @@ export default function MultiSelect({
 
     const id = useId()
 
-    const defaultValue: Option[] = useMemo(() => {
+    const value: Option[] = useMemo(() => {
         return selectedOptions.map(option => {
             return options.find(o => o.value === option)
         }) as Option[]
@@ -60,7 +60,7 @@ export default function MultiSelect({
             isMulti
             options={options}
             onChange={onChange}
-            defaultValue={defaultValue}
+            value={value}
             placeholder={placeholder ?? 'All'}
             className={`text-black ${className}`}
             instanceId={id}
