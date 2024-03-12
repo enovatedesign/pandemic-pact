@@ -134,7 +134,7 @@ export default function RegionalFlowOfGrantsCard() {
                             <div className="overflow-x-auto">
                                 <div className="inline-block min-w-full align-middle">
                                     <div className="overflow-hidden">
-                                        <ResponsiveContainer height={500} className="px-6 md:px-0">
+                                        <ResponsiveContainer height={500} minWidth={900} className="px-6 md:px-0">
                                             <Sankey
                                                 data={{ nodes, links }}
                                                 nodePadding={30}
