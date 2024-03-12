@@ -39,7 +39,7 @@ export function availableFilters() {
         },
 
         {
-            label: 'Pathogen',
+            label: 'Pathogen Family',
             field: 'Pathogen',
             excludeGrantsWithMultipleItems: {label: 'Exclude Grants with Multiple Pathogens'},
         },
