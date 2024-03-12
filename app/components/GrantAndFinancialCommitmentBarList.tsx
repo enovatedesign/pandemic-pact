@@ -134,7 +134,7 @@ export function GrantAndFinancialCommitmentBarList({
                                 </p>
                                 {subCharts && (
                                     <button
-                                    className="text-gray-600 text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-gray-100 hover:bg-gray-200"
+                                    className="text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
                                     onClick={() =>
                                         setSelectedSubChart(
                                             datum['Category Value']
