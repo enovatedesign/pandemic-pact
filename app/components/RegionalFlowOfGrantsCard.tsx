@@ -124,79 +124,87 @@ export default function RegionalFlowOfGrantsCard() {
             id="regional-flow-of-grants"
             title="Regional Flow of Research Grants"
             subtitle="The chart illustrates the flow of research grants by region, tracing it from funder to research institution and ultimately to the location where the research is conducted."
+            chartInstructions="If the full chart is not visible, please scroll horizontally to view."
             footnote="Please note: Funding amounts are included only when they have been published by the funder. Some research projects are undertaken in multiple locations (countries). Where research location is not explicitly specified the default used is the location of the research institution receiving the funds."
         >
             <div className="w-full">
                 {links.length > 0 && (
-                    <div className="flex flex-col justify-center gap-y-8">
-                        <ResponsiveContainer width="100%" height={500}>
-                            <Sankey
-                                data={{ nodes, links }}
-                                nodePadding={30}
-                                margin={{
-                                    left: 0,
-                                    right: 0,
-                                    top: 40,
-                                    bottom: 80,
-                                }}
-                                node={
-                                    <SankeyNode
-                                        colours={colours}
-                                        displayTotalMoneyCommitted={
-                                            displayTotalMoneyCommitted
-                                        }
-                                        totalNodeGroups={nodeGroups.length}
-                                    />
-                                }
-                                link={<SankeyLink colours={colours} />}
-                            >
-                                <Tooltip
-                                    isAnimationActive={false}
-                                    formatter={tooltipFormatter}
-                                    {...baseTooltipProps}
-                                />
+                    <>
+                        <div className="breakout">
+                            <div className="overflow-x-auto">
+                                <div className="inline-block min-w-full align-middle">
+                                    <div className="overflow-hidden">
+                                        <ResponsiveContainer height={500} className="px-6 md:px-0">
+                                            <Sankey
+                                                data={{ nodes, links }}
+                                                nodePadding={30}
+                                                margin={{
+                                                    left: 0,
+                                                    right: 0,
+                                                    top: 40,
+                                                    bottom: 40,
+                                                }}
+                                                node={
+                                                    <SankeyNode
+                                                    colours={colours}
+                                                    displayTotalMoneyCommitted={
+                                                        displayTotalMoneyCommitted
+                                                    }
+                                                    totalNodeGroups={nodeGroups.length}
+                                                    />
+                                                }
+                                                link={<SankeyLink colours={colours} />}
+                                                >
+                                                <Tooltip
+                                                    isAnimationActive={false}
+                                                    formatter={tooltipFormatter}
+                                                    {...baseTooltipProps}
+                                                    />
 
-                                <text
-                                    x={0}
-                                    y={580}
-                                    fontSize="16"
-                                    fill="#666"
-                                    textAnchor="start"
-                                >
-                                    Funder Region
-                                </text>
+                                                <text
+                                                    x={0}
+                                                    y={580}
+                                                    fontSize="16"
+                                                    fill="#666"
+                                                    textAnchor="start"
+                                                    >
+                                                    Funder Region
+                                                </text>
 
-                                <text
-                                    x="50%"
-                                    y={580}
-                                    fontSize="16"
-                                    fill="#666"
-                                    textAnchor="middle"
-                                >
-                                    Research Institution Region
-                                </text>
+                                                <text
+                                                    x="50%"
+                                                    y={580}
+                                                    fontSize="16"
+                                                    fill="#666"
+                                                    textAnchor="middle"
+                                                    >
+                                                    Research Institution Region
+                                                </text>
 
-                                <text
-                                    x="100%"
-                                    y={580}
-                                    fontSize="16"
-                                    fill="#666"
-                                    textAnchor="end"
-                                >
-                                    Research Location Region
-                                </text>
-                            </Sankey>
-                        </ResponsiveContainer>
-
+                                                <text
+                                                    x="100%"
+                                                    y={580}
+                                                    fontSize="16"
+                                                    fill="#666"
+                                                    textAnchor="end"
+                                                    >
+                                                    Research Location Region
+                                                </text>
+                                            </Sankey>
+                                        </ResponsiveContainer>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
                             leftLabel="Total Number of Grants"
                             rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
-                            className="justify-center"
+                            className="justify-center mt-6"
                         />
-                    </div>
+                    </>
                 )}
 
                 {links.length === 0 && (
