@@ -34,7 +34,7 @@ export function availableFilters() {
         },
 
         {
-            label: 'Disease Family',
+            label: 'Disease',
             field: 'Disease',
         },
 
