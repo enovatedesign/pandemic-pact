@@ -32,14 +32,32 @@ export default function BarChart() {
     let data: any[] = []
 
     if (selectedRegion) {
-        data = Object.entries(
-            groupBy(
-                dataset.filter((grant: any) =>
-                    grant.ResearchInstitutionRegion.includes(selectedRegion)
-                ),
-                'ResearchInstitutionCountry'
+        let grantsGroupedByCountry: any = {}
+
+        dataset
+            .filter((grant: any) =>
+                grant.ResearchInstitutionRegion.includes(selectedRegion)
             )
-        )
+            .forEach((grant: any) => {
+                grant.ResearchInstitutionCountry.forEach((country: string) => {
+                    const selectedRegionCountries =
+                        regionToCountryMapping[
+                            selectedRegion as keyof typeof regionToCountryMapping
+                        ]
+
+                    if (!selectedRegionCountries.includes(country)) {
+                        return
+                    }
+
+                    if (grantsGroupedByCountry[country]) {
+                        grantsGroupedByCountry[country].push(grant)
+                    } else {
+                        grantsGroupedByCountry[country] = [grant]
+                    }
+                })
+            })
+
+        data = Object.entries(grantsGroupedByCountry)
     } else {
         const whoRegions = Object.keys(regionToCountryMapping)
 
