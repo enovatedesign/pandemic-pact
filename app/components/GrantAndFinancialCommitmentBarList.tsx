@@ -128,13 +128,13 @@ export function GrantAndFinancialCommitmentBarList({
                 {data.map((datum: any) => (
                     <Fragment key={datum['Category Value']}>
                         <div className="self-center mt-1 col-span-4 first:mt-0">
-                            <div className="flex flex-col gap-x-2 md:flex-row justify-between">
+                            <div className="flex flex-col gap-x-2 gap-y-1 justify-between md:flex-row">
                                 <p className="text-gray-600 text-sm">
                                     {datum['Category Label']}
                                 </p>
                                 {subCharts && (
                                     <button
-                                    className="text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
+                                    className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
                                     onClick={() =>
                                         setSelectedSubChart(
                                             datum['Category Value']
