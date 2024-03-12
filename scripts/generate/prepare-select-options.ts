@@ -113,9 +113,18 @@ function parseResearchCategoriesAndSubcategories(
     })
 
     const researchSubCategoryOptions = researchCategoryMapping.map(row => {
+        const parentCategoryValue = row['Coded'].match(/^\d+/)
+
+        if (parentCategoryValue === null) {
+            throw new Error(`Could not find parent category value for ${row}`)
+        }
+
+        const parent = parentCategoryValue[0].trim()
+
         return {
             value: row['Coded'].trim(),
             label: row[' Sub categories Description'].trim(),
+            parent,
         }
     })
 
