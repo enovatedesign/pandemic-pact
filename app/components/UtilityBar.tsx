@@ -28,7 +28,7 @@ const AnimatedIcon = ({ Icon, style, className }: AnimatedIconProps) => {
 
 const AnimatedIcons = ({ Icon, state }: AnimatedIconsProps) => {
     const iconWrapperClasses = 'relative w-8 h-8 md:w-9 md:h-9'
-    const iconClasses = 'absolute inset-0 origin-center'
+    const iconClasses = 'absolute inset-0 origin-center text-secondary'
     const duration = 300
 
     const iconAnimation = useSpring({
