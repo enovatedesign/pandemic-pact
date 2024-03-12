@@ -15,6 +15,7 @@ interface Props {
     id: string
     title: string
     subtitle?: string
+    chartInstructions?: string
     footnote?: string
     infoModalContents?: ReactNode
     children?: ReactNode
@@ -29,6 +30,7 @@ export default function VisualisationCard({
     id,
     title,
     subtitle,
+    chartInstructions,
     footnote,
     infoModalContents,
     children,
@@ -68,7 +70,7 @@ export default function VisualisationCard({
     return (
         <>
             <animated.div id={id} ref={ref} style={springs}>
-                <div className="flex flex-col items-start gap-y-6 h-full w-full bg-white p-8 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
+                <div className="flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
                     <div className="flex flex-col items-start gap-y-6">
                         <div className="mr-16">
                             <h2 className="text-lg capitalize inline">
@@ -121,6 +123,10 @@ export default function VisualisationCard({
 
                         {subtitle && (
                             <p className="text-brand-grey-500">{subtitle}</p>
+                        )}
+
+                        {chartInstructions && (
+                            <p className="text-brand-grey-500">{chartInstructions}</p>
                         )}
                     </div>
 
