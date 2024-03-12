@@ -84,7 +84,7 @@ export default function GrantsByResearchCategoryCard() {
         <VisualisationCard
             id="grants-by-research-category"
             title="Global Distribution of Grants by Research Area"
-            subtitle="The chart shows the total amount of funding allocated for different research areas for all diseases. Use filters on the left for advanced filtering depending on your interests."
+            subtitle="The chart shows the total amount of funding allocated for different research areas for all diseases. Use filters on the left for advanced filtering depending on your interests. Use the 'View sub-categories' buttons to explore the sub-categories."
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             infoModalContents={infoModalContents}
             tabs={tabs}
