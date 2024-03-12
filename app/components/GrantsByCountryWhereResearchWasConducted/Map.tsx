@@ -182,7 +182,9 @@ function getGeojsonPropertiesByIsoNumeric(dataset: any[], displayWhoRegions: boo
             const regionName = selectOptions[regionKey].find(option => option.value === region)?.label
 
             return {
-                isoNumeric: regionToCountryMapping[region as keyof typeof regionToCountryMapping],
+                isoNumeric: regionToCountryMapping[region as keyof typeof regionToCountryMapping].map(
+                    (country: string) => country.padStart(3, '0')
+                ),
                 properties: {
                     NAME: regionName,
                     regionValue: region,
