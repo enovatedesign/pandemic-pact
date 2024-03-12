@@ -64,7 +64,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
 
     const fields = {
         Disease: 'Diseases',
-        Pathogen: 'Pathogen Family',
+        Pathogen: 'Pathogen Families',
         ResearchInstitutionCountry: 'Research Institution Countries',
         ResearchInstitutionRegion: 'Research Institution Regions',
         FunderCountry: 'Funder Countries',
