@@ -114,8 +114,6 @@ export default async function () {
             grantIDsInData
         )
 
-        console.log('grantIDsToDelete', grantIDsToDelete)
-
         if (grantIDsToDelete.length > 0) {
             info(`Removing documents that are no longer in the data...`)
 
