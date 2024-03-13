@@ -1,24 +1,35 @@
-import {useContext} from "react"
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts'
-import {groupBy} from 'lodash'
-import {dollarValueFormatter, axisDollarFormatter} from "../../helpers/value-formatters"
-import {sumNumericGrantAmounts} from "../../helpers/reducers"
-import {GlobalFilterContext} from "../../helpers/filters"
-import selectOptions from "../../../data/dist/select-options.json"
-import {diseaseColours} from "../../helpers/colours"
-import {baseTooltipProps} from "../../helpers/tooltip"
+import { useContext } from 'react'
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts'
+import { groupBy } from 'lodash'
+import {
+    dollarValueFormatter,
+    axisDollarFormatter,
+} from '../../helpers/value-formatters'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
+import { GlobalFilterContext } from '../../helpers/filters'
+import selectOptions from '../../../data/dist/select-options.json'
+import { diseaseColours } from '../../helpers/colours'
+import { baseTooltipProps } from '../../helpers/tooltip'
 
 export default function TemporalChart() {
-    const {grants} = useContext(GlobalFilterContext)
+    const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
-        grants
-            .filter((grant: any) => 
-                grant?.TrendStartYear && 
-                !isNaN(grant.TrendStartYear) && 
+        grants.filter(
+            (grant: any) =>
+                grant?.TrendStartYear &&
+                !isNaN(grant.TrendStartYear) &&
                 grant.TrendStartYear >= 2020
-            ),
-            'TrendStartYear'
+        ),
+        'TrendStartYear'
     )
 
     const amountCommittedToEachDiseaseOverTime = Object.keys(
@@ -26,9 +37,9 @@ export default function TemporalChart() {
     ).map(year => {
         const grants = datasetGroupedByYear[year]
 
-        let dataPoint: {[key: string]: string | number} = {year}
+        let dataPoint: { [key: string]: string | number } = { year }
 
-        selectOptions.Disease.forEach(({value, label}) => {
+        selectOptions.Disease.forEach(({ value, label }) => {
             dataPoint[label] = grants
                 .filter(grant => grant.Disease.includes(value))
                 .reduce(...sumNumericGrantAmounts)
@@ -36,6 +47,9 @@ export default function TemporalChart() {
 
         return dataPoint
     })
+
+    // Sort tooltip items by descending dollar value, so highest is at the top
+    const tooltipItemSorter = (item: { value: number }) => -item.value
 
     return (
         <ResponsiveContainer width="100%" height={500}>
@@ -54,8 +68,8 @@ export default function TemporalChart() {
                     type="category"
                     dataKey="year"
                     label={{
-                        value: "Year of Award Start",
-                        position: "bottom",
+                        value: 'Year of Award Start',
+                        position: 'bottom',
                         offset: 0,
                     }}
                     className="text-lg"
@@ -65,10 +79,10 @@ export default function TemporalChart() {
                     type="number"
                     tickFormatter={axisDollarFormatter}
                     label={{
-                        value: "Known Financial Commitments (USD)",
-                        position: "left",
+                        value: 'Known Financial Commitments (USD)',
+                        position: 'left',
                         angle: -90,
-                        style: {textAnchor: 'middle'},
+                        style: { textAnchor: 'middle' },
                         offset: 20,
                     }}
                     className="text-lg"
@@ -77,10 +91,11 @@ export default function TemporalChart() {
                 <Tooltip
                     formatter={dollarValueFormatter}
                     isAnimationActive={false}
+                    itemSorter={tooltipItemSorter}
                     {...baseTooltipProps}
                 />
 
-                {selectOptions.Disease.map(({value, label}) => (
+                {selectOptions.Disease.map(({ value, label }) => (
                     <Line
                         key={label}
                         type="monotone"
