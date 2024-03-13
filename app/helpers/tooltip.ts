@@ -14,4 +14,5 @@ export const baseTooltipProps = {
         typeof window !== 'undefined' && window.innerWidth < 768
             ? { x: 0 }
             : undefined,
+    isAnimationActive: false,
 }

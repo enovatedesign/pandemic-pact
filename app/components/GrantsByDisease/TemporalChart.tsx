@@ -8,11 +8,9 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
+import { rechartTooltipContentFunction } from '../RechartTooltipContent'
 import { groupBy } from 'lodash'
-import {
-    dollarValueFormatter,
-    axisDollarFormatter,
-} from '../../helpers/value-formatters'
+import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
@@ -86,14 +84,7 @@ export default function TemporalChart() {
                 />
 
                 <Tooltip
-                    isAnimationActive={false}
-                    content={props => (
-                        <TooltipContent
-                            active={props.active}
-                            payload={props.payload}
-                            label={props.label}
-                        />
-                    )}
+                    content={rechartTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 
@@ -109,51 +100,5 @@ export default function TemporalChart() {
                 ))}
             </LineChart>
         </ResponsiveContainer>
-    )
-}
-
-function TooltipContent({
-    active,
-    payload,
-    label,
-}: {
-    active?: boolean
-    payload: any
-    label: string
-}) {
-    if (!active) return null
-
-    // Sort tooltip items by descending dollar value, so highest is at the top
-    payload.sort(
-        (a: { value: number }, b: { value: number }) => b.value - a.value
-    )
-
-    return (
-        <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
-            <div className="border-gray-100 border-b px-4 py-2">
-                <p className="font-medium text-gray-700">{label}</p>
-            </div>
-
-            <div className="px-4 py-2 space-y-1">
-                {payload.map((item: any, index: number) => (
-                    <div className="flex items-center justify-between space-x-8">
-                        <div className="flex items-center space-x-2">
-                            <span
-                                className="shrink-0 rounded-full border-2 h-3 w-3 border-white shadow"
-                                style={{ backgroundColor: item.color }}
-                            />
-
-                            <p className="text-right whitespace-nowrap text-gray-400">
-                                {item.name}
-                            </p>
-                        </div>
-
-                        <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                            {dollarValueFormatter(item.value)}
-                        </p>
-                    </div>
-                ))}
-            </div>
-        </div>
     )
 }
