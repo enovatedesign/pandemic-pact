@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 interface TooltipContentItem {
     colour?: string
     label: string
@@ -7,9 +9,10 @@ interface TooltipContentItem {
 interface Props {
     title?: string
     items?: TooltipContentItem[]
+    footer?: ReactNode
 }
 
-export default function TooltipContent({ title, items }: Props) {
+export default function TooltipContent({ title, items, footer = null }: Props) {
     return (
         <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
             {title && (
@@ -45,6 +48,8 @@ export default function TooltipContent({ title, items }: Props) {
                     ))}
                 </div>
             )}
+
+            {footer}
         </div>
     )
 }

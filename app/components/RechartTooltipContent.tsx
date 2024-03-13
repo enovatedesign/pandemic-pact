@@ -19,7 +19,9 @@ export default function RechartTooltipContent({
 
     const items = payload.map((item: any) => ({
         label: item.name,
-        value: dollarValueFormatter(item.value),
+        value: item.name.includes('(USD)')
+            ? dollarValueFormatter(item.value)
+            : item.value,
         colour: item.color,
     }))
 

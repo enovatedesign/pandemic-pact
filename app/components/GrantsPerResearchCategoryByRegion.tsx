@@ -7,6 +7,7 @@ import {
     PolarAngleAxis,
     ResponsiveContainer,
 } from 'recharts'
+import { rechartTooltipContentFunction } from './RechartTooltipContent'
 import VisualisationCard from './VisualisationCard'
 import MultiSelect from './MultiSelect'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
@@ -31,12 +32,15 @@ export default function GrantsPerResearchCategoryByRegion() {
         ResearchCat: selectedResearchCategories,
     })
 
-    const regionOptions = researchLocationRegionOptions.filter(
-        regionOption => !['Unspecified'].includes(regionOption.label)
-    ).map(regionOption => ({
-        ...regionOption,
-        label: (regionOption.label === "International") ? "Multi-Regional" : regionOption.label
-    }))
+    const regionOptions = researchLocationRegionOptions
+        .filter(regionOption => !['Unspecified'].includes(regionOption.label))
+        .map(regionOption => ({
+            ...regionOption,
+            label:
+                regionOption.label === 'International'
+                    ? 'Multi-Regional'
+                    : regionOption.label,
+        }))
 
     let researchCategoryOptions: { value: string; label: string }[]
 
@@ -132,7 +136,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                             ))}
 
                             <Tooltip
-                                isAnimationActive={false}
+                                content={rechartTooltipContentFunction}
                                 {...baseTooltipProps}
                             />
                         </RadarChart>

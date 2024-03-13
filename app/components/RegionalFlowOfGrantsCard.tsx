@@ -8,6 +8,7 @@ import {
     Sankey,
     Tooltip,
 } from 'recharts'
+import TooltipContent from './TooltipContent'
 import { groupBy } from 'lodash'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
 import { GlobalFilterContext } from '../helpers/filters'
@@ -104,19 +105,27 @@ export default function RegionalFlowOfGrantsCard() {
         )
     }
 
-    const tooltipFormatter = (value: any, _: string, { payload }: any) => {
-        const details = payload.payload
+    const tooltipContent = (props: any) => {
+        if (!props.active) {
+            return null
+        }
 
-        const label = details.option
-            ? details.option.label
-            : `${details.source.option.label} → ${details.target.option.label}`
+        const items = props.payload.map((payload: any) => {
+            const details = payload.payload.payload
 
-        return [
-            displayTotalMoneyCommitted
-                ? dollarValueFormatter(details.value)
-                : details.value,
-            label,
-        ]
+            const label = details.option
+                ? details.option.label
+                : `${details.source.option.label} → ${details.target.option.label}`
+
+            return {
+                label,
+                value: displayTotalMoneyCommitted
+                    ? dollarValueFormatter(details.value)
+                    : details.value,
+            }
+        })
+
+        return <TooltipContent items={items} />
     }
 
     return (
@@ -134,7 +143,11 @@ export default function RegionalFlowOfGrantsCard() {
                             <div className="overflow-x-auto">
                                 <div className="inline-block min-w-full align-middle">
                                     <div className="overflow-hidden">
-                                        <ResponsiveContainer height={500} minWidth={900} className="px-6 md:px-0">
+                                        <ResponsiveContainer
+                                            height={500}
+                                            minWidth={900}
+                                            className="px-6 md:px-0"
+                                        >
                                             <Sankey
                                                 data={{ nodes, links }}
                                                 nodePadding={30}
@@ -146,20 +159,25 @@ export default function RegionalFlowOfGrantsCard() {
                                                 }}
                                                 node={
                                                     <SankeyNode
-                                                    colours={colours}
-                                                    displayTotalMoneyCommitted={
-                                                        displayTotalMoneyCommitted
-                                                    }
-                                                    totalNodeGroups={nodeGroups.length}
+                                                        colours={colours}
+                                                        displayTotalMoneyCommitted={
+                                                            displayTotalMoneyCommitted
+                                                        }
+                                                        totalNodeGroups={
+                                                            nodeGroups.length
+                                                        }
                                                     />
                                                 }
-                                                link={<SankeyLink colours={colours} />}
-                                                >
-                                                <Tooltip
-                                                    isAnimationActive={false}
-                                                    formatter={tooltipFormatter}
-                                                    {...baseTooltipProps}
+                                                link={
+                                                    <SankeyLink
+                                                        colours={colours}
                                                     />
+                                                }
+                                            >
+                                                <Tooltip
+                                                    content={tooltipContent}
+                                                    {...baseTooltipProps}
+                                                />
 
                                                 <text
                                                     x={0}
@@ -167,7 +185,7 @@ export default function RegionalFlowOfGrantsCard() {
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="start"
-                                                    >
+                                                >
                                                     Funder Region
                                                 </text>
 
@@ -177,7 +195,7 @@ export default function RegionalFlowOfGrantsCard() {
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="middle"
-                                                    >
+                                                >
                                                     Research Institution Region
                                                 </text>
 
@@ -187,15 +205,16 @@ export default function RegionalFlowOfGrantsCard() {
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="end"
-                                                    >
+                                                >
                                                     Research Location Region
                                                 </text>
                                             </Sankey>
-                                        </ResponsiveContainer>    
+                                        </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}

@@ -15,6 +15,7 @@ import {
     PresentationChartLineIcon,
 } from '@heroicons/react/solid'
 import VisualisationCard from './VisualisationCard'
+import { rechartTooltipContentFunction } from './RechartTooltipContent'
 import MultiSelect from './MultiSelect'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
 import {
@@ -44,13 +45,13 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     })
 
     const datasetGroupedByYear = groupBy(
-        filteredDataset
-            .filter((grant: any) => 
-                grant?.TrendStartYear && 
-                !isNaN(grant.TrendStartYear) && 
+        filteredDataset.filter(
+            (grant: any) =>
+                grant?.TrendStartYear &&
+                !isNaN(grant.TrendStartYear) &&
                 grant.TrendStartYear >= 2020
-            ),
-            'TrendStartYear'
+        ),
+        'TrendStartYear'
     )
 
     const showingAllResearchCategories = selectedResearchCategories.length === 0
@@ -74,9 +75,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
 
         let dataPoint: { [key: string]: string | number } = { year }
 
-            if (showingAllResearchCategories) {
-                dataPoint['All Research Categories'] = grants.reduce(
-                    ...sumNumericGrantAmounts
+        if (showingAllResearchCategories) {
+            dataPoint['All Research Categories'] = grants.reduce(
+                ...sumNumericGrantAmounts
             )
         } else {
             selectedResearchCategoryOptions.forEach(
@@ -194,8 +195,7 @@ function BarChart({
                 />
 
                 <Tooltip
-                    formatter={dollarValueFormatter}
-                    isAnimationActive={false}
+                    content={rechartTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 
@@ -256,8 +256,7 @@ function LineChart({
                 />
 
                 <Tooltip
-                    formatter={dollarValueFormatter}
-                    isAnimationActive={false}
+                    content={rechartTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 

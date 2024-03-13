@@ -21,6 +21,7 @@ import regionToCountryMapping from '../../../data/source/region-to-country-mappi
 import selectOptions from '../../../data/dist/select-options.json'
 import { baseTooltipProps } from '../../helpers/tooltip'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import TooltipContent from '../TooltipContent'
 
 export default function BarChart() {
     const { grants: dataset } = useContext(GlobalFilterContext)
@@ -119,6 +120,21 @@ export default function BarChart() {
         ].find(option => option.value === label)?.label as string
     }
 
+    const tooltipContent = (props: any) => {
+        const title = selectOptions[
+            selectedRegion
+                ? 'ResearchInstitutionCountry'
+                : 'ResearchInstitutionRegion'
+        ].find(option => option.value === props.label)?.label as string
+
+        const items = props.payload.map((item: any) => ({
+            label: 'Known Financial Commitments (USD)',
+            value: dollarValueFormatter(item.value),
+        }))
+
+        return <TooltipContent title={title} items={items} />
+    }
+
     const selectedRegionName = selectOptions.ResearchInstitutionRegion.find(
         option => option.value === selectedRegion
     )?.label
@@ -171,9 +187,7 @@ export default function BarChart() {
                         />
 
                         <Tooltip
-                            formatter={dollarValueFormatter}
-                            labelFormatter={countryOrRegionFormatter}
-                            isAnimationActive={false}
+                            content={tooltipContent}
                             cursor={{ fill: 'transparent' }}
                             {...baseTooltipProps}
                         />
