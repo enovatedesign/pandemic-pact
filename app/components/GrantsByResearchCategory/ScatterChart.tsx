@@ -10,13 +10,10 @@ import {
     Tooltip,
     Cell,
 } from 'recharts'
-import {
-    dollarValueFormatter,
-    axisDollarFormatter,
-} from '../../helpers/value-formatters'
+import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { researchCategoryColours } from '../../helpers/colours'
 import Legend from '../Legend'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { baseTooltipProps } from '../../helpers/tooltip'
