@@ -174,7 +174,6 @@ export default function VisualisePageClient() {
                             place="right-start"
                             offset={10}
                             variant="light"
-                            className=""
                             opacity={1}
                             disableStyleInjection
                         />
