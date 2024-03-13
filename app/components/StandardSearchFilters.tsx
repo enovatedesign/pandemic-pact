@@ -27,6 +27,35 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
     )
 
+    const setSearchFiltersFromLocalFilterState = () => {
+        setSearchFilters({
+            logicalAnd: true,
+            filters: Object.entries(filters).map(([field, values]) => ({
+                field,
+                values,
+                logicalAnd: false,
+            })),
+        })
+    }
+
+    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
+        const newFilters = {
+            ...filters,
+            [field]: selectedOptions,
+        }
+
+        setFilters(newFilters)
+
+        setSearchFiltersFromLocalFilterState()
+    }
+
+    // Set initial filter state from URL on page load
+    useEffect(() => {
+        if (filtersFromUrl) {
+            setSearchFiltersFromLocalFilterState()
+        }
+    }, [filtersFromUrl])
+
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
 
@@ -44,24 +73,6 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
 
         router.replace(url.href)
     }, [searchParams, filters, pathname, router])
-
-    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
-        const newFilters = {
-            ...filters,
-            [field]: selectedOptions,
-        }
-
-        setFilters(newFilters)
-
-        setSearchFilters({
-            logicalAnd: true,
-            filters: Object.entries(newFilters).map(([field, values]) => ({
-                field,
-                values,
-                logicalAnd: false,
-            })),
-        })
-    }
 
     const fields = {
         Disease: 'Diseases',
