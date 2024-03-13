@@ -11,6 +11,7 @@ import { dollarValueFormatter } from '../helpers/value-formatters'
 import { TooltipContext } from '../helpers/tooltip'
 import { Colours } from '../helpers/colours'
 import InfoModal from './InfoModal'
+import TooltipContent from './TooltipContent'
 
 export type GrantAndFinancialCommitmentBarListData = Array<{
     'Known Financial Commitments (USD)': number
@@ -88,7 +89,11 @@ export function GrantAndFinancialCommitmentBarList({
                     x: event.clientX,
                     y: event.clientY,
                 },
-                content: <TooltipContent nextState={nextState} />,
+                content: (
+                    <GrantAndFinancialCommitmentBarListTooltipContent
+                        nextState={nextState}
+                    />
+                ),
             })
         } else {
             onChartMouseLeave()
@@ -134,13 +139,13 @@ export function GrantAndFinancialCommitmentBarList({
                                 </p>
                                 {subCharts && (
                                     <button
-                                    className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
-                                    onClick={() =>
-                                        setSelectedSubChart(
-                                            datum['Category Value']
+                                        className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
+                                        onClick={() =>
+                                            setSelectedSubChart(
+                                                datum['Category Value']
                                             )
                                         }
-                                        >
+                                    >
                                         View sub-categories
                                     </button>
                                 )}
@@ -280,25 +285,15 @@ export function GrantAndFinancialCommitmentBarList({
     )
 }
 
-function TooltipContent({ nextState }: any) {
-    return (
-        <div className="flex flex-col gap-y-2">
-            {nextState.activePayload.map((payload: any, index: number) => (
-                <p
-                    key={`${index}-${payload.name}`}
-                    style={{ color: payload.color }}
-                >
-                    <span>{payload.name}:</span>
+function GrantAndFinancialCommitmentBarListTooltipContent({ nextState }: any) {
+    const items = nextState.activePayload.map((payload: any) => ({
+        label: payload.name,
+        value:
+            payload.dataKey === 'Known Financial Commitments (USD)'
+                ? dollarValueFormatter(payload.value)
+                : payload.value,
+        colour: payload.color,
+    }))
 
-                    <span className="ml-2">
-                        {payload.dataKey === 'Known Financial Commitments (USD)'
-                            ? dollarValueFormatter(
-                                  payload.payload[payload.dataKey]
-                              )
-                            : payload.payload[payload.dataKey]}
-                    </span>
-                </p>
-            ))}
-        </div>
-    )
+    return <TooltipContent items={items} />
 }
