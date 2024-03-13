@@ -48,9 +48,6 @@ export default function TemporalChart() {
         return dataPoint
     })
 
-    // Sort tooltip items by descending dollar value, so highest is at the top
-    const tooltipItemSorter = (item: any) => -item.value
-
     return (
         <ResponsiveContainer width="100%" height={500}>
             <LineChart
@@ -89,9 +86,7 @@ export default function TemporalChart() {
                 />
 
                 <Tooltip
-                    formatter={dollarValueFormatter}
                     isAnimationActive={false}
-                    itemSorter={tooltipItemSorter}
                     content={<TooltipContent />}
                     {...baseTooltipProps}
                 />
@@ -111,24 +106,37 @@ export default function TemporalChart() {
     )
 }
 
-function TooltipContent() {
+function TooltipContent({ active, payload, label }) {
+    if (!active) return null
+
+    // Sort tooltip items by descending dollar value, so highest is at the top
+    payload.sort((a, b) => b.value - a.value)
+
     return (
         <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
             <div className="border-gray-100 border-b px-4 py-2">
-                <p className="font-medium text-gray-800">Sep 11</p>
+                <p className="font-medium text-gray-700">{label}</p>
             </div>
+
             <div className="px-4 py-2 space-y-1">
-                <div className="flex items-center justify-between space-x-8">
-                    <div className="flex items-center space-x-2">
-                        <span className="shrink-0 rounded-full border-2 h-3 w-3 border-white shadow bg-blue-500" />
-                        <p className="text-right whitespace-nowrap text-gray-400">
-                            ETF Shares Vital
+                {payload.map((item: any, index: number) => (
+                    <div className="flex items-center justify-between space-x-8">
+                        <div className="flex items-center space-x-2">
+                            <span
+                                className="shrink-0 rounded-full border-2 h-3 w-3 border-white shadow"
+                                style={{ backgroundColor: item.color }}
+                            />
+
+                            <p className="text-right whitespace-nowrap text-gray-400">
+                                {item.name}
+                            </p>
+                        </div>
+
+                        <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
+                            {dollarValueFormatter(item.value)}
                         </p>
                     </div>
-                    <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-800">
-                        $8,748.5
-                    </p>
-                </div>
+                ))}
             </div>
         </div>
     )
