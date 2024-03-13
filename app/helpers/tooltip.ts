@@ -1,7 +1,5 @@
-// TODO I don't think this file needs to be .tsx?
-
-import {createContext, RefObject} from 'react'
-import {TooltipRefProps} from 'react-tooltip'
+import { createContext, RefObject } from 'react'
+import { TooltipRefProps } from 'react-tooltip'
 
 export const TooltipContext = createContext<{
     tooltipRef: RefObject<TooltipRefProps> | null
@@ -11,6 +9,9 @@ export const TooltipContext = createContext<{
 
 export const baseTooltipProps = {
     wrapperClassName: 'max-w-full md:max-w-none',
-    itemStyle: {whiteSpace: 'pre-wrap'},
-    position: typeof window !== 'undefined' && window.innerWidth < 768 ? {x: 0} : undefined,
+    itemStyle: { whiteSpace: 'pre-wrap' },
+    position:
+        typeof window !== 'undefined' && window.innerWidth < 768
+            ? { x: 0 }
+            : undefined,
 }
