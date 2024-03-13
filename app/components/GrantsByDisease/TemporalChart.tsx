@@ -87,7 +87,13 @@ export default function TemporalChart() {
 
                 <Tooltip
                     isAnimationActive={false}
-                    content={<TooltipContent />}
+                    content={props => (
+                        <TooltipContent
+                            active={props.active}
+                            payload={props.payload}
+                            label={props.label}
+                        />
+                    )}
                     {...baseTooltipProps}
                 />
 
@@ -106,11 +112,21 @@ export default function TemporalChart() {
     )
 }
 
-function TooltipContent({ active, payload, label }) {
+function TooltipContent({
+    active,
+    payload,
+    label,
+}: {
+    active?: boolean
+    payload: any
+    label: string
+}) {
     if (!active) return null
 
     // Sort tooltip items by descending dollar value, so highest is at the top
-    payload.sort((a, b) => b.value - a.value)
+    payload.sort(
+        (a: { value: number }, b: { value: number }) => b.value - a.value
+    )
 
     return (
         <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
