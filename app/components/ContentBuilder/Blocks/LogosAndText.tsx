@@ -24,7 +24,7 @@ export default function LogosAndText({ block }: Props) {
                 )}
 
                 <div className="flex flex-col gap-6">
-                    {blockContent.map((content, index: number) => <FunderItem content={content} key={index} index={index} />
+                    {blockContent.map((content, index: number) => <LogoAndTextItem content={content} key={index} index={index} />
                         
                     )}
                 </div>
@@ -35,7 +35,7 @@ export default function LogosAndText({ block }: Props) {
 	}
 }
 
-interface FunderProps {
+interface LogoAndTextProps {
     content: {
         logos: {
             altText: string,
@@ -48,13 +48,9 @@ interface FunderProps {
     index: number
 }
 
-const FunderItem = ({content, index}: FunderProps) => {
+const LogoAndTextItem = ({content, index}: LogoAndTextProps) => {
 
-    const textClasses = [
-        'prose prose-lg',
-        'flex justify-center items-center',
-        'w-full',
-    ].join(" ")
+    const textClasses = 'prose prose-lg w-full'
 
     const blockClasses = [
         'bg-white py-6 px-8 rounded-2xl border-2 border-gray-200',
@@ -100,11 +96,7 @@ const FunderItem = ({content, index}: FunderProps) => {
 
             </div>
 
-            <div className={textClasses}>
-                <div className="w-full">
-                    <p className="my-0" dangerouslySetInnerHTML={{ __html: content.text }}></p>
-                </div>
-            </div>
+            <div className={textClasses} dangerouslySetInnerHTML={{ __html: content.text }}></div>
         </animated.div>
     )
 }
