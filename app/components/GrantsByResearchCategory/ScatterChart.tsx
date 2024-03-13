@@ -17,8 +17,9 @@ import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { baseTooltipProps } from '../../helpers/tooltip'
+import { dollarValueFormatter } from '../../helpers/value-formatters'
 import { GrantAndFinancialCommitmentBarListData } from '../GrantAndFinancialCommitmentBarList'
-import { rechartTooltipContentFunction } from '../RechartTooltipContent'
+import TooltipContent from '../TooltipContent'
 
 interface Props {
     chartData: GrantAndFinancialCommitmentBarListData
@@ -37,6 +38,24 @@ export default function ScatterChart({ chartData }: Props) {
         label: data['Category Label'],
         value: data['Category Value'],
     }))
+
+    const tooltipContent = (props: any) => {
+        const { active, payload } = props
+
+        if (!active) return null
+
+        const title = payload[0].payload['Category Label']
+
+        const items = payload.map((item: any) => ({
+            label: item.name,
+            value: item.name.includes('(USD)')
+                ? dollarValueFormatter(item.value)
+                : item.value,
+            colour: item.color,
+        }))
+
+        return <TooltipContent title={title} items={items} />
+    }
 
     return (
         <>
@@ -111,7 +130,7 @@ export default function ScatterChart({ chartData }: Props) {
 
                     <Tooltip
                         cursor={{ strokeDasharray: '3 3' }}
-                        content={rechartTooltipContentFunction}
+                        content={tooltipContent}
                         {...baseTooltipProps}
                     />
 
