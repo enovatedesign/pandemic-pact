@@ -8,7 +8,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
-import { rechartTooltipContentFunction } from '../RechartTooltipContent'
+import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
 import { groupBy } from 'lodash'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -84,7 +84,7 @@ export default function TemporalChart() {
                 />
 
                 <Tooltip
-                    content={rechartTooltipContentFunction}
+                    content={rechartCategoriesTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 

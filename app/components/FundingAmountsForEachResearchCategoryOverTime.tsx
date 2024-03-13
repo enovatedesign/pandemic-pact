@@ -15,7 +15,7 @@ import {
     PresentationChartLineIcon,
 } from '@heroicons/react/solid'
 import VisualisationCard from './VisualisationCard'
-import { rechartTooltipContentFunction } from './RechartTooltipContent'
+import { rechartCategoriesTooltipContentFunction } from './RechartCategoriesTooltipContent'
 import MultiSelect from './MultiSelect'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
 import {
@@ -195,7 +195,7 @@ function BarChart({
                 />
 
                 <Tooltip
-                    content={rechartTooltipContentFunction}
+                    content={rechartCategoriesTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 
@@ -256,7 +256,7 @@ function LineChart({
                 />
 
                 <Tooltip
-                    content={rechartTooltipContentFunction}
+                    content={rechartCategoriesTooltipContentFunction}
                     {...baseTooltipProps}
                 />
 
