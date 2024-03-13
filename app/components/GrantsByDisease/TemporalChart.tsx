@@ -49,7 +49,7 @@ export default function TemporalChart() {
     })
 
     // Sort tooltip items by descending dollar value, so highest is at the top
-    const tooltipItemSorter = (item: { value: number }) => -item.value
+    const tooltipItemSorter = (item: any) => -item.value
 
     return (
         <ResponsiveContainer width="100%" height={500}>
