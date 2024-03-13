@@ -26,6 +26,8 @@ export default function Publications({ grant }: { grant: any }) {
         lastItemIndex
     )
 
+    const viewAllHref = `https://europepmc.org/search?query=GRANT_ID%3A%22${grant.PubMedGrantId}%22`
+
     return (
         <div className="flex flex-col space-y-4" id="paginationTop">
             <div className="flex flex-col gap-y-4 xl:gap-y-0 xl:flex-row xl:items-end xl:justify-between xl:gap-x-4">
@@ -49,7 +51,7 @@ export default function Publications({ grant }: { grant: any }) {
                         </span>
                     </p>
                     <Button
-                        href="#"
+                        href={viewAllHref}
                         colour='grey'
                         customClasses="flex items-center justify-between gap-2 lg:-translate-y-1"
                         size='small'
