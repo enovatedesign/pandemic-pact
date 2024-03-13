@@ -24,16 +24,13 @@ export default function SearchInput({ setSearchResponse }: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = JSON.parse(searchParams.get('filters') ?? 'null')
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [searchFilters, setSearchFilters] = useState<SearchFilters>(
-        filtersFromUrl ?? {
-            logicalAnd: true,
-            filters: [],
-        }
-    )
+    const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+        logicalAnd: true,
+        filters: [],
+    })
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
@@ -48,18 +45,8 @@ export default function SearchInput({ setSearchResponse }: Props) {
             url.searchParams.delete('q')
         }
 
-        const anyFiltersAreSet = Object.values(searchFilters.filters).some(
-            filter => filter.values?.length > 0
-        )
-
-        if (anyFiltersAreSet) {
-            url.searchParams.set('filters', JSON.stringify(searchFilters))
-        } else {
-            url.searchParams.delete('filters')
-        }
-
         router.replace(url.href)
-    }, [searchParams, searchQuery, searchFilters, pathname, router])
+    }, [searchParams, searchQuery, pathname, router])
 
     const searchRequestBody = useMemo(() => {
         return {
@@ -200,7 +187,6 @@ export default function SearchInput({ setSearchResponse }: Props) {
                                 height={!advancedSearchShow && 'auto'}
                             >
                                 <StandardSearchFilters
-                                    searchFilters={searchFilters}
                                     setSearchFilters={setSearchFilters}
                                 />
                             </AnimateHeight>

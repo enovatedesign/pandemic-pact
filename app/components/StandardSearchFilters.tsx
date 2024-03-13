@@ -1,50 +1,65 @@
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MultiSelect from './MultiSelect'
 import { SearchFilters } from '../helpers/search'
 import selectOptions from '../../data/dist/select-options.json'
 
-interface StandardSearchFiltersProps {
-    searchFilters: SearchFilters
-    setSearchFilters: any
+interface Props {
+    setSearchFilters: (searchFilters: SearchFilters) => void
 }
 
-export default function StandardSearchFilters({
-    searchFilters,
-    setSearchFilters,
-}: StandardSearchFiltersProps) {
-    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
-        setSearchFilters((previousSearchFilters: SearchFilters) => {
-            // Find the index of the filter object with field
-            const index = previousSearchFilters.filters.findIndex(
-                filter => filter.field === field
-            )
+interface SelectedFilters {
+    Disease?: string[]
+    Pathogen?: string[]
+    ResearchInstitutionCountry?: string[]
+    ResearchInstitutionRegion?: string[]
+    FunderCountry?: string[]
+    FunderRegion?: string[]
+}
 
-            if (index !== -1) {
-                // If the filter object exists, update its values array
-                return {
-                    ...previousSearchFilters,
-                    filters: [
-                        ...previousSearchFilters.filters.slice(0, index),
-                        {
-                            ...previousSearchFilters.filters[index],
-                            values: selectedOptions,
-                        },
-                        ...previousSearchFilters.filters.slice(index + 1),
-                    ],
-                }
-            } else {
-                // If the filter object doesn't exist, create a new one
-                return {
-                    ...previousSearchFilters,
-                    filters: [
-                        ...previousSearchFilters.filters,
-                        {
-                            field,
-                            values: selectedOptions,
-                            logicalAnd: false,
-                        },
-                    ],
-                }
-            }
+export default function StandardSearchFilters({ setSearchFilters }: Props) {
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const filtersFromUrl = searchParams.get('filters') ?? null
+
+    const [filters, setFilters] = useState<SelectedFilters>(
+        filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
+    )
+
+    useEffect(() => {
+        const url = new URL(pathname, window.location.origin)
+
+        url.search = searchParams.toString()
+
+        const anyFiltersAreSet = Object.values(filters).some(
+            selectedOptions => selectedOptions.length > 0
+        )
+
+        if (anyFiltersAreSet) {
+            url.searchParams.set('filters', JSON.stringify(filters))
+        } else {
+            url.searchParams.delete('filters')
+        }
+
+        router.replace(url.href)
+    }, [searchParams, filters, pathname, router])
+
+    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
+        const newFilters = {
+            ...filters,
+            [field]: selectedOptions,
+        }
+
+        setFilters(newFilters)
+
+        setSearchFilters({
+            logicalAnd: true,
+            filters: Object.entries(newFilters).map(([field, values]) => ({
+                field,
+                values,
+                logicalAnd: false,
+            })),
         })
     }
 
@@ -66,49 +81,23 @@ export default function StandardSearchFilters({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {Object.entries(fields).map(([field, label]) => (
-                    <StandardSearchMultiSelect
+                    <MultiSelect
                         key={field}
                         field={field}
-                        label={label}
-                        searchFilters={searchFilters}
-                        setSelectedOptions={setSelectedOptions}
+                        preloadedOptions={
+                            selectOptions[field as keyof typeof selectOptions]
+                        }
+                        selectedOptions={
+                            filters[field as keyof SelectedFilters] ?? []
+                        }
+                        setSelectedOptions={selectedOptions =>
+                            setSelectedOptions(field, selectedOptions)
+                        }
+                        placeholder={`All ${label}`}
+                        className="col-span-1"
                     />
                 ))}
             </div>
         </section>
-    )
-}
-
-interface StandardSearchMultiSelectProps {
-    field: string
-    label: string
-    searchFilters: SearchFilters
-    setSelectedOptions: any
-}
-
-function StandardSearchMultiSelect({
-    field,
-    label,
-    searchFilters,
-    setSelectedOptions,
-}: StandardSearchMultiSelectProps) {
-    const selectedOptions = searchFilters.filters.find(
-        filter => filter.field === field
-    )?.values
-
-    return (
-        <MultiSelect
-            key={field}
-            field={field}
-            preloadedOptions={
-                selectOptions[field as keyof typeof selectOptions]
-            }
-            selectedOptions={selectedOptions ?? []}
-            setSelectedOptions={selectedOptions =>
-                setSelectedOptions(field, selectedOptions)
-            }
-            placeholder={`All ${label}`}
-            className="col-span-1"
-        />
     )
 }
