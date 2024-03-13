@@ -134,7 +134,7 @@ export default function VisualisationCard({
 
                     {tabs && tabs[selectedTabIndex].content}
 
-                    <div className="w-full flex flex-col-reverse gap-y-4 justify-between items-center ignore-in-image-export md:flex-row-reverse md:gap-y-0">
+                    <div className={`w-full flex ${!tabs ? 'flex-col items-center md:flex-row-reverse md:justify-between' : 'flex-row-reverse justify-between'} gap-y-4 justify-between items-center ignore-in-image-export md:gap-y-0`}>
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}

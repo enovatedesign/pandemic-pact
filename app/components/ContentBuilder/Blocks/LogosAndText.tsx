@@ -6,15 +6,15 @@ import { useInView, animated } from '@react-spring/web';
 interface Props {
     block: {
         heading: string, 
-        funders: any[],   
+        blockContent: any[],   
     }
 }
 
-export default function FunderLogoAndStatement({ block }: Props) {
+export default function LogosAndText({ block }: Props) {
 	const heading = block.heading
-	const funders = block.funders
+	const blockContent = block.blockContent
 
-	if (funders.length > 0) {
+	if (blockContent.length > 0) {
 		return (
 			<BlockWrapper>
                 {heading && (
@@ -24,7 +24,7 @@ export default function FunderLogoAndStatement({ block }: Props) {
                 )}
 
                 <div className="flex flex-col gap-6">
-                    {funders.map((funder, index: number) => <FunderItem funder={funder} key={index} index={index} />
+                    {blockContent.map((content, index: number) => <LogoAndTextItem content={content} key={index} index={index} />
                         
                     )}
                 </div>
@@ -35,27 +35,22 @@ export default function FunderLogoAndStatement({ block }: Props) {
 	}
 }
 
-interface FunderProps {
-    funder: {
-        funderLogos: {
+interface LogoAndTextProps {
+    content: {
+        logos: {
             altText: string,
             url: string,
             width: number,
             height: number,
         }[],
-        funderName: string, 
-        fundingStatement: string,
+        text: string, 
     }, 
     index: number
 }
 
-const FunderItem = ({funder, index}: FunderProps) => {
+const LogoAndTextItem = ({content, index}: LogoAndTextProps) => {
 
-    const textClasses = [
-        'prose prose-lg',
-        'flex justify-center items-center',
-        'w-full',
-    ].join(" ")
+    const textClasses = 'prose prose-lg w-full'
 
     const blockClasses = [
         'bg-white py-6 px-8 rounded-2xl border-2 border-gray-200',
@@ -83,9 +78,9 @@ const FunderItem = ({funder, index}: FunderProps) => {
     return (
         <animated.div className={`${blockClasses} ${index % 2 !== 0 && 'md:flex-row-reverse'}`} key={index} ref={ref} style={springs}>
 
-            <div className={`grid ${funder.funderLogos.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} items-center gap-6 lg:gap-12`}>
+            <div className={`grid ${content.logos.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} items-center gap-6 lg:gap-12`}>
 
-                {funder.funderLogos.map((logo, index: number) => {
+                {content.logos.map((logo, index: number) => {
                     return (
                         <Image
                             key={index}
@@ -101,12 +96,7 @@ const FunderItem = ({funder, index}: FunderProps) => {
 
             </div>
 
-            <div className={textClasses}>
-                <div className="w-full">
-                    <h3 className="my-0" dangerouslySetInnerHTML={{ __html: funder.funderName }}></h3>
-                    <p className="my-0" dangerouslySetInnerHTML={{ __html: funder.fundingStatement }}></p>
-                </div>
-            </div>
+            <div className={textClasses} dangerouslySetInnerHTML={{ __html: content.text }}></div>
         </animated.div>
     )
 }

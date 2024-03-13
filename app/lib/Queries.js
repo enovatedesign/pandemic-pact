@@ -318,14 +318,14 @@ export const contentBuilderQuery = `
               }
             }
           }
-          ... on bodyContent_funderLogoAndStatement_BlockType {
+          ... on bodyContent_logosAndText_BlockType {
             id
             typeHandle
             heading
-            funders {
-              ... on funders_BlockType {
+            blockContent {
+              ... on blockContent_BlockType {
                 id
-                funderLogos {
+                logos {
                   ... on contentAssets_Asset {
                     id
                     altText
@@ -334,8 +334,7 @@ export const contentBuilderQuery = `
                   width
                   height
                 }
-                funderName
-                fundingStatement
+                text
               }
             }
           }
