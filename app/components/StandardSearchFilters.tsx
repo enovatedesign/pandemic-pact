@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MultiSelect from './MultiSelect'
 import { SearchFilters } from '../helpers/search'
+import selectOptions from '../../data/dist/select-options.json'
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
@@ -83,6 +84,9 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                     <MultiSelect
                         key={field}
                         field={field}
+                        preloadedOptions={
+                            selectOptions[field as keyof typeof selectOptions]
+                        }
                         selectedOptions={
                             filters[field as keyof SelectedFilters] ?? []
                         }

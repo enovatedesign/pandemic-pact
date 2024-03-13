@@ -12,6 +12,7 @@ interface Props {
     setSelectedOptions: (options: string[]) => void
     placeholder?: string
     className?: string
+    preloadedOptions?: Option[]
 }
 
 export default function MultiSelect({
@@ -20,8 +21,10 @@ export default function MultiSelect({
     setSelectedOptions,
     placeholder,
     className,
+    preloadedOptions = [],
 }: Props) {
-    const [options, setOptions] = useState<Option[]>([])
+    const [options, setOptions] = useState<Option[]>(preloadedOptions)
+
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const id = useId()
@@ -37,6 +40,7 @@ export default function MultiSelect({
     }
 
     const loadOptions = () => {
+        // If options are already loaded, don't load them again
         if (options.length > 0) {
             return options
         }
