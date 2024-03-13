@@ -1,6 +1,6 @@
-import {NextResponse} from 'next/server'
-import {Client} from '@opensearch-project/opensearch'
-import {SearchFilters} from '../../helpers/search'
+import { NextResponse } from 'next/server'
+import { Client } from '@opensearch-project/opensearch'
+import { SearchFilters } from '../../helpers/search'
 
 export function getSearchClient() {
     if (
@@ -21,20 +21,23 @@ export function getSearchClient() {
 }
 
 export function getIndexName() {
-    const prefix = process.env.SEARCH_INDEX_PREFIX ?
-        `${process.env.SEARCH_INDEX_PREFIX}-` :
-        ''
+    const prefix = process.env.SEARCH_INDEX_PREFIX
+        ? `${process.env.SEARCH_INDEX_PREFIX}-`
+        : ''
 
     return `${prefix}grants`
 }
 
 export function searchUnavailableResponse() {
-    return NextResponse.json({
-        error: 'Service Unavailable',
-    }, {
-        status: 503,
-        statusText: 'Service Unavailable',
-    })
+    return NextResponse.json(
+        {
+            error: 'Service Unavailable',
+        },
+        {
+            status: 503,
+            statusText: 'Service Unavailable',
+        }
+    )
 }
 
 export async function validateRequest(request: Request) {
@@ -46,28 +49,28 @@ export async function validateRequest(request: Request) {
         errors.push({
             field: 'q',
             message: 'The q parameter is required',
-        });
+        })
     }
 
     if (typeof parameters.q !== 'string') {
         errors.push({
             field: 'q',
             message: 'The q parameter must be a string',
-        });
+        })
     }
 
     if (typeof parameters.filters === 'undefined') {
         errors.push({
             field: 'filters',
             message: 'The filters parameter is required',
-        });
+        })
     }
 
     if (typeof parameters.filters !== 'object') {
         errors.push({
             field: 'filters',
             message: 'The filters parameter must be an object',
-        });
+        })
     } else {
         // TODO update validation logic to work with advanced filters
         // Object.entries(parameters.filters).forEach(
@@ -75,7 +78,6 @@ export async function validateRequest(request: Request) {
         //         const isStringArray = Array.isArray(value) && value.every(
         //             (item) => typeof item === 'string'
         //         )
-
         //         if (!isStringArray) {
         //             errors.push({
         //                 field: `filters.${key}`,
@@ -88,16 +90,19 @@ export async function validateRequest(request: Request) {
 
     if (errors.length > 0) {
         return {
-            errorResponse: NextResponse.json({
-                errors,
-            }, {
-                status: 400,
-                statusText: 'Bad Request',
-            })
+            errorResponse: NextResponse.json(
+                {
+                    errors,
+                },
+                {
+                    status: 400,
+                    statusText: 'Bad Request',
+                }
+            ),
         }
     }
 
-    return {values: parameters}
+    return { values: parameters }
 }
 
 export function getBooleanQuery(q: string, filters: SearchFilters) {
@@ -108,14 +113,10 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
             must: {
                 simple_query_string: {
                     query: q,
-                    fields: [
-                        'GrantTitleEng^4',
-                        'Abstract^2',
-                        'LaySummary'
-                    ],
-                    flags: "AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE",
-                }
-            }
+                    fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+                    flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
+                },
+            },
         }
     }
 
@@ -128,24 +129,24 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
             filter: {
                 bool: {
                     [outerBoolOperator]: filters.filters.map(
-                        ({field, values, logicalAnd}) => {
-                            const innerBoolOperator = logicalAnd ? 'must' : 'should'
+                        ({ field, values, logicalAnd }) => {
+                            const innerBoolOperator = logicalAnd
+                                ? 'must'
+                                : 'should'
 
                             return {
                                 bool: {
-                                    [innerBoolOperator]: values.map(
-                                        (value) => ({
-                                            term: {
-                                                [field]: value
-                                            }
-                                        })
-                                    )
-                                }
+                                    [innerBoolOperator]: values.map(value => ({
+                                        term: {
+                                            [field]: value,
+                                        },
+                                    })),
+                                },
                             }
                         }
-                    )
-                }
-            }
+                    ),
+                },
+            },
         }
     }
 
@@ -153,7 +154,7 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
         bool: {
             ...mustClause,
             ...filterClause,
-        }
+        },
     }
 }
 
@@ -164,14 +165,18 @@ export async function fetchAllGrantIDsInIndex(client: Client) {
     })
 }
 
-export async function fetchAllGrantIDsMatchingBooleanQuery(client: Client, q: string, filters: SearchFilters) {
+export async function fetchAllGrantIDsMatchingBooleanQuery(
+    client: Client,
+    q: string,
+    filters: SearchFilters
+) {
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters);
+    const query = getBooleanQuery(q, filters)
 
     const grantIDs = []
 
-    const size = 1000
+    const size = 10000
 
     let hits = []
 
@@ -191,12 +196,12 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(client: Client, q: st
 
                 sort: [
                     {
-                        "GrantID": {order: 'asc'}
-                    }
+                        GrantID: { order: 'asc' },
+                    },
                 ],
 
                 ...searchAfterClause,
-            }
+            },
         })
 
         hits = results.body.hits.hits
@@ -208,7 +213,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(client: Client, q: st
         searchAfterClause = {
             search_after: hits[hits.length - 1].sort,
         }
-    } while (hits.length === size);
+    } while (hits.length === size)
 
-    return grantIDs;
+    return grantIDs
 }
