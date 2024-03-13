@@ -5,9 +5,11 @@ import {
     PolarGrid,
     Tooltip,
     PolarAngleAxis,
+    PolarRadiusAxis,
     ResponsiveContainer,
 } from 'recharts'
 import VisualisationCard from './VisualisationCard'
+import RadiusAxisLabel from './RadiusAxisLabel' 
 import MultiSelect from './MultiSelect'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
 import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
@@ -31,12 +33,15 @@ export default function GrantsPerResearchCategoryByRegion() {
         ResearchCat: selectedResearchCategories,
     })
 
-    const regionOptions = researchLocationRegionOptions.filter(
-        regionOption => !['Unspecified'].includes(regionOption.label)
-    ).map(regionOption => ({
-        ...regionOption,
-        label: (regionOption.label === "International") ? "Multi-Regional" : regionOption.label
-    }))
+    const regionOptions = researchLocationRegionOptions
+        .filter(regionOption => !['Unspecified'].includes(regionOption.label))
+        .map(regionOption => ({
+            ...regionOption,
+            label:
+                regionOption.label === 'International'
+                    ? 'Multi-Regional'
+                    : regionOption.label,
+        }))
 
     let researchCategoryOptions: { value: string; label: string }[]
 
@@ -115,6 +120,8 @@ export default function GrantsPerResearchCategoryByRegion() {
                             <PolarGrid />
 
                             <PolarAngleAxis dataKey="Region" />
+
+                            <PolarRadiusAxis angle={90} tick={(props) => <RadiusAxisLabel {...props} />} />
 
                             {researchCategoryOptions.map(({ value, label }) => (
                                 <Radar
