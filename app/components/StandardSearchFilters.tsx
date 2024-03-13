@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MultiSelect from './MultiSelect'
 import { SearchFilters } from '../helpers/search'
+import selectOptions from '../../data/dist/select-options.json'
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
@@ -26,6 +27,35 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
     )
 
+    const setSearchFiltersFromLocalFilterState = () => {
+        setSearchFilters({
+            logicalAnd: true,
+            filters: Object.entries(filters).map(([field, values]) => ({
+                field,
+                values,
+                logicalAnd: false,
+            })),
+        })
+    }
+
+    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
+        const newFilters = {
+            ...filters,
+            [field]: selectedOptions,
+        }
+
+        setFilters(newFilters)
+
+        setSearchFiltersFromLocalFilterState()
+    }
+
+    // Set initial filter state from URL on page load
+    useEffect(() => {
+        if (filtersFromUrl) {
+            setSearchFiltersFromLocalFilterState()
+        }
+    }, [filtersFromUrl])
+
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
 
@@ -43,24 +73,6 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
 
         router.replace(url.href)
     }, [searchParams, filters, pathname, router])
-
-    const setSelectedOptions = (field: string, selectedOptions: string[]) => {
-        const newFilters = {
-            ...filters,
-            [field]: selectedOptions,
-        }
-
-        setFilters(newFilters)
-
-        setSearchFilters({
-            logicalAnd: true,
-            filters: Object.entries(newFilters).map(([field, values]) => ({
-                field,
-                values,
-                logicalAnd: false,
-            })),
-        })
-    }
 
     const fields = {
         Disease: 'Diseases',
@@ -83,6 +95,9 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                     <MultiSelect
                         key={field}
                         field={field}
+                        preloadedOptions={
+                            selectOptions[field as keyof typeof selectOptions]
+                        }
                         selectedOptions={
                             filters[field as keyof SelectedFilters] ?? []
                         }
