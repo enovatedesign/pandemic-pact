@@ -33,9 +33,7 @@ const Layout = ({
     mastheadContent,
     children,
 }: Props) => {
-
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
 
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [showClosedContent, setShowClosedContent] = useState(false)
@@ -143,7 +141,9 @@ const Layout = ({
                                 style={widthAnimationProps}
                             >
                                 <animated.div style={opacityAnimationProps}>
-                                    {sidebarOpen && sidebar.openContent}
+                                    <div className={!sidebarOpen ? 'hidden' : undefined}>
+                                        {sidebar.openContent}
+                                    </div>
                                 </animated.div>
                             </animated.div>
                         </div>
@@ -180,6 +180,7 @@ const Layout = ({
                                                         {summary}
                                                     </p>
                                                 )}
+
                                                 {mastheadContent}
                                             </div>
                                         )}

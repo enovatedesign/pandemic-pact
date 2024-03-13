@@ -7,7 +7,7 @@ import HighlightedRichTextBlock from "./Blocks/HighlightedRichText";
 import ImageBlock from "./Blocks/Image";
 import MultiColumnsBlock from "./Blocks/MultiColumns";
 import RichTextBlock from "./Blocks/RichText";
-import FunderLogoAndStatementBlock from "./Blocks/FunderLogoAndStatement";
+import LogosAndText from "./Blocks/LogosAndText";
 import DownloadBlock from "./Blocks/Download";
 import SplitImageTextBlock from "./Blocks/SplitImageTextBlock";
 import TabbedContentBlock from "./Blocks/TabbedContentBlock";
@@ -33,7 +33,7 @@ const blocks: any = {
 	image: ImageBlock,
 	multiColumns: MultiColumnsBlock,
 	richText: RichTextBlock,
-	funderLogoAndStatement: FunderLogoAndStatementBlock,
+	logosAndText: LogosAndText,
 	download: DownloadBlock,
 	splitImageText: SplitImageTextBlock,
 	tabbedContent: TabbedContentBlock,

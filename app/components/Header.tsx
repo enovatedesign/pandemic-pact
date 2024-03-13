@@ -18,12 +18,10 @@ export default function Header({ className, showMobileNav }: Props ) {
     const pathname = usePathname()
     const links = getLinksArray()
 
-    const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(-1)
     const navItemClick = () => {
         const bodyEl = document.querySelector('body')
         bodyEl?.classList.remove('overflow-y-hidden')
-        setIsVisible(false)
     }
     
     const NavItem = (link: {label: string, href: string, subPages: any}) => (
@@ -63,7 +61,6 @@ export default function Header({ className, showMobileNav }: Props ) {
     useEffect(() => {
         const handleDocumentClick = (e: any) => {
             if (!navRef.current?.contains(e.target)) {
-                setIsVisible(false)
                 setActiveIndex(-1)
             }
         }
@@ -124,7 +121,8 @@ export default function Header({ className, showMobileNav }: Props ) {
                                             {link.subPages && (
                                                 <AnimateHeight
                                                     duration={300}
-                                                    height={activeIndex === index || isVisible ? 'auto' : 0}
+                                                    height={activeIndex === index ? 'auto' : 0}
+                                                    className={activeIndex === index ? 'lg:block' : 'lg:hidden'}
                                                 >
                                                     <ul className='bg-white/10 p-4 lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-64 lg:shadow-xl lg:flex lg:flex-col rounded-2xl lg:p-2'>
                                                         {link.subPages.map((subPage, index) => {
