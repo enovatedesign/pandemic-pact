@@ -20,8 +20,11 @@ export default function TooltipContent({ title, items }: Props) {
 
             {items && (
                 <div className="px-4 py-2 space-y-1">
-                    {items.map(item => (
-                        <div className="flex items-center justify-between space-x-8">
+                    {items.map((item: TooltipContentItem, index: number) => (
+                        <div
+                            className="flex items-center justify-between space-x-8"
+                            key={index}
+                        >
                             <div className="flex items-center space-x-2">
                                 {item.colour && (
                                     <span
