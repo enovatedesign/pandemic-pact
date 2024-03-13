@@ -92,6 +92,7 @@ export default function TemporalChart() {
                     formatter={dollarValueFormatter}
                     isAnimationActive={false}
                     itemSorter={tooltipItemSorter}
+                    content={<TooltipContent />}
                     {...baseTooltipProps}
                 />
 
@@ -107,5 +108,28 @@ export default function TemporalChart() {
                 ))}
             </LineChart>
         </ResponsiveContainer>
+    )
+}
+
+function TooltipContent() {
+    return (
+        <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
+            <div className="border-gray-100 border-b px-4 py-2">
+                <p className="font-medium text-gray-800">Sep 11</p>
+            </div>
+            <div className="px-4 py-2 space-y-1">
+                <div className="flex items-center justify-between space-x-8">
+                    <div className="flex items-center space-x-2">
+                        <span className="shrink-0 rounded-full border-2 h-3 w-3 border-white shadow bg-blue-500" />
+                        <p className="text-right whitespace-nowrap text-gray-400">
+                            ETF Shares Vital
+                        </p>
+                    </div>
+                    <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-800">
+                        $8,748.5
+                    </p>
+                </div>
+            </div>
+        </div>
     )
 }
