@@ -1,11 +1,12 @@
-import { useState, useMemo, useContext, MouseEvent } from 'react'
+import { useState, useEffect, useMemo, useContext, MouseEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { groupBy } from 'lodash'
-import { GlobalFilterContext } from '../../helpers/filters'
+import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
 import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import { dollarValueFormatter } from '../../helpers/value-formatters'
@@ -13,6 +14,7 @@ import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
+import { debounce } from 'lodash'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -102,7 +104,7 @@ export default function Map() {
                 y: event.clientY,
             },
             content: (
-                <TooltipContent
+                <MapTooltipContent
                     geo={geo}
                     displayWhoRegions={displayWhoRegions}
                 />
@@ -120,48 +122,82 @@ export default function Map() {
             : '#D6D6DA'
     }
 
+    const [height, setHeight] = useState(650)
+    const [scale, setScale] = useState(120)
+
+    useEffect(() => {
+
+        const handleHeight = () => {
+            if (window.innerWidth > 1024) {
+                setHeight(300)
+                setScale(80)
+            } else {
+                setHeight(650)
+                setScale(120)
+            }
+        }
+    
+        const debouncedHandleHeight = debounce(handleHeight, 200)
+
+        debouncedHandleHeight()
+
+        window.addEventListener('resize', debouncedHandleHeight)
+
+        return () => {
+            window.removeEventListener('resize', debouncedHandleHeight)
+        }
+    })
+    
+    const { sidebarOpen } = useContext(SidebarStateContext)
+
     return (
-        <div className="w-full h-full">
-            <ComposableMap
-                projection="geoMercator"
-                projectionConfig={{
-                    scale: 80,
-                    center: [0, 40],
-                }}
-                height={300}
-            >
-                <Geographies geography={filteredGeojson}>
-                    {({ geographies }) =>
-                        geographies.map(geo => (
-                            <Geography
-                                key={geo.rsmKey}
-                                geography={geo}
-                                fill={getColourOfGeo(geo)}
-                                stroke={
-                                    displayWhoRegions
-                                        ? getColourOfGeo(geo)
-                                        : '#FFFFFF'
-                                }
-                                strokeWidth={displayWhoRegions ? 0.5 : 1.0}
-                                className="cursor-pointer"
-                                onClick={() => onGeoClick(geo)}
-                                onMouseEnter={event =>
-                                    onGeoMouseEnterOrMove(event, geo)
-                                }
-                                onMouseMove={event =>
-                                    onGeoMouseEnterOrMove(event, geo)
-                                }
-                                onMouseLeave={onGeoMouseLeave}
-                            />
-                        ))
-                    }
-                </Geographies>
-            </ComposableMap>
 
-            <div className="grid gap-4 md:grid-cols-3">
+        <div className="w-full h-full flex flex-col gap-y-4">
+            <div className="breakout">
+                <ComposableMap
+                    projection="geoMercator"
+                    projectionConfig={{
+                        scale: scale,
+                        center: [0, 40],
+                    }}
+                    height={height}
+                >
+                    <ZoomableGroup center={[0, 40]} >
+                        <Geographies geography={filteredGeojson}>
+                            {({ geographies }) =>
+                                geographies.map(geo => (
+                                    <Geography
+                                        key={geo.rsmKey}
+                                        geography={geo}
+                                        fill={getColourOfGeo(geo)}
+                                        stroke={
+                                            displayWhoRegions
+                                                ? getColourOfGeo(geo)
+                                                : '#FFFFFF'
+                                        }
+                                        strokeWidth={displayWhoRegions ? 0.5 : 1.0}
+                                        className="cursor-pointer"
+                                        onClick={() => onGeoClick(geo)}
+                                        onMouseEnter={event =>
+                                            onGeoMouseEnterOrMove(event, geo)
+                                        }
+                                        onMouseMove={event =>
+                                            onGeoMouseEnterOrMove(event, geo)
+                                        }
+                                        onMouseLeave={onGeoMouseLeave}
+                                    />
+                                ))
+                            }
+                        </Geographies>
+                    </ZoomableGroup>
+                </ComposableMap>
+            </div>
+                        
+            <div className={`flex flex-col items-center gap-y-2 ${!sidebarOpen && 'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'}`}>
+                
                 <ColourScale colourScale={colourScale} />
-
-                <div className="justify-self-center">
+                
+                <div className="xl:self-center xl:-translate-y-[14px]">
                     <DoubleLabelSwitch
                         checked={displayWhoRegions}
                         onChange={setDisplayWhoRegions}
@@ -171,7 +207,7 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="justify-self-center">
+                <div className="xl:self-center xl:-translate-y-[14px]">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
                         onChange={setUsingFunderLocation}
@@ -185,34 +221,38 @@ export default function Map() {
     )
 }
 
-function TooltipContent({
+function MapTooltipContent({
     geo,
     displayWhoRegions,
 }: {
     geo: any
     displayWhoRegions: boolean
 }) {
+    const items = [
+        {
+            label: 'Grants',
+            value: geo.properties.totalGrants || 0,
+        },
+        {
+            label: 'Known Financial Commitments (USD)',
+            value: dollarValueFormatter(
+                geo.properties.totalAmountCommitted || 0
+            ),
+        },
+    ]
     return (
-        <div className="flex flex-col gap-y-4">
-            <p className="font-bold text-lg">{geo.properties.NAME}</p>
-
-            <div>
-                <p className="text-md">
-                    Grants: {geo.properties.totalGrants || 0}
-                </p>
-                <p className="text-md">
-                    Known Financial Commitments:{' '}
-                    {dollarValueFormatter(
-                        geo.properties.totalAmountCommitted || 0
-                    )}
-                </p>
-            </div>
-
-            <p className="text-md italic">
-                Click to explore grants in this{' '}
-                {displayWhoRegions ? 'region' : 'country'}
-            </p>
-        </div>
+        <TooltipContent
+            title={geo.properties.NAME}
+            items={items}
+            footer={
+                <div className="px-4 py-2">
+                    <p className="text-right text-sm text-gray-400">
+                        Click to explore grants in this{' '}
+                        {displayWhoRegions ? 'region' : 'country'}
+                    </p>
+                </div>
+            }
+        />
     )
 }
 

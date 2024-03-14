@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MultiSelect from './MultiSelect'
 import { SearchFilters } from '../helpers/search'
@@ -27,7 +27,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
     )
 
-    const setSearchFiltersFromLocalFilterState = () => {
+    const setSearchFiltersFromLocalFilterState = useCallback(() => {
         setSearchFilters({
             logicalAnd: true,
             filters: Object.entries(filters).map(([field, values]) => ({
@@ -36,7 +36,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                 logicalAnd: false,
             })),
         })
-    }
+    }, [filters, setSearchFilters])
 
     const setSelectedOptions = (field: string, selectedOptions: string[]) => {
         const newFilters = {
@@ -54,7 +54,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
         if (filtersFromUrl) {
             setSearchFiltersFromLocalFilterState()
         }
-    }, [filtersFromUrl])
+    }, [filtersFromUrl, setSearchFiltersFromLocalFilterState])
 
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
