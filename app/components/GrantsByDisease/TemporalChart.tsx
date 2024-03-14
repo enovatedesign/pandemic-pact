@@ -84,7 +84,12 @@ export default function TemporalChart() {
                 />
 
                 <Tooltip
-                    content={rechartCategoriesTooltipContentFunction}
+                    content={props =>
+                        rechartCategoriesTooltipContentFunction({
+                            ...props,
+                            category: 'Disease',
+                        })
+                    }
                     {...baseTooltipProps}
                 />
 
