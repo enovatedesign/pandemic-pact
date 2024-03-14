@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { groupBy } from 'lodash'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
@@ -103,7 +104,7 @@ export default function Map() {
                 y: event.clientY,
             },
             content: (
-                <TooltipContent
+                <MapTooltipContent
                     geo={geo}
                     displayWhoRegions={displayWhoRegions}
                 />
@@ -220,34 +221,38 @@ export default function Map() {
     )
 }
 
-function TooltipContent({
+function MapTooltipContent({
     geo,
     displayWhoRegions,
 }: {
     geo: any
     displayWhoRegions: boolean
 }) {
+    const items = [
+        {
+            label: 'Grants',
+            value: geo.properties.totalGrants || 0,
+        },
+        {
+            label: 'Known Financial Commitments (USD)',
+            value: dollarValueFormatter(
+                geo.properties.totalAmountCommitted || 0
+            ),
+        },
+    ]
     return (
-        <div className="flex flex-col gap-y-4">
-            <p className="font-bold text-lg">{geo.properties.NAME}</p>
-
-            <div>
-                <p className="text-md">
-                    Grants: {geo.properties.totalGrants || 0}
-                </p>
-                <p className="text-md">
-                    Known Financial Commitments:{' '}
-                    {dollarValueFormatter(
-                        geo.properties.totalAmountCommitted || 0
-                    )}
-                </p>
-            </div>
-
-            <p className="text-md italic">
-                Click to explore grants in this{' '}
-                {displayWhoRegions ? 'region' : 'country'}
-            </p>
-        </div>
+        <TooltipContent
+            title={geo.properties.NAME}
+            items={items}
+            footer={
+                <div className="px-4 py-2">
+                    <p className="text-right text-sm text-gray-400">
+                        Click to explore grants in this{' '}
+                        {displayWhoRegions ? 'region' : 'country'}
+                    </p>
+                </div>
+            }
+        />
     )
 }
 

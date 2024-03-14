@@ -1,33 +1,39 @@
-"use client"
+'use client'
 
-import {useMemo, useState, useEffect, useRef} from "react"
-import Layout from "../components/Layout"
-import FilterSidebar from "../components/FilterSidebar"
+import { useMemo, useState, useEffect, useRef } from 'react'
+import Layout from '../components/Layout'
+import FilterSidebar from '../components/FilterSidebar'
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
-import FundingAmountsForEachResearchCategoryOverTime from "../components/FundingAmountsForEachResearchCategoryOverTime"
-import GrantsByDiseaseCard from "../components/GrantsByDisease/Card"
-import WordCloudsCard from "../components/WordClouds/Card"
-import {emptyFilters, filterGrants, GlobalFilterContext, countActiveFilters, Filters} from "../helpers/filters"
+import FundingAmountsForEachResearchCategoryOverTime from '../components/FundingAmountsForEachResearchCategoryOverTime'
+import GrantsByDiseaseCard from '../components/GrantsByDisease/Card'
+import WordCloudsCard from '../components/WordClouds/Card'
+import {
+    emptyFilters,
+    filterGrants,
+    GlobalFilterContext,
+    countActiveFilters,
+    Filters,
+} from '../helpers/filters'
 import completeDataset from '../../data/dist/grants.json'
-import {throttle, debounce} from 'lodash'
-import {Tooltip, TooltipRefProps} from 'react-tooltip'
-import {TooltipContext} from '../helpers/tooltip'
-import VisualisationCardLinks from "./components/VisualisationCardLinks"
+import { throttle, debounce } from 'lodash'
+import { Tooltip, TooltipRefProps } from 'react-tooltip'
+import { TooltipContext } from '../helpers/tooltip'
+import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 
 export default function VisualisePageClient() {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
-        emptyFilters(),
+        emptyFilters()
     )
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),
-        [selectedFilters],
+        [selectedFilters]
     )
 
     const sidebar = useMemo(() => {
@@ -43,22 +49,35 @@ export default function VisualisePageClient() {
             ),
             closedContent: (
                 <dl className="flex items-center justify-center self-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
-                    {(globallyFilteredDataset.length < completeDataset.length) ? (
+                    {globallyFilteredDataset.length < completeDataset.length ? (
                         <>
-                            <dt className="text-white uppercase">Filtered Grants Total</dt>
-                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{globallyFilteredDataset.length} / {completeDataset.length}</dd>
+                            <dt className="text-white uppercase">
+                                Filtered Grants Total
+                            </dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
+                                {globallyFilteredDataset.length} /{' '}
+                                {completeDataset.length}
+                            </dd>
                         </>
                     ) : (
                         <>
-                            <dt className="text-white uppercase">Total grants</dt>
-                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{globallyFilteredDataset.length}</dd>
+                            <dt className="text-white uppercase">
+                                Total grants
+                            </dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
+                                {globallyFilteredDataset.length}
+                            </dd>
                         </>
                     )}
 
                     {numberOfActiveFilters > 0 && (
                         <>
-                            <dt className="text-white uppercase pt-4 mt-2 border-t-2 border-gray-500">Filters</dt>
-                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">{numberOfActiveFilters}</dd>
+                            <dt className="text-white uppercase pt-4 mt-2 border-t-2 border-gray-500">
+                                Filters
+                            </dt>
+                            <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
+                                {numberOfActiveFilters}
+                            </dd>
                         </>
                     )}
                 </dl>
@@ -101,31 +120,37 @@ export default function VisualisePageClient() {
     }, [dropdownVisible])
 
     return (
-        <GlobalFilterContext.Provider value={{filters: selectedFilters, grants: globallyFilteredDataset}}>
-            <TooltipContext.Provider value={{tooltipRef}}>
+        <GlobalFilterContext.Provider
+            value={{
+                filters: selectedFilters,
+                grants: globallyFilteredDataset,
+            }}
+        >
+            <TooltipContext.Provider value={{ tooltipRef }}>
                 <Layout
                     title="Interactive Charts"
                     showSummary={true}
                     summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
                     sidebar={sidebar}
                 >
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} />
 
-                    <VisualisationCardLinks/>
+                    <VisualisationCardLinks />
 
                     <div className="relative z-10 mx-auto my-6 lg:my-12 lg:container">
-                        <div
-                            className={`${gridClasses} mt-6`}
-                        >
-                            <div id='disease' className={gridClasses}>
+                        <div className={`${gridClasses} mt-6`}>
+                            <div id="disease" className={gridClasses}>
                                 <GrantsByDiseaseCard />
                             </div>
 
-                            <div id='research-category' className={gridClasses}>
+                            <div id="research-category" className={gridClasses}>
                                 <GrantsByResearchCategoryCard />
                             </div>
 
-                            <div id='geographical-distribution' className={gridClasses}>
+                            <div
+                                id="geographical-distribution"
+                                className={gridClasses}
+                            >
                                 <GrantsByCountryWhereResearchWasConductedCard />
 
                                 <GrantsPerResearchCategoryByRegion />
@@ -133,7 +158,7 @@ export default function VisualisePageClient() {
                                 <RegionalFlowOfGrantsCard />
                             </div>
 
-                            <div id='annual-trends' className={gridClasses}>
+                            <div id="annual-trends" className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
 
@@ -149,13 +174,12 @@ export default function VisualisePageClient() {
                             place="right-start"
                             offset={10}
                             variant="light"
-                            className="!px-3 !py-2 text-left border border-gray-200"
                             opacity={1}
+                            disableStyleInjection
                         />
                     </div>
                 </Layout>
             </TooltipContext.Provider>
         </GlobalFilterContext.Provider>
-
     )
 }

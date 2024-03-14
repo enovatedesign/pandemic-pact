@@ -8,6 +8,7 @@ import {
     PolarRadiusAxis,
     ResponsiveContainer,
 } from 'recharts'
+import { rechartTooltipContentFunction } from './RechartTooltipContent'
 import VisualisationCard from './VisualisationCard'
 import RadiusAxisLabel from './RadiusAxisLabel' 
 import MultiSelect from './MultiSelect'
@@ -139,7 +140,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                             ))}
 
                             <Tooltip
-                                isAnimationActive={false}
+                                content={rechartTooltipContentFunction}
                                 {...baseTooltipProps}
                             />
                         </RadarChart>
