@@ -130,8 +130,6 @@ function AllSubCategoriesBarChart({ chartData }: Props) {
         }
     )
 
-    console.log('subCategoryChartData', subCategoryChartData)
-
     return (
         <div className="flex flex-col gap-y-6 w-full">
             {subCategoryChartData.map(
