@@ -26,6 +26,7 @@ interface Props {
     brightColours: Colours
     dimColours: Colours
     subCharts?: { [key: string]: ReactNode }
+    showColumnHeadings?: boolean
 }
 
 export function GrantAndFinancialCommitmentBarList({
@@ -33,6 +34,7 @@ export function GrantAndFinancialCommitmentBarList({
     brightColours,
     dimColours,
     subCharts,
+    showColumnHeadings = true,
 }: Props) {
     const { tooltipRef } = useContext(TooltipContext)
 
@@ -102,28 +104,33 @@ export function GrantAndFinancialCommitmentBarList({
     return (
         <>
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
-                <div className="hidden pr-6 col-span-2 justify-self-end md:block">
-                    <p className="text-lg text-brand-grey-500">
-                        Number of grants
-                    </p>
-                </div>
-
-                <div className="hidden pl-2 col-span-2 justify-self-end md:block">
-                    <div className="flex gap-x-1">
-                        <p className="text-lg text-brand-grey-500">
-                            Known Financial Commitments (USD)
-                        </p>
-                        <InfoModal>
-                            <p>
-                                We used historical currency exchange rates from
-                                any currency in which the grant was awarded
-                                converted to the US dollars. The term ‘known’ is
-                                used as not all grant records have funding
-                                amount data.
+                {showColumnHeadings && (
+                    <>
+                        <div className="hidden pr-6 col-span-2 justify-self-end md:block">
+                            <p className="text-lg text-brand-grey-500">
+                                Number of grants
                             </p>
-                        </InfoModal>
-                    </div>
-                </div>
+                        </div>
+
+                        <div className="hidden pl-2 col-span-2 justify-self-end md:block">
+                            <div className="flex gap-x-1">
+                                <p className="text-lg text-brand-grey-500">
+                                    Known Financial Commitments (USD)
+                                </p>
+                                <InfoModal>
+                                    <p>
+                                        We used historical currency exchange
+                                        rates from any currency in which the
+                                        grant was awarded converted to the US
+                                        dollars. The term ‘known’ is used as not
+                                        all grant records have funding amount
+                                        data.
+                                    </p>
+                                </InfoModal>
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 {data.map((datum: any) => (
                     <Fragment key={datum['Category Value']}>
@@ -134,13 +141,13 @@ export function GrantAndFinancialCommitmentBarList({
                                 </p>
                                 {subCharts && (
                                     <button
-                                    className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
-                                    onClick={() =>
-                                        setSelectedSubChart(
-                                            datum['Category Value']
+                                        className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
+                                        onClick={() =>
+                                            setSelectedSubChart(
+                                                datum['Category Value']
                                             )
                                         }
-                                        >
+                                    >
                                         View sub-categories
                                     </button>
                                 )}

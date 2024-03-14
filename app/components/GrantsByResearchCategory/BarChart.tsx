@@ -81,10 +81,14 @@ export default function BarChart({ chartData }: Props) {
 function AllSubCategoriesBarChart({ chartData }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
-    const subCategoryChartData = chartData.flatMap(
-        ({ 'Category Value': researchCategory }) =>
-            selectOptions.ResearchSubcat.filter(
-                ({ parent }: { parent: string }) => parent === researchCategory
+    const subCategoryChartData: [string, any][] = chartData.map(
+        ({
+            'Category Label': researchCategoryLabel,
+            'Category Value': researchCategoryValue,
+        }) => {
+            const researchSubCategoryData = selectOptions.ResearchSubcat.filter(
+                ({ parent }: { parent: string }) =>
+                    parent === researchCategoryValue
             ).map(function (researchSubCategory) {
                 const grantsWithKnownAmounts = grants
                     .filter((grant: any) =>
@@ -121,14 +125,32 @@ function AllSubCategoriesBarChart({ chartData }: Props) {
                     'Known Financial Commitments (USD)': moneyCommitted,
                 }
             })
+
+            return [researchCategoryLabel, researchSubCategoryData]
+        }
     )
 
+    console.log('subCategoryChartData', subCategoryChartData)
+
     return (
-        <GrantAndFinancialCommitmentBarList
-            data={subCategoryChartData}
-            brightColours={researchSubCategoryColours}
-            dimColours={researchSubCategoryDimColours}
-        />
+        <div className="flex flex-col gap-y-6 w-full">
+            {subCategoryChartData.map(
+                ([researchCategoryLabel, researchSubCategoryData]) => (
+                    <div key={researchCategoryLabel}>
+                        <h3 className="text-lg mb-2">
+                            {researchCategoryLabel}
+                        </h3>
+
+                        <GrantAndFinancialCommitmentBarList
+                            data={researchSubCategoryData}
+                            brightColours={researchSubCategoryColours}
+                            dimColours={researchSubCategoryDimColours}
+                            showColumnHeadings={false}
+                        />
+                    </div>
+                )
+            )}
+        </div>
     )
 }
 
