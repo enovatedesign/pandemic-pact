@@ -4,6 +4,7 @@ interface TooltipContentItem {
     colour?: string
     label: string
     value: string
+    bold?: boolean
 }
 
 interface Props {
@@ -36,7 +37,13 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                     />
                                 )}
 
-                                <p className="text-right whitespace-nowrap text-gray-400">
+                                <p
+                                    className={`text-right whitespace-nowrap ${
+                                        item.bold
+                                            ? 'font-bold text-gray-600'
+                                            : 'text-gray-400'
+                                    }`}
+                                >
                                     {item.label}
                                 </p>
                             </div>
