@@ -35,6 +35,7 @@ export default function BarChart({ chartData }: Props) {
     if (selectedCategory === 'all') {
         return (
             <AllSubCategoriesBarChart
+                selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
             />
         )
@@ -121,14 +122,111 @@ interface SubCategoryBarChartProps {
 }
 
 function AllSubCategoriesBarChart({
+    selectedCategory,
     setSelectedCategory,
 }: SubCategoryBarChartProps) {
+    const { grants } = useContext(GlobalFilterContext)
+
+    const subCategoryChartData: {
+        researchCategoryLabel: string
+        researchSubCategoryData: BarListData
+    }[] = useMemo(() => {
+        return selectOptions.ResearchCat.map(
+            ({
+                label: researchCategoryLabel,
+                value: researchCategoryValue,
+            }) => {
+                const researchSubCategoryData =
+                    selectOptions.ResearchSubcat.filter(
+                        ({ parent }: { parent: string }) =>
+                            parent === researchCategoryValue
+                    ).map(function (researchSubCategory) {
+                        const grantsWithKnownAmounts = grants
+                            .filter((grant: any) =>
+                                grant.ResearchSubcat.includes(
+                                    researchSubCategory.value
+                                )
+                            )
+                            .filter(
+                                (grant: any) =>
+                                    typeof grant.GrantAmountConverted ===
+                                    'number'
+                            )
+
+                        const grantsWithUnspecifiedAmounts = grants
+                            .filter((grant: any) =>
+                                grant.ResearchSubcat.includes(
+                                    researchSubCategory.value
+                                )
+                            )
+                            .filter(
+                                (grant: any) =>
+                                    typeof grant.GrantAmountConverted !==
+                                    'number'
+                            )
+
+                        const moneyCommitted = grantsWithKnownAmounts.reduce(
+                            ...sumNumericGrantAmounts
+                        )
+
+                        return {
+                            'Category Value': researchSubCategory.value,
+                            'Category Label': researchSubCategory.label,
+                            'Grants With Known Financial Commitments':
+                                grantsWithKnownAmounts.length,
+                            'Grants With Unspecified Financial Commitments':
+                                grantsWithUnspecifiedAmounts.length,
+                            'Total Grants':
+                                grantsWithKnownAmounts.length +
+                                grantsWithUnspecifiedAmounts.length,
+                            'Known Financial Commitments (USD)': moneyCommitted,
+                        }
+                    })
+
+                return {
+                    researchCategoryLabel,
+                    researchSubCategoryData,
+                }
+            }
+        )
+    }, [grants])
+
     return (
         <>
             <BackToCategoriesButton
                 label="Viewing All Sub-Categories"
                 setSelectedSubChart={setSelectedCategory}
             />
+
+            {subCategoryChartData.map(
+                ({ researchCategoryLabel, researchSubCategoryData }) => (
+                    <Fragment key={researchCategoryLabel}>
+                        <h3 className="text-xl text-brand-grey-500">
+                            {researchCategoryLabel}
+                        </h3>
+
+                        <BarList
+                            data={researchSubCategoryData}
+                            brightColours={researchSubCategoryColours}
+                            dimColours={researchSubCategoryDimColours}
+                        >
+                            {researchSubCategoryData.map(
+                                (datum: any, index: number) => (
+                                    <Fragment key={datum['Category Value']}>
+                                        <BarListRowHeading>
+                                            <p className="text-gray-600 text-sm">
+                                                {datum['Category Label']}
+                                            </p>
+                                        </BarListRowHeading>
+
+                                        <BarListRow dataIndex={index} />
+                                    </Fragment>
+                                )
+                            )}
+                        </BarList>
+                    </Fragment>
+                )
+            )}
         </>
     )
 }
