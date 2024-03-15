@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import AnimateHeight from 'react-animate-height'
 import {
     ScatterChart as RechartScatterChart,
     Scatter,
@@ -10,19 +12,19 @@ import {
     Tooltip,
     Cell,
 } from 'recharts'
-import { axisDollarFormatter } from '../../helpers/value-formatters'
-import { researchCategoryColours } from '../../helpers/colours'
-import Legend from '../Legend'
-import { useState } from 'react'
-import AnimateHeight from 'react-animate-height'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { baseTooltipProps } from '../../helpers/tooltip'
-import { dollarValueFormatter } from '../../helpers/value-formatters'
-import { GrantAndFinancialCommitmentBarListData } from '../GrantAndFinancialCommitmentBarList'
+import { BarListData } from '../../helpers/bar-list'
+import { researchCategoryColours } from '../../helpers/colours'
+import {
+    dollarValueFormatter,
+    axisDollarFormatter,
+} from '../../helpers/value-formatters'
+import Legend from '../Legend'
 import TooltipContent from '../TooltipContent'
 
 interface Props {
-    chartData: GrantAndFinancialCommitmentBarListData
+    chartData: BarListData
 }
 
 const CustomDot = (props: any) => {
