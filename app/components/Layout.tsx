@@ -12,6 +12,7 @@ import Footer from './Footer'
 import PageTitle from './PageTitle'
 import InteractiveBackground from './InteractiveBackground'
 import UtilityBar from './UtilityBar'
+import { SidebarStateContext } from "../helpers/filters"
 
 type Props = {
     sidebar?: {
@@ -188,7 +189,9 @@ const Layout = ({
                                 </div>
                             </InteractiveBackground>
 
-                            {children}
+                            <SidebarStateContext.Provider value={{sidebarOpen}}>
+                                {children}
+                            </SidebarStateContext.Provider>
                         </article>
                     </main>
 

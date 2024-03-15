@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import AnimateHeight from 'react-animate-height'
 import {
     ScatterChart as RechartScatterChart,
     Scatter,
@@ -10,8 +12,6 @@ import {
     Tooltip,
     Cell,
 } from 'recharts'
-import { useState } from 'react'
-import AnimateHeight from 'react-animate-height'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { baseTooltipProps } from '../../helpers/tooltip'
 import { BarListData } from '../../helpers/bar-list'
@@ -21,6 +21,7 @@ import {
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
 import Legend from '../Legend'
+import TooltipContent from '../TooltipContent'
 
 interface Props {
     chartData: BarListData
@@ -39,6 +40,24 @@ export default function ScatterChart({ chartData }: Props) {
         label: data['Category Label'],
         value: data['Category Value'],
     }))
+
+    const tooltipContent = (props: any) => {
+        const { active, payload } = props
+
+        if (!active) return null
+
+        const title = payload[0].payload['Category Label']
+
+        const items = payload.map((item: any) => ({
+            label: item.name,
+            value: item.name.includes('(USD)')
+                ? dollarValueFormatter(item.value)
+                : item.value,
+            colour: item.color,
+        }))
+
+        return <TooltipContent title={title} items={items} />
+    }
 
     return (
         <>
@@ -112,23 +131,8 @@ export default function ScatterChart({ chartData }: Props) {
                     />
 
                     <Tooltip
-                        isAnimationActive={false}
                         cursor={{ strokeDasharray: '3 3' }}
-                        formatter={(value: any, name: any, props: any) => {
-                            if (
-                                name.includes(
-                                    'Known Financial Commitments (USD)'
-                                )
-                            ) {
-                                return [
-                                    dollarValueFormatter(value),
-                                    'Known Financial Commitments (USD)',
-                                    props,
-                                ]
-                            }
-
-                            return [value, name, props]
-                        }}
+                        content={tooltipContent}
                         {...baseTooltipProps}
                     />
 

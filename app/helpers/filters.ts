@@ -133,3 +133,9 @@ export const GlobalFilterContext = createContext<{
     filters: emptyFilters(),
     grants: [],
 })
+
+export const SidebarStateContext = createContext<{
+    sidebarOpen: boolean,
+}>({
+    sidebarOpen: false,
+})

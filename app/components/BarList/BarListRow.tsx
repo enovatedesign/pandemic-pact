@@ -10,6 +10,7 @@ import {
 import { dollarValueFormatter } from '../../helpers/value-formatters'
 import { TooltipContext } from '../../helpers/tooltip'
 import { BarListContext } from '../../helpers/bar-list'
+import TooltipContent from '../TooltipContent'
 
 interface Props {
     dataIndex: number
@@ -38,7 +39,7 @@ export default function BarListRow({ dataIndex }: Props) {
                     x: event.clientX,
                     y: event.clientY,
                 },
-                content: <TooltipContent nextState={nextState} />,
+                content: <BarListRowTooltipContent nextState={nextState} />,
             })
         } else {
             onChartMouseLeave()
@@ -157,25 +158,15 @@ export default function BarListRow({ dataIndex }: Props) {
     )
 }
 
-function TooltipContent({ nextState }: any) {
-    return (
-        <div className="flex flex-col gap-y-2">
-            {nextState.activePayload.map((payload: any, index: number) => (
-                <p
-                    key={`${index}-${payload.name}`}
-                    style={{ color: payload.color }}
-                >
-                    <span>{payload.name}:</span>
+function BarListRowTooltipContent({ nextState }: any) {
+    const items = nextState.activePayload.map((payload: any) => ({
+        label: payload.name,
+        value:
+            payload.dataKey === 'Known Financial Commitments (USD)'
+                ? dollarValueFormatter(payload.value)
+                : payload.value,
+        colour: payload.color,
+    }))
 
-                    <span className="ml-2">
-                        {payload.dataKey === 'Known Financial Commitments (USD)'
-                            ? dollarValueFormatter(
-                                  payload.payload[payload.dataKey]
-                              )
-                            : payload.payload[payload.dataKey]}
-                    </span>
-                </p>
-            ))}
-        </div>
-    )
+    return <TooltipContent items={items} />
 }
