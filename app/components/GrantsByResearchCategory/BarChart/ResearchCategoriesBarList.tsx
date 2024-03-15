@@ -48,6 +48,7 @@ export default function ResearchCategoriesBarList({
                     label="View all sub-categories"
                     subCategoryValue="all"
                     setSelectedCategory={setSelectedCategory}
+                    customClasses='px-4 py-1 lg:text-base uppercase text-white bg-secondary hover:bg-secondary-lighter'
                 />
             </div>
         </>
@@ -58,17 +59,25 @@ interface ViewSubCategoryButtonProps {
     label: string
     subCategoryValue: string
     setSelectedCategory: (category: string) => void
+    customClasses?: string
 }
 
 function ViewSubCategoryButton({
     label,
     subCategoryValue,
     setSelectedCategory,
+    customClasses
 }: ViewSubCategoryButtonProps) {
+
+    const handleClick = (e: any) => {
+        location.href="#research-category"
+        setSelectedCategory(subCategoryValue)
+    }
+
     return (
         <button
-            className="self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled px-3 text-sm bg-primary-lightest text-secondary hover:bg-primary-lighter"
-            onClick={() => setSelectedCategory(subCategoryValue)}
+            className={`self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled text-sm ${customClasses ? customClasses : 'px-3 bg-primary hover:bg-primary-lighter text-secondary'}`}
+            onClick={handleClick}
         >
             {label}
         </button>
