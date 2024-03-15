@@ -96,7 +96,8 @@ const LogoAndTextItem = ({content, index}: LogoAndTextProps) => {
 
             </div>
 
-            <div className={textClasses} dangerouslySetInnerHTML={{ __html: content.text }}></div>
+            <div className={`${defaultProseClasses.join(" ")} max-w-none w-full`} dangerouslySetInnerHTML={{ __html: content.text }}></div>
+
         </animated.div>
     )
 }
