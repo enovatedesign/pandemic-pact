@@ -129,7 +129,7 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
                         )}
 
                         
-                        <div className={postDate ? "flex items-end justify-between" : "mt-auto self-end"}>
+                        <div className={`pt-3 mt-auto ${postDate ? "flex items-end justify-between" : "self-end"}`}>
                             {postDate && (
                                 <p>
                                     <time className="text-sm text-brand-grey-400" dateTime={dayjs(postDate).format('YYYY-MM-DD')}>
