@@ -53,7 +53,11 @@ export default function BarChart() {
         >
             {chartData.map((datum: any, index: number) => (
                 <Fragment key={datum['Category Value']}>
-                    <BarListRowHeading label={datum['Category Label']} />
+                    <BarListRowHeading>
+                        <p className="text-gray-600 text-sm">
+                            {datum['Category Label']}
+                        </p>
+                    </BarListRowHeading>
 
                     <BarListRow dataIndex={index} />
                 </Fragment>
