@@ -50,8 +50,6 @@ interface LogoAndTextProps {
 
 const LogoAndTextItem = ({content, index}: LogoAndTextProps) => {
 
-    const textClasses = 'prose prose-lg w-full'
-
     const blockClasses = [
         'bg-white py-6 px-8 rounded-2xl border-2 border-gray-200',
         'flex flex-col md:flex-row gap-6 lg:gap-12 items-center',
