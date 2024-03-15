@@ -51,14 +51,6 @@ export function BarListRow({ dataIndex }: Props) {
 
     return (
         <>
-            <div className="self-center mt-1 col-span-4 first:mt-0">
-                <div className="flex flex-col gap-x-2 gap-y-1 justify-between md:flex-row">
-                    <p className="text-gray-600 text-sm">
-                        {datum['Category Label']}
-                    </p>
-                </div>
-            </div>
-
             <div className="col-span-3 md:col-span-1">
                 <ResponsiveContainer width="100%" height={20}>
                     <RechartBarChart
