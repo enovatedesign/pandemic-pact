@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { ChartBarIcon, SparklesIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
-import BarChart from './BarChart'
+import BarChart from './BarChart/BarChart'
 import ScatterChart from './ScatterChart'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
