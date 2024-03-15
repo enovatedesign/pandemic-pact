@@ -15,7 +15,7 @@ interface Props {
     dataIndex: number
 }
 
-export function BarListRow({ dataIndex }: Props) {
+export default function BarListRow({ dataIndex }: Props) {
     const { tooltipRef } = useContext(TooltipContext)
 
     const {

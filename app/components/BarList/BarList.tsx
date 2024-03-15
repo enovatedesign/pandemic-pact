@@ -10,7 +10,7 @@ interface Props {
     children: ReactNode
 }
 
-export function GrantAndFinancialCommitmentBarList({
+export default function BarList({
     data,
     brightColours,
     dimColours,
