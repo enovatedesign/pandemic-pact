@@ -63,10 +63,14 @@ export default function ResearchSubCategoriesBarList({
         })
     }, [grants, selectedCategory])
 
+    const researchCategoryLabel = selectOptions.ResearchCat.find(
+        ({ value }: { value: string }) => value === selectedCategory
+    )?.label
+
     return (
         <>
             <BackToParentButton
-                label="Viewing Sub-Categories Of X"
+                label={`Viewing Sub-Categories Of ${researchCategoryLabel}`}
                 onClick={() => setSelectedCategory(null)}
             />
 
