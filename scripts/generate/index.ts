@@ -6,6 +6,7 @@ import prepareHomepageTotals from './prepare-homepage-totals'
 import fetchPubMedData from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
 import prepareCsvExportFile from './prepare-csv-export-file'
+import prepareMap from './prepare-map'
 import prepareSearch from './prepare-search'
 
 main()
@@ -26,6 +27,8 @@ async function main() {
     prepareIndividualGrantFiles()
 
     prepareCsvExportFile()
+
+    prepareMap()
 
     await prepareSearch()
 }
