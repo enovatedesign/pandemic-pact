@@ -23,5 +23,5 @@ export default async function () {
         }
     )
 
-    fs.writeJsonSync('./public/data/world.geojson', outputGeojson)
+    fs.writeJsonSync('./public/data/world-geo.json', outputGeojson)
 }
