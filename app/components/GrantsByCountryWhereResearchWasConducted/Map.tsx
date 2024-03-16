@@ -52,7 +52,7 @@ export default function Map() {
                 const propertiesToAssign: any = geojsonPropertiesToAssign.find(
                     (properties: any) =>
                         properties.isoNumeric.includes(
-                            existingProperties.ISO_N3_EH
+                            existingProperties.iso_code
                         )
                 )
 
@@ -93,7 +93,7 @@ export default function Map() {
                 usingFunderLocation
                     ? 'FunderCountry'
                     : 'ResearchInstitutionCountry'
-            ] = [geo.properties.ISO_N3_EH]
+            ] = [geo.properties.iso_code]
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
