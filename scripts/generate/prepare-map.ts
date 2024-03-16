@@ -6,7 +6,6 @@ export default async function () {
         './data/source/geojson/ne_110m_admin_0_countries.json'
     )
 
-    // TODO determine whether we need bbox property here and in features
     const outputGeojson = _.pick(inputGeojson, ['type', 'features', 'bbox'])
 
     outputGeojson.features = outputGeojson.features.map(
