@@ -18,8 +18,11 @@ import selectOptions from '../../../data/dist/select-options.json'
 import { diseaseColours } from '../../helpers/colours'
 import { baseTooltipProps } from '../../helpers/tooltip'
 
-export default function TemporalChart() {
-    const [hideCovid, setHideCovid] = useState(false)
+interface Props {
+    hideCovid: boolean
+}
+
+export default function TemporalChart({ hideCovid }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
@@ -56,12 +59,6 @@ export default function TemporalChart() {
 
     return (
         <>
-            <Switch
-                checked={hideCovid}
-                onChange={setHideCovid}
-                label="Hide COVID-19"
-            />
-
             <ResponsiveContainer width="100%" height={500}>
                 <LineChart
                     margin={{
