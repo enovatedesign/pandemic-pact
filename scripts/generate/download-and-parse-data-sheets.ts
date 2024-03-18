@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
-import {read, utils} from 'xlsx'
-import {title, info, printWrittenFileStats} from '../helpers/log'
+import { read, utils } from 'xlsx'
+import { title, info, printWrittenFileStats } from '../helpers/log'
 
 export default async function () {
     title('Fetching data sheets')
@@ -18,17 +18,20 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/44975305?private_link=74c1a289a1a1de9d66f5',
+        'https://figshare.com/ndownloader/files/45110524?private_link=58527668245cb63f14f5',
         'grants.json'
     )
 }
 
-async function downloadCsvAndConvertToJson(url: string, outputFileName: string) {
+async function downloadCsvAndConvertToJson(
+    url: string,
+    outputFileName: string
+) {
     const buffer = await fetch(url).then(res => res.arrayBuffer())
 
     info(`Fetched file from ${url}`)
 
-    const workbook = read(buffer, {raw: true})
+    const workbook = read(buffer, { raw: true })
 
     const sheetName = workbook.SheetNames[0]
 

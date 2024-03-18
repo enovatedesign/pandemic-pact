@@ -17,7 +17,7 @@ export default function Switch({
     textClassName,
     theme = 'dark',
 }: Props) {
-    const offBgColour = theme === 'light' ? 'bg-white/25' : 'bg-gray-200'
+    const offBgColour = theme === 'dark' ? 'bg-white/25' : 'bg-gray-200'
 
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
