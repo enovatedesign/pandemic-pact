@@ -16,7 +16,7 @@ export default function ExplorePageClient() {
         <Layout
             title="Grant Search"
             showSummary={true}
-            summary="Explore our data on research grants for infectious diseases with pandemic potential."
+            summary="Find, filter and explore grant abstracts, linked publications and other curated data on research grants for infectious disease with a pandemic potential."
         >
             <div className="container mx-auto my-6 lg:my-12">
                 <div className="flex flex-col space-y-6 lg:space-y-8 mt-6">
