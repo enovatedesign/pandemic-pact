@@ -66,6 +66,14 @@ export const getFooterLinksArray = () => {
     return Object.values(footerLinks)
 }
 
+export const footerLinksFirstCollection = [
+    { label: 'Overview', href: '/about/overview' },
+    { label: 'Partners and Collaborators', href: '/about/partners-and-collaborators' },
+    { label: 'Meet the Team', href: '/about/meet-the-team' },
+    { label: 'Funders', href: '/about/funders' },
+    { label: 'Our Data', href: '/about/our-data' },
+]
+
 export const footerLinksSecondCollection = [
     { label: 'GloPID-R website', href: 'https://www.glopid-r.org/' },
     { label: 'UKCDR website', href: 'https://ukcdr.org.uk/' },
