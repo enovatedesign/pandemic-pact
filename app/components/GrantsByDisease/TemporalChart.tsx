@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useState, useContext } from 'react'
 import {
     LineChart,
     Line,
@@ -9,6 +9,7 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
+import Switch from '../Switch'
 import { groupBy } from 'lodash'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -18,6 +19,7 @@ import { diseaseColours } from '../../helpers/colours'
 import { baseTooltipProps } from '../../helpers/tooltip'
 
 export default function TemporalChart() {
+    const [hideCovid, setHideCovid] = useState(false)
     const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
@@ -46,64 +48,78 @@ export default function TemporalChart() {
         return dataPoint
     })
 
+    if (hideCovid) {
+        amountCommittedToEachDiseaseOverTime.forEach(dataPoint => {
+            delete dataPoint['COVID-19']
+        })
+    }
+
     return (
-        <ResponsiveContainer width="100%" height={500}>
-            <LineChart
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 30,
-                    bottom: 20,
-                }}
-                data={amountCommittedToEachDiseaseOverTime}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
+        <>
+            <Switch
+                checked={hideCovid}
+                onChange={setHideCovid}
+                label="Hide COVID-19"
+            />
 
-                <XAxis
-                    type="category"
-                    dataKey="year"
-                    label={{
-                        value: 'Year of Award Start',
-                        position: 'bottom',
-                        offset: 0,
+            <ResponsiveContainer width="100%" height={500}>
+                <LineChart
+                    margin={{
+                        top: 5,
+                        right: 30,
+                        left: 30,
+                        bottom: 20,
                     }}
-                    className="text-lg"
-                />
+                    data={amountCommittedToEachDiseaseOverTime}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
 
-                <YAxis
-                    type="number"
-                    tickFormatter={axisDollarFormatter}
-                    label={{
-                        value: 'Known Financial Commitments (USD)',
-                        position: 'left',
-                        angle: -90,
-                        style: { textAnchor: 'middle' },
-                        offset: 20,
-                    }}
-                    className="text-lg"
-                />
-
-                <Tooltip
-                    content={props =>
-                        rechartCategoriesTooltipContentFunction({
-                            ...props,
-                            category: 'Disease',
-                        })
-                    }
-                    {...baseTooltipProps}
-                />
-
-                {selectOptions.Disease.map(({ value, label }) => (
-                    <Line
-                        key={label}
-                        type="monotone"
-                        dataKey={label}
-                        stroke={diseaseColours[value]}
-                        strokeWidth={2}
-                        dot={false}
+                    <XAxis
+                        type="category"
+                        dataKey="year"
+                        label={{
+                            value: 'Year of Award Start',
+                            position: 'bottom',
+                            offset: 0,
+                        }}
+                        className="text-lg"
                     />
-                ))}
-            </LineChart>
-        </ResponsiveContainer>
+
+                    <YAxis
+                        type="number"
+                        tickFormatter={axisDollarFormatter}
+                        label={{
+                            value: 'Known Financial Commitments (USD)',
+                            position: 'left',
+                            angle: -90,
+                            style: { textAnchor: 'middle' },
+                            offset: 20,
+                        }}
+                        className="text-lg"
+                    />
+
+                    <Tooltip
+                        content={props =>
+                            rechartCategoriesTooltipContentFunction({
+                                ...props,
+                                category: 'Disease',
+                            })
+                        }
+                        {...baseTooltipProps}
+                    />
+
+                    {selectOptions.Disease.map(({ value, label }) => (
+                        <Line
+                            key={label}
+                            type="monotone"
+                            dataKey={label}
+                            stroke={diseaseColours[value]}
+                            strokeWidth={2}
+                            dot={false}
+                        />
+                    ))}
+                </LineChart>
+            </ResponsiveContainer>
+        </>
     )
 }
