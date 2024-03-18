@@ -2,7 +2,6 @@
 
 import { SearchResponse } from '../helpers/search'
 import { links } from '../helpers/nav'
-import { useState } from 'react'
 import SearchResult from './SearchResult'
 
 import '../css/components/highlighted-search-results.css'
@@ -12,7 +11,6 @@ interface Props {
 }
 
 export default function ResultsTable({ searchResponse }: Props) {
-    const [activeIndex, setActiveIndex] = useState(-1)
 
     return (
         <div>
@@ -38,7 +36,7 @@ export default function ResultsTable({ searchResponse }: Props) {
                         >   
                             <div>
                                 <h3 className="flex gap-2 items-start">
-                                    <span className="block text-gray-400 font-semibold lg:text-2xl">{index + 1}.
+                                    <span className="block text-gray-500 font-semibold lg:text-2xl">{index + 1}.
                                     </span> {result.highlight?.GrantTitleEng ? (
                                         <a
                                             href={href}

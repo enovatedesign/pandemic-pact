@@ -4,9 +4,11 @@ interface Props {
 	block: {
 		style: string
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function DividerBlock({ block }: Props) {
+export default function DividerBlock({ block, firstBlock, lastBlock }: Props) {
 
 	const style = block.style;
 	const hrClasses = [

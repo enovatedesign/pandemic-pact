@@ -88,7 +88,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
     return (
         <div className="my-2 breakout-with-border overflow-hidden">
             <div className="relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden">
-                <h3 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">Key facts</h3>
+                <h2 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">Key facts</h2>
                 <div className="w-full bg-primary text-secondary">
                     <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
                         {filteredKeyFactsHeadings.map((heading, index) => {

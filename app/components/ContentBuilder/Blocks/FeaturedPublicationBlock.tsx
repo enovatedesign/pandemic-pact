@@ -23,14 +23,16 @@ interface Props {
             publicationType: string,
         }[],
     }
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function FeaturedPublicationBlock({ block }: Props) {
+export default function FeaturedPublicationBlock({ block, firstBlock, lastBlock }: Props) {
 
 	const publications = block.featuredPublication ?? null
 
 	const cardBlock = publications.length === 3 ? true : false
-
+	
 	if (publications) {
 		return (
             <BlockWrapper>
@@ -83,7 +85,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 																width={cardData.image.width}
 																height={cardData.image.height}
 																className="w-full h-full object-cover"
-																loading="lazy"
+																loading={firstBlock ? "eager" : "lazy"}
 															/>    
 														) : (
 															<Image 
@@ -92,7 +94,7 @@ export default function FeaturedPublicationBlock({ block }: Props) {
 																width='480'
 																height='300'
 																className="w-full h-full object-cover"
-																loading="lazy"
+																loading={firstBlock ? "eager" : "lazy"}
 															/>
 														)}
 													</div>

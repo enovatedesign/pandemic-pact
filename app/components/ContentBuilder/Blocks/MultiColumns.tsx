@@ -5,9 +5,11 @@ interface Props {
 	block: {
 		column: any[]
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function MultiColumnsBlock({ block }: Props) {
+export default function MultiColumnsBlock({ block, firstBlock, lastBlock }: Props) {
 	const columns = block.column;
 
 	if (columns) {

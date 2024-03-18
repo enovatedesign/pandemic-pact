@@ -14,9 +14,11 @@ interface Props {
             altText: string,
         }[],
     }
+    firstBlock: boolean
+    lastBlock: boolean
 }
 
-export default function ImageBlock({ block }: Props) {
+export default function ImageBlock({ block, firstBlock, lastBlock }: Props) {
 
     const [ref, springs] = useInView(
         () => ({

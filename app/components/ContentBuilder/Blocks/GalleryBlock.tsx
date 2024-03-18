@@ -14,9 +14,11 @@ type Props = {
 		autoPlay: boolean,
 		thumbnailsOnly: boolean,
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-const GalleryBlock = ( { block }: Props ) => {
+const GalleryBlock = ( { block, firstBlock, lastBlock }: Props ) => {
 	
 	const images = block.images; 
 	const autoplay = block.autoPlay ?? false
