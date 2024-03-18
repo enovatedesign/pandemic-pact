@@ -13,15 +13,16 @@ interface Props {
     placeholder?: string
     className?: string
     preloadedOptions?: Option[]
+    label?: string
 }
 
 export default function MultiSelect({
     field,
     selectedOptions,
     setSelectedOptions,
-    placeholder,
     className,
     preloadedOptions = [],
+    label
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 
@@ -65,7 +66,8 @@ export default function MultiSelect({
             options={options}
             onChange={onChange}
             value={value}
-            placeholder={placeholder ?? 'All'}
+            placeholder={`All ${label}`}
+            aria-label={`All ${label}`}
             className={`text-black ${className}`}
             instanceId={id}
             onFocus={loadOptions}

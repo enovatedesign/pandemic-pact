@@ -8,12 +8,13 @@ interface Props {
 		firstBlock: boolean,
 		lastBlock: boolean
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function RichTextBlock({ block }: Props) {
+export default function RichTextBlock({ block, firstBlock, lastBlock }: Props) {
 	const text = block.text;
 	const textAlign = block.textAlign;
-	const {firstBlock, lastBlock} = block
 
 	if (text && textAlign) {
 		const blockClasses = [

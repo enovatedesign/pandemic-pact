@@ -8,9 +8,11 @@ interface Props {
         heading: string, 
         blockContent: any[],   
     }
+    firstBlock: boolean
+    lastBlock: boolean
 }
 
-export default function LogosAndText({ block }: Props) {
+export default function LogosAndText({ block, firstBlock, lastBlock }: Props) {
 	const heading = block.heading
 	const blockContent = block.blockContent
 
