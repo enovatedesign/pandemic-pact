@@ -65,7 +65,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Broad Policy Alignment',
-            metric: '100 Days Mission',
+            metric: 'Pending',
         },
         {
             text: 'Age Group',
