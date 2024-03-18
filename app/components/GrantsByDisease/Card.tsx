@@ -57,6 +57,7 @@ export default function GrantsByDisease() {
                 checked={hideCovid}
                 onChange={setHideCovid}
                 label="Hide COVID-19"
+                theme="light"
             />
         </VisualisationCard>
     )
