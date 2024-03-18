@@ -181,7 +181,7 @@ export default function RegionalFlowOfGrantsCard() {
 
                                                 <text
                                                     x={0}
-                                                    y={580}
+                                                    y={20}
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="start"
@@ -191,7 +191,7 @@ export default function RegionalFlowOfGrantsCard() {
 
                                                 <text
                                                     x="50%"
-                                                    y={580}
+                                                    y={20}
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="middle"
@@ -201,7 +201,7 @@ export default function RegionalFlowOfGrantsCard() {
 
                                                 <text
                                                     x="100%"
-                                                    y={580}
+                                                    y={20}
                                                     fontSize="16"
                                                     fill="#666"
                                                     textAnchor="end"
