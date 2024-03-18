@@ -108,7 +108,6 @@ export default function TemporalChart({ hideCovid }: Props) {
                     {selectOptions.Disease.map(({ value, label }) => (
                         <Line
                             key={label}
-                            type="monotone"
                             dataKey={label}
                             stroke={diseaseColours[value]}
                             strokeWidth={2}
