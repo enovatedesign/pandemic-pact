@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import FooterMenu from './FooterMenu'
 import {getLinksArray} from '../helpers/nav'
-import {footerLinksSecondCollection} from '../helpers/nav'
+import {footerLinksFirstCollection , footerLinksSecondCollection} from '../helpers/nav'
 import FooterCopyrightStatement from './FooterCopyrightStatement'
 import { ExternalLinkIcon } from '@heroicons/react/solid'
 
@@ -42,7 +42,7 @@ export default function Header() {
                         <div>
                             <h2 className="text-gray-700 uppercase font-bold text-sm mb-3">Discover</h2>
                             <ul className="flex flex-col gap-2 sm:gap-3">
-                                {links.filter(link => link.label !== 'About').map((link, index) => (
+                                {footerLinksFirstCollection.filter(link => link.label !== 'About').map((link, index) => (
                                     <NavItem key={index} {...link} />
                                 ))}
                             </ul>
