@@ -149,7 +149,7 @@ export default function BarChart() {
                         </span>
                     ) : (
                         <span className="cursor-default">
-                            <InformationCircleIcon className="size-7 text-brand-grey-500" />
+                            <InformationCircleIcon className="size-7 text-brand-grey-500 ignore-in-image-export" />
                         </span>
                     )}
                 </button>
