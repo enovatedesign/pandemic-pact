@@ -37,19 +37,13 @@ export default function SearchInput({ setSearchResponse }: Props) {
             filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
         )
 
-    const [searchFilters, setSearchFilters] = useState<SearchFilters>(
-        convertStandardFiltersToSearchFilters(standardSearchFilters)
-    )
+    const [advancedSearchFilters, setAdvancedSearchFilters] =
+        useState<SearchFilters>({
+            logicalAnd: true,
+            filters: [],
+        })
 
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
-
-    const setSelectedStandardSearchFilters = (
-        selectedFilters: SelectedStandardSearchFilters
-    ) => {
-        setStandardSearchFilters(selectedFilters)
-
-        setSearchFilters(convertStandardFiltersToSearchFilters(selectedFilters))
-    }
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
@@ -81,11 +75,20 @@ export default function SearchInput({ setSearchResponse }: Props) {
     }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
 
     const searchRequestBody = useMemo(() => {
+        const searchFilters = showAdvancedSearch
+            ? advancedSearchFilters
+            : convertStandardFiltersToSearchFilters(standardSearchFilters)
+
         return {
             q: searchQuery,
             filters: searchFilters,
         }
-    }, [searchQuery, searchFilters])
+    }, [
+        searchQuery,
+        standardSearchFilters,
+        advancedSearchFilters,
+        showAdvancedSearch,
+    ])
 
     useEffect(() => {
         searchRequest('list', searchRequestBody)
@@ -97,7 +100,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
             .catch(error => {
                 console.error(error)
             })
-    }, [searchRequestBody, setTotalHits, setSearchResponse, showAdvancedSearch])
+    }, [searchRequestBody, setTotalHits, setSearchResponse])
 
     return (
         <div>
@@ -210,7 +213,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             className={showAdvancedSearch ? 'block' : 'hidden'}
                         >
                             <AdvancedSearchFilters
-                                setSearchFilters={setSearchFilters}
+                                setSearchFilters={setAdvancedSearchFilters}
                             />
                         </div>
 
@@ -219,9 +222,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         >
                             <StandardSearchFilters
                                 selectedFilters={standardSearchFilters}
-                                setSelectedFilters={
-                                    setSelectedStandardSearchFilters
-                                }
+                                setSelectedFilters={setStandardSearchFilters}
                             />
                         </div>
                     </div>
