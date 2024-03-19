@@ -16,6 +16,7 @@ import StandardSearchFilters, {
     SelectedStandardSearchFilters,
 } from './StandardSearchFilters'
 import AdvancedSearchFilters from './AdvancedSearchFilters'
+import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
     setSearchResponse: (searchResponse: SearchResponse) => void
@@ -29,6 +30,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
     const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     const [standardSearchFilters, setStandardSearchFilters] =
         useState<SelectedStandardSearchFilters>(
@@ -88,6 +90,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
             .then(data => {
                 setSearchResponse(data)
                 setTotalHits(data.total.value)
+                setIsLoading(false)
             })
             .catch(error => {
                 console.error(error)
@@ -230,12 +233,16 @@ export default function SearchInput({ setSearchResponse }: Props) {
 
                 <div className="flex flex-col md:flex-row gap-4 justify-between justify-start md:items-center">
                     <p className="text-secondary flex flex-row item-center gap-2 uppercase">
-                        <span>
+                        <span className="whitespace-nowrap">
                             {searchQuery ? 'Total Hits:' : 'Total Grants:'}
                         </span>
-                        <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
-                            {totalHits}
-                        </span>
+                        {isLoading ? (
+                            <LoadingSpinner className="w-5 h-5 animate-spin shrink-0"/>
+                        ) : (
+                            <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
+                                {totalHits}
+                            </span>
+                        )}
                     </p>
 
                     <div className="flex flex-col md:flex-row gap-4">
