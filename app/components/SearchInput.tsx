@@ -12,7 +12,9 @@ import {
 import Button from './Button'
 import AnimateHeight from 'react-animate-height'
 import InfoModal from './InfoModal'
-import StandardSearchFilters from './StandardSearchFilters'
+import StandardSearchFilters, {
+    SelectedStandardSearchFilters,
+} from './StandardSearchFilters'
 import AdvancedSearchFilters from './AdvancedSearchFilters'
 
 interface Props {
@@ -24,13 +26,26 @@ export default function SearchInput({ setSearchResponse }: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
+    const filtersFromUrl = searchParams.get('filters') ?? null
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
-    const [searchFilters, setSearchFilters] = useState<SearchFilters>({
-        logicalAnd: true,
-        filters: [],
-    })
+    const [standardSearchFilters, setStandardSearchFilters] =
+        useState<SelectedStandardSearchFilters>(
+            filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
+        )
+
+    const [searchFilters, setSearchFilters] = useState<SearchFilters>(
+        convertStandardFiltersToSearchFilters(standardSearchFilters)
+    )
+
+    const setSelectedStandardSearchFilters = (
+        selectedFilters: SelectedStandardSearchFilters
+    ) => {
+        setStandardSearchFilters(selectedFilters)
+
+        setSearchFilters(convertStandardFiltersToSearchFilters(selectedFilters))
+    }
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
@@ -45,8 +60,21 @@ export default function SearchInput({ setSearchResponse }: Props) {
             url.searchParams.delete('q')
         }
 
+        const anyStandardFiltersAreApplied = Object.values(
+            standardSearchFilters
+        ).some(filter => filter.length > 0)
+
+        if (anyStandardFiltersAreApplied) {
+            url.searchParams.set(
+                'filters',
+                JSON.stringify(standardSearchFilters)
+            )
+        } else {
+            url.searchParams.delete('filters')
+        }
+
         router.replace(url.href)
-    }, [searchParams, searchQuery, pathname, router])
+    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
 
     const searchRequestBody = useMemo(() => {
         return {
@@ -82,6 +110,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             value={searchQuery}
                             className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
+
                         <Button
                             size="xsmall"
                             colour="grey"
@@ -147,6 +176,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         <h2 className="text-secondary uppercase tracking-widest font-bold">
                             Search Filters
                         </h2>
+
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
@@ -158,6 +188,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             >
                                 Standard Search
                             </button>
+
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
                                 className={`${
@@ -187,7 +218,10 @@ export default function SearchInput({ setSearchResponse }: Props) {
                                 height={!advancedSearchShow && 'auto'}
                             >
                                 <StandardSearchFilters
-                                    setSearchFilters={setSearchFilters}
+                                    selectedFilters={standardSearchFilters}
+                                    setSelectedFilters={
+                                        setSelectedStandardSearchFilters
+                                    }
                                 />
                             </AnimateHeight>
                         )}
@@ -217,4 +251,17 @@ export default function SearchInput({ setSearchResponse }: Props) {
             </div>
         </div>
     )
+}
+
+function convertStandardFiltersToSearchFilters(
+    standardFilters: SelectedStandardSearchFilters
+): SearchFilters {
+    return {
+        logicalAnd: true,
+        filters: Object.entries(standardFilters).map(([field, values]) => ({
+            field,
+            values,
+            logicalAnd: false,
+        })),
+    }
 }
