@@ -122,11 +122,11 @@ export default function VisualisationCard({
                         )}
 
                         {subtitle && (
-                            <p className="text-brand-grey-500">{subtitle}</p>
+                            <p className="text-brand-grey-600">{subtitle}</p>
                         )}
 
                         {chartInstructions && (
-                            <p className="text-brand-grey-500">{chartInstructions}</p>
+                            <p className="text-brand-grey-600">{chartInstructions}</p>
                         )}
                     </div>
 
@@ -153,8 +153,8 @@ export default function VisualisationCard({
                                                     w-full rounded-md px-2 py-1 text-sm font-medium leading-5
                                                     ${
                                                         selected
-                                                            ? 'bg-brand-teal-600 text-white shadow cursor-default'
-                                                            : 'hover:bg-gray-200 text-gray-500 hover:text-gray-600'
+                                                            ? 'bg-brand-teal-700 text-white shadow cursor-default'
+                                                            : 'hover:bg-gray-200 text-gray-600 hover:text-gray-600'
                                                     }
                                                 `}
                                             >
@@ -174,7 +174,7 @@ export default function VisualisationCard({
                     </div>
 
                     {footnote && (
-                        <p className="text-sm text-gray-500">{footnote}</p>
+                        <p className="text-sm text-gray-600">{footnote}</p>
                     )}
                 </div>
             </animated.div>

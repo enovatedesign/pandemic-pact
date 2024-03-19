@@ -95,7 +95,6 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
                                 width={cardImage.width}
                                 height={cardImage.height}
                                 className={customImageClasses}
-                                loading="lazy"
                             />    
                         ) : (
                             <Image 
@@ -104,7 +103,6 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
                                 width='480'
                                 height='480'
                                 className="w-full"
-                                loading="lazy"
                             />
                         )}
                     </div>                
@@ -126,7 +124,7 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
 
                         {text && (
                             <RichText text={text} customClasses='' invert={false} typeScale={""}/>
-                        )}
+                        )} 
 
                         
                         <div className={`pt-3 mt-auto ${postDate ? "flex items-end justify-between" : "self-end"}`}>

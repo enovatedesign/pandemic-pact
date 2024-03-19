@@ -104,7 +104,7 @@ export default function StandardSearchFilters({ setSearchFilters }: Props) {
                         setSelectedOptions={selectedOptions =>
                             setSelectedOptions(field, selectedOptions)
                         }
-                        placeholder={`All ${label}`}
+                        label={label}
                         className="col-span-1"
                     />
                 ))}

@@ -102,24 +102,24 @@ export default function HomepageClient() {
                                 <Image
                                     src="/glopid-r-logo-inverted.png"
                                     alt="GLOPID-R logo"
-                                    width={335}
-                                    height={79}
+                                    width={320}
+                                    height={75}
                                     className="w-full col-span-2"
                                 />
 
                                 <Image
                                     src="/ukcdr-logo.png"
                                     alt="UKCDR logo"
-                                    width={276}
-                                    height={114}
+                                    width={140}
+                                    height={50}
                                     className="w-full"
                                 />
 
                                 <Image
                                     src="/psi-logo-inverted.png"
                                     alt="Pandemic Sciences Institute logo"
-                                    width={480}
-                                    height={236}
+                                    width={140}
+                                    height={150}
                                     className="w-full"
                                 />
 

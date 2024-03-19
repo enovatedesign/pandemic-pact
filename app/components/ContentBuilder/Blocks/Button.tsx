@@ -7,9 +7,11 @@ interface Props {
 		colour: string,
 		position: string
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function ButtonBlock({ block }: Props) {
+export default function ButtonBlock({ block, firstBlock, lastBlock }: Props) {
 	const button = block.button;
 	const colour = block.colour;
 	const position = block.position;

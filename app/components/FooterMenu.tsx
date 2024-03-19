@@ -4,7 +4,7 @@ import {getFooterLinksArray} from '../helpers/nav'
 export default function FooterMenu({className, linkClassName}: {className?: string, linkClassName?: string}) {
 
     className = className ?? 'flex flex-col items-center justify-center sm:flex-row gap-1 sm:gap-4 xl:justify-end'
-    linkClassName = linkClassName ?? 'text-gray-700 text-xs uppercase hover:underline'
+    linkClassName = linkClassName ?? 'block py-1 text-gray-700 text-xs uppercase hover:underline'
 
     const links = getFooterLinksArray()
 
@@ -13,7 +13,7 @@ export default function FooterMenu({className, linkClassName}: {className?: stri
             <Link
                 href={link.href}
                 className={linkClassName}
-            >
+            >   
                 {link.label}
             </Link>
         </li>

@@ -23,6 +23,7 @@ import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
 import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock";
 import BlockIndexWrapper from "./BlockIndexWrapper"
+import { first } from "lodash";
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -70,18 +71,18 @@ const Blocks = ({blocks}: any) => {
 		<>
 			{blocks.map((block: any, index: number) => {
 
-				block.firstBlock = (index === 0)
-				block.lastBlock = (index === totalBlocks - 1)
+				const firstBlockValue = (index === 0)
+				const lastBlockValue = (index === totalBlocks - 1)
 
 				return (
 					<BlockIndexWrapper 
 						options={{ 
-							firstBlock: index === 0,
-							lastBlock: index === totalBlocks - 1,
+							firstBlock: firstBlockValue,
+							lastBlock: lastBlockValue,
 						}} 
 						key={block.id}
 					>
-						<Block block={block} />
+						<Block block={block} firstBlock={firstBlockValue} lastBlock={lastBlockValue}/>
 					</BlockIndexWrapper>
 				)
 			})}

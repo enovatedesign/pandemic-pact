@@ -46,7 +46,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
 
                 </div>
 
-                <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     
                     {customEntries.map((entry, index) => {
 
@@ -58,18 +58,13 @@ const ListTeamMembersBlock = ({block}: Props) => {
                         }
 
                         return (
-                            <div key={index}>
-                                <Card
-                                    entry={cardData} 
-                                    tags={false} 
-                                    hover={false} 
-                                >
-                                </Card>  
-                            </div>
+                            <li key={index}>
+                                <Card entry={cardData} />
+                            </li>
                         )
                     })}
 
-                </div>
+                </ul>
         </BlockWrapper>
     )
 }

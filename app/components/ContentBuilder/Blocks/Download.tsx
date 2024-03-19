@@ -17,9 +17,11 @@ type Props = {
 			},
 		},
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-const DownloadBlock = ({ block }: Props) => {
+const DownloadBlock = ({ block, firstBlock, lastBlock }: Props) => {
 	
 	const {url, text, customText, element} = block.download ?? null
 	

@@ -263,7 +263,6 @@ function LineChart({
                 {categories.map(({ value, label }) => (
                     <Line
                         key={`line-${value}`}
-                        type="monotone"
                         dataKey={label}
                         stroke={
                             showingAllResearchCategories

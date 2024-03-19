@@ -7,9 +7,11 @@ interface Props {
 		textAlign: string,
 		width: string,
 	}
+	firstBlock: boolean
+	lastBlock: boolean
 }
 
-export default function HighlightedRichTextBlock({ block }: Props) {
+export default function HighlightedRichTextBlock({ block, firstBlock, lastBlock }: Props) {
 	const colour = block.colour;
 	const text = block.text;
 	const textAlign = block.textAlign;
