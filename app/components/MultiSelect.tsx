@@ -22,7 +22,7 @@ export default function MultiSelect({
     setSelectedOptions,
     className,
     preloadedOptions = [],
-    label
+    label = '',
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 
@@ -60,14 +60,16 @@ export default function MultiSelect({
             })
     }
 
+    const fullLabel = label ? `All ${label}` : 'All'
+
     return (
         <Select
             isMulti
             options={options}
             onChange={onChange}
             value={value}
-            placeholder={`All ${label}`}
-            aria-label={`All ${label}`}
+            placeholder={fullLabel}
+            aria-label={fullLabel}
             className={`text-black ${className}`}
             instanceId={id}
             onFocus={loadOptions}

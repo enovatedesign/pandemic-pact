@@ -10,7 +10,7 @@ import {
 } from 'recharts'
 import { rechartTooltipContentFunction } from './RechartTooltipContent'
 import VisualisationCard from './VisualisationCard'
-import RadiusAxisLabel from './RadiusAxisLabel' 
+import RadiusAxisLabel from './RadiusAxisLabel'
 import MultiSelect from './MultiSelect'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
 import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
@@ -101,7 +101,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                         field="ResearchCat"
                         selectedOptions={selectedResearchCategories}
                         setSelectedOptions={setSelectedResearchCategories}
-                        placeholder="All Research Categories"
+                        label="Research Categories"
                         className="max-w-xs ignore-in-image-export"
                     />
 
@@ -122,7 +122,10 @@ export default function GrantsPerResearchCategoryByRegion() {
 
                             <PolarAngleAxis dataKey="Region" />
 
-                            <PolarRadiusAxis angle={90} tick={(props) => <RadiusAxisLabel {...props} />} />
+                            <PolarRadiusAxis
+                                angle={90}
+                                tick={props => <RadiusAxisLabel {...props} />}
+                            />
 
                             {researchCategoryOptions.map(({ value, label }) => (
                                 <Radar
