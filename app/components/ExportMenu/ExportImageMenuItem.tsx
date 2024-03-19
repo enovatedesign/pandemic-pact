@@ -28,11 +28,18 @@ export default function ExportImageMenuItem({chartSelector, imageFilename}: Prop
         const ignoreElements = (element: Element) => element.classList.contains('ignore-in-image-export')
 
         const onclone = (document: Document, element: HTMLElement) => {
-            // Add a <p> tag with CCO licence info
-            const p = document.createElement('p')
-            p.style.marginTop = '1rem'
-            p.innerText = 'This image is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.'
-            element.appendChild(p)
+            // Get the inner container of the visualisation card
+            const vizWrapper = element.getElementsByClassName('visualisation-card-wrapper')[0]
+
+            if (vizWrapper === undefined) {
+                console.error('ExportToPngButton: could not find visualisation card wrapper')
+                return
+            }
+
+            // Remove the border from the visualisation card
+            vizWrapper.classList.remove('border-y-2', 'lg:border-2')
+            // Reveal the hidden visualisation card footer
+            vizWrapper.getElementsByClassName('image-export-footer')[0].classList.remove('hidden')
         }
 
         html2canvas(element, {
