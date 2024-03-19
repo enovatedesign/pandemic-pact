@@ -20,7 +20,7 @@ export default function Button({Icon, label, onClick, className, loading}: Props
             {({active, disabled}) => (
                 <button
                     className={`
-                        ${(active && !disabled) ? 'bg-blue-500 text-white' : 'text-gray-900'}
+                        ${(active && !disabled) ? 'bg-brand-teal-700 text-white' : 'text-gray-900'}
                         ${disabled ? 'cursor-progress' : ''}
                         group flex w-full items-center  px-2 py-2 text-sm
                         ${className}

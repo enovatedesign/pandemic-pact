@@ -16,7 +16,7 @@ export default function InfoModal({children, customButton = null, customButtonCl
                 ) : (
                     <>
                         <span className="sr-only">Information</span>
-                        <InformationCircleIcon className="w-6 h-6 text-secondary" />
+                        <InformationCircleIcon className="w-6 h-6 text-secondary ignore-in-image-export" />
                     </>
                 )}
             </button>

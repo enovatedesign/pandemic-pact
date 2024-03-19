@@ -58,6 +58,7 @@ export default function GrantsByDisease() {
                 onChange={setHideCovid}
                 label="Hide COVID-19"
                 theme="light"
+                className="ignore-in-image-export"
             />
         </VisualisationCard>
     )
