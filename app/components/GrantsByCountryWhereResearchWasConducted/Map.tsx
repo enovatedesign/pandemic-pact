@@ -1,13 +1,18 @@
 import { useState, useEffect, useMemo, useContext, MouseEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps'
+import {
+    ComposableMap,
+    Geographies,
+    Geography,
+    ZoomableGroup,
+} from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { groupBy } from 'lodash'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
-import geojson from '../../../data/source/geojson/ne_110m_admin_0_countries.json'
+import geojson from '../../../public/data/world-geo.json'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import { dollarValueFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -47,7 +52,7 @@ export default function Map() {
                 const propertiesToAssign: any = geojsonPropertiesToAssign.find(
                     (properties: any) =>
                         properties.isoNumeric.includes(
-                            existingProperties.ISO_N3_EH
+                            existingProperties.iso_code
                         )
                 )
 
@@ -88,7 +93,7 @@ export default function Map() {
                 usingFunderLocation
                     ? 'FunderCountry'
                     : 'ResearchInstitutionCountry'
-            ] = [geo.properties.ISO_N3_EH]
+            ] = [geo.properties.iso_code]
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
@@ -126,7 +131,6 @@ export default function Map() {
     const [scale, setScale] = useState(120)
 
     useEffect(() => {
-
         const handleHeight = () => {
             if (window.innerWidth > 1024) {
                 setHeight(300)
@@ -136,7 +140,7 @@ export default function Map() {
                 setScale(120)
             }
         }
-    
+
         const debouncedHandleHeight = debounce(handleHeight, 200)
 
         debouncedHandleHeight()
@@ -147,11 +151,10 @@ export default function Map() {
             window.removeEventListener('resize', debouncedHandleHeight)
         }
     })
-    
+
     const { sidebarOpen } = useContext(SidebarStateContext)
 
     return (
-
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
                 <ComposableMap
@@ -162,7 +165,7 @@ export default function Map() {
                     }}
                     height={height}
                 >
-                    <ZoomableGroup center={[0, 40]} >
+                    <ZoomableGroup center={[0, 40]}>
                         <Geographies geography={filteredGeojson}>
                             {({ geographies }) =>
                                 geographies.map(geo => (
@@ -175,7 +178,9 @@ export default function Map() {
                                                 ? getColourOfGeo(geo)
                                                 : '#FFFFFF'
                                         }
-                                        strokeWidth={displayWhoRegions ? 0.5 : 1.0}
+                                        strokeWidth={
+                                            displayWhoRegions ? 0.5 : 1.0
+                                        }
                                         className="cursor-pointer"
                                         onClick={() => onGeoClick(geo)}
                                         onMouseEnter={event =>
@@ -192,11 +197,15 @@ export default function Map() {
                     </ZoomableGroup>
                 </ComposableMap>
             </div>
-                        
-            <div className={`flex flex-col items-center gap-y-2 ${!sidebarOpen && 'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'}`}>
-                
+
+            <div
+                className={`flex flex-col items-center gap-y-2 ${
+                    !sidebarOpen &&
+                    'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'
+                }`}
+            >
                 <ColourScale colourScale={colourScale} />
-                
+
                 <div className="xl:self-center xl:-translate-y-[14px]">
                     <DoubleLabelSwitch
                         checked={displayWhoRegions}
@@ -283,9 +292,10 @@ function getGeojsonPropertiesByIsoNumeric(
             )?.label
 
             return {
-                isoNumeric: regionToCountryMapping[
-                    region as keyof typeof regionToCountryMapping
-                ].map((country: string) => country.padStart(3, '0')),
+                isoNumeric:
+                    regionToCountryMapping[
+                        region as keyof typeof regionToCountryMapping
+                    ],
                 properties: {
                     NAME: regionName,
                     regionValue: region,
@@ -302,7 +312,7 @@ function getGeojsonPropertiesByIsoNumeric(
             usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'
         )
     ).map(([country, grants]) => ({
-        isoNumeric: [country.padStart(3, '0')],
+        isoNumeric: [country],
         properties: {
             totalGrants: grants.length,
             totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
