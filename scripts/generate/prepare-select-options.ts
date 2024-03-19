@@ -123,7 +123,7 @@ function parseResearchCategoriesAndSubcategories(
 
         return {
             value: row['Coded'].trim(),
-            label: row[' Sub categories Description'].trim(),
+            label: row['Sub categories Description'].trim(),
             parent,
         }
     })
