@@ -22,25 +22,25 @@ interface SelectedFilters {
 }
 
 export default function AdvancedSearch({ setSearchFilters }: Props) {
-    const defaultRow: (field: string) => Row = (field) => ({
+    const defaultRow: (field: string) => Row = field => ({
         field: field,
         values: [],
         logicalAnd: false,
         key: new Date().getTime(),
-    });
-    
-    const defaultRowsArray: (fields: string[]) => Row[] = (fields) => {
-        const rows: Row[] = [];
+    })
+
+    const defaultRowsArray: (fields: string[]) => Row[] = fields => {
+        const rows: Row[] = []
         for (let i = 0; i < fields.length; i++) {
-            rows.push(defaultRow(fields[i % fields.length]));
+            rows.push(defaultRow(fields[i % fields.length]))
         }
-        return rows;
-    };
-    
+        return rows
+    }
+
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
         rows: defaultRowsArray(['StudySubject', 'Ethnicity']),
         logicalAnd: true,
-    });
+    })
 
     const globalAndButtonTextClasses = [
         selectedFilters.logicalAnd
