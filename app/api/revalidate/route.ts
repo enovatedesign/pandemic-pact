@@ -44,9 +44,14 @@ export async function POST(req: NextRequest) {
         .reverse();
 
         for (const path of paths) {
-            console.log(`Revalidating Path: ${path}`);
 
-            revalidatePath(path);
+            if (path === '/homepage') {
+                console.log(`Revalidating Path: ${path} -> /`);
+                revalidatePath('/');
+            } else {
+                console.log(`Revalidating Path: ${path}`);
+                revalidatePath(path);
+            }
         }
 
         console.log(`Done Revalidating`);
