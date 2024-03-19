@@ -7,9 +7,7 @@ export const TooltipContext = createContext<{
     tooltipRef: null,
 })
 
-export const baseTooltipProps = {
-    wrapperClassName: 'max-w-full md:max-w-none',
-    itemStyle: { whiteSpace: 'pre-wrap' },
+export const rechartBaseTooltipProps = {
     position:
         typeof window !== 'undefined' && window.innerWidth < 768
             ? { x: 0 }

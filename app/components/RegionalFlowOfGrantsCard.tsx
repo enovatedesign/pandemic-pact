@@ -15,7 +15,7 @@ import { GlobalFilterContext } from '../helpers/filters'
 import { dollarValueFormatter } from '../helpers/value-formatters'
 import { brandColours } from '../helpers/colours'
 import selectOptions from '../../data/dist/select-options.json'
-import { baseTooltipProps } from '../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../helpers/tooltip'
 
 export default function RegionalFlowOfGrantsCard() {
     const { grants } = useContext(GlobalFilterContext)
@@ -176,7 +176,7 @@ export default function RegionalFlowOfGrantsCard() {
                                             >
                                                 <Tooltip
                                                     content={tooltipContent}
-                                                    {...baseTooltipProps}
+                                                    {...rechartBaseTooltipProps}
                                                 />
 
                                                 <text
