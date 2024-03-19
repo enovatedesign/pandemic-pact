@@ -82,6 +82,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             value={searchQuery}
                             className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
+
                         <Button
                             size="xsmall"
                             colour="grey"
@@ -147,6 +148,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                         <h2 className="text-secondary uppercase tracking-widest font-bold">
                             Search Filters
                         </h2>
+
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
                                 onClick={() => setAdvancedSearchShow(false)}
@@ -158,6 +160,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             >
                                 Standard Search
                             </button>
+
                             <button
                                 onClick={() => setAdvancedSearchShow(true)}
                                 className={`${
