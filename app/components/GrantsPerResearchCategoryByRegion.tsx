@@ -20,7 +20,7 @@ import {
     researchCategoryColours,
     allResearchCategoriesColour,
 } from '../helpers/colours'
-import { baseTooltipProps } from '../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../helpers/tooltip'
 
 export default function GrantsPerResearchCategoryByRegion() {
     const { grants: globalGrants, filters: selectedFilters } =
@@ -144,7 +144,7 @@ export default function GrantsPerResearchCategoryByRegion() {
 
                             <Tooltip
                                 content={rechartTooltipContentFunction}
-                                {...baseTooltipProps}
+                                {...rechartBaseTooltipProps}
                             />
                         </RadarChart>
                     </ResponsiveContainer>

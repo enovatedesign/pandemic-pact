@@ -15,7 +15,7 @@ interface Props {
 
 export default function TooltipContent({ title, items, footer = null }: Props) {
     return (
-        <div className="rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100 ">
+        <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
             {title && (
                 <div className="border-gray-100 border-b px-4 py-2">
                     <p className="font-medium text-gray-700">{title}</p>
@@ -38,10 +38,10 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                 )}
 
                                 <p
-                                    className={`text-right whitespace-nowrap ${
+                                    className={`text-left ${
                                         item.bold
-                                            ? 'font-bold text-gray-600'
-                                            : 'text-gray-400'
+                                            ? 'font-bold text-gray-700'
+                                            : 'text-gray-700'
                                     }`}
                                 >
                                     {item.label}

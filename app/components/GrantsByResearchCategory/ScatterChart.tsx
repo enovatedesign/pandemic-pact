@@ -13,7 +13,7 @@ import {
     Cell,
 } from 'recharts'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { baseTooltipProps } from '../../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import { BarListData } from '../../helpers/bar-list'
 import { researchCategoryColours } from '../../helpers/colours'
 import {
@@ -133,7 +133,7 @@ export default function ScatterChart({ chartData }: Props) {
                     <Tooltip
                         cursor={{ strokeDasharray: '3 3' }}
                         content={tooltipContent}
-                        {...baseTooltipProps}
+                        {...rechartBaseTooltipProps}
                     />
 
                     <Scatter data={chartData} shape={<CustomDot />}>
