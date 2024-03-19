@@ -136,9 +136,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
             <div className=" flex w-full justify-between items-start mb-6 ignore-in-image-export">
                 <MultiSelect
                     field="ResearchCat"
+                    label="Research Categories"
                     selectedOptions={selectedResearchCategories}
                     setSelectedOptions={setSelectedResearchCategories}
-                    placeholder="All Research Categories"
                     className="max-w-xs ignore-in-image-export"
                 />
 
