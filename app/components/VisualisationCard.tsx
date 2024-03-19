@@ -10,6 +10,7 @@ import InfoModal from './InfoModal'
 import { useInView, animated } from '@react-spring/web'
 import { FilterIcon } from '@heroicons/react/solid'
 import { Tooltip } from 'react-tooltip'
+import LogoInverted from './LogoInverted'
 
 interface Props {
     id: string
@@ -70,7 +71,7 @@ export default function VisualisationCard({
     return (
         <>
             <animated.div id={id} ref={ref} style={springs}>
-                <div className="flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
+                <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
                     <div className="flex flex-col items-start gap-y-6">
                         <div className="mr-16">
                             <h2 className="text-lg capitalize inline">
@@ -176,6 +177,24 @@ export default function VisualisationCard({
                     {footnote && (
                         <p className="text-sm text-gray-600">{footnote}</p>
                     )}
+
+                    <div className="image-export-footer w-full flex flex-row items-center gap-12 hidden">
+
+                        <div className="grow">
+                            <p className="font-bold italic text-sm text-gray-600">
+                                This image is licensed under a Creative Commons
+                                Attribution-ShareAlike 4.0 International License.
+                            </p>
+                            <p className="mt-3 italic text-sm text-gray-600">
+                                Pandemic PACT Grant Tracker by the Pandemic PACT team with GloPID-R and UKCDR (www.pandemicpact.org)
+                            </p>
+                        </div>
+
+                        {/* Inline logo SVG so it's included in the image export */}
+                        <LogoInverted className="w-40" />
+
+                    </div>
+
                 </div>
             </animated.div>
         </>
