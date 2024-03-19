@@ -19,7 +19,7 @@ import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { regionColours } from '../../helpers/colours'
 import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
 import selectOptions from '../../../data/dist/select-options.json'
-import { baseTooltipProps } from '../../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
 
@@ -189,7 +189,7 @@ export default function BarChart() {
                         <Tooltip
                             content={tooltipContent}
                             cursor={{ fill: 'transparent' }}
-                            {...baseTooltipProps}
+                            {...rechartBaseTooltipProps}
                         />
 
                         <Bar

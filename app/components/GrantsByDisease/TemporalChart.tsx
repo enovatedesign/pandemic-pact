@@ -9,14 +9,13 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
-import Switch from '../Switch'
 import { groupBy } from 'lodash'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
 import { diseaseColours } from '../../helpers/colours'
-import { baseTooltipProps } from '../../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
@@ -59,7 +58,7 @@ export default function TemporalChart({ hideCovid }: Props) {
 
     return (
         <>
-            <ResponsiveContainer width="100%" height={500}>
+            <ResponsiveContainer width="100%" height={500} className="z-10">
                 <LineChart
                     margin={{
                         top: 5,
@@ -102,7 +101,7 @@ export default function TemporalChart({ hideCovid }: Props) {
                                 category: 'Disease',
                             })
                         }
-                        {...baseTooltipProps}
+                        {...rechartBaseTooltipProps}
                     />
 
                     {selectOptions.Disease.map(({ value, label }) => (

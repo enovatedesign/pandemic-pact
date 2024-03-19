@@ -18,10 +18,7 @@ import VisualisationCard from './VisualisationCard'
 import { rechartCategoriesTooltipContentFunction } from './RechartCategoriesTooltipContent'
 import MultiSelect from './MultiSelect'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
-import {
-    dollarValueFormatter,
-    axisDollarFormatter,
-} from '../helpers/value-formatters'
+import { axisDollarFormatter } from '../helpers/value-formatters'
 import { filterGrants, GlobalFilterContext } from '../helpers/filters'
 import { groupBy } from 'lodash'
 import dataset from '../../data/dist/grants.json'
@@ -30,7 +27,7 @@ import {
     researchCategoryColours,
     allResearchCategoriesColour,
 } from '../helpers/colours'
-import { baseTooltipProps } from '../helpers/tooltip'
+import { rechartBaseTooltipProps } from '../helpers/tooltip'
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const { grants: globalGrants, filters: selectedFilters } =
@@ -196,7 +193,7 @@ function BarChart({
 
                 <Tooltip
                     content={rechartCategoriesTooltipContentFunction}
-                    {...baseTooltipProps}
+                    {...rechartBaseTooltipProps}
                 />
 
                 {categories.map(({ value, label }) => (
@@ -257,7 +254,7 @@ function LineChart({
 
                 <Tooltip
                     content={rechartCategoriesTooltipContentFunction}
-                    {...baseTooltipProps}
+                    {...rechartBaseTooltipProps}
                 />
 
                 {categories.map(({ value, label }) => (
