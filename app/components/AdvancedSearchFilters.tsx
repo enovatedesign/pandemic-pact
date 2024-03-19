@@ -13,7 +13,7 @@ interface Row {
     field: string
     values: string[]
     logicalAnd: boolean
-    key: number
+    key: string
 }
 
 interface SelectedFilters {
@@ -26,7 +26,7 @@ export default function AdvancedSearch({ setSearchFilters }: Props) {
         field: field,
         values: [],
         logicalAnd: false,
-        key: new Date().getTime(),
+        key: `${field}-${new Date().getTime()}`,
     })
 
     const defaultRowsArray: (fields: string[]) => Row[] = fields => {
