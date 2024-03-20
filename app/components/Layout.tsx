@@ -64,7 +64,14 @@ const Layout = ({
 
     const opacityAnimationProps = useSpring({
         opacity: sidebarOpen ? 1 : 0,
-        ...baseAnimationConfig,
+        delay: sidebarOpen ? 200 : 0,
+        config: { 
+            duration: 200
+        },
+        immediate: animateImmediately,
+        onRest: () => {
+            if (animateImmediately) setAnimateImmediately(false)
+        }
     })
 
     let optionalUtilityBarAttributes = null
