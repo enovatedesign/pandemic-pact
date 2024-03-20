@@ -80,7 +80,7 @@ const Layout = ({
             setSidebarBooleanValue();
         }, 200);
 
-        window.addEventListener('resize', handleResize);
+        // window.addEventListener('resize', handleResize);
         
         if (document.readyState === 'complete') {
             setSidebarBooleanValue()
