@@ -71,27 +71,8 @@ const Layout = ({
     }
 
     useEffect(() => {
-        const setSidebarBooleanValue = () => {
-            setSidebarOpen(window.innerWidth >= 1024);
-            setShowClosedContent(window.innerWidth >= 1024)
-        } 
-        
-        const handleResize = debounce(() => {
-            setSidebarBooleanValue();
-        }, 200);
-
-        // window.addEventListener('resize', handleResize);
-        
-        if (document.readyState === 'complete') {
-            setSidebarBooleanValue()
-        } else {
-            window.addEventListener('load', handleResize)
-        }
-        
-        return () => {
-            window.removeEventListener('load', handleResize)
-            window.removeEventListener('resize', handleResize);
-        }
+        setSidebarOpen(window.innerWidth >= 1024);
+        setShowClosedContent(window.innerWidth >= 1024)
     }, [])
     
     return (
