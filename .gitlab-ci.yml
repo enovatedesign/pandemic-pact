@@ -4,9 +4,11 @@ default:
 workflow:
   rules:
       # Prevent pipelines running at all for develop and master branches
-      - if: $CI_COMMIT_BRANCH != "develop" || $CI_COMMIT_BRANCH != "master"
+      - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "master"
+        when: never
       # Prevent duplicate pipelines being created when pushing to a branch that has a Merge Request open
-      - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+        when: never
 
 deploy_review:
   stage: deploy
