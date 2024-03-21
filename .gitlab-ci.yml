@@ -3,10 +3,11 @@ default:
 
 workflow:
   rules:
-    # Prevent duplicate pipelines being created when pushing to a branch that has a Merge Request open
-    - if: $CI_PIPELINE_SOURCE != "merge_request_event"
-    # Prevent pipelines running at all for develop and master branches
-    - if: $CI_COMMIT_BRANCH !~ /(develop|master)/
+      # Prevent pipelines running at all for develop and master branches
+      - if: $CI_COMMIT_BRANCH =~ /^(develop|master)$/
+        when: never
+      # Prevent duplicate pipelines being created when pushing to a branch that has a Merge Request open
+      - if: $CI_PIPELINE_SOURCE != "merge_request_event"
 
 deploy_review:
   stage: deploy
