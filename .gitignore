@@ -56,4 +56,5 @@ sample-real-data.xlsx
 # prepared exports in the public directory
 /public/export
 
-/public/grants
+/public/grants/
+
