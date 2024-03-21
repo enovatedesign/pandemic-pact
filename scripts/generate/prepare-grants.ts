@@ -106,7 +106,7 @@ export default function () {
 
     const pathname = './data/dist/grants.json'
 
-    fs.writeJsonSync(pathname, grants)
+    fs.writeJsonSync(pathname, [])
 
     printWrittenFileStats(pathname)
 }
