@@ -21,7 +21,6 @@ import { sumNumericGrantAmounts } from '../helpers/reducers'
 import { axisDollarFormatter } from '../helpers/value-formatters'
 import { filterGrants, GlobalFilterContext } from '../helpers/filters'
 import { groupBy } from 'lodash'
-import dataset from '../../data/dist/grants.json'
 import researchCategoryOptions from '../../public/data/select-options/ResearchCat.json'
 import {
     researchCategoryColours,
@@ -30,8 +29,11 @@ import {
 import { rechartBaseTooltipProps } from '../helpers/tooltip'
 
 export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
-    const { grants: globalGrants, filters: selectedFilters } =
-        useContext(GlobalFilterContext)
+    const {
+        grants: globalGrants,
+        completeDataset: dataset,
+        filters: selectedFilters,
+    } = useContext(GlobalFilterContext)
 
     const [selectedResearchCategories, setSelectedResearchCategories] =
         useState<string[]>(researchCategoryOptions.map(({ value }) => value))

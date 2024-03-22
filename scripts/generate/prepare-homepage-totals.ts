@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import {Grant} from '../types/generate'
-import {title, info, printWrittenFileStats} from '../helpers/log'
-import {millify} from 'millify'
+import { Grant } from '../types/generate'
+import { title, info, printWrittenFileStats } from '../helpers/log'
+import { millify } from 'millify'
 
 export default function () {
     title('Preparing homepage totals')
@@ -24,7 +24,10 @@ export default function () {
         'sextillion',
     ]
 
-    const formattedTotalCommittedUsd = millify(rawTotalCommittedUsd, {units, precision: 0})
+    const formattedTotalCommittedUsd = millify(rawTotalCommittedUsd, {
+        units,
+        precision: 0,
+    })
 
     const totalCommittedUsd = {
         finalCount: parseInt(formattedTotalCommittedUsd),
@@ -33,17 +36,20 @@ export default function () {
 
     // Calculate the total number of grants
 
-    const totalGrants = {finalCount: grants.length}
+    const totalGrants = { finalCount: grants.length }
 
     // Calculate the total number of funders
 
     const totalFunders = {
-        finalCount: _.uniq(grants.map(grant => grant.FundingOrgName).flat()).length
+        finalCount: _.uniq(grants.map(grant => grant.FundingOrgName).flat())
+            .length,
     }
 
     // Log the totals
 
-    info(`Total amount (USD): ${totalCommittedUsd.finalCount} ${totalCommittedUsd.suffix}`)
+    info(
+        `Total amount (USD): ${totalCommittedUsd.finalCount} ${totalCommittedUsd.suffix}`
+    )
     info(`Total number of grants: ${totalGrants.finalCount}`)
     info(`Total number of funders: ${totalFunders.finalCount}`)
 
