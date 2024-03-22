@@ -5,6 +5,7 @@ import prepareGrants from './prepare-grants'
 import prepareHomepageTotals from './prepare-homepage-totals'
 import fetchPubMedData from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
+import prepareVisualisePageGrantsFile from './prepare-visualise-page-grants-file'
 import prepareCsvExportFile from './prepare-csv-export-file'
 import prepareMap from './prepare-map'
 import prepareSearch from './prepare-search'
@@ -25,6 +26,8 @@ async function main() {
     await fetchPubMedData()
 
     prepareIndividualGrantFiles()
+
+    prepareVisualisePageGrantsFile()
 
     prepareCsvExportFile()
 
