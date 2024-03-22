@@ -37,7 +37,7 @@ export default function ExportImageMenuItem({chartSelector, imageFilename}: Prop
             }
 
             // Remove the border from the visualisation card
-            vizWrapper.classList.remove('border-y-2', 'lg:border-2')
+            vizWrapper.classList.remove('border-y-2', 'lg:border-2', 'lg:rounded-xl')
             // Reveal the hidden visualisation card footer
             vizWrapper.getElementsByClassName('image-export-footer')[0].classList.remove('hidden')
         }

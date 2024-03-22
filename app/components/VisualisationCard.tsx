@@ -93,7 +93,7 @@ export default function VisualisationCard({
                                         data-tooltip-id={`${id}-tooltip`}
                                     />
                                 </div>
-                                <div className="absolute right-3 top-3 size-6 rounded-full bg-primary flex items-center justify-center font-bold text-white">
+                                <div className="ignore-in-image-export absolute right-3 top-3 size-6 rounded-full bg-primary flex items-center justify-center align-center font-bold text-white">
                                     {numberOfActiveFilters}{' '}
                                     <span className="sr-only">
                                         Global Filters Applied
@@ -135,7 +135,7 @@ export default function VisualisationCard({
 
                     {tabs && tabs[selectedTabIndex].content}
 
-                    <div className={`w-full flex ${!tabs ? 'flex-col items-center md:flex-row-reverse md:justify-between' : 'flex-row-reverse justify-between'} gap-y-4 justify-between items-center ignore-in-image-export md:gap-y-0`}>
+                    <div className={`ignore-in-image-export w-full flex ${!tabs ? 'flex-col items-center md:flex-row-reverse md:justify-between' : 'flex-row-reverse justify-between'} gap-y-4 justify-between items-center md:gap-y-0`}>
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}

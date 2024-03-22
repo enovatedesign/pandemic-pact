@@ -31,7 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
     };
 
-    const metaTitle = `${params.id} | Pandemic PACT Tracker`
+    let metaTitle = `${params.id} | Pandemic PACT Tracker`
+
+    if (grant?.GrantTitleEng) {
+        metaTitle = `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`
+    }
+
     const metadataBaseUrl = new URL(process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : 'https://localhost:3000')
 
     let metaData: Metadata = {
@@ -41,10 +46,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title: metaTitle,
             images: `/api/og?grant=${params.id}`
         }
-    }
-    
-    if (grant?.GrantTitleEng) {
-        metaData.title = `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`
     }
 
     if (grant?.Abstract) {
