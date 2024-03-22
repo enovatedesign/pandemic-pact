@@ -5,6 +5,7 @@ import Switch from './Switch'
 import Button from './Button'
 import { availableFilters, emptyFilters, Filters } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
+import LoadingSpinner from './LoadingSpinner'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -46,42 +47,51 @@ export default function FilterSidebar({
 
         setSelectedFilters(selectedOptions)
     }
-
+    
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
-                {loadingDataset ? (
-                    <p className="text-white">Loading Dataset...</p>
-                ) : (
-                    <p className="flex flex-col gap-1">
-                        {globallyFilteredDataset.length <
-                        completeDataset.length ? (
-                            <>
-                                <span className="text-xs font-bold text-gray-300 uppercase">
-                                    Filtered Grants Total
-                                </span>
-                                <span className="flex flex-row items-end gap-1">
+                <p className="flex flex-col gap-1">
+                    {loadingDataset ? (
+                        <>
+                            <span className="text-xs font-bold text-gray-300 uppercase">
+                                Loading Dataset
+                            </span>
+                            <LoadingSpinner
+                                className="size-9 animate-spin shrink-0 text-primary"
+                            />
+                        </>
+                    ) : (
+                        <>
+                            {globallyFilteredDataset.length <
+                            completeDataset.length ? (
+                                <>
+                                    <span className="text-xs font-bold text-gray-300 uppercase">
+                                        Filtered Grants Total
+                                    </span>
+                                    <span className="flex flex-row items-end gap-1">
+                                        <span className="text-4xl font-bold text-primary">
+                                            {globallyFilteredDataset.length}
+                                        </span>
+                                        <span className="text-lg font-bold text-primary">
+                                            {' '}
+                                            / {completeDataset.length}
+                                        </span>
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-xs font-bold text-gray-300 uppercase">
+                                        Total Number Of Grants
+                                    </span>
                                     <span className="text-4xl font-bold text-primary">
-                                        {globallyFilteredDataset.length}
+                                        {completeDataset.length}
                                     </span>
-                                    <span className="text-lg font-bold text-primary">
-                                        {' '}
-                                        / {completeDataset.length}
-                                    </span>
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                <span className="text-xs font-bold text-gray-300 uppercase">
-                                    Total Number Of Grants
-                                </span>
-                                <span className="text-4xl font-bold text-primary">
-                                    {completeDataset.length}
-                                </span>
-                            </>
-                        )}
-                    </p>
-                )}
+                                </>
+                            )}
+                        </>
+                    )}
+                </p>
             </div>
 
             <FilterBlock
