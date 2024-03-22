@@ -9,7 +9,6 @@ import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCa
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
 import FundingAmountsForEachResearchCategoryOverTime from '../components/FundingAmountsForEachResearchCategoryOverTime'
 import GrantsByDiseaseCard from '../components/GrantsByDisease/Card'
-import WordCloudsCard from '../components/WordClouds/Card'
 import {
     emptyFilters,
     filterGrants,
@@ -17,7 +16,6 @@ import {
     countActiveFilters,
     Filters,
 } from '../helpers/filters'
-import completeDataset from '../../data/dist/grants.json'
 import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
@@ -27,13 +25,26 @@ import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 export default function VisualisePageClient() {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
+    const [completeDataset, setCompleteDataset] = useState([])
+
+    const [loadingDataset, setLoadingDataset] = useState(true)
+
+    useEffect(() => {
+        fetch('/data/grants.json')
+            .then(response => response.json())
+            .then(data => {
+                setCompleteDataset(data)
+                setLoadingDataset(false)
+            })
+    }, [])
+
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
         emptyFilters()
     )
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),
-        [selectedFilters]
+        [completeDataset, selectedFilters]
     )
 
     const sidebar = useMemo(() => {
@@ -45,6 +56,7 @@ export default function VisualisePageClient() {
                     setSelectedFilters={setSelectedFilters}
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
+                    loadingDataset={loadingDataset}
                 />
             ),
             closedContent: (
@@ -83,7 +95,12 @@ export default function VisualisePageClient() {
                 </dl>
             ),
         }
-    }, [selectedFilters, globallyFilteredDataset])
+    }, [
+        selectedFilters,
+        completeDataset,
+        globallyFilteredDataset,
+        loadingDataset,
+    ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
 
@@ -124,6 +141,7 @@ export default function VisualisePageClient() {
             value={{
                 filters: selectedFilters,
                 grants: globallyFilteredDataset,
+                completeDataset,
             }}
         >
             <TooltipContext.Provider value={{ tooltipRef }}>
@@ -161,10 +179,6 @@ export default function VisualisePageClient() {
                             <div id="annual-trends" className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
-
-                            {/* <div id='word-clouds' className={gridClasses}>
-                                <WordCloudsCard />
-                            </div> */}
                         </div>
 
                         <Tooltip

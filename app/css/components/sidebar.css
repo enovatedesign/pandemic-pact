@@ -1,0 +1,23 @@
+.sidebar {
+    .sidebar-open-content {
+        @apply hidden;
+    }
+
+    &.open {
+        .sidebar-open-content {
+            @apply block;
+        }
+    }
+
+    @screen xl {
+        .sidebar-open-content {
+            @apply block;
+        }
+
+        &.closed {
+            .sidebar-open-content {
+                @apply hidden;
+            }
+        }
+    }
+}

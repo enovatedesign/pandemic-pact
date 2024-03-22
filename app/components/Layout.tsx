@@ -1,9 +1,9 @@
 'use client'
 
 import mastheadStyles from '../css/components/masthead.module.css'
+import '../css/components/sidebar.css'
 
 import { isValidElement, useState, useEffect, ReactNode } from 'react'
-import { debounce } from 'lodash'
 import { useSpring, animated } from '@react-spring/web'
 import { AdjustmentsIcon } from '@heroicons/react/outline'
 
@@ -34,6 +34,8 @@ const Layout = ({
     mastheadContent,
     children,
 }: Props) => {
+    const [animateImmediately, setAnimateImmediately] = useState(true);
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const [showMobileNav, setShowMobileNav] = useState(false)
@@ -44,6 +46,10 @@ const Layout = ({
         config: { 
             duration: 200
         },
+        immediate: animateImmediately,
+        onRest: () => {
+            if (animateImmediately) setAnimateImmediately(false)
+        }
     }
 
     const transformAnimationProps = useSpring({
@@ -58,7 +64,14 @@ const Layout = ({
 
     const opacityAnimationProps = useSpring({
         opacity: sidebarOpen ? 1 : 0,
-        ...baseAnimationConfig,
+        delay: sidebarOpen ? 200 : 0,
+        config: { 
+            duration: 200
+        },
+        immediate: animateImmediately,
+        onRest: () => {
+            if (animateImmediately) setAnimateImmediately(false)
+        }
     })
 
     let optionalUtilityBarAttributes = null
@@ -69,28 +82,14 @@ const Layout = ({
             setSidebarOpen,
         }
     }
-
+    
     useEffect(() => {
-        const setSidebarBooleanValue = () => {
-            setSidebarOpen(window.innerWidth >= 1024);
-            setShowClosedContent(window.innerWidth >= 1024)
-        } 
-        
-        const handleResize = debounce(() => {
-            setSidebarBooleanValue();
-        }, 200);
+        const isDesktop = window.innerWidth >= 1280 // Tailwind CSS breakpoint for xl
+        setSidebarOpen(isDesktop)
+        setShowClosedContent(isDesktop)
 
-        // window.addEventListener('resize', handleResize);
-        
-        if (document.readyState === 'complete') {
-            setSidebarBooleanValue()
-        } else {
-            window.addEventListener('load', handleResize)
-        }
-        
-        return () => {
-            window.removeEventListener('load', handleResize)
-            window.removeEventListener('resize', handleResize);
+        if (!isDesktop) {
+            setAnimateImmediately(false)
         }
     }, [])
     
@@ -116,7 +115,7 @@ const Layout = ({
             <div className={`${sidebar && 'flex'}`}>
                 {sidebar && (
                     <animated.aside
-                        className="fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none"
+                        className={`fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none sidebar ${sidebarOpen ? 'open' : 'closed'}`}
                         style={transformAnimationProps}
                     >
                         <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
@@ -142,7 +141,7 @@ const Layout = ({
                                 style={widthAnimationProps}
                             >
                                 <animated.div style={opacityAnimationProps}>
-                                    <div className={!sidebarOpen ? 'hidden' : undefined}>
+                                    <div className="sidebar-open-content">
                                         {sidebar.openContent}
                                     </div>
                                 </animated.div>

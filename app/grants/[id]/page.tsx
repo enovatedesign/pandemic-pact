@@ -31,8 +31,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
     };
 
+    const metaTitle = `${params.id} | Pandemic PACT Tracker`
+    const metadataBaseUrl = new URL(process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : 'https://localhost:3000')
+
     let metaData: Metadata = {
-        title: `${params.id} | Pandemic PACT Tracker`,
+        metadataBase: metadataBaseUrl,
+        title: metaTitle,
+        openGraph: {
+            title: metaTitle,
+            images: `/api/og?grant=${params.id}`
+        }
     }
     
     if (grant?.GrantTitleEng) {
@@ -54,7 +62,7 @@ export async function generateStaticParams() {
 
 export default function Page({ params }: { params: { id: string } }) {
     const path = `./data/dist/grants/${params.id}.json`;
-
+    
     if (!fs.existsSync(path)) {
         notFound();
     }

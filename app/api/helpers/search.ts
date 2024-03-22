@@ -210,8 +210,10 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
             grantIDs.push(hit._id)
         }
 
-        searchAfterClause = {
-            search_after: hits[hits.length - 1].sort,
+        if (hits.length > 0) {
+            searchAfterClause = {
+                search_after: hits[hits.length - 1].sort,
+            }
         }
     } while (hits.length === size)
 

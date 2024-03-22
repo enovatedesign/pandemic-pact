@@ -14,7 +14,6 @@ import RadiusAxisLabel from './RadiusAxisLabel'
 import MultiSelect from './MultiSelect'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
 import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
-import dataset from '../../data/dist/grants.json'
 import { filterGrants, GlobalFilterContext } from '../helpers/filters'
 import {
     researchCategoryColours,
@@ -23,8 +22,11 @@ import {
 import { rechartBaseTooltipProps } from '../helpers/tooltip'
 
 export default function GrantsPerResearchCategoryByRegion() {
-    const { grants: globalGrants, filters: selectedFilters } =
-        useContext(GlobalFilterContext)
+    const {
+        grants: globalGrants,
+        completeDataset: dataset,
+        filters: selectedFilters,
+    } = useContext(GlobalFilterContext)
 
     const [selectedResearchCategories, setSelectedResearchCategories] =
         useState<string[]>([])

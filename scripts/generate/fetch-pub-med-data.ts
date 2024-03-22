@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import {put} from "@vercel/blob"
-import {ProcessedGrant, Grant} from '../types/generate'
-import {title, info, printWrittenFileStats, warn} from '../helpers/log'
+import { put } from '@vercel/blob'
+import { ProcessedGrant, Grant } from '../types/generate'
+import { title, info, printWrittenFileStats, warn } from '../helpers/log'
 
 export default async function () {
     title('Fetching publication data from PubMed')
@@ -12,7 +12,9 @@ export default async function () {
     console.time(timeLogLabel)
 
     if (process.env.SKIP_FETCHING_PUBMED_DATA) {
-        warn('Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present')
+        warn(
+            'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present'
+        )
         return
     }
 
@@ -27,7 +29,7 @@ export default async function () {
     const grants = sourceGrants.map((grant: Grant) => {
         const PubMedLinks = publications[grant.PubMedGrantId as string] ?? []
 
-        return {...grant, PubMedLinks}
+        return { ...grant, PubMedLinks }
     })
 
     fs.writeJsonSync(grantsDistPathname, grants)
@@ -38,18 +40,18 @@ export default async function () {
 }
 
 async function getPublications(pubMedGrantIds: string[]) {
-    const grantIds = _.uniq(
-        pubMedGrantIds.filter(idIsValidPubMedGrantId)
-    )
+    const grantIds = _.uniq(pubMedGrantIds.filter(idIsValidPubMedGrantId))
 
-    const cacheFilename = 'cached-pub-med-publications.json';
+    const cacheFilename = 'cached-pub-med-publications.json'
 
     const cacheUrl = `https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/${cacheFilename}`
 
     const cacheResponse = await fetch(cacheUrl)
 
     if (!cacheResponse.ok && cacheResponse.status !== 404) {
-        throw new Error(`Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`)
+        throw new Error(
+            `Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`
+        )
     }
 
     if (cacheResponse.ok) {
@@ -59,7 +61,9 @@ async function getPublications(pubMedGrantIds: string[]) {
             const cachedGrantIds = Object.keys(cache.publications)
 
             // check if all grant IDs are in the cache
-            const allIdsInCache = grantIds.every(id => cachedGrantIds.includes(id))
+            const allIdsInCache = grantIds.every(id =>
+                cachedGrantIds.includes(id)
+            )
 
             // check expired date has not passed
             const cacheHasNotExpired = cache.expiresAt > Date.now()
@@ -71,10 +75,12 @@ async function getPublications(pubMedGrantIds: string[]) {
         }
     }
 
-    info('Cached PubMed data is not available or has expired, fetching new data via API')
+    info(
+        'Cached PubMed data is not available or has expired, fetching new data via API'
+    )
 
     // Fetch new PubMed data for each Grant ID
-    const publications: {[key: string]: string} = {}
+    const publications: { [key: string]: string } = {}
 
     for (let i = 0; i < grantIds.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === grantIds.length - 1)) {
@@ -87,16 +93,19 @@ async function getPublications(pubMedGrantIds: string[]) {
     }
 
     // Cache the data for 1 week
-    const expiresAt = Date.now() + (1000 * 60 * 60 * 24 * 7) // 1 week
+    const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7 // 1 week
 
     // Store it at Vercel Blob
-    await put(
-        cacheFilename,
-        JSON.stringify({publications, expiresAt}),
-        {access: 'public', addRandomSuffix: false}
-    )
+    await put(cacheFilename, JSON.stringify({ publications, expiresAt }), {
+        access: 'public',
+        addRandomSuffix: false,
+    })
 
-    info(`Stored PubMed data in cache file ${cacheFilename} until ${new Date(expiresAt).toLocaleString()}`)
+    info(
+        `Stored PubMed data in cache file ${cacheFilename} until ${new Date(
+            expiresAt
+        ).toLocaleString()}`
+    )
 
     return publications
 }
@@ -116,18 +125,20 @@ async function getPubMedLinks(pubMedGrantId: string) {
         `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
     ).then(response => response.json())
 
-    return data.resultList.result.map(
-        (result: any) => _.pick(result, [
-            'title',
-            'source',
-            'pmid',
-            'authorString',
-            'doi',
-            'pubYear',
-            'journalInfo.journal.title',
-        ])
-    ).map((result: any) => ({
-        ...result,
-        updated_at: new Date().toISOString(),
-    }))
+    return data.resultList.result
+        .map((result: any) =>
+            _.pick(result, [
+                'title',
+                'source',
+                'pmid',
+                'authorString',
+                'doi',
+                'pubYear',
+                'journalInfo.journal.title',
+            ])
+        )
+        .map((result: any) => ({
+            ...result,
+            updated_at: new Date().toISOString(),
+        }))
 }
