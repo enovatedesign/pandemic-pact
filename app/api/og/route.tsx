@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
     return new ImageResponse(
       (
         <div tw="flex">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             width="1200"
             height="630"
