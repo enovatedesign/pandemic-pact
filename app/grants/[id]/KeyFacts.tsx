@@ -71,13 +71,13 @@ export default function KeyFacts({ grant }: { grant: any }) {
             text: 'Age Group',
             metric: grant.AgeGroups,
             infoModalText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                'We curated data on the age groups using information from the grant summary when available. If no age criteria were specified, we coded the field as unspecified. If a grant summary described a research project conducted on viruses or other non-human subjects, we coded the field as not applicable.',
         },
         {
             text: 'Vulnerable Population',
             metric: grant.VulnerablePopulations,
             infoModalText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                'We curated data on the vulnerable populations using information on special populations from the grant summary. If a grant was awarded to conduct research involving participants with recognised vulnerabilities, we used this information to populate the field. If no vulnerabilities were mentioned, we coded the field as unspecified. If the grant was awarded to conduct research on the non-human populations, including viruses or other, we coded the field as not applicable.',
         },
         {
             text: 'Occupations of Interest',

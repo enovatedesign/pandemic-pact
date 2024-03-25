@@ -35,7 +35,7 @@ const ListTeamMembersBlock = ({block}: Props) => {
 
                 <div className="flex flex-col items-center pb-8 space-y-4">
                     {heading && (
-                        <div className={`${defaultProseClasses.join(" ")}`}>
+                        <div className={defaultProseClasses}>
                             <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
                         </div>
                     )}

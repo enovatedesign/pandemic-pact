@@ -8,4 +8,4 @@ export const defaultProseClasses = [
     'prose-headings:text-brand-teal-richText-h2',
     'prose-gray',
     'mx-auto',
-]
+].join(' ')

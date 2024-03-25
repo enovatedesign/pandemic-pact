@@ -1,17 +1,9 @@
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
+import numDigits from "../helpers/metadata-functions";
 
 export const runtime = "edge";
-
-function numDigits(x: number) {
-  const result = Math.max(Math.floor(Math.log10(Math.abs(x))), 0) + 1;
-  if (result === 4) {
-    return result;
-  } else {
-    return null;
-  }
-}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -68,6 +60,7 @@ export async function GET(request: NextRequest) {
     return new ImageResponse(
       (
         <div tw="flex">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             width="1200"
             height="630"

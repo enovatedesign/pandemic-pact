@@ -125,6 +125,24 @@ module.exports = {
                 '--tw-prose-bullets': theme('colors.secondary.DEFAULT'),
             },
         },
+        DEFAULT: {
+          css: {
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+            code: {
+              backgroundColor: theme('colors.gray.100'),
+              borderRadius: theme('borderRadius.DEFAULT'),
+              paddingLeft: theme('spacing[1.5]'),
+              paddingRight: theme('spacing[1.5]'),
+              paddingTop: theme('spacing.1'),
+              paddingBottom: theme('spacing.1'),
+            },
+          },
+        },
       }),
       zIndex: {
         '-1': '-1',
