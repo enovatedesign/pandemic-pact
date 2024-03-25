@@ -20,7 +20,7 @@ export default function LogosAndText({ block, firstBlock, lastBlock }: Props) {
 		return (
 			<BlockWrapper>
                 {heading && (
-                    <div className={`${defaultProseClasses.join(" ")} text-center mb-12`}>
+                    <div className={`${defaultProseClasses} text-center mb-12`}>
                         <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
                     </div>
                 )}
@@ -96,7 +96,7 @@ const LogoAndTextItem = ({content, index}: LogoAndTextProps) => {
 
             </div>
 
-            <div className={`${defaultProseClasses.join(" ")} max-w-none w-full`} dangerouslySetInnerHTML={{ __html: content.text }}></div>
+            <div className={`${defaultProseClasses} max-w-none w-full`} dangerouslySetInnerHTML={{ __html: content.text }}></div>
 
         </animated.div>
     )
