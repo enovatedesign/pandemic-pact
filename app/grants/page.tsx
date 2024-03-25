@@ -7,7 +7,7 @@ type generateMetadataProps = {
 }
 
 export async function generateMetadata({ params }: generateMetadataProps, parent: ResolvingMetadata): Promise<Metadata> {
-    return fetchMetadataFromCraft('explore')
+    return fetchMetadataFromCraft('grants')
 }
 
 export default function Explore() {
