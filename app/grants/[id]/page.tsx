@@ -9,6 +9,7 @@ import KeyFacts from './KeyFacts';
 import Publications from './Publications';
 import type { Metadata } from 'next';
 import '../../css/components/highlighted-search-results.css';
+import numDigits from '@/app/api/helpers/metadata-functions';
 
 type Props = {
     params: { id: string };
@@ -32,7 +33,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 
     let metaTitle = `${params.id} | Pandemic PACT Tracker`
+    
+    const startYear = grant.GrantStartYear
+    const altStartYear = startYear > 0 && numDigits(startYear) !== null ? startYear : null
 
+    const altAmountCommitted = "$" + grant.GrantAmountConverted
+
+    let altText = `${grant.GrantTitleEng}. Funded by: ${grant.FundingOrgName}.`;
+    if (altStartYear) altText += ` Start year: ${altStartYear}.`;
+    if (altAmountCommitted) altText += ` Amount committed: ${altAmountCommitted}.`;
+    
     if (grant?.GrantTitleEng) {
         metaTitle = `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`
     }
@@ -44,7 +54,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: metaTitle,
         openGraph: {
             title: metaTitle,
-            images: `/api/og?grant=${params.id}`
+            images: [
+                {
+                    url: `/api/og?grant=${params.id}`,
+                    alt: altText.replace('..', '.'),
+                    width: 1200,
+                    height: 630,
+                }
+            ] 
         }
     }
 
