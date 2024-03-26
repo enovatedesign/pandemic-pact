@@ -186,7 +186,7 @@ export default function VisualisationCard({
                                 Attribution-ShareAlike 4.0 International License.
                             </p>
                             <p className="mt-3 italic text-sm text-gray-600">
-                                Pandemic PACT Grant Tracker by the Pandemic PACT team with GloPID-R and UKCDR (www.pandemicpact.org)
+                                Pandemic PACT Research Programme, Grant and Evidence Gap Tracker by the Pandemic PACT Team with GloPID-R and UKCDR (www.pandemicpact.org).
                             </p>
                         </div>
 

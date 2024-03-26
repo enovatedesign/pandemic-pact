@@ -80,6 +80,17 @@ export default function SearchResult({
         )?.label
     )
 
+    const resultFacts = [ 
+        {
+            title: 'Amount committed (USD)',
+            value: grantAmountConverted,
+        },
+        {
+            title: 'Start Year',
+            value: result._source.GrantStartYear
+        },
+    ]
+
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-12 lg:gap-8">
@@ -145,23 +156,24 @@ export default function SearchResult({
                                 <p className='line-clamp-6'>{result._source.Abstract}</p>
                         )}
                 </div>
-
-                <div className="col-span-4 grid grid-cols-2 gap-4 lg:col-start-4 lg:col-span-1 lg:flex lg:flex-col">
-                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
-                        <span className="uppercase text-xs tracking-widest font-bold">
-                            Amount committed (USD)<span className="sr-only">:</span>
-                        </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
-                            {grantAmountConverted}
-                        </span>
-                    </p>
-                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
-                        <span className="uppercase text-xs tracking-widest font-bold">
-                            Start Year<span className="sr-only">:</span>
-                        </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
-                            {result._source.GrantStartYear}
-                        </span>
-                    </p>
-                </div>
+                        
+                <ul className="col-span-4 flex gap-4 lg:col-start-4 lg:col-span-1 lg:flex-col">
+                    {resultFacts.map((fact, index: number) => 
+                        <>
+                            {fact.value && (
+                                <li key={index} className="w-full">
+                                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                                        <span className="uppercase text-xs tracking-widest font-bold">
+                                            {fact.title}<span className="sr-only">:</span>
+                                        </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
+                                            {fact.value}
+                                        </span>
+                                    </p>
+                                </li>
+                            )}
+                        </>
+                    )}
+                </ul>
             </div>
         </div>
     )

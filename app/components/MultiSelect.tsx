@@ -1,5 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
+import { customSelectThemeColours } from '../helpers/select-colours'
 
 interface Option {
     label: string
@@ -74,6 +75,13 @@ export default function MultiSelect({
             instanceId={id}
             onFocus={loadOptions}
             isLoading={isLoading}
+            theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  ...customSelectThemeColours,
+                },
+              })}
         />
     )
 }
