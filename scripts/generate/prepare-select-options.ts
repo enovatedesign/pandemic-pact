@@ -23,11 +23,9 @@ export default function () {
 
     const path = './data/dist'
 
-    fs.emptyDirSync(path)
-
     const optionsWithConvertedKeys = convertSourceKeysToOurKeys(rawOptions)
 
-    const selectOptions = {
+    const selectOptions: { [key: string]: any[] } = {
         ...optionsWithConvertedKeys,
         ResearchInstitutionCountry: _.cloneDeep(
             optionsWithConvertedKeys.FunderCountry
@@ -43,6 +41,13 @@ export default function () {
             'research_institition_name'
         ),
     }
+
+    // Remove funders that don't have any grants
+    const grants: any[] = fs.readJsonSync('./data/dist/grants.json')
+
+    selectOptions.FundingOrgName = selectOptions.FundingOrgName.filter(funder =>
+        grants.some(grant => grant.FundingOrgName.includes(funder.value))
+    )
 
     const pathname = `${path}/select-options.json`
 
