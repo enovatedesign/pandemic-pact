@@ -67,7 +67,7 @@ export default function MultiSelect({
     const fullTailwindConfig: any = resolveConfig(tailwindConfig)
 
     const customThemeColours = {
-        primary25: fullTailwindConfig.theme.colors.primary.DEFAULT,
+        primary25: fullTailwindConfig.theme.colors.primary.lightest,
         primary: fullTailwindConfig.theme.colors.primary.darker,
     }
 
