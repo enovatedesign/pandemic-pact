@@ -16,6 +16,7 @@
         "@headlessui/react": "^1.7.18",
         "@headlessui/tailwindcss": "^0.2.0",
         "@heroicons/react": "^1.0.6",
+        "@next/third-parties": "^14.1.4",
         "@opensearch-project/opensearch": "^2.5.0",
         "@react-spring/web": "^9.7.3",
         "@react-three/drei": "^9.93.0",
