@@ -90,20 +90,18 @@ export default function KeyFacts({ grant }: { grant: any }) {
             <div className="relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden">
                 <h2 className="self-start lg:self-auto px-4 py-2 lg:py-0 lg:px-4 text-white tracking-wider lg:[writing-mode:vertical-lr] uppercase text-lg lg:text-xl font-medium">Key facts</h2>
                 <div className="w-full bg-primary text-secondary">
-                    <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50%">
+                    <ul className="grid grid-cols-2 md:grid-cols-6 bg-gradient-to-t from-secondary/20 to-transparent to-50% border-b-2 border-secondary/30">
                         {filteredKeyFactsHeadings.map((heading, index) => {
                             const borderClasses = [
-                                index === 0 && 'col-span-2 md:col-span-3 md:border-r-2',
-                                index === 1 && 'border-r-2 md:col-span-3 md:border-r-0 mr-0.5 md:mr-0',
-                                index === 2 && 'md:border-r-2 md:col-span-2',
-                                index === 3 && 'border-r-2 md:col-span-2 md:border-r-2',
-                                index === 4 && 'md:col-span-2',
+                                index === 0 && 'col-span-2 md:col-span-3 md:border-r-2 border-b-2',
+                                index === 1 &&  `border-r-2 md:col-span-3 md:border-r-0 border-b-2`,
+                                index === 2 && 'md:border-r-2 md:col-span-2 border-b-2',
+                                index === 3 && 'border-r-2 md:col-span-2 md:border-r-2 border-b-2',
+                                index === 4 && 'md:col-span-2 border-b-2',
                                 index === 5 && 'col-span-1 md:col-span-2 border-r-2',
-                                index === 6 && 'col-span-1 md:col-span-2',
-                                index === 7 && 'col-span-2 md:border-l-2 -ml-0.5 ',
-                                heading.metric && '-translate-x-0.5 md:translate-x-0',
-                                index > 2 ? 'border-b-2' : 'border-b-2',
-                            ].join(' ')
+                                index === 6 && 'col-span-1 md:col-span-4',
+                                index === 7 && 'col-span-2 md:border-l-2',
+                            ].filter(Boolean).join(' ')
 
                             const metricClasses = [index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'].join(' ')
 
@@ -171,10 +169,14 @@ export default function KeyFacts({ grant }: { grant: any }) {
                     </ul>
                     <ul className="grid grid-cols-2 md:grid-cols-3 bg-primary-lightest">
                         {keyFactsSubHeadings.map((subHeading, index) => {
-                            const borderClasses = ['col-span-2 md:col-span-1', index % 2 == 0 ? 'border-r-2' : 'md:border-r-2'].join(' ')
-
+                            const borderClasses = [
+                                'col-span-2 md:col-span-1 border-b-2',
+                                (index === 6 || index === 7 || index === 8) && 'md:border-b-0',
+                                (index === 0 || index === 1 || index === 3 || index === 4 || index === 6 || index === 7) && 'md:border-r-2',
+                              ].filter(Boolean).join(' ');
+                              
                             return (
-                                <li key={index} className={`${borderClasses} border-b-2 p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}>
+                                <li key={index} className={`${borderClasses} p-4 py-5 flex flex-col justify-between space-y-2 border-secondary/10`}>
                                     {subHeading.infoModalText ? (
                                         <div className="flex items-center space-x-2">
                                             {subHeading.text && <p className="uppercase text-xs tracking-widest font-bold">{subHeading.text}</p>}

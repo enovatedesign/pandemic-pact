@@ -10,6 +10,7 @@ import Publications from './Publications';
 import type { Metadata } from 'next';
 import '../../css/components/highlighted-search-results.css';
 import numDigits from '@/app/api/helpers/metadata-functions';
+import { defaultMetaData } from '@/app/helpers/default-meta-data';
 
 type Props = {
     params: { id: string };
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const path = `./data/dist/grants/${params.id}.json`;
 
     if (!fs.existsSync(path)) {
-        notFound();
+        return {...defaultMetaData}
     }
 
     const grant = fs.readJsonSync(path);

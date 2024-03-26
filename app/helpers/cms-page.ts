@@ -1,7 +1,7 @@
 import GraphQL from '../lib/GraphQl'
 import EntryTypes from '../lib/EntryTypes'
-import {notFound} from 'next/navigation'
 import {getMetadata} from 'next-seomatic'
+import { defaultMetaData } from './default-meta-data'
 
 export interface Parameters {
     slug: string[]
@@ -102,7 +102,7 @@ export async function fetchMetadataFromCraft(uri: string) {
     )
 
     if (!metaDataQuery.entry) {
-        notFound()
+        return {...defaultMetaData}
     }
    
     return getMetadata(metaDataQuery.entry.seomatic);
