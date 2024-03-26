@@ -7,11 +7,12 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const classes: string = `overflow-x-hidden ${font.className}`;
+    const classes: string = `overflow-x-hidden ${font.className}`
+    const gtmId: string|undefined = process.env.NEXT_PUBLIC_GTM_ID
 
     return (
         <html lang="en" className="scroll-smooth">
-            <GoogleTagManager gtmId="{{ process.env.NEXT_PUBLIC_GTM_ID }}" />
+            {gtmId && <GoogleTagManager gtmId={gtmId} />}
             <body className={classes}>
                 {children}
             </body>
