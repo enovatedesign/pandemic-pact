@@ -4,6 +4,7 @@ import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
 import { SearchFilters } from '../helpers/search'
+import { customSelectThemeColours } from '../helpers/select-colours'
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
@@ -330,6 +331,13 @@ function SingleSelect({ options, value, onSelectChange }: SingleSelectProps) {
             isClearable={false}
             placeholder="Select..."
             instanceId={id}
+            theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  ...customSelectThemeColours,
+                },
+              })}
         />
     )
 }
@@ -365,6 +373,13 @@ function MultiSelect({
             defaultValue={defaultValue}
             placeholder="Select..."
             instanceId={id}
+            theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  ...customSelectThemeColours,
+                },
+              })}
         />
     )
 }
