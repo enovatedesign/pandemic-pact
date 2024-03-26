@@ -110,6 +110,8 @@ export default function () {
         }
     })
 
+    fs.emptyDirSync('./data/dist')
+
     const pathname = './data/dist/grants.json'
 
     fs.writeJsonSync(pathname, grants)
