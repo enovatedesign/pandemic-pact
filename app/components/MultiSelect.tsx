@@ -1,7 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config.js'
+import { customSelectThemeColours } from '../helpers/select-colours'
 
 interface Option {
     label: string
@@ -64,13 +63,6 @@ export default function MultiSelect({
 
     const fullLabel = label ? `All ${label}` : 'All'
 
-    const fullTailwindConfig: any = resolveConfig(tailwindConfig)
-
-    const customThemeColours = {
-        primary25: fullTailwindConfig.theme.colors.primary.lightest,
-        primary: fullTailwindConfig.theme.colors.primary.darker,
-    }
-
     return (
         <Select
             isMulti
@@ -87,7 +79,7 @@ export default function MultiSelect({
                 ...theme,
                 colors: {
                   ...theme.colors,
-                  ...customThemeColours,
+                  ...customSelectThemeColours,
                 },
               })}
         />
