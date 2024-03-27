@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import {
     LineChart,
     Line,
@@ -8,7 +8,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
-import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
+import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { groupBy } from 'lodash'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -95,12 +95,12 @@ export default function TemporalChart({ hideCovid }: Props) {
                     />
 
                     <Tooltip
-                        content={props =>
-                            rechartCategoriesTooltipContentFunction({
-                                ...props,
-                                category: 'Disease',
-                            })
-                        }
+                        content={props => (
+                            <RechartTrendsTooltipContent
+                                props={props}
+                                chartData={amountCommittedToEachDiseaseOverTime}
+                            />
+                        )}
                         {...rechartBaseTooltipProps}
                     />
 
