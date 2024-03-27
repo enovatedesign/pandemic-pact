@@ -152,7 +152,11 @@ module.exports = {
       },
       height: {
         "d-screen": "100dvh"
-      }
+      },
+      backgroundImage: {
+        dots: "url('/images/homepage-dots/home-dot.png')",
+    },
+
     },
   },
   safelist: [
