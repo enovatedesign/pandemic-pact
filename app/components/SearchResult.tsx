@@ -162,7 +162,7 @@ export default function SearchResult({
                         <>
                             {fact.value && (
                                 <li key={index} className="w-full">
-                                    <p className="flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
+                                    <p className="h-full flex flex-col justify-between bg-primary text-secondary rounded-xl p-4">
                                         <span className="uppercase text-xs tracking-widest font-bold">
                                             {fact.title}<span className="sr-only">:</span>
                                         </span> <span className="text-lg md:text-3xl lg:text-4xl font-bold mt-2">
