@@ -206,7 +206,7 @@ export default function Map() {
             >
                 <ColourScale colourScale={colourScale} />
 
-                <div className="xl:self-center xl:-translate-y-[14px]">
+                <div className="xl:self-center xl:-translate-y-[14px] ignore-in-image-export">
                     <DoubleLabelSwitch
                         checked={displayWhoRegions}
                         onChange={setDisplayWhoRegions}
@@ -216,7 +216,7 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="xl:self-center xl:-translate-y-[14px]">
+                <div className="xl:self-center xl:-translate-y-[14px] ignore-in-image-export">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
                         onChange={setUsingFunderLocation}
