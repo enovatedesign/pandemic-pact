@@ -8,9 +8,12 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
-import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
+import TooltipContent from '../TooltipContent'
 import { groupBy } from 'lodash'
-import { axisDollarFormatter } from '../../helpers/value-formatters'
+import {
+    dollarValueFormatter,
+    axisDollarFormatter,
+} from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
@@ -56,6 +59,57 @@ export default function TemporalChart({ hideCovid }: Props) {
         })
     }
 
+    const tooltipContent = (props: any) => {
+        if (!props.active) return null
+
+        // Sort tooltip items by descending dollar value, so highest is at the top
+        props.payload.sort(
+            (a: { value: number }, b: { value: number }) => b.value - a.value
+        )
+
+        const years = amountCommittedToEachDiseaseOverTime
+            .map(item => item.year)
+            .sort()
+
+        const items = props.payload.map((item: any) => {
+            let trend = undefined
+
+            const year = item.payload.year
+
+            const yearIndex = years.indexOf(year)
+
+            if (yearIndex > 0) {
+                const previousYear = years[yearIndex - 1]
+
+                const previousYearObject =
+                    amountCommittedToEachDiseaseOverTime.find(
+                        item => item.year === previousYear
+                    )
+
+                const previousYearValue = previousYearObject
+                    ? previousYearObject[item.dataKey]
+                    : 0
+
+                if (item.value > previousYearValue) {
+                    trend = 'up'
+                } else if (item.value < previousYearValue) {
+                    trend = 'down'
+                } else {
+                    trend = 'none'
+                }
+            }
+
+            return {
+                label: item.name,
+                value: dollarValueFormatter(item.value),
+                colour: item.color,
+                trend,
+            }
+        })
+
+        return <TooltipContent title={props.label} items={items} />
+    }
+
     return (
         <>
             <ResponsiveContainer width="100%" height={500} className="z-10">
@@ -95,12 +149,7 @@ export default function TemporalChart({ hideCovid }: Props) {
                     />
 
                     <Tooltip
-                        content={props =>
-                            rechartCategoriesTooltipContentFunction({
-                                ...props,
-                                category: 'Disease',
-                            })
-                        }
+                        content={tooltipContent}
                         {...rechartBaseTooltipProps}
                     />
 
