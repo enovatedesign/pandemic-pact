@@ -59,10 +59,14 @@ export default function ExportImageMenuItem({
                 .getElementsByClassName('image-export-footer')[0]
                 .classList.remove('hidden')
 
-            // Reveal the hidden visualisation legend
-            vizWrapper
-                .getElementsByClassName('image-export-legend')[0]
-                .classList.remove('hidden')
+            // Reveal the hidden visualisation legend (if it exists)
+            const imageExportLegend = vizWrapper.getElementsByClassName(
+                'image-export-legend'
+            )[0]
+
+            if (imageExportLegend) {
+                imageExportLegend.classList.remove('hidden')
+            }
         }
 
         html2canvas(element, {
