@@ -44,7 +44,7 @@ export default function ExportImageMenuItem({
             
             const dollarAmountElements = vizWrapper.getElementsByClassName('dollar-amount-text')
             
-            const barChartTitleElements = vizWrapper.getElementsByClassName('bar-chart-title')
+            const barChartCategoryLabelElements = vizWrapper.getElementsByClassName('bar-chart-category-label')
 
             if (vizWrapper === undefined) {
                 console.error(
@@ -67,15 +67,15 @@ export default function ExportImageMenuItem({
             
         
             for (let i = 0; i < numberElements.length; i++) {
-                numberElements[i].classList.add('-translate-y-[6px]');
+                numberElements[i].classList.add('-translate-y-[6px]')
             }
             
             for (let i = 0; i < dollarAmountElements.length; i++) {
-                dollarAmountElements[i].classList.add('-translate-y-[6px]');
+                dollarAmountElements[i].classList.add('-translate-y-[6px]')
             }
             
-            for (let i = 0; i < barChartTitleElements.length; i++) {
-                barChartTitleElements[i].classList.add('pb-2');
+            for (let i = 0; i < barChartCategoryLabelElements.length; i++) {
+                barChartCategoryLabelElements[i].classList.add('pb-2')
             }
 
             // Reveal the hidden visualisation legend (if it exists)
