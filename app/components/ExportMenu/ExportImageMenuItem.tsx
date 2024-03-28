@@ -40,9 +40,11 @@ export default function ExportImageMenuItem({
                 'visualisation-card-wrapper'
             )[0]
             
-            const numberElements = vizWrapper.getElementsByClassName('total-grants-number');
+            const numberElements = vizWrapper.getElementsByClassName('total-grants-number')
             
-            const dollarAmountElements = vizWrapper.getElementsByClassName('dollar-amount-text');
+            const dollarAmountElements = vizWrapper.getElementsByClassName('dollar-amount-text')
+            
+            const barChartTitleElements = vizWrapper.getElementsByClassName('bar-chart-title')
 
             if (vizWrapper === undefined) {
                 console.error(
@@ -70,6 +72,10 @@ export default function ExportImageMenuItem({
             
             for (let i = 0; i < dollarAmountElements.length; i++) {
                 dollarAmountElements[i].classList.add('-translate-y-[6px]');
+            }
+            
+            for (let i = 0; i < barChartTitleElements.length; i++) {
+                barChartTitleElements[i].classList.add('pb-2');
             }
 
             // Reveal the hidden visualisation legend (if it exists)

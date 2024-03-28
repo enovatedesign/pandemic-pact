@@ -68,7 +68,7 @@ export default function BarChart({ hideCovid }: Props) {
             {chartData.map((datum: any, index: number) => (
                 <Fragment key={datum['Category Value']}>
                     <BarListRowHeading>
-                        <p className="text-gray-600 text-sm">
+                        <p className="bar-chart-title text-gray-600 text-sm">
                             {datum['Category Label']}
                         </p>
                     </BarListRowHeading>

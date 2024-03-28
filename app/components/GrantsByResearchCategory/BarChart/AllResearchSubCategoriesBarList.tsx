@@ -113,7 +113,7 @@ export default function AllResearchSubCategoriesBarList({
                             {researchSubCategoryData.map((datum: any) => (
                                 <Fragment key={datum['Category Value']}>
                                     <BarListRowHeading>
-                                        <p className="text-gray-600 text-sm">
+                                        <p className="bar-chart-title text-gray-600 text-sm">
                                             {datum['Category Label']}
                                         </p>
                                     </BarListRowHeading>
