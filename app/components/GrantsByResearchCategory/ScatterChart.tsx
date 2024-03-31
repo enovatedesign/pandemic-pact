@@ -21,7 +21,7 @@ import {
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
 import Legend from '../Legend'
-import ImageLegend from '../ImageLegend'
+import ImageExportLegend from '../ImageExportLegend'
 import TooltipContent from '../TooltipContent'
 
 interface Props {
@@ -152,7 +152,7 @@ export default function ScatterChart({ chartData }: Props) {
                 </RechartScatterChart>
             </ResponsiveContainer>
 
-            <ImageLegend
+            <ImageExportLegend
                 categories={researchCategories.map(category => category.label)}
                 colours={researchCategories.map(
                     ({ value }) => researchCategoryColours[value]

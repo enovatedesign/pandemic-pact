@@ -10,7 +10,7 @@ import {
 } from 'recharts'
 import { groupBy } from 'lodash'
 import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
-import ImageLegend from '../ImageLegend'
+import ImageExportLegend from '../ImageExportLegend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
@@ -117,7 +117,7 @@ export default function TemporalChart({ hideCovid }: Props) {
                 </LineChart>
             </ResponsiveContainer>
 
-            <ImageLegend
+            <ImageExportLegend
                 categories={selectOptions.Disease.map(({ label }) => label)}
                 colours={selectOptions.Disease.map(
                     ({ value }) => diseaseColours[value]

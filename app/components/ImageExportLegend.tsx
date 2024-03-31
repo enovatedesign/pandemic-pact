@@ -5,7 +5,7 @@ interface Props {
     colours: string[]
 }
 
-export default function ImageLegend({ categories, colours }: Props) {
+export default function ImageExportLegend({ categories, colours }: Props) {
     return (
         <div className="image-export-legend hidden">
             <Legend
