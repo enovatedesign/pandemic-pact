@@ -64,8 +64,6 @@ export default function GrantsPerResearchCategoryByRegion() {
         )
     }
 
-    console.log('researchCategoryOptions', researchCategoryOptions)
-
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset.filter((grant: any) =>
             grant.ResearchLocationRegion.includes(regionOption.value)
