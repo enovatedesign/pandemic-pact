@@ -45,7 +45,10 @@ export default function ExportImageMenuItem({
             const dollarAmountElements = vizWrapper.getElementsByClassName('dollar-amount-text')
             
             const barChartCategoryLabelElements = vizWrapper.getElementsByClassName('bar-chart-category-label')
-
+            
+            const imageLegendListItems = vizWrapper.getElementsByClassName('image-legend-list-item')
+            const imageLegendSvgElementsToHide = vizWrapper.getElementsByClassName('image-legend-svg-to-hide')
+            
             if (vizWrapper === undefined) {
                 console.error(
                     'ExportToPngButton: could not find visualisation card wrapper'
@@ -77,15 +80,20 @@ export default function ExportImageMenuItem({
             for (let i = 0; i < barChartCategoryLabelElements.length; i++) {
                 barChartCategoryLabelElements[i].classList.add('pb-2')
             }
-
+            
             // Reveal the hidden visualisation legend (if it exists)
             const imageExportLegend = vizWrapper.getElementsByClassName(
                 'image-export-legend'
             )[0]
-
+                
             if (imageExportLegend) {
                 imageExportLegend.classList.remove('hidden')
             }
+            
+            for (let i = 0; i < imageLegendListItems.length; i++) {
+                imageLegendListItems[i].classList.add('-translate-y-[10px]')
+            }
+
         }
 
         html2canvas(element, {

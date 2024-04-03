@@ -13,7 +13,7 @@ export default function Legend({categories, colours, customWrapperClasses, custo
             {categories.map((category, index) => (
                 <li
                     key={`legend-item-${category}-${index}`}
-                    className="group inline-flex items-start truncate px-2 py-0.5 transition cursor-default text-gray-500"
+                    className="image-legend-list-item group inline-flex items-start truncate px-2 py-0.5 transition cursor-default text-gray-500"
                 >
                     <svg
                         className="flex-none text-blue-500 h-2 w-2 mr-1.5 opacity-100 mt-[5px]"
