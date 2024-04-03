@@ -13,11 +13,11 @@ export default function Legend({categories, colours, customWrapperClasses, custo
             {categories.map((category, index) => (
                 <li
                     key={`legend-item-${category}-${index}`}
-                    className="image-legend-list-item group inline-flex items-center truncate px-2 py-0.5 transition cursor-default text-gray-500"
+                    className="image-legend-list-item group inline-flex items-start truncate px-2 py-0.5 transition cursor-default text-gray-500"
                 >
-                    <div className="image-legend-svg-wrapper">
+                    <div className="image-legend-svg-wrapper mt-[5px]">
                         <svg
-                            className="image-legend-svg-element flex-none text-blue-500 w-2 h-2 mr-1.5 opacity-100"
+                            className="flex-none text-blue-500 w-2 h-2 mr-1.5 opacity-100"
                             fill={colours[index]}
                             viewBox="0 0 8 8"
                         >

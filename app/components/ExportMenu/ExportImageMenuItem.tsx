@@ -95,7 +95,8 @@ export default function ExportImageMenuItem({
             }
 
             for (let i = 0; i < imageLegendSvgWrappers.length; i++) {
-                imageLegendSvgWrappers[i].classList.add('translate-y-[7px]')
+                imageLegendSvgWrappers[i].classList.add('translate-y-[12px]')
+                imageLegendSvgWrappers[i].classList.remove('mt-[5px]')
             }
         }
 
