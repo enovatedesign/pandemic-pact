@@ -47,7 +47,7 @@ export default function ExportImageMenuItem({
             const barChartCategoryLabelElements = vizWrapper.getElementsByClassName('bar-chart-category-label')
             
             const imageLegendListItems = vizWrapper.getElementsByClassName('image-legend-list-item')
-            const imageLegendSvgElementsToHide = vizWrapper.getElementsByClassName('image-legend-svg-to-hide')
+            const imageLegendSvgWrappers = vizWrapper.getElementsByClassName('image-legend-svg-wrapper')
             
             if (vizWrapper === undefined) {
                 console.error(
@@ -94,6 +94,9 @@ export default function ExportImageMenuItem({
                 imageLegendListItems[i].classList.add('-translate-y-[10px]')
             }
 
+            for (let i = 0; i < imageLegendSvgWrappers.length; i++) {
+                imageLegendSvgWrappers[i].classList.add('translate-y-[7px]')
+            }
         }
 
         html2canvas(element, {
