@@ -15,7 +15,7 @@ import {
     PresentationChartLineIcon,
 } from '@heroicons/react/solid'
 import VisualisationCard from './VisualisationCard'
-import { rechartCategoriesTooltipContentFunction } from './RechartCategoriesTooltipContent'
+import RechartTrendsTooltipContent from './RechartTrendsTooltipContent'
 import MultiSelect from './MultiSelect'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
 import { axisDollarFormatter } from '../helpers/value-formatters'
@@ -127,7 +127,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     return (
         <VisualisationCard
             id="amount-committed-to-each-research-category-over-time-card"
-            title="Annual Trends in New Global Grants for Research Areas "
+            title="Annual Trends in New Global Grants for Research Areas"
             subtitle="The chart shows the total amount of funding allocated to different research areas by calendar year of award start date."
             footnote="Please note: Grants may fall under more than one research category. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
             tabs={tabs}
@@ -194,7 +194,12 @@ function BarChart({
                 />
 
                 <Tooltip
-                    content={rechartCategoriesTooltipContentFunction}
+                    content={props => (
+                        <RechartTrendsTooltipContent
+                            props={props}
+                            chartData={data}
+                        />
+                    )}
                     {...rechartBaseTooltipProps}
                 />
 
@@ -255,7 +260,12 @@ function LineChart({
                 />
 
                 <Tooltip
-                    content={rechartCategoriesTooltipContentFunction}
+                    content={props => (
+                        <RechartTrendsTooltipContent
+                            props={props}
+                            chartData={data}
+                        />
+                    )}
                     {...rechartBaseTooltipProps}
                 />
 

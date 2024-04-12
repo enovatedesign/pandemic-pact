@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import downloadAndParseDataSheets from './download-and-parse-data-sheets'
-import prepareSelectOptions from './prepare-select-options'
 import prepareGrants from './prepare-grants'
+import prepareSelectOptions from './prepare-select-options'
 import prepareHomepageTotals from './prepare-homepage-totals'
 import fetchPubMedData from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
@@ -17,9 +17,9 @@ async function main() {
 
     await downloadAndParseDataSheets()
 
-    prepareSelectOptions()
-
     prepareGrants()
+
+    prepareSelectOptions()
 
     prepareHomepageTotals()
 

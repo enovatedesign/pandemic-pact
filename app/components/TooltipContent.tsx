@@ -1,10 +1,16 @@
 import { ReactNode } from 'react'
+import {
+    TrendingUpIcon,
+    TrendingDownIcon,
+    MinusIcon,
+} from '@heroicons/react/solid'
 
 interface TooltipContentItem {
     colour?: string
     label: string
     value: string
     bold?: boolean
+    trend?: 'up' | 'down' | 'none'
 }
 
 interface Props {
@@ -48,9 +54,27 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                 </p>
                             </div>
 
-                            <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                                {item.value}
-                            </p>
+                            <div className="flex justify-between items-center gap-x-2">
+                                <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
+                                    {item.value}
+                                </p>
+
+                                {item.trend && (
+                                    <>
+                                        {item.trend === 'up' && (
+                                            <TrendingUpIcon className="h-4 w-4 text-green-500" />
+                                        )}
+
+                                        {item.trend === 'down' && (
+                                            <TrendingDownIcon className="h-4 w-4 text-red-500" />
+                                        )}
+
+                                        {item.trend === 'none' && (
+                                            <MinusIcon className="h-4 w-4 text-gray-500" />
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
