@@ -3,7 +3,7 @@ import GraphQL from './lib/GraphQl'
 import fs from 'fs';
 import path from 'path';
 
-const siteUrl = process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+const siteUrl = 'https://www.pandemicpact.org'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
