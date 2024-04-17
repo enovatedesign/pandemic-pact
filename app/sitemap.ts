@@ -65,9 +65,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const grantJsonDataArray = await readJsonFiles();
 
-    const grantPageSitemapData = grantJsonDataArray.map((grant: {GrantID: string, updated_at: string}) => ({
-        url: `${siteUrl}/grants/${grant.GrantID}`, 
-    }))
+    const grantPageSitemapData = grantJsonDataArray
+        .filter(grant => grant.id !== undefined)
+        .map((grant: {GrantID: string, updated_at: string}) => ({
+            url: `${siteUrl}/grants/${grant.GrantID}`, 
+        }))
+    
     return [
         ...homepageSitemapData,
         ...entriesSitemapData,
