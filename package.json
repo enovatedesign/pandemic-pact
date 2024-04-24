@@ -32,6 +32,7 @@
         "@vercel/og": "^0.6.2",
         "autoprefixer": "10.4.16",
         "chalk": "^4.1.2",
+        "colortranslator": "^4.1.0",
         "dayjs": "^1.11.10",
         "dotenv": "^16.3.1",
         "encoding": "^0.1.13",
