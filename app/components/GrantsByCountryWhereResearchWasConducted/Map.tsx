@@ -249,9 +249,10 @@ function MapTooltipContent({
             ),
         },
     ]
+    
     return (
         <TooltipContent
-            title={geo.properties.NAME}
+            title={geo.properties.name}
             items={items}
             footer={
                 <div className="px-4 py-2">
