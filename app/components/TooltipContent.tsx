@@ -65,7 +65,7 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                         {item.trend === 'up' && (
                                             <p className="text-green-500 flex items-center">
                                                 <TrendingUpIcon className="h-4 w-4" />
-                                                {item.trendPercentageDifference && (
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
                                                     <span className="ml-1">{`+${item.trendPercentageDifference}%`}</span>
                                                 )}
                                             </p>
@@ -74,7 +74,7 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                         {item.trend === 'down' && (
                                             <p className="text-red-500 flex items-center">
                                                 <TrendingDownIcon className="h-4 w-4"/>
-                                                {item.trendPercentageDifference && (
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
                                                     <span className="ml-1">{`-${item.trendPercentageDifference}%`}</span>
                                                 )}
                                             </p>
