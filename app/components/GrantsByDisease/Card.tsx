@@ -41,6 +41,10 @@ export default function GrantsByDisease() {
                 The chart shows the total number of grants awarded and amount of
                 funding committed for each disease per calendar year.
             </p>
+
+            <p>
+                The pop up box notes the year on year percentage increase or decrease for each priority disease.
+            </p>
         </>
     )
 
