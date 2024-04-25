@@ -7,6 +7,7 @@ import TemporalChart from './TemporalChart'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
+    const [orderSortingValue, setOrderSortingValue] = useState('Known Financial Commitments (USD)')
 
     const tabs = [
         {
@@ -21,7 +22,7 @@ export default function GrantsByDisease() {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart hideCovid={hideCovid} />,
+            content: <BarChart hideCovid={hideCovid} orderSortingValue={orderSortingValue}/>,
         },
     ]
 
@@ -64,6 +65,13 @@ export default function GrantsByDisease() {
                 theme="light"
                 className="ignore-in-image-export"
             />
+            {/* <Switch
+                checked={hideCovid}
+                onChange={setHideCovid}
+                label="Hide COVID-19"
+                theme="light"
+                className="ignore-in-image-export"
+            /> */}
         </VisualisationCard>
     )
 }

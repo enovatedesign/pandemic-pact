@@ -9,9 +9,10 @@ import BarListRowHeading from '../BarList/BarListRowHeading'
 
 interface Props {
     hideCovid: boolean
+    orderSortingValue: string
 }
 
-export default function BarChart({ hideCovid }: Props) {
+export default function BarChart({ hideCovid, orderSortingValue }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
     const chartData = useMemo(() => {
@@ -57,8 +58,8 @@ export default function BarChart({ hideCovid }: Props) {
                 }
             })
             .filter(disease => disease['Total Grants'] > 0)
-            .sort((a, b) => b['Known Financial Commitments (USD)'] - a['Known Financial Commitments (USD)'])
-    }, [grants, hideCovid])
+            .sort((a, b) => b[orderSortingValue] - a[orderSortingValue])
+    }, [grants, hideCovid, orderSortingValue])
 
     return (
         <BarList

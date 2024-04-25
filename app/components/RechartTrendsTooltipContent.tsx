@@ -21,7 +21,7 @@ export default function RechartTrendsTooltipContent({
 
     const items = props.payload.map((item: any) => {
         let trend = undefined
-        let trendValueAmount = undefined
+        let trendPercentageDifference = undefined
 
         const year = item.payload.year
 
@@ -37,15 +37,16 @@ export default function RechartTrendsTooltipContent({
             const previousYearValue = previousYearObject
                 ? previousYearObject[item.dataKey]
                 : 0
+                
             if (item.value > previousYearValue) {
                 trend = 'up'
-                trendValueAmount = dollarValueFormatter(item.value - previousYearValue)
+                trendPercentageDifference = Math.round(((item.value - previousYearValue) / previousYearValue) * 100);
             } else if (item.value < previousYearValue) {
                 trend = 'down'
-                trendValueAmount = dollarValueFormatter(previousYearValue - item.value)
+                trendPercentageDifference = Math.round(((previousYearValue - item.value) / item.value) * 100);
             } else {
                 trend = 'none'
-                trendValueAmount = null
+                trendPercentageDifference = null
             }
         }
         return {
@@ -53,7 +54,7 @@ export default function RechartTrendsTooltipContent({
             value: dollarValueFormatter(item.value),
             colour: item.color,
             trend,
-            trendValueAmount
+            trendPercentageDifference
         }
     })
 
