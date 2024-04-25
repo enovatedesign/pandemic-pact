@@ -21,6 +21,7 @@ export default function RechartTrendsTooltipContent({
 
     const items = props.payload.map((item: any) => {
         let trend = undefined
+        let trendValueAmount = undefined
 
         const year = item.payload.year
 
@@ -28,7 +29,7 @@ export default function RechartTrendsTooltipContent({
 
         if (yearIndex > 0) {
             const previousYear = years[yearIndex - 1]
-
+            
             const previousYearObject = chartData.find(
                 (item: any) => item.year === previousYear
             )
@@ -36,21 +37,23 @@ export default function RechartTrendsTooltipContent({
             const previousYearValue = previousYearObject
                 ? previousYearObject[item.dataKey]
                 : 0
-
             if (item.value > previousYearValue) {
                 trend = 'up'
+                trendValueAmount = dollarValueFormatter(item.value - previousYearValue)
             } else if (item.value < previousYearValue) {
                 trend = 'down'
+                trendValueAmount = dollarValueFormatter(previousYearValue - item.value)
             } else {
                 trend = 'none'
+                trendValueAmount = null
             }
         }
-
         return {
             label: item.name,
             value: dollarValueFormatter(item.value),
             colour: item.color,
             trend,
+            trendValueAmount
         }
     })
 

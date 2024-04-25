@@ -11,6 +11,7 @@ interface TooltipContentItem {
     value: string
     bold?: boolean
     trend?: 'up' | 'down' | 'none'
+    trendValueAmount?: number
 }
 
 interface Props {
@@ -71,6 +72,10 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
 
                                         {item.trend === 'none' && (
                                             <MinusIcon className="h-4 w-4 text-gray-500" />
+                                        )}
+                                        
+                                        {item.trendValueAmount && (
+                                            <span>{item.trendValueAmount}</span>
                                         )}
                                     </>
                                 )}
