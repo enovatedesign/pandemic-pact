@@ -18,7 +18,7 @@ export default function BarChart({ hideCovid }: Props) {
         const diseases = selectOptions.Disease.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
         )
-
+        
         return diseases
             .map(function (disease) {
                 const grantsWithKnownAmounts = grants
@@ -57,6 +57,7 @@ export default function BarChart({ hideCovid }: Props) {
                 }
             })
             .filter(disease => disease['Total Grants'] > 0)
+            .sort((a, b) => b['Known Financial Commitments (USD)'] - a['Known Financial Commitments (USD)'])
     }, [grants, hideCovid])
 
     return (
