@@ -19,9 +19,10 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
+    orderSortingValue: string
 }
 
-export default function TemporalChart({ hideCovid }: Props) {
+export default function TemporalChart({ hideCovid, orderSortingValue }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(

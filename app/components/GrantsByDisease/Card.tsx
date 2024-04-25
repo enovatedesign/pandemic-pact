@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChartBarIcon, ClockIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
 import Switch from '../Switch'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
+import DoubleLabelSwitch from '../DoubleLabelSwitch'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
-    const [orderSortingValue, setOrderSortingValue] = useState('Known Financial Commitments (USD)')
+    const [orderByTotalGrantsBooleanValue, setOrderByTotalGrantsBooleanValue] = useState(false)
+    const orderSortingValue = !orderByTotalGrantsBooleanValue ? "Known Financial Commitments (USD)" : "Total Grants"
+
+    console.log(orderSortingValue)
 
     const tabs = [
         {
@@ -15,7 +19,7 @@ export default function GrantsByDisease() {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} />,
+            content: <TemporalChart hideCovid={hideCovid} orderSortingValue={orderSortingValue}/>,
         },
         {
             tab: {
@@ -58,20 +62,24 @@ export default function GrantsByDisease() {
             infoModalContents={infoModalContents}
             tabs={tabs}
         >
-            <Switch
-                checked={hideCovid}
-                onChange={setHideCovid}
-                label="Hide COVID-19"
-                theme="light"
-                className="ignore-in-image-export"
-            />
-            {/* <Switch
-                checked={hideCovid}
-                onChange={setHideCovid}
-                label="Hide COVID-19"
-                theme="light"
-                className="ignore-in-image-export"
-            /> */}
+            <div className="w-full flex justify-between items-center">
+                <Switch
+                    checked={hideCovid}
+                    onChange={setHideCovid}
+                    label="Hide COVID-19"
+                    theme="light"
+                    className="ignore-in-image-export"
+                />
+
+                <DoubleLabelSwitch
+                    checked={orderByTotalGrantsBooleanValue}
+                    onChange={setOrderByTotalGrantsBooleanValue}
+                    leftLabel="USD"
+                    rightLabel="Number of Grants"
+                    className="ignore-in-image-export"
+                    screenReaderLabel="Order bar chart"
+                />
+            </div>
         </VisualisationCard>
     )
 }

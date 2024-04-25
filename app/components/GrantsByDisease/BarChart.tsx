@@ -8,8 +8,8 @@ import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 
 interface Props {
-    hideCovid: boolean
-    orderSortingValue: string
+    hideCovid: Boolean
+    orderSortingValue: String
 }
 
 export default function BarChart({ hideCovid, orderSortingValue }: Props) {
