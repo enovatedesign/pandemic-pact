@@ -5,6 +5,8 @@ import { links } from '../helpers/nav'
 import SearchResult from './SearchResult'
 
 import '../css/components/highlighted-search-results.css'
+import { Suspense, useEffect, useState } from 'react'
+import Pagination from './ContentBuilder/Common/Pagination'
 
 interface Props {
     searchResponse: SearchResponse
@@ -12,6 +14,18 @@ interface Props {
 
 export default function ResultsTable({ searchResponse }: Props) {
 
+    const searchResponseHits = searchResponse.hits
+    const limit = 10 
+    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
+    const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
+
+    const limitedSearchResponse = searchResponse.hits.slice(0, limit) 
+    const [paginatedSearchResponse, setPaginatedEntries] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+
+    useEffect(() => {
+        setPaginatedEntries(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+    }, [searchResponseHits, firstItemIndex, lastItemIndex])
+    
     return (
         <div>
             <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">
