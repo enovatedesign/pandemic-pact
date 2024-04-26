@@ -28,14 +28,20 @@ export default function ResultsTable({ searchResponse }: Props) {
         setPaginatedEntries(searchResponseHits.slice(firstItemIndex, lastItemIndex))
     }, [searchResponseHits, firstItemIndex, lastItemIndex])
 
-    const paginationSelectOptions = [
-        {
+    const defaultValue = [{
             label: "25 options per page",
             value: limit,
+        }]
+    
+    const paginationSelectOptions = [
+        ...defaultValue,
+        {
+            label: "30 options per page",
+            value: 30,
         },
         {
-            label: "50 options per page",
-            value: 50,
+            label: "40 options per page",
+            value: 40,
         }
     ] 
 
@@ -46,7 +52,7 @@ export default function ResultsTable({ searchResponse }: Props) {
             setLimit(selectedOption.value);
         }
     };
-    
+
     return (
         <div>
             <div className="w-full flex items-center justify-between">
@@ -55,14 +61,14 @@ export default function ResultsTable({ searchResponse }: Props) {
                 </h2>
                 
                 <Select
+                    defaultValue={defaultValue}
                     options={paginationSelectOptions}
                     onChange={handlePaginationChange}
-                    placeholder={paginationSelectOptions[0].label}
                     theme={(theme) => ({
                         ...theme,
-                            colors: {
-                            ...theme.colors,
-                            ...customSelectThemeColours,
+                        colors: {
+                          ...theme.colors,
+                          ...customSelectThemeColours,
                         },
                     })}
                 />
