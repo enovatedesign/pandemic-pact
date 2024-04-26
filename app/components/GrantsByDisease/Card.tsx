@@ -45,7 +45,7 @@ export default function GrantsByDisease() {
                 funding committed for each disease per calendar year.
             </p>
 
-            <p>
+            <p className="text-brand-grey-500">
                 The pop up box notes the year on year percentage increase or decrease for each priority disease.
             </p>
         </>
