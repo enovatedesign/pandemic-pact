@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
             'FundingOrgName',
         ],
 
-        size: 20,
+        size: 50,
 
         body: {
             query,

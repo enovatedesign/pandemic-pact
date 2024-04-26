@@ -5,7 +5,9 @@ import { links } from '../helpers/nav'
 import SearchResult from './SearchResult'
 
 import '../css/components/highlighted-search-results.css'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import Select from 'react-select'
+import { customSelectThemeColours } from '../helpers/select-colours'
 import Pagination from './ContentBuilder/Common/Pagination'
 
 interface Props {
@@ -15,7 +17,7 @@ interface Props {
 export default function ResultsTable({ searchResponse }: Props) {
 
     const searchResponseHits = searchResponse.hits
-    const limit = 10 
+    const [limit, setLimit] = useState<number>(25)
     const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
     const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
 
@@ -25,15 +27,49 @@ export default function ResultsTable({ searchResponse }: Props) {
     useEffect(() => {
         setPaginatedEntries(searchResponseHits.slice(firstItemIndex, lastItemIndex))
     }, [searchResponseHits, firstItemIndex, lastItemIndex])
+
+    const paginationSelectOptions = [
+        {
+            label: "25 options per page",
+            value: limit,
+        },
+        {
+            label: "50 options per page",
+            value: 50,
+        }
+    ] 
+
+    const handlePaginationChange = (selectedOption: any) => {
+        if (selectedOption.value === 25) {
+            return;
+        } else {
+            setLimit(selectedOption.value);
+        }
+    };
     
     return (
         <div>
-            <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">
-                Results
-            </h2>
+            <div className="w-full flex items-center justify-between">
+                <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">
+                    Results
+                </h2>
+                
+                <Select
+                    options={paginationSelectOptions}
+                    onChange={handlePaginationChange}
+                    placeholder={paginationSelectOptions[0].label}
+                    theme={(theme) => ({
+                        ...theme,
+                            colors: {
+                            ...theme.colors,
+                            ...customSelectThemeColours,
+                        },
+                    })}
+                />
+            </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
-                {searchResponse.hits.map((result, index) => {
+                {paginatedSearchResponse.map((result, index) => {
                     const query = searchResponse.query
 
                     const href =
@@ -77,6 +113,15 @@ export default function ResultsTable({ searchResponse }: Props) {
                     )
                 })}
             </div>
+
+            {searchResponseHits.length > limitedSearchResponse.length && (
+                <Pagination 
+                    totalPosts={searchResponseHits.length}
+                    postsPerPage={limit}
+                    setFirstItemIndex={setFirstItemIndex}
+                    setLastItemIndex={setLastItemIndex}
+                />
+            )}
         </div>
     )
 }
