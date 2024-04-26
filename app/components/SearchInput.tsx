@@ -228,7 +228,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                     </div>
                 </section>
 
-                <div className="flex flex-col md:flex-row gap-4 justify-between justify-start md:items-center">
+                <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
                     <p className="text-secondary flex flex-row items-center gap-2 uppercase">
                         <span className="whitespace-nowrap">
                             {searchQuery ? 'Total Hits:' : 'Total Grants:'}
