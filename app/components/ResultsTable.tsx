@@ -20,14 +20,19 @@ export default function ResultsTable({ searchResponse }: Props) {
     const [limit, setLimit] = useState<number>(25)
     const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
     const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
-
-    const limitedSearchResults = searchResponseHits.slice(0, limit) 
+    const [pagination, setPagination] = useState<boolean>(false)
     const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
 
     useEffect(() => {
         setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
     }, [searchResponseHits, firstItemIndex, lastItemIndex])
 
+    useEffect(() => {
+        if (searchResponseHits.length > limit) {
+            setPagination(true)
+        }
+    }, [limit, searchResponseHits.length])
+    
     const defaultValue = {
             label: "25 options per page",
             value: limit,
@@ -67,18 +72,20 @@ export default function ResultsTable({ searchResponse }: Props) {
                     Results
                 </h2>
                 
-                <Select
-                    defaultValue={defaultValue}
-                    options={paginationSelectOptions}
-                    onChange={handlePaginationChange}
-                    theme={(theme) => ({
-                        ...theme,
-                        colors: {
-                          ...theme.colors,
-                          ...customSelectThemeColours,
-                        },
-                    })}
-                />
+                {pagination && (
+                    <Select
+                        defaultValue={defaultValue}
+                        options={paginationSelectOptions}
+                        onChange={handlePaginationChange}
+                        theme={(theme) => ({
+                            ...theme,
+                            colors: {
+                            ...theme.colors,
+                            ...customSelectThemeColours,
+                            },
+                        })}
+                    />
+                )}
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
@@ -127,12 +134,14 @@ export default function ResultsTable({ searchResponse }: Props) {
                 })}
             </div>
                 
-            <Pagination 
-                totalPosts={searchResponseHits.length}
-                postsPerPage={limit}
-                setFirstItemIndex={setFirstItemIndex}
-                setLastItemIndex={setLastItemIndex}
-            />
+            {pagination && (
+                <Pagination 
+                    totalPosts={searchResponseHits.length}
+                    postsPerPage={limit}
+                    setFirstItemIndex={setFirstItemIndex}
+                    setLastItemIndex={setLastItemIndex}
+                />
+            )}
         </div>
     )
 }
