@@ -21,38 +21,45 @@ export default function ResultsTable({ searchResponse }: Props) {
     const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
     const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
 
-    const limitedSearchResponse = searchResponse.hits.slice(0, limit) 
-    const [paginatedSearchResponse, setPaginatedEntries] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+    const limitedSearchResults = searchResponseHits.slice(0, limit) 
+    const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
 
     useEffect(() => {
-        setPaginatedEntries(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+        setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
     }, [searchResponseHits, firstItemIndex, lastItemIndex])
 
-    const defaultValue = [{
+    const defaultValue = {
             label: "25 options per page",
             value: limit,
-        }]
+        }
     
     const paginationSelectOptions = [
-        ...defaultValue,
         {
-            label: "30 options per page",
-            value: 30,
+            label: "Show 25 Grants per page",
+            value: 25,
         },
         {
-            label: "40 options per page",
-            value: 40,
+            label: "Show 50 Grants per page",
+            value: 50,
+        },
+        {
+            label: "Show 75 Grants per page",
+            value: 75,
+        },
+        {
+            label: "Show 100 Grants per page",
+            value: 100,
         }
     ] 
 
     const handlePaginationChange = (selectedOption: any) => {
-        if (selectedOption.value === 25) {
+        if (selectedOption.value === limit) {
             return;
         } else {
             setLimit(selectedOption.value);
         }
     };
-
+    
     return (
         <div>
             <div className="w-full flex items-center justify-between">
@@ -75,7 +82,7 @@ export default function ResultsTable({ searchResponse }: Props) {
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
-                {paginatedSearchResponse.map((result, index) => {
+                {paginatedSearchResults.map((result, index) => {
                     const query = searchResponse.query
 
                     const href =
@@ -119,15 +126,13 @@ export default function ResultsTable({ searchResponse }: Props) {
                     )
                 })}
             </div>
-
-            {searchResponseHits.length > limitedSearchResponse.length && (
-                <Pagination 
-                    totalPosts={searchResponseHits.length}
-                    postsPerPage={limit}
-                    setFirstItemIndex={setFirstItemIndex}
-                    setLastItemIndex={setLastItemIndex}
-                />
-            )}
+                
+            <Pagination 
+                totalPosts={searchResponseHits.length}
+                postsPerPage={limit}
+                setFirstItemIndex={setFirstItemIndex}
+                setLastItemIndex={setLastItemIndex}
+            />
         </div>
     )
 }
