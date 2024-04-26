@@ -70,7 +70,7 @@ export default function ResultsTable({ searchResponse }: Props) {
             setPagination(true)
         }
         
-        const updatedOptions = paginationSelectOptions.filter(option => option.value <= searchResponseHits.length)
+        const updatedOptions = paginationSelectOptions.filter(option => option.value <= searchResponseHits.length + limit)
         setPaginationSelectOptions(updatedOptions)
         
     }, [limit, paginationSelectOptions, searchResponseHits.length])
