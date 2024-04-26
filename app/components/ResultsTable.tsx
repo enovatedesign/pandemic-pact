@@ -68,7 +68,6 @@ export default function ResultsTable({ searchResponse }: Props) {
         if (searchResponseHits.length > limit) {
             setPagination(true)
         }
-        
     }, [limit, searchResponseHits.length])
     
     return (
