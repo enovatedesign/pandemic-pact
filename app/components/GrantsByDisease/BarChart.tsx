@@ -7,9 +7,11 @@ import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 
+type SortingKey = 'Known Financial Commitments (USD)' | 'Total Grants' 
+
 interface Props {
-    hideCovid: Boolean
-    orderSortingValue: String
+    hideCovid: boolean
+    orderSortingValue: SortingKey
 }
 
 export default function BarChart({ hideCovid, orderSortingValue }: Props) {
