@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { customSelectThemeColours } from '../helpers/select-colours'
 import Pagination from './ContentBuilder/Common/Pagination'
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
     searchResponse: SearchResponse
@@ -22,6 +23,10 @@ export default function ResultsTable({ searchResponse }: Props) {
     const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
     const [pagination, setPagination] = useState<boolean>(false)
     const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+
+    const params = useSearchParams()
+    const pageParam = params.get('page')
+    
 
     useEffect(() => {
         setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
@@ -98,6 +103,8 @@ export default function ResultsTable({ searchResponse }: Props) {
 
                     const linkClasses =
                         'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
+                    
+                    const grantIndex = pageParam ? ((Number(pageParam) -1) * limit + 1) + index : index + 1
 
                     return (
                         <article
@@ -106,7 +113,7 @@ export default function ResultsTable({ searchResponse }: Props) {
                         >   
                             <div>
                                 <h3 className="flex gap-2 items-start">
-                                    <span className="block text-gray-500 font-semibold lg:text-2xl">{index + 1}.
+                                    <span className="block text-gray-500 font-semibold lg:text-2xl">{grantIndex}.
                                     </span> {result.highlight?.GrantTitleEng ? (
                                         <a
                                             href={href}
