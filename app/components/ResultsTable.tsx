@@ -1,15 +1,16 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useSearchParams } from "next/navigation"
+import Select from 'react-select'
+
+import SearchResult from './SearchResult'
+import Pagination from './ContentBuilder/Common/Pagination'
 import { SearchResponse } from '../helpers/search'
 import { links } from '../helpers/nav'
-import SearchResult from './SearchResult'
+import { customSelectThemeColours } from '../helpers/select-colours'
 
 import '../css/components/highlighted-search-results.css'
-import { useEffect, useState } from 'react'
-import Select from 'react-select'
-import { customSelectThemeColours } from '../helpers/select-colours'
-import Pagination from './ContentBuilder/Common/Pagination'
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
     searchResponse: SearchResponse
@@ -27,23 +28,16 @@ export default function ResultsTable({ searchResponse }: Props) {
     const params = useSearchParams()
     const pageParam = params.get('page')
     
-
     useEffect(() => {
         setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
     }, [searchResponseHits, firstItemIndex, lastItemIndex])
-
-    useEffect(() => {
-        if (searchResponseHits.length > limit) {
-            setPagination(true)
-        }
-    }, [limit, searchResponseHits.length])
     
     const defaultValue = {
-            label: "Show 25 Grants per page",
-            value: limit,
-        }
-    
-    const paginationSelectOptions = [
+        label: "Show 25 Grants per page",
+        value: limit,
+    }
+
+    const [paginationSelectOptions, setPaginationSelectOptions] = useState([
         {
             label: "Show 25 Grants per page",
             value: 25,
@@ -60,15 +54,26 @@ export default function ResultsTable({ searchResponse }: Props) {
             label: "Show 100 Grants per page",
             value: 100,
         }
-    ] 
+    ])
+    
 
     const handlePaginationChange = (selectedOption: any) => {
         if (selectedOption.value === limit) {
-            return;
+            return
         } else {
-            setLimit(selectedOption.value);
+            setLimit(selectedOption.value)
         }
-    };
+    }
+
+    useEffect(() => {
+        if (searchResponseHits.length > limit) {
+            setPagination(true)
+        }
+        
+        const updatedOptions = paginationSelectOptions.filter(option => option.value <= searchResponseHits.length)
+        setPaginationSelectOptions(updatedOptions)
+        
+    }, [limit, paginationSelectOptions, searchResponseHits.length])
     
     return (
         <div>
