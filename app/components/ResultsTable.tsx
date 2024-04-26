@@ -37,7 +37,7 @@ export default function ResultsTable({ searchResponse }: Props) {
         value: limit,
     }
 
-    const [paginationSelectOptions, setPaginationSelectOptions] = useState([
+    const paginationSelectOptions = [
         {
             label: "Show 25 Grants per page",
             value: 25,
@@ -54,9 +54,8 @@ export default function ResultsTable({ searchResponse }: Props) {
             label: "Show 100 Grants per page",
             value: 100,
         }
-    ])
+    ]
     
-
     const handlePaginationChange = (selectedOption: any) => {
         if (selectedOption.value === limit) {
             return
@@ -70,10 +69,7 @@ export default function ResultsTable({ searchResponse }: Props) {
             setPagination(true)
         }
         
-        const updatedOptions = paginationSelectOptions.filter(option => option.value <= searchResponseHits.length + limit)
-        setPaginationSelectOptions(updatedOptions)
-        
-    }, [limit, paginationSelectOptions, searchResponseHits.length])
+    }, [limit, searchResponseHits.length])
     
     return (
         <div>
