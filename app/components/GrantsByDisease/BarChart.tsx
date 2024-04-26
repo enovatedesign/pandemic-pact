@@ -14,7 +14,7 @@ interface Props {
 
 export default function BarChart({ hideCovid, orderSortingValue }: Props) {
     const { grants } = useContext(GlobalFilterContext)
-
+    
     const chartData = useMemo(() => {
         const diseases = selectOptions.Disease.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
@@ -30,7 +30,6 @@ export default function BarChart({ hideCovid, orderSortingValue }: Props) {
                         (grant: any) =>
                             typeof grant.GrantAmountConverted === 'number'
                     )
-
                 const grantsWithUnspecifiedAmounts = grants
                     .filter((grant: any) =>
                         grant.Disease.includes(disease.value)

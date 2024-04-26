@@ -19,12 +19,16 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
-    orderSortingValue: string
+    orderByTotalGrantsBooleanValue: boolean
 }
 
-export default function TemporalChart({ hideCovid, orderSortingValue }: Props) {
+export default function TemporalChart({ hideCovid, orderByTotalGrantsBooleanValue }: Props) {
     const { grants } = useContext(GlobalFilterContext)
-
+    
+    const grantsWithKnownAmounts = groupBy(grants.filter((grant: any) => typeof grant.GrantAmountConverted === 'number'))
+    const grantsWithUnspecifiedAmounts = groupBy(grants.filter((grant: any) => typeof grant?.GrantAmountConverted !== 'number'))
+    const totalGrants = [grantsWithKnownAmounts, grantsWithUnspecifiedAmounts]
+    
     const datasetGroupedByYear = groupBy(
         grants.filter(
             (grant: any) =>
@@ -67,7 +71,7 @@ export default function TemporalChart({ hideCovid, orderSortingValue }: Props) {
                         left: 30,
                         bottom: 20,
                     }}
-                    data={amountCommittedToEachDiseaseOverTime}
+                    data={orderByTotalGrantsBooleanValue ? totalGrants : amountCommittedToEachDiseaseOverTime}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
 

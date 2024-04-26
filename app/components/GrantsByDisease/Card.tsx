@@ -11,15 +11,13 @@ export default function GrantsByDisease() {
     const [orderByTotalGrantsBooleanValue, setOrderByTotalGrantsBooleanValue] = useState(false)
     const orderSortingValue = !orderByTotalGrantsBooleanValue ? "Known Financial Commitments (USD)" : "Total Grants"
 
-    console.log(orderSortingValue)
-
     const tabs = [
         {
             tab: {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} orderSortingValue={orderSortingValue}/>,
+            content: <TemporalChart hideCovid={hideCovid} orderByTotalGrantsBooleanValue={orderByTotalGrantsBooleanValue}/>,
         },
         {
             tab: {
