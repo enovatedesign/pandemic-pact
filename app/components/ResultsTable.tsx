@@ -34,7 +34,7 @@ export default function ResultsTable({ searchResponse }: Props) {
     }, [limit, searchResponseHits.length])
     
     const defaultValue = {
-            label: "25 options per page",
+            label: "Show 25 Grants per page",
             value: limit,
         }
     
