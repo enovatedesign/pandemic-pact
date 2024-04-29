@@ -4,11 +4,13 @@ import TooltipContent from './TooltipContent'
 interface Props {
     props: any
     chartData: any
+    numOfGrantsBoolean?: boolean
 }
 
 export default function RechartTrendsTooltipContent({
     props,
     chartData,
+    numOfGrantsBoolean,
 }: Props) {
     if (!props.active) return null
 
@@ -51,7 +53,7 @@ export default function RechartTrendsTooltipContent({
         }
         return {
             label: item.name,
-            value: dollarValueFormatter(item.value),
+            value: !numOfGrantsBoolean && dollarValueFormatter(item.value),
             colour: item.color,
             trend,
             trendPercentageDifference

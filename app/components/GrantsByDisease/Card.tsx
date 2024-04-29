@@ -8,8 +8,8 @@ import DoubleLabelSwitch from '../DoubleLabelSwitch'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
-    const [orderByTotalGrantsBooleanValue, setOrderByTotalGrantsBooleanValue] = useState(false)
-    const orderSortingValue = !orderByTotalGrantsBooleanValue ? "Known Financial Commitments (USD)" : "Total Grants"
+    const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(false)
+    const orderSortingValue = !numOfGrantsBoolean ? "Known Financial Commitments (USD)" : "Total Grants"
 
     const tabs = [
         {
@@ -17,7 +17,7 @@ export default function GrantsByDisease() {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} orderByTotalGrantsBooleanValue={orderByTotalGrantsBooleanValue}/>,
+            content: <TemporalChart hideCovid={hideCovid} numOfGrantsBoolean={numOfGrantsBoolean}/>,
         },
         {
             tab: {
@@ -70,8 +70,8 @@ export default function GrantsByDisease() {
                 />
 
                 <DoubleLabelSwitch
-                    checked={orderByTotalGrantsBooleanValue}
-                    onChange={setOrderByTotalGrantsBooleanValue}
+                    checked={numOfGrantsBoolean}
+                    onChange={setNumOfGrantsBoolean}
                     leftLabel="USD"
                     rightLabel="Number of Grants"
                     className="ignore-in-image-export"
