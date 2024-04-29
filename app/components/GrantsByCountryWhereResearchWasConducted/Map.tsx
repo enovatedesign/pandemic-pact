@@ -32,8 +32,9 @@ export default function Map() {
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [usingFunderLocation, setUsingFunderLocation] =
-        useState<boolean>(false)
+    const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
+
+    const [displayUsingKnownFinancialCommitments, setDisplayUsingKnownFinancialCommitments] = useState<boolean>(false)
 
     const [filteredGeojson, colourScale] = useMemo(() => {
         const geojsonPropertiesToAssign: { [key: string]: any } =
@@ -69,15 +70,15 @@ export default function Map() {
         )
 
         const allTotalGrants = filteredGeojson.features
-            .filter((country: any) => country.properties.totalGrants)
-            .map((country: any) => country.properties.totalGrants)
-
+            .filter((country: any) => displayUsingKnownFinancialCommitments ? country.properties.totalAmountCommitted : country.properties.totalGrants)
+            .map((country: any) => displayUsingKnownFinancialCommitments ? country.properties.totalAmountCommitted : country.properties.totalGrants)
+            
         const colourScale = scaleLinear<string>()
             .domain([0, Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [filteredGeojson, colourScale]
-    }, [dataset, displayWhoRegions, usingFunderLocation])
+    }, [dataset, displayUsingKnownFinancialCommitments, displayWhoRegions, usingFunderLocation])
 
     const onGeoClick = (geo: any) => {
         let queryFilters: any = {}
@@ -122,9 +123,13 @@ export default function Map() {
     }
 
     const getColourOfGeo = (geo: any) => {
-        return geo.properties.totalGrants
-            ? colourScale(geo.properties.totalGrants)
-            : '#D6D6DA'
+        const properties = geo.properties
+
+        if (displayUsingKnownFinancialCommitments) {
+            return properties.totalAmountCommitted ? colourScale(properties.totalAmountCommitted) : '#D6D6DA'
+        } else {
+            return properties.totalGrants ? colourScale(properties.totalGrants) : '#D6D6DA'
+        }
     }
 
     const [height, setHeight] = useState(650)
@@ -204,7 +209,7 @@ export default function Map() {
                     'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'
                 }`}
             >
-                <ColourScale colourScale={colourScale} />
+                <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
 
                 <div className="xl:self-center xl:-translate-y-[14px]">
                     <DoubleLabelSwitch
@@ -223,6 +228,16 @@ export default function Map() {
                         leftLabel="Research Institution"
                         rightLabel="Funder"
                         screenReaderLabel="Using Funder Location"
+                    />
+                </div>
+
+                <div className="xl:self-center xl:-translate-y-[14px]">
+                    <DoubleLabelSwitch
+                        checked={displayUsingKnownFinancialCommitments}
+                        onChange={setDisplayUsingKnownFinancialCommitments}
+                        leftLabel="Number of grants"
+                        rightLabel="Known Financial Commitments (USD)"
+                        screenReaderLabel="Display known financial commitments"
                     />
                 </div>
             </div>

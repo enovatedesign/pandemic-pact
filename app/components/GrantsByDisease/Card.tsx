@@ -72,8 +72,8 @@ export default function GrantsByDisease() {
                 <DoubleLabelSwitch
                     checked={numOfGrantsBoolean}
                     onChange={setNumOfGrantsBoolean}
-                    leftLabel="USD"
-                    rightLabel="Number of Grants"
+                    leftLabel="Known financial commitments"
+                    rightLabel="Number of grants"
                     className="ignore-in-image-export"
                     screenReaderLabel="Order bar chart"
                 />
