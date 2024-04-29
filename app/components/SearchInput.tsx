@@ -19,6 +19,7 @@ interface Props {
     setAdvancedSearchFilters: (advancedSearchFilters: SearchFilters) => void
     setStandardSearchFilters: any
     searchRequestBody: any
+    setIsQueryPageOne: (isQueryPageOne: boolean) => void
 }
 
 export default function SearchInput({ 
@@ -31,8 +32,14 @@ export default function SearchInput({
     setShowAdvancedSearch, 
     setAdvancedSearchFilters, 
     setStandardSearchFilters,
-    searchRequestBody
+    searchRequestBody,
+    setIsQueryPageOne
 }: Props) {
+
+    const handleSearchToggleButtons = (boolean: boolean) => {
+        setShowAdvancedSearch(boolean)
+        setIsQueryPageOne(true)
+    }
 
     return (
         <div>
@@ -117,7 +124,7 @@ export default function SearchInput({
 
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
-                                onClick={() => setShowAdvancedSearch(false)}
+                                onClick={() => handleSearchToggleButtons(false)}
                                 className={`${
                                     !showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'
@@ -128,7 +135,7 @@ export default function SearchInput({
                             </button>
 
                             <button
-                                onClick={() => setShowAdvancedSearch(true)}
+                                onClick={() => handleSearchToggleButtons(true)}
                                 className={`${
                                     showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'

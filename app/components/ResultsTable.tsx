@@ -16,10 +16,6 @@ interface Props {
     pagination: boolean
     limit: number
     setLimit: (limit: number) => void
-    paginatedSearchResults: any
-    setPaginatedSearchResults: any
-    firstItemIndex: number 
-    lastItemIndex: number 
     pageParam: string | null
 }
 
@@ -29,20 +25,12 @@ export default function ResultsTable({
     pagination, 
     limit,
     setLimit, 
-    paginatedSearchResults, 
-    setPaginatedSearchResults,
-    firstItemIndex,
-    lastItemIndex,
     pageParam
 }: Props) {
     
-    useEffect(() => {
-        setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
-    }, [searchResponseHits, firstItemIndex, lastItemIndex, setPaginatedSearchResults])
-    
     const defaultValue = {
         label: "Show 25 Grants per page",
-        value: lastItemIndex,
+        value: limit,
     }
 
     const paginationSelectOptions = [
@@ -65,7 +53,7 @@ export default function ResultsTable({
     ]
     
     const handlePaginationChange = (selectedOption: any) => {
-        if (selectedOption.value === lastItemIndex) {
+        if (selectedOption.value === limit) {
             return
         } else {
             setLimit(selectedOption.value)
@@ -96,7 +84,7 @@ export default function ResultsTable({
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
-                {paginatedSearchResults.map((result: any, index: number) => {
+                {searchResponseHits.map((result: any, index: number) => {
                     const query = searchResponse.query
 
                     const href =

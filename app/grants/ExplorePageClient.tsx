@@ -50,11 +50,8 @@ export default function ExplorePageClient() {
     const searchResponseHits = searchResponse.hits
 
     const [limit, setLimit] = useState<number>(25)
-    const [pagination, setPagination] = useState<boolean>(true)
-    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
-    const [lastItemIndex, setLastItemIndex] = useState<number>(limit)
-    const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
-    const [searchParamsChanged, setSearchParamsChanged] = useState(false);
+    const [pagination, setPagination] = useState<boolean>(false)
+    const [isQueryPageOne, setisQueryPageOne] = useState(false);
     const pageParam = searchParams.get('page')
     
     const searchRequestBody = useMemo(() => {
@@ -66,6 +63,7 @@ export default function ExplorePageClient() {
             filters: searchFilters,
             page: pageParam,
             limit: limit,
+            total: totalHits,
         }
     }, [
         searchQuery,
@@ -73,7 +71,8 @@ export default function ExplorePageClient() {
         advancedSearchFilters,
         showAdvancedSearch,
         pageParam, 
-        limit
+        limit,
+        totalHits
     ])
 
     useEffect(() => {
@@ -95,11 +94,11 @@ export default function ExplorePageClient() {
     }, [searchRequestBody, setTotalHits, setSearchResponse])
 
     useEffect(() => {
-        setSearchParamsChanged(true);
+        setisQueryPageOne(true);
     }, [searchQuery, standardSearchFilters]);
 
     useEffect(() => {
-        setSearchParamsChanged(false);
+        setisQueryPageOne(false);
     }, [pageParam]);
 
     useEffect(() => {
@@ -108,31 +107,29 @@ export default function ExplorePageClient() {
         
         if (searchQuery) {
             url.searchParams.set('q', searchQuery)
-            if (searchParamsChanged) {
-                url.searchParams.set('page', '1')
-            }
         } else {
             url.searchParams.delete('q')
         }
-
+        
         const anyStandardFiltersAreApplied = Object.values(
             standardSearchFilters
         ).some(filter => filter.length > 0)
-
+        
         if (anyStandardFiltersAreApplied) {
             url.searchParams.set(
                 'filters',
                 JSON.stringify(standardSearchFilters)
             )
-            if (searchParamsChanged) {
-                url.searchParams.set('page', '1')
-            }
         } else {
             url.searchParams.delete('filters')
         }
+        
+        if (isQueryPageOne) {
+            url.searchParams.set('page', '1')
+        }
 
         router.replace(url.href)
-    }, [searchParams, searchQuery, standardSearchFilters, pathname, router, searchParamsChanged]);
+    }, [searchParams, searchQuery, standardSearchFilters, pathname, router, isQueryPageOne]);
 
     return (
         <Layout
@@ -160,6 +157,7 @@ export default function ExplorePageClient() {
                                 totalHits={totalHits} 
                                 standardSearchFilters={standardSearchFilters}
                                 setStandardSearchFilters={setStandardSearchFilters}
+                                setIsQueryPageOne={setisQueryPageOne}
                             />
                         </Suspense>
                     </div>
@@ -171,10 +169,6 @@ export default function ExplorePageClient() {
                             pagination={pagination}
                             limit={limit}
                             setLimit={setLimit}
-                            paginatedSearchResults={paginatedSearchResults}
-                            setPaginatedSearchResults={setPaginatedSearchResults} 
-                            firstItemIndex={firstItemIndex} 
-                            lastItemIndex={lastItemIndex}     
                             pageParam={pageParam}                       
                         />
                     }
@@ -182,9 +176,7 @@ export default function ExplorePageClient() {
                     {pagination && (
                         <SearchPagination
                             postsPerPage={limit}
-                            totalPosts={searchResponseHits.length}
-                            setFirstItemIndex={setFirstItemIndex}
-                            setLastItemIndex={setLastItemIndex}
+                            totalPosts={totalHits}
                         />
                     )}
                 </div>

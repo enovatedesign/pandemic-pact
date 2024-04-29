@@ -7,17 +7,13 @@ import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid"
 interface Props {
     postsPerPage: number,
     totalPosts: number,
-    setFirstItemIndex: ((index: number) => void)
-    setLastItemIndex: ((index: number) => void)
 }
-
 
 const SearchPagination  = ({
     postsPerPage,
     totalPosts,
-    setFirstItemIndex,
-    setLastItemIndex,
 }: Props) => {
+    
     const router = useRouter()
     const pathName = usePathname()
     const params = useSearchParams()
@@ -26,7 +22,7 @@ const SearchPagination  = ({
     const [page, setPage] = useState(pageParam ? Number(pageParam) : 1)
     const totalPages = Array.from({length: (Math.ceil(totalPosts / postsPerPage))}, (_, i) => i + 1)
     const filteredPages = (totalPages.length > 3 && page > 3) ? totalPages.slice(page - 3, page + 2) : totalPages.splice(0, 5)
-
+    
     useEffect(() => {
         const newPageParam = params.get('page')
         if (!newPageParam && page !== 1) {
@@ -35,10 +31,7 @@ const SearchPagination  = ({
             setPage(Number(newPageParam))
         }
 
-        const lastItemIndex = page * postsPerPage
-        setFirstItemIndex(lastItemIndex - postsPerPage)
-        setLastItemIndex(lastItemIndex)
-    }, [page, postsPerPage, setFirstItemIndex, setLastItemIndex, params])
+    }, [page, postsPerPage,  params])
 
     const updateSearchParams = (number: number) => {
         const newParams = new URLSearchParams(params.toString())

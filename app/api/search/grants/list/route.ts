@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const {q, filters, page, limit} = values
-
+    
     let highlightClause = {}
 
     if (q) {
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         ],
         
         from: page && limit ? limit * (page -1) : 0,
-        size: 1000,
+        size: limit,
 
         body: {
             query,
