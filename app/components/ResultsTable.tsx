@@ -35,9 +35,6 @@ export default function ResultsTable({
     lastItemIndex,
     pageParam
 }: Props) {
-
-    
-    
     
     useEffect(() => {
         setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))

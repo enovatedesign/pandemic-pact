@@ -40,7 +40,6 @@ export default function SearchInput({
     setStandardSearchFilters,
     searchRequestBody
 }: Props) {
-    
 
     return (
         <div>
