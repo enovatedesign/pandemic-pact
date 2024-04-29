@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { SearchIcon } from '@heroicons/react/solid'
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
@@ -18,89 +16,31 @@ import AdvancedSearchFilters from './AdvancedSearchFilters'
 import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void
+    searchQuery: string
+    showAdvancedSearch: boolean
+    standardSearchFilters: any
+    isLoading: boolean
+    totalHits: number
+    setSearchQuery: (searchQuery: string) => void
+    setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
+    setAdvancedSearchFilters: (advancedSearchFilters: SearchFilters) => void
+    setStandardSearchFilters: any
+    searchRequestBody: any
 }
 
-export default function SearchInput({ setSearchResponse }: Props) {
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
-    const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
-
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
-
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    const [standardSearchFilters, setStandardSearchFilters] =
-        useState<SelectedStandardSearchFilters>(
-            filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
-        )
-
-    const [advancedSearchFilters, setAdvancedSearchFilters] =
-        useState<SearchFilters>({
-            logicalAnd: true,
-            filters: [],
-        })
-
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
-
-    const [totalHits, setTotalHits] = useState<number>(0)
-
-    useEffect(() => {
-        const url = new URL(pathname, window.location.origin)
-
-        url.search = searchParams.toString()
-
-        if (searchQuery) {
-            url.searchParams.set('q', searchQuery)
-        } else {
-            url.searchParams.delete('q')
-        }
-
-        const anyStandardFiltersAreApplied = Object.values(
-            standardSearchFilters
-        ).some(filter => filter.length > 0)
-
-        if (anyStandardFiltersAreApplied) {
-            url.searchParams.set(
-                'filters',
-                JSON.stringify(standardSearchFilters)
-            )
-        } else {
-            url.searchParams.delete('filters')
-        }
-
-        router.replace(url.href)
-    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
-
-    const searchRequestBody = useMemo(() => {
-        const searchFilters = showAdvancedSearch
-            ? advancedSearchFilters
-            : convertStandardFiltersToSearchFilters(standardSearchFilters)
-
-        return {
-            q: searchQuery,
-            filters: searchFilters,
-        }
-    }, [
-        searchQuery,
-        standardSearchFilters,
-        advancedSearchFilters,
-        showAdvancedSearch,
-    ])
-
-    useEffect(() => {
-        searchRequest('list', searchRequestBody)
-            .then(data => {
-                setSearchResponse(data)
-                setTotalHits(data.total.value)
-                setIsLoading(false)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
+export default function SearchInput({ 
+    searchQuery, 
+    showAdvancedSearch, 
+    standardSearchFilters, 
+    isLoading,
+    totalHits,
+    setSearchQuery, 
+    setShowAdvancedSearch, 
+    setAdvancedSearchFilters, 
+    setStandardSearchFilters,
+    searchRequestBody
+}: Props) {
+    
 
     return (
         <div>
@@ -257,15 +197,4 @@ export default function SearchInput({ setSearchResponse }: Props) {
     )
 }
 
-function convertStandardFiltersToSearchFilters(
-    standardFilters: SelectedStandardSearchFilters
-): SearchFilters {
-    return {
-        logicalAnd: true,
-        filters: Object.entries(standardFilters).map(([field, values]) => ({
-            field,
-            values,
-            logicalAnd: false,
-        })),
-    }
-}
+

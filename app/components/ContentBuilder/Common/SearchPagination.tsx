@@ -1,3 +1,4 @@
+
 "use client"
 import {useState, useEffect} from "react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -10,13 +11,13 @@ interface Props {
     setLastItemIndex: ((index: number) => void)
 }
 
-const Pagination = ({
+const SearchPagination  = ({
     postsPerPage,
     totalPosts,
     setFirstItemIndex,
     setLastItemIndex,
 }: Props) => {
-
+    
     const router = useRouter()
     const pathName = usePathname()
     const params = useSearchParams()
@@ -151,8 +152,7 @@ const Pagination = ({
             </ul>
             
         </nav>
-
     )
 }
 
-export default Pagination
+export default SearchPagination

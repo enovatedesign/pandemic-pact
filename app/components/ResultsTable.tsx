@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useSearchParams } from "next/navigation"
-import Select from 'react-select'
+import { useEffect } from 'react'
 
+import Select from 'react-select'
 import SearchResult from './SearchResult'
-import Pagination from './ContentBuilder/Common/Pagination'
 import { SearchResponse } from '../helpers/search'
 import { links } from '../helpers/nav'
 import { customSelectThemeColours } from '../helpers/select-colours'
@@ -13,28 +11,41 @@ import { customSelectThemeColours } from '../helpers/select-colours'
 import '../css/components/highlighted-search-results.css'
 
 interface Props {
-    searchResponse: SearchResponse
+    searchResponse: SearchResponse 
+    searchResponseHits: any
+    pagination: boolean
+    limit: number
+    setLimit: (limit: number) => void
+    paginatedSearchResults: any
+    setPaginatedSearchResults: any
+    firstItemIndex: number 
+    lastItemIndex: number 
+    pageParam: string | null
 }
 
-export default function ResultsTable({ searchResponse }: Props) {
+export default function ResultsTable({
+    searchResponse,
+    searchResponseHits, 
+    pagination, 
+    limit,
+    setLimit, 
+    paginatedSearchResults, 
+    setPaginatedSearchResults,
+    firstItemIndex,
+    lastItemIndex,
+    pageParam
+}: Props) {
 
-    const searchResponseHits = searchResponse.hits
-    const [limit, setLimit] = useState<number>(25)
-    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
-    const [lastItemIndex, setLastItemIndex] = useState<number>(limit - 1)
-    const [pagination, setPagination] = useState<boolean>(false)
-    const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
-
-    const params = useSearchParams()
-    const pageParam = params.get('page')
+    
+    
     
     useEffect(() => {
         setPaginatedSearchResults(searchResponseHits.slice(firstItemIndex, lastItemIndex))
-    }, [searchResponseHits, firstItemIndex, lastItemIndex])
+    }, [searchResponseHits, firstItemIndex, lastItemIndex, setPaginatedSearchResults])
     
     const defaultValue = {
         label: "Show 25 Grants per page",
-        value: limit,
+        value: lastItemIndex,
     }
 
     const paginationSelectOptions = [
@@ -57,19 +68,13 @@ export default function ResultsTable({ searchResponse }: Props) {
     ]
     
     const handlePaginationChange = (selectedOption: any) => {
-        if (selectedOption.value === limit) {
+        if (selectedOption.value === lastItemIndex) {
             return
         } else {
             setLimit(selectedOption.value)
         }
     }
 
-    useEffect(() => {
-        if (searchResponseHits.length > limit) {
-            setPagination(true)
-        }
-    }, [limit, searchResponseHits.length])
-    
     return (
         <div>
             <div className="w-full flex items-center justify-between">
@@ -94,7 +99,7 @@ export default function ResultsTable({ searchResponse }: Props) {
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
-                {paginatedSearchResults.map((result, index) => {
+                {paginatedSearchResults.map((result: any, index: number) => {
                     const query = searchResponse.query
 
                     const href =
@@ -140,15 +145,6 @@ export default function ResultsTable({ searchResponse }: Props) {
                     )
                 })}
             </div>
-                
-            {pagination && (
-                <Pagination 
-                    totalPosts={searchResponseHits.length}
-                    postsPerPage={limit}
-                    setFirstItemIndex={setFirstItemIndex}
-                    setLastItemIndex={setLastItemIndex}
-                />
-            )}
         </div>
     )
 }
