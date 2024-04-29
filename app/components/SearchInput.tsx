@@ -1,17 +1,10 @@
 import { SearchIcon } from '@heroicons/react/solid'
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
-import {
-    searchRequest,
-    SearchFilters,
-    SearchResponse,
-    queryOrFiltersAreSet,
-} from '../helpers/search'
+import { SearchFilters, queryOrFiltersAreSet } from '../helpers/search'
 import Button from './Button'
 import InfoModal from './InfoModal'
-import StandardSearchFilters, {
-    SelectedStandardSearchFilters,
-} from './StandardSearchFilters'
+import StandardSearchFilters from './StandardSearchFilters'
 import AdvancedSearchFilters from './AdvancedSearchFilters'
 import LoadingSpinner from './LoadingSpinner'
 

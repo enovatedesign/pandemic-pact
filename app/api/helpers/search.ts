@@ -42,9 +42,8 @@ export function searchUnavailableResponse() {
 
 export async function validateRequest(request: Request) {
     const parameters = await request.json().catch(() => Promise.resolve({}))
-
     const errors = []
-
+    
     if (typeof parameters.q === 'undefined') {
         errors.push({
             field: 'q',
@@ -65,6 +64,20 @@ export async function validateRequest(request: Request) {
             message: 'The filters parameter is required',
         })
     }
+
+    // if (typeof parameters.page !== 'number') {
+    //     errors.push({
+    //         field: 'page',
+    //         message: 'The page parameter must be a number',
+    //     })
+    // }
+
+    // if (typeof parameters.limit !== 'number') {
+    //     errors.push({
+    //         field: 'limit',
+    //         message: 'The limit parameter must be a number',
+    //     })
+    // }
 
     if (typeof parameters.filters !== 'object') {
         errors.push({

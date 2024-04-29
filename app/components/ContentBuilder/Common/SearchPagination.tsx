@@ -11,13 +11,13 @@ interface Props {
     setLastItemIndex: ((index: number) => void)
 }
 
+
 const SearchPagination  = ({
     postsPerPage,
     totalPosts,
     setFirstItemIndex,
     setLastItemIndex,
 }: Props) => {
-    
     const router = useRouter()
     const pathName = usePathname()
     const params = useSearchParams()

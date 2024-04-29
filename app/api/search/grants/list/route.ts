@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         return errorResponse
     }
 
-    const {q, filters} = values
+    const {q, filters, page, limit} = values
 
     let highlightClause = {}
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
             }
         }
     }
-
+    
     const index = getIndexName()
 
     const query = getBooleanQuery(q, filters);
@@ -63,7 +63,8 @@ export async function POST(request: NextRequest) {
             'GrantStartYear',
             'FundingOrgName',
         ],
-
+        
+        from: page && limit ? limit * (page -1) : 0,
         size: 1000,
 
         body: {
@@ -74,6 +75,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
         query: q,
+        page: page,
         ...results.body.hits,
     })
 }

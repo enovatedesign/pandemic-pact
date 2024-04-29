@@ -47,13 +47,70 @@ export default function ExplorePageClient() {
 
     const [totalHits, setTotalHits] = useState<number>(0)
 
+    const searchResponseHits = searchResponse.hits
+
+    const [limit, setLimit] = useState<number>(25)
+    const [pagination, setPagination] = useState<boolean>(true)
+    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
+    const [lastItemIndex, setLastItemIndex] = useState<number>(limit)
+    const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
+    const [searchParamsChanged, setSearchParamsChanged] = useState(false);
+    const pageParam = searchParams.get('page')
+    
+    const searchRequestBody = useMemo(() => {
+        const searchFilters = showAdvancedSearch
+            ? advancedSearchFilters
+            : convertStandardFiltersToSearchFilters(standardSearchFilters)
+        return {
+            q: searchQuery,
+            filters: searchFilters,
+            page: pageParam,
+            limit: limit,
+        }
+    }, [
+        searchQuery,
+        standardSearchFilters,
+        advancedSearchFilters,
+        showAdvancedSearch,
+        pageParam, 
+        limit
+    ])
+
+    useEffect(() => {
+        if (totalHits > limit) {
+            setPagination(true)
+        }
+    }, [totalHits, limit])
+    
+    useEffect(() => {
+        searchRequest('list', searchRequestBody)
+            .then(data => {
+                setSearchResponse(data)
+                setTotalHits(data.total.value)
+                setIsLoading(false)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [searchRequestBody, setTotalHits, setSearchResponse])
+
+    useEffect(() => {
+        setSearchParamsChanged(true);
+    }, [searchQuery, standardSearchFilters]);
+
+    useEffect(() => {
+        setSearchParamsChanged(false);
+    }, [pageParam]);
+
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
-
         url.search = searchParams.toString()
-
+        
         if (searchQuery) {
             url.searchParams.set('q', searchQuery)
+            if (searchParamsChanged) {
+                url.searchParams.set('page', '1')
+            }
         } else {
             url.searchParams.delete('q')
         }
@@ -67,57 +124,16 @@ export default function ExplorePageClient() {
                 'filters',
                 JSON.stringify(standardSearchFilters)
             )
+            if (searchParamsChanged) {
+                url.searchParams.set('page', '1')
+            }
         } else {
             url.searchParams.delete('filters')
         }
 
         router.replace(url.href)
-    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
+    }, [searchParams, searchQuery, standardSearchFilters, pathname, router, searchParamsChanged]);
 
-    const searchRequestBody = useMemo(() => {
-        const searchFilters = showAdvancedSearch
-            ? advancedSearchFilters
-            : convertStandardFiltersToSearchFilters(standardSearchFilters)
-
-        return {
-            q: searchQuery,
-            filters: searchFilters,
-        }
-    }, [
-        searchQuery,
-        standardSearchFilters,
-        advancedSearchFilters,
-        showAdvancedSearch,
-    ])
-
-    useEffect(() => {
-        searchRequest('list', searchRequestBody)
-            .then(data => {
-                setSearchResponse(data)
-                setTotalHits(data.total.value)
-                setIsLoading(false)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
-
-    const [limit, setLimit] = useState<number>(25)
-    const [pagination, setPagination] = useState<boolean>(false)
-    const [firstItemIndex, setFirstItemIndex] = useState<number>(0)
-    const [lastItemIndex, setLastItemIndex] = useState<number>(limit)
-    
-    const searchResponseHits = searchResponse.hits
-    const [paginatedSearchResults, setPaginatedSearchResults] = useState(searchResponseHits.slice(firstItemIndex, lastItemIndex))
-    
-    const pageParam = searchParams.get('page')
-    
-    useEffect(() => {
-        if (searchResponseHits.length > lastItemIndex) {
-            setPagination(true)
-        }
-    }, [lastItemIndex, searchResponseHits.length, setPagination])
-    
     return (
         <Layout
             title="Grant Search"
@@ -149,20 +165,18 @@ export default function ExplorePageClient() {
                     </div>
 
                     {searchResponseHits.length > 0 &&
-                        <div>
-                            <ResultsTable 
-                                searchResponse={searchResponse}
-                                searchResponseHits={searchResponseHits}
-                                pagination={pagination}
-                                limit={limit}
-                                setLimit={setLimit}
-                                paginatedSearchResults={paginatedSearchResults}
-                                setPaginatedSearchResults={setPaginatedSearchResults} 
-                                firstItemIndex={firstItemIndex} 
-                                lastItemIndex={lastItemIndex}     
-                                pageParam={pageParam}                       
-                            />
-                        </div>
+                        <ResultsTable 
+                            searchResponse={searchResponse}
+                            searchResponseHits={searchResponseHits}
+                            pagination={pagination}
+                            limit={limit}
+                            setLimit={setLimit}
+                            paginatedSearchResults={paginatedSearchResults}
+                            setPaginatedSearchResults={setPaginatedSearchResults} 
+                            firstItemIndex={firstItemIndex} 
+                            lastItemIndex={lastItemIndex}     
+                            pageParam={pageParam}                       
+                        />
                     }
 
                     {pagination && (
