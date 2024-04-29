@@ -117,7 +117,7 @@ export default function ExplorePageClient() {
             setPagination(true)
         }
     }, [lastItemIndex, searchResponseHits.length, setPagination])
-
+    
     return (
         <Layout
             title="Grant Search"
