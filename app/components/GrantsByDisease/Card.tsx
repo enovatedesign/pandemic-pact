@@ -51,6 +51,10 @@ export default function GrantsByDisease() {
         </>
     )
 
+    const handleShownDataset = () => {
+        setNumOfGrantsBoolean(!numOfGrantsBoolean)
+    }
+
     return (
         <VisualisationCard
             id="grants-by-disease"
@@ -60,7 +64,7 @@ export default function GrantsByDisease() {
             infoModalContents={infoModalContents}
             tabs={tabs}
         >
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between :items-center">
                 <Switch
                     checked={hideCovid}
                     onChange={setHideCovid}
@@ -68,14 +72,21 @@ export default function GrantsByDisease() {
                     theme="light"
                     className="ignore-in-image-export"
                 />
-
-                <DoubleLabelSwitch
+                
+                <Switch
                     checked={numOfGrantsBoolean}
-                    onChange={setNumOfGrantsBoolean}
-                    leftLabel="Known financial commitments"
-                    rightLabel="Number of grants"
+                    onChange={handleShownDataset}
+                    label="Number of grants"
+                    theme="light"
                     className="ignore-in-image-export"
-                    screenReaderLabel="Order bar chart"
+                />
+
+                <Switch
+                    checked={!numOfGrantsBoolean}
+                    onChange={handleShownDataset}
+                    label="Known financial commitments (USD)"
+                    theme="light"
+                    className="ignore-in-image-export"
                 />
             </div>
         </VisualisationCard>
