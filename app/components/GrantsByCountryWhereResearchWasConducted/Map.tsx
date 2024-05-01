@@ -208,13 +208,13 @@ export default function Map() {
                 </ComposableMap>
             </div>
             
-            <div className={`flex flex-col lg:flex-row w-full ${sidebarOpen ? ' flex-col gap-y-2 bg-brand-grey-200' : 'lg:flex-row lg:items-center lg:justify-between'}`}>
+            <div className={`flex flex-col w-full rounded-md overflow-hidden ${sidebarOpen ? 'flex-col' : 'xl:flex-row'}`}>
                 
-                <div className="w-full bg-brand-grey-200 h-full flex items-center justify-center">
+                <div className={`w-full ${!sidebarOpen && 'xl:w-4/6' } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}>
                     <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
                 </div>
 
-                <div className="flex w-full flex-col items-center md:flex-row md:items-center md:justify-between bg-primary-lightest p-4 gap-y-2 md:gap-y-0">
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0">
                     
                     <div className="space-y-2">
                         <DoubleLabelSwitch
