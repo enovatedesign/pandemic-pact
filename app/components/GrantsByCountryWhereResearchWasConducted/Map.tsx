@@ -207,49 +207,50 @@ export default function Map() {
                     </ZoomableGroup>
                 </ComposableMap>
             </div>
-
-            <div
-                className={`flex flex-col items-center ${
-                    !sidebarOpen &&
-                    'xl:flex-row xl:justify-between'
-                }`}
-            >
-                <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
+            
+            <div className={`flex flex-col lg:flex-row w-full ${sidebarOpen ? ' flex-col gap-y-2 bg-brand-grey-200' : 'lg:flex-row lg:items-center lg:justify-between'}`}>
                 
-                <div className="space-y-2">
-                    <DoubleLabelSwitch
-                        checked={displayWhoRegions}
-                        onChange={setDisplayWhoRegions}
-                        leftLabel="Countries"
-                        rightLabel="WHO Regions"
-                        screenReaderLabel="Display WHO Regions"
-                    />
-
-                    <DoubleLabelSwitch
-                        checked={usingFunderLocation}
-                        onChange={setUsingFunderLocation}
-                        leftLabel="Research Institution"
-                        rightLabel="Funder"
-                        screenReaderLabel="Using Funder Location"
-                    />
+                <div className="w-full bg-brand-grey-200 h-full flex items-center justify-center">
+                    <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
                 </div>
-                
-                <div className="space-y-2">
-                    <Switch
-                        checked={!displayUsingKnownFinancialCommitments}
-                        onChange={handleShownDataset}
-                        label="Number of grants"
-                        theme="light"
-                        className="ignore-in-image-export"
-                    />
 
-                    <Switch
-                        checked={displayUsingKnownFinancialCommitments}
-                        onChange={handleShownDataset}
-                        label="Known financial commitments (USD)"
-                        theme="light"
-                        className="ignore-in-image-export"
-                    />
+                <div className="flex w-full flex-col items-center md:flex-row md:items-center md:justify-between bg-primary-lightest p-4 gap-y-2 md:gap-y-0">
+                    
+                    <div className="space-y-2">
+                        <DoubleLabelSwitch
+                            checked={displayWhoRegions}
+                            onChange={setDisplayWhoRegions}
+                            leftLabel="Countries"
+                            rightLabel="WHO Regions"
+                            screenReaderLabel="Display WHO Regions"
+                        />
+
+                        <DoubleLabelSwitch
+                            checked={usingFunderLocation}
+                            onChange={setUsingFunderLocation}
+                            leftLabel="Research Institution"
+                            rightLabel="Funder"
+                            screenReaderLabel="Using Funder Location"
+                        />
+                    </div>
+                    
+                    <div className="space-y-2">
+                        <Switch
+                            checked={!displayUsingKnownFinancialCommitments}
+                            onChange={handleShownDataset}
+                            label="Number of grants"
+                            theme="light"
+                            className="ignore-in-image-export"
+                        />
+
+                        <Switch
+                            checked={displayUsingKnownFinancialCommitments}
+                            onChange={handleShownDataset}
+                            label="Known financial commitments (USD)"
+                            theme="light"
+                            className="ignore-in-image-export"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
