@@ -53,7 +53,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Special Interest Tags',
-            metric: 'Gender',
+            metric: grant.Tags,
         },
         {
             text: 'Study Subject',
