@@ -20,6 +20,7 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
+import Switch from '../Switch'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -159,6 +160,10 @@ export default function Map() {
 
     const { sidebarOpen } = useContext(SidebarStateContext)
 
+    const handleShownDataset = () => {
+        setDisplayUsingKnownFinancialCommitments(!displayUsingKnownFinancialCommitments)
+    }
+
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
@@ -204,14 +209,14 @@ export default function Map() {
             </div>
 
             <div
-                className={`flex flex-col items-center gap-y-2 ${
+                className={`flex flex-col items-center ${
                     !sidebarOpen &&
-                    'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'
+                    'xl:flex-row xl:justify-between'
                 }`}
             >
                 <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
-
-                <div className="xl:self-center xl:-translate-y-[14px]">
+                
+                <div className="space-y-2">
                     <DoubleLabelSwitch
                         checked={displayWhoRegions}
                         onChange={setDisplayWhoRegions}
@@ -219,9 +224,7 @@ export default function Map() {
                         rightLabel="WHO Regions"
                         screenReaderLabel="Display WHO Regions"
                     />
-                </div>
 
-                <div className="xl:self-center xl:-translate-y-[14px]">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
                         onChange={setUsingFunderLocation}
@@ -230,14 +233,22 @@ export default function Map() {
                         screenReaderLabel="Using Funder Location"
                     />
                 </div>
+                
+                <div className="space-y-2">
+                    <Switch
+                        checked={!displayUsingKnownFinancialCommitments}
+                        onChange={handleShownDataset}
+                        label="Number of grants"
+                        theme="light"
+                        className="ignore-in-image-export"
+                    />
 
-                <div className="xl:self-center xl:-translate-y-[14px]">
-                    <DoubleLabelSwitch
+                    <Switch
                         checked={displayUsingKnownFinancialCommitments}
-                        onChange={setDisplayUsingKnownFinancialCommitments}
-                        leftLabel="Number of grants"
-                        rightLabel="Known Financial Commitments (USD)"
-                        screenReaderLabel="Display known financial commitments"
+                        onChange={handleShownDataset}
+                        label="Known financial commitments (USD)"
+                        theme="light"
+                        className="ignore-in-image-export"
                     />
                 </div>
             </div>

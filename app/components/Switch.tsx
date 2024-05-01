@@ -19,6 +19,12 @@ export default function Switch({
 }: Props) {
     const offBgColour = theme === 'dark' ? 'bg-white/25' : 'bg-gray-200'
 
+    const labelClasses = [
+        'text-sm',
+        textClassName || (checked ? 'text-black' : 'text-brand-grey-500')
+    ].filter(Boolean).join(' ');
+      
+
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
             <HeadlessUISwitch
@@ -37,7 +43,7 @@ export default function Switch({
                 />
             </HeadlessUISwitch>
 
-            <p className={textClassName}>{label}</p>
+            <p className={labelClasses}>{label}</p>
         </div>
     )
 }
