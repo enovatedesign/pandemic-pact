@@ -19,6 +19,11 @@ export function availableFilters() {
         },
 
         {
+            label: 'Funders Region',
+            field: 'FunderRegion',
+        },
+
+        {
             label: 'Funders Country',
             field: 'FunderCountry',
         },
