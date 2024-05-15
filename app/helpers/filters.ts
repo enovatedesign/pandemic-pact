@@ -19,6 +19,11 @@ export function availableFilters() {
         },
 
         {
+            label: 'Funders Country',
+            field: 'FunderCountry',
+        },
+
+        {
             label: 'Research Institution',
             field: 'ResearchInstitutionName',
         },
