@@ -21,6 +21,7 @@ import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
 import Switch from '../Switch'
+import funderRegion from '../../../public/data/select-options/FunderRegion.json'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -276,10 +277,17 @@ function MapTooltipContent({
             ),
         },
     ]
+
+    const getWhoRegion = () => {
+        const region = funderRegion.find(region => region.value === geo.properties.regionValue)
+        return region ? region.label : 'No who region defined.'
+    }
+    
+    const country = geo.properties.name
     
     return (
         <TooltipContent
-            title={geo.properties.name}
+            title={displayWhoRegions ? getWhoRegion() : country}
             items={items}
             footer={
                 <div className="px-4 py-2">
