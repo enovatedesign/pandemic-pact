@@ -28,7 +28,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Research Location',
-            metric: [grant.ResearchInstitutionCountry[0], grant.ResearchInstitutionRegion[0]],
+            metric: grant.ResearchLocationCountry,
         },
         {
             text: 'Lead Research Institution',
