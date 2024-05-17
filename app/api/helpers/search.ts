@@ -65,20 +65,6 @@ export async function validateRequest(request: Request) {
         })
     }
 
-    // if (typeof parameters.page !== 'number') {
-    //     errors.push({
-    //         field: 'page',
-    //         message: 'The page parameter must be a number',
-    //     })
-    // }
-
-    // if (typeof parameters.limit !== 'number') {
-    //     errors.push({
-    //         field: 'limit',
-    //         message: 'The limit parameter must be a number',
-    //     })
-    // }
-
     if (typeof parameters.filters !== 'object') {
         errors.push({
             field: 'filters',
