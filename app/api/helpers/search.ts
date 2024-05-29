@@ -45,7 +45,7 @@ export async function validateRequest(request: Request) {
     const errors = []
     
     if (!parameters.page) {
-        parameters.page = 0
+        parameters.page = 1
     }
 
     if (typeof parameters.q === 'undefined') {

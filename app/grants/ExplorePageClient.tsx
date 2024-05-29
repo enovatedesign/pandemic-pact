@@ -61,7 +61,7 @@ export default function ExplorePageClient() {
         return {
             q: searchQuery,
             filters: searchFilters,
-            page: pageParam,
+            page: pageParam ? parseInt(pageParam) : null,
             limit: limit,
             total: totalHits,
         }
