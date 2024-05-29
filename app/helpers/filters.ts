@@ -34,7 +34,7 @@ export function availableFilters() {
         },
 
         {
-            label: 'Country',
+            label: 'Research Location Country',
             field: 'ResearchLocationCountry',
         },
 
