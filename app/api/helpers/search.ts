@@ -44,6 +44,10 @@ export async function validateRequest(request: Request) {
     const parameters = await request.json().catch(() => Promise.resolve({}))
     const errors = []
     
+    if (!parameters.page) {
+        parameters.page = 0
+    }
+
     if (typeof parameters.q === 'undefined') {
         errors.push({
             field: 'q',
@@ -85,6 +89,48 @@ export async function validateRequest(request: Request) {
         //         }
         //     }
         // )
+    }
+
+    if (typeof parameters.page !== 'number') {
+        errors.push({
+            field: 'page',
+            message: 'The page parameter must be a number',
+        })
+    }
+
+    if (parameters.page < 0) {
+        errors.push({
+            field: 'page',
+            message: 'The page parameter must be greater than 0',
+        })
+    }
+
+    if (typeof parameters.limit === 'undefined') {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter is required',
+        })
+    }
+
+    if (typeof parameters.limit !== 'number') {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be a number',
+        })
+    }
+
+    if (parameters.limit > 100) {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be less than or equal to 100',
+        })
+    }
+
+    if (parameters.limit <= 0) {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be greater than 0',
+        })
     }
 
     if (errors.length > 0) {

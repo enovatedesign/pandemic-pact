@@ -51,6 +51,8 @@ export async function POST(request: NextRequest) {
     const index = getIndexName()
 
     const query = getBooleanQuery(q, filters);
+    
+    const from = (page && limit) ? (limit * (page -1)) : 0
 
     const results = await client.search({
         index,
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
             'FundingOrgName',
         ],
         
-        from: page && limit ? limit * (page -1) : 0,
+        from: from,
         size: limit,
 
         body: {
