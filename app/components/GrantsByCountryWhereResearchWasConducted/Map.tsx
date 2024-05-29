@@ -9,7 +9,7 @@ import {
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
-import { scaleLinear, scaleLog } from 'd3-scale'
+import { scaleLinear } from 'd3-scale'
 import { groupBy } from 'lodash'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
 import geojson from '../../../public/data/world-geo.json'
@@ -178,7 +178,7 @@ export default function Map() {
                     }}
                     height={height}
                 >
-                    <ZoomableGroup center={[0, 5]}>
+                    <ZoomableGroup center={[0, 0]}>
                         <Geographies geography={filteredGeojson}>
                             {({ geographies }) =>
                                 geographies.map(geo => (
