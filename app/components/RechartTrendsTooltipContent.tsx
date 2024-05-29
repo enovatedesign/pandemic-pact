@@ -53,7 +53,7 @@ export default function RechartTrendsTooltipContent({
         }
         return {
             label: item.name,
-            value: !numOfGrantsBoolean && dollarValueFormatter(item.value),
+            value: numOfGrantsBoolean ? item.value : dollarValueFormatter(item.value),
             colour: item.color,
             trend,
             trendPercentageDifference
