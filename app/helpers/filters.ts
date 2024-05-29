@@ -19,12 +19,12 @@ export function availableFilters() {
         },
 
         {
-            label: 'Funders Region',
+            label: 'Funder Region',
             field: 'FunderRegion',
         },
 
         {
-            label: 'Funders Country',
+            label: 'Funder Country',
             field: 'FunderCountry',
         },
 
