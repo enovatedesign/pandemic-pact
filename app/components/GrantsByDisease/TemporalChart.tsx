@@ -60,13 +60,8 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
         })
     }
  
-    const tickFormatter = (value: any, index: number) => {
-        if (numOfGrantsBoolean) {
-          return value.toString();
-        } else {
-          return axisDollarFormatter(value);
-        }
-    }
+    const tickFormatter = (value: any, index: number) => numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
+        
     return (
         <>
             <ResponsiveContainer width="100%" height={500} className="z-10">
