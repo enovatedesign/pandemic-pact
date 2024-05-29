@@ -45,7 +45,7 @@ export default function RechartTrendsTooltipContent({
                 trendPercentageDifference = Math.round(((item.value - previousYearValue) / previousYearValue) * 100);
             } else if (item.value < previousYearValue) {
                 trend = 'down'
-                trendPercentageDifference = Math.round(((previousYearValue - item.value) / item.value) * 100);
+                trendPercentageDifference = Math.round(((previousYearValue - item.value) / previousYearValue) * 100);
             } else {
                 trend = 'none'
                 trendPercentageDifference = null
