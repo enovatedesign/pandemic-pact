@@ -282,7 +282,7 @@ function MapTooltipContent({
 
     const getWhoRegion = () => {
         const region = funderRegion.find(region => region.value === geo.properties.regionValue)
-        return region ? region.label : 'No who region defined.'
+        return region ? region.label : 'Unknown WHO region'
     }
     
     const country = geo.properties.name
