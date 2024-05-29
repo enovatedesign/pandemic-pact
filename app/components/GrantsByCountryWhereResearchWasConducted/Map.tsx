@@ -9,7 +9,7 @@ import {
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
-import { scaleLinear } from 'd3-scale'
+import { scaleLinear, scaleLog } from 'd3-scale'
 import { groupBy } from 'lodash'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
 import geojson from '../../../public/data/world-geo.json'
@@ -136,17 +136,17 @@ export default function Map() {
         }
     }
 
-    const [height, setHeight] = useState(650)
-    const [scale, setScale] = useState(120)
+    const [height, setHeight] = useState(450)
+    const [scale, setScale] = useState(200)
 
     useEffect(() => {
         const handleHeight = () => {
             if (window.innerWidth > 1024) {
-                setHeight(300)
-                setScale(80)
+                setHeight(350)
+                setScale(125)
             } else {
-                setHeight(650)
-                setScale(120)
+                setHeight(450)
+                setScale(200)
             }
         }
 
@@ -171,14 +171,14 @@ export default function Map() {
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
                 <ComposableMap
-                    projection="geoMercator"
+                    projection="geoNaturalEarth1"
                     projectionConfig={{
                         scale: scale,
                         center: [0, 40],
                     }}
                     height={height}
                 >
-                    <ZoomableGroup center={[0, 40]}>
+                    <ZoomableGroup center={[0, 5]}>
                         <Geographies geography={filteredGeojson}>
                             {({ geographies }) =>
                                 geographies.map(geo => (
