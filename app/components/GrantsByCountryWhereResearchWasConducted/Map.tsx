@@ -70,10 +70,12 @@ export default function Map() {
                 }
             }
         )
+        
+        const key = displayUsingKnownFinancialCommitments ? 'totalAmountCommitted' : 'totalGrants'
 
         const allTotalGrants = filteredGeojson.features
-            .filter((country: any) => displayUsingKnownFinancialCommitments ? country.properties.totalAmountCommitted : country.properties.totalGrants)
-            .map((country: any) => displayUsingKnownFinancialCommitments ? country.properties.totalAmountCommitted : country.properties.totalGrants)
+            .filter((country: any) => country.properties[key])
+            .map((country: any) => country.properties[key])
             
         const colourScale = scaleLinear<string>()
             .domain([0, Math.max(...allTotalGrants)])
