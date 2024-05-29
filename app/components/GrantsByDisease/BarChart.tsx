@@ -7,16 +7,17 @@ import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 
-type SortingKey = 'Known Financial Commitments (USD)' | 'Total Grants' 
-
 interface Props {
     hideCovid: boolean
-    orderSortingValue: SortingKey
+    numOfGrantsBoolean: boolean
 }
 
-export default function BarChart({ hideCovid, orderSortingValue }: Props) {
-    const { grants } = useContext(GlobalFilterContext)
+export default function BarChart({ hideCovid, numOfGrantsBoolean }: Props) {
     
+    const orderSortingValue = numOfGrantsBoolean ? "Total Grants" : "Known Financial Commitments (USD)"
+    
+    const { grants } = useContext(GlobalFilterContext)
+
     const chartData = useMemo(() => {
         const diseases = selectOptions.Disease.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
