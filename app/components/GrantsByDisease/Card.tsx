@@ -9,7 +9,7 @@ import DoubleLabelSwitch from '../DoubleLabelSwitch'
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
     const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(false)
-    const orderSortingValue = !numOfGrantsBoolean ? "Known Financial Commitments (USD)" : "Total Grants"
+    const orderSortingValue = numOfGrantsBoolean ? "Total Grants" : "Known Financial Commitments (USD)"
 
     const tabs = [
         {
