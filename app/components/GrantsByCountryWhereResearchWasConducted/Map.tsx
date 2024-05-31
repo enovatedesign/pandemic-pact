@@ -34,13 +34,21 @@ export default function Map() {
     const [usingFunderLocation, setUsingFunderLocation] =
         useState<boolean>(false)
 
-    const grantField = displayWhoRegions
-        ? usingFunderLocation
+    let grantField:
+        | 'FunderRegion'
+        | 'ResearchInstitutionRegion'
+        | 'FunderCountry'
+        | 'ResearchInstitutionCountry'
+
+    if (displayWhoRegions) {
+        grantField = usingFunderLocation
             ? 'FunderRegion'
             : 'ResearchInstitutionRegion'
-        : usingFunderLocation
-        ? 'FunderCountry'
-        : 'ResearchInstitutionCountry'
+    } else {
+        grantField = usingFunderLocation
+            ? 'FunderCountry'
+            : 'ResearchInstitutionCountry'
+    }
 
     const [geojson, colourScale] = useMemo(() => {
         const geojson = displayWhoRegions
@@ -48,12 +56,14 @@ export default function Map() {
             : { ...countryGeojson }
 
         geojson.features = geojson.features.map((feature: any) => {
+            const id = feature.properties.id
+
             const name = selectOptions[grantField].find(
-                option => option.value === feature.properties.id
+                option => option.value === id
             )?.label
 
             const grants = dataset.filter(grant =>
-                grant[grantField].includes(feature.properties.id)
+                grant[grantField].includes(id)
             )
 
             const totalGrants = grants.length
@@ -65,6 +75,7 @@ export default function Map() {
             return {
                 ...feature,
                 properties: {
+                    id,
                     name,
                     totalGrants,
                     totalAmountCommitted,
