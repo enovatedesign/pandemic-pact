@@ -280,17 +280,9 @@ function MapTooltipContent({
         },
     ]
 
-    const getWhoRegion = () => {
-        const region = funderRegion.find(region => region.value === geo.properties.regionValue)
-        console.log(region)
-        return region ? region.label : 'Unknown WHO region'
-    }
-    
-    const country = geo.properties.name
-    
     return (
         <TooltipContent
-            title={displayWhoRegions ? getWhoRegion() : country}
+            title={geo.properties.name}
             items={items}
             footer={
                 <div className="px-4 py-2">
