@@ -14,12 +14,7 @@ export default async function () {
     const countriesGeojson = _.pick(inputGeojson, ['type', 'features', 'bbox'])
 
     countriesGeojson.features = countriesGeojson.features.map(
-        (feature: {
-            type: string
-            properties: { NAME: string; ISO_N3_EH: string }
-        }) => {
-            const name = feature.properties.NAME
-
+        (feature: { type: string; properties: { ISO_N3_EH: string } }) => {
             const iso_code = feature.properties.ISO_N3_EH.replace(/^0+/, '')
 
             const who_region = Object.entries(regionToCountryMapping).find(
@@ -29,7 +24,6 @@ export default async function () {
             return {
                 ...feature,
                 properties: {
-                    name,
                     iso_code,
                     who_region,
                 },
