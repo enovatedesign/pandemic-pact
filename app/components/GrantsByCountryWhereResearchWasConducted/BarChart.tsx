@@ -35,28 +35,24 @@ export default function BarChart() {
     if (selectedRegion) {
         let grantsGroupedByCountry: any = {}
 
-        dataset
-            .filter((grant: any) =>
-                grant.ResearchInstitutionRegion.includes(selectedRegion)
-            )
-            .forEach((grant: any) => {
-                grant.ResearchInstitutionCountry.forEach((country: string) => {
-                    const selectedRegionCountries =
-                        regionToCountryMapping[
-                            selectedRegion as keyof typeof regionToCountryMapping
-                        ]
+        const countriesInSelectedRegion =
+            regionToCountryMapping[
+                selectedRegion as keyof typeof regionToCountryMapping
+            ]
 
-                    if (!selectedRegionCountries.includes(country)) {
-                        return
-                    }
+        dataset.forEach((grant: any) => {
+            grant.ResearchInstitutionCountry.forEach((country: string) => {
+                if (!countriesInSelectedRegion.includes(country)) {
+                    return
+                }
 
-                    if (grantsGroupedByCountry[country]) {
-                        grantsGroupedByCountry[country].push(grant)
-                    } else {
-                        grantsGroupedByCountry[country] = [grant]
-                    }
-                })
+                if (grantsGroupedByCountry[country]) {
+                    grantsGroupedByCountry[country].push(grant)
+                } else {
+                    grantsGroupedByCountry[country] = [grant]
+                }
             })
+        })
 
         data = Object.entries(grantsGroupedByCountry)
     } else {
