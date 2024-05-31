@@ -78,8 +78,6 @@ export default function Map() {
             }
         })
 
-        console.log(geojson.features[0].properties)
-
         const allTotalGrants = geojson.features
             .filter((country: any) => country.properties.totalGrants)
             .map((country: any) => country.properties.totalGrants)
