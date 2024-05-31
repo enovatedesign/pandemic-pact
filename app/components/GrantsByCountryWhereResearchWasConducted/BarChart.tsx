@@ -209,6 +209,7 @@ export default function BarChart() {
                         </Bar>
                     </RechartBarChart>
                 </ResponsiveContainer>
+
                 <div className="self-center">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
