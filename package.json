@@ -64,6 +64,7 @@
     "devDependencies": {
         "@faker-js/faker": "^8.3.1",
         "@tailwindcss/typography": "^0.5.10",
-        "@types/seedrandom": "^3.0.8"
+        "@types/seedrandom": "^3.0.8",
+        "mapshaper": "^0.6.96"
     }
 }

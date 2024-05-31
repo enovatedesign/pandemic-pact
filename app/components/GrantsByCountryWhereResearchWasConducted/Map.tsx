@@ -10,10 +10,9 @@ import {
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
-import { groupBy } from 'lodash'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
-import geojson from '../../../public/data/world-geo.json'
-import regionToCountryMapping from '../../../data/source/region-to-country-mapping.json'
+import countryGeojson from '../../../public/data/geojson/countries.json'
+import whoRegionGeojson from '../../../public/data/geojson/who-regions.json'
 import { dollarValueFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { TooltipContext } from '../../helpers/tooltip'
@@ -35,40 +34,56 @@ export default function Map() {
     const [usingFunderLocation, setUsingFunderLocation] =
         useState<boolean>(false)
 
-    const [filteredGeojson, colourScale] = useMemo(() => {
-        const geojsonPropertiesToAssign: { [key: string]: any } =
-            getGeojsonPropertiesByIsoNumeric(
-                dataset,
-                displayWhoRegions,
-                usingFunderLocation
+    let grantField:
+        | 'FunderRegion'
+        | 'ResearchInstitutionRegion'
+        | 'FunderCountry'
+        | 'ResearchInstitutionCountry'
+
+    if (displayWhoRegions) {
+        grantField = usingFunderLocation
+            ? 'FunderRegion'
+            : 'ResearchInstitutionRegion'
+    } else {
+        grantField = usingFunderLocation
+            ? 'FunderCountry'
+            : 'ResearchInstitutionCountry'
+    }
+
+    const [geojson, colourScale] = useMemo(() => {
+        const geojson = displayWhoRegions
+            ? { ...whoRegionGeojson }
+            : { ...countryGeojson }
+
+        geojson.features = geojson.features.map((feature: any) => {
+            const id = feature.properties.id
+
+            const name = selectOptions[grantField].find(
+                option => option.value === id
+            )?.label
+
+            const grants = dataset.filter(grant =>
+                grant[grantField].includes(id)
             )
 
-        const filteredGeojson = { ...geojson }
+            const totalGrants = grants.length
 
-        filteredGeojson.features = filteredGeojson.features.map(
-            (country: any) => {
-                const existingProperties: any = country.properties
+            const totalAmountCommitted = grants.reduce(
+                ...sumNumericGrantAmounts
+            )
 
-                const propertiesToAssign: any = geojsonPropertiesToAssign.find(
-                    (properties: any) =>
-                        properties.isoNumeric.includes(
-                            existingProperties.iso_code
-                        )
-                )
-
-                const newProperties = propertiesToAssign?.properties || {}
-
-                return {
-                    ...country,
-                    properties: {
-                        ...existingProperties,
-                        ...newProperties,
-                    },
-                }
+            return {
+                ...feature,
+                properties: {
+                    id,
+                    name,
+                    totalGrants,
+                    totalAmountCommitted,
+                },
             }
-        )
+        })
 
-        const allTotalGrants = filteredGeojson.features
+        const allTotalGrants = geojson.features
             .filter((country: any) => country.properties.totalGrants)
             .map((country: any) => country.properties.totalGrants)
 
@@ -76,24 +91,12 @@ export default function Map() {
             .domain([0, Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
-        return [filteredGeojson, colourScale]
-    }, [dataset, displayWhoRegions, usingFunderLocation])
+        return [geojson, colourScale]
+    }, [dataset, displayWhoRegions, grantField])
 
     const onGeoClick = (geo: any) => {
-        let queryFilters: any = {}
-
-        if (displayWhoRegions) {
-            queryFilters[
-                usingFunderLocation
-                    ? 'FunderRegion'
-                    : 'ResearchInstitutionRegion'
-            ] = [geo.properties.regionValue]
-        } else {
-            queryFilters[
-                usingFunderLocation
-                    ? 'FunderCountry'
-                    : 'ResearchInstitutionCountry'
-            ] = [geo.properties.iso_code]
+        const queryFilters = {
+            [grantField]: [geo.properties.id],
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
@@ -166,21 +169,15 @@ export default function Map() {
                     height={height}
                 >
                     <ZoomableGroup center={[0, 40]}>
-                        <Geographies geography={filteredGeojson}>
+                        <Geographies geography={geojson}>
                             {({ geographies }) =>
                                 geographies.map(geo => (
                                     <Geography
                                         key={geo.rsmKey}
                                         geography={geo}
                                         fill={getColourOfGeo(geo)}
-                                        stroke={
-                                            displayWhoRegions
-                                                ? getColourOfGeo(geo)
-                                                : '#FFFFFF'
-                                        }
-                                        strokeWidth={
-                                            displayWhoRegions ? 0.5 : 1.0
-                                        }
+                                        stroke="#FFFFFF"
+                                        strokeWidth={1.0}
                                         className="cursor-pointer"
                                         onClick={() => onGeoClick(geo)}
                                         onMouseEnter={event =>
@@ -249,7 +246,7 @@ function MapTooltipContent({
             ),
         },
     ]
-    
+
     return (
         <TooltipContent
             title={geo.properties.name}
@@ -264,59 +261,4 @@ function MapTooltipContent({
             }
         />
     )
-}
-
-function getGeojsonPropertiesByIsoNumeric(
-    dataset: any[],
-    displayWhoRegions: boolean,
-    usingFunderLocation: boolean
-) {
-    if (displayWhoRegions) {
-        const whoRegions = Object.keys(regionToCountryMapping)
-
-        const regionKey = usingFunderLocation
-            ? 'FunderRegion'
-            : 'ResearchInstitutionRegion'
-
-        const grantsGroupedByRegion = groupBy(dataset, regionKey)
-
-        return whoRegions.map(region => {
-            const grants = grantsGroupedByRegion[region]
-
-            const totalGrants = grants?.length ?? 0
-
-            const totalAmountCommitted =
-                grants?.reduce(...sumNumericGrantAmounts) ?? 0
-
-            const regionName = selectOptions[regionKey].find(
-                option => option.value === region
-            )?.label
-
-            return {
-                isoNumeric:
-                    regionToCountryMapping[
-                        region as keyof typeof regionToCountryMapping
-                    ],
-                properties: {
-                    NAME: regionName,
-                    regionValue: region,
-                    totalGrants,
-                    totalAmountCommitted,
-                },
-            }
-        })
-    }
-
-    return Object.entries(
-        groupBy(
-            dataset,
-            usingFunderLocation ? 'FunderCountry' : 'ResearchInstitutionCountry'
-        )
-    ).map(([country, grants]) => ({
-        isoNumeric: [country],
-        properties: {
-            totalGrants: grants.length,
-            totalAmountCommitted: grants.reduce(...sumNumericGrantAmounts),
-        },
-    }))
 }
