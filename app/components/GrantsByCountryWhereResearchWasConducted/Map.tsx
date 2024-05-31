@@ -48,18 +48,12 @@ export default function Map() {
             : { ...countryGeojson }
 
         geojson.features = geojson.features.map((feature: any) => {
-            const geoJsonIdentifier = displayWhoRegions
-                ? 'who_region'
-                : 'iso_code'
-
             const name = selectOptions[grantField].find(
-                option => option.value === feature.properties[geoJsonIdentifier]
+                option => option.value === feature.properties.id
             )?.label
 
             const grants = dataset.filter(grant =>
-                grant[grantField].includes(
-                    feature.properties[geoJsonIdentifier]
-                )
+                grant[grantField].includes(feature.properties.id)
             )
 
             const totalGrants = grants.length

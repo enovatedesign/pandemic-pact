@@ -15,17 +15,17 @@ export default async function () {
 
     countriesGeojson.features = countriesGeojson.features.map(
         (feature: { type: string; properties: { ISO_N3_EH: string } }) => {
-            const iso_code = feature.properties.ISO_N3_EH.replace(/^0+/, '')
+            const id = feature.properties.ISO_N3_EH.replace(/^0+/, '')
 
-            const who_region = Object.entries(regionToCountryMapping).find(
-                ([_, countries]) => countries.includes(iso_code)
+            const who_region_id = Object.entries(regionToCountryMapping).find(
+                ([_, countries]) => countries.includes(id)
             )?.[0]
 
             return {
                 ...feature,
                 properties: {
-                    iso_code,
-                    who_region,
+                    id,
+                    who_region_id,
                 },
             }
         }
@@ -37,7 +37,8 @@ export default async function () {
 
     execSync(`
         npx mapshaper ./public/data/geojson/countries.json \
-            -dissolve who_region copy-fields=who_region \
+            -dissolve who_region_id copy-fields=who_region_id \
+            -each 'id=who_region_id, delete who_region_id' \
             -clean \
             -o fix-geometry gj2008 format=geojson ./public/data/geojson/who-regions.json
     `)
