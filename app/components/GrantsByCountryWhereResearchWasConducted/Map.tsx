@@ -96,7 +96,7 @@ export default function Map() {
 
     const onGeoClick = (geo: any) => {
         const queryFilters = {
-            [grantField]: geo.properties.id,
+            [grantField]: [geo.properties.id],
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
