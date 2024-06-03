@@ -43,7 +43,7 @@ export function searchUnavailableResponse() {
 export async function validateRequest(request: Request) {
     const parameters = await request.json().catch(() => Promise.resolve({}))
     const errors = []
-    
+
     if (!parameters.page) {
         parameters.page = 1
     }
@@ -154,10 +154,15 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
     let mustClause = {}
 
     if (q) {
+        let query = q
+            .replace(/\bAND\b/g, '+')
+            .replace(/\bOR\b/g, '|')
+            .replace(/\bNOT\b/g, '-')
+
         mustClause = {
             must: {
                 simple_query_string: {
-                    query: q,
+                    query,
                     fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
                     flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
                 },
