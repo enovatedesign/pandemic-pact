@@ -221,7 +221,7 @@ export default function RegionalFlowOfGrantsCard() {
                             leftLabel="Total Number of Grants"
                             rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
-                            className="justify-center mt-6"
+                            className="justify-center mt-6 ignore-in-image-export"
                         />
                     </>
                 )}

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, ReactNode } from 'react'
 import {
     BarChart as RechartBarChart,
     Bar,
@@ -17,6 +17,7 @@ import {
 import VisualisationCard from './VisualisationCard'
 import RechartTrendsTooltipContent from './RechartTrendsTooltipContent'
 import MultiSelect from './MultiSelect'
+import ImageExportLegend from './ImageExportLegend'
 import { sumNumericGrantAmounts } from '../helpers/reducers'
 import { axisDollarFormatter } from '../helpers/value-formatters'
 import { filterGrants, GlobalFilterContext } from '../helpers/filters'
@@ -95,6 +96,21 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
         return dataPoint
     })
 
+    const imageExportLegend = (
+        <ImageExportLegend
+            categories={selectedResearchCategoryOptions.map(
+                ({ label }) => label
+            )}
+            colours={
+                showingAllResearchCategories
+                    ? [allResearchCategoriesColour]
+                    : selectedResearchCategoryOptions.map(
+                          ({ value }) => researchCategoryColours[value]
+                      )
+            }
+        />
+    )
+
     const tabs = [
         {
             tab: {
@@ -106,6 +122,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
                     data={amountCommittedToEachResearchCategoryOverTime}
                     categories={selectedResearchCategoryOptions}
                     showingAllResearchCategories={showingAllResearchCategories}
+                    imageExportLegend={imageExportLegend}
                 />
             ),
         },
@@ -119,6 +136,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
                     data={amountCommittedToEachResearchCategoryOverTime}
                     categories={selectedResearchCategoryOptions}
                     showingAllResearchCategories={showingAllResearchCategories}
+                    imageExportLegend={imageExportLegend}
                 />
             ),
         },
@@ -153,69 +171,75 @@ interface ChartProps {
     data: any[]
     categories: { value: string; label: string }[]
     showingAllResearchCategories: boolean
+    imageExportLegend: ReactNode
 }
 
 function BarChart({
     data,
     categories,
     showingAllResearchCategories,
+    imageExportLegend,
 }: ChartProps) {
     return (
-        <ResponsiveContainer width="100%" height={500}>
-            <RechartBarChart
-                data={data}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 20,
-                }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-
-                <XAxis
-                    dataKey="year"
-                    label={{
-                        value: 'Year of Award Start',
-                        position: 'bottom',
-                        offset: 0,
+        <>
+            <ResponsiveContainer width="100%" height={500}>
+                <RechartBarChart
+                    data={data}
+                    margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 20,
                     }}
-                />
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
 
-                <YAxis
-                    tickFormatter={axisDollarFormatter}
-                    label={{
-                        value: 'Known Financial Commitments (USD)',
-                        position: 'left',
-                        angle: -90,
-                        style: { textAnchor: 'middle' },
-                        offset: 10,
-                    }}
-                />
-
-                <Tooltip
-                    content={props => (
-                        <RechartTrendsTooltipContent
-                            props={props}
-                            chartData={data}
-                        />
-                    )}
-                    {...rechartBaseTooltipProps}
-                />
-
-                {categories.map(({ value, label }) => (
-                    <Bar
-                        key={`bar-${value}`}
-                        dataKey={label}
-                        fill={
-                            showingAllResearchCategories
-                                ? allResearchCategoriesColour
-                                : researchCategoryColours[value]
-                        }
+                    <XAxis
+                        dataKey="year"
+                        label={{
+                            value: 'Year of Award Start',
+                            position: 'bottom',
+                            offset: 0,
+                        }}
                     />
-                ))}
-            </RechartBarChart>
-        </ResponsiveContainer>
+
+                    <YAxis
+                        tickFormatter={axisDollarFormatter}
+                        label={{
+                            value: 'Known Financial Commitments (USD)',
+                            position: 'left',
+                            angle: -90,
+                            style: { textAnchor: 'middle' },
+                            offset: 10,
+                        }}
+                    />
+
+                    <Tooltip
+                        content={props => (
+                            <RechartTrendsTooltipContent
+                                props={props}
+                                chartData={data}
+                            />
+                        )}
+                        {...rechartBaseTooltipProps}
+                    />
+
+                    {categories.map(({ value, label }) => (
+                        <Bar
+                            key={`bar-${value}`}
+                            dataKey={label}
+                            fill={
+                                showingAllResearchCategories
+                                    ? allResearchCategoriesColour
+                                    : researchCategoryColours[value]
+                            }
+                        />
+                    ))}
+                </RechartBarChart>
+            </ResponsiveContainer>
+
+            {imageExportLegend}
+        </>
     )
 }
 
@@ -223,66 +247,71 @@ function LineChart({
     data,
     categories,
     showingAllResearchCategories,
+    imageExportLegend,
 }: ChartProps) {
     return (
-        <ResponsiveContainer width="100%" height={500}>
-            <RechartLineChart
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 20,
-                }}
-                data={data}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-
-                <XAxis
-                    type="category"
-                    dataKey="year"
-                    label={{
-                        value: 'Year',
-                        position: 'bottom',
-                        offset: 0,
+        <>
+            <ResponsiveContainer width="100%" height={500}>
+                <RechartLineChart
+                    margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 20,
                     }}
-                />
+                    data={data}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
 
-                <YAxis
-                    type="number"
-                    tickFormatter={axisDollarFormatter}
-                    label={{
-                        value: 'Known Financial Commitments (USD)',
-                        position: 'left',
-                        angle: -90,
-                        style: { textAnchor: 'middle' },
-                        offset: 10,
-                    }}
-                />
-
-                <Tooltip
-                    content={props => (
-                        <RechartTrendsTooltipContent
-                            props={props}
-                            chartData={data}
-                        />
-                    )}
-                    {...rechartBaseTooltipProps}
-                />
-
-                {categories.map(({ value, label }) => (
-                    <Line
-                        key={`line-${value}`}
-                        dataKey={label}
-                        stroke={
-                            showingAllResearchCategories
-                                ? allResearchCategoriesColour
-                                : researchCategoryColours[value]
-                        }
-                        strokeWidth={2}
-                        dot={false}
+                    <XAxis
+                        type="category"
+                        dataKey="year"
+                        label={{
+                            value: 'Year',
+                            position: 'bottom',
+                            offset: 0,
+                        }}
                     />
-                ))}
-            </RechartLineChart>
-        </ResponsiveContainer>
+
+                    <YAxis
+                        type="number"
+                        tickFormatter={axisDollarFormatter}
+                        label={{
+                            value: 'Known Financial Commitments (USD)',
+                            position: 'left',
+                            angle: -90,
+                            style: { textAnchor: 'middle' },
+                            offset: 10,
+                        }}
+                    />
+
+                    <Tooltip
+                        content={props => (
+                            <RechartTrendsTooltipContent
+                                props={props}
+                                chartData={data}
+                            />
+                        )}
+                        {...rechartBaseTooltipProps}
+                    />
+
+                    {categories.map(({ value, label }) => (
+                        <Line
+                            key={`line-${value}`}
+                            dataKey={label}
+                            stroke={
+                                showingAllResearchCategories
+                                    ? allResearchCategoriesColour
+                                    : researchCategoryColours[value]
+                            }
+                            strokeWidth={2}
+                            dot={false}
+                        />
+                    ))}
+                </RechartLineChart>
+            </ResponsiveContainer>
+
+            {imageExportLegend}
+        </>
     )
 }

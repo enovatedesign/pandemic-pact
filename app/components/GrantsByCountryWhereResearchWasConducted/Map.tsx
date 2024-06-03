@@ -184,7 +184,7 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0">
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0 ignore-in-image-export">
                     <div className="space-y-2">
                         <DoubleLabelSwitch
                             checked={displayWhoRegions}
@@ -209,7 +209,6 @@ export default function Map() {
                             onChange={handleShownDataset}
                             label="Number of grants"
                             theme="light"
-                            className="ignore-in-image-export"
                         />
 
                         <Switch
@@ -217,7 +216,6 @@ export default function Map() {
                             onChange={handleShownDataset}
                             label="Known financial commitments (USD)"
                             theme="light"
-                            className="ignore-in-image-export"
                         />
                     </div>
                 </div>
