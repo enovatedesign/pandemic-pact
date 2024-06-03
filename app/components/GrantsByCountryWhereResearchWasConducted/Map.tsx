@@ -6,6 +6,7 @@ import {
     Geographies,
     Geography,
     ZoomableGroup,
+    useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
@@ -19,20 +20,22 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
+import Switch from '../Switch'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
 export default function Map() {
-    const { tooltipRef } = useContext(TooltipContext)
-
     const { grants: dataset } = useContext(GlobalFilterContext)
-
-    const router = useRouter()
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
     const [usingFunderLocation, setUsingFunderLocation] =
         useState<boolean>(false)
+
+    const [
+        displayUsingKnownFinancialCommitments,
+        setDisplayUsingKnownFinancialCommitments,
+    ] = useState<boolean>(false)
 
     let grantField:
         | 'FunderRegion'
@@ -83,23 +86,179 @@ export default function Map() {
             }
         })
 
+        const key = displayUsingKnownFinancialCommitments
+            ? 'totalAmountCommitted'
+            : 'totalGrants'
+
         const allTotalGrants = geojson.features
-            .filter((country: any) => country.properties.totalGrants)
-            .map((country: any) => country.properties.totalGrants)
+            .filter((country: any) => country.properties[key])
+            .map((country: any) => country.properties[key])
 
         const colourScale = scaleLinear<string>()
             .domain([0, Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [geojson, colourScale]
-    }, [dataset, displayWhoRegions, grantField])
+    }, [
+        dataset,
+        displayUsingKnownFinancialCommitments,
+        displayWhoRegions,
+        grantField,
+    ])
 
-    const onGeoClick = (geo: any) => {
-        const queryFilters = {
-            [grantField]: [geo.properties.id],
+    const [height, setHeight] = useState(450)
+    const [scale, setScale] = useState(200)
+
+    useEffect(() => {
+        const handleHeight = () => {
+            if (window.innerWidth > 1024) {
+                setHeight(350)
+                setScale(125)
+            } else {
+                setHeight(450)
+                setScale(200)
+            }
         }
 
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+        const debouncedHandleHeight = debounce(handleHeight, 200)
+
+        debouncedHandleHeight()
+
+        window.addEventListener('resize', debouncedHandleHeight)
+
+        return () => {
+            window.removeEventListener('resize', debouncedHandleHeight)
+        }
+    })
+
+    const { sidebarOpen } = useContext(SidebarStateContext)
+
+    const handleShownDataset = () => {
+        setDisplayUsingKnownFinancialCommitments(
+            !displayUsingKnownFinancialCommitments
+        )
+    }
+
+    const center: [number, number] = [20, 10]
+
+    return (
+        <div className="w-full h-full flex flex-col gap-y-4">
+            <div className="breakout">
+                <ComposableMap
+                    projection="geoNaturalEarth1"
+                    projectionConfig={{
+                        scale,
+                        center,
+                    }}
+                    height={height}
+                >
+                    <ZoomableGroup center={center}>
+                        <GeographiesWithScalingOutlines
+                            displayUsingKnownFinancialCommitments={
+                                displayUsingKnownFinancialCommitments
+                            }
+                            displayWhoRegions={displayWhoRegions}
+                            grantField={grantField}
+                            geojson={geojson}
+                            colourScale={colourScale}
+                        />
+                    </ZoomableGroup>
+                </ComposableMap>
+            </div>
+
+            <div
+                className={`flex flex-col w-full rounded-md overflow-hidden ${
+                    sidebarOpen ? 'flex-col' : 'xl:flex-row'
+                }`}
+            >
+                <div
+                    className={`w-full ${
+                        !sidebarOpen && 'xl:w-4/6'
+                    } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
+                >
+                    <ColourScale
+                        colourScale={colourScale}
+                        displayUsingKnownFinancialCommitments={
+                            displayUsingKnownFinancialCommitments
+                        }
+                    />
+                </div>
+
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0">
+                    <div className="space-y-2">
+                        <DoubleLabelSwitch
+                            checked={displayWhoRegions}
+                            onChange={setDisplayWhoRegions}
+                            leftLabel="Countries"
+                            rightLabel="WHO Regions"
+                            screenReaderLabel="Display WHO Regions"
+                        />
+
+                        <DoubleLabelSwitch
+                            checked={usingFunderLocation}
+                            onChange={setUsingFunderLocation}
+                            leftLabel="Research Institution"
+                            rightLabel="Funder"
+                            screenReaderLabel="Using Funder Location"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Switch
+                            checked={!displayUsingKnownFinancialCommitments}
+                            onChange={handleShownDataset}
+                            label="Number of grants"
+                            theme="light"
+                            className="ignore-in-image-export"
+                        />
+
+                        <Switch
+                            checked={displayUsingKnownFinancialCommitments}
+                            onChange={handleShownDataset}
+                            label="Known financial commitments (USD)"
+                            theme="light"
+                            className="ignore-in-image-export"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+interface GeographiesWithScalingOutlinesProps {
+    displayUsingKnownFinancialCommitments: boolean
+    displayWhoRegions: boolean
+    grantField: string
+    geojson: any
+    colourScale: any
+}
+
+function GeographiesWithScalingOutlines({
+    displayUsingKnownFinancialCommitments,
+    displayWhoRegions,
+    grantField,
+    geojson,
+    colourScale,
+}: GeographiesWithScalingOutlinesProps) {
+    const zoomContext = useZoomPanContext()
+
+    const { tooltipRef } = useContext(TooltipContext)
+
+    const router = useRouter()
+
+    const getColourOfGeo = (geo: any) => {
+        const properties = geo.properties
+
+        if (displayUsingKnownFinancialCommitments) {
+            return properties.totalAmountCommitted
+                ? colourScale(properties.totalAmountCommitted)
+                : '#D6D6DA'
+        } else {
+            return properties.totalGrants
+                ? colourScale(properties.totalGrants)
+                : '#D6D6DA'
+        }
     }
 
     const onGeoMouseEnterOrMove = (
@@ -124,106 +283,35 @@ export default function Map() {
         tooltipRef?.current?.close()
     }
 
-    const getColourOfGeo = (geo: any) => {
-        return geo.properties.totalGrants
-            ? colourScale(geo.properties.totalGrants)
-            : '#D6D6DA'
+    const onGeoClick = (geo: any) => {
+        const queryFilters = {
+            [grantField]: [geo.properties.id],
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const [height, setHeight] = useState(650)
-    const [scale, setScale] = useState(120)
-
-    useEffect(() => {
-        const handleHeight = () => {
-            if (window.innerWidth > 1024) {
-                setHeight(300)
-                setScale(80)
-            } else {
-                setHeight(650)
-                setScale(120)
-            }
-        }
-
-        const debouncedHandleHeight = debounce(handleHeight, 200)
-
-        debouncedHandleHeight()
-
-        window.addEventListener('resize', debouncedHandleHeight)
-
-        return () => {
-            window.removeEventListener('resize', debouncedHandleHeight)
-        }
-    })
-
-    const { sidebarOpen } = useContext(SidebarStateContext)
-
     return (
-        <div className="w-full h-full flex flex-col gap-y-4">
-            <div className="breakout">
-                <ComposableMap
-                    projection="geoMercator"
-                    projectionConfig={{
-                        scale: scale,
-                        center: [0, 40],
-                    }}
-                    height={height}
-                >
-                    <ZoomableGroup center={[0, 40]}>
-                        <Geographies geography={geojson}>
-                            {({ geographies }) =>
-                                geographies.map(geo => (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        fill={getColourOfGeo(geo)}
-                                        stroke="#FFFFFF"
-                                        strokeWidth={1.0}
-                                        className="cursor-pointer"
-                                        onClick={() => onGeoClick(geo)}
-                                        onMouseEnter={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseMove={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseLeave={onGeoMouseLeave}
-                                    />
-                                ))
-                            }
-                        </Geographies>
-                    </ZoomableGroup>
-                </ComposableMap>
-            </div>
-
-            <div
-                className={`flex flex-col items-center gap-y-2 ${
-                    !sidebarOpen &&
-                    'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'
-                }`}
-            >
-                <ColourScale colourScale={colourScale} />
-
-                <div className="xl:self-center xl:-translate-y-[14px]">
-                    <DoubleLabelSwitch
-                        checked={displayWhoRegions}
-                        onChange={setDisplayWhoRegions}
-                        leftLabel="Countries"
-                        rightLabel="WHO Regions"
-                        screenReaderLabel="Display WHO Regions"
+        <Geographies geography={geojson}>
+            {({ geographies }) =>
+                geographies.map(geo => (
+                    <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill={getColourOfGeo(geo)}
+                        stroke="#FFFFFF"
+                        strokeWidth={1.0 / zoomContext.k}
+                        className="cursor-pointer"
+                        onClick={() => onGeoClick(geo)}
+                        onMouseEnter={event =>
+                            onGeoMouseEnterOrMove(event, geo)
+                        }
+                        onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
+                        onMouseLeave={onGeoMouseLeave}
                     />
-                </div>
-
-                <div className="xl:self-center xl:-translate-y-[14px]">
-                    <DoubleLabelSwitch
-                        checked={usingFunderLocation}
-                        onChange={setUsingFunderLocation}
-                        leftLabel="Research Institution"
-                        rightLabel="Funder"
-                        screenReaderLabel="Using Funder Location"
-                    />
-                </div>
-            </div>
-        </div>
+                ))
+            }
+        </Geographies>
     )
 }
 

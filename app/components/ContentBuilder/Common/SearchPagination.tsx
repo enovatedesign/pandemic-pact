@@ -1,3 +1,4 @@
+
 "use client"
 import {useState, useEffect} from "react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -6,17 +7,13 @@ import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid"
 interface Props {
     postsPerPage: number,
     totalPosts: number,
-    setFirstItemIndex: ((index: number) => void)
-    setLastItemIndex: ((index: number) => void)
 }
 
-const Pagination = ({
+const SearchPagination  = ({
     postsPerPage,
     totalPosts,
-    setFirstItemIndex,
-    setLastItemIndex,
 }: Props) => {
-
+    
     const router = useRouter()
     const pathName = usePathname()
     const params = useSearchParams()
@@ -34,10 +31,7 @@ const Pagination = ({
             setPage(Number(newPageParam))
         }
 
-        const lastItemIndex = page * postsPerPage
-        setFirstItemIndex(lastItemIndex - postsPerPage)
-        setLastItemIndex(lastItemIndex)
-    }, [page, postsPerPage, setFirstItemIndex, setLastItemIndex, params])
+    }, [page, postsPerPage,  params])
 
     const updateSearchParams = (number: number) => {
         const newParams = new URLSearchParams(params.toString())
@@ -73,11 +67,10 @@ const Pagination = ({
                     {page !== 1 ? (
                         <button
                             onClick={() => handleChange(page-1)}
-                            className={`${page === 1 ? 'text-gray-400' : 'text-secondary'} uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed`}
-                            disabled={page === 1}
-                            title='Previous page' aria-hidden={page === 1} aria-label={`Go to the previous page`}
+                            className="text-secondary uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
+                            title='Previous page' aria-label="Go to the previous page"
                         >
-                            <ChevronLeftIcon className={`${iconClasses} ${page === 1 ? 'text-gray-400 border-gray-400' : 'text-primary border-primary hover:bg-primary hover:text-white' } transition duration-300`}/>
+                            <ChevronLeftIcon className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}/>
                             <span>Previous</span>
                         </button>
                     ): (
@@ -133,12 +126,11 @@ const Pagination = ({
                     {page !== totalPages.length ? (
                         <button
                             onClick={() => handleChange(page + 1)}
-                            className={`${page === totalPages.length ? 'text-gray-400' : 'text-secondary'}  uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed`}
-                            disabled={page === totalPages.length}
-                            title='Next page' aria-hidden={page === totalPages.length} aria-label={`Go to the next page`}
+                            className="text-secondary uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
+                            title='Next page' aria-label="Go to the next page"
                         >
                             <span>Next</span>
-                            <ChevronRightIcon className={`${iconClasses} ${page === totalPages.length ? 'text-gray-400 border-gray-400' : 'text-primary border-primary hover:bg-primary hover:text-white' } transition duration-300`}/>
+                            <ChevronRightIcon className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}/>
                         </button>
                     ) : (
                         <span className="text-gray-400  uppercase font-bold flex items-center space-x-2 md:space-x-4">
@@ -151,8 +143,7 @@ const Pagination = ({
             </ul>
             
         </nav>
-
     )
 }
 
-export default Pagination
+export default SearchPagination

@@ -1,10 +1,12 @@
 import {BarChart, Bar, XAxis, YAxis} from 'recharts';
+import { axisDollarFormatter } from '@/app/helpers/value-formatters';
 
 interface Props {
     colourScale: any
+    displayUsingKnownFinancialCommitments: boolean
 }
 
-export default function ColourScale({colourScale}: Props) {
+export default function ColourScale({colourScale, displayUsingKnownFinancialCommitments}: Props) {
     const ticks = colourScale.ticks(5)
 
     const step = ticks[1] - ticks[0]
@@ -19,6 +21,14 @@ export default function ColourScale({colourScale}: Props) {
         Object.fromEntries(bars.map((bar: any) => [bar.name, bar.value])),
     ]
 
+    const tickFormatter = (value: any, index: number) => {
+        if (displayUsingKnownFinancialCommitments) {
+            return axisDollarFormatter(value);
+        } else {
+            return value.toString();
+        }
+    }
+
     return (
         <BarChart
             width={300}
@@ -27,6 +37,7 @@ export default function ColourScale({colourScale}: Props) {
             data={chartData}
         >
             <XAxis
+                tickFormatter={tickFormatter}
                 type="number"
                 ticks={ticks}
                 tickLine={false}

@@ -9,16 +9,20 @@ import BarListRowHeading from '../BarList/BarListRowHeading'
 
 interface Props {
     hideCovid: boolean
+    numOfGrantsBoolean: boolean
 }
 
-export default function BarChart({ hideCovid }: Props) {
+export default function BarChart({ hideCovid, numOfGrantsBoolean }: Props) {
+    
+    const orderSortingValue = numOfGrantsBoolean ? "Total Grants" : "Known Financial Commitments (USD)"
+    
     const { grants } = useContext(GlobalFilterContext)
 
     const chartData = useMemo(() => {
         const diseases = selectOptions.Disease.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
         )
-
+        
         return diseases
             .map(function (disease) {
                 const grantsWithKnownAmounts = grants
@@ -29,7 +33,6 @@ export default function BarChart({ hideCovid }: Props) {
                         (grant: any) =>
                             typeof grant.GrantAmountConverted === 'number'
                     )
-
                 const grantsWithUnspecifiedAmounts = grants
                     .filter((grant: any) =>
                         grant.Disease.includes(disease.value)
@@ -57,7 +60,8 @@ export default function BarChart({ hideCovid }: Props) {
                 }
             })
             .filter(disease => disease['Total Grants'] > 0)
-    }, [grants, hideCovid])
+            .sort((a, b) => b[orderSortingValue] - a[orderSortingValue])
+    }, [grants, hideCovid, orderSortingValue])
 
     return (
         <BarList

@@ -42,8 +42,11 @@ export function searchUnavailableResponse() {
 
 export async function validateRequest(request: Request) {
     const parameters = await request.json().catch(() => Promise.resolve({}))
-
     const errors = []
+
+    if (!parameters.page) {
+        parameters.page = 1
+    }
 
     if (typeof parameters.q === 'undefined') {
         errors.push({
@@ -88,6 +91,48 @@ export async function validateRequest(request: Request) {
         // )
     }
 
+    if (typeof parameters.page !== 'number') {
+        errors.push({
+            field: 'page',
+            message: 'The page parameter must be a number',
+        })
+    }
+
+    if (parameters.page < 0) {
+        errors.push({
+            field: 'page',
+            message: 'The page parameter must be greater than 0',
+        })
+    }
+
+    if (typeof parameters.limit === 'undefined') {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter is required',
+        })
+    }
+
+    if (typeof parameters.limit !== 'number') {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be a number',
+        })
+    }
+
+    if (parameters.limit > 100) {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be less than or equal to 100',
+        })
+    }
+
+    if (parameters.limit <= 0) {
+        errors.push({
+            field: 'limit',
+            message: 'The limit parameter must be greater than 0',
+        })
+    }
+
     if (errors.length > 0) {
         return {
             errorResponse: NextResponse.json(
@@ -109,10 +154,15 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
     let mustClause = {}
 
     if (q) {
+        let query = q
+            .replace(/\bAND\b/g, '+')
+            .replace(/\bOR\b/g, '|')
+            .replace(/\bNOT\b/g, '-')
+
         mustClause = {
             must: {
                 simple_query_string: {
-                    query: q,
+                    query,
                     fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
                     flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
                 },
@@ -176,7 +226,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
 
     const grantIDs = []
 
-    const size = 10000
+    const size = 1000
 
     let hits = []
 

@@ -1,106 +1,45 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { SearchIcon } from '@heroicons/react/solid'
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
-import {
-    searchRequest,
-    SearchFilters,
-    SearchResponse,
-    queryOrFiltersAreSet,
-} from '../helpers/search'
+import { SearchFilters, queryOrFiltersAreSet } from '../helpers/search'
 import Button from './Button'
 import InfoModal from './InfoModal'
-import StandardSearchFilters, {
-    SelectedStandardSearchFilters,
-} from './StandardSearchFilters'
+import StandardSearchFilters from './StandardSearchFilters'
 import AdvancedSearchFilters from './AdvancedSearchFilters'
 import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void
+    searchQuery: string
+    showAdvancedSearch: boolean
+    standardSearchFilters: any
+    isLoading: boolean
+    totalHits: number
+    setSearchQuery: (searchQuery: string) => void
+    setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
+    setAdvancedSearchFilters: (advancedSearchFilters: SearchFilters) => void
+    setStandardSearchFilters: any
+    searchRequestBody: any
+    setIsQueryPageOne: (isQueryPageOne: boolean) => void
 }
 
-export default function SearchInput({ setSearchResponse }: Props) {
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
-    const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
+export default function SearchInput({ 
+    searchQuery, 
+    showAdvancedSearch, 
+    standardSearchFilters, 
+    isLoading,
+    totalHits,
+    setSearchQuery, 
+    setShowAdvancedSearch, 
+    setAdvancedSearchFilters, 
+    setStandardSearchFilters,
+    searchRequestBody,
+    setIsQueryPageOne
+}: Props) {
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
-
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    const [standardSearchFilters, setStandardSearchFilters] =
-        useState<SelectedStandardSearchFilters>(
-            filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
-        )
-
-    const [advancedSearchFilters, setAdvancedSearchFilters] =
-        useState<SearchFilters>({
-            logicalAnd: true,
-            filters: [],
-        })
-
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
-
-    const [totalHits, setTotalHits] = useState<number>(0)
-
-    useEffect(() => {
-        const url = new URL(pathname, window.location.origin)
-
-        url.search = searchParams.toString()
-
-        if (searchQuery) {
-            url.searchParams.set('q', searchQuery)
-        } else {
-            url.searchParams.delete('q')
-        }
-
-        const anyStandardFiltersAreApplied = Object.values(
-            standardSearchFilters
-        ).some(filter => filter.length > 0)
-
-        if (anyStandardFiltersAreApplied) {
-            url.searchParams.set(
-                'filters',
-                JSON.stringify(standardSearchFilters)
-            )
-        } else {
-            url.searchParams.delete('filters')
-        }
-
-        router.replace(url.href)
-    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
-
-    const searchRequestBody = useMemo(() => {
-        const searchFilters = showAdvancedSearch
-            ? advancedSearchFilters
-            : convertStandardFiltersToSearchFilters(standardSearchFilters)
-
-        return {
-            q: searchQuery,
-            filters: searchFilters,
-        }
-    }, [
-        searchQuery,
-        standardSearchFilters,
-        advancedSearchFilters,
-        showAdvancedSearch,
-    ])
-
-    useEffect(() => {
-        searchRequest('list', searchRequestBody)
-            .then(data => {
-                setSearchResponse(data)
-                setTotalHits(data.total.value)
-                setIsLoading(false)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
+    const handleSearchToggleButtons = (boolean: boolean) => {
+        setShowAdvancedSearch(boolean)
+        setIsQueryPageOne(true)
+    }
 
     return (
         <div>
@@ -185,7 +124,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
 
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
-                                onClick={() => setShowAdvancedSearch(false)}
+                                onClick={() => handleSearchToggleButtons(false)}
                                 className={`${
                                     !showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'
@@ -196,7 +135,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             </button>
 
                             <button
-                                onClick={() => setShowAdvancedSearch(true)}
+                                onClick={() => handleSearchToggleButtons(true)}
                                 className={`${
                                     showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'
@@ -228,7 +167,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                     </div>
                 </section>
 
-                <div className="flex flex-col md:flex-row gap-4 justify-between justify-start md:items-center">
+                <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
                     <p className="text-secondary flex flex-row items-center gap-2 uppercase">
                         <span className="whitespace-nowrap">
                             {searchQuery ? 'Total Hits:' : 'Total Grants:'}
@@ -257,15 +196,4 @@ export default function SearchInput({ setSearchResponse }: Props) {
     )
 }
 
-function convertStandardFiltersToSearchFilters(
-    standardFilters: SelectedStandardSearchFilters
-): SearchFilters {
-    return {
-        logicalAnd: true,
-        filters: Object.entries(standardFilters).map(([field, values]) => ({
-            field,
-            values,
-            logicalAnd: false,
-        })),
-    }
-}
+

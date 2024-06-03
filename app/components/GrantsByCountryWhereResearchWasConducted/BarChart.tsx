@@ -75,6 +75,7 @@ export default function BarChart() {
             'Known Financial Commitments': grants.reduce(
                 ...sumNumericGrantAmounts
             ),
+            'Number of Grants': grants.length
         }
     })
 
@@ -123,10 +124,16 @@ export default function BarChart() {
                 : 'ResearchInstitutionRegion'
         ].find(option => option.value === props.label)?.label as string
 
-        const items = props.payload.map((item: any) => ({
-            label: 'Known Financial Commitments (USD)',
-            value: dollarValueFormatter(item.value),
-        }))
+        const items = [
+            {
+                label: 'Known Financial Commitments (USD)',
+                value: dollarValueFormatter(props.payload[0]?.value),
+            },
+            {
+                label: 'Number of Grants',
+                value: props.payload[0]?.payload['Number of Grants']
+            }
+        ];
 
         return <TooltipContent title={title} items={items} />
     }
