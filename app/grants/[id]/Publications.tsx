@@ -166,7 +166,6 @@ export default function Publications({ grant }: { grant: any }) {
                             postsPerPage={limit}
                             setLastItemIndex={setLastItemIndex}
                             setFirstItemIndex={setFirstItemIndex}
-                            setActiveIndex={setActiveIndex}
                         />
                     </Suspense>
                 )}

@@ -12,12 +12,12 @@ interface Props {
 export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLabel, screenReaderLabel, className}: Props) {
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
-            <p className={`${checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap md:text-base`}>{leftLabel}</p>
+            <p className={`${checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap `}>{leftLabel}</p>
 
             <HeadlessUISwitch
                 checked={checked}
                 onChange={onChange}
-                className="relative inline-flex items-center h-6 bg-brand-teal-600 rounded-full w-11"
+                className={`relative inline-flex items-center h-6 rounded-full w-11 ${checked ? 'bg-primary' : 'bg-gray-200'}`}
             >
                 <span className="sr-only">{screenReaderLabel}</span>
 
@@ -26,7 +26,7 @@ export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLa
                 />
             </HeadlessUISwitch>
 
-            <p className={`${!checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap md:text-base`}>{rightLabel}</p>
+            <p className={`${!checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap `}>{rightLabel}</p>
         </div>
     )
 }

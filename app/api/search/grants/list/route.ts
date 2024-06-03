@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
         return errorResponse
     }
 
-    const {q, filters} = values
-
+    const {q, filters, page, limit} = values
+    
     let highlightClause = {}
 
     if (q) {
@@ -47,10 +47,12 @@ export async function POST(request: NextRequest) {
             }
         }
     }
-
+    
     const index = getIndexName()
 
     const query = getBooleanQuery(q, filters);
+    
+    const from = (page && limit) ? (limit * (page -1)) : 0
 
     const results = await client.search({
         index,
@@ -63,8 +65,9 @@ export async function POST(request: NextRequest) {
             'GrantStartYear',
             'FundingOrgName',
         ],
-
-        size: 20,
+        
+        from: from,
+        size: limit,
 
         body: {
             query,
@@ -74,6 +77,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
         query: q,
+        page: page,
         ...results.body.hits,
     })
 }

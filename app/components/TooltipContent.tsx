@@ -1,10 +1,17 @@
 import { ReactNode } from 'react'
+import {
+    TrendingUpIcon,
+    TrendingDownIcon,
+    MinusIcon,
+} from '@heroicons/react/solid'
 
 interface TooltipContentItem {
     colour?: string
     label: string
     value: string
     bold?: boolean
+    trend?: 'up' | 'down' | 'none'
+    trendPercentageDifference?: number
 }
 
 interface Props {
@@ -48,9 +55,37 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                 </p>
                             </div>
 
-                            <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                                {item.value}
-                            </p>
+                            <div className="flex justify-between items-center gap-x-2">
+                                <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
+                                    {item.value}
+                                </p>
+
+                                {item.trend && (
+                                    <>
+                                        {item.trend === 'up' && (
+                                            <p className="text-green-500 flex items-center">
+                                                <TrendingUpIcon className="h-4 w-4" />
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
+                                                    <span className="ml-1">{`+${item.trendPercentageDifference}%`}</span>
+                                                )}
+                                            </p>
+                                        )}
+
+                                        {item.trend === 'down' && (
+                                            <p className="text-red-500 flex items-center">
+                                                <TrendingDownIcon className="h-4 w-4"/>
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
+                                                    <span className="ml-1">{`-${item.trendPercentageDifference}%`}</span>
+                                                )}
+                                            </p>
+                                        )}
+
+                                        {item.trend === 'none' && (
+                                            <MinusIcon className="h-4 w-4 text-gray-500" />
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>

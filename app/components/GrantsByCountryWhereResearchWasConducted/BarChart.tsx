@@ -35,28 +35,24 @@ export default function BarChart() {
     if (selectedRegion) {
         let grantsGroupedByCountry: any = {}
 
-        dataset
-            .filter((grant: any) =>
-                grant.ResearchInstitutionRegion.includes(selectedRegion)
-            )
-            .forEach((grant: any) => {
-                grant.ResearchInstitutionCountry.forEach((country: string) => {
-                    const selectedRegionCountries =
-                        regionToCountryMapping[
-                            selectedRegion as keyof typeof regionToCountryMapping
-                        ]
+        const countriesInSelectedRegion =
+            regionToCountryMapping[
+                selectedRegion as keyof typeof regionToCountryMapping
+            ]
 
-                    if (!selectedRegionCountries.includes(country)) {
-                        return
-                    }
+        dataset.forEach((grant: any) => {
+            grant.ResearchInstitutionCountry.forEach((country: string) => {
+                if (!countriesInSelectedRegion.includes(country)) {
+                    return
+                }
 
-                    if (grantsGroupedByCountry[country]) {
-                        grantsGroupedByCountry[country].push(grant)
-                    } else {
-                        grantsGroupedByCountry[country] = [grant]
-                    }
-                })
+                if (grantsGroupedByCountry[country]) {
+                    grantsGroupedByCountry[country].push(grant)
+                } else {
+                    grantsGroupedByCountry[country] = [grant]
+                }
             })
+        })
 
         data = Object.entries(grantsGroupedByCountry)
     } else {
@@ -79,6 +75,7 @@ export default function BarChart() {
             'Known Financial Commitments': grants.reduce(
                 ...sumNumericGrantAmounts
             ),
+            'Number of Grants': grants.length
         }
     })
 
@@ -127,10 +124,16 @@ export default function BarChart() {
                 : 'ResearchInstitutionRegion'
         ].find(option => option.value === props.label)?.label as string
 
-        const items = props.payload.map((item: any) => ({
-            label: 'Known Financial Commitments (USD)',
-            value: dollarValueFormatter(item.value),
-        }))
+        const items = [
+            {
+                label: 'Known Financial Commitments (USD)',
+                value: dollarValueFormatter(props.payload[0]?.value),
+            },
+            {
+                label: 'Number of Grants',
+                value: props.payload[0]?.payload['Number of Grants']
+            }
+        ];
 
         return <TooltipContent title={title} items={items} />
     }

@@ -32,6 +32,7 @@
         "@vercel/og": "^0.6.2",
         "autoprefixer": "10.4.16",
         "chalk": "^4.1.2",
+        "colortranslator": "^4.1.0",
         "dayjs": "^1.11.10",
         "dotenv": "^16.3.1",
         "encoding": "^0.1.13",
@@ -58,11 +59,12 @@
         "tailwindcss": "3.4.1",
         "three": "^0.160.0",
         "typescript": "5.3.3",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.3.1",
         "@tailwindcss/typography": "^0.5.10",
-        "@types/seedrandom": "^3.0.8"
+        "@types/seedrandom": "^3.0.8",
+        "mapshaper": "^0.6.96"
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import {
     LineChart,
     Line,
@@ -8,6 +8,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
+import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { groupBy } from 'lodash'
 import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
 import ImageExportLegend from '../ImageExportLegend'
@@ -20,11 +21,12 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
+    numOfGrantsBoolean: boolean
 }
 
-export default function TemporalChart({ hideCovid }: Props) {
+export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) {
     const { grants } = useContext(GlobalFilterContext)
-
+    
     const datasetGroupedByYear = groupBy(
         grants.filter(
             (grant: any) =>
@@ -35,28 +37,33 @@ export default function TemporalChart({ hideCovid }: Props) {
         'TrendStartYear'
     )
 
-    const amountCommittedToEachDiseaseOverTime = Object.keys(
+    const chartData = Object.keys(
         datasetGroupedByYear
     ).map(year => {
         const grants = datasetGroupedByYear[year]
-
+        
         let dataPoint: { [key: string]: string | number } = { year }
-
+        
         selectOptions.Disease.forEach(({ value, label }) => {
-            dataPoint[label] = grants
-                .filter(grant => grant.Disease.includes(value))
-                .reduce(...sumNumericGrantAmounts)
-        })
 
+            const filteredGrants = grants.filter(grant => grant.Disease.includes(value)).length
+
+            dataPoint[label] = numOfGrantsBoolean ? filteredGrants : grants
+            .filter(grant => grant.Disease.includes(value))
+            .reduce(...sumNumericGrantAmounts)
+        })
+        
         return dataPoint
     })
 
     if (hideCovid) {
-        amountCommittedToEachDiseaseOverTime.forEach(dataPoint => {
+        chartData.forEach(dataPoint => {
             delete dataPoint['COVID-19']
         })
     }
-
+ 
+    const tickFormatter = (value: any, index: number) => numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
+        
     return (
         <>
             <ResponsiveContainer width="100%" height={500} className="z-10">
@@ -67,7 +74,7 @@ export default function TemporalChart({ hideCovid }: Props) {
                         left: 30,
                         bottom: 20,
                     }}
-                    data={amountCommittedToEachDiseaseOverTime}
+                    data={chartData}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
 
@@ -84,9 +91,9 @@ export default function TemporalChart({ hideCovid }: Props) {
 
                     <YAxis
                         type="number"
-                        tickFormatter={axisDollarFormatter}
+                        tickFormatter={tickFormatter}
                         label={{
-                            value: 'Known Financial Commitments (USD)',
+                            value: !numOfGrantsBoolean ? 'Known Financial Commitments (USD)' : 'Number of grants',
                             position: 'left',
                             angle: -90,
                             style: { textAnchor: 'middle' },
@@ -96,12 +103,13 @@ export default function TemporalChart({ hideCovid }: Props) {
                     />
 
                     <Tooltip
-                        content={props =>
-                            rechartCategoriesTooltipContentFunction({
-                                ...props,
-                                category: 'Disease',
-                            })
-                        }
+                        content={props => (
+                            <RechartTrendsTooltipContent
+                                props={props}
+                                chartData={chartData}
+                                numOfGrantsBoolean={numOfGrantsBoolean}
+                            />
+                        )}
                         {...rechartBaseTooltipProps}
                     />
 

@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChartBarIcon, ClockIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
 import Switch from '../Switch'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
+import DoubleLabelSwitch from '../DoubleLabelSwitch'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
+    const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(false)
 
     const tabs = [
         {
@@ -14,14 +16,14 @@ export default function GrantsByDisease() {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} />,
+            content: <TemporalChart hideCovid={hideCovid} numOfGrantsBoolean={numOfGrantsBoolean}/>,
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart hideCovid={hideCovid} />,
+            content: <BarChart hideCovid={hideCovid} numOfGrantsBoolean={numOfGrantsBoolean}/>,
         },
     ]
 
@@ -41,8 +43,16 @@ export default function GrantsByDisease() {
                 The chart shows the total number of grants awarded and amount of
                 funding committed for each disease per calendar year.
             </p>
+
+            <p className="text-brand-grey-500">
+                The pop up box notes the year on year percentage increase or decrease for each priority disease.
+            </p>
         </>
     )
+
+    const handleShownDataset = () => {
+        setNumOfGrantsBoolean(!numOfGrantsBoolean)
+    }
 
     return (
         <VisualisationCard
@@ -53,13 +63,31 @@ export default function GrantsByDisease() {
             infoModalContents={infoModalContents}
             tabs={tabs}
         >
-            <Switch
-                checked={hideCovid}
-                onChange={setHideCovid}
-                label="Hide COVID-19"
-                theme="light"
-                className="ignore-in-image-export"
-            />
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between :items-center">
+                <Switch
+                    checked={hideCovid}
+                    onChange={setHideCovid}
+                    label="Hide COVID-19"
+                    theme="light"
+                    className="ignore-in-image-export"
+                />
+                
+                <Switch
+                    checked={numOfGrantsBoolean}
+                    onChange={handleShownDataset}
+                    label="Number of grants"
+                    theme="light"
+                    className="ignore-in-image-export"
+                />
+
+                <Switch
+                    checked={!numOfGrantsBoolean}
+                    onChange={handleShownDataset}
+                    label="Known financial commitments (USD)"
+                    theme="light"
+                    className="ignore-in-image-export"
+                />
+            </div>
         </VisualisationCard>
     )
 }
