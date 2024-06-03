@@ -3,9 +3,16 @@ import { execSync } from 'child_process'
 import _ from 'lodash'
 
 export default async function () {
-    const inputGeojson = fs.readJsonSync(
-        './data/source/geojson/ne_110m_admin_0_countries.json'
-    )
+    fs.ensureDirSync('./data/dist/geojson')
+
+    // Merge Somalia and Somaliland and write to an intermediate GeoJSON file
+    execSync(`
+        npx mapshaper ./data/source/geojson/ne_110m_admin_0_countries.json \
+            -dissolve copy-fields=ISO_N3_EH where='SOVEREIGNT === "Somalia" || SOVEREIGNT === "Somaliland"' \
+            -o gj2008 format=geojson ./data/dist/geojson/countries.json
+    `)
+
+    const inputGeojson = fs.readJsonSync('./data/dist/geojson/countries.json')
 
     const regionToCountryMapping: { [key: string]: string[] } = fs.readJsonSync(
         './data/source/region-to-country-mapping.json'
@@ -35,11 +42,11 @@ export default async function () {
 
     fs.writeJsonSync('./public/data/geojson/countries.json', countriesGeojson)
 
+    // Merge countries into WHO regions and write to a separate GeoJSON file
     execSync(`
         npx mapshaper ./public/data/geojson/countries.json \
             -dissolve who_region_id copy-fields=who_region_id \
             -each 'id=who_region_id, delete who_region_id' \
-            -clean \
-            -o fix-geometry gj2008 format=geojson ./public/data/geojson/who-regions.json
+            -o gj2008 format=geojson ./public/data/geojson/who-regions.json
     `)
 }
