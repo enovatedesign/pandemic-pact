@@ -1,45 +1,39 @@
-import {BarChart, Bar, XAxis, YAxis} from 'recharts';
-import { axisDollarFormatter } from '@/app/helpers/value-formatters';
+import { BarChart, Bar, Cell, XAxis, YAxis } from 'recharts'
+import { axisDollarFormatter } from '@/app/helpers/value-formatters'
 
 interface Props {
     colourScale: any
     displayUsingKnownFinancialCommitments: boolean
 }
 
-export default function ColourScale({colourScale, displayUsingKnownFinancialCommitments}: Props) {
-    const ticks = colourScale.ticks(5)
+export default function ColourScale({
+    colourScale,
+    displayUsingKnownFinancialCommitments,
+}: Props) {
+    const ticks = colourScale.ticks()
 
-    const step = ticks[1] - ticks[0]
+    const tickFormat = colourScale.tickFormat(6, 'd')
 
-    const bars: any = ticks.map((tick: any) => ({
-        name: `tick-${tick}`,
-        value: step,
-        colour: colourScale(tick),
-    }))
-
-    const chartData: any = [
-        Object.fromEntries(bars.map((bar: any) => [bar.name, bar.value])),
-    ]
-
-    const tickFormatter = (value: any, index: number) => {
-        if (displayUsingKnownFinancialCommitments) {
-            return axisDollarFormatter(value);
-        } else {
-            return value.toString();
-        }
-    }
+    const chartData = ticks
+        .map(tickFormat)
+        .filter((value: string) => value !== '')
+        .map((value: string) => ({
+            name: value,
+            amount: 100,
+            colour: colourScale(value),
+        }))
 
     return (
         <BarChart
-            width={300}
+            width={400}
             height={60}
-            layout="vertical"
             data={chartData}
+            barGap={0}
+            barCategoryGap={0}
         >
             <XAxis
-                tickFormatter={tickFormatter}
-                type="number"
-                ticks={ticks}
+                type="category"
+                dataKey="name"
                 tickLine={false}
                 axisLine={false}
             />
@@ -50,22 +44,19 @@ export default function ColourScale({colourScale, displayUsingKnownFinancialComm
                 hidden as well. So we have to use the `tickLine`, `axisLine` and
                 `width` props to hide the y-axis.
             */}
-            <YAxis
-                type="category"
-                dataKey="name"
-                width={1}
-                axisLine={false}
-                tickLine={false}
-            />
 
-            {bars.map((bar: any) => (
-                <Bar
-                    key={bar.name}
-                    stackId="a"
-                    dataKey={bar.name}
-                    fill={bar.colour}
-                />
-            ))}
+            <YAxis width={1} axisLine={false} tickLine={false} />
+
+            <Bar
+                type="category"
+                dataKey="amount"
+                fill="blue"
+                isAnimationActive={false}
+            >
+                {chartData.map((datum: any, index: number) => (
+                    <Cell key={`cell-${index}`} fill={datum.colour} />
+                ))}
+            </Bar>
         </BarChart>
     )
 }
