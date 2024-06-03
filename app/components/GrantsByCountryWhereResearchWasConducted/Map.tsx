@@ -24,11 +24,7 @@ import Switch from '../Switch'
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
 export default function Map() {
-    const { tooltipRef } = useContext(TooltipContext)
-
     const { grants: dataset } = useContext(GlobalFilterContext)
-
-    const router = useRouter()
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
@@ -109,50 +105,6 @@ export default function Map() {
         grantField,
     ])
 
-    const onGeoClick = (geo: any) => {
-        const queryFilters = {
-            [grantField]: [geo.properties.id],
-        }
-
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
-    }
-
-    const onGeoMouseEnterOrMove = (
-        event: MouseEvent<SVGPathElement>,
-        geo: any
-    ) => {
-        tooltipRef?.current?.open({
-            position: {
-                x: event.clientX,
-                y: event.clientY,
-            },
-            content: (
-                <MapTooltipContent
-                    geo={geo}
-                    displayWhoRegions={displayWhoRegions}
-                />
-            ),
-        })
-    }
-
-    const onGeoMouseLeave = () => {
-        tooltipRef?.current?.close()
-    }
-
-    const getColourOfGeo = (geo: any) => {
-        const properties = geo.properties
-
-        if (displayUsingKnownFinancialCommitments) {
-            return properties.totalAmountCommitted
-                ? colourScale(properties.totalAmountCommitted)
-                : '#D6D6DA'
-        } else {
-            return properties.totalGrants
-                ? colourScale(properties.totalGrants)
-                : '#D6D6DA'
-        }
-    }
-
     const [height, setHeight] = useState(450)
     const [scale, setScale] = useState(200)
 
@@ -198,28 +150,15 @@ export default function Map() {
                     height={height}
                 >
                     <ZoomableGroup center={[0, 40]}>
-                        <Geographies geography={geojson}>
-                            {({ geographies }) =>
-                                geographies.map(geo => (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        fill={getColourOfGeo(geo)}
-                                        stroke="#FFFFFF"
-                                        strokeWidth={1.0}
-                                        className="cursor-pointer"
-                                        onClick={() => onGeoClick(geo)}
-                                        onMouseEnter={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseMove={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseLeave={onGeoMouseLeave}
-                                    />
-                                ))
+                        <GeographiesWithScalingOutlines
+                            displayUsingKnownFinancialCommitments={
+                                displayUsingKnownFinancialCommitments
                             }
-                        </Geographies>
+                            displayWhoRegions={displayWhoRegions}
+                            grantField={grantField}
+                            geojson={geojson}
+                            colourScale={colourScale}
+                        />
                     </ZoomableGroup>
                 </ComposableMap>
             </div>
@@ -281,6 +220,93 @@ export default function Map() {
                 </div>
             </div>
         </div>
+    )
+}
+
+interface GeographiesWithScalingOutlinesProps {
+    displayUsingKnownFinancialCommitments: boolean
+    displayWhoRegions: boolean
+    grantField: string
+    geojson: any
+    colourScale: any
+}
+
+function GeographiesWithScalingOutlines({
+    displayUsingKnownFinancialCommitments,
+    displayWhoRegions,
+    grantField,
+    geojson,
+    colourScale,
+}: GeographiesWithScalingOutlinesProps) {
+    const { tooltipRef } = useContext(TooltipContext)
+
+    const router = useRouter()
+
+    const getColourOfGeo = (geo: any) => {
+        const properties = geo.properties
+
+        if (displayUsingKnownFinancialCommitments) {
+            return properties.totalAmountCommitted
+                ? colourScale(properties.totalAmountCommitted)
+                : '#D6D6DA'
+        } else {
+            return properties.totalGrants
+                ? colourScale(properties.totalGrants)
+                : '#D6D6DA'
+        }
+    }
+
+    const onGeoMouseEnterOrMove = (
+        event: MouseEvent<SVGPathElement>,
+        geo: any
+    ) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: (
+                <MapTooltipContent
+                    geo={geo}
+                    displayWhoRegions={displayWhoRegions}
+                />
+            ),
+        })
+    }
+
+    const onGeoMouseLeave = () => {
+        tooltipRef?.current?.close()
+    }
+
+    const onGeoClick = (geo: any) => {
+        const queryFilters = {
+            [grantField]: [geo.properties.id],
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+    }
+
+    return (
+        <Geographies geography={geojson}>
+            {({ geographies }) =>
+                geographies.map(geo => (
+                    <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill={getColourOfGeo(geo)}
+                        stroke="#FFFFFF"
+                        strokeWidth={1.0}
+                        className="cursor-pointer"
+                        onClick={() => onGeoClick(geo)}
+                        onMouseEnter={event =>
+                            onGeoMouseEnterOrMove(event, geo)
+                        }
+                        onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
+                        onMouseLeave={onGeoMouseLeave}
+                    />
+                ))
+            }
+        </Geographies>
     )
 }
 
