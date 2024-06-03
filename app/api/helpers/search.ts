@@ -226,7 +226,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
 
     const grantIDs = []
 
-    const size = 10000
+    const size = 1000
 
     let hits = []
 
