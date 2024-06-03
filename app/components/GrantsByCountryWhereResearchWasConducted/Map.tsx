@@ -139,18 +139,20 @@ export default function Map() {
         )
     }
 
+    const center = [20, 10]
+
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
                 <ComposableMap
                     projection="geoNaturalEarth1"
                     projectionConfig={{
-                        scale: scale,
-                        center: [0, 40],
+                        scale,
+                        center,
                     }}
                     height={height}
                 >
-                    <ZoomableGroup center={[0, 40]}>
+                    <ZoomableGroup center={center}>
                         <GeographiesWithScalingOutlines
                             displayUsingKnownFinancialCommitments={
                                 displayUsingKnownFinancialCommitments
