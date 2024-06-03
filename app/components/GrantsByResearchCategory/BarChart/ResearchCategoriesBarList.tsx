@@ -27,7 +27,7 @@ export default function ResearchCategoriesBarList({
                 {chartData.map((datum: any, index: number) => (
                     <Fragment key={datum['Category Value']}>
                         <BarListRowHeading>
-                            <p className="text-gray-600 text-sm">
+                            <p className="bar-chart-category-label text-gray-600 text-sm">
                                 {datum['Category Label']}
                             </p>
 
