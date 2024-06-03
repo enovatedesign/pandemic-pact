@@ -6,6 +6,7 @@ import {
     Geographies,
     Geography,
     ZoomableGroup,
+    useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
@@ -238,6 +239,8 @@ function GeographiesWithScalingOutlines({
     geojson,
     colourScale,
 }: GeographiesWithScalingOutlinesProps) {
+    const zoomContext = useZoomPanContext()
+
     const { tooltipRef } = useContext(TooltipContext)
 
     const router = useRouter()
@@ -295,7 +298,7 @@ function GeographiesWithScalingOutlines({
                         geography={geo}
                         fill={getColourOfGeo(geo)}
                         stroke="#FFFFFF"
-                        strokeWidth={1.0}
+                        strokeWidth={1.5 / zoomContext.k}
                         className="cursor-pointer"
                         onClick={() => onGeoClick(geo)}
                         onMouseEnter={event =>
