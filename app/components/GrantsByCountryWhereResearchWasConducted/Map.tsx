@@ -9,6 +9,7 @@ import {
     useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import BooleanRadioGroup from '../BooleanRadioGroup'
 import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
@@ -216,6 +217,14 @@ export default function Map() {
                             onChange={handleShownDataset}
                             label="Known financial commitments (USD)"
                             theme="light"
+                        />
+
+                        <BooleanRadioGroup
+                            srLabel="Number Of Grants or Known Financial Commitments"
+                            value={displayUsingKnownFinancialCommitments}
+                            onChange={setDisplayUsingKnownFinancialCommitments}
+                            falseLabel="Number of grants"
+                            trueLabel="Known financial commitments (USD)"
                         />
                     </div>
                 </div>
