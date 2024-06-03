@@ -139,7 +139,7 @@ export default function Map() {
         )
     }
 
-    const center = [20, 10]
+    const center: [number, number] = [20, 10]
 
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
