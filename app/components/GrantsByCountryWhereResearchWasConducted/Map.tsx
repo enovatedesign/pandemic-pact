@@ -300,7 +300,7 @@ function GeographiesWithScalingOutlines({
                         geography={geo}
                         fill={getColourOfGeo(geo)}
                         stroke="#FFFFFF"
-                        strokeWidth={1.5 / zoomContext.k}
+                        strokeWidth={1.0 / zoomContext.k}
                         className="cursor-pointer"
                         onClick={() => onGeoClick(geo)}
                         onMouseEnter={event =>
