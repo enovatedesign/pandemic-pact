@@ -33,9 +33,13 @@ export default function Map() {
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
+    const [usingFunderLocation, setUsingFunderLocation] =
+        useState<boolean>(false)
 
-    const [displayUsingKnownFinancialCommitments, setDisplayUsingKnownFinancialCommitments] = useState<boolean>(false)
+    const [
+        displayUsingKnownFinancialCommitments,
+        setDisplayUsingKnownFinancialCommitments,
+    ] = useState<boolean>(false)
 
     let grantField:
         | 'FunderRegion'
@@ -86,21 +90,25 @@ export default function Map() {
             }
         })
 
-        const key = displayUsingKnownFinancialCommitments ? 'totalAmountCommitted' : 'totalGrants'
+        const key = displayUsingKnownFinancialCommitments
+            ? 'totalAmountCommitted'
+            : 'totalGrants'
 
         const allTotalGrants = geojson.features
             .filter((country: any) => country.properties[key])
             .map((country: any) => country.properties[key])
-            
 
         const colourScale = scaleLinear<string>()
             .domain([0, Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
-
         return [geojson, colourScale]
-    }, [dataset, displayUsingKnownFinancialCommitments, displayWhoRegions, grantField])
-
+    }, [
+        dataset,
+        displayUsingKnownFinancialCommitments,
+        displayWhoRegions,
+        grantField,
+    ])
 
     const onGeoClick = (geo: any) => {
         const queryFilters = {
@@ -136,9 +144,13 @@ export default function Map() {
         const properties = geo.properties
 
         if (displayUsingKnownFinancialCommitments) {
-            return properties.totalAmountCommitted ? colourScale(properties.totalAmountCommitted) : '#D6D6DA'
+            return properties.totalAmountCommitted
+                ? colourScale(properties.totalAmountCommitted)
+                : '#D6D6DA'
         } else {
-            return properties.totalGrants ? colourScale(properties.totalGrants) : '#D6D6DA'
+            return properties.totalGrants
+                ? colourScale(properties.totalGrants)
+                : '#D6D6DA'
         }
     }
 
@@ -170,7 +182,9 @@ export default function Map() {
     const { sidebarOpen } = useContext(SidebarStateContext)
 
     const handleShownDataset = () => {
-        setDisplayUsingKnownFinancialCommitments(!displayUsingKnownFinancialCommitments)
+        setDisplayUsingKnownFinancialCommitments(
+            !displayUsingKnownFinancialCommitments
+        )
     }
 
     return (
@@ -210,15 +224,26 @@ export default function Map() {
                     </ZoomableGroup>
                 </ComposableMap>
             </div>
-            
-            <div className={`flex flex-col w-full rounded-md overflow-hidden ${sidebarOpen ? 'flex-col' : 'xl:flex-row'}`}>
-                
-                <div className={`w-full ${!sidebarOpen && 'xl:w-4/6' } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}>
-                    <ColourScale colourScale={colourScale} displayUsingKnownFinancialCommitments={displayUsingKnownFinancialCommitments}/>
+
+            <div
+                className={`flex flex-col w-full rounded-md overflow-hidden ${
+                    sidebarOpen ? 'flex-col' : 'xl:flex-row'
+                }`}
+            >
+                <div
+                    className={`w-full ${
+                        !sidebarOpen && 'xl:w-4/6'
+                    } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
+                >
+                    <ColourScale
+                        colourScale={colourScale}
+                        displayUsingKnownFinancialCommitments={
+                            displayUsingKnownFinancialCommitments
+                        }
+                    />
                 </div>
 
                 <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0">
-                    
                     <div className="space-y-2">
                         <DoubleLabelSwitch
                             checked={displayWhoRegions}
@@ -236,7 +261,7 @@ export default function Map() {
                             screenReaderLabel="Using Funder Location"
                         />
                     </div>
-                    
+
                     <div className="space-y-2">
                         <Switch
                             checked={!displayUsingKnownFinancialCommitments}
