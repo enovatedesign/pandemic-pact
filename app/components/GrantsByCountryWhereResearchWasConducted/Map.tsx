@@ -20,7 +20,6 @@ import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
 import Switch from '../Switch'
-import funderRegion from '../../../public/data/select-options/FunderRegion.json'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
