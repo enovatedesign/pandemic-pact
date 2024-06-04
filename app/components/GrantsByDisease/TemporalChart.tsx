@@ -10,7 +10,6 @@ import {
 } from 'recharts'
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { groupBy } from 'lodash'
-import { rechartCategoriesTooltipContentFunction } from '../RechartCategoriesTooltipContent'
 import ImageExportLegend from '../ImageExportLegend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -21,12 +20,12 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
-    numOfGrantsBoolean: boolean
+    displayKnownFinancialCommitments: boolean
 }
 
 export default function TemporalChart({
     hideCovid,
-    numOfGrantsBoolean,
+    displayKnownFinancialCommitments,
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
@@ -48,13 +47,11 @@ export default function TemporalChart({
         selectOptions.Disease.forEach(({ value, label }) => {
             const filteredGrants = grants.filter(grant =>
                 grant.Disease.includes(value)
-            ).length
+            )
 
-            dataPoint[label] = numOfGrantsBoolean
-                ? filteredGrants
-                : grants
-                      .filter(grant => grant.Disease.includes(value))
-                      .reduce(...sumNumericGrantAmounts)
+            dataPoint[label] = displayKnownFinancialCommitments
+                ? filteredGrants.reduce(...sumNumericGrantAmounts)
+                : filteredGrants.length
         })
 
         return dataPoint
@@ -67,7 +64,9 @@ export default function TemporalChart({
     }
 
     const tickFormatter = (value: any, index: number) =>
-        numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
+        displayKnownFinancialCommitments
+            ? axisDollarFormatter(value)
+            : value.toString()
 
     return (
         <>
@@ -98,7 +97,7 @@ export default function TemporalChart({
                         type="number"
                         tickFormatter={tickFormatter}
                         label={{
-                            value: !numOfGrantsBoolean
+                            value: displayKnownFinancialCommitments
                                 ? 'Known Financial Commitments (USD)'
                                 : 'Number of grants',
                             position: 'left',
@@ -114,7 +113,9 @@ export default function TemporalChart({
                             <RechartTrendsTooltipContent
                                 props={props}
                                 chartData={chartData}
-                                numOfGrantsBoolean={numOfGrantsBoolean}
+                                displayKnownFinancialCommitments={
+                                    displayKnownFinancialCommitments
+                                }
                             />
                         )}
                         {...rechartBaseTooltipProps}

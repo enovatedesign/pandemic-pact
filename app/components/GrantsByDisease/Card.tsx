@@ -8,7 +8,10 @@ import TemporalChart from './TemporalChart'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
-    const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(true)
+    const [
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
+    ] = useState(false)
 
     const tabs = [
         {
@@ -19,7 +22,9 @@ export default function GrantsByDisease() {
             content: (
                 <TemporalChart
                     hideCovid={hideCovid}
-                    numOfGrantsBoolean={numOfGrantsBoolean}
+                    displayKnownFinancialCommitments={
+                        displayKnownFinancialCommitments
+                    }
                 />
             ),
         },
@@ -31,7 +36,9 @@ export default function GrantsByDisease() {
             content: (
                 <BarChart
                     hideCovid={hideCovid}
-                    numOfGrantsBoolean={numOfGrantsBoolean}
+                    displayKnownFinancialCommitments={
+                        displayKnownFinancialCommitments
+                    }
                 />
             ),
         },
@@ -81,14 +88,14 @@ export default function GrantsByDisease() {
 
                 <RadioGroup<boolean>
                     options={[
-                        { label: 'Number of grants', value: true },
+                        { label: 'Number of grants', value: false },
                         {
                             label: 'Known financial commitments (USD)',
-                            value: false,
+                            value: true,
                         },
                     ]}
-                    value={numOfGrantsBoolean}
-                    onChange={setNumOfGrantsBoolean}
+                    value={displayKnownFinancialCommitments}
+                    onChange={setDisplayKnownFinancialCommitments}
                 />
             </div>
         </VisualisationCard>
