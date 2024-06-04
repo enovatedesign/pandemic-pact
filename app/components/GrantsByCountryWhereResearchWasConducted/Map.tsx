@@ -29,29 +29,14 @@ export default function Map() {
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [usingFunderLocation, setUsingFunderLocation] =
-        useState<boolean>(false)
+    const [column, setColumn] = useState<string>('Funder')
 
     const [
         displayUsingKnownFinancialCommitments,
         setDisplayUsingKnownFinancialCommitments,
     ] = useState<boolean>(false)
 
-    let grantField:
-        | 'FunderRegion'
-        | 'ResearchInstitutionRegion'
-        | 'FunderCountry'
-        | 'ResearchInstitutionCountry'
-
-    if (displayWhoRegions) {
-        grantField = usingFunderLocation
-            ? 'FunderRegion'
-            : 'ResearchInstitutionRegion'
-    } else {
-        grantField = usingFunderLocation
-            ? 'FunderCountry'
-            : 'ResearchInstitutionCountry'
-    }
+    const grantField = column + (displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
         const geojson = displayWhoRegions
@@ -61,9 +46,9 @@ export default function Map() {
         geojson.features = geojson.features.map((feature: any) => {
             const id = feature.properties.id
 
-            const name = selectOptions[grantField].find(
-                option => option.value === id
-            )?.label
+            const name = selectOptions[
+                grantField as keyof typeof selectOptions
+            ].find(option => option.value === id)?.label
 
             const grants = dataset.filter(grant =>
                 grant[grantField].includes(id)
@@ -187,13 +172,27 @@ export default function Map() {
                             rightLabel="WHO Regions"
                             screenReaderLabel="Display WHO Regions"
                         />
+                    </div>
 
-                        <DoubleLabelSwitch
-                            checked={usingFunderLocation}
-                            onChange={setUsingFunderLocation}
-                            leftLabel="Research Institution"
-                            rightLabel="Funder"
-                            screenReaderLabel="Using Funder Location"
+                    <div className="space-y-2">
+                        <RadioGroup<string>
+                            options={[
+                                {
+                                    label: 'Funder',
+                                    value: 'Funder',
+                                },
+                                {
+                                    label: 'Research Institution',
+                                    value: 'ResearchInstitution',
+                                },
+                                {
+                                    label: 'Research Location',
+                                    value: 'ResearchLocation',
+                                },
+                            ]}
+                            value={column}
+                            onChange={setColumn}
+                            fieldsetClassName="flex flex-col"
                         />
                     </div>
 
