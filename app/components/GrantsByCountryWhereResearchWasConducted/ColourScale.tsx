@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis } from 'recharts'
+import { BarChart, Bar, Cell, XAxis, YAxis } from 'recharts'
 import { axisDollarFormatter } from '@/app/helpers/value-formatters'
 
 interface Props {
@@ -10,31 +10,40 @@ export default function ColourScale({
     colourScale,
     displayKnownFinancialCommitments,
 }: Props) {
-    const ticks = colourScale.ticks(5)
+    const ticks = colourScale.ticks()
 
-    const step = ticks[1] - ticks[0]
+    const tickFormat = colourScale.tickFormat(6, 'd')
 
-    const bars: any = ticks.map((tick: any) => ({
-        name: `tick-${tick}`,
-        value: step,
-        colour: colourScale(tick),
-    }))
+    let chartData = ticks
+        .map(tickFormat)
+        .filter((value: string) => value !== '')
+        .map((value: string) => ({
+            name: displayKnownFinancialCommitments
+                ? axisDollarFormatter(parseInt(value))
+                : value,
+            amount: 1,
+            colour: colourScale(value),
+        }))
 
-    const chartData: any = [
-        Object.fromEntries(bars.map((bar: any) => [bar.name, bar.value])),
-    ]
-
-    const tickFormatter = (value: any) =>
-        displayKnownFinancialCommitments
-            ? axisDollarFormatter(value)
-            : value.toString()
+    // You sometimes get duplicates using the `d` formater because the scale may
+    // have multiple decimal values that each round to the same integer.
+    // So we remove the duplicates here. This method of de-duplication
+    // relies on the array being sorted already, which `ticks()` should do.
+    chartData = chartData.filter((value: any, index: number, array: any[]) => {
+        return index === 0 || value.name !== array[index - 1].name
+    })
 
     return (
-        <BarChart width={300} height={60} layout="vertical" data={chartData}>
+        <BarChart
+            width={400}
+            height={60}
+            data={chartData}
+            barGap={0}
+            barCategoryGap={0}
+        >
             <XAxis
-                tickFormatter={tickFormatter}
-                type="number"
-                ticks={ticks}
+                type="category"
+                dataKey="name"
                 tickLine={false}
                 axisLine={false}
             />
@@ -45,22 +54,18 @@ export default function ColourScale({
                 hidden as well. So we have to use the `tickLine`, `axisLine` and
                 `width` props to hide the y-axis.
             */}
-            <YAxis
-                type="category"
-                dataKey="name"
-                width={1}
-                axisLine={false}
-                tickLine={false}
-            />
+            <YAxis width={1} axisLine={false} tickLine={false} />
 
-            {bars.map((bar: any) => (
-                <Bar
-                    key={bar.name}
-                    stackId="a"
-                    dataKey={bar.name}
-                    fill={bar.colour}
-                />
-            ))}
+            <Bar
+                type="category"
+                dataKey="amount"
+                fill="blue"
+                isAnimationActive={false}
+            >
+                {chartData.map((datum: any, index: number) => (
+                    <Cell key={`cell-${index}`} fill={datum.colour} />
+                ))}
+            </Bar>
         </BarChart>
     )
 }

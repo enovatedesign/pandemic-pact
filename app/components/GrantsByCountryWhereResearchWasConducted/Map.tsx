@@ -11,7 +11,7 @@ import {
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
-import { scaleLinear } from 'd3-scale'
+import { scaleLog } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
 import countryGeojson from '../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../public/data/geojson/who-regions.json'
@@ -81,8 +81,8 @@ export default function Map() {
             .filter((country: any) => country.properties[key])
             .map((country: any) => country.properties[key])
 
-        const colourScale = scaleLinear<string>()
-            .domain([0, Math.max(...allTotalGrants)])
+        const colourScale = scaleLog<string>()
+            .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [geojson, colourScale]
