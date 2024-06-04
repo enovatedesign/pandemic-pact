@@ -5,7 +5,7 @@ interface Props<T> {
     fieldsetClassName?: string
 }
 
-export default function InlineRadioGroup<T>({
+export default function RadioGroup<T>({
     options,
     value,
     onChange,
