@@ -1,5 +1,6 @@
 import { BarChart, Bar, Cell, XAxis, YAxis } from 'recharts'
 import { axisDollarFormatter } from '@/app/helpers/value-formatters'
+import { uniq } from 'lodash'
 
 interface Props {
     colourScale: any
@@ -14,14 +15,22 @@ export default function ColourScale({
 
     const tickFormat = colourScale.tickFormat(6, 'd')
 
-    const chartData = ticks
+    let chartData = ticks
         .map(tickFormat)
         .filter((value: string) => value !== '')
         .map((value: string) => ({
             name: value,
-            amount: 100,
+            amount: 1,
             colour: colourScale(value),
         }))
+
+    // You sometimes get duplicates using the `d` formater because the scale may
+    // have multiple decimal values that each round to the same integer.
+    // So we remove the duplicates here. This method of de-duplication
+    // relies on the array being sorted already, which `ticks()` should do.
+    chartData = chartData.filter((value: any, index: number, array: any[]) => {
+        return index === 0 || value.name !== array[index - 1].name
+    })
 
     return (
         <BarChart
