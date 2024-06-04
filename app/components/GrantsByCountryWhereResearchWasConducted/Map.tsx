@@ -9,6 +9,7 @@ import {
     useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
@@ -20,7 +21,6 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
-import Switch from '../Switch'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -133,12 +133,6 @@ export default function Map() {
 
     const { sidebarOpen } = useContext(SidebarStateContext)
 
-    const handleShownDataset = () => {
-        setDisplayUsingKnownFinancialCommitments(
-            !displayUsingKnownFinancialCommitments
-        )
-    }
-
     const center: [number, number] = [20, 10]
 
     return (
@@ -204,18 +198,17 @@ export default function Map() {
                     </div>
 
                     <div className="space-y-2">
-                        <Switch
-                            checked={!displayUsingKnownFinancialCommitments}
-                            onChange={handleShownDataset}
-                            label="Number of grants"
-                            theme="light"
-                        />
-
-                        <Switch
-                            checked={displayUsingKnownFinancialCommitments}
-                            onChange={handleShownDataset}
-                            label="Known financial commitments (USD)"
-                            theme="light"
+                        <RadioGroup<boolean>
+                            options={[
+                                { label: 'Number of grants', value: true },
+                                {
+                                    label: 'Known financial commitments (USD)',
+                                    value: false,
+                                },
+                            ]}
+                            value={displayUsingKnownFinancialCommitments}
+                            onChange={setDisplayUsingKnownFinancialCommitments}
+                            fieldsetClassName="flex flex-col"
                         />
                     </div>
                 </div>

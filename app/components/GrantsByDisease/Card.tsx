@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ChartBarIcon, ClockIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
 import Switch from '../Switch'
+import RadioGroup from '../RadioGroup'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
-import DoubleLabelSwitch from '../DoubleLabelSwitch'
 
 export default function GrantsByDisease() {
     const [hideCovid, setHideCovid] = useState(false)
-    const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(false)
+    const [numOfGrantsBoolean, setNumOfGrantsBoolean] = useState(true)
 
     const tabs = [
         {
@@ -16,14 +16,24 @@ export default function GrantsByDisease() {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} numOfGrantsBoolean={numOfGrantsBoolean}/>,
+            content: (
+                <TemporalChart
+                    hideCovid={hideCovid}
+                    numOfGrantsBoolean={numOfGrantsBoolean}
+                />
+            ),
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart hideCovid={hideCovid} numOfGrantsBoolean={numOfGrantsBoolean}/>,
+            content: (
+                <BarChart
+                    hideCovid={hideCovid}
+                    numOfGrantsBoolean={numOfGrantsBoolean}
+                />
+            ),
         },
     ]
 
@@ -45,14 +55,11 @@ export default function GrantsByDisease() {
             </p>
 
             <p className="text-brand-grey-500">
-                The pop up box notes the year on year percentage increase or decrease for each priority disease.
+                The pop up box notes the year on year percentage increase or
+                decrease for each priority disease.
             </p>
         </>
     )
-
-    const handleShownDataset = () => {
-        setNumOfGrantsBoolean(!numOfGrantsBoolean)
-    }
 
     return (
         <VisualisationCard
@@ -71,21 +78,17 @@ export default function GrantsByDisease() {
                     theme="light"
                     className="ignore-in-image-export"
                 />
-                
-                <Switch
-                    checked={numOfGrantsBoolean}
-                    onChange={handleShownDataset}
-                    label="Number of grants"
-                    theme="light"
-                    className="ignore-in-image-export"
-                />
 
-                <Switch
-                    checked={!numOfGrantsBoolean}
-                    onChange={handleShownDataset}
-                    label="Known financial commitments (USD)"
-                    theme="light"
-                    className="ignore-in-image-export"
+                <RadioGroup<boolean>
+                    options={[
+                        { label: 'Number of grants', value: true },
+                        {
+                            label: 'Known financial commitments (USD)',
+                            value: false,
+                        },
+                    ]}
+                    value={numOfGrantsBoolean}
+                    onChange={setNumOfGrantsBoolean}
                 />
             </div>
         </VisualisationCard>
