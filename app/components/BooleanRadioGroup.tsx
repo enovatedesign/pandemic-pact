@@ -1,7 +1,5 @@
-import { RadioGroup } from '@headlessui/react'
-
 interface Props {
-    srLabel: string
+    legend: string
     falseLabel: string
     trueLabel: string
     value: boolean
@@ -9,91 +7,42 @@ interface Props {
 }
 
 export default function BooleanRadioGroup({
-    srLabel,
+    legend,
     falseLabel,
     trueLabel,
     value,
     onChange,
 }: Props) {
     const options = [
-        { name: falseLabel, value: false },
-        { name: trueLabel, value: true },
+        { id: `${falseLabel}-${value}`, name: falseLabel, value: false },
+        { id: `${trueLabel}-${value}`, name: trueLabel, value: true },
     ]
 
     return (
-        <div className="w-full px-4 py-16">
-            <div className="mx-auto w-full max-w-md">
-                <RadioGroup value={value} onChange={onChange}>
-                    <RadioGroup.Label className="sr-only">
-                        {srLabel}
-                    </RadioGroup.Label>
-                    <div className="space-y-2">
-                        {options.map(option => (
-                            <RadioGroup.Option
-                                key={option.name}
-                                value={option.value}
-                            >
-                                {({ checked }) => (
-                                    <>
-                                        <div className="flex w-full items-center gap-x-4">
-                                            <div className="flex items-center">
-                                                <div className="text-sm">
-                                                    <RadioGroup.Label
-                                                        as="p"
-                                                        className={`font-medium text-gray-900`}
-                                                    >
-                                                        {option.name}
-                                                    </RadioGroup.Label>
-                                                </div>
-                                            </div>
-                                            <div className="shrink-0">
-                                                {checked ? (
-                                                    <CheckIcon className="h-6 w-6" />
-                                                ) : (
-                                                    <UncheckIcon className="h-6 w-6" />
-                                                )}
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                            </RadioGroup.Option>
-                        ))}
+        <fieldset>
+            <legend className="text-sm font-semibold leading-6 text-gray-900">
+                {legend}
+            </legend>
+            <div className="mt-1 space-y-1">
+                {options.map(option => (
+                    <div key={option.id} className="flex items-center">
+                        <input
+                            id={option.id}
+                            name="notification-method"
+                            type="radio"
+                            defaultChecked={option.value === value}
+                            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                            onChange={() => onChange(option.value)}
+                        />
+                        <label
+                            htmlFor={option.id}
+                            className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+                        >
+                            {option.name}
+                        </label>
                     </div>
-                </RadioGroup>
+                ))}
             </div>
-        </div>
-    )
-}
-
-function CheckIcon(props: any) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" {...props}>
-            <circle cx={12} cy={12} r={12} stroke="#62d5d1" fill="white" />
-
-            <circle cx={12} cy={12} r={10} fill="#62d5d1" />
-
-            <path
-                d="M7 13l3 3 7-7"
-                stroke="#fff"
-                strokeWidth={1.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        </svg>
-    )
-}
-
-function UncheckIcon(props: any) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" {...props}>
-            <circle
-                cx={12}
-                cy={12}
-                r={12}
-                stroke="grey"
-                strokeWidth={2}
-                fill="white"
-            />
-        </svg>
+        </fieldset>
     )
 }
