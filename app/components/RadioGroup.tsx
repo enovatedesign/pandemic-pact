@@ -22,7 +22,7 @@ export default function RadioGroup<T>({
                 <div key={option.id} className="flex items-center gap-x-2">
                     <input
                         id={option.id}
-                        name="notification-method"
+                        name={option.id}
                         type="radio"
                         checked={option.value === value}
                         className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
