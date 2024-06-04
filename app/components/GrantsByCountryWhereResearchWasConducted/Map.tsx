@@ -82,7 +82,7 @@ export default function Map() {
             .map((country: any) => country.properties[key])
 
         const colourScale = scaleLog<string>()
-            .domain([1, Math.max(...allTotalGrants)])
+            .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [geojson, colourScale]
