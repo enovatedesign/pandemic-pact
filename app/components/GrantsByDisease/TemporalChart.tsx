@@ -126,7 +126,6 @@ export default function TemporalChart({
                             dataKey={label}
                             stroke={diseaseColours[value]}
                             strokeWidth={2}
-                            dot={false}
                         />
                     ))}
                 </LineChart>
