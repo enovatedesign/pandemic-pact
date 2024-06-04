@@ -77,13 +77,12 @@ export default function GrantsByDisease() {
             infoModalContents={infoModalContents}
             tabs={tabs}
         >
-            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between :items-center">
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
                 <Switch
                     checked={hideCovid}
                     onChange={setHideCovid}
                     label="Hide COVID-19"
                     theme="light"
-                    className="ignore-in-image-export"
                 />
 
                 <RadioGroup<boolean>
