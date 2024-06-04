@@ -1,3 +1,5 @@
+import { useId } from 'react'
+
 interface Props<T> {
     options: { label: string; value: T }[]
     value: T
@@ -11,9 +13,11 @@ export default function RadioGroup<T>({
     onChange,
     fieldsetClassName,
 }: Props<T>) {
+    const id = useId()
+
     const optionsWithIds = options.map(option => ({
         ...option,
-        id: `radio-${option.label}-${option.value}`,
+        id: `radio-${id}-${option.label}-${option.value}`,
     }))
 
     return (
