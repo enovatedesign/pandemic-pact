@@ -24,19 +24,21 @@ import { debounce } from 'lodash'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
+type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
+
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [column, setColumn] = useState<string>('Funder')
+    const [locationType, setColumn] = useState<LocationType>('Funder')
 
     const [
         displayUsingKnownFinancialCommitments,
         setDisplayUsingKnownFinancialCommitments,
     ] = useState<boolean>(false)
 
-    const grantField = column + (displayWhoRegions ? 'Region' : 'Country')
+    const grantField = locationType + (displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
         const geojson = displayWhoRegions
@@ -175,7 +177,7 @@ export default function Map() {
                     </div>
 
                     <div className="space-y-2">
-                        <RadioGroup<string>
+                        <RadioGroup<LocationType>
                             options={[
                                 {
                                     label: 'Funder',
@@ -190,7 +192,7 @@ export default function Map() {
                                     value: 'ResearchLocation',
                                 },
                             ]}
-                            value={column}
+                            value={locationType}
                             onChange={setColumn}
                             fieldsetClassName="flex flex-col"
                         />
