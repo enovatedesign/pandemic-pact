@@ -9,7 +9,7 @@ import {
     useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
-import BooleanRadioGroup from '../BooleanRadioGroup'
+import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
 import { scaleLinear } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
@@ -21,7 +21,6 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
-import Switch from '../Switch'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -134,12 +133,6 @@ export default function Map() {
 
     const { sidebarOpen } = useContext(SidebarStateContext)
 
-    const handleShownDataset = () => {
-        setDisplayUsingKnownFinancialCommitments(
-            !displayUsingKnownFinancialCommitments
-        )
-    }
-
     const center: [number, number] = [20, 10]
 
     return (
@@ -185,7 +178,7 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0 ignore-in-image-export">
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0 ignore-in-image-export">
                     <div className="space-y-2">
                         <DoubleLabelSwitch
                             checked={displayWhoRegions}
@@ -205,12 +198,17 @@ export default function Map() {
                     </div>
 
                     <div className="space-y-2">
-                        <BooleanRadioGroup
-                            legend="Display grants by:"
+                        <RadioGroup<boolean>
+                            options={[
+                                { label: 'Number of grants', value: true },
+                                {
+                                    label: 'Known financial commitments (USD)',
+                                    value: false,
+                                },
+                            ]}
                             value={displayUsingKnownFinancialCommitments}
                             onChange={setDisplayUsingKnownFinancialCommitments}
-                            falseLabel="Number of grants"
-                            trueLabel="Known financial commitments (USD)"
+                            fieldsetClassName="flex flex-col"
                         />
                     </div>
                 </div>
