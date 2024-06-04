@@ -165,53 +165,47 @@ export default function Map() {
                     />
                 </div>
 
-                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0 ignore-in-image-export">
-                    <div className="space-y-2">
-                        <DoubleLabelSwitch
-                            checked={displayWhoRegions}
-                            onChange={setDisplayWhoRegions}
-                            leftLabel="Countries"
-                            rightLabel="WHO Regions"
-                            screenReaderLabel="Display WHO Regions"
-                        />
-                    </div>
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
+                    <DoubleLabelSwitch
+                        checked={displayWhoRegions}
+                        onChange={setDisplayWhoRegions}
+                        leftLabel="Countries"
+                        rightLabel="WHO Regions"
+                        screenReaderLabel="Display WHO Regions"
+                    />
 
-                    <div className="space-y-2">
-                        <RadioGroup<LocationType>
-                            options={[
-                                {
-                                    label: 'Funder',
-                                    value: 'Funder',
-                                },
-                                {
-                                    label: 'Research Institution',
-                                    value: 'ResearchInstitution',
-                                },
-                                {
-                                    label: 'Research Location',
-                                    value: 'ResearchLocation',
-                                },
-                            ]}
-                            value={locationType}
-                            onChange={setColumn}
-                            fieldsetClassName="flex flex-col"
-                        />
-                    </div>
+                    <RadioGroup<LocationType>
+                        options={[
+                            {
+                                label: 'Funder',
+                                value: 'Funder',
+                            },
+                            {
+                                label: 'Research Institution',
+                                value: 'ResearchInstitution',
+                            },
+                            {
+                                label: 'Research Location',
+                                value: 'ResearchLocation',
+                            },
+                        ]}
+                        value={locationType}
+                        onChange={setColumn}
+                        fieldsetClassName="flex flex-col"
+                    />
 
-                    <div className="space-y-2">
-                        <RadioGroup<boolean>
-                            options={[
-                                { label: 'Number of grants', value: true },
-                                {
-                                    label: 'Known financial commitments (USD)',
-                                    value: false,
-                                },
-                            ]}
-                            value={displayUsingKnownFinancialCommitments}
-                            onChange={setDisplayUsingKnownFinancialCommitments}
-                            fieldsetClassName="flex flex-col"
-                        />
-                    </div>
+                    <RadioGroup<boolean>
+                        options={[
+                            { label: 'Number of grants', value: true },
+                            {
+                                label: 'Known financial commitments (USD)',
+                                value: false,
+                            },
+                        ]}
+                        value={displayUsingKnownFinancialCommitments}
+                        onChange={setDisplayUsingKnownFinancialCommitments}
+                        fieldsetClassName="flex flex-col"
+                    />
                 </div>
             </div>
         </div>
