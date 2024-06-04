@@ -305,7 +305,6 @@ function LineChart({
                                     : researchCategoryColours[value]
                             }
                             strokeWidth={2}
-                            dot={false}
                         />
                     ))}
                 </RechartLineChart>
