@@ -24,9 +24,12 @@ interface Props {
     numOfGrantsBoolean: boolean
 }
 
-export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) {
+export default function TemporalChart({
+    hideCovid,
+    numOfGrantsBoolean,
+}: Props) {
     const { grants } = useContext(GlobalFilterContext)
-    
+
     const datasetGroupedByYear = groupBy(
         grants.filter(
             (grant: any) =>
@@ -37,22 +40,23 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
         'TrendStartYear'
     )
 
-    const chartData = Object.keys(
-        datasetGroupedByYear
-    ).map(year => {
+    const chartData = Object.keys(datasetGroupedByYear).map(year => {
         const grants = datasetGroupedByYear[year]
-        
+
         let dataPoint: { [key: string]: string | number } = { year }
-        
+
         selectOptions.Disease.forEach(({ value, label }) => {
+            const filteredGrants = grants.filter(grant =>
+                grant.Disease.includes(value)
+            ).length
 
-            const filteredGrants = grants.filter(grant => grant.Disease.includes(value)).length
-
-            dataPoint[label] = numOfGrantsBoolean ? filteredGrants : grants
-            .filter(grant => grant.Disease.includes(value))
-            .reduce(...sumNumericGrantAmounts)
+            dataPoint[label] = numOfGrantsBoolean
+                ? filteredGrants
+                : grants
+                      .filter(grant => grant.Disease.includes(value))
+                      .reduce(...sumNumericGrantAmounts)
         })
-        
+
         return dataPoint
     })
 
@@ -61,9 +65,10 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
             delete dataPoint['COVID-19']
         })
     }
- 
-    const tickFormatter = (value: any, index: number) => numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
-        
+
+    const tickFormatter = (value: any, index: number) =>
+        numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
+
     return (
         <>
             <ResponsiveContainer width="100%" height={500} className="z-10">
@@ -93,7 +98,9 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
                         type="number"
                         tickFormatter={tickFormatter}
                         label={{
-                            value: !numOfGrantsBoolean ? 'Known Financial Commitments (USD)' : 'Number of grants',
+                            value: !numOfGrantsBoolean
+                                ? 'Known Financial Commitments (USD)'
+                                : 'Number of grants',
                             position: 'left',
                             angle: -90,
                             style: { textAnchor: 'middle' },
