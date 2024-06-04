@@ -1,46 +1,23 @@
-import { useState } from 'react'
 import { ChartBarIcon, ClockIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
-import Switch from '../Switch'
-import RadioGroup from '../RadioGroup'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
 
 export default function GrantsByDisease() {
-    const [hideCovid, setHideCovid] = useState(false)
-    const [
-        displayKnownFinancialCommitments,
-        setDisplayKnownFinancialCommitments,
-    ] = useState(false)
-
     const tabs = [
         {
             tab: {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: (
-                <TemporalChart
-                    hideCovid={hideCovid}
-                    displayKnownFinancialCommitments={
-                        displayKnownFinancialCommitments
-                    }
-                />
-            ),
+            content: <TemporalChart />,
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: (
-                <BarChart
-                    hideCovid={hideCovid}
-                    displayKnownFinancialCommitments={
-                        displayKnownFinancialCommitments
-                    }
-                />
-            ),
+            content: <BarChart />,
         },
     ]
 
@@ -76,27 +53,6 @@ export default function GrantsByDisease() {
             footnote="Please note: Grants may fall under more than one disease. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
             infoModalContents={infoModalContents}
             tabs={tabs}
-        >
-            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
-                <Switch
-                    checked={hideCovid}
-                    onChange={setHideCovid}
-                    label="Hide COVID-19"
-                    theme="light"
-                />
-
-                <RadioGroup<boolean>
-                    options={[
-                        { label: 'Number of grants', value: false },
-                        {
-                            label: 'Known financial commitments (USD)',
-                            value: true,
-                        },
-                    ]}
-                    value={displayKnownFinancialCommitments}
-                    onChange={setDisplayKnownFinancialCommitments}
-                />
-            </div>
-        </VisualisationCard>
+        />
     )
 }

@@ -4,6 +4,7 @@ interface Props<T> {
     options: { label: string; value: T }[]
     value: T
     onChange: (value: T) => void
+    legend?: string
     fieldsetClassName?: string
 }
 
@@ -11,6 +12,7 @@ export default function RadioGroup<T>({
     options,
     value,
     onChange,
+    legend,
     fieldsetClassName,
 }: Props<T>) {
     const id = useId()
@@ -22,6 +24,14 @@ export default function RadioGroup<T>({
 
     return (
         <fieldset className={fieldsetClassName ?? 'flex items-center gap-x-4'}>
+            {legend && (
+                <div>
+                    <legend className="text-sm font-semibold leading-6 text-gray-900">
+                        {legend}
+                    </legend>
+                </div>
+            )}
+
             {optionsWithIds.map(option => (
                 <div key={option.id} className="flex items-center gap-x-2">
                     <input

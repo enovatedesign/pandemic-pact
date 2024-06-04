@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import {
     LineChart,
     Line,
@@ -17,16 +17,17 @@ import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
 import { diseaseColours } from '../../helpers/colours'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
+import Switch from '../Switch'
+import RadioGroup from '../RadioGroup'
 
-interface Props {
-    hideCovid: boolean
-    displayKnownFinancialCommitments: boolean
-}
+export default function TemporalChart() {
+    const [hideCovid, setHideCovid] = useState(false)
 
-export default function TemporalChart({
-    hideCovid,
-    displayKnownFinancialCommitments,
-}: Props) {
+    const [
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
+    ] = useState(false)
+
     const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
@@ -63,13 +64,34 @@ export default function TemporalChart({
         })
     }
 
-    const tickFormatter = (value: any, index: number) =>
+    const tickFormatter = (value: any) =>
         displayKnownFinancialCommitments
             ? axisDollarFormatter(value)
             : value.toString()
 
     return (
         <>
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
+                <Switch
+                    checked={hideCovid}
+                    onChange={setHideCovid}
+                    label="Hide COVID-19"
+                    theme="light"
+                />
+
+                <RadioGroup<boolean>
+                    options={[
+                        { label: 'Number of grants', value: false },
+                        {
+                            label: 'Known financial commitments (USD)',
+                            value: true,
+                        },
+                    ]}
+                    value={displayKnownFinancialCommitments}
+                    onChange={setDisplayKnownFinancialCommitments}
+                />
+            </div>
+
             <ResponsiveContainer width="100%" height={500} className="z-10">
                 <LineChart
                     margin={{
