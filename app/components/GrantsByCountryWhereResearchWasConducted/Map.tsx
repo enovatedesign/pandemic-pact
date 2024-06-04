@@ -34,8 +34,8 @@ export default function Map() {
     const [locationType, setColumn] = useState<LocationType>('Funder')
 
     const [
-        displayUsingKnownFinancialCommitments,
-        setDisplayUsingKnownFinancialCommitments,
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
     ] = useState<boolean>(false)
 
     const grantField = locationType + (displayWhoRegions ? 'Region' : 'Country')
@@ -73,7 +73,7 @@ export default function Map() {
             }
         })
 
-        const key = displayUsingKnownFinancialCommitments
+        const key = displayKnownFinancialCommitments
             ? 'totalAmountCommitted'
             : 'totalGrants'
 
@@ -88,7 +88,7 @@ export default function Map() {
         return [geojson, colourScale]
     }, [
         dataset,
-        displayUsingKnownFinancialCommitments,
+        displayKnownFinancialCommitments,
         displayWhoRegions,
         grantField,
     ])
@@ -135,8 +135,8 @@ export default function Map() {
                 >
                     <ZoomableGroup center={center}>
                         <GeographiesWithScalingOutlines
-                            displayUsingKnownFinancialCommitments={
-                                displayUsingKnownFinancialCommitments
+                            displayKnownFinancialCommitments={
+                                displayKnownFinancialCommitments
                             }
                             displayWhoRegions={displayWhoRegions}
                             grantField={grantField}
@@ -159,8 +159,8 @@ export default function Map() {
                 >
                     <ColourScale
                         colourScale={colourScale}
-                        displayUsingKnownFinancialCommitments={
-                            displayUsingKnownFinancialCommitments
+                        displayKnownFinancialCommitments={
+                            displayKnownFinancialCommitments
                         }
                     />
                 </div>
@@ -196,14 +196,14 @@ export default function Map() {
 
                     <RadioGroup<boolean>
                         options={[
-                            { label: 'Number of grants', value: true },
+                            { label: 'Number of grants', value: false },
                             {
                                 label: 'Known financial commitments (USD)',
-                                value: false,
+                                value: true,
                             },
                         ]}
-                        value={displayUsingKnownFinancialCommitments}
-                        onChange={setDisplayUsingKnownFinancialCommitments}
+                        value={displayKnownFinancialCommitments}
+                        onChange={setDisplayKnownFinancialCommitments}
                         fieldsetClassName="flex flex-col"
                     />
                 </div>
@@ -213,7 +213,7 @@ export default function Map() {
 }
 
 interface GeographiesWithScalingOutlinesProps {
-    displayUsingKnownFinancialCommitments: boolean
+    displayKnownFinancialCommitments: boolean
     displayWhoRegions: boolean
     grantField: string
     geojson: any
@@ -221,7 +221,7 @@ interface GeographiesWithScalingOutlinesProps {
 }
 
 function GeographiesWithScalingOutlines({
-    displayUsingKnownFinancialCommitments,
+    displayKnownFinancialCommitments,
     displayWhoRegions,
     grantField,
     geojson,
@@ -236,7 +236,7 @@ function GeographiesWithScalingOutlines({
     const getColourOfGeo = (geo: any) => {
         const properties = geo.properties
 
-        if (displayUsingKnownFinancialCommitments) {
+        if (displayKnownFinancialCommitments) {
             return properties.totalAmountCommitted
                 ? colourScale(properties.totalAmountCommitted)
                 : '#D6D6DA'
