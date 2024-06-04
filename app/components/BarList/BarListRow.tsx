@@ -102,7 +102,7 @@ export default function BarListRow({ dataIndex }: Props) {
             </div>
 
             <div className="self-center pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
-                <p className="text-xs text-gray-600">{datum['Total Grants']}</p>
+                <p className="total-grants-number text-xs text-gray-600">{datum['Total Grants']}</p>
             </div>
 
             <div className="col-span-3 md:col-span-1">
@@ -148,7 +148,7 @@ export default function BarListRow({ dataIndex }: Props) {
             </div>
 
             <div className="self-center pl-2 col-span-1 md:col-span-1 justify-self-end">
-                <p className="text-xs text-gray-600">
+                <p className="dollar-amount-text text-xs text-gray-600">
                     {dollarValueFormatter(
                         datum['Known Financial Commitments (USD)']
                     )}

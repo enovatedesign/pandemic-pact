@@ -3,12 +3,12 @@ import { axisDollarFormatter } from '@/app/helpers/value-formatters'
 
 interface Props {
     colourScale: any
-    displayUsingKnownFinancialCommitments: boolean
+    displayKnownFinancialCommitments: boolean
 }
 
 export default function ColourScale({
     colourScale,
-    displayUsingKnownFinancialCommitments,
+    displayKnownFinancialCommitments,
 }: Props) {
     const ticks = colourScale.ticks()
 
@@ -18,7 +18,7 @@ export default function ColourScale({
         .map(tickFormat)
         .filter((value: string) => value !== '')
         .map((value: string) => ({
-            name: displayUsingKnownFinancialCommitments
+            name: displayKnownFinancialCommitments
                 ? axisDollarFormatter(parseInt(value))
                 : value,
             amount: 1,

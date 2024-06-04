@@ -157,7 +157,7 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
         let query = q
             .replace(/\bAND\b/g, '+')
             .replace(/\bOR\b/g, '|')
-            .replace(/\bNOT\b/g, '-')
+            .replace(/\bNOT\s+/g, '-')
 
         mustClause = {
             must: {

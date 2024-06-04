@@ -12,6 +12,7 @@ import { rechartTooltipContentFunction } from './RechartTooltipContent'
 import VisualisationCard from './VisualisationCard'
 import RadiusAxisLabel from './RadiusAxisLabel'
 import MultiSelect from './MultiSelect'
+import ImageExportLegend from './ImageExportLegend'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
 import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
 import { filterGrants, GlobalFilterContext } from '../helpers/filters'
@@ -150,6 +151,20 @@ export default function GrantsPerResearchCategoryByRegion() {
                             />
                         </RadarChart>
                     </ResponsiveContainer>
+
+                    <ImageExportLegend
+                        categories={researchCategoryOptions.map(
+                            ({ label }) => label
+                        )}
+                        colours={
+                            showingAllResearchCategories
+                                ? [allResearchCategoriesColour]
+                                : researchCategoryOptions.map(
+                                      ({ value }) =>
+                                          researchCategoryColours[value]
+                                  )
+                        }
+                    />
                 </div>
             </div>
         </VisualisationCard>

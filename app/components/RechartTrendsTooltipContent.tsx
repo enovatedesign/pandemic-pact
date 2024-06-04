@@ -4,13 +4,13 @@ import TooltipContent from './TooltipContent'
 interface Props {
     props: any
     chartData: any
-    numOfGrantsBoolean?: boolean
+    displayKnownFinancialCommitments?: boolean
 }
 
 export default function RechartTrendsTooltipContent({
     props,
     chartData,
-    numOfGrantsBoolean,
+    displayKnownFinancialCommitments,
 }: Props) {
     if (!props.active) return null
 
@@ -31,7 +31,7 @@ export default function RechartTrendsTooltipContent({
 
         if (yearIndex > 0) {
             const previousYear = years[yearIndex - 1]
-            
+
             const previousYearObject = chartData.find(
                 (item: any) => item.year === previousYear
             )
@@ -39,13 +39,17 @@ export default function RechartTrendsTooltipContent({
             const previousYearValue = previousYearObject
                 ? previousYearObject[item.dataKey]
                 : 0
-                
+
             if (item.value > previousYearValue) {
                 trend = 'up'
-                trendPercentageDifference = Math.round(((item.value - previousYearValue) / previousYearValue) * 100);
+                trendPercentageDifference = Math.round(
+                    ((item.value - previousYearValue) / previousYearValue) * 100
+                )
             } else if (item.value < previousYearValue) {
                 trend = 'down'
-                trendPercentageDifference = Math.round(((previousYearValue - item.value) / previousYearValue) * 100);
+                trendPercentageDifference = Math.round(
+                    ((previousYearValue - item.value) / previousYearValue) * 100
+                )
             } else {
                 trend = 'none'
                 trendPercentageDifference = null
@@ -53,10 +57,12 @@ export default function RechartTrendsTooltipContent({
         }
         return {
             label: item.name,
-            value: numOfGrantsBoolean ? item.value : dollarValueFormatter(item.value),
+            value: displayKnownFinancialCommitments
+                ? dollarValueFormatter(item.value)
+                : item.value,
             colour: item.color,
             trend,
-            trendPercentageDifference
+            trendPercentageDifference,
         }
     })
 

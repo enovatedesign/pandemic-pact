@@ -10,6 +10,7 @@ import {
 } from 'recharts'
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { groupBy } from 'lodash'
+import ImageExportLegend from '../ImageExportLegend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
@@ -19,12 +20,15 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 
 interface Props {
     hideCovid: boolean
-    numOfGrantsBoolean: boolean
+    displayKnownFinancialCommitments: boolean
 }
 
-export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) {
+export default function TemporalChart({
+    hideCovid,
+    displayKnownFinancialCommitments,
+}: Props) {
     const { grants } = useContext(GlobalFilterContext)
-    
+
     const datasetGroupedByYear = groupBy(
         grants.filter(
             (grant: any) =>
@@ -35,22 +39,21 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
         'TrendStartYear'
     )
 
-    const chartData = Object.keys(
-        datasetGroupedByYear
-    ).map(year => {
+    const chartData = Object.keys(datasetGroupedByYear).map(year => {
         const grants = datasetGroupedByYear[year]
-        
+
         let dataPoint: { [key: string]: string | number } = { year }
-        
+
         selectOptions.Disease.forEach(({ value, label }) => {
+            const filteredGrants = grants.filter(grant =>
+                grant.Disease.includes(value)
+            )
 
-            const filteredGrants = grants.filter(grant => grant.Disease.includes(value)).length
-
-            dataPoint[label] = numOfGrantsBoolean ? filteredGrants : grants
-            .filter(grant => grant.Disease.includes(value))
-            .reduce(...sumNumericGrantAmounts)
+            dataPoint[label] = displayKnownFinancialCommitments
+                ? filteredGrants.reduce(...sumNumericGrantAmounts)
+                : filteredGrants.length
         })
-        
+
         return dataPoint
     })
 
@@ -59,9 +62,12 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
             delete dataPoint['COVID-19']
         })
     }
- 
-    const tickFormatter = (value: any, index: number) => numOfGrantsBoolean ? value.toString() : axisDollarFormatter(value)
-        
+
+    const tickFormatter = (value: any, index: number) =>
+        displayKnownFinancialCommitments
+            ? axisDollarFormatter(value)
+            : value.toString()
+
     return (
         <>
             <ResponsiveContainer width="100%" height={500} className="z-10">
@@ -91,7 +97,9 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
                         type="number"
                         tickFormatter={tickFormatter}
                         label={{
-                            value: !numOfGrantsBoolean ? 'Known Financial Commitments (USD)' : 'Number of grants',
+                            value: displayKnownFinancialCommitments
+                                ? 'Known Financial Commitments (USD)'
+                                : 'Number of grants',
                             position: 'left',
                             angle: -90,
                             style: { textAnchor: 'middle' },
@@ -105,7 +113,9 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
                             <RechartTrendsTooltipContent
                                 props={props}
                                 chartData={chartData}
-                                numOfGrantsBoolean={numOfGrantsBoolean}
+                                displayKnownFinancialCommitments={
+                                    displayKnownFinancialCommitments
+                                }
                             />
                         )}
                         {...rechartBaseTooltipProps}
@@ -117,11 +127,17 @@ export default function TemporalChart({ hideCovid, numOfGrantsBoolean }: Props) 
                             dataKey={label}
                             stroke={diseaseColours[value]}
                             strokeWidth={2}
-                            dot={false}
                         />
                     ))}
                 </LineChart>
             </ResponsiveContainer>
+
+            <ImageExportLegend
+                categories={selectOptions.Disease.map(({ label }) => label)}
+                colours={selectOptions.Disease.map(
+                    ({ value }) => diseaseColours[value]
+                )}
+            />
         </>
     )
 }

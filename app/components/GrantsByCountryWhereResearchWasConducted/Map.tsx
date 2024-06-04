@@ -9,6 +9,7 @@ import {
     useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
 import { scaleLog } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
@@ -20,38 +21,24 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import { debounce } from 'lodash'
-import Switch from '../Switch'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
+
+type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [usingFunderLocation, setUsingFunderLocation] =
-        useState<boolean>(false)
+    const [locationType, setColumn] = useState<LocationType>('Funder')
 
     const [
-        displayUsingKnownFinancialCommitments,
-        setDisplayUsingKnownFinancialCommitments,
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
     ] = useState<boolean>(false)
 
-    let grantField:
-        | 'FunderRegion'
-        | 'ResearchInstitutionRegion'
-        | 'FunderCountry'
-        | 'ResearchInstitutionCountry'
-
-    if (displayWhoRegions) {
-        grantField = usingFunderLocation
-            ? 'FunderRegion'
-            : 'ResearchInstitutionRegion'
-    } else {
-        grantField = usingFunderLocation
-            ? 'FunderCountry'
-            : 'ResearchInstitutionCountry'
-    }
+    const grantField = locationType + (displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
         const geojson = displayWhoRegions
@@ -61,9 +48,9 @@ export default function Map() {
         geojson.features = geojson.features.map((feature: any) => {
             const id = feature.properties.id
 
-            const name = selectOptions[grantField].find(
-                option => option.value === id
-            )?.label
+            const name = selectOptions[
+                grantField as keyof typeof selectOptions
+            ].find(option => option.value === id)?.label
 
             const grants = dataset.filter(grant =>
                 grant[grantField].includes(id)
@@ -86,7 +73,7 @@ export default function Map() {
             }
         })
 
-        const key = displayUsingKnownFinancialCommitments
+        const key = displayKnownFinancialCommitments
             ? 'totalAmountCommitted'
             : 'totalGrants'
 
@@ -101,7 +88,7 @@ export default function Map() {
         return [geojson, colourScale]
     }, [
         dataset,
-        displayUsingKnownFinancialCommitments,
+        displayKnownFinancialCommitments,
         displayWhoRegions,
         grantField,
     ])
@@ -133,12 +120,6 @@ export default function Map() {
 
     const { sidebarOpen } = useContext(SidebarStateContext)
 
-    const handleShownDataset = () => {
-        setDisplayUsingKnownFinancialCommitments(
-            !displayUsingKnownFinancialCommitments
-        )
-    }
-
     const center: [number, number] = [20, 10]
 
     return (
@@ -154,8 +135,8 @@ export default function Map() {
                 >
                     <ZoomableGroup center={center}>
                         <GeographiesWithScalingOutlines
-                            displayUsingKnownFinancialCommitments={
-                                displayUsingKnownFinancialCommitments
+                            displayKnownFinancialCommitments={
+                                displayKnownFinancialCommitments
                             }
                             displayWhoRegions={displayWhoRegions}
                             grantField={grantField}
@@ -178,48 +159,53 @@ export default function Map() {
                 >
                     <ColourScale
                         colourScale={colourScale}
-                        displayUsingKnownFinancialCommitments={
-                            displayUsingKnownFinancialCommitments
+                        displayKnownFinancialCommitments={
+                            displayKnownFinancialCommitments
                         }
                     />
                 </div>
 
-                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:items-center md:justify-between md:gap-y-0">
-                    <div className="space-y-2">
-                        <DoubleLabelSwitch
-                            checked={displayWhoRegions}
-                            onChange={setDisplayWhoRegions}
-                            leftLabel="Countries"
-                            rightLabel="WHO Regions"
-                            screenReaderLabel="Display WHO Regions"
-                        />
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
+                    <DoubleLabelSwitch
+                        checked={displayWhoRegions}
+                        onChange={setDisplayWhoRegions}
+                        leftLabel="Countries"
+                        rightLabel="WHO Regions"
+                        screenReaderLabel="Display WHO Regions"
+                    />
 
-                        <DoubleLabelSwitch
-                            checked={usingFunderLocation}
-                            onChange={setUsingFunderLocation}
-                            leftLabel="Research Institution"
-                            rightLabel="Funder"
-                            screenReaderLabel="Using Funder Location"
-                        />
-                    </div>
+                    <RadioGroup<LocationType>
+                        options={[
+                            {
+                                label: 'Funder',
+                                value: 'Funder',
+                            },
+                            {
+                                label: 'Research Institution',
+                                value: 'ResearchInstitution',
+                            },
+                            {
+                                label: 'Research Location',
+                                value: 'ResearchLocation',
+                            },
+                        ]}
+                        value={locationType}
+                        onChange={setColumn}
+                        fieldsetClassName="flex flex-col"
+                    />
 
-                    <div className="space-y-2">
-                        <Switch
-                            checked={!displayUsingKnownFinancialCommitments}
-                            onChange={handleShownDataset}
-                            label="Number of grants"
-                            theme="light"
-                            className="ignore-in-image-export"
-                        />
-
-                        <Switch
-                            checked={displayUsingKnownFinancialCommitments}
-                            onChange={handleShownDataset}
-                            label="Known financial commitments (USD)"
-                            theme="light"
-                            className="ignore-in-image-export"
-                        />
-                    </div>
+                    <RadioGroup<boolean>
+                        options={[
+                            { label: 'Number of grants', value: false },
+                            {
+                                label: 'Known financial commitments (USD)',
+                                value: true,
+                            },
+                        ]}
+                        value={displayKnownFinancialCommitments}
+                        onChange={setDisplayKnownFinancialCommitments}
+                        fieldsetClassName="flex flex-col"
+                    />
                 </div>
             </div>
         </div>
@@ -227,7 +213,7 @@ export default function Map() {
 }
 
 interface GeographiesWithScalingOutlinesProps {
-    displayUsingKnownFinancialCommitments: boolean
+    displayKnownFinancialCommitments: boolean
     displayWhoRegions: boolean
     grantField: string
     geojson: any
@@ -235,7 +221,7 @@ interface GeographiesWithScalingOutlinesProps {
 }
 
 function GeographiesWithScalingOutlines({
-    displayUsingKnownFinancialCommitments,
+    displayKnownFinancialCommitments,
     displayWhoRegions,
     grantField,
     geojson,
@@ -250,7 +236,7 @@ function GeographiesWithScalingOutlines({
     const getColourOfGeo = (geo: any) => {
         const properties = geo.properties
 
-        if (displayUsingKnownFinancialCommitments) {
+        if (displayKnownFinancialCommitments) {
             return properties.totalAmountCommitted
                 ? colourScale(properties.totalAmountCommitted)
                 : '#D6D6DA'
