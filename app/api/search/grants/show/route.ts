@@ -1,11 +1,11 @@
-import {NextRequest, NextResponse} from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import {
     getIndexName,
     getBooleanQuery,
     getSearchClient,
     searchUnavailableResponse,
-    validateRequest
+    validateRequest,
 } from '../../../helpers/search'
 
 export async function POST(request: NextRequest) {
@@ -15,13 +15,16 @@ export async function POST(request: NextRequest) {
         return searchUnavailableResponse()
     }
 
-    const {errorResponse, values} = await validateRequest(request)
+    const { errorResponse, values } = await validateRequest(request, [
+        'q',
+        'filters',
+    ])
 
     if (errorResponse) {
         return errorResponse
     }
 
-    const {q, filters} = values
+    const { q, filters } = values
 
     let highlightClause = {}
 
@@ -39,30 +42,26 @@ export async function POST(request: NextRequest) {
                     GrantTitleEng: highlightOptions,
                     Abstract: highlightOptions,
                     LaySummary: highlightOptions,
-                }
-            }
+                },
+            },
         }
     }
 
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters);
+    const query = getBooleanQuery(q, filters)
 
     const results = await client.search({
         index,
 
-        _source: [
-            'GrantTitleEng',
-            'Abstract',
-            'LaySummary',
-        ],
+        _source: ['GrantTitleEng', 'Abstract', 'LaySummary'],
 
         size: 1,
 
         body: {
             query,
             ...highlightClause,
-        }
+        },
     })
 
     return NextResponse.json({
