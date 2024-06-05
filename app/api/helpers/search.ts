@@ -47,11 +47,13 @@ export async function validateRequest(request: Request) {
                 addError('The q parameter must be a string')
             }
         },
+
         filters: (addError: (message: string) => void) => {
             if (typeof parameters.filters !== 'object') {
                 addError('The filters parameter must be an object')
             }
         },
+
         page: (addError: (message: string) => void) => {
             if (typeof parameters.page !== 'number') {
                 addError('The page parameter must be a number')
@@ -61,6 +63,7 @@ export async function validateRequest(request: Request) {
                 addError('The page parameter must be greater than 0')
             }
         },
+
         limit: (addError: (message: string) => void) => {
             if (typeof parameters.limit !== 'number') {
                 addError('The limit parameter must be a number')
