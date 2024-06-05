@@ -40,7 +40,10 @@ export function searchUnavailableResponse() {
     )
 }
 
-export async function validateRequest(request: Request) {
+export async function validateRequest(
+    request: Request,
+    fieldsToValidate: string[]
+) {
     const rules = {
         q: (addError: (message: string) => void) => {
             if (typeof parameters.q !== 'string') {
@@ -88,6 +91,10 @@ export async function validateRequest(request: Request) {
     const values: any = {}
 
     for (const [field, rule] of Object.entries(rules)) {
+        if (!fieldsToValidate.includes(field)) {
+            continue
+        }
+
         if (parameters[field] === undefined) {
             continue
         }

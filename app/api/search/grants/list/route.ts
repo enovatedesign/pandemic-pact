@@ -1,11 +1,11 @@
-import {NextRequest, NextResponse} from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import {
     getIndexName,
     getBooleanQuery,
     getSearchClient,
     searchUnavailableResponse,
-    validateRequest
+    validateRequest,
 } from '../../../helpers/search'
 
 export async function POST(request: NextRequest) {
@@ -15,14 +15,19 @@ export async function POST(request: NextRequest) {
         return searchUnavailableResponse()
     }
 
-    const {errorResponse, values} = await validateRequest(request)
+    const { errorResponse, values } = await validateRequest(request, [
+        'q',
+        'filters',
+        'page',
+        'limit',
+    ])
 
     if (errorResponse) {
         return errorResponse
     }
 
-    const {q, filters, page, limit} = values
-    
+    const { q, filters, page, limit } = values
+
     let highlightClause = {}
 
     if (q) {
@@ -37,22 +42,22 @@ export async function POST(request: NextRequest) {
                 fields: {
                     GrantTitleEng: {
                         number_of_fragments: 0,
-                        ...highlightTags
+                        ...highlightTags,
                     },
                     Abstract: {
-                        ...highlightTags
+                        ...highlightTags,
                     },
                     LaySummary: highlightTags,
-                }
-            }
+                },
+            },
         }
     }
-    
+
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters);
-    
-    const from = (page && limit) ? (limit * (page -1)) : 0
+    const query = getBooleanQuery(q, filters)
+
+    const from = page && limit ? limit * (page - 1) : 0
 
     const results = await client.search({
         index,
@@ -65,14 +70,14 @@ export async function POST(request: NextRequest) {
             'GrantStartYear',
             'FundingOrgName',
         ],
-        
+
         from: from,
         size: limit,
 
         body: {
             query,
             ...highlightClause,
-        }
+        },
     })
 
     return NextResponse.json({
