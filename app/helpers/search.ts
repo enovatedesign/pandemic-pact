@@ -73,9 +73,9 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
     }
 
     return {
-        GrantTitleEng: hit.highlight.GrantTitleEng[0] || grant.GrantTitleEng,
-        Abstract: hit.highlight.Abstract[0] || grant.Abstract,
-        LaySummary: (hit.highlight.LaySummary ?? [])[0] || grant.LaySummary,
+        GrantTitleEng: hit.highlight?.GrantTitleEng[0] || grant.GrantTitleEng,
+        Abstract: hit.highlight?.Abstract[0] || grant.Abstract,
+        LaySummary: (hit.highlight?.LaySummary ?? [])[0] || grant.LaySummary,
     }
 }
 
@@ -86,14 +86,14 @@ export async function searchRequest(
     return fetch(`/api/search/grants/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify(body),
-    }).then((response) => response.json())
+    }).then(response => response.json())
 }
 
 export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
     return (
         searchRequestBody.q !== '' ||
         Object.values(searchRequestBody.filters).some(
-            (filter) => filter?.length > 0
+            filter => filter?.length > 0
         )
     )
 }
