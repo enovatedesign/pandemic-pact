@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-
 import Select from 'react-select'
 import SearchResult from './SearchResult'
 import { SearchResponse } from '../helpers/search'
