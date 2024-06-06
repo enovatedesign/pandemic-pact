@@ -23,10 +23,16 @@ export default function SearchPagination({
         document.getElementById('searchResultsHeading')?.scrollIntoView()
     }
 
-    const firstPageButton = totalPages > 3 && page > 3 ? page - 3 : 1
-    const lastPageButton = totalPages > 3 && page > 3 ? page + 2 : 5
+    const maxButtonsToShow = 5
 
-    const pageNumberButtons = range(firstPageButton, lastPageButton)
+    const firstPageButton = Math.max(1, page - Math.floor(maxButtonsToShow / 2))
+
+    const lastPageButton = Math.min(
+        totalPages,
+        firstPageButton + maxButtonsToShow - 1
+    )
+
+    const pageNumberButtons = range(firstPageButton, lastPageButton + 1)
 
     const showLeftEllipses = firstPageButton > 1
     const showRightEllipses = lastPageButton < totalPages
