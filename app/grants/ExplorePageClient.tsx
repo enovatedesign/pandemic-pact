@@ -20,7 +20,7 @@ export default function ExplorePageClient() {
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
     const filtersFromUrl = searchParams.get('filters') ?? null
-    const pageFromUrl = searchParams.get('page')
+    const pageFromUrl = searchParams.get('page') ?? 1
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
@@ -43,6 +43,8 @@ export default function ExplorePageClient() {
 
     const searchResponseHits = searchResponse.hits
 
+    const [page, setPage] = useState<number>(1)
+
     const [limit, setLimit] = useState<number>(25)
 
     const searchRequestBody = useMemo(() => {
@@ -53,15 +55,15 @@ export default function ExplorePageClient() {
         return {
             q: searchQuery,
             filters: searchFilters,
-            page: pageFromUrl ? parseInt(pageFromUrl) : undefined,
-            limit: limit,
+            page,
+            limit,
         }
     }, [
         searchQuery,
         standardSearchFilters,
         advancedSearchFilters,
         showAdvancedSearch,
-        pageFromUrl,
+        page,
         limit,
     ])
 
@@ -143,7 +145,7 @@ export default function ExplorePageClient() {
                             searchResponseHits={searchResponseHits}
                             limit={limit}
                             setLimit={setLimit}
-                            page={pageFromUrl}
+                            page={page}
                         />
                     )}
 

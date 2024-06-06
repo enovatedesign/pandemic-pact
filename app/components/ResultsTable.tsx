@@ -12,7 +12,7 @@ interface Props {
     searchResponseHits: any
     limit: number
     setLimit: (limit: number) => void
-    page: string | null
+    page: number
 }
 
 export default function ResultsTable({
@@ -44,7 +44,7 @@ export default function ResultsTable({
                         'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
 
                     const grantIndex = page
-                        ? (Number(page) - 1) * limit + 1 + index
+                        ? (page - 1) * limit + 1 + index
                         : index + 1
 
                     return (
@@ -82,4 +82,3 @@ export default function ResultsTable({
         </div>
     )
 }
-
