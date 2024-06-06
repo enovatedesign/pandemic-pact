@@ -43,7 +43,6 @@ export default function ExplorePageClient() {
     const searchResponseHits = searchResponse.hits
 
     const [limit, setLimit] = useState<number>(25)
-    const [pagination, setPagination] = useState<boolean>(false)
     const [isQueryPageOne, setIsQueryPageOne] = useState(false)
     const pageParam = searchParams.get('page')
 
@@ -66,12 +65,6 @@ export default function ExplorePageClient() {
         pageParam,
         limit,
     ])
-
-    useEffect(() => {
-        if (totalHits > limit) {
-            setPagination(true)
-        }
-    }, [totalHits, limit])
 
     useEffect(() => {
         searchRequest('list', searchRequestBody)
@@ -169,14 +162,13 @@ export default function ExplorePageClient() {
                         <ResultsTable
                             searchResponse={searchResponse}
                             searchResponseHits={searchResponseHits}
-                            pagination={pagination}
                             limit={limit}
                             setLimit={setLimit}
-                            pageParam={pageParam}
+                            page={pageParam}
                         />
                     )}
 
-                    {pagination && (
+                    {totalHits > limit && (
                         <SearchPagination
                             postsPerPage={limit}
                             totalPosts={totalHits}
@@ -200,4 +192,3 @@ function convertStandardFiltersToSearchFilters(
         })),
     }
 }
-

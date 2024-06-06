@@ -1,62 +1,27 @@
 'use client'
 
-import Select from 'react-select'
+import ItemsPerPageSelect from './ItemsPerPageSelect'
 import SearchResult from './SearchResult'
 import { SearchResponse } from '../helpers/search'
 import { links } from '../helpers/nav'
-import { customSelectThemeColours } from '../helpers/select-colours'
 
 import '../css/components/highlighted-search-results.css'
 
 interface Props {
     searchResponse: SearchResponse
     searchResponseHits: any
-    pagination: boolean
     limit: number
     setLimit: (limit: number) => void
-    pageParam: string | null
+    page: string | null
 }
 
 export default function ResultsTable({
     searchResponse,
     searchResponseHits,
-    pagination,
     limit,
     setLimit,
-    pageParam,
+    page,
 }: Props) {
-    const defaultValue = {
-        label: 'Show 25 Grants per page',
-        value: limit,
-    }
-
-    const paginationSelectOptions = [
-        {
-            label: 'Show 25 Grants per page',
-            value: 25,
-        },
-        {
-            label: 'Show 50 Grants per page',
-            value: 50,
-        },
-        {
-            label: 'Show 75 Grants per page',
-            value: 75,
-        },
-        {
-            label: 'Show 100 Grants per page',
-            value: 100,
-        },
-    ]
-
-    const handlePaginationChange = (selectedOption: any) => {
-        if (selectedOption.value === limit) {
-            return
-        } else {
-            setLimit(selectedOption.value)
-        }
-    }
-
     return (
         <div>
             <div className="w-full flex items-center justify-between">
@@ -64,20 +29,7 @@ export default function ResultsTable({
                     Results
                 </h2>
 
-                {pagination && (
-                    <Select
-                        defaultValue={defaultValue}
-                        options={paginationSelectOptions}
-                        onChange={handlePaginationChange}
-                        theme={theme => ({
-                            ...theme,
-                            colors: {
-                                ...theme.colors,
-                                ...customSelectThemeColours,
-                            },
-                        })}
-                    />
-                )}
+                <ItemsPerPageSelect limit={limit} setLimit={setLimit} />
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
@@ -91,8 +43,8 @@ export default function ResultsTable({
                     const linkClasses =
                         'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
 
-                    const grantIndex = pageParam
-                        ? (Number(pageParam) - 1) * limit + 1 + index
+                    const grantIndex = page
+                        ? (Number(page) - 1) * limit + 1 + index
                         : index + 1
 
                     return (
