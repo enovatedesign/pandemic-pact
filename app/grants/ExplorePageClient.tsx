@@ -43,7 +43,7 @@ export default function ExplorePageClient() {
     const searchResponseHits = searchResponse.hits
 
     const [limit, setLimit] = useState<number>(25)
-    const [isQueryPageOne, setIsQueryPageOne] = useState(false)
+
     const pageParam = searchParams.get('page')
 
     const searchRequestBody = useMemo(() => {
@@ -79,14 +79,6 @@ export default function ExplorePageClient() {
     }, [searchRequestBody, setTotalHits, setSearchResponse])
 
     useEffect(() => {
-        setIsQueryPageOne(true)
-    }, [searchQuery, standardSearchFilters])
-
-    useEffect(() => {
-        setIsQueryPageOne(false)
-    }, [pageParam])
-
-    useEffect(() => {
         const url = new URL(pathname, window.location.origin)
         url.search = searchParams.toString()
 
@@ -109,19 +101,8 @@ export default function ExplorePageClient() {
             url.searchParams.delete('filters')
         }
 
-        if (isQueryPageOne) {
-            url.searchParams.set('page', '1')
-        }
-
         router.replace(url.href)
-    }, [
-        searchParams,
-        searchQuery,
-        standardSearchFilters,
-        pathname,
-        router,
-        isQueryPageOne,
-    ])
+    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
 
     return (
         <Layout
@@ -153,7 +134,6 @@ export default function ExplorePageClient() {
                                 setStandardSearchFilters={
                                     setStandardSearchFilters
                                 }
-                                setIsQueryPageOne={setIsQueryPageOne}
                             />
                         </Suspense>
                     </div>

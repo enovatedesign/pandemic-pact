@@ -19,26 +19,22 @@ interface Props {
     setAdvancedSearchFilters: (advancedSearchFilters: SearchFilters) => void
     setStandardSearchFilters: any
     searchRequestBody: any
-    setIsQueryPageOne: (isQueryPageOne: boolean) => void
 }
 
-export default function SearchInput({ 
-    searchQuery, 
-    showAdvancedSearch, 
-    standardSearchFilters, 
+export default function SearchInput({
+    searchQuery,
+    showAdvancedSearch,
+    standardSearchFilters,
     isLoading,
     totalHits,
-    setSearchQuery, 
-    setShowAdvancedSearch, 
-    setAdvancedSearchFilters, 
+    setSearchQuery,
+    setShowAdvancedSearch,
+    setAdvancedSearchFilters,
     setStandardSearchFilters,
     searchRequestBody,
-    setIsQueryPageOne
 }: Props) {
-
-    const handleSearchToggleButtons = (boolean: boolean) => {
-        setShowAdvancedSearch(boolean)
-        setIsQueryPageOne(true)
+    const handleSearchToggleButtons = (value: boolean) => {
+        setShowAdvancedSearch(value)
     }
 
     return (
@@ -195,5 +191,3 @@ export default function SearchInput({
         </div>
     )
 }
-
-
