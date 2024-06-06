@@ -1,113 +1,96 @@
+'use client'
 
-"use client"
-import {useState, useEffect} from "react"
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid"
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { range } from 'lodash'
 
 interface Props {
-    postsPerPage: number,
-    totalPosts: number,
+    page: number
+    setPage: (value: number) => void
+    totalHits: number
+    limit: number
 }
 
-const SearchPagination  = ({
-    postsPerPage,
-    totalPosts,
-}: Props) => {
-    
-    const router = useRouter()
-    const pathName = usePathname()
-    const params = useSearchParams()
-    const pageParam = params.get('page')
+export default function SearchPagination({
+    page,
+    setPage,
+    totalHits,
+    limit,
+}: Props) {
+    const totalPages = Math.ceil(totalHits / limit)
 
-    const [page, setPage] = useState(pageParam ? Number(pageParam) : 1)
-    const totalPages = Array.from({length: (Math.ceil(totalPosts / postsPerPage))}, (_, i) => i + 1)
-    const filteredPages = (totalPages.length > 3 && page > 3) ? totalPages.slice(page - 3, page + 2) : totalPages.splice(0, 5)
-
-    useEffect(() => {
-        const newPageParam = params.get('page')
-        if (!newPageParam && page !== 1) {
-            setPage(1)
-        } else if (newPageParam && newPageParam !== page.toString()) {
-            setPage(Number(newPageParam))
-        }
-
-    }, [page, postsPerPage,  params])
-
-    const updateSearchParams = (number: number) => {
-        const newParams = new URLSearchParams(params.toString())
-        newParams.set('page', number.toString())
-
-        const url = number !== 1 ? `${pathName}?${newParams.toString()}` : pathName
-        router.push(url, { scroll: false })
-    }
-
-    const updatePage = (number: number) => {
-        setPage(number)
-        updateSearchParams(number)
-    }
-    
-    const handleChange = (target: number) => {
-        updatePage(target)
-        window.location.hash = "#paginationTop"
+    const changePage = (newPage: number) => {
+        setPage(newPage)
+        document.getElementById('searchResultsHeading')?.scrollIntoView()
     }
 
     const iconClasses = 'w-8 h-8 border-2 rounded-full'
-
     const ellipsesClasses = 'flex text-primary space-x-2 text-4xl items-end'
-    const leftEllipsesClasses = (page >= 4)
-    const rightEllipsesClasses = (page < (totalPages.length - 2))
+
+    // TODO name this better
+    const leftEllipsesClasses = page >= 4
+    const rightEllipsesClasses = page < totalPages - 2
+
+    const firstPageButton = totalPages > 3 && page > 3 ? page - 3 : 1
+    const lastPageButton = totalPages > 3 && page > 3 ? page + 2 : 5
+    const pageNumberButtons = range(firstPageButton, lastPageButton)
 
     return (
         <nav aria-label="Pagination">
-
             <ul className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
                 <li>
-
                     {/* Previous page button */}
-                    {page !== 1 ? (
+                    {page > 1 ? (
                         <button
-                            onClick={() => handleChange(page-1)}
+                            onClick={() => changePage(page - 1)}
                             className="text-secondary uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
-                            title='Previous page' aria-label="Go to the previous page"
+                            title="Previous page"
+                            aria-label="Go to the previous page"
                         >
-                            <ChevronLeftIcon className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}/>
+                            <ChevronLeftIcon
+                                className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}
+                            />
                             <span>Previous</span>
                         </button>
-                    ): (
-                        <span
-                            className="text-gray-400 uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
-                        >
-                            <ChevronLeftIcon className={`${iconClasses} text-gray-400 border-gray-400 `}/>
+                    ) : (
+                        <span className="text-gray-400 uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed">
+                            <ChevronLeftIcon
+                                className={`${iconClasses} text-gray-400 border-gray-400 `}
+                            />
                             <span>Previous</span>
                         </span>
                     )}
-
                 </li>
-                <li>
 
+                <li>
                     {/* Page number buttons */}
                     <ul className="hidden md:flex md:space-x-4">
+                        {leftEllipsesClasses && (
+                            <li className={ellipsesClasses}>…</li>
+                        )}
 
-                        {leftEllipsesClasses && (<li className={ellipsesClasses}>…</li>)}
-
-                        {filteredPages.map(number => {
-                            
+                        {pageNumberButtons.map(number => {
                             const activeButtonClasses = [
-                                page === number ? "bg-primary text-white" : "border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300"
+                                page === number
+                                    ? 'bg-primary text-white'
+                                    : 'border-2 border-primary hover:bg-primary text-secondary hover:text-white transition duration-300',
                             ].join(' ')
 
                             return (
                                 <li key={number}>
                                     {page !== number ? (
                                         <button
-                                            onClick={() => handleChange(number)}
+                                            onClick={() => changePage(number)}
                                             className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}
-                                            title={`Go to page ${number}`} aria-label={`Go to page ${number}`}
+                                            title={`Go to page ${number}`}
+                                            aria-label={`Go to page ${number}`}
                                         >
                                             {number}
                                         </button>
-                                    ) : (   
-                                        <span aria-label={`You are currently on page ${number}`} className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}>
+                                    ) : (
+                                        <span
+                                            aria-label={`You are currently on page ${number}`}
+                                            className={`${activeButtonClasses} w-8 rounded-lg flex items-center justify-center aspect-square`}
+                                        >
                                             {number}
                                         </span>
                                     )}
@@ -115,35 +98,37 @@ const SearchPagination  = ({
                             )
                         })}
 
-                        {rightEllipsesClasses && (<li className={ellipsesClasses}>…</li>)}
-
+                        {rightEllipsesClasses && (
+                            <li className={ellipsesClasses}>…</li>
+                        )}
                     </ul>
-
                 </li>
-                <li>
 
+                <li>
                     {/* Next page button */}
-                    {page !== totalPages.length ? (
+                    {page < totalPages ? (
                         <button
-                            onClick={() => handleChange(page + 1)}
+                            onClick={() => changePage(page + 1)}
                             className="text-secondary uppercase font-bold flex items-center space-x-2 md:space-x-4 disabled:cursor-not-allowed"
-                            title='Next page' aria-label="Go to the next page"
+                            title="Next page"
+                            aria-label="Go to the next page"
                         >
                             <span>Next</span>
-                            <ChevronRightIcon className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}/>
+                            <ChevronRightIcon
+                                className={`${iconClasses} text-primary border-primary hover:bg-primary hover:text-white transition duration-300`}
+                            />
                         </button>
                     ) : (
                         <span className="text-gray-400  uppercase font-bold flex items-center space-x-2 md:space-x-4">
                             <span>Next</span>
-                            <ChevronRightIcon className={`${iconClasses} text-gray-400 border-gray-400`}/>
+                            <ChevronRightIcon
+                                className={`${iconClasses} text-gray-400 border-gray-400`}
+                            />
                         </span>
                     )}
-
                 </li>
             </ul>
-            
         </nav>
     )
 }
 
-export default SearchPagination

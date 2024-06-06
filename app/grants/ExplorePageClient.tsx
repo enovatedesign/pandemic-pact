@@ -151,8 +151,10 @@ export default function ExplorePageClient() {
 
                     {totalHits > limit && (
                         <SearchPagination
-                            postsPerPage={limit}
-                            totalPosts={totalHits}
+                            page={page}
+                            setPage={setPage}
+                            totalHits={totalHits}
+                            limit={limit}
                         />
                     )}
                 </div>

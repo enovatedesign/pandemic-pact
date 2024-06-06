@@ -25,7 +25,10 @@ export default function ResultsTable({
     return (
         <div>
             <div className="w-full flex items-center justify-between">
-                <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">
+                <h2
+                    id="searchResultsHeading"
+                    className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold"
+                >
                     Results
                 </h2>
 
