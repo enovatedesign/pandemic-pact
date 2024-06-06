@@ -20,7 +20,8 @@ export default function ExplorePageClient() {
     const searchParams = useSearchParams()
     const searchQueryFromUrl = searchParams.get('q') ?? ''
     const filtersFromUrl = searchParams.get('filters') ?? null
-    const pageFromUrl = searchParams.get('page') ?? 1
+    const pageFromUrl = parseInt(searchParams.get('page') ?? '1')
+    const limitFromUrl = parseInt(searchParams.get('limit') ?? '25')
 
     const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
 
@@ -43,9 +44,9 @@ export default function ExplorePageClient() {
 
     const searchResponseHits = searchResponse.hits
 
-    const [page, setPage] = useState<number>(1)
+    const [page, setPage] = useState<number>(pageFromUrl)
 
-    const [limit, setLimit] = useState<number>(25)
+    const [limit, setLimit] = useState<number>(limitFromUrl)
 
     const searchRequestBody = useMemo(() => {
         const searchFilters = showAdvancedSearch
@@ -81,6 +82,7 @@ export default function ExplorePageClient() {
 
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
+
         url.search = searchParams.toString()
 
         if (searchQuery) {
