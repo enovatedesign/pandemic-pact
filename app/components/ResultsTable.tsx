@@ -11,7 +11,7 @@ import { customSelectThemeColours } from '../helpers/select-colours'
 import '../css/components/highlighted-search-results.css'
 
 interface Props {
-    searchResponse: SearchResponse 
+    searchResponse: SearchResponse
     searchResponseHits: any
     pagination: boolean
     limit: number
@@ -21,37 +21,36 @@ interface Props {
 
 export default function ResultsTable({
     searchResponse,
-    searchResponseHits, 
-    pagination, 
+    searchResponseHits,
+    pagination,
     limit,
-    setLimit, 
-    pageParam
+    setLimit,
+    pageParam,
 }: Props) {
-    
     const defaultValue = {
-        label: "Show 25 Grants per page",
+        label: 'Show 25 Grants per page',
         value: limit,
     }
 
     const paginationSelectOptions = [
         {
-            label: "Show 25 Grants per page",
+            label: 'Show 25 Grants per page',
             value: 25,
         },
         {
-            label: "Show 50 Grants per page",
+            label: 'Show 50 Grants per page',
             value: 50,
         },
         {
-            label: "Show 75 Grants per page",
+            label: 'Show 75 Grants per page',
             value: 75,
         },
         {
-            label: "Show 100 Grants per page",
+            label: 'Show 100 Grants per page',
             value: 100,
-        }
+        },
     ]
-    
+
     const handlePaginationChange = (selectedOption: any) => {
         if (selectedOption.value === limit) {
             return
@@ -66,17 +65,17 @@ export default function ResultsTable({
                 <h2 className="text-secondary uppercase tracking-widest text-lg lg:text-xl font-bold">
                     Results
                 </h2>
-                
+
                 {pagination && (
                     <Select
                         defaultValue={defaultValue}
                         options={paginationSelectOptions}
                         onChange={handlePaginationChange}
-                        theme={(theme) => ({
+                        theme={theme => ({
                             ...theme,
                             colors: {
-                            ...theme.colors,
-                            ...customSelectThemeColours,
+                                ...theme.colors,
+                                ...customSelectThemeColours,
                             },
                         })}
                     />
@@ -93,18 +92,22 @@ export default function ResultsTable({
 
                     const linkClasses =
                         'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
-                    
-                    const grantIndex = pageParam ? ((Number(pageParam) -1) * limit + 1) + index : index + 1
+
+                    const grantIndex = pageParam
+                        ? (Number(pageParam) - 1) * limit + 1 + index
+                        : index + 1
 
                     return (
                         <article
                             key={result._id}
                             className="flex flex-col space-y-2 lg:space-y-6"
-                        >   
+                        >
                             <div>
                                 <h3 className="flex gap-2 items-start">
-                                    <span className="block text-gray-500 font-semibold lg:text-2xl">{grantIndex}.
-                                    </span> {result.highlight?.GrantTitleEng ? (
+                                    <span className="block text-gray-500 font-semibold lg:text-2xl">
+                                        {grantIndex}.
+                                    </span>{' '}
+                                    {result.highlight?.GrantTitleEng ? (
                                         <a
                                             href={href}
                                             className={linkClasses}
@@ -121,11 +124,7 @@ export default function ResultsTable({
                                 </h3>
                             </div>
 
-                            <SearchResult 
-                                result={result} 
-                                href={href}
-                            />
-                            
+                            <SearchResult result={result} href={href} />
                         </article>
                     )
                 })}
@@ -133,3 +132,4 @@ export default function ResultsTable({
         </div>
     )
 }
+
