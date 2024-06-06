@@ -23,16 +23,16 @@ export default function SearchPagination({
         document.getElementById('searchResultsHeading')?.scrollIntoView()
     }
 
-    const iconClasses = 'w-8 h-8 border-2 rounded-full'
-    const ellipsesClasses = 'flex text-primary space-x-2 text-4xl items-end'
-
-    // TODO name this better
-    const leftEllipsesClasses = page >= 4
-    const rightEllipsesClasses = page < totalPages - 2
-
     const firstPageButton = totalPages > 3 && page > 3 ? page - 3 : 1
     const lastPageButton = totalPages > 3 && page > 3 ? page + 2 : 5
+
     const pageNumberButtons = range(firstPageButton, lastPageButton)
+
+    const showLeftEllipses = firstPageButton > 1
+    const showRightEllipses = lastPageButton < totalPages
+
+    const iconClasses = 'w-8 h-8 border-2 rounded-full'
+    const ellipsesClasses = 'flex text-primary space-x-2 text-4xl items-end'
 
     return (
         <nav aria-label="Pagination">
@@ -64,7 +64,7 @@ export default function SearchPagination({
                 <li>
                     {/* Page number buttons */}
                     <ul className="hidden md:flex md:space-x-4">
-                        {leftEllipsesClasses && (
+                        {showLeftEllipses && (
                             <li className={ellipsesClasses}>…</li>
                         )}
 
@@ -98,7 +98,7 @@ export default function SearchPagination({
                             )
                         })}
 
-                        {rightEllipsesClasses && (
+                        {showRightEllipses && (
                             <li className={ellipsesClasses}>…</li>
                         )}
                     </ul>
