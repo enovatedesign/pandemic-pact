@@ -11,14 +11,12 @@ interface Props {
     searchParameters: SearchParameters
     setSearchParameters: (searchParameters: SearchParameters) => void
     searchResponse: SearchResponse
-    searchResponseHits: any
 }
 
 export default function ResultsTable({
     searchParameters,
     setSearchParameters,
     searchResponse,
-    searchResponseHits,
 }: Props) {
     const setLimit = (limit: number) => {
         setSearchParameters({ ...searchParameters, limit })
@@ -41,7 +39,7 @@ export default function ResultsTable({
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
-                {searchResponseHits.map((result: any, index: number) => {
+                {searchResponse.hits.map((result: any, index: number) => {
                     const query = searchResponse.query
 
                     const href =
