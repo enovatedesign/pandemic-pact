@@ -1,3 +1,20 @@
+export interface SelectedStandardSearchFilters {
+    Disease?: string[]
+    Pathogen?: string[]
+    ResearchInstitutionCountry?: string[]
+    ResearchInstitutionRegion?: string[]
+    FunderCountry?: string[]
+    FunderRegion?: string[]
+}
+
+export interface SearchParameters {
+    q: string
+    standardFilters: SelectedStandardSearchFilters
+    advancedFilters: SearchFilters
+    page: number
+    limit: number
+}
+
 export interface SearchResult {
     _index: string
     _id: string

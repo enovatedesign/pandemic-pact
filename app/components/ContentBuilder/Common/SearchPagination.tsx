@@ -1,25 +1,27 @@
 'use client'
 
+import { SearchParameters } from '../../../helpers/search'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { range } from 'lodash'
 
 interface Props {
-    page: number
-    setPage: (value: number) => void
+    searchParameters: SearchParameters
+    setSearchParameters: (searchParameters: SearchParameters) => void
     totalHits: number
-    limit: number
 }
 
 export default function SearchPagination({
-    page,
-    setPage,
+    searchParameters,
+    setSearchParameters,
     totalHits,
-    limit,
 }: Props) {
+    const { page, limit } = searchParameters
+
     const totalPages = Math.ceil(totalHits / limit)
 
     const changePage = (newPage: number) => {
-        setPage(newPage)
+        setSearchParameters({ ...searchParameters, page: newPage })
+
         document.getElementById('searchResultsHeading')?.scrollIntoView()
     }
 
@@ -137,4 +139,3 @@ export default function SearchPagination({
         </nav>
     )
 }
-

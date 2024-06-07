@@ -2,26 +2,28 @@
 
 import ItemsPerPageSelect from './ItemsPerPageSelect'
 import SearchResult from './SearchResult'
-import { SearchResponse } from '../helpers/search'
+import { SearchParameters, SearchResponse } from '../helpers/search'
 import { links } from '../helpers/nav'
 
 import '../css/components/highlighted-search-results.css'
 
 interface Props {
+    searchParameters: SearchParameters
+    setSearchParameters: (searchParameters: SearchParameters) => void
     searchResponse: SearchResponse
     searchResponseHits: any
-    limit: number
-    setLimit: (limit: number) => void
-    page: number
 }
 
 export default function ResultsTable({
+    searchParameters,
+    setSearchParameters,
     searchResponse,
     searchResponseHits,
-    limit,
-    setLimit,
-    page,
 }: Props) {
+    const setLimit = (limit: number) => {
+        setSearchParameters({ ...searchParameters, limit })
+    }
+
     return (
         <div>
             <div className="w-full flex items-center justify-between">
@@ -32,7 +34,10 @@ export default function ResultsTable({
                     Results
                 </h2>
 
-                <ItemsPerPageSelect limit={limit} setLimit={setLimit} />
+                <ItemsPerPageSelect
+                    limit={searchParameters.limit}
+                    setLimit={setLimit}
+                />
             </div>
 
             <div className="mt-4 flex flex-col space-y-8 lg:space-y-12 bg-white p-4 md:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
@@ -46,8 +51,10 @@ export default function ResultsTable({
                     const linkClasses =
                         'underline decoration-primary hover:decoration-secondary font-semibold lg:text-2xl'
 
-                    const grantIndex = page
-                        ? (page - 1) * limit + 1 + index
+                    const grantIndex = searchParameters.page
+                        ? (searchParameters.page - 1) * searchParameters.limit +
+                          1 +
+                          index
                         : index + 1
 
                     return (
