@@ -1,7 +1,12 @@
 import { SearchIcon } from '@heroicons/react/solid'
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
-import { SearchFilters, queryOrFiltersAreSet } from '../helpers/search'
+import {
+    queryOrFiltersAreSet,
+    SearchFilters,
+    SelectedStandardSearchFilters,
+    SearchParameters,
+} from '../helpers/search'
 import Button from './Button'
 import InfoModal from './InfoModal'
 import StandardSearchFilters from './StandardSearchFilters'
@@ -9,36 +14,46 @@ import AdvancedSearchFilters from './AdvancedSearchFilters'
 import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
-    searchQuery: string
+    searchParameters: SearchParameters
+    setSearchParameters: (searchParameters: SearchParameters) => void
     showAdvancedSearch: boolean
-    standardSearchFilters: any
     isLoading: boolean
     totalHits: number
-    setSearchQuery: (searchQuery: string) => void
     setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
-    setAdvancedSearchFilters: (advancedSearchFilters: SearchFilters) => void
-    setStandardSearchFilters: any
     searchRequestBody: any
-    setIsQueryPageOne: (isQueryPageOne: boolean) => void
 }
 
-export default function SearchInput({ 
-    searchQuery, 
-    showAdvancedSearch, 
-    standardSearchFilters, 
+export default function SearchInput({
+    searchParameters,
+    setSearchParameters,
+    showAdvancedSearch,
     isLoading,
     totalHits,
-    setSearchQuery, 
-    setShowAdvancedSearch, 
-    setAdvancedSearchFilters, 
-    setStandardSearchFilters,
+    setShowAdvancedSearch,
     searchRequestBody,
-    setIsQueryPageOne
 }: Props) {
+    const handleSearchToggleButtons = (value: boolean) => {
+        setShowAdvancedSearch(value)
+    }
 
-    const handleSearchToggleButtons = (boolean: boolean) => {
-        setShowAdvancedSearch(boolean)
-        setIsQueryPageOne(true)
+    const setSearchQuery = (query: string) => {
+        setSearchParameters({ ...searchParameters, q: query })
+    }
+
+    const setStandardSearchFilters = (
+        filters: SelectedStandardSearchFilters
+    ) => {
+        setSearchParameters({
+            ...searchParameters,
+            standardFilters: filters,
+        })
+    }
+
+    const setShowAdvancedSearchFilters = (filters: SearchFilters) => {
+        setSearchParameters({
+            ...searchParameters,
+            advancedFilters: filters,
+        })
     }
 
     return (
@@ -52,7 +67,7 @@ export default function SearchInput({
                             onInput={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => setSearchQuery(event.target.value)}
-                            value={searchQuery}
+                            value={searchParameters.q}
                             className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
                         />
 
@@ -152,7 +167,7 @@ export default function SearchInput({
                             className={showAdvancedSearch ? 'block' : 'hidden'}
                         >
                             <AdvancedSearchFilters
-                                setSearchFilters={setAdvancedSearchFilters}
+                                setSearchFilters={setShowAdvancedSearchFilters}
                             />
                         </div>
 
@@ -160,7 +175,9 @@ export default function SearchInput({
                             className={showAdvancedSearch ? 'hidden' : 'block'}
                         >
                             <StandardSearchFilters
-                                selectedFilters={standardSearchFilters}
+                                selectedFilters={
+                                    searchParameters.standardFilters
+                                }
                                 setSelectedFilters={setStandardSearchFilters}
                             />
                         </div>
@@ -170,7 +187,9 @@ export default function SearchInput({
                 <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
                     <p className="text-secondary flex flex-row items-center gap-2 uppercase">
                         <span className="whitespace-nowrap">
-                            {searchQuery ? 'Total Hits:' : 'Total Grants:'}
+                            {searchParameters.q
+                                ? 'Total Hits:'
+                                : 'Total Grants:'}
                         </span>
                         {isLoading ? (
                             <LoadingSpinner className="w-5 h-5 animate-spin shrink-0" />
@@ -195,5 +214,3 @@ export default function SearchInput({
         </div>
     )
 }
-
-

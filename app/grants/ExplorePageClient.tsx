@@ -1,134 +1,109 @@
 'use client'
 
 import { Suspense, useState, useEffect, useMemo } from 'react'
+import { isEqual } from 'lodash'
 import Layout from '../components/Layout'
 import SearchInput from '../components/SearchInput'
 import ResultsTable from '../components/ResultsTable'
-import { searchRequest, SearchFilters, SearchResponse } from '../helpers/search'
+import {
+    prepareInitialSearchParameters,
+    updateUrlQueryString,
+    searchRequest,
+    SearchParameters,
+    SearchResponse,
+} from '../helpers/search'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { SelectedStandardSearchFilters } from '../components/StandardSearchFilters'
-import SearchPagination from '../components/ContentBuilder/Common/SearchPagination'
+import SearchPagination from '../components/SearchPagination'
 
 export default function ExplorePageClient() {
-    const [searchResponse, setSearchResponse] = useState<SearchResponse>({
-        hits: [],
-        query: '',
-    })
-
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
-    const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
+    const [searchParameters, setSearchParameters] = useState<SearchParameters>(
+        prepareInitialSearchParameters(searchParams)
+    )
+
+    const updateSearchParameters = (newSearchParameters: SearchParameters) => {
+        setSearchParameters(oldSearchParameters => {
+            // Page should be reset if any search parameter other than `page` has changed
+            const pageShouldBeReset = Object.entries(newSearchParameters)
+                .filter(([key]) => key !== 'page')
+                .some(
+                    ([key, value]) =>
+                        !isEqual(
+                            value,
+                            oldSearchParameters[key as keyof SearchParameters]
+                        )
+                )
+
+            return {
+                ...oldSearchParameters,
+                ...newSearchParameters,
+                page: pageShouldBeReset ? 1 : newSearchParameters.page,
+            }
+        })
+    }
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
-    const [standardSearchFilters, setStandardSearchFilters] =
-        useState<SelectedStandardSearchFilters>(
-            filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
-        )
-
-    const [advancedSearchFilters, setAdvancedSearchFilters] =
-        useState<SearchFilters>({
-            logicalAnd: true,
-            filters: [],
-        })
-
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
-    const [totalHits, setTotalHits] = useState<number>(0)
-
-    const searchResponseHits = searchResponse.hits
-
-    const [limit, setLimit] = useState<number>(25)
-    const [pagination, setPagination] = useState<boolean>(false)
-    const [isQueryPageOne, setIsQueryPageOne] = useState(false)
-    const pageParam = searchParams.get('page')
+    const [searchResponse, setSearchResponse] = useState<SearchResponse>({
+        hits: [],
+        query: '',
+        total: { value: 0 },
+    })
 
     const searchRequestBody = useMemo(() => {
-        const searchFilters = showAdvancedSearch
-            ? advancedSearchFilters
-            : convertStandardFiltersToSearchFilters(standardSearchFilters)
+        let filters
+
+        if (showAdvancedSearch) {
+            // Advanced Search Filters are already in the format expected by the API
+            // so no conversion needed
+            filters = searchParameters.advancedFilters
+        } else {
+            // Convert the Standard Search Filters into the format expected by the API
+            filters = {
+                logicalAnd: true,
+                filters: Object.entries(searchParameters.standardFilters).map(
+                    ([field, values]) => ({
+                        field,
+                        values,
+                        logicalAnd: false,
+                    })
+                ),
+            }
+        }
 
         return {
-            q: searchQuery,
-            filters: searchFilters,
-            page: pageParam ? parseInt(pageParam) : undefined,
-            limit: limit,
+            q: searchParameters.q,
+            page: searchParameters.page,
+            limit: searchParameters.limit,
+            filters,
         }
-    }, [
-        searchQuery,
-        standardSearchFilters,
-        advancedSearchFilters,
-        showAdvancedSearch,
-        pageParam,
-        limit,
-    ])
-
-    useEffect(() => {
-        if (totalHits > limit) {
-            setPagination(true)
-        }
-    }, [totalHits, limit])
+    }, [searchParameters, showAdvancedSearch])
 
     useEffect(() => {
         searchRequest('list', searchRequestBody)
             .then(data => {
                 setSearchResponse(data)
-                setTotalHits(data.total.value)
                 setIsLoading(false)
             })
             .catch(error => {
                 console.error(error)
             })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
-
-    useEffect(() => {
-        setIsQueryPageOne(true)
-    }, [searchQuery, standardSearchFilters])
-
-    useEffect(() => {
-        setIsQueryPageOne(false)
-    }, [pageParam])
+    }, [searchRequestBody, setSearchResponse])
 
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
+
         url.search = searchParams.toString()
 
-        if (searchQuery) {
-            url.searchParams.set('q', searchQuery)
-        } else {
-            url.searchParams.delete('q')
-        }
-
-        const anyStandardFiltersAreApplied = Object.values(
-            standardSearchFilters
-        ).some(filter => filter.length > 0)
-
-        if (anyStandardFiltersAreApplied) {
-            url.searchParams.set(
-                'filters',
-                JSON.stringify(standardSearchFilters)
-            )
-        } else {
-            url.searchParams.delete('filters')
-        }
-
-        if (isQueryPageOne) {
-            url.searchParams.set('page', '1')
-        }
+        updateUrlQueryString(url, searchParameters)
 
         router.replace(url.href)
-    }, [
-        searchParams,
-        searchQuery,
-        standardSearchFilters,
-        pathname,
-        router,
-        isQueryPageOne,
-    ])
+    }, [searchParams, pathname, router, searchParameters])
 
     return (
         <Layout
@@ -146,40 +121,30 @@ export default function ExplorePageClient() {
                         */}
                         <Suspense fallback={<div>Loading...</div>}>
                             <SearchInput
-                                setSearchQuery={setSearchQuery}
-                                searchQuery={searchQuery}
+                                searchParameters={searchParameters}
+                                setSearchParameters={updateSearchParameters}
                                 showAdvancedSearch={showAdvancedSearch}
                                 setShowAdvancedSearch={setShowAdvancedSearch}
-                                setAdvancedSearchFilters={
-                                    setAdvancedSearchFilters
-                                }
                                 isLoading={isLoading}
                                 searchRequestBody={searchRequestBody}
-                                totalHits={totalHits}
-                                standardSearchFilters={standardSearchFilters}
-                                setStandardSearchFilters={
-                                    setStandardSearchFilters
-                                }
-                                setIsQueryPageOne={setIsQueryPageOne}
+                                totalHits={searchResponse.total.value}
                             />
                         </Suspense>
                     </div>
 
-                    {searchResponseHits.length > 0 && (
+                    {searchResponse.hits.length > 0 && (
                         <ResultsTable
+                            searchParameters={searchParameters}
+                            setSearchParameters={updateSearchParameters}
                             searchResponse={searchResponse}
-                            searchResponseHits={searchResponseHits}
-                            pagination={pagination}
-                            limit={limit}
-                            setLimit={setLimit}
-                            pageParam={pageParam}
                         />
                     )}
 
-                    {pagination && (
+                    {searchResponse.total.value > searchParameters.limit && (
                         <SearchPagination
-                            postsPerPage={limit}
-                            totalPosts={totalHits}
+                            searchParameters={searchParameters}
+                            setSearchParameters={updateSearchParameters}
+                            totalHits={searchResponse.total.value}
                         />
                     )}
                 </div>
@@ -187,17 +152,3 @@ export default function ExplorePageClient() {
         </Layout>
     )
 }
-
-function convertStandardFiltersToSearchFilters(
-    standardFilters: SelectedStandardSearchFilters
-): SearchFilters {
-    return {
-        logicalAnd: true,
-        filters: Object.entries(standardFilters).map(([field, values]) => ({
-            field,
-            values,
-            logicalAnd: false,
-        })),
-    }
-}
-

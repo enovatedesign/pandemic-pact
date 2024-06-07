@@ -1,14 +1,6 @@
+import { SelectedStandardSearchFilters } from '../helpers/search'
 import MultiSelect from './MultiSelect'
 import selectOptions from '../../data/dist/select-options.json'
-
-export interface SelectedStandardSearchFilters {
-    Disease?: string[]
-    Pathogen?: string[]
-    ResearchInstitutionCountry?: string[]
-    ResearchInstitutionRegion?: string[]
-    FunderCountry?: string[]
-    FunderRegion?: string[]
-}
 
 interface Props {
     selectedFilters: SelectedStandardSearchFilters
