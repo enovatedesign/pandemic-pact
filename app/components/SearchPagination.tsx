@@ -1,6 +1,6 @@
 'use client'
 
-import { SearchParameters } from '../../../helpers/search'
+import { SearchParameters } from '../helpers/search'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { range } from 'lodash'
 
