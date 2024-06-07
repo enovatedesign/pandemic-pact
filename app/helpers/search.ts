@@ -40,6 +40,9 @@ export type SearchResults = Array<SearchResult>
 export interface SearchResponse {
     hits: SearchResults
     query: string
+    total: {
+        value: number
+    }
 }
 
 export interface SearchFilters {

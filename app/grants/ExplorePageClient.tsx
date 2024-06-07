@@ -31,14 +31,11 @@ export default function ExplorePageClient() {
 
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
-    const [totalHits, setTotalHits] = useState<number>(0)
-
     const [searchResponse, setSearchResponse] = useState<SearchResponse>({
         hits: [],
         query: '',
+        total: { value: 0 },
     })
-
-    const searchResponseHits = searchResponse.hits
 
     const searchRequestBody = useMemo(() => {
         const filters = showAdvancedSearch
@@ -59,13 +56,12 @@ export default function ExplorePageClient() {
         searchRequest('list', searchRequestBody)
             .then(data => {
                 setSearchResponse(data)
-                setTotalHits(data.total.value)
                 setIsLoading(false)
             })
             .catch(error => {
                 console.error(error)
             })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
+    }, [searchRequestBody, setSearchResponse])
 
     useEffect(() => {
         const url = new URL(pathname, window.location.origin)
@@ -116,25 +112,24 @@ export default function ExplorePageClient() {
                                 setShowAdvancedSearch={setShowAdvancedSearch}
                                 isLoading={isLoading}
                                 searchRequestBody={searchRequestBody}
-                                totalHits={totalHits}
+                                totalHits={searchResponse.total.value}
                             />
                         </Suspense>
                     </div>
 
-                    {searchResponseHits.length > 0 && (
+                    {searchResponse.hits.length > 0 && (
                         <ResultsTable
                             searchParameters={searchParameters}
                             setSearchParameters={setSearchParameters}
                             searchResponse={searchResponse}
-                            searchResponseHits={searchResponseHits}
                         />
                     )}
 
-                    {totalHits > searchParameters.limit && (
+                    {searchResponse.total.value > searchParameters.limit && (
                         <SearchPagination
                             searchParameters={searchParameters}
                             setSearchParameters={setSearchParameters}
-                            totalHits={totalHits}
+                            totalHits={searchResponse.total.value}
                         />
                     )}
                 </div>
