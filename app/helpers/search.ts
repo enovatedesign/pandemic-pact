@@ -1,3 +1,11 @@
+export interface SearchParameterSchema {
+    [key: string]: {
+        defaultValue: any
+        queryStringParameter?: string
+        excludeFromQueryString?: boolean
+    }
+}
+
 export interface SelectedStandardSearchFilters {
     Disease?: string[]
     Pathogen?: string[]
@@ -57,6 +65,81 @@ export interface SearchFilters {
 export interface SearchRequestBody {
     q: string
     filters: SearchFilters
+}
+
+const searchParameterSchema: SearchParameterSchema = {
+    q: {
+        defaultValue: '',
+    },
+    standardFilters: {
+        defaultValue: {},
+        queryStringParameter: 'filters',
+    },
+    advancedFilters: {
+        defaultValue: { logicalAnd: true, filters: [] },
+        excludeFromQueryString: true,
+    },
+    page: {
+        defaultValue: 1,
+    },
+    limit: {
+        defaultValue: 25,
+    },
+}
+
+export function prepareInitialSearchParameters(searchParams: URLSearchParams) {
+    const initialSearchParameters = Object.entries(searchParameterSchema).map(
+        ([key, schema]) => {
+            if (schema.excludeFromQueryString) {
+                return [key, schema.defaultValue]
+            }
+
+            const searchParamValue = searchParams.get(
+                schema.queryStringParameter ?? key
+            )
+
+            if (!searchParamValue) {
+                return [key, schema.defaultValue]
+            }
+
+            if (typeof schema.defaultValue === 'number') {
+                return [key, parseInt(searchParamValue)]
+            }
+
+            if (typeof schema.defaultValue === 'object') {
+                return [key, JSON.parse(searchParamValue)]
+            }
+
+            return [key, searchParamValue]
+        }
+    )
+
+    return Object.fromEntries(initialSearchParameters)
+}
+
+export function updateUrlQueryString(
+    url: URL,
+    searchParameters: SearchParameters
+) {
+    Object.entries(searchParameterSchema).forEach(([key, schema]) => {
+        if (schema.excludeFromQueryString) {
+            return
+        }
+
+        const stateValue = searchParameters[key as keyof SearchParameters]
+
+        if (schema.defaultValue === stateValue) {
+            url.searchParams.delete(key)
+            return
+        }
+
+        const value =
+            typeof stateValue === 'object'
+                ? JSON.stringify(stateValue)
+                : `${stateValue}`
+
+        url.searchParams.set(schema.queryStringParameter ?? key, value)
+    })
 }
 
 export async function highlightMatchesInGrant(grant: any, query: string) {
