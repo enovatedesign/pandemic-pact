@@ -7,8 +7,6 @@ import SearchInput from '../components/SearchInput'
 import ResultsTable from '../components/ResultsTable'
 import {
     searchRequest,
-    SearchFilters,
-    SelectedStandardSearchFilters,
     SearchParameters,
     SearchResponse,
 } from '../helpers/search'
@@ -60,11 +58,25 @@ export default function ExplorePageClient() {
     })
 
     const searchRequestBody = useMemo(() => {
-        const filters = showAdvancedSearch
-            ? searchParameters.advancedFilters
-            : convertStandardFiltersToSearchFilters(
-                  searchParameters.standardFilters
-              )
+        let filters
+
+        if (showAdvancedSearch) {
+            // Advanced Search Filters are already in the format expected by the API
+            // so no conversion needed
+            filters = searchParameters.advancedFilters
+        } else {
+            // Convert the Standard Search Filters into the format expected by the API
+            filters = {
+                logicalAnd: true,
+                filters: Object.entries(searchParameters.standardFilters).map(
+                    ([field, values]) => ({
+                        field,
+                        values,
+                        logicalAnd: false,
+                    })
+                ),
+            }
+        }
 
         return {
             q: searchParameters.q,
@@ -158,17 +170,4 @@ export default function ExplorePageClient() {
             </div>
         </Layout>
     )
-}
-
-function convertStandardFiltersToSearchFilters(
-    standardFilters: SelectedStandardSearchFilters
-): SearchFilters {
-    return {
-        logicalAnd: true,
-        filters: Object.entries(standardFilters).map(([field, values]) => ({
-            field,
-            values,
-            logicalAnd: false,
-        })),
-    }
 }
