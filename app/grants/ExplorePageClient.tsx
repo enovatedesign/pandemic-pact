@@ -12,7 +12,7 @@ import {
     SearchResponse,
 } from '../helpers/search'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import SearchPagination from '../components/ContentBuilder/Common/SearchPagination'
+import SearchPagination from '../components/SearchPagination'
 
 export default function ExplorePageClient() {
     const router = useRouter()
