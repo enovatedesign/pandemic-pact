@@ -18,13 +18,63 @@ export default function ExplorePageClient() {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
-    const [searchParameters, setSearchParameters] = useState<SearchParameters>({
-        q: searchParams.get('q') ?? '',
-        standardFilters: JSON.parse(searchParams.get('filters') ?? '{}'),
-        advancedFilters: { logicalAnd: true, filters: [] },
-        page: parseInt(searchParams.get('page') ?? '1'),
-        limit: parseInt(searchParams.get('limit') ?? '25'),
-    })
+    interface SearchParameterSchema {
+        [key: string]: {
+            defaultValue: any
+            queryStringParameter?: string
+            excludeFromQueryString?: boolean
+        }
+    }
+
+    const searchParameterSchema: SearchParameterSchema = {
+        q: {
+            defaultValue: '',
+        },
+        standardFilters: {
+            defaultValue: {},
+            queryStringParameter: 'filters',
+        },
+        advancedFilters: {
+            defaultValue: { logicalAnd: true, filters: [] },
+            excludeFromQueryString: true,
+        },
+        page: {
+            defaultValue: 1,
+        },
+        limit: {
+            defaultValue: 25,
+        },
+    }
+
+    const initialSearchParameters = Object.entries(searchParameterSchema).map(
+        ([key, schema]) => {
+            if (schema.excludeFromQueryString) {
+                return [key, schema.defaultValue]
+            }
+
+            const searchParamValue = searchParams.get(
+                schema.queryStringParameter ?? key
+            )
+
+            if (!searchParamValue) {
+                return [key, schema.defaultValue]
+            }
+
+            if (typeof schema.defaultValue === 'number') {
+                return [key, parseInt(searchParamValue)]
+            }
+
+            if (typeof schema.defaultValue === 'object') {
+                return [key, JSON.parse(searchParamValue)]
+            }
+
+            return [key, searchParamValue]
+        }
+    )
+
+    const [searchParameters, setSearchParameters] = useState<SearchParameters>(
+        Object.fromEntries(initialSearchParameters)
+    )
 
     const updateSearchParameters = (newSearchParameters: SearchParameters) => {
         setSearchParameters(oldSearchParameters => {
@@ -102,24 +152,25 @@ export default function ExplorePageClient() {
 
         url.search = searchParams.toString()
 
-        if (searchParameters.q) {
-            url.searchParams.set('q', searchParameters.q)
-        } else {
-            url.searchParams.delete('q')
-        }
+        Object.entries(searchParameterSchema).forEach(([key, schema]) => {
+            if (schema.excludeFromQueryString) {
+                return
+            }
 
-        const anyStandardFiltersAreApplied = Object.values(
-            searchParameters.standardFilters
-        ).some(filter => filter.length > 0)
+            const stateValue = searchParameters[key as keyof SearchParameters]
 
-        if (anyStandardFiltersAreApplied) {
-            url.searchParams.set(
-                'filters',
-                JSON.stringify(searchParameters.standardFilters)
-            )
-        } else {
-            url.searchParams.delete('filters')
-        }
+            if (schema.defaultValue === stateValue) {
+                url.searchParams.delete(key)
+                return
+            }
+
+            const value =
+                typeof stateValue === 'object'
+                    ? JSON.stringify(stateValue)
+                    : `${stateValue}`
+
+            url.searchParams.set(schema.queryStringParameter ?? key, value)
+        })
 
         router.replace(url.href)
     }, [searchParams, pathname, router, searchParameters])
