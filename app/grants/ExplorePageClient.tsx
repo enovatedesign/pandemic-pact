@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useState, useEffect, useMemo } from 'react'
+import { isEqual } from 'lodash'
 import Layout from '../components/Layout'
 import SearchInput from '../components/SearchInput'
 import ResultsTable from '../components/ResultsTable'
@@ -26,6 +27,27 @@ export default function ExplorePageClient() {
         page: parseInt(searchParams.get('page') ?? '1'),
         limit: parseInt(searchParams.get('limit') ?? '25'),
     })
+
+    const updateSearchParameters = (newSearchParameters: SearchParameters) => {
+        setSearchParameters(oldSearchParameters => {
+            // Page should be reset if any search parameter other than `page` has changed
+            const pageShouldBeReset = Object.entries(newSearchParameters)
+                .filter(([key]) => key !== 'page')
+                .some(
+                    ([key, value]) =>
+                        !isEqual(
+                            value,
+                            oldSearchParameters[key as keyof SearchParameters]
+                        )
+                )
+
+            return {
+                ...oldSearchParameters,
+                ...newSearchParameters,
+                page: pageShouldBeReset ? 1 : newSearchParameters.page,
+            }
+        })
+    }
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -107,7 +129,7 @@ export default function ExplorePageClient() {
                         <Suspense fallback={<div>Loading...</div>}>
                             <SearchInput
                                 searchParameters={searchParameters}
-                                setSearchParameters={setSearchParameters}
+                                setSearchParameters={updateSearchParameters}
                                 showAdvancedSearch={showAdvancedSearch}
                                 setShowAdvancedSearch={setShowAdvancedSearch}
                                 isLoading={isLoading}
@@ -120,7 +142,7 @@ export default function ExplorePageClient() {
                     {searchResponse.hits.length > 0 && (
                         <ResultsTable
                             searchParameters={searchParameters}
-                            setSearchParameters={setSearchParameters}
+                            setSearchParameters={updateSearchParameters}
                             searchResponse={searchResponse}
                         />
                     )}
@@ -128,7 +150,7 @@ export default function ExplorePageClient() {
                     {searchResponse.total.value > searchParameters.limit && (
                         <SearchPagination
                             searchParameters={searchParameters}
-                            setSearchParameters={setSearchParameters}
+                            setSearchParameters={updateSearchParameters}
                             totalHits={searchResponse.total.value}
                         />
                     )}
