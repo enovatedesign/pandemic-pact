@@ -24,15 +24,31 @@ export default function Header({ className, showMobileNav }: Props ) {
         bodyEl?.classList.remove('overflow-y-hidden')
     }
     
-    const NavItem = (link: {label: string, href: string, subPages: any}) => (
-        <Link
-            onClick={navItemClick}
-            href={link.href}
-            className={`border border-primary/25 inner-glow rounded-full py-3 px-6 my-3 flex uppercase font-medium tracking-wider transition-colors duration-150 lg:rounded-none lg:p-0 lg:border-0 lg:my-0 lg:shadow-none ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'}`}
-        >
-            {link.label}
-        </Link>
-    )
+    const NavItem = (link: {label: string, href: string, subPages: any}) => {
+
+        const outbreaks = link.label.toLowerCase() === 'outbreaks' ? true : false
+        
+        const linkClasses = [
+            'border border-primary/25 inner-glow rounded-full py-3 px-6 my-3 flex uppercase font-medium tracking-wider transition-colors duration-150 lg:rounded-none lg:p-0 lg:border-0 lg:my-0 lg:shadow-none',
+            pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white',
+            'lg:text-sm xl:text-base'
+        ].filter(Boolean).join(' ')
+        
+        return (
+            <Link
+                onClick={navItemClick}
+                href={link.href}
+                className={linkClasses}
+            >   
+                {link.label}
+                {outbreaks && (
+                    <span className="relative flex size-3 ml-0.5 items-center justify-center">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
+                        <span className="relative inline-flex rounded-full size-2.5 bg-brand-red-600"></span>
+                    </span>
+                )}
+            </Link>
+        )}
     
     const Logo = () => (
         <Image
@@ -40,7 +56,7 @@ export default function Header({ className, showMobileNav }: Props ) {
             alt="Pandemic Pact"
             width={192}
             height={95}
-            className="-ml-2.5 lg:-ml-4 w-36 h-auto lg:w-48"
+            className="-ml-2.5 lg:-ml-4 w-36 h-auto lg:w-48 min-w-32"
         />
     )
         
@@ -50,7 +66,7 @@ export default function Header({ className, showMobileNav }: Props ) {
 
     const navUnorderedListClasses = [
         "pb-24 px-6 w-full max-h-screen overflow-y-auto mt-auto",
-        "lg:px-10 lg:relative lg:flex lg:gap-x-10 lg:py-3 lg:overflow-y-visible",
+        "lg:px-10 lg:relative lg:flex lg:gap-x-6 2xl:gap-x-10 lg:py-3 lg:overflow-y-visible",
     ].join(' ')
 
     // delay-[50ms] delay-[100ms] delay-[150ms] delay-[200ms] delay-[250ms] delay-[300ms] delay-[350ms] delay-[400ms] delay-[450ms] delay-[500ms] 
@@ -74,7 +90,7 @@ export default function Header({ className, showMobileNav }: Props ) {
     return (
         <header className={className}>
             <div className="container relative">
-                <div className="py-8 flex flex-row items-center justify-between">
+                <div className="py-8 flex flex-row gap-10 items-center justify-between">
                     
                     {pathname === '/' ?
                         <h1>
@@ -109,7 +125,7 @@ export default function Header({ className, showMobileNav }: Props ) {
 
                                             {link.subPages ? (
                                                 <button onClick={handleClick} className='border border-primary/25 inner-glow rounded-full py-3 px-6 my-3 flex justify-between w-full lg:rounded-none lg:p-0 lg:border-0 lg:my-0 lg:shadow-none lg:py-0'>
-                                                    <span className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'} `}>
+                                                    <span className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'} lg:text-sm xl:text-base`}>
                                                         {link.label}
                                                     </span>
                                                     <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300 lg:hidden`} />

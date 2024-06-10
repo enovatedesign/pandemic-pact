@@ -60,7 +60,7 @@ export default function SearchInput({
         <div>
             <div className="space-y-3">
                 <div className="flex gap-x-4">
-                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
+                    <div className="focus-within:border-primary bg-white pl-2 pr-1 md:pr-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
                         <input
                             type="search"
                             placeholder="Search..."
@@ -68,7 +68,7 @@ export default function SearchInput({
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => setSearchQuery(event.target.value)}
                             value={searchParameters.q}
-                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                            className="block w-full placeholder:text-gray-400 border-none p-0 text-sm md:text-lg xl:text-xl focus:outline-none focus:border-none focus:ring-0"
                         />
 
                         <Button

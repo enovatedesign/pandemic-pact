@@ -66,7 +66,7 @@ const Pagination = ({
     return (
         <nav aria-label="Pagination">
 
-            <ul className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
+            <ul className="flex justify-between md:pt-6">
                 <li>
 
                     {/* Previous page button */}

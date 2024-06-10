@@ -67,7 +67,7 @@ export default function JumpMenu({cardData}: Props) {
                                         return (
                                             <li ref={dropdown}
                                                 key={index}
-                                                className="hover:bg-primary-lightest transition-colors duration-300 p-2 rounded-lg h-full"
+                                                className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
                                             >
                                                 <a href={url}>
                                                     <button onClick={() => setIsOpen(false)}>
@@ -82,7 +82,7 @@ export default function JumpMenu({cardData}: Props) {
                                                             />
                                                         )}
                                                         {title && (
-                                                            <p className='text-left pt-4'>
+                                                            <p className="text-left pt-4">
                                                                 {title}
                                                             </p>
                                                         )}

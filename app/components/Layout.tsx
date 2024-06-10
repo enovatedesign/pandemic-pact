@@ -5,7 +5,7 @@ import '../css/components/sidebar.css'
 
 import { isValidElement, useState, useEffect, ReactNode } from 'react'
 import { useSpring, animated } from '@react-spring/web'
-import { AdjustmentsIcon } from '@heroicons/react/outline'
+import { AdjustmentsIcon, ShieldExclamationIcon } from '@heroicons/react/outline'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -24,6 +24,7 @@ type Props = {
     title?: string | ReactNode
     summary?: string
     showSummary?: boolean
+    outbreak?: boolean
 }
 
 const Layout = ({
@@ -33,6 +34,7 @@ const Layout = ({
     sidebar,
     mastheadContent,
     children,
+    outbreak = false
 }: Props) => {
     const [animateImmediately, setAnimateImmediately] = useState(true);
 
@@ -118,7 +120,7 @@ const Layout = ({
                         className={`fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none sidebar ${sidebarOpen ? 'open' : 'closed'}`}
                         style={transformAnimationProps}
                     >
-                        <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25  text-white h-screen">
+                        <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25 text-white h-screen">
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
                                 className="hidden lg:block p-6 text-primary hover:text-white duration-300 transition-colors"
@@ -162,18 +164,26 @@ const Layout = ({
                                 className={`relative masthead-background ${mastheadStyles.background}`}
                             >
                                 <div
-                                    className={`masthead-background ${mastheadStyles.visualise}`}
+                                    className={`masthead-background ${!outbreak ? mastheadStyles.visualise : mastheadStyles.outbreak}`}
                                 >
                                     <div className="h-full flex items-end pb-6 lg:pb-12">
                                         {title && (
                                             <div className="container mt-44 lg:mt-52">
-                                                {isValidElement(title) ? (
-                                                    title
-                                                ) : (
-                                                    <PageTitle>
-                                                        {title}
-                                                    </PageTitle>
-                                                )}
+                                                <div className="flex gap-x-2 items-center">
+                                                    {outbreak && (
+                                                        <ShieldExclamationIcon 
+                                                            className="size-10 text-brand-red-500"
+                                                            aria-hidden="true"
+                                                        />
+                                                    )}
+                                                    {isValidElement(title) ? (
+                                                        title
+                                                    ) : (
+                                                        <PageTitle>
+                                                            {title}
+                                                        </PageTitle>
+                                                    )}
+                                                </div>
 
                                                 {summary && showSummary && (
                                                     <p className="mt-2 text-white opacity-50 lg:text-xl">

@@ -11,5 +11,10 @@ export async function generateMetadata({ params }: generateMetadataProps, parent
 }
 
 export default async function Visualise() {
-    return <VisualisePageClient/>
+    return (
+        <VisualisePageClient 
+            title="Interactive Charts"
+            summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+        />
+    ) 
 }

@@ -8,13 +8,13 @@ interface Props {
 
 const VisualisationJumpMenu = ({dropdownVisible}: Props) => {
     return (
-    <AnimateHeight
-        duration={300}
-        height={dropdownVisible ? 'auto' : 0}
-        className="sticky w-full z-20 top-0 bg-primary-lighter/75 backdrop-blur-sm"
-    >
-        <JumpMenu cardData={visualisationCardData} />
-    </AnimateHeight>
+        <AnimateHeight
+            duration={300}
+            height={dropdownVisible ? 'auto' : 0}
+            className="sticky w-full z-20 top-0 backdrop-blur-sm bg-primary-lighter/75"
+        >
+            <JumpMenu cardData={visualisationCardData}/>
+        </AnimateHeight>
     )
 }
 

@@ -3,21 +3,25 @@ import VisualisationCard from '../VisualisationCard'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
 
-export default function GrantsByDisease() {
+interface GrantsByDiseaseProps {
+    outbreak?: boolean
+}
+
+export default function GrantsByDisease({outbreak}: GrantsByDiseaseProps) {
     const tabs = [
         {
             tab: {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart />,
+            content: <TemporalChart outbreak={outbreak} />,
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart />,
+            content: <BarChart outbreak={outbreak} />,
         },
     ]
 
