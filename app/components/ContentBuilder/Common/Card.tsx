@@ -46,12 +46,12 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
 
     const cardImage = thumbnailImage ? thumbnailImage[0] : image
 
-    const urlCondition = url?.startsWith('http') || url?.startsWith('#') ;
-    const targetAttr = url?.startsWith('http') ? '_blank' : undefined;
-    const relAttr = urlCondition ? 'nofollow noopener noreferrer' : undefined;
+    const externalUrl = url?.startsWith('http')
+    const targetAttr = externalUrl ? '_blank' : undefined
+    const relAttr = externalUrl ? 'nofollow noopener noreferrer' : undefined
 
     const hoverClasses = [
-        urlCondition ? 'hover:shadow-lg transition-shadow duration-300' : ''
+        url ? 'hover:shadow-lg transition-shadow duration-300' : ''
     ].join(' ')
 
     const [ref, springs] = useInView(
@@ -76,7 +76,7 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
             style={springs}
         >   
             <ConditionalWrapper
-                condition={urlCondition}
+                condition={url}
                 wrapper={children => <a href={url} className="h-full flex flex-col" target={targetAttr} rel={relAttr}>{children}</a>}
             >   
 
@@ -140,7 +140,7 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
                                 <CardBottomContent cardBottomContent={cardBottomContent}/>
                             )}
 
-                            {animatedIcon && (
+                            {animatedIcon && url && (
                                 <>
                                     <div className="relative h-12 w-12" aria-hidden="true">
                                         <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">

@@ -14,12 +14,17 @@ export const links = {
         href: '/grants', 
         subPages: null,
     },
+    outbreaks: { 
+        label: 'Outbreaks', 
+        href: '/outbreaks',
+        subPages: null,
+    },
     rrnas: { 
         label: 'RRNA', 
         href: '/rapid-research-needs-appraisals', 
         subPages: null,
     },
-    publications: { 
+    publications: {
         label: 'Publications', 
         href: '/publications' ,
         subPages: null,

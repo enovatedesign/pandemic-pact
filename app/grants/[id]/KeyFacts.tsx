@@ -38,6 +38,10 @@ export default function KeyFacts({ grant }: { grant: any }) {
             text: 'Partner Institution',
             metric: null,
         },
+        {
+            text: 'Research Priority Alignment',
+            metric: 'N/A',
+        },
     ]
 
     const filteredKeyFactsHeadings = keyFactsHeadings.filter(heading => heading.metric || heading.startMetric)
@@ -98,9 +102,9 @@ export default function KeyFacts({ grant }: { grant: any }) {
                                 index === 2 && 'md:border-r-2 md:col-span-2 border-b-2',
                                 index === 3 && 'border-r-2 md:col-span-2 md:border-r-2 border-b-2',
                                 index === 4 && 'md:col-span-2 border-b-2',
-                                index === 5 && 'col-span-1 md:col-span-2 border-r-2',
-                                index === 6 && 'col-span-1 md:col-span-4',
-                                index === 7 && 'col-span-2 md:border-l-2',
+                                index === 5 && 'col-span-1 max-md:border-b-2 md:col-span-2 border-r-2',
+                                index === 6 && 'col-span-1 max-md:border-b-2 md:col-span-2 md:border-r-2',
+                                index === 7 && 'col-span-2',
                             ].filter(Boolean).join(' ')
 
                             const metricClasses = [index > 2 ? 'text-lg lg:text-xl' : 'text-lg md:text-3xl lg:text-4xl font-bold'].join(' ')

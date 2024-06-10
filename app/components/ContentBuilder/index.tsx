@@ -21,9 +21,9 @@ import HeroImageSliderBlock from "./Blocks/HeroImageSliderBlock";
 import PullQuoteBlock from "./Blocks/PullQuoteBlock";
 import ListTeamMembersBlock from "./Blocks/ListTeamMembersBlock";
 import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
+import ListOutbreaksBlock from "./Blocks/ListOutbreaksBlock";
 import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock";
 import BlockIndexWrapper from "./BlockIndexWrapper"
-import { first } from "lodash";
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -48,6 +48,7 @@ const blocks: any = {
 	pullQuote: PullQuoteBlock,
 	listTeamMembers: ListTeamMembersBlock,
 	listPublications: ListPublicationsBlock,
+	listOutbreaks: ListOutbreaksBlock,
 	featuredPublication: FeaturedPublicationBlock,
 };
 

@@ -29,7 +29,12 @@ export const contentBuilderQuery = `
             id
             typeHandle
             status
+            button {
+              url
+              text
+            }
             colour
+            position
           }
           ... on bodyContent_pullQuote_BlockType {
             id
@@ -142,6 +147,29 @@ export const contentBuilderQuery = `
                   }
                 }
                 publicationType(label: true)
+              }
+            }
+          }
+          ... on bodyContent_listOutbreaks_BlockType {
+            id
+            typeHandle
+            heading
+            customEntries (orderBy: "title DESC") {
+              ... on outbreaks_outbreak_Entry {
+                id
+                title
+                summary
+                uri
+                postDate
+                outbreakPending
+                thumbnailImage  @transform(transform: "c480x300") {
+                  ... on contentAssets_Asset {
+                    altText
+                    height
+                    url
+                    width
+                  }
+                }
               }
             }
           }

@@ -50,16 +50,17 @@ export async function getPageContent(
     context: Parameters,
     previewToken?: string
 ) {
-    const slug = context.slug[context.slug.length - 1] ?? undefined
+
+    const uri = context.slug.join('/')
 
     const entryTypeData = await GraphQL(
-        `query($slug:[String]){
-			entry: entry(status: "enabled", slug: $slug) {
+        `query($uri:[String]){
+			entry: entry(status: "enabled", uri: $uri) {
 				typeHandle
 				sectionHandle
 			}
 		}`,
-        { slug },
+        { uri },
         previewToken
     )
 
@@ -76,7 +77,7 @@ export async function getPageContent(
         return null
     }
 
-    const data = await entryQuery(slug, entryType, sectionHandle, previewToken)
+    const data = await entryQuery(uri, entryType, sectionHandle, previewToken)
 
     return data
 }

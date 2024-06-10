@@ -28,6 +28,8 @@ type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
+    
+    const router = useRouter()
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 

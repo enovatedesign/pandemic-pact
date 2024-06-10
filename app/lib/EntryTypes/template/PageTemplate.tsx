@@ -12,6 +12,7 @@ export default function PageTemplate({data}: any) {
                 title={entry.title}
                 summary={entry.summary}
                 showSummary={entry.showSummary}
+                outbreak={entry.outbreak}
             >
                 <Matrix blocks={entry.bodyContent} />
             </Layout>

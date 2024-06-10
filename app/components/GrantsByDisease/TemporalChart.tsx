@@ -20,7 +20,11 @@ import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import Switch from '../Switch'
 import RadioGroup from '../RadioGroup'
 
-export default function TemporalChart() {
+interface TemporalChartProps {
+    outbreak?: boolean
+}
+
+export default function TemporalChart({outbreak}: TemporalChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
 
     const [
@@ -72,12 +76,14 @@ export default function TemporalChart() {
     return (
         <>
             <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
-                <Switch
-                    checked={hideCovid}
-                    onChange={setHideCovid}
-                    label="Hide COVID-19"
-                    theme="light"
-                />
+                {!outbreak && (
+                    <Switch
+                        checked={hideCovid}
+                        onChange={setHideCovid}
+                        label="Hide COVID-19"
+                        theme="light"
+                    />
+                )}
 
                 <RadioGroup<boolean>
                     options={[

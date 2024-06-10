@@ -11,18 +11,18 @@ interface Props {
 	lastBlock: boolean
 }
 
-export default function ButtonBlock({ block, firstBlock, lastBlock }: Props) {
+export default function ButtonBlock({ block }: Props) {
 	const button = block.button;
 	const colour = block.colour;
 	const position = block.position;
-
-	if (button && colour && position) {
+	
+	if (button.url && colour && position) {
 		return (
 			<BlockWrapper>
 				<div className={"text-" + position}>
 					<Button
 						colour={colour}
-						href={"/" + button.element.uri}
+						href={button.url}
 					>
 						{button.text}
 					</Button>
