@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import {
     LineChart,
     Line,
@@ -10,18 +10,28 @@ import {
 } from 'recharts'
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { groupBy } from 'lodash'
+import ImageExportLegend from '../ImageExportLegend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
 import { diseaseColours } from '../../helpers/colours'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
+import Switch from '../Switch'
+import RadioGroup from '../RadioGroup'
 
-interface Props {
-    hideCovid: boolean
+interface TemporalChartProps {
+    outbreak?: boolean
 }
 
-export default function TemporalChart({ hideCovid }: Props) {
+export default function TemporalChart({outbreak}: TemporalChartProps) {
+    const [hideCovid, setHideCovid] = useState(false)
+
+    const [
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
+    ] = useState(false)
+
     const { grants } = useContext(GlobalFilterContext)
 
     const datasetGroupedByYear = groupBy(
@@ -34,30 +44,60 @@ export default function TemporalChart({ hideCovid }: Props) {
         'TrendStartYear'
     )
 
-    const amountCommittedToEachDiseaseOverTime = Object.keys(
-        datasetGroupedByYear
-    ).map(year => {
+    const chartData = Object.keys(datasetGroupedByYear).map(year => {
         const grants = datasetGroupedByYear[year]
 
         let dataPoint: { [key: string]: string | number } = { year }
 
         selectOptions.Disease.forEach(({ value, label }) => {
-            dataPoint[label] = grants
-                .filter(grant => grant.Disease.includes(value))
-                .reduce(...sumNumericGrantAmounts)
+            const filteredGrants = grants.filter(grant =>
+                grant.Disease.includes(value)
+            )
+
+            dataPoint[label] = displayKnownFinancialCommitments
+                ? filteredGrants.reduce(...sumNumericGrantAmounts)
+                : filteredGrants.length
         })
 
         return dataPoint
     })
 
     if (hideCovid) {
-        amountCommittedToEachDiseaseOverTime.forEach(dataPoint => {
+        chartData.forEach(dataPoint => {
             delete dataPoint['COVID-19']
         })
     }
 
+    const tickFormatter = (value: any) =>
+        displayKnownFinancialCommitments
+            ? axisDollarFormatter(value)
+            : value.toString()
+
     return (
         <>
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
+                {!outbreak && (
+                    <Switch
+                        checked={hideCovid}
+                        onChange={setHideCovid}
+                        label="Hide COVID-19"
+                        theme="light"
+                    />
+                )}
+
+                <RadioGroup<boolean>
+                    options={[
+                        { label: 'Number of grants', value: false },
+                        {
+                            label: 'Known financial commitments (USD)',
+                            value: true,
+                        },
+                    ]}
+                    value={displayKnownFinancialCommitments}
+                    onChange={setDisplayKnownFinancialCommitments}
+                />
+            </div>
+
             <ResponsiveContainer width="100%" height={500} className="z-10">
                 <LineChart
                     margin={{
@@ -66,7 +106,7 @@ export default function TemporalChart({ hideCovid }: Props) {
                         left: 30,
                         bottom: 20,
                     }}
-                    data={amountCommittedToEachDiseaseOverTime}
+                    data={chartData}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
 
@@ -83,9 +123,11 @@ export default function TemporalChart({ hideCovid }: Props) {
 
                     <YAxis
                         type="number"
-                        tickFormatter={axisDollarFormatter}
+                        tickFormatter={tickFormatter}
                         label={{
-                            value: 'Known Financial Commitments (USD)',
+                            value: displayKnownFinancialCommitments
+                                ? 'Known Financial Commitments (USD)'
+                                : 'Number of grants',
                             position: 'left',
                             angle: -90,
                             style: { textAnchor: 'middle' },
@@ -98,7 +140,10 @@ export default function TemporalChart({ hideCovid }: Props) {
                         content={props => (
                             <RechartTrendsTooltipContent
                                 props={props}
-                                chartData={amountCommittedToEachDiseaseOverTime}
+                                chartData={chartData}
+                                displayKnownFinancialCommitments={
+                                    displayKnownFinancialCommitments
+                                }
                             />
                         )}
                         {...rechartBaseTooltipProps}
@@ -110,11 +155,17 @@ export default function TemporalChart({ hideCovid }: Props) {
                             dataKey={label}
                             stroke={diseaseColours[value]}
                             strokeWidth={2}
-                            dot={false}
                         />
                     ))}
                 </LineChart>
             </ResponsiveContainer>
+
+            <ImageExportLegend
+                categories={selectOptions.Disease.map(({ label }) => label)}
+                colours={selectOptions.Disease.map(
+                    ({ value }) => diseaseColours[value]
+                )}
+            />
         </>
     )
 }

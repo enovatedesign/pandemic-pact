@@ -19,12 +19,22 @@ export function availableFilters() {
         },
 
         {
+            label: 'Funder Region',
+            field: 'FunderRegion',
+        },
+
+        {
+            label: 'Funder Country',
+            field: 'FunderCountry',
+        },
+
+        {
             label: 'Research Institution',
             field: 'ResearchInstitutionName',
         },
 
         {
-            label: 'Country',
+            label: 'Research Location Country',
             field: 'ResearchLocationCountry',
         },
 

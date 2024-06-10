@@ -4,11 +4,13 @@ import TooltipContent from './TooltipContent'
 interface Props {
     props: any
     chartData: any
+    displayKnownFinancialCommitments?: boolean
 }
 
 export default function RechartTrendsTooltipContent({
     props,
     chartData,
+    displayKnownFinancialCommitments,
 }: Props) {
     if (!props.active) return null
 
@@ -21,6 +23,7 @@ export default function RechartTrendsTooltipContent({
 
     const items = props.payload.map((item: any) => {
         let trend = undefined
+        let trendPercentageDifference = undefined
 
         const year = item.payload.year
 
@@ -39,18 +42,27 @@ export default function RechartTrendsTooltipContent({
 
             if (item.value > previousYearValue) {
                 trend = 'up'
+                trendPercentageDifference = Math.round(
+                    ((item.value - previousYearValue) / previousYearValue) * 100
+                )
             } else if (item.value < previousYearValue) {
                 trend = 'down'
+                trendPercentageDifference = Math.round(
+                    ((previousYearValue - item.value) / previousYearValue) * 100
+                )
             } else {
                 trend = 'none'
+                trendPercentageDifference = null
             }
         }
-
         return {
             label: item.name,
-            value: dollarValueFormatter(item.value),
+            value: displayKnownFinancialCommitments
+                ? dollarValueFormatter(item.value)
+                : item.value,
             colour: item.color,
             trend,
+            trendPercentageDifference,
         }
     })
 

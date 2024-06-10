@@ -1,27 +1,27 @@
-import { useState } from 'react'
 import { ChartBarIcon, ClockIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
-import Switch from '../Switch'
 import BarChart from './BarChart'
 import TemporalChart from './TemporalChart'
 
-export default function GrantsByDisease() {
-    const [hideCovid, setHideCovid] = useState(false)
+interface GrantsByDiseaseProps {
+    outbreak?: boolean
+}
 
+export default function GrantsByDisease({outbreak}: GrantsByDiseaseProps) {
     const tabs = [
         {
             tab: {
                 icon: ClockIcon,
                 label: 'Temporal',
             },
-            content: <TemporalChart hideCovid={hideCovid} />,
+            content: <TemporalChart outbreak={outbreak} />,
         },
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart hideCovid={hideCovid} />,
+            content: <BarChart outbreak={outbreak} />,
         },
     ]
 
@@ -41,6 +41,11 @@ export default function GrantsByDisease() {
                 The chart shows the total number of grants awarded and amount of
                 funding committed for each disease per calendar year.
             </p>
+
+            <p className="text-brand-grey-500">
+                The pop up box notes the year on year percentage increase or
+                decrease for each priority disease.
+            </p>
         </>
     )
 
@@ -52,14 +57,6 @@ export default function GrantsByDisease() {
             footnote="Please note: Grants may fall under more than one disease. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
             infoModalContents={infoModalContents}
             tabs={tabs}
-        >
-            <Switch
-                checked={hideCovid}
-                onChange={setHideCovid}
-                label="Hide COVID-19"
-                theme="light"
-                className="ignore-in-image-export"
-            />
-        </VisualisationCard>
+        />
     )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react';
 import { useMemo, useState, useEffect, useRef } from 'react'
 import Layout from '../components/Layout'
 import FilterSidebar from '../components/FilterSidebar'
@@ -21,13 +22,36 @@ import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
+import Button from '../components/Button'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 
-export default function VisualisePageClient() {
+interface VisualisationPageProps {
+    title: string
+    summary?: string
+    showSummary?: boolean
+    outbreak?: boolean
+    fixedDiseaseOptions?: {
+        label: string 
+        value: string
+        isFixed?: boolean
+    }[],
+    children?: React.ReactNode,
+}
+export default function VisualisePageClient({
+    title,
+    summary,
+    showSummary = true,
+    outbreak = false,
+    fixedDiseaseOptions,
+    children
+}: VisualisationPageProps) {
     const tooltipRef = useRef<TooltipRefProps>(null)
-
+    
     const [completeDataset, setCompleteDataset] = useState([])
 
     const [loadingDataset, setLoadingDataset] = useState(true)
+
+    const hasChildren = React.Children.toArray(children).length > 0
 
     useEffect(() => {
         fetch('/data/grants.json')
@@ -57,6 +81,7 @@ export default function VisualisePageClient() {
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
+                    fixedDiseaseOptions={fixedDiseaseOptions}
                 />
             ),
             closedContent: (
@@ -95,12 +120,7 @@ export default function VisualisePageClient() {
                 </dl>
             ),
         }
-    }, [
-        selectedFilters,
-        completeDataset,
-        globallyFilteredDataset,
-        loadingDataset,
-    ])
+    }, [selectedFilters, completeDataset, globallyFilteredDataset, loadingDataset, fixedDiseaseOptions])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
 
@@ -146,19 +166,40 @@ export default function VisualisePageClient() {
         >
             <TooltipContext.Provider value={{ tooltipRef }}>
                 <Layout
-                    title="Interactive Charts"
-                    showSummary={true}
-                    summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+                    title={title}
+                    showSummary={showSummary}
+                    summary={summary}
                     sidebar={sidebar}
+                    outbreak={outbreak}
                 >
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} />
+                    {!outbreak && (
+                        <>
+                            <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
 
-                    <VisualisationCardLinks />
+                            <VisualisationCardLinks />
+                        </>
+                    )}
 
-                    <div className="relative z-10 mx-auto my-6 lg:my-12 lg:container">
+                    {hasChildren && (
+                        <div className="mx-auto container flex justify-center mt-6 lg:mt-12">
+                            <Button
+                                size="small" 
+                                colour="primary"
+                                href="#visualisations-wrapper"
+                                customClasses="flex items-center gap-1"
+                            >
+                                Jump to visualisations
+                                <ChevronDownIcon className="size-6" />
+                            </Button>
+                        </div>
+                    )}
+
+                    {children}
+
+                    <div className="relative z-10 mx-auto my-6 lg:my-12 lg:container" id="visualisations-wrapper">
                         <div className={`${gridClasses} mt-6`}>
                             <div id="disease" className={gridClasses}>
-                                <GrantsByDiseaseCard />
+                                <GrantsByDiseaseCard outbreak={outbreak}/>
                             </div>
 
                             <div id="research-category" className={gridClasses}>

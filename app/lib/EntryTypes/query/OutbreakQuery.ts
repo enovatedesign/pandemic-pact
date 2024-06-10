@@ -13,9 +13,10 @@ export default async function PageQuery(uri: string, entryType: string = 'page',
                     postDate
                     slug
                     ... on ${sectionHandle}_${entryType}_Entry {
+                        outbreakDisease
+                        outbreakPending
                         summary
                         showSummary
-                        outbreak
                         ${contentBuilderQuery}
                     }
                     ${seomaticQuery}

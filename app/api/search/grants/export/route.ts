@@ -14,7 +14,10 @@ export async function POST(request: NextRequest) {
         return searchUnavailableResponse()
     }
 
-    const { errorResponse, values } = await validateRequest(request)
+    const { errorResponse, values } = await validateRequest(request, [
+        'q',
+        'filters',
+    ])
 
     if (errorResponse) {
         return errorResponse

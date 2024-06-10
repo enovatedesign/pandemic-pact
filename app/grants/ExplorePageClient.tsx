@@ -1,16 +1,109 @@
-"use client"
+'use client'
 
-import {Suspense, useState} from "react"
-import Layout from "../components/Layout"
-import SearchInput from "../components/SearchInput"
-import ResultsTable from "../components/ResultsTable"
-import {SearchResponse} from '../helpers/search'
+import { Suspense, useState, useEffect, useMemo } from 'react'
+import { isEqual } from 'lodash'
+import Layout from '../components/Layout'
+import SearchInput from '../components/SearchInput'
+import ResultsTable from '../components/ResultsTable'
+import {
+    prepareInitialSearchParameters,
+    updateUrlQueryString,
+    searchRequest,
+    SearchParameters,
+    SearchResponse,
+} from '../helpers/search'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import SearchPagination from '../components/SearchPagination'
 
 export default function ExplorePageClient() {
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const [searchParameters, setSearchParameters] = useState<SearchParameters>(
+        prepareInitialSearchParameters(searchParams)
+    )
+
+    const updateSearchParameters = (newSearchParameters: SearchParameters) => {
+        setSearchParameters(oldSearchParameters => {
+            // Page should be reset if any search parameter other than `page` has changed
+            const pageShouldBeReset = Object.entries(newSearchParameters)
+                .filter(([key]) => key !== 'page')
+                .some(
+                    ([key, value]) =>
+                        !isEqual(
+                            value,
+                            oldSearchParameters[key as keyof SearchParameters]
+                        )
+                )
+
+            return {
+                ...oldSearchParameters,
+                ...newSearchParameters,
+                page: pageShouldBeReset ? 1 : newSearchParameters.page,
+            }
+        })
+    }
+
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
+    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
+
     const [searchResponse, setSearchResponse] = useState<SearchResponse>({
         hits: [],
-        query: "",
+        query: '',
+        total: { value: 0 },
     })
+
+    const searchRequestBody = useMemo(() => {
+        let filters
+
+        if (showAdvancedSearch) {
+            // Advanced Search Filters are already in the format expected by the API
+            // so no conversion needed
+            filters = searchParameters.advancedFilters
+        } else {
+            // Convert the Standard Search Filters into the format expected by the API
+            filters = {
+                logicalAnd: true,
+                filters: Object.entries(searchParameters.standardFilters).map(
+                    ([field, values]) => ({
+                        field,
+                        values,
+                        logicalAnd: false,
+                    })
+                ),
+            }
+        }
+
+        return {
+            q: searchParameters.q,
+            page: searchParameters.page,
+            limit: searchParameters.limit,
+            filters,
+        }
+    }, [searchParameters, showAdvancedSearch])
+
+    useEffect(() => {
+        searchRequest('list', searchRequestBody)
+            .then(data => {
+                setSearchResponse(data)
+                setIsLoading(false)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [searchRequestBody, setSearchResponse])
+
+    useEffect(() => {
+        const url = new URL(pathname, window.location.origin)
+
+        url.search = searchParams.toString()
+
+        updateUrlQueryString(url, searchParameters)
+
+        router.replace(url.href)
+    }, [searchParams, pathname, router, searchParameters])
 
     return (
         <Layout
@@ -27,15 +120,33 @@ export default function ExplorePageClient() {
                         TODO work out what to do with the `Suspense` `fallback`
                         */}
                         <Suspense fallback={<div>Loading...</div>}>
-                            <SearchInput setSearchResponse={setSearchResponse} />
+                            <SearchInput
+                                searchParameters={searchParameters}
+                                setSearchParameters={updateSearchParameters}
+                                showAdvancedSearch={showAdvancedSearch}
+                                setShowAdvancedSearch={setShowAdvancedSearch}
+                                isLoading={isLoading}
+                                searchRequestBody={searchRequestBody}
+                                totalHits={searchResponse.total.value}
+                            />
                         </Suspense>
                     </div>
 
-                    {searchResponse.hits.length > 0 &&
-                        <div>
-                            <ResultsTable searchResponse={searchResponse} />
-                        </div>
-                    }
+                    {searchResponse.hits.length > 0 && (
+                        <ResultsTable
+                            searchParameters={searchParameters}
+                            setSearchParameters={updateSearchParameters}
+                            searchResponse={searchResponse}
+                        />
+                    )}
+
+                    {searchResponse.total.value > searchParameters.limit && (
+                        <SearchPagination
+                            searchParameters={searchParameters}
+                            setSearchParameters={updateSearchParameters}
+                            totalHits={searchResponse.total.value}
+                        />
+                    )}
                 </div>
             </div>
         </Layout>

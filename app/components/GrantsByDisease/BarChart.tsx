@@ -1,4 +1,4 @@
-import { Fragment, useContext, useMemo } from 'react'
+import { Fragment, useContext, useMemo, useState } from 'react'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
@@ -6,12 +6,25 @@ import { diseaseColours, diseaseDimColours } from '../../helpers/colours'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
+import Switch from '../Switch'
+import RadioGroup from '../RadioGroup'
 
-interface Props {
-    hideCovid: boolean
+interface BarChartProps {
+    outbreak?: boolean
 }
 
-export default function BarChart({ hideCovid }: Props) {
+export default function BarChart({outbreak}: BarChartProps) {
+    const [hideCovid, setHideCovid] = useState(false)
+
+    const [
+        sortByKnownFinancialCommitments,
+        setSortByKnownFinancialCommitments,
+    ] = useState(false)
+
+    const orderSortingValue = sortByKnownFinancialCommitments
+        ? 'Known Financial Commitments (USD)'
+        : 'Total Grants'
+
     const { grants } = useContext(GlobalFilterContext)
 
     const chartData = useMemo(() => {
@@ -29,7 +42,6 @@ export default function BarChart({ hideCovid }: Props) {
                         (grant: any) =>
                             typeof grant.GrantAmountConverted === 'number'
                     )
-
                 const grantsWithUnspecifiedAmounts = grants
                     .filter((grant: any) =>
                         grant.Disease.includes(disease.value)
@@ -57,25 +69,52 @@ export default function BarChart({ hideCovid }: Props) {
                 }
             })
             .filter(disease => disease['Total Grants'] > 0)
-    }, [grants, hideCovid])
+            .sort((a, b) => b[orderSortingValue] - a[orderSortingValue])
+    }, [grants, hideCovid, orderSortingValue])
 
     return (
-        <BarList
-            data={chartData}
-            brightColours={diseaseColours}
-            dimColours={diseaseDimColours}
-        >
-            {chartData.map((datum: any, index: number) => (
-                <Fragment key={datum['Category Value']}>
-                    <BarListRowHeading>
-                        <p className="text-gray-600 text-sm">
-                            {datum['Category Label']}
-                        </p>
-                    </BarListRowHeading>
+        <>
+            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
+                {!outbreak && (
+                    <Switch
+                        checked={hideCovid}
+                        onChange={setHideCovid}
+                        label="Hide COVID-19"
+                        theme="light"
+                    />
+                )}
 
-                    <BarListRow dataIndex={index} />
-                </Fragment>
-            ))}
-        </BarList>
+                <RadioGroup<boolean>
+                    legend="Sort By:"
+                    options={[
+                        { label: 'Number of grants', value: false },
+                        {
+                            label: 'Known financial commitments (USD)',
+                            value: true,
+                        },
+                    ]}
+                    value={sortByKnownFinancialCommitments}
+                    onChange={setSortByKnownFinancialCommitments}
+                />
+            </div>
+
+            <BarList
+                data={chartData}
+                brightColours={diseaseColours}
+                dimColours={diseaseDimColours}
+            >
+                {chartData.map((datum: any, index: number) => (
+                    <Fragment key={datum['Category Value']}>
+                        <BarListRowHeading>
+                            <p className="bar-chart-category-label text-gray-600 text-sm">
+                                {datum['Category Label']}
+                            </p>
+                        </BarListRowHeading>
+
+                        <BarListRow dataIndex={index} />
+                    </Fragment>
+                ))}
+            </BarList>
+        </>
     )
 }

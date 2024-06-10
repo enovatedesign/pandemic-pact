@@ -1,120 +1,74 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { SearchIcon } from '@heroicons/react/solid'
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
 import {
-    searchRequest,
-    SearchFilters,
-    SearchResponse,
     queryOrFiltersAreSet,
+    SearchFilters,
+    SelectedStandardSearchFilters,
+    SearchParameters,
 } from '../helpers/search'
 import Button from './Button'
 import InfoModal from './InfoModal'
-import StandardSearchFilters, {
-    SelectedStandardSearchFilters,
-} from './StandardSearchFilters'
+import StandardSearchFilters from './StandardSearchFilters'
 import AdvancedSearchFilters from './AdvancedSearchFilters'
 import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
-    setSearchResponse: (searchResponse: SearchResponse) => void
+    searchParameters: SearchParameters
+    setSearchParameters: (searchParameters: SearchParameters) => void
+    showAdvancedSearch: boolean
+    isLoading: boolean
+    totalHits: number
+    setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
+    searchRequestBody: any
 }
 
-export default function SearchInput({ setSearchResponse }: Props) {
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
-    const searchQueryFromUrl = searchParams.get('q') ?? ''
-    const filtersFromUrl = searchParams.get('filters') ?? null
+export default function SearchInput({
+    searchParameters,
+    setSearchParameters,
+    showAdvancedSearch,
+    isLoading,
+    totalHits,
+    setShowAdvancedSearch,
+    searchRequestBody,
+}: Props) {
+    const handleSearchToggleButtons = (value: boolean) => {
+        setShowAdvancedSearch(value)
+    }
 
-    const [searchQuery, setSearchQuery] = useState<string>(searchQueryFromUrl)
+    const setSearchQuery = (query: string) => {
+        setSearchParameters({ ...searchParameters, q: query })
+    }
 
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    const [standardSearchFilters, setStandardSearchFilters] =
-        useState<SelectedStandardSearchFilters>(
-            filtersFromUrl ? JSON.parse(filtersFromUrl) : {}
-        )
-
-    const [advancedSearchFilters, setAdvancedSearchFilters] =
-        useState<SearchFilters>({
-            logicalAnd: true,
-            filters: [],
+    const setStandardSearchFilters = (
+        filters: SelectedStandardSearchFilters
+    ) => {
+        setSearchParameters({
+            ...searchParameters,
+            standardFilters: filters,
         })
+    }
 
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
-
-    const [totalHits, setTotalHits] = useState<number>(0)
-
-    useEffect(() => {
-        const url = new URL(pathname, window.location.origin)
-
-        url.search = searchParams.toString()
-
-        if (searchQuery) {
-            url.searchParams.set('q', searchQuery)
-        } else {
-            url.searchParams.delete('q')
-        }
-
-        const anyStandardFiltersAreApplied = Object.values(
-            standardSearchFilters
-        ).some(filter => filter.length > 0)
-
-        if (anyStandardFiltersAreApplied) {
-            url.searchParams.set(
-                'filters',
-                JSON.stringify(standardSearchFilters)
-            )
-        } else {
-            url.searchParams.delete('filters')
-        }
-
-        router.replace(url.href)
-    }, [searchParams, searchQuery, standardSearchFilters, pathname, router])
-
-    const searchRequestBody = useMemo(() => {
-        const searchFilters = showAdvancedSearch
-            ? advancedSearchFilters
-            : convertStandardFiltersToSearchFilters(standardSearchFilters)
-
-        return {
-            q: searchQuery,
-            filters: searchFilters,
-        }
-    }, [
-        searchQuery,
-        standardSearchFilters,
-        advancedSearchFilters,
-        showAdvancedSearch,
-    ])
-
-    useEffect(() => {
-        searchRequest('list', searchRequestBody)
-            .then(data => {
-                setSearchResponse(data)
-                setTotalHits(data.total.value)
-                setIsLoading(false)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [searchRequestBody, setTotalHits, setSearchResponse])
+    const setShowAdvancedSearchFilters = (filters: SearchFilters) => {
+        setSearchParameters({
+            ...searchParameters,
+            advancedFilters: filters,
+        })
+    }
 
     return (
         <div>
             <div className="space-y-3">
                 <div className="flex gap-x-4">
-                    <div className="focus-within:border-primary bg-white px-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
+                    <div className="focus-within:border-primary bg-white pl-2 pr-1 md:pr-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
                         <input
                             type="search"
                             placeholder="Search..."
                             onInput={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => setSearchQuery(event.target.value)}
-                            value={searchQuery}
-                            className="block w-full placeholder:text-gray-00 text-sm md:text-lg xl:text-xl focus:outline-none focus:"
+                            value={searchParameters.q}
+                            className="block w-full placeholder:text-gray-400 border-none p-0 text-sm md:text-lg xl:text-xl focus:outline-none focus:border-none focus:ring-0"
                         />
 
                         <Button
@@ -185,7 +139,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
 
                         <div className="flex space-x-1 text-sm text-secondary">
                             <button
-                                onClick={() => setShowAdvancedSearch(false)}
+                                onClick={() => handleSearchToggleButtons(false)}
                                 className={`${
                                     !showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'
@@ -196,7 +150,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             </button>
 
                             <button
-                                onClick={() => setShowAdvancedSearch(true)}
+                                onClick={() => handleSearchToggleButtons(true)}
                                 className={`${
                                     showAdvancedSearch
                                         ? 'bg-white rounded-t-lg'
@@ -213,7 +167,7 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             className={showAdvancedSearch ? 'block' : 'hidden'}
                         >
                             <AdvancedSearchFilters
-                                setSearchFilters={setAdvancedSearchFilters}
+                                setSearchFilters={setShowAdvancedSearchFilters}
                             />
                         </div>
 
@@ -221,17 +175,21 @@ export default function SearchInput({ setSearchResponse }: Props) {
                             className={showAdvancedSearch ? 'hidden' : 'block'}
                         >
                             <StandardSearchFilters
-                                selectedFilters={standardSearchFilters}
+                                selectedFilters={
+                                    searchParameters.standardFilters
+                                }
                                 setSelectedFilters={setStandardSearchFilters}
                             />
                         </div>
                     </div>
                 </section>
 
-                <div className="flex flex-col md:flex-row gap-4 justify-between justify-start md:items-center">
+                <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
                     <p className="text-secondary flex flex-row items-center gap-2 uppercase">
                         <span className="whitespace-nowrap">
-                            {searchQuery ? 'Total Hits:' : 'Total Grants:'}
+                            {searchParameters.q
+                                ? 'Total Hits:'
+                                : 'Total Grants:'}
                         </span>
                         {isLoading ? (
                             <LoadingSpinner className="w-5 h-5 animate-spin shrink-0" />
@@ -255,17 +213,4 @@ export default function SearchInput({ setSearchResponse }: Props) {
             </div>
         </div>
     )
-}
-
-function convertStandardFiltersToSearchFilters(
-    standardFilters: SelectedStandardSearchFilters
-): SearchFilters {
-    return {
-        logicalAnd: true,
-        filters: Object.entries(standardFilters).map(([field, values]) => ({
-            field,
-            values,
-            logicalAnd: false,
-        })),
-    }
 }

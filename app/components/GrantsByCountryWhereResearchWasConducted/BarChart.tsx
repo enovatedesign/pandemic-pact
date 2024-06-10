@@ -75,6 +75,7 @@ export default function BarChart() {
             'Known Financial Commitments': grants.reduce(
                 ...sumNumericGrantAmounts
             ),
+            'Number of Grants': grants.length
         }
     })
 
@@ -123,10 +124,16 @@ export default function BarChart() {
                 : 'ResearchInstitutionRegion'
         ].find(option => option.value === props.label)?.label as string
 
-        const items = props.payload.map((item: any) => ({
-            label: 'Known Financial Commitments (USD)',
-            value: dollarValueFormatter(item.value),
-        }))
+        const items = [
+            {
+                label: 'Known Financial Commitments (USD)',
+                value: dollarValueFormatter(props.payload[0]?.value),
+            },
+            {
+                label: 'Number of Grants',
+                value: props.payload[0]?.payload['Number of Grants']
+            }
+        ];
 
         return <TooltipContent title={title} items={items} />
     }
@@ -137,7 +144,7 @@ export default function BarChart() {
 
     return (
         <div className="w-full">
-            <div className="flex justify-center items-center gap-x-2">
+            <div className="flex justify-center items-center gap-x-2 ignore-in-image-export">
                 <button onClick={handleIconClick} className="flex items-center">
                     {selectedRegion ? (
                         <span className="cursor-pointer mr-4 bg-brand-grey-200 p-1.5 rounded-md shadow-lg">
@@ -206,7 +213,7 @@ export default function BarChart() {
                     </RechartBarChart>
                 </ResponsiveContainer>
 
-                <div className="self-center">
+                <div className="self-center ignore-in-image-export">
                     <DoubleLabelSwitch
                         checked={usingFunderLocation}
                         onChange={setUsingFunderLocation}

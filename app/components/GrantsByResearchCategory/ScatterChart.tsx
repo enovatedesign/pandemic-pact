@@ -21,6 +21,7 @@ import {
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
 import Legend from '../Legend'
+import ImageExportLegend from '../ImageExportLegend'
 import TooltipContent from '../TooltipContent'
 
 interface Props {
@@ -61,7 +62,7 @@ export default function ScatterChart({ chartData }: Props) {
 
     return (
         <>
-            <div className="space-y-2">
+            <div className="space-y-2 ignore-in-image-export">
                 {showLegendButton && (
                     <button
                         onClick={() => setShowLegend(!showLegend)}
@@ -150,6 +151,13 @@ export default function ScatterChart({ chartData }: Props) {
                     </Scatter>
                 </RechartScatterChart>
             </ResponsiveContainer>
+
+            <ImageExportLegend
+                categories={researchCategories.map(category => category.label)}
+                colours={researchCategories.map(
+                    ({ value }) => researchCategoryColours[value]
+                )}
+            />
         </>
     )
 }

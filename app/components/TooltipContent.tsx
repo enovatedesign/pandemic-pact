@@ -11,6 +11,7 @@ interface TooltipContentItem {
     value: string
     bold?: boolean
     trend?: 'up' | 'down' | 'none'
+    trendPercentageDifference?: number
 }
 
 interface Props {
@@ -62,11 +63,21 @@ export default function TooltipContent({ title, items, footer = null }: Props) {
                                 {item.trend && (
                                     <>
                                         {item.trend === 'up' && (
-                                            <TrendingUpIcon className="h-4 w-4 text-green-500" />
+                                            <p className="text-green-500 flex items-center">
+                                                <TrendingUpIcon className="h-4 w-4" />
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
+                                                    <span className="ml-1">{`+${item.trendPercentageDifference}%`}</span>
+                                                )}
+                                            </p>
                                         )}
 
                                         {item.trend === 'down' && (
-                                            <TrendingDownIcon className="h-4 w-4 text-red-500" />
+                                            <p className="text-red-500 flex items-center">
+                                                <TrendingDownIcon className="h-4 w-4"/>
+                                                {item.trendPercentageDifference && item.trendPercentageDifference !== Infinity && (
+                                                    <span className="ml-1">{`-${item.trendPercentageDifference}%`}</span>
+                                                )}
+                                            </p>
                                         )}
 
                                         {item.trend === 'none' && (

@@ -13,6 +13,11 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
+    fixedDiseaseOptions?: {
+        label: string 
+        value: string
+        isFixed?: boolean
+    }[]
 }
 
 export default function FilterSidebar({
@@ -21,13 +26,20 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
+    fixedDiseaseOptions
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
     const filters = availableFilters()
-    const standardFilters = filters.filter(f => !f.advanced)
+    let standardFilters = filters.filter(f => !f.advanced)
     const advancedFilters = filters.filter(f => f.advanced)
+    
+    // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
+    // The Disease filter must remain to allow maniupulation of this field within the multi select
+    if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
+        standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
+    }
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = { ...selectedFilters }
@@ -101,6 +113,7 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
+                fixedDiseaseOptions={fixedDiseaseOptions}
             />
 
             <AnimateHeight
@@ -163,6 +176,11 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean
     ) => void
+    fixedDiseaseOptions?: {
+        label: string
+        value: string
+        isFixed?: boolean 
+    }[]
 }
 
 const FilterBlock = ({
@@ -170,39 +188,74 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
+    fixedDiseaseOptions
 }: filterBlockProps) => {
+    
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => (
-                <div className="flex flex-col space-y-2 w-full" key={field}>
-                    <p className="text-white">Filter by {label}</p>
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
+                
+                let srOnlyText = null
 
-                    <MultiSelect
-                        field={field}
-                        selectedOptions={selectedFilters[field].values}
-                        setSelectedOptions={options =>
-                            setSelectedOptions(field, options)
-                        }
-                    />
+                if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
+                    srOnlyText = `Active ${label} filter`
+                    if (fixedDiseaseOptions.length === 1) {
+                        srOnlyText += ` is: ${fixedDiseaseOptions[0].label}`
+                    } else {
+                        srOnlyText += `s are: ${fixedDiseaseOptions.map(disease => disease.label).join(', ')}`
+                    }
+                }
 
-                    {excludeGrantsWithMultipleItems && (
-                        <Switch
-                            checked={
-                                selectedFilters[field]
-                                    .excludeGrantsWithMultipleItems
-                            }
-                            onChange={value =>
-                                setExcludeGrantsWithMultipleItemsInField(
-                                    field,
-                                    value
-                                )
-                            }
-                            label={excludeGrantsWithMultipleItems.label}
-                            textClassName="text-white"
-                        />
-                    )}
-                </div>
-            ))}
+                return (
+                    <div className="flex flex-col space-y-2 w-full" key={field}>
+
+                        {fixedDiseaseOptions && label === 'Disease' ? (
+                            <>
+                                <p className="sr-only">{srOnlyText}</p>
+
+                                <MultiSelect
+                                    field={field}
+                                    selectedOptions={selectedFilters[field].values}
+                                    setSelectedOptions={options =>
+                                        setSelectedOptions(field, options)
+                                    }
+                                    fixedDiseaseOptions={fixedDiseaseOptions}
+                                    className="hidden"
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-white">Filter by {label}</p>
+
+                                <MultiSelect
+                                    field={field}
+                                    selectedOptions={selectedFilters[field].values}
+                                    setSelectedOptions={options =>
+                                        setSelectedOptions(field, options)
+                                    }
+                                />
+                            </>
+                        )}
+
+                        {excludeGrantsWithMultipleItems && (
+                            <Switch
+                                checked={
+                                    selectedFilters[field]
+                                        .excludeGrantsWithMultipleItems
+                                }
+                                onChange={value =>
+                                    setExcludeGrantsWithMultipleItemsInField(
+                                        field,
+                                        value
+                                    )
+                                }
+                                label={excludeGrantsWithMultipleItems.label}
+                                textClassName="text-white"
+                            />
+                        )}
+                    </div>
+                )
+            })}
         </>
     )
 }

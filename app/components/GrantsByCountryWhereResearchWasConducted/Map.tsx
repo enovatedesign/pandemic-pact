@@ -6,10 +6,12 @@ import {
     Geographies,
     Geography,
     ZoomableGroup,
+    useZoomPanContext,
 } from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
+import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
-import { scaleLinear } from 'd3-scale'
+import { scaleLog } from 'd3-scale'
 import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
 import countryGeojson from '../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../public/data/geojson/who-regions.json'
@@ -22,33 +24,23 @@ import { debounce } from 'lodash'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
+type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
+
 export default function Map() {
-    const { tooltipRef } = useContext(TooltipContext)
-
     const { grants: dataset } = useContext(GlobalFilterContext)
-
+    
     const router = useRouter()
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
-    const [usingFunderLocation, setUsingFunderLocation] =
-        useState<boolean>(false)
+    const [locationType, setColumn] = useState<LocationType>('Funder')
 
-    let grantField:
-        | 'FunderRegion'
-        | 'ResearchInstitutionRegion'
-        | 'FunderCountry'
-        | 'ResearchInstitutionCountry'
+    const [
+        displayKnownFinancialCommitments,
+        setDisplayKnownFinancialCommitments,
+    ] = useState<boolean>(false)
 
-    if (displayWhoRegions) {
-        grantField = usingFunderLocation
-            ? 'FunderRegion'
-            : 'ResearchInstitutionRegion'
-    } else {
-        grantField = usingFunderLocation
-            ? 'FunderCountry'
-            : 'ResearchInstitutionCountry'
-    }
+    const grantField = locationType + (displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
         const geojson = displayWhoRegions
@@ -58,9 +50,9 @@ export default function Map() {
         geojson.features = geojson.features.map((feature: any) => {
             const id = feature.properties.id
 
-            const name = selectOptions[grantField].find(
-                option => option.value === id
-            )?.label
+            const name = selectOptions[
+                grantField as keyof typeof selectOptions
+            ].find(option => option.value === id)?.label
 
             const grants = dataset.filter(grant =>
                 grant[grantField].includes(id)
@@ -83,23 +75,178 @@ export default function Map() {
             }
         })
 
-        const allTotalGrants = geojson.features
-            .filter((country: any) => country.properties.totalGrants)
-            .map((country: any) => country.properties.totalGrants)
+        const key = displayKnownFinancialCommitments
+            ? 'totalAmountCommitted'
+            : 'totalGrants'
 
-        const colourScale = scaleLinear<string>()
-            .domain([0, Math.max(...allTotalGrants)])
+        const allTotalGrants = geojson.features
+            .filter((country: any) => country.properties[key])
+            .map((country: any) => country.properties[key])
+
+        const colourScale = scaleLog<string>()
+            .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
         return [geojson, colourScale]
-    }, [dataset, displayWhoRegions, grantField])
+    }, [
+        dataset,
+        displayKnownFinancialCommitments,
+        displayWhoRegions,
+        grantField,
+    ])
 
-    const onGeoClick = (geo: any) => {
-        const queryFilters = {
-            [grantField]: [geo.properties.id],
+    const [height, setHeight] = useState(450)
+    const [scale, setScale] = useState(200)
+
+    useEffect(() => {
+        const handleHeight = () => {
+            if (window.innerWidth > 1024) {
+                setHeight(350)
+                setScale(125)
+            } else {
+                setHeight(450)
+                setScale(200)
+            }
         }
 
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+        const debouncedHandleHeight = debounce(handleHeight, 200)
+
+        debouncedHandleHeight()
+
+        window.addEventListener('resize', debouncedHandleHeight)
+
+        return () => {
+            window.removeEventListener('resize', debouncedHandleHeight)
+        }
+    })
+
+    const { sidebarOpen } = useContext(SidebarStateContext)
+
+    const center: [number, number] = [20, 10]
+
+    return (
+        <div className="w-full h-full flex flex-col gap-y-4">
+            <div className="breakout">
+                <ComposableMap
+                    projection="geoNaturalEarth1"
+                    projectionConfig={{
+                        scale,
+                        center,
+                    }}
+                    height={height}
+                >
+                    <ZoomableGroup center={center}>
+                        <GeographiesWithScalingOutlines
+                            displayKnownFinancialCommitments={
+                                displayKnownFinancialCommitments
+                            }
+                            displayWhoRegions={displayWhoRegions}
+                            grantField={grantField}
+                            geojson={geojson}
+                            colourScale={colourScale}
+                        />
+                    </ZoomableGroup>
+                </ComposableMap>
+            </div>
+
+            <div
+                className={`flex flex-col w-full rounded-md overflow-hidden ${
+                    sidebarOpen ? 'flex-col' : 'xl:flex-row'
+                }`}
+            >
+                <div
+                    className={`w-full ${
+                        !sidebarOpen && 'xl:w-4/6'
+                    } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
+                >
+                    <ColourScale
+                        colourScale={colourScale}
+                        displayKnownFinancialCommitments={
+                            displayKnownFinancialCommitments
+                        }
+                    />
+                </div>
+
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
+                    <DoubleLabelSwitch
+                        checked={displayWhoRegions}
+                        onChange={setDisplayWhoRegions}
+                        leftLabel="Countries"
+                        rightLabel="WHO Regions"
+                        screenReaderLabel="Display WHO Regions"
+                    />
+
+                    <RadioGroup<LocationType>
+                        options={[
+                            {
+                                label: 'Funder',
+                                value: 'Funder',
+                            },
+                            {
+                                label: 'Research Institution',
+                                value: 'ResearchInstitution',
+                            },
+                            {
+                                label: 'Research Location',
+                                value: 'ResearchLocation',
+                            },
+                        ]}
+                        value={locationType}
+                        onChange={setColumn}
+                        fieldsetClassName="flex flex-col"
+                    />
+
+                    <RadioGroup<boolean>
+                        options={[
+                            { label: 'Number of grants', value: false },
+                            {
+                                label: 'Known financial commitments (USD)',
+                                value: true,
+                            },
+                        ]}
+                        value={displayKnownFinancialCommitments}
+                        onChange={setDisplayKnownFinancialCommitments}
+                        fieldsetClassName="flex flex-col"
+                    />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+interface GeographiesWithScalingOutlinesProps {
+    displayKnownFinancialCommitments: boolean
+    displayWhoRegions: boolean
+    grantField: string
+    geojson: any
+    colourScale: any
+}
+
+function GeographiesWithScalingOutlines({
+    displayKnownFinancialCommitments,
+    displayWhoRegions,
+    grantField,
+    geojson,
+    colourScale,
+}: GeographiesWithScalingOutlinesProps) {
+    const zoomContext = useZoomPanContext()
+
+    const { tooltipRef } = useContext(TooltipContext)
+
+    const router = useRouter()
+
+    const getColourOfGeo = (geo: any) => {
+        const properties = geo.properties
+
+        if (displayKnownFinancialCommitments) {
+            return properties.totalAmountCommitted
+                ? colourScale(properties.totalAmountCommitted)
+                : '#D6D6DA'
+        } else {
+            return properties.totalGrants
+                ? colourScale(properties.totalGrants)
+                : '#D6D6DA'
+        }
     }
 
     const onGeoMouseEnterOrMove = (
@@ -124,106 +271,35 @@ export default function Map() {
         tooltipRef?.current?.close()
     }
 
-    const getColourOfGeo = (geo: any) => {
-        return geo.properties.totalGrants
-            ? colourScale(geo.properties.totalGrants)
-            : '#D6D6DA'
+    const onGeoClick = (geo: any) => {
+        const queryFilters = {
+            [grantField]: [geo.properties.id],
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const [height, setHeight] = useState(650)
-    const [scale, setScale] = useState(120)
-
-    useEffect(() => {
-        const handleHeight = () => {
-            if (window.innerWidth > 1024) {
-                setHeight(300)
-                setScale(80)
-            } else {
-                setHeight(650)
-                setScale(120)
-            }
-        }
-
-        const debouncedHandleHeight = debounce(handleHeight, 200)
-
-        debouncedHandleHeight()
-
-        window.addEventListener('resize', debouncedHandleHeight)
-
-        return () => {
-            window.removeEventListener('resize', debouncedHandleHeight)
-        }
-    })
-
-    const { sidebarOpen } = useContext(SidebarStateContext)
-
     return (
-        <div className="w-full h-full flex flex-col gap-y-4">
-            <div className="breakout">
-                <ComposableMap
-                    projection="geoMercator"
-                    projectionConfig={{
-                        scale: scale,
-                        center: [0, 40],
-                    }}
-                    height={height}
-                >
-                    <ZoomableGroup center={[0, 40]}>
-                        <Geographies geography={geojson}>
-                            {({ geographies }) =>
-                                geographies.map(geo => (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        fill={getColourOfGeo(geo)}
-                                        stroke="#FFFFFF"
-                                        strokeWidth={1.0}
-                                        className="cursor-pointer"
-                                        onClick={() => onGeoClick(geo)}
-                                        onMouseEnter={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseMove={event =>
-                                            onGeoMouseEnterOrMove(event, geo)
-                                        }
-                                        onMouseLeave={onGeoMouseLeave}
-                                    />
-                                ))
-                            }
-                        </Geographies>
-                    </ZoomableGroup>
-                </ComposableMap>
-            </div>
-
-            <div
-                className={`flex flex-col items-center gap-y-2 ${
-                    !sidebarOpen &&
-                    'xl:flex-row xl:justify-between xl:gap-y-0 xl:gap-x-2'
-                }`}
-            >
-                <ColourScale colourScale={colourScale} />
-
-                <div className="xl:self-center xl:-translate-y-[14px]">
-                    <DoubleLabelSwitch
-                        checked={displayWhoRegions}
-                        onChange={setDisplayWhoRegions}
-                        leftLabel="Countries"
-                        rightLabel="WHO Regions"
-                        screenReaderLabel="Display WHO Regions"
+        <Geographies geography={geojson}>
+            {({ geographies }) =>
+                geographies.map(geo => (
+                    <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill={getColourOfGeo(geo)}
+                        stroke="#FFFFFF"
+                        strokeWidth={1.0 / zoomContext.k}
+                        className="cursor-pointer"
+                        onClick={() => onGeoClick(geo)}
+                        onMouseEnter={event =>
+                            onGeoMouseEnterOrMove(event, geo)
+                        }
+                        onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
+                        onMouseLeave={onGeoMouseLeave}
                     />
-                </div>
-
-                <div className="xl:self-center xl:-translate-y-[14px]">
-                    <DoubleLabelSwitch
-                        checked={usingFunderLocation}
-                        onChange={setUsingFunderLocation}
-                        leftLabel="Research Institution"
-                        rightLabel="Funder"
-                        screenReaderLabel="Using Funder Location"
-                    />
-                </div>
-            </div>
-        </div>
+                ))
+            }
+        </Geographies>
     )
 }
 

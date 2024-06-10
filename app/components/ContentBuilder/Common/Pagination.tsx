@@ -8,7 +8,6 @@ interface Props {
     totalPosts: number,
     setFirstItemIndex: ((index: number) => void)
     setLastItemIndex: ((index: number) => void)
-    setActiveIndex?: ((index: number) => void)
 }
 
 const Pagination = ({
@@ -16,7 +15,6 @@ const Pagination = ({
     totalPosts,
     setFirstItemIndex,
     setLastItemIndex,
-    setActiveIndex,
 }: Props) => {
 
     const router = useRouter()
@@ -55,11 +53,8 @@ const Pagination = ({
     }
     
     const handleChange = (target: number) => {
-            updatePage(target)
-            window.location.hash = "#paginationTop"
-            if (setActiveIndex) {
-                setActiveIndex(-1)
-            }
+        updatePage(target)
+        window.location.hash = "#paginationTop"
     }
 
     const iconClasses = 'w-8 h-8 border-2 rounded-full'
@@ -71,7 +66,7 @@ const Pagination = ({
     return (
         <nav aria-label="Pagination">
 
-            <ul className="flex justify-between between pt-6 md:pt-8 xl:pt-20">
+            <ul className="flex justify-between md:pt-6">
                 <li>
 
                     {/* Previous page button */}

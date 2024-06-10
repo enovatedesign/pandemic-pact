@@ -40,79 +40,110 @@ export function searchUnavailableResponse() {
     )
 }
 
-export async function validateRequest(request: Request) {
+export async function validateRequest(
+    request: Request,
+    fieldsToValidate: string[]
+) {
+    const rules = {
+        q: (addError: (message: string) => void) => {
+            if (typeof parameters.q !== 'string') {
+                addError('The q parameter must be a string')
+            }
+        },
+
+        filters: (addError: (message: string) => void) => {
+            if (typeof parameters.filters !== 'object') {
+                addError('The filters parameter must be an object')
+            }
+        },
+
+        page: (addError: (message: string) => void) => {
+            if (typeof parameters.page !== 'number') {
+                addError('The page parameter must be a number')
+            }
+
+            if (parameters.page < 0) {
+                addError('The page parameter must be greater than 0')
+            }
+        },
+
+        limit: (addError: (message: string) => void) => {
+            if (typeof parameters.limit !== 'number') {
+                addError('The limit parameter must be a number')
+            }
+
+            if (parameters.limit > 100) {
+                addError(
+                    'The limit parameter must be less than or equal to 100'
+                )
+            }
+
+            if (parameters.limit <= 0) {
+                addError('The limit parameter must be greater than 0')
+            }
+        },
+    }
+
     const parameters = await request.json().catch(() => Promise.resolve({}))
 
-    const errors = []
+    const allErrors: any = {}
 
-    if (typeof parameters.q === 'undefined') {
-        errors.push({
-            field: 'q',
-            message: 'The q parameter is required',
-        })
+    const values: any = {}
+
+    for (const [field, rule] of Object.entries(rules)) {
+        if (!fieldsToValidate.includes(field)) {
+            continue
+        }
+
+        if (parameters[field] === undefined) {
+            continue
+        }
+
+        const errors: any = []
+
+        const addError = (message: string) => {
+            errors.push(message)
+        }
+
+        rule(addError)
+
+        if (errors.length > 0) {
+            allErrors[field] = errors
+        } else {
+            values[field] = parameters[field]
+        }
     }
 
-    if (typeof parameters.q !== 'string') {
-        errors.push({
-            field: 'q',
-            message: 'The q parameter must be a string',
-        })
-    }
-
-    if (typeof parameters.filters === 'undefined') {
-        errors.push({
-            field: 'filters',
-            message: 'The filters parameter is required',
-        })
-    }
-
-    if (typeof parameters.filters !== 'object') {
-        errors.push({
-            field: 'filters',
-            message: 'The filters parameter must be an object',
-        })
-    } else {
-        // TODO update validation logic to work with advanced filters
-        // Object.entries(parameters.filters).forEach(
-        //     ([key, value]) => {
-        //         const isStringArray = Array.isArray(value) && value.every(
-        //             (item) => typeof item === 'string'
-        //         )
-        //         if (!isStringArray) {
-        //             errors.push({
-        //                 field: `filters.${key}`,
-        //                 message: `The filters.${key} parameter must be an array of strings`,
-        //             });
-        //         }
-        //     }
-        // )
-    }
-
-    if (errors.length > 0) {
+    if (Object.keys(allErrors).length > 0) {
         return {
             errorResponse: NextResponse.json(
                 {
-                    errors,
+                    allErrors,
                 },
                 {
-                    status: 400,
-                    statusText: 'Bad Request',
+                    status: 422,
+                    statusText: 'Unprocessable Entity',
                 }
             ),
         }
     }
 
-    return { values: parameters }
+    return { values }
 }
 
 export function getBooleanQuery(q: string, filters: SearchFilters) {
     let mustClause = {}
 
     if (q) {
+        let query = q
+            .replace(/\bAND\b/g, '+')
+            .replace(/\bOR\b/g, '|')
+            .replace(/\bNOT\s+/g, '-')
+
         mustClause = {
             must: {
                 simple_query_string: {
-                    query: q,
+                    query,
                     fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
                     flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
                 },
@@ -176,7 +207,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
 
     const grantIDs = []
 
-    const size = 10000
+    const size = 1000
 
     let hits = []
 
