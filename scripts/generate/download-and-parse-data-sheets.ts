@@ -18,7 +18,7 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/46391479?private_link=58527668245cb63f14f5',
+        'https://figshare.com/ndownloader/files/46987357?private_link=58527668245cb63f14f5',
         'grants.json'
     )
 }
@@ -31,7 +31,7 @@ async function downloadCsvAndConvertToJson(
 
     info(`Fetched file from ${url}`)
 
-    const workbook = read(buffer, { raw: true })
+    const workbook = read(buffer, { raw: true, dense: true})
 
     const sheetName = workbook.SheetNames[0]
 
