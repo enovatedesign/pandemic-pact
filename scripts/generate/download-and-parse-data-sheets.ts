@@ -31,7 +31,7 @@ async function downloadCsvAndConvertToJson(
 
     info(`Fetched file from ${url}`)
 
-    const workbook = read(buffer, { raw: true, dense: true})
+    const workbook = read(buffer, { raw: true, dense: true })
 
     const sheetName = workbook.SheetNames[0]
 
