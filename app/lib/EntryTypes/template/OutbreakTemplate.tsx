@@ -14,18 +14,16 @@ export default function OutbreakTemplate({data}: any) {
         .map(data => ({...data, isFixed: true}))
 
     return (
-        <>
-            <VisualisePageClient 
-                outbreak={true}
-                title={`OUTBREAK: ${entry.title}`}
-                summary={entry.summary}
-                showSummary={entry.showSummary}
-                fixedDiseaseOptions={fixedDiseaseOptions}
-            >
-                {entry.bodyContent && entry.bodyContent.length > 0 && (
-                    <Matrix blocks={entry.bodyContent} />
-                )}
-            </VisualisePageClient>
-        </>
+        <VisualisePageClient 
+            outbreak={true}
+            title={`OUTBREAK: ${entry.title}`}
+            summary={entry.summary}
+            showSummary={entry.showSummary}
+            fixedDiseaseOptions={fixedDiseaseOptions}
+        >
+            {entry.bodyContent && entry.bodyContent.length > 0 && (
+                <Matrix blocks={entry.bodyContent} />
+            )}
+        </VisualisePageClient>
     )
 }
