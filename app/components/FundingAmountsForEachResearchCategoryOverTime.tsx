@@ -219,9 +219,11 @@ function BarChart({
                             <RechartTrendsTooltipContent
                                 props={props}
                                 chartData={data}
+                                formatValuesToDollars
                             />
                         )}
                         {...rechartBaseTooltipProps}
+
                     />
 
                     {categories.map(({ value, label }) => (
@@ -290,6 +292,7 @@ function LineChart({
                             <RechartTrendsTooltipContent
                                 props={props}
                                 chartData={data}
+                                formatValuesToDollars
                             />
                         )}
                         {...rechartBaseTooltipProps}
