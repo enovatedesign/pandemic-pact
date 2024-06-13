@@ -51,8 +51,6 @@ export default function VisualisePageClient({
 
     const [loadingDataset, setLoadingDataset] = useState(true)
 
-    const hasChildren = React.Children.toArray(children).length > 0
-
     useEffect(() => {
         fetch('/data/grants.json')
             .then(response => response.json())
@@ -172,27 +170,10 @@ export default function VisualisePageClient({
                     sidebar={sidebar}
                     outbreak={outbreak}
                 >
-                    {!outbreak && (
-                        <>
-                            <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
+                
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
 
-                            <VisualisationCardLinks />
-                        </>
-                    )}
-
-                    {hasChildren && (
-                        <div className="mx-auto container flex justify-center mt-6 lg:mt-12">
-                            <Button
-                                size="small" 
-                                colour="primary"
-                                href="#visualisations-wrapper"
-                                customClasses="flex items-center gap-1"
-                            >
-                                Jump to visualisations
-                                <ChevronDownIcon className="size-6" />
-                            </Button>
-                        </div>
-                    )}
+                    <VisualisationCardLinks />
 
                     {children}
 
