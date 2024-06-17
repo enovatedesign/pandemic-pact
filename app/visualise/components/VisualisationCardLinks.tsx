@@ -2,14 +2,17 @@ import Card from "../../components/ContentBuilder/Common/Card"
 import {ChevronDownIcon} from "@heroicons/react/solid"
 import { visualisationCardData } from './visualisationCardData'
 
+interface VisualisationCardLinksProps {
+    outbreak?: boolean
+    disease?: string | null
+}
 
-const VisualisationCardLinks = () => {
-    
+const VisualisationCardLinks = ({ outbreak = false, disease }: VisualisationCardLinksProps) => {
+
     return (
         <section className="hidden lg:block container mx-auto my-6 lg:my-12">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-                {visualisationCardData.map((card, index) => {
-
+                {visualisationCardData(outbreak, disease).map((card, index) => {
                     return (
                         <Card
                             key={index}

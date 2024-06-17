@@ -36,6 +36,7 @@ interface VisualisationPageProps {
         isFixed?: boolean
     }[],
     children?: React.ReactNode,
+    diseaseLabel?: string
 }
 export default function VisualisePageClient({
     title,
@@ -43,7 +44,8 @@ export default function VisualisePageClient({
     showSummary = true,
     outbreak = false,
     fixedDiseaseOptions,
-    children
+    children,
+    diseaseLabel
 }: VisualisationPageProps) {
     const tooltipRef = useRef<TooltipRefProps>(null)
     
@@ -153,7 +155,7 @@ export default function VisualisePageClient({
             window.removeEventListener('resize', debouncedHandleResize)
         }
     }, [dropdownVisible])
-
+    
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -171,9 +173,9 @@ export default function VisualisePageClient({
                     outbreak={outbreak}
                 >
                 
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak}/>
 
-                    <VisualisationCardLinks />
+                    <VisualisationCardLinks outbreak={outbreak} disease={diseaseLabel}/>
 
                     {children}
 

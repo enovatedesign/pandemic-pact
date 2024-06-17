@@ -16,6 +16,7 @@ export default function OutbreakTemplate({data}: any) {
     return (
         <VisualisePageClient 
             outbreak={true}
+            diseaseLabel={diseaseLabel}
             title={`OUTBREAK: ${entry.title}`}
             summary={entry.summary}
             showSummary={entry.showSummary}
