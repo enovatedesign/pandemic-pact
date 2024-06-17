@@ -1,11 +1,11 @@
-export const visualisationCardData = (outbreak = false, disease = null) => {
+export const visualisationCardData = (outbreak = false, disease = '') => {
 
     let diseaseSummary;
     let researchCategorySummary;
     let geographicalDistributionSummary;
     let annualTrendsSummary;
     let policyRoadmapSummary;
-
+    
     if (outbreak && disease) {
         diseaseSummary = `We bring together grant information on ${disease}.`;
         researchCategorySummary = `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`;

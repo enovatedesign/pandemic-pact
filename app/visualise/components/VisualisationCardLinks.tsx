@@ -4,7 +4,7 @@ import { visualisationCardData } from './visualisationCardData'
 
 interface VisualisationCardLinksProps {
     outbreak?: boolean
-    disease?: string | null
+    disease?: string 
 }
 
 const VisualisationCardLinks = ({ outbreak = false, disease }: VisualisationCardLinksProps) => {

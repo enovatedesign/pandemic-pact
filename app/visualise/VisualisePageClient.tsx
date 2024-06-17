@@ -173,7 +173,7 @@ export default function VisualisePageClient({
                     outbreak={outbreak}
                 >
                 
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak}/>
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
 
                     <VisualisationCardLinks outbreak={outbreak} disease={diseaseLabel}/>
 
