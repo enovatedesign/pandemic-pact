@@ -1,7 +1,10 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import { title, printWrittenFileStats } from '../helpers/log'
-import { convertSourceKeysToOurKeys } from '../helpers/key-mapping'
+import {
+    mpoxResearchPriorityAndSubPriorityMapping,
+    convertSourceKeysToOurKeys,
+} from '../helpers/key-mapping'
 
 type Row = { [key: string]: string }
 
@@ -75,21 +78,18 @@ function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
 }) {
     const MPOXResearchPriorityOptions =
         rawOptions.research_and_policy_roadmaps.filter(
-            ({ value }) => parseInt(value) >= 14 && parseInt(value) <= 23
+            ({ value }) => value in mpoxResearchPriorityAndSubPriorityMapping
         )
 
     const MPOXResearchSubPriorityOptions = MPOXResearchPriorityOptions.flatMap(
-        option => {
-            const field =
-                option.label.replace(/[^a-zA-Z]+/g, '_').toLowerCase() + '_list'
+        ({ value }) => {
+            const field = mpoxResearchPriorityAndSubPriorityMapping[value]
 
-            const subOptions = rawOptions[field].map(subOption => ({
-                value: option.value + subOption.value,
+            return rawOptions[field].map(subOption => ({
+                value: value + subOption.value,
                 label: subOption.label,
-                parent: option.value,
+                parent: value,
             }))
-
-            return subOptions
         }
     )
 
