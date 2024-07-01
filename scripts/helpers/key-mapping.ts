@@ -29,6 +29,8 @@ export const keyMapping: { [key: string]: string } = {
     research_location_country_iso: 'ResearchLocationCountry',
     main_research_priority_area_number_new: 'ResearchCat',
     main_research_sub_priority_number_new: 'ResearchSubcat',
+    mpox_research_priority: 'MPOXResearchPriority',
+    mpox_research_sub_priority: 'MPOXResearchSubPriority',
     tags: 'Tags',
 }
 
