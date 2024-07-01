@@ -23,7 +23,9 @@ export default function () {
 
     const path = './data/dist'
 
-    const optionsWithConvertedKeys = convertSourceKeysToOurKeys(rawOptions)
+    const optionsWithConvertedKeys = convertSourceKeysToOurKeys(
+        prepareMpoxResearchPriorityAndSubPriority(rawOptions)
+    )
 
     const selectOptions: { [key: string]: any[] } = {
         ...optionsWithConvertedKeys,
@@ -66,6 +68,36 @@ export default function () {
 
         printWrittenFileStats(pathname)
     })
+}
+
+function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
+    [key: string]: any[]
+}) {
+    const MPOXResearchPriorityOptions =
+        rawOptions.research_and_policy_roadmaps.filter(
+            ({ value }) => parseInt(value) >= 14 && parseInt(value) <= 23
+        )
+
+    const MPOXResearchSubPriorityOptions = MPOXResearchPriorityOptions.flatMap(
+        option => {
+            const field =
+                option.label.replace(/[^a-zA-Z]+/g, '_').toLowerCase() + '_list'
+
+            const subOptions = rawOptions[field].map(subOption => ({
+                value: option.value + subOption.value,
+                label: subOption.label,
+                parent: option.value,
+            }))
+
+            return subOptions
+        }
+    )
+
+    return {
+        ...rawOptions,
+        mpox_research_priority: MPOXResearchPriorityOptions,
+        mpox_research_sub_priority: MPOXResearchSubPriorityOptions,
+    }
 }
 
 function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {
