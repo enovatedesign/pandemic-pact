@@ -13,18 +13,13 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/47280508?private_link=74c1a289a1a1de9d66f5',
-        'grants.json'
-    )
-
-    await downloadCsvAndConvertToJson(
         'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/research-categories.csv',
         'research-category-mapping.json'
     )
 
     await downloadCsvAndConvertToJson(
-        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/mpox-research-priorities-mapping-Emmjb4CGPagn1imDvy56ES09sw1p3P.csv',
-        'mpox-research-priority-mapping.json'
+        'https://figshare.com/ndownloader/files/47280508?private_link=74c1a289a1a1de9d66f5',
+        'grants.json'
     )
 }
 
