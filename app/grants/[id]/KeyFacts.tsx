@@ -89,6 +89,18 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
     ]
 
+    if (grant.Disease.includes('Mpox')) {
+        keyFactsSubHeadings.push({
+            text: 'Mpox Research Priorities',
+            metric: grant.MPOXResearchPriority,
+        })
+
+        keyFactsSubHeadings.push({
+            text: 'Mpox Research Sub Priorities',
+            metric: grant.MPOXResearchSubPriority,
+        })
+    }
+
     return (
         <div className="my-2 breakout-with-border overflow-hidden">
             <div className="relative flex flex-col lg:flex-row justify-start items-center w-full bg-secondary md:rounded-2xl overflow-hidden">
