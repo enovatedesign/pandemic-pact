@@ -1,16 +1,16 @@
 import { Fragment, useContext, useMemo } from 'react'
-import { GlobalFilterContext } from '../../../helpers/filters'
-import { sumNumericGrantAmounts } from '../../../helpers/reducers'
+import { GlobalFilterContext } from '../../helpers/filters'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import {
     researchSubCategoryColours,
     researchSubCategoryDimColours,
-} from '../../../helpers/colours'
-import { BarListData } from '../../../helpers/bar-list'
-import BarList from '../../BarList/BarList'
-import BarListRow from '../../BarList/BarListRow'
-import BarListRowHeading from '../../BarList/BarListRowHeading'
-import BackToParentButton from '../../BackToParentButton'
-import selectOptions from '../../../../data/dist/select-options.json'
+} from '../../helpers/colours'
+import { BarListData } from '../../helpers/bar-list'
+import BarList from '../BarList/BarList'
+import BarListRow from '../BarList/BarListRow'
+import BarListRowHeading from '../BarList/BarListRowHeading'
+import BackToParentButton from '../BackToParentButton'
+import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
     setSelectedCategory: (category: string | null) => void

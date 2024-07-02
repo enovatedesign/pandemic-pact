@@ -1,12 +1,12 @@
 import { Fragment } from 'react'
-import { BarListData } from '../../../helpers/bar-list'
-import BarList from '../../BarList/BarList'
-import BarListRow from '../../BarList/BarListRow'
-import BarListRowHeading from '../../BarList/BarListRowHeading'
+import { BarListData } from '../../helpers/bar-list'
+import BarList from '../BarList/BarList'
+import BarListRow from '../BarList/BarListRow'
+import BarListRowHeading from '../BarList/BarListRowHeading'
 import {
     researchCategoryColours,
     researchCategoryDimColours,
-} from '../../../helpers/colours'
+} from '../../helpers/colours'
 
 interface Props {
     chartData: BarListData
@@ -48,7 +48,7 @@ export default function ResearchCategoriesBarList({
                     label="View all sub-categories"
                     subCategoryValue="all"
                     setSelectedCategory={setSelectedCategory}
-                    customClasses='px-4 py-1 lg:text-base uppercase text-white bg-secondary hover:bg-secondary-lighter'
+                    customClasses="px-4 py-1 lg:text-base uppercase text-white bg-secondary hover:bg-secondary-lighter"
                 />
             </div>
         </>
@@ -66,17 +66,20 @@ function ViewSubCategoryButton({
     label,
     subCategoryValue,
     setSelectedCategory,
-    customClasses
+    customClasses,
 }: ViewSubCategoryButtonProps) {
-
     const handleClick = (e: any) => {
-        location.href="#research-category"
+        location.href = '#research-category'
         setSelectedCategory(subCategoryValue)
     }
 
     return (
         <button
-            className={`self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled text-sm ${customClasses ? customClasses : 'px-3 bg-primary hover:bg-primary-lighter text-secondary'} ignore-in-image-export`}
+            className={`self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled text-sm ${
+                customClasses
+                    ? customClasses
+                    : 'px-3 bg-primary hover:bg-primary-lighter text-secondary'
+            } ignore-in-image-export`}
             onClick={handleClick}
         >
             {label}

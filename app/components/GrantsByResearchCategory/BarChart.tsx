@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { BarListData } from '../../../helpers/bar-list'
-import ResearchCategoriesBarList from './ResearchCategoriesBarList'
-import ResearchSubCategoriesBarList from './ResearchSubCategoriesBarList'
-import AllResearchSubCategoriesBarList from './AllResearchSubCategoriesBarList'
+import { BarListData } from '../../helpers/bar-list'
+import ResearchCategoriesBarList from '../CategoryAndSubcategoryBarList/ResearchCategoriesBarList'
+import ResearchSubCategoriesBarList from '../CategoryAndSubcategoryBarList/ResearchSubCategoriesBarList'
+import AllResearchSubCategoriesBarList from '../CategoryAndSubcategoryBarList/AllResearchSubCategoriesBarList'
 
 interface Props {
     chartData: BarListData
