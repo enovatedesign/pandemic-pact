@@ -13,31 +13,44 @@ import BackToParentButton from '../BackToParentButton'
 import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
+    categoryField: string
+    subcategoryField: string
     setSelectedCategory: (category: string | null) => void
 }
 
 export default function AllResearchSubCategoriesBarList({
+    categoryField,
+    subcategoryField,
     setSelectedCategory,
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
     const [subCategoriesGroupedByParent, subCategories] = useMemo(() => {
+        const categories =
+            selectOptions[categoryField as keyof typeof selectOptions]
+
         const subCategoriesGroupedByParent: {
             researchCategoryLabel: string
             researchSubCategoryData: BarListData
-        }[] = selectOptions.ResearchCat.map(
+        }[] = categories.map(
             ({
                 label: researchCategoryLabel,
                 value: researchCategoryValue,
             }) => {
-                const researchSubCategoryData =
-                    selectOptions.ResearchSubcat.filter(
+                const subCategories: any =
+                    selectOptions[
+                        subcategoryField as keyof typeof selectOptions
+                    ]
+
+                const researchSubCategoryData = subCategories
+                    .filter(
                         ({ parent }: { parent: string }) =>
                             parent === researchCategoryValue
-                    ).map(function (researchSubCategory) {
+                    )
+                    .map(function (researchSubCategory: any) {
                         const grantsWithKnownAmounts = grants
                             .filter((grant: any) =>
-                                grant.ResearchSubcat.includes(
+                                grant[subcategoryField].includes(
                                     researchSubCategory.value
                                 )
                             )
@@ -49,7 +62,7 @@ export default function AllResearchSubCategoriesBarList({
 
                         const grantsWithUnspecifiedAmounts = grants
                             .filter((grant: any) =>
-                                grant.ResearchSubcat.includes(
+                                grant[subcategoryField].includes(
                                     researchSubCategory.value
                                 )
                             )

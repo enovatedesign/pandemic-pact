@@ -6,5 +6,11 @@ interface Props {
 }
 
 export default function BarChart({ chartData }: Props) {
-    return <CategoryAndSubcategoryBarList chartData={chartData} />
+    return (
+        <CategoryAndSubcategoryBarList
+            categoryField="ResearchCat"
+            subcategoryField="ResearchSubcat"
+            chartData={chartData}
+        />
+    )
 }

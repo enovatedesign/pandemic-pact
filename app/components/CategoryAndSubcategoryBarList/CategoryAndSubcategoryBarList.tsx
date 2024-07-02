@@ -5,10 +5,16 @@ import ResearchSubCategoriesBarList from './ResearchSubCategoriesBarList'
 import AllResearchSubCategoriesBarList from './AllResearchSubCategoriesBarList'
 
 interface Props {
+    categoryField: string
+    subcategoryField: string
     chartData: BarListData
 }
 
-export default function CategoryAndSubcategoryBarList({ chartData }: Props) {
+export default function CategoryAndSubcategoryBarList({
+    categoryField,
+    subcategoryField,
+    chartData,
+}: Props) {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     )
@@ -25,6 +31,8 @@ export default function CategoryAndSubcategoryBarList({ chartData }: Props) {
     if (selectedCategory === 'all') {
         return (
             <AllResearchSubCategoriesBarList
+                categoryField={categoryField}
+                subcategoryField={subcategoryField}
                 setSelectedCategory={setSelectedCategory}
             />
         )
@@ -32,6 +40,8 @@ export default function CategoryAndSubcategoryBarList({ chartData }: Props) {
 
     return (
         <ResearchSubCategoriesBarList
+            categoryField={categoryField}
+            subcategoryField={subcategoryField}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
         />

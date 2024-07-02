@@ -12,58 +12,74 @@ import BackToParentButton from '../BackToParentButton'
 import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
+    categoryField: string
+    subcategoryField: string
     selectedCategory: string
     setSelectedCategory: (category: string | null) => void
 }
 
 export default function ResearchSubCategoriesBarList({
+    categoryField,
+    subcategoryField,
     selectedCategory,
     setSelectedCategory,
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
     const chartData = useMemo(() => {
-        return selectOptions.ResearchSubcat.filter(
-            ({ parent }: { parent: string }) => parent === selectedCategory
-        ).map(function (researchSubCategory) {
-            const grantsWithKnownAmounts = grants
-                .filter((grant: any) =>
-                    grant.ResearchSubcat.includes(researchSubCategory.value)
-                )
-                .filter(
-                    (grant: any) =>
-                        typeof grant.GrantAmountConverted === 'number'
-                )
+        const subCategories: any =
+            selectOptions[subcategoryField as keyof typeof selectOptions]
 
-            const grantsWithUnspecifiedAmounts = grants
-                .filter((grant: any) =>
-                    grant.ResearchSubcat.includes(researchSubCategory.value)
-                )
-                .filter(
-                    (grant: any) =>
-                        typeof grant.GrantAmountConverted !== 'number'
-                )
-
-            const moneyCommitted = grantsWithKnownAmounts.reduce(
-                ...sumNumericGrantAmounts
+        return subCategories
+            .filter(
+                ({ parent }: { parent: string }) => parent === selectedCategory
             )
+            .map(function (researchSubCategory: any) {
+                const grantsWithKnownAmounts = grants
+                    .filter((grant: any) =>
+                        grant[subcategoryField].includes(
+                            researchSubCategory.value
+                        )
+                    )
+                    .filter(
+                        (grant: any) =>
+                            typeof grant.GrantAmountConverted === 'number'
+                    )
 
-            return {
-                'Category Value': researchSubCategory.value,
-                'Category Label': researchSubCategory.label,
-                'Grants With Known Financial Commitments':
-                    grantsWithKnownAmounts.length,
-                'Grants With Unspecified Financial Commitments':
-                    grantsWithUnspecifiedAmounts.length,
-                'Total Grants':
-                    grantsWithKnownAmounts.length +
-                    grantsWithUnspecifiedAmounts.length,
-                'Known Financial Commitments (USD)': moneyCommitted,
-            }
-        })
+                const grantsWithUnspecifiedAmounts = grants
+                    .filter((grant: any) =>
+                        grant[subcategoryField].includes(
+                            researchSubCategory.value
+                        )
+                    )
+                    .filter(
+                        (grant: any) =>
+                            typeof grant.GrantAmountConverted !== 'number'
+                    )
+
+                const moneyCommitted = grantsWithKnownAmounts.reduce(
+                    ...sumNumericGrantAmounts
+                )
+
+                return {
+                    'Category Value': researchSubCategory.value,
+                    'Category Label': researchSubCategory.label,
+                    'Grants With Known Financial Commitments':
+                        grantsWithKnownAmounts.length,
+                    'Grants With Unspecified Financial Commitments':
+                        grantsWithUnspecifiedAmounts.length,
+                    'Total Grants':
+                        grantsWithKnownAmounts.length +
+                        grantsWithUnspecifiedAmounts.length,
+                    'Known Financial Commitments (USD)': moneyCommitted,
+                }
+            })
     }, [grants, selectedCategory])
 
-    const researchCategoryLabel = selectOptions.ResearchCat.find(
+    const categories =
+        selectOptions[categoryField as keyof typeof selectOptions]
+
+    const researchCategoryLabel = categories.find(
         ({ value }: { value: string }) => value === selectedCategory
     )?.label
 
