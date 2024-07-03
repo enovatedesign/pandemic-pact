@@ -261,7 +261,7 @@ export const coloursByField = {
         bright: researchCategoryColours,
         dim: researchCategoryDimColours,
     },
-    ResearchSubCat: {
+    ResearchSubcat: {
         bright: researchSubCategoryColours,
         dim: researchSubCategoryDimColours,
     },

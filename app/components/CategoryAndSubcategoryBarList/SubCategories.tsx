@@ -76,7 +76,7 @@ export default function SubCategories({
         ({ value }: { value: string }) => value === selectedCategory
     )?.label
 
-    const { brightColours, dimColours } = getColoursByField(categoryField)
+    const { brightColours, dimColours } = getColoursByField(subcategoryField)
 
     return (
         <>
