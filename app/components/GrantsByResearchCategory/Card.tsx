@@ -1,66 +1,23 @@
-import { useContext } from 'react'
 import { ChartBarIcon, SparklesIcon } from '@heroicons/react/solid'
 import VisualisationCard from '../VisualisationCard'
 import BarChart from './BarChart'
 import ScatterChart from './ScatterChart'
-import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import { GlobalFilterContext } from '../../helpers/filters'
-import selectOptions from '../../../data/dist/select-options.json'
 
 export default function GrantsByResearchCategoryCard() {
-    const { grants } = useContext(GlobalFilterContext)
-
-    const chartData = selectOptions.ResearchCat.map(function (
-        researchCategory
-    ) {
-        const grantsWithKnownAmounts = grants
-            .filter((grant: any) =>
-                grant.ResearchCat.includes(researchCategory.value)
-            )
-            .filter(
-                (grant: any) => typeof grant.GrantAmountConverted === 'number'
-            )
-
-        const grantsWithUnspecifiedAmounts = grants
-            .filter((grant: any) =>
-                grant.ResearchCat.includes(researchCategory.value)
-            )
-            .filter(
-                (grant: any) => typeof grant.GrantAmountConverted !== 'number'
-            )
-
-        const moneyCommitted = grantsWithKnownAmounts.reduce(
-            ...sumNumericGrantAmounts
-        )
-
-        return {
-            'Category Value': researchCategory.value,
-            'Category Label': researchCategory.label,
-            'Grants With Known Financial Commitments':
-                grantsWithKnownAmounts.length,
-            'Grants With Unspecified Financial Commitments':
-                grantsWithUnspecifiedAmounts.length,
-            'Total Grants':
-                grantsWithKnownAmounts.length +
-                grantsWithUnspecifiedAmounts.length,
-            'Known Financial Commitments (USD)': moneyCommitted,
-        }
-    })
-
     const tabs = [
         {
             tab: {
                 icon: ChartBarIcon,
                 label: 'Bars',
             },
-            content: <BarChart chartData={chartData} />,
+            content: <BarChart />,
         },
         {
             tab: {
                 icon: SparklesIcon,
                 label: 'Scatter',
             },
-            content: <ScatterChart chartData={chartData} />,
+            content: <ScatterChart />,
         },
     ]
 

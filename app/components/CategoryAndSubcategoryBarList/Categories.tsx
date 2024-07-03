@@ -1,21 +1,66 @@
-import { Fragment } from 'react'
-import { getColoursByField, BarListData } from '../../helpers/bar-list'
+import { useContext, useMemo, Fragment } from 'react'
+import { getColoursByField } from '../../helpers/bar-list'
+import { GlobalFilterContext } from '../../helpers/filters'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
+import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
     categoryField: string
-    chartData: BarListData
     setSelectedCategory: (category: string) => void
 }
 
 export default function Categories({
     categoryField,
-    chartData,
     setSelectedCategory,
 }: Props) {
+    const { grants } = useContext(GlobalFilterContext)
+
     const { brightColours, dimColours } = getColoursByField(categoryField)
+
+    const categories =
+        selectOptions[categoryField as keyof typeof selectOptions]
+
+    const chartData = useMemo(() => {
+        return categories.map(function (category) {
+            const grantsWithKnownAmounts = grants
+                .filter((grant: any) =>
+                    grant[categoryField].includes(category.value)
+                )
+                .filter(
+                    (grant: any) =>
+                        typeof grant.GrantAmountConverted === 'number'
+                )
+
+            const grantsWithUnspecifiedAmounts = grants
+                .filter((grant: any) =>
+                    grant[categoryField].includes(category.value)
+                )
+                .filter(
+                    (grant: any) =>
+                        typeof grant.GrantAmountConverted !== 'number'
+                )
+
+            const moneyCommitted = grantsWithKnownAmounts.reduce(
+                ...sumNumericGrantAmounts
+            )
+
+            return {
+                'Category Value': category.value,
+                'Category Label': category.label,
+                'Grants With Known Financial Commitments':
+                    grantsWithKnownAmounts.length,
+                'Grants With Unspecified Financial Commitments':
+                    grantsWithUnspecifiedAmounts.length,
+                'Total Grants':
+                    grantsWithKnownAmounts.length +
+                    grantsWithUnspecifiedAmounts.length,
+                'Known Financial Commitments (USD)': moneyCommitted,
+            }
+        })
+    }, [categories, grants])
 
     return (
         <>

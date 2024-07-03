@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import {
     ScatterChart as RechartScatterChart,
@@ -14,28 +14,66 @@ import {
 } from 'recharts'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
-import { BarListData } from '../../helpers/bar-list'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
+import selectOptions from '../../../data/dist/select-options.json'
 import { researchCategoryColours } from '../../helpers/colours'
 import {
     dollarValueFormatter,
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
+import { GlobalFilterContext } from '../../helpers/filters'
 import Legend from '../Legend'
 import ImageExportLegend from '../ImageExportLegend'
 import TooltipContent from '../TooltipContent'
-
-interface Props {
-    chartData: BarListData
-}
 
 const CustomDot = (props: any) => {
     const { cx, cy, fill } = props
     return <circle cx={cx} cy={cy} r={6} fill={fill} />
 }
 
-export default function ScatterChart({ chartData }: Props) {
+export default function ScatterChart() {
+    const { grants } = useContext(GlobalFilterContext)
+
     const [showLegend, setShowLegend] = useState<boolean>(false)
     const [showLegendButton, setShowLegendButton] = useState<boolean>(true)
+
+    // TODO useMemo this
+    const chartData = selectOptions.ResearchCat.map(function (
+        researchCategory
+    ) {
+        const grantsWithKnownAmounts = grants
+            .filter((grant: any) =>
+                grant.ResearchCat.includes(researchCategory.value)
+            )
+            .filter(
+                (grant: any) => typeof grant.GrantAmountConverted === 'number'
+            )
+
+        const grantsWithUnspecifiedAmounts = grants
+            .filter((grant: any) =>
+                grant.ResearchCat.includes(researchCategory.value)
+            )
+            .filter(
+                (grant: any) => typeof grant.GrantAmountConverted !== 'number'
+            )
+
+        const moneyCommitted = grantsWithKnownAmounts.reduce(
+            ...sumNumericGrantAmounts
+        )
+
+        return {
+            'Category Value': researchCategory.value,
+            'Category Label': researchCategory.label,
+            'Grants With Known Financial Commitments':
+                grantsWithKnownAmounts.length,
+            'Grants With Unspecified Financial Commitments':
+                grantsWithUnspecifiedAmounts.length,
+            'Total Grants':
+                grantsWithKnownAmounts.length +
+                grantsWithUnspecifiedAmounts.length,
+            'Known Financial Commitments (USD)': moneyCommitted,
+        }
+    })
 
     const researchCategories = chartData.map(data => ({
         label: data['Category Label'],
