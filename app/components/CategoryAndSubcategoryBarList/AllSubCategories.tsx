@@ -95,7 +95,7 @@ export default function AllSubCategories({
         )
 
         return [subCategoriesGroupedByParent, subCategories]
-    }, [grants])
+    }, [categoryField, subcategoryField, grants])
 
     const { brightColours, dimColours } = getColoursByField(subcategoryField)
 

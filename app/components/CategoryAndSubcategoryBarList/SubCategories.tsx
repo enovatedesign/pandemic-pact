@@ -67,7 +67,7 @@ export default function SubCategories({
                     'Known Financial Commitments (USD)': moneyCommitted,
                 }
             })
-    }, [grants, selectedCategory])
+    }, [subcategoryField, grants, selectedCategory])
 
     const categories =
         selectOptions[categoryField as keyof typeof selectOptions]
