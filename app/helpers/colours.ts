@@ -256,6 +256,84 @@ export const regionColours: Colours = {
     '-99': brandColours.blue['DEFAULT'],
 }
 
+export const mpoxResearchPriorityColours: Colours = {
+    '14': brandColours.blue['400'],
+    '15': brandColours.teal['500'],
+    '16': brandColours.green['500'],
+    '17': brandColours.orange['500'],
+    '18': brandColours.grey['400'],
+    '19': brandColours.red['500'],
+    '20': brandColours.yellow['600'],
+    '21': brandColours.blue['700'],
+    '22': brandColours.teal['700'],
+    '23': brandColours.green['700'],
+}
+
+export const mpoxResearchPriorityDimColours: Colours = {
+    '14': brandColours.blue['300'],
+    '15': brandColours.teal['400'],
+    '16': brandColours.green['400'],
+    '17': brandColours.orange['400'],
+    '18': brandColours.grey['300'],
+    '19': brandColours.red['400'],
+    '20': brandColours.yellow['400'],
+    '21': brandColours.blue['600'],
+    '22': brandColours.teal['600'],
+    '23': brandColours.green['600'],
+}
+
+export const mpoxResearchSubPriorityColours: Colours = {
+    '14a': brandColours.blue['400'],
+    '14b': brandColours.teal['500'],
+    '14c': brandColours.green['500'],
+    '15a': brandColours.orange['500'],
+    '16a': brandColours.grey['400'],
+    '16b': brandColours.red['500'],
+    '16c': brandColours.blue['400'],
+    '16d': brandColours.teal['500'],
+    '16e': brandColours.green['500'],
+    '17a': brandColours.blue['400'],
+    '17b': brandColours.teal['500'],
+    '17c': brandColours.green['500'],
+    '17d': brandColours.orange['500'],
+    '18a': brandColours.blue['400'],
+    '19a': brandColours.teal['500'],
+    '20a': brandColours.green['500'],
+    '20b': brandColours.orange['500'],
+    '21a': brandColours.grey['400'],
+    '21b': brandColours.blue['400'],
+    '21c': brandColours.teal['500'],
+    '22a': brandColours.green['500'],
+    '23a': brandColours.orange['500'],
+    '23b': brandColours.blue['400'],
+}
+
+export const mpoxResearchSubPriorityDimColours: Colours = {
+    '14a': brandColours.blue['300'],
+    '14b': brandColours.teal['400'],
+    '14c': brandColours.green['400'],
+    '15a': brandColours.orange['400'],
+    '16a': brandColours.grey['300'],
+    '16b': brandColours.red['400'],
+    '16c': brandColours.blue['300'],
+    '16d': brandColours.teal['400'],
+    '16e': brandColours.green['400'],
+    '17a': brandColours.blue['300'],
+    '17b': brandColours.teal['400'],
+    '17c': brandColours.green['400'],
+    '17d': brandColours.orange['400'],
+    '18a': brandColours.blue['300'],
+    '19a': brandColours.teal['400'],
+    '20a': brandColours.green['400'],
+    '20b': brandColours.orange['400'],
+    '21a': brandColours.grey['300'],
+    '21b': brandColours.blue['300'],
+    '21c': brandColours.teal['400'],
+    '22a': brandColours.green['400'],
+    '23a': brandColours.orange['400'],
+    '23b': brandColours.blue['300'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,
@@ -264,5 +342,13 @@ export const coloursByField = {
     ResearchSubcat: {
         bright: researchSubCategoryColours,
         dim: researchSubCategoryDimColours,
+    },
+    MPOXResearchPriority: {
+        bright: mpoxResearchPriorityColours,
+        dim: mpoxResearchPriorityDimColours,
+    },
+    MPOXResearchSubPriority: {
+        bright: mpoxResearchSubPriorityColours,
+        dim: mpoxResearchSubPriorityDimColours,
     },
 }
