@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { BarListData } from '../../helpers/bar-list'
-import ResearchCategoriesBarList from './ResearchCategoriesBarList'
-import ResearchSubCategoriesBarList from './ResearchSubCategoriesBarList'
-import AllResearchSubCategoriesBarList from './AllResearchSubCategoriesBarList'
+import Categories from './Categories'
+import SubCategories from './SubCategories'
+import AllSubCategories from './AllSubCategories'
 
 interface Props {
     categoryField: string
@@ -21,7 +21,7 @@ export default function CategoryAndSubcategoryBarList({
 
     if (!selectedCategory) {
         return (
-            <ResearchCategoriesBarList
+            <Categories
                 categoryField={categoryField}
                 chartData={chartData}
                 setSelectedCategory={setSelectedCategory}
@@ -31,7 +31,7 @@ export default function CategoryAndSubcategoryBarList({
 
     if (selectedCategory === 'all') {
         return (
-            <AllResearchSubCategoriesBarList
+            <AllSubCategories
                 categoryField={categoryField}
                 subcategoryField={subcategoryField}
                 setSelectedCategory={setSelectedCategory}
@@ -40,7 +40,7 @@ export default function CategoryAndSubcategoryBarList({
     }
 
     return (
-        <ResearchSubCategoriesBarList
+        <SubCategories
             categoryField={categoryField}
             subcategoryField={subcategoryField}
             selectedCategory={selectedCategory}

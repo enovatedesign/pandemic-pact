@@ -10,7 +10,7 @@ interface Props {
     setSelectedCategory: (category: string) => void
 }
 
-export default function ResearchCategoriesBarList({
+export default function Categories({
     categoryField,
     chartData,
     setSelectedCategory,

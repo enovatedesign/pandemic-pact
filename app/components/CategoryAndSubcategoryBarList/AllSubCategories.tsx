@@ -14,7 +14,7 @@ interface Props {
     setSelectedCategory: (category: string | null) => void
 }
 
-export default function AllResearchSubCategoriesBarList({
+export default function AllSubCategories({
     categoryField,
     subcategoryField,
     setSelectedCategory,
