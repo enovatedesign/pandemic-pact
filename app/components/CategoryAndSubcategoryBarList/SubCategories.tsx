@@ -1,7 +1,9 @@
 import { Fragment, useContext, useMemo } from 'react'
 import { GlobalFilterContext } from '../../helpers/filters'
-import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import { getColoursByField } from '../../helpers/bar-list'
+import {
+    getColoursByField,
+    prepareBarListDataForCategory,
+} from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
@@ -31,42 +33,13 @@ export default function SubCategories({
             .filter(
                 ({ parent }: { parent: string }) => parent === selectedCategory
             )
-            .map(function (subCategory: any) {
-                const grantsWithKnownAmounts = grants
-                    .filter((grant: any) =>
-                        grant[subcategoryField].includes(subCategory.value)
-                    )
-                    .filter(
-                        (grant: any) =>
-                            typeof grant.GrantAmountConverted === 'number'
-                    )
-
-                const grantsWithUnspecifiedAmounts = grants
-                    .filter((grant: any) =>
-                        grant[subcategoryField].includes(subCategory.value)
-                    )
-                    .filter(
-                        (grant: any) =>
-                            typeof grant.GrantAmountConverted !== 'number'
-                    )
-
-                const moneyCommitted = grantsWithKnownAmounts.reduce(
-                    ...sumNumericGrantAmounts
+            .map((category: any) =>
+                prepareBarListDataForCategory(
+                    grants,
+                    category,
+                    subcategoryField
                 )
-
-                return {
-                    'Category Value': subCategory.value,
-                    'Category Label': subCategory.label,
-                    'Grants With Known Financial Commitments':
-                        grantsWithKnownAmounts.length,
-                    'Grants With Unspecified Financial Commitments':
-                        grantsWithUnspecifiedAmounts.length,
-                    'Total Grants':
-                        grantsWithKnownAmounts.length +
-                        grantsWithUnspecifiedAmounts.length,
-                    'Known Financial Commitments (USD)': moneyCommitted,
-                }
-            })
+            )
     }, [subcategoryField, grants, selectedCategory])
 
     const categories =
