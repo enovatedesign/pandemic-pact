@@ -26,28 +26,25 @@ export default function AllResearchSubCategoriesBarList({
             selectOptions[categoryField as keyof typeof selectOptions]
 
         const subCategoriesGroupedByParent: {
-            researchCategoryLabel: string
-            researchSubCategoryData: BarListData
+            categoryLabel: string
+            subCategoryData: BarListData
         }[] = categories.map(
-            ({
-                label: researchCategoryLabel,
-                value: researchCategoryValue,
-            }) => {
+            ({ label: categoryLabel, value: categoryValue }) => {
                 const subCategories: any =
                     selectOptions[
                         subcategoryField as keyof typeof selectOptions
                     ]
 
-                const researchSubCategoryData = subCategories
+                const subCategoryData = subCategories
                     .filter(
                         ({ parent }: { parent: string }) =>
-                            parent === researchCategoryValue
+                            parent === categoryValue
                     )
-                    .map(function (researchSubCategory: any) {
+                    .map(function (subCategory: any) {
                         const grantsWithKnownAmounts = grants
                             .filter((grant: any) =>
                                 grant[subcategoryField].includes(
-                                    researchSubCategory.value
+                                    subCategory.value
                                 )
                             )
                             .filter(
@@ -59,7 +56,7 @@ export default function AllResearchSubCategoriesBarList({
                         const grantsWithUnspecifiedAmounts = grants
                             .filter((grant: any) =>
                                 grant[subcategoryField].includes(
-                                    researchSubCategory.value
+                                    subCategory.value
                                 )
                             )
                             .filter(
@@ -73,8 +70,8 @@ export default function AllResearchSubCategoriesBarList({
                         )
 
                         return {
-                            'Category Value': researchSubCategory.value,
-                            'Category Label': researchSubCategory.label,
+                            'Category Value': subCategory.value,
+                            'Category Label': subCategory.label,
                             'Grants With Known Financial Commitments':
                                 grantsWithKnownAmounts.length,
                             'Grants With Unspecified Financial Commitments':
@@ -87,14 +84,14 @@ export default function AllResearchSubCategoriesBarList({
                     })
 
                 return {
-                    researchCategoryLabel,
-                    researchSubCategoryData,
+                    categoryLabel,
+                    subCategoryData,
                 }
             }
         )
 
         const subCategories = subCategoriesGroupedByParent.flatMap(
-            ({ researchSubCategoryData }) => researchSubCategoryData
+            ({ subCategoryData }) => subCategoryData
         )
 
         return [subCategoriesGroupedByParent, subCategories]
@@ -115,13 +112,13 @@ export default function AllResearchSubCategoriesBarList({
                 dimColours={dimColours}
             >
                 {subCategoriesGroupedByParent.map(
-                    ({ researchCategoryLabel, researchSubCategoryData }) => (
-                        <Fragment key={researchCategoryLabel}>
+                    ({ categoryLabel, subCategoryData }) => (
+                        <Fragment key={categoryLabel}>
                             <h3 className="text-lg mb-2 mt-6 col-span-4">
-                                {researchCategoryLabel}
+                                {categoryLabel}
                             </h3>
 
-                            {researchSubCategoryData.map((datum: any) => (
+                            {subCategoryData.map((datum: any) => (
                                 <Fragment key={datum['Category Value']}>
                                     <BarListRowHeading>
                                         <p className="bar-chart-category-label text-gray-600 text-sm">

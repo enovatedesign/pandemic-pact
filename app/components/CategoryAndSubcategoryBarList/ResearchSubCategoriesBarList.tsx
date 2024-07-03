@@ -31,12 +31,10 @@ export default function ResearchSubCategoriesBarList({
             .filter(
                 ({ parent }: { parent: string }) => parent === selectedCategory
             )
-            .map(function (researchSubCategory: any) {
+            .map(function (subCategory: any) {
                 const grantsWithKnownAmounts = grants
                     .filter((grant: any) =>
-                        grant[subcategoryField].includes(
-                            researchSubCategory.value
-                        )
+                        grant[subcategoryField].includes(subCategory.value)
                     )
                     .filter(
                         (grant: any) =>
@@ -45,9 +43,7 @@ export default function ResearchSubCategoriesBarList({
 
                 const grantsWithUnspecifiedAmounts = grants
                     .filter((grant: any) =>
-                        grant[subcategoryField].includes(
-                            researchSubCategory.value
-                        )
+                        grant[subcategoryField].includes(subCategory.value)
                     )
                     .filter(
                         (grant: any) =>
@@ -59,8 +55,8 @@ export default function ResearchSubCategoriesBarList({
                 )
 
                 return {
-                    'Category Value': researchSubCategory.value,
-                    'Category Label': researchSubCategory.label,
+                    'Category Value': subCategory.value,
+                    'Category Label': subCategory.label,
                     'Grants With Known Financial Commitments':
                         grantsWithKnownAmounts.length,
                     'Grants With Unspecified Financial Commitments':
@@ -76,7 +72,7 @@ export default function ResearchSubCategoriesBarList({
     const categories =
         selectOptions[categoryField as keyof typeof selectOptions]
 
-    const researchCategoryLabel = categories.find(
+    const categoryLabel = categories.find(
         ({ value }: { value: string }) => value === selectedCategory
     )?.label
 
@@ -85,7 +81,7 @@ export default function ResearchSubCategoriesBarList({
     return (
         <>
             <BackToParentButton
-                label={`Viewing Sub-Categories Of ${researchCategoryLabel}`}
+                label={`Viewing Sub-Categories Of ${categoryLabel}`}
                 onClick={() => setSelectedCategory(null)}
             />
 
