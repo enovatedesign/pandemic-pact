@@ -85,7 +85,7 @@ function ViewSubCategoryButton({
     customClasses,
 }: ViewSubCategoryButtonProps) {
     const handleClick = () => {
-        location.href = '#research-category'
+        //location.href = '#research-category' TODO reimplement this in an agnostic way
         setSelectedCategory(subCategoryValue)
     }
 
