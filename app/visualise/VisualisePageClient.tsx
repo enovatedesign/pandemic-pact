@@ -193,20 +193,25 @@ export default function VisualisePageClient({
                         id="visualisations-wrapper"
                     >
                         <div className={`${gridClasses} mt-6`}>
-                            <div
-                                id="mpox-research-priorities"
-                                className={gridClasses}
-                            >
-                                <GrantsByMpoxResearchPriorityCard />
-                            </div>
-
                             <div id="disease" className={gridClasses}>
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            <div id="research-category" className={gridClasses}>
-                                <GrantsByResearchCategoryCard />
-                            </div>
+                            {outbreak ? (
+                                <div
+                                    id="mpox-research-priorities"
+                                    className={gridClasses}
+                                >
+                                    <GrantsByMpoxResearchPriorityCard />
+                                </div>
+                            ) : (
+                                <div
+                                    id="research-category"
+                                    className={gridClasses}
+                                >
+                                    <GrantsByResearchCategoryCard />
+                                </div>
+                            )}
 
                             <div
                                 id="geographical-distribution"
