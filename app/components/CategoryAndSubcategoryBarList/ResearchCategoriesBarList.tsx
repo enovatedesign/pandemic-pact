@@ -1,28 +1,28 @@
 import { Fragment } from 'react'
-import { BarListData } from '../../helpers/bar-list'
+import { getColoursByField, BarListData } from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
-import {
-    researchCategoryColours,
-    researchCategoryDimColours,
-} from '../../helpers/colours'
 
 interface Props {
+    categoryField: string
     chartData: BarListData
     setSelectedCategory: (category: string) => void
 }
 
 export default function ResearchCategoriesBarList({
+    categoryField,
     chartData,
     setSelectedCategory,
 }: Props) {
+    const { brightColours, dimColours } = getColoursByField(categoryField)
+
     return (
         <>
             <BarList
                 data={chartData}
-                brightColours={researchCategoryColours}
-                dimColours={researchCategoryDimColours}
+                brightColours={brightColours}
+                dimColours={dimColours}
             >
                 {chartData.map((datum: any, index: number) => (
                     <Fragment key={datum['Category Value']}>

@@ -1,10 +1,7 @@
 import { Fragment, useContext, useMemo } from 'react'
 import { GlobalFilterContext } from '../../helpers/filters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import {
-    researchSubCategoryColours,
-    researchSubCategoryDimColours,
-} from '../../helpers/colours'
+import { getColoursByField } from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
@@ -83,6 +80,8 @@ export default function ResearchSubCategoriesBarList({
         ({ value }: { value: string }) => value === selectedCategory
     )?.label
 
+    const { brightColours, dimColours } = getColoursByField(categoryField)
+
     return (
         <>
             <BackToParentButton
@@ -92,8 +91,8 @@ export default function ResearchSubCategoriesBarList({
 
             <BarList
                 data={chartData}
-                brightColours={researchSubCategoryColours}
-                dimColours={researchSubCategoryDimColours}
+                brightColours={brightColours}
+                dimColours={dimColours}
             >
                 {chartData.map((datum: any, index: number) => (
                     <Fragment key={datum['Category Value']}>

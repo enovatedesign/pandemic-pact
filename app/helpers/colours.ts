@@ -255,3 +255,14 @@ export const regionColours: Colours = {
     '9999999': brandColours.grey['400'],
     '-99': brandColours.blue['DEFAULT'],
 }
+
+export const coloursByField = {
+    ResearchCat: {
+        bright: researchCategoryColours,
+        dim: researchCategoryDimColours,
+    },
+    ResearchSubCat: {
+        bright: researchSubCategoryColours,
+        dim: researchSubCategoryDimColours,
+    },
+}

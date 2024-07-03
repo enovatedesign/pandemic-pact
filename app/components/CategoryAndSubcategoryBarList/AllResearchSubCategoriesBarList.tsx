@@ -1,11 +1,7 @@
 import { Fragment, useContext, useMemo } from 'react'
 import { GlobalFilterContext } from '../../helpers/filters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import {
-    researchSubCategoryColours,
-    researchSubCategoryDimColours,
-} from '../../helpers/colours'
-import { BarListData } from '../../helpers/bar-list'
+import { getColoursByField, BarListData } from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
@@ -104,6 +100,8 @@ export default function AllResearchSubCategoriesBarList({
         return [subCategoriesGroupedByParent, subCategories]
     }, [grants])
 
+    const { brightColours, dimColours } = getColoursByField(categoryField)
+
     return (
         <>
             <BackToParentButton
@@ -113,8 +111,8 @@ export default function AllResearchSubCategoriesBarList({
 
             <BarList
                 data={subCategories}
-                brightColours={researchSubCategoryColours}
-                dimColours={researchSubCategoryDimColours}
+                brightColours={brightColours}
+                dimColours={dimColours}
             >
                 {subCategoriesGroupedByParent.map(
                     ({ researchCategoryLabel, researchSubCategoryData }) => (

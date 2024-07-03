@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { Colours } from './colours'
+import { Colours, coloursByField } from './colours'
 
 export interface BarListDatum {
     'Known Financial Commitments (USD)': number
@@ -25,3 +25,12 @@ export const BarListContext = createContext<{
     maxTotalNumberOfGrants: 0,
     maxAmountCommitted: 0,
 })
+
+export function getColoursByField(field: string) {
+    const brightColours =
+        coloursByField[field as keyof typeof coloursByField].bright
+
+    const dimColours = coloursByField[field as keyof typeof coloursByField].dim
+
+    return { brightColours, dimColours }
+}

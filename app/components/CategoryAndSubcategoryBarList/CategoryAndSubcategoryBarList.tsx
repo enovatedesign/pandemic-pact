@@ -22,6 +22,7 @@ export default function CategoryAndSubcategoryBarList({
     if (!selectedCategory) {
         return (
             <ResearchCategoriesBarList
+                categoryField={categoryField}
                 chartData={chartData}
                 setSelectedCategory={setSelectedCategory}
             />
