@@ -35,7 +35,6 @@ export default function ScatterChart() {
     const { grants } = useContext(GlobalFilterContext)
 
     const [showLegend, setShowLegend] = useState<boolean>(false)
-    const [showLegendButton, setShowLegendButton] = useState<boolean>(true)
 
     const { chartData, researchCategories } = useMemo(() => {
         const chartData = selectOptions.ResearchCat.map(
@@ -106,24 +105,23 @@ export default function ScatterChart() {
     return (
         <>
             <div className="space-y-2 ignore-in-image-export">
-                {showLegendButton && (
-                    <button
-                        onClick={() => setShowLegend(!showLegend)}
+                <button
+                    onClick={() => setShowLegend(!showLegend)}
+                    className={`${
+                        showLegend
+                            ? 'bg-brand-teal-600 hover:bg-brand-teal-700 text-white shadow'
+                            : 'bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-600'
+                    }  p-2 rounded-lg text-sm font-medium leading-5 flex gap-2 items-center`}
+                >
+                    Legend
+                    <ChevronDownIcon
                         className={`${
-                            showLegend
-                                ? 'bg-brand-teal-600 hover:bg-brand-teal-700 text-white shadow'
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-600'
-                        }  p-2 rounded-lg text-sm font-medium leading-5 flex gap-2 items-center`}
-                    >
-                        Legend
-                        <ChevronDownIcon
-                            className={`${
-                                showLegend && 'rotate-180'
-                            } transition duration-300 h-5 w-5`}
-                            aria-hidden="true"
-                        />
-                    </button>
-                )}
+                            showLegend && 'rotate-180'
+                        } transition duration-300 h-5 w-5`}
+                        aria-hidden="true"
+                    />
+                </button>
+
                 <AnimateHeight duration={300} height={showLegend ? 'auto' : 0}>
                     <Legend
                         categories={researchCategories.map(
