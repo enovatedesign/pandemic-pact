@@ -4,13 +4,13 @@ import SubCategories from './SubCategories'
 import AllSubCategories from './AllSubCategories'
 
 interface Props {
-    cardId: string
+    topOfCardId: string
     categoryField: string
     subcategoryField: string
 }
 
 export default function CategoryAndSubcategoryBarList({
-    cardId,
+    topOfCardId,
     categoryField,
     subcategoryField,
 }: Props) {
@@ -21,7 +21,7 @@ export default function CategoryAndSubcategoryBarList({
     if (!selectedCategory) {
         return (
             <Categories
-                cardId={cardId}
+                topOfCardId={topOfCardId}
                 categoryField={categoryField}
                 setSelectedCategory={setSelectedCategory}
             />

@@ -10,13 +10,13 @@ import BarListRowHeading from '../BarList/BarListRowHeading'
 import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
-    cardId: string
+    topOfCardId: string
     categoryField: string
     setSelectedCategory: (category: string) => void
 }
 
 export default function Categories({
-    cardId,
+    topOfCardId,
     categoryField,
     setSelectedCategory,
 }: Props) {
@@ -50,7 +50,7 @@ export default function Categories({
                             </p>
 
                             <ViewSubCategoryButton
-                                cardId={cardId}
+                                topOfCardId={topOfCardId}
                                 label="View sub-categories"
                                 subCategoryValue={datum['Category Value']}
                                 setSelectedCategory={setSelectedCategory}
@@ -64,7 +64,7 @@ export default function Categories({
 
             <div className="flex justify-end w-full">
                 <ViewSubCategoryButton
-                    cardId={cardId}
+                    topOfCardId={topOfCardId}
                     label="View all sub-categories"
                     subCategoryValue="all"
                     setSelectedCategory={setSelectedCategory}
@@ -76,7 +76,7 @@ export default function Categories({
 }
 
 interface ViewSubCategoryButtonProps {
-    cardId: string
+    topOfCardId: string
     label: string
     subCategoryValue: string
     setSelectedCategory: (category: string) => void
@@ -84,14 +84,14 @@ interface ViewSubCategoryButtonProps {
 }
 
 function ViewSubCategoryButton({
-    cardId,
+    topOfCardId,
     label,
     subCategoryValue,
     setSelectedCategory,
     customClasses,
 }: ViewSubCategoryButtonProps) {
     const handleClick = () => {
-        location.href = `#${cardId}`
+        location.href = `#${topOfCardId}`
 
         setSelectedCategory(subCategoryValue)
     }
