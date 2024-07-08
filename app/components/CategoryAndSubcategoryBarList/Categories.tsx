@@ -10,11 +10,13 @@ import BarListRowHeading from '../BarList/BarListRowHeading'
 import selectOptions from '../../../data/dist/select-options.json'
 
 interface Props {
+    cardId: string
     categoryField: string
     setSelectedCategory: (category: string) => void
 }
 
 export default function Categories({
+    cardId,
     categoryField,
     setSelectedCategory,
 }: Props) {
@@ -28,9 +30,9 @@ export default function Categories({
     const chartData = useMemo(
         () =>
             categories.map(category =>
-                prepareBarListDataForCategory(grants, category, categoryField)
+                prepareBarListDataForCategory(grants, category, categoryField),
             ),
-        [grants, categories, categoryField]
+        [grants, categories, categoryField],
     )
 
     return (
@@ -48,6 +50,7 @@ export default function Categories({
                             </p>
 
                             <ViewSubCategoryButton
+                                cardId={cardId}
                                 label="View sub-categories"
                                 subCategoryValue={datum['Category Value']}
                                 setSelectedCategory={setSelectedCategory}
@@ -61,6 +64,7 @@ export default function Categories({
 
             <div className="flex justify-end w-full">
                 <ViewSubCategoryButton
+                    cardId={cardId}
                     label="View all sub-categories"
                     subCategoryValue="all"
                     setSelectedCategory={setSelectedCategory}
@@ -72,6 +76,7 @@ export default function Categories({
 }
 
 interface ViewSubCategoryButtonProps {
+    cardId: string
     label: string
     subCategoryValue: string
     setSelectedCategory: (category: string) => void
@@ -79,13 +84,15 @@ interface ViewSubCategoryButtonProps {
 }
 
 function ViewSubCategoryButton({
+    cardId,
     label,
     subCategoryValue,
     setSelectedCategory,
     customClasses,
 }: ViewSubCategoryButtonProps) {
     const handleClick = () => {
-        //location.href = '#research-category' TODO reimplement this in an agnostic way
+        location.href = `#${cardId}`
+
         setSelectedCategory(subCategoryValue)
     }
 

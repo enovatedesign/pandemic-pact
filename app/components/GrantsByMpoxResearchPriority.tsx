@@ -8,6 +8,7 @@ export default function GrantsPerMpoxResearchPriority() {
             title="Grants by Mpox Research Priority"
         >
             <CategoryAndSubcategoryBarList
+                cardId="mpox-research-priorities"
                 categoryField="MPOXResearchPriority"
                 subcategoryField="MPOXResearchSubPriority"
             />

@@ -3,6 +3,7 @@ import CategoryAndSubcategoryBarList from '../CategoryAndSubcategoryBarList/Cate
 export default function BarChart() {
     return (
         <CategoryAndSubcategoryBarList
+            cardId="research-category"
             categoryField="ResearchCat"
             subcategoryField="ResearchSubcat"
         />
