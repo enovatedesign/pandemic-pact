@@ -4,13 +4,13 @@ import TooltipContent from './TooltipContent'
 interface Props {
     props: any
     chartData: any
-    displayKnownFinancialCommitments?: boolean
+    formatValuesToDollars?: boolean
 }
 
 export default function RechartTrendsTooltipContent({
     props,
     chartData,
-    displayKnownFinancialCommitments,
+    formatValuesToDollars = false
 }: Props) {
     if (!props.active) return null
 
@@ -57,7 +57,7 @@ export default function RechartTrendsTooltipContent({
         }
         return {
             label: item.name,
-            value: displayKnownFinancialCommitments
+            value: formatValuesToDollars
                 ? dollarValueFormatter(item.value)
                 : item.value,
             colour: item.color,
