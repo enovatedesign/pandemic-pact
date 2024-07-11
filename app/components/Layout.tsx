@@ -204,7 +204,7 @@ const Layout = ({
                         </article>
                     </main>
 
-                    <Footer />
+                    <Footer sidebarOpen={sidebarOpen}/>
                 </div>
             </div>
         </>
