@@ -141,9 +141,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                             <RechartTrendsTooltipContent
                                 props={props}
                                 chartData={chartData}
-                                displayKnownFinancialCommitments={
-                                    displayKnownFinancialCommitments
-                                }
+                                formatValuesToDollars={displayKnownFinancialCommitments}
                             />
                         )}
                         {...rechartBaseTooltipProps}
