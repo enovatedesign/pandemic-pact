@@ -40,6 +40,7 @@
         "eslint-config-next": "14.0.4",
         "fs-extra": "^11.2.0",
         "html-react-parser": "^5.0.11",
+        "gsap": "npm:@gsap/shockingly@^3.12.5",
         "html2canvas": "^1.4.1",
         "lodash": "^4.17.21",
         "millify": "^6.1.0",

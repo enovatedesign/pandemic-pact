@@ -3,8 +3,8 @@ import {getFooterLinksArray} from '../helpers/nav'
 
 export default function FooterMenu({className, linkClassName}: {className?: string, linkClassName?: string}) {
 
-    className = className ?? 'flex flex-col items-center justify-center sm:flex-row gap-1 sm:gap-4 xl:justify-end'
-    linkClassName = linkClassName ?? 'block py-1 text-gray-700 text-xs uppercase hover:underline'
+    className = className ?? 'flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4 lg:gap-1 lg:flex-col lg:justify-end lg:items-end 2xl:flex-row 2xl:gap-4'
+    linkClassName = linkClassName ?? 'block py-1 text-gray-700 text-xs uppercase hover:underline whitespace-nowrap'
 
     const links = getFooterLinksArray()
 
