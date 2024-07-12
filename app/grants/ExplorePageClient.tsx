@@ -114,10 +114,10 @@ export default function ExplorePageClient() {
             <div className="container mx-auto my-6 lg:my-12">
                 <div className="flex flex-col space-y-6 lg:space-y-8 mt-6">
                     <div>
-                        {/*
-                        Note that the `Suspense` here is to suppress the following error:
-                        https://nextjs.org/docs/messages/deopted-into-client-rendering
-                        TODO work out what to do with the `Suspense` `fallback`
+                        {/* 
+                            Note that the `Suspense` here is to suppress the following error:
+                            https://nextjs.org/docs/messages/deopted-into-client-rendering
+                            TODO work out what to do with the `Suspense` `fallback` 
                         */}
                         <Suspense fallback={<div>Loading...</div>}>
                             <SearchInput
