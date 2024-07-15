@@ -154,7 +154,7 @@ module.exports = {
                 'd-screen': '100dvh',
             },
             backgroundImage: {
-                dots: "url('/images/homepage-dots/home-dot.png')",
+                dots: "url('/images/interface/dot-pattern.svg')",
             },
         },
     },
