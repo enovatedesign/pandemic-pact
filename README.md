@@ -1,13 +1,13 @@
 This project uses the following technologies and packages:
 
-- [Next.js](https://nextjs.org)
-- [Vercel](https://vercel.com)
-- [Typescript](https://www.typescriptlang.org)
-- [OpenSearch](https://opensearch.org)
-- [Headless UI](https://headlessui.com)
-- [Recharts](https://recharts.org)
-- [React Simple Maps](https://www.react-simple-maps.io)
-- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
+-   [Next.js](https://nextjs.org)
+-   [Vercel](https://vercel.com)
+-   [Typescript](https://www.typescriptlang.org)
+-   [OpenSearch](https://opensearch.org)
+-   [Headless UI](https://headlessui.com)
+-   [Recharts](https://recharts.org)
+-   [React Simple Maps](https://www.react-simple-maps.io)
+-   [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 
 ## Getting Started
 
@@ -17,11 +17,13 @@ Start by ensuring that you are on the correct version of NodeJS by using NVM:
 nvm use
 ```
 
-Install NPM dependencies:
+Next, install the project's dependencies via NPM. You will need to get the GSAP Token from the Vercel project's Environment Variables - ask someone if you don't have access.
 
 ```bash
-npm install
+GSAP_TOKEN="..." npm ci
 ```
+
+Replace `...` in the command above with the GSAP Token.
 
 ### OpenSearch
 
