@@ -17,7 +17,7 @@ Start by ensuring that you are on the correct version of NodeJS by using NVM:
 nvm use
 ```
 
-Next, install the project's dependencies via NPM. You will need to get the GSAP Token from the Vercel project's Environment Variables - ask someone if you don't have access.
+Next, install dependencies via NPM. You will need to get the GSAP Token from the Vercel Environment Variables - ask someone if you don't have access.
 
 ```bash
 GSAP_TOKEN="..." npm ci
