@@ -65,7 +65,7 @@ export default async function () {
 
     const allGrants = fs.readJsonSync('./data/dist/grants.json')
 
-    const chunkSize = 1000
+    const chunkSize = 500
 
     const chunkedGrants = _.chunk(allGrants, chunkSize)
 
