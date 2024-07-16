@@ -36,7 +36,7 @@ export default async function () {
             Object.keys(selectOptions).map(field => [
                 field,
                 { type: 'keyword' },
-            ])
+            ]),
         ),
     }
 
@@ -111,7 +111,7 @@ export default async function () {
 
         const grantIDsToDelete = _.difference(
             allGrantIDsInIndex,
-            grantIDsInData
+            grantIDsInData,
         )
 
         if (grantIDsToDelete.length > 0) {
@@ -124,7 +124,7 @@ export default async function () {
                     info(
                         `Deleted ${i * chunkSize}/${
                             grantIDsToDelete.length
-                        } documents`
+                        } documents`,
                     )
                 }
 
@@ -138,7 +138,7 @@ export default async function () {
                                 _id: grantID,
                             },
                         }
-                    }
+                    },
                 )
 
                 const response = await client
@@ -151,7 +151,7 @@ export default async function () {
             }
 
             info(
-                `Removed ${grantIDsToDelete.length} documents that are no longer in the data`
+                `Removed ${grantIDsToDelete.length} documents that are no longer in the data`,
             )
         }
     }
