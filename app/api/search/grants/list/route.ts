@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
 
         from: from,
         size: limit,
+        track_total_hits: true,
 
         body: {
             query,
