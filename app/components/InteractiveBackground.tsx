@@ -97,7 +97,7 @@ export default function InteractiveBackground({children, ...rest}: Props) {
     return (
         <section {...rest}>
             {children}
-            <canvas className="bg-dots absolute inset-0 w-full h-full z-0 md:hidden"></canvas>
+            <div className="bg-dots bg-center bg-[length:75px_75px] bg-size bg-repeat absolute inset-0 w-full h-full z-0 md:hidden"></div>
             <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0 hidden md:block"></canvas>
         </section>
     )
