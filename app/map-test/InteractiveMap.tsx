@@ -56,7 +56,11 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
                 initialViewState={{
                     zoom: 1,
                 }}
-                style={{ width: 1500, height: 1000 }}
+                renderWorldCopies={false}
+                style={{
+                    width: 1500,
+                    height: 1000,
+                }}
                 cursor={cursor}
                 onClick={onClick}
                 onMouseEnter={onMouseEnter}
