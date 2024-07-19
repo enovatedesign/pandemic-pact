@@ -1,13 +1,9 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import Map, { Source, Layer } from 'react-map-gl/maplibre'
-import type {
-    FillLayer,
-    LineLayer,
-    MapLayerMouseEvent,
-} from 'react-map-gl/maplibre'
-import 'maplibre-gl/dist/maplibre-gl.css'
+import Map, { Source, Layer } from 'react-map-gl'
+import type { FillLayer, LineLayer, MapLayerMouseEvent } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 interface Props {
     geojson: any // TODO type
@@ -53,20 +49,21 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
     return (
         <>
             <Map
-                initialViewState={{
-                    zoom: 1,
-                }}
+                mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
                 renderWorldCopies={false}
+                projection="naturalEarth"
+                interactiveLayerIds={['fill-layer']}
                 style={{
-                    width: 1500,
-                    height: 1000,
+                    width: '100vw',
+                    height: 1200,
+                }}
+                initialViewState={{
+                    zoom: 2,
                 }}
                 cursor={cursor}
                 onClick={onClick}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                interactiveLayerIds={['fill-layer']}
-                attributionControl={false}
             >
                 <Source id="geojson-source" type="geojson" data={geojson}>
                     <Layer {...fillLayer} />
