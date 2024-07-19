@@ -62,6 +62,7 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 interactiveLayerIds={['fill-layer']}
+                attributionControl={false}
             >
                 <Source id="geojson-source" type="geojson" data={geojson}>
                     <Layer {...fillLayer} />
