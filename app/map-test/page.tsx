@@ -1,31 +1,45 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import InteractiveMap from './InteractiveMap'
 import countryGeojson from '../../public/data/geojson/countries.json'
 import { brandColours } from '../helpers/colours'
 import { scaleLog } from 'd3-scale'
 import dataset from '../../public/data/grants.json'
+import selectOptions from '../../data/dist/select-options.json'
+import { CountrySummary } from './types'
+import StatusBar from './StatusBar'
 
 export default function Page() {
-    const geojson = useMemo(() => {
-        const countryTotals = new Map<string, number>()
+    const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
 
-        countryGeojson.features.forEach(feature => {
-            const id = feature.properties.id
+    const countrySummaries = useMemo(() => {
+        const countrySummaries = new Map<string, CountrySummary>()
 
-            const grants = (dataset as any).filter((grant: any) =>
-                grant.FunderCountry.includes(id),
-            )
+        selectOptions.FunderCountry.forEach(
+            ({ value: id, label }: { value: string; label: string }) => {
+                const grants = (dataset as any).filter((grant: any) =>
+                    grant.FunderCountry.includes(id),
+                )
 
-            const totalGrants = grants.length
+                const totalGrants = grants.length
 
-            countryTotals.set(feature.properties.id, totalGrants)
-        })
-
-        const allTotalGrants = Array.from(countryTotals.values()).filter(
-            value => value > 0,
+                countrySummaries.set(id, {
+                    id,
+                    name: label,
+                    totalGrants,
+                    totalFunding: 0, // TODO
+                })
+            },
         )
+
+        return countrySummaries
+    }, [dataset, selectOptions])
+
+    const geojson = useMemo(() => {
+        const allTotalGrants = Array.from(countrySummaries.values())
+            .map(({ totalGrants }) => totalGrants)
+            .filter(value => value > 0)
 
         const colourScale = scaleLog<string>()
             .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
@@ -34,11 +48,11 @@ export default function Page() {
         return {
             ...countryGeojson,
             features: countryGeojson.features.map(feature => {
-                const total = countryTotals.get(feature.properties.id) ?? 0
+                const total =
+                    countrySummaries.get(feature.properties.id)?.totalGrants ??
+                    0
 
                 const colour = total ? colourScale(total) : '#D6D6DA'
-
-                console.log('Colour for', feature.properties.id, colour)
 
                 return {
                     ...feature,
@@ -49,7 +63,26 @@ export default function Page() {
                 }
             }),
         }
-    }, [countryGeojson])
+    }, [countryGeojson, countrySummaries])
 
-    return <InteractiveMap geojson={geojson} />
+    const selectedCountrySummary = useMemo(() => {
+        if (!selectedCountry) {
+            return null
+        }
+
+        return countrySummaries.get(selectedCountry)
+    }, [selectedCountry, countrySummaries])
+
+    return (
+        <>
+            <InteractiveMap
+                geojson={geojson}
+                setSelectedCountry={setSelectedCountry}
+            />
+
+            {selectedCountrySummary && (
+                <StatusBar countrySummary={selectedCountrySummary} />
+            )}
+        </>
+    )
 }
