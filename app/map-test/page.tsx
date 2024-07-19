@@ -34,7 +34,7 @@ export default function Page() {
         )
 
         return countrySummaries
-    }, [dataset, selectOptions])
+    }, [])
 
     const geojson = useMemo(() => {
         const allTotalGrants = Array.from(countrySummaries.values())
@@ -63,7 +63,7 @@ export default function Page() {
                 }
             }),
         }
-    }, [countryGeojson, countrySummaries])
+    }, [countrySummaries])
 
     const selectedCountrySummary = useMemo(() => {
         if (!selectedCountry) {
@@ -81,7 +81,10 @@ export default function Page() {
             />
 
             {selectedCountrySummary && (
-                <StatusBar countrySummary={selectedCountrySummary} />
+                <StatusBar
+                    countrySummary={selectedCountrySummary}
+                    setSelectedCountry={setSelectedCountry}
+                />
             )}
         </>
     )

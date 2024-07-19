@@ -11,7 +11,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 
 interface Props {
     geojson: any // TODO type
-    setSelectedCountry: (country: string) => void
+    setSelectedCountry: (country: string | null) => void
 }
 
 export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
@@ -36,13 +36,16 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
         },
     }
 
-    const onClick = useCallback((event: MapLayerMouseEvent) => {
-        const feature = event.features && event.features[0]
+    const onClick = useCallback(
+        (event: MapLayerMouseEvent) => {
+            const feature = event.features && event.features[0]
 
-        const id = feature?.properties?.id
+            const id = feature?.properties?.id
 
-        setSelectedCountry(id ?? null)
-    }, [])
+            setSelectedCountry(id ?? null)
+        },
+        [setSelectedCountry],
+    )
 
     const onMouseEnter = useCallback(() => setCursor('pointer'), [])
     const onMouseLeave = useCallback(() => setCursor('auto'), [])
