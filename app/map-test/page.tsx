@@ -9,7 +9,6 @@ import dataset from '../../public/data/grants.json'
 import selectOptions from '../../data/dist/select-options.json'
 import { CountrySummary } from './types'
 import StatusBar from './StatusBar'
-import { ColorTranslator } from 'colortranslator'
 
 export default function Page() {
     const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
@@ -53,15 +52,13 @@ export default function Page() {
                     countrySummaries.get(feature.properties.id)?.totalGrants ??
                     0
 
-                const colour = new ColorTranslator(
-                    total ? colourScale(total) : '#D6D6DA',
-                )
+                const colour = total ? colourScale(total) : '#D6D6DA'
 
                 return {
                     ...feature,
                     properties: {
                         ...feature.properties,
-                        colour: [colour.R, colour.G, colour.B],
+                        colour,
                     },
                 }
             }),
