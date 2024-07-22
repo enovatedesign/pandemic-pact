@@ -1,11 +1,8 @@
 import { useState, useMemo, useContext } from 'react'
 import { useRouter } from 'next/navigation'
-import dynamic from 'next/dynamic'
-import DoubleLabelSwitch from '../DoubleLabelSwitch'
-import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
 import { scaleLog } from 'd3-scale'
-import { GlobalFilterContext, SidebarStateContext } from '../../helpers/filters'
+import { GlobalFilterContext } from '../../helpers/filters'
 import countryGeojson from '../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../public/data/geojson/who-regions.json'
 import { dollarValueFormatter } from '../../helpers/value-formatters'
@@ -14,10 +11,8 @@ import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
 import InteractiveMap from './InteractiveMap'
-
-const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
-
-type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
+import MapControls from './MapControls'
+import type { MapControlState } from './types'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
@@ -25,6 +20,12 @@ export default function Map() {
     const { tooltipRef } = useContext(TooltipContext)
 
     const router = useRouter()
+
+    const [mapControlState, setMapControlState] = useState<MapControlState>({
+        displayKnownFinancialCommitments: false,
+        displayWhoRegions: false,
+        locationType: 'Funder',
+    })
 
     const onMouseEnterOrMove = (
         position: { x: number; y: number },
@@ -35,7 +36,7 @@ export default function Map() {
             content: (
                 <MapTooltipContent
                     properties={properties}
-                    displayWhoRegions={displayWhoRegions}
+                    displayWhoRegions={mapControlState.displayWhoRegions}
                 />
             ),
         })
@@ -53,19 +54,12 @@ export default function Map() {
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
     }
 
-    const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
-
-    const [locationType, setColumn] = useState<LocationType>('Funder')
-
-    const [
-        displayKnownFinancialCommitments,
-        setDisplayKnownFinancialCommitments,
-    ] = useState<boolean>(false)
-
-    const grantField = locationType + (displayWhoRegions ? 'Region' : 'Country')
+    const grantField =
+        mapControlState.locationType +
+        (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
-        const geojson = displayWhoRegions
+        const geojson = mapControlState.displayWhoRegions
             ? { ...whoRegionGeojson }
             : { ...countryGeojson }
 
@@ -97,7 +91,7 @@ export default function Map() {
             }
         })
 
-        const key = displayKnownFinancialCommitments
+        const key = mapControlState.displayKnownFinancialCommitments
             ? 'totalAmountCommitted'
             : 'totalGrants'
 
@@ -124,14 +118,7 @@ export default function Map() {
         })
 
         return [geojson, colourScale]
-    }, [
-        dataset,
-        displayKnownFinancialCommitments,
-        displayWhoRegions,
-        grantField,
-    ])
-
-    const { sidebarOpen } = useContext(SidebarStateContext)
+    }, [dataset, mapControlState, grantField])
 
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
@@ -144,67 +131,11 @@ export default function Map() {
                 />
             </div>
 
-            <div
-                className={`flex flex-col w-full rounded-md overflow-hidden ${
-                    sidebarOpen ? 'flex-col' : 'xl:flex-row'
-                }`}
-            >
-                <div
-                    className={`w-full ${
-                        !sidebarOpen && 'xl:w-4/6'
-                    } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
-                >
-                    <ColourScale
-                        colourScale={colourScale}
-                        displayKnownFinancialCommitments={
-                            displayKnownFinancialCommitments
-                        }
-                    />
-                </div>
-
-                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
-                    <DoubleLabelSwitch
-                        checked={displayWhoRegions}
-                        onChange={setDisplayWhoRegions}
-                        leftLabel="Countries"
-                        rightLabel="WHO Regions"
-                        screenReaderLabel="Display WHO Regions"
-                    />
-
-                    <RadioGroup<LocationType>
-                        options={[
-                            {
-                                label: 'Funder',
-                                value: 'Funder',
-                            },
-                            {
-                                label: 'Research Institution',
-                                value: 'ResearchInstitution',
-                            },
-                            {
-                                label: 'Research Location',
-                                value: 'ResearchLocation',
-                            },
-                        ]}
-                        value={locationType}
-                        onChange={setColumn}
-                        fieldsetClassName="flex flex-col"
-                    />
-
-                    <RadioGroup<boolean>
-                        options={[
-                            { label: 'Number of grants', value: false },
-                            {
-                                label: 'Known financial commitments (USD)',
-                                value: true,
-                            },
-                        ]}
-                        value={displayKnownFinancialCommitments}
-                        onChange={setDisplayKnownFinancialCommitments}
-                        fieldsetClassName="flex flex-col"
-                    />
-                </div>
-            </div>
+            <MapControls
+                mapControlState={mapControlState}
+                setMapControlState={setMapControlState}
+                colourScale={colourScale}
+            />
         </div>
     )
 }
