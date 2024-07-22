@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useState, MouseEvent } from 'react'
-import { debounce } from 'lodash'
-import {
-    ComposableMap,
-    Geographies,
-    Geography,
-    ZoomableGroup,
-    useZoomPanContext,
-} from 'react-simple-maps'
+import { useCallback, useMemo } from 'react'
+import DeckGL from '@deck.gl/react'
+import { GeoJsonLayer } from '@deck.gl/layers'
+import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
+import type { PickingInfo } from '@deck.gl/core'
+import { ColorTranslator } from 'colortranslator'
 
 interface Props {
     geojson: any
@@ -24,110 +21,93 @@ export default function InteractiveMap({
     onMouseLeave,
     onClick,
 }: Props) {
-    const [height, setHeight] = useState(450)
-    const [scale, setScale] = useState(200)
-
-    useEffect(() => {
-        const handleHeight = () => {
-            if (window.innerWidth > 1024) {
-                setHeight(350)
-                setScale(125)
-            } else {
-                setHeight(450)
-                setScale(200)
-            }
-        }
-
-        const debouncedHandleHeight = debounce(handleHeight, 200)
-
-        debouncedHandleHeight()
-
-        window.addEventListener('resize', debouncedHandleHeight)
-
-        return () => {
-            window.removeEventListener('resize', debouncedHandleHeight)
-        }
-    })
-
-    const onGeoMouseEnterOrMove = useCallback(
-        (event: MouseEvent<SVGPathElement>, geo: any) => {
-            onMouseEnterOrMove(
-                { x: event.clientX, y: event.clientY },
-                geo.properties,
-            )
-        },
-        [onMouseEnterOrMove],
-    )
-
-    const onGeoClick = useCallback(
-        (geo: any) => {
-            onClick(geo.properties)
+    const onLayerClick = useCallback(
+        (info: PickingInfo) => {
+            onClick(info.object?.properties ?? null)
         },
         [onClick],
     )
 
-    const onGeoMouseLeave = useCallback(() => {
-        onMouseLeave()
-    }, [onMouseLeave])
-
-    const center: [number, number] = [20, 10]
-
-    return (
-        <ComposableMap
-            projection="geoNaturalEarth1"
-            projectionConfig={{
-                scale,
-                center,
-            }}
-            height={height}
-        >
-            <ZoomableGroup center={center}>
-                <InnerMap
-                    geojson={geojson}
-                    onGeoMouseEnterOrMove={onGeoMouseEnterOrMove}
-                    onGeoMouseLeave={onGeoMouseLeave}
-                    onGeoClick={onGeoClick}
-                />
-            </ZoomableGroup>
-        </ComposableMap>
-    )
-}
-
-interface InnerMapProps {
-    geojson: any
-    onGeoMouseEnterOrMove: (event: MouseEvent<SVGPathElement>, geo: any) => void
-    onGeoMouseLeave: () => void
-    onGeoClick: (geo: any) => void
-}
-
-function InnerMap({
-    geojson,
-    onGeoMouseEnterOrMove,
-    onGeoMouseLeave,
-    onGeoClick,
-}: InnerMapProps) {
-    const zoomContext = useZoomPanContext()
-
-    return (
-        <Geographies geography={geojson}>
-            {({ geographies }) =>
-                geographies.map(geo => (
-                    <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        fill={geo.properties.colour}
-                        stroke="#FFFFFF"
-                        strokeWidth={1.0 / zoomContext.k}
-                        className="cursor-pointer"
-                        onClick={() => onGeoClick(geo)}
-                        onMouseEnter={event =>
-                            onGeoMouseEnterOrMove(event, geo)
-                        }
-                        onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
-                        onMouseLeave={onGeoMouseLeave}
-                    />
-                ))
+    const onLayerHover = useCallback(
+        (info: PickingInfo) => {
+            if (info.picked) {
+                onMouseEnterOrMove(
+                    {
+                        x: info.x,
+                        y: info.y,
+                    },
+                    info.object?.properties,
+                )
+            } else {
+                onMouseLeave()
             }
-        </Geographies>
+        },
+        [onMouseEnterOrMove, onMouseLeave],
+    )
+
+    const layer = useMemo(
+        () =>
+            new GeoJsonLayer<any>({
+                id: 'GeoJsonLayer',
+                data: geojson,
+
+                filled: true,
+                getFillColor: (f: any) => {
+                    const colourTranslator = new ColorTranslator(
+                        f.properties.colour,
+                    )
+
+                    return [
+                        colourTranslator.R,
+                        colourTranslator.G,
+                        colourTranslator.B,
+                    ]
+                },
+
+                stroked: true,
+                getLineColor: [255, 255, 255],
+                getLineWidth: 2,
+                lineWidthUnits: 'pixels',
+                pickable: true,
+                modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                onClick: onLayerClick,
+                onHover: onLayerHover,
+            }),
+        [geojson, onLayerClick, onLayerHover],
+    )
+
+    const view = useMemo(
+        () =>
+            new OrthographicView({
+                id: 'orthographic-view',
+                flipY: false,
+                controller: true,
+            }),
+        [],
+    )
+
+    const interpolator = useMemo(
+        () => new LinearInterpolator(['target', 'zoom']),
+        [],
+    )
+
+    return (
+        <DeckGL
+            width="100%"
+            height={450}
+            style={{ position: 'relative' }}
+            views={view}
+            initialViewState={{
+                zoom: 1.0,
+                transitionInterpolator: interpolator,
+                target: [0, 0, 0],
+            }}
+            controller={{
+                dragRotate: false,
+                touchRotate: false,
+                keyboard: false,
+            }}
+            layers={[layer]}
+        />
     )
 }

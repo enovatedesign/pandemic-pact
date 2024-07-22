@@ -19,6 +19,10 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
         [setSelectedCountry],
     )
 
+    const onHover = useCallback((info: PickingInfo) => {
+        console.log('hover', info)
+    }, [])
+
     const layer = useMemo(
         () =>
             new GeoJsonLayer<any>({
@@ -35,6 +39,7 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 onClick,
+                onHover,
             }),
         [geojson, setSelectedCountry],
     )
@@ -43,8 +48,8 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
         () =>
             new OrthographicView({
                 id: 'orthographic-view',
-                width: 2000,
-                height: 2000,
+                width: 1000,
+                height: 1000,
                 flipY: false,
                 controller: true,
             }),
@@ -58,9 +63,12 @@ export default function InteractiveMap({ geojson, setSelectedCountry }: Props) {
 
     return (
         <DeckGL
+            width={1000}
+            height={1000}
+            style={{ position: 'relative' }}
             views={view}
             initialViewState={{
-                zoom: 2,
+                zoom: 1,
                 transitionInterpolator: interpolator,
                 target: [0, 0, 0],
             }}
