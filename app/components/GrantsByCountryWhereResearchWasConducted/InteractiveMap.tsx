@@ -69,7 +69,7 @@ export default function InteractiveMap({
                 getLineWidth: 1,
                 lineWidthUnits: 'pixels',
                 pickable: true,
-                modelMatrix: [1, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 onClick: onLayerClick,
                 onHover: onLayerHover,
             }),
