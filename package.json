@@ -33,8 +33,6 @@
         "autoprefixer": "^10.4.19",
         "chalk": "4.1.2",
         "colortranslator": "^4.1.0",
-        "d3-geo": "^3.1.1",
-        "d3-scale": "^4.0.2",
         "dayjs": "^1.11.11",
         "deck.gl": "^9.0.23",
         "dotenv": "^16.4.5",
