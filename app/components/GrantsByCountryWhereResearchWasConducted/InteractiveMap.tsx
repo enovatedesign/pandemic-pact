@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, MouseEvent } from 'react'
 import { debounce } from 'lodash'
 import {
     ComposableMap,
@@ -10,16 +10,19 @@ import {
 
 interface Props {
     geojson: any
-    onGeoMouseEnterOrMove: (event: any, geo: any) => void
-    onGeoMouseLeave: () => void
-    onGeoClick: (geo: any) => void
+    onMouseEnterOrMove: (
+        position: { x: number; y: number },
+        properties: any,
+    ) => void
+    onMouseLeave: () => void
+    onClick: (properties: any) => void
 }
 
 export default function InteractiveMap({
     geojson,
-    onGeoMouseEnterOrMove,
-    onGeoMouseLeave,
-    onGeoClick,
+    onMouseEnterOrMove,
+    onMouseLeave,
+    onClick,
 }: Props) {
     const [height, setHeight] = useState(450)
     const [scale, setScale] = useState(200)
@@ -46,6 +49,27 @@ export default function InteractiveMap({
         }
     })
 
+    const onGeoMouseEnterOrMove = useCallback(
+        (event: MouseEvent<SVGPathElement>, geo: any) => {
+            onMouseEnterOrMove(
+                { x: event.clientX, y: event.clientY },
+                geo.properties,
+            )
+        },
+        [onMouseEnterOrMove],
+    )
+
+    const onGeoClick = useCallback(
+        (geo: any) => {
+            onClick(geo.properties)
+        },
+        [onClick],
+    )
+
+    const onGeoMouseLeave = useCallback(() => {
+        onMouseLeave()
+    }, [onMouseLeave])
+
     const center: [number, number] = [20, 10]
 
     return (
@@ -69,12 +93,19 @@ export default function InteractiveMap({
     )
 }
 
+interface InnerMapProps {
+    geojson: any
+    onGeoMouseEnterOrMove: (event: MouseEvent<SVGPathElement>, geo: any) => void
+    onGeoMouseLeave: () => void
+    onGeoClick: (geo: any) => void
+}
+
 function InnerMap({
     geojson,
     onGeoMouseEnterOrMove,
     onGeoMouseLeave,
     onGeoClick,
-}: Props) {
+}: InnerMapProps) {
     const zoomContext = useZoomPanContext()
 
     return (

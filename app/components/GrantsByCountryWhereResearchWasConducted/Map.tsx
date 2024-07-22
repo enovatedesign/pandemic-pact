@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext, MouseEvent } from 'react'
+import { useState, useMemo, useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
@@ -26,31 +26,28 @@ export default function Map() {
 
     const router = useRouter()
 
-    const onGeoMouseEnterOrMove = (
-        event: MouseEvent<SVGPathElement>,
-        geo: any,
+    const onMouseEnterOrMove = (
+        position: { x: number; y: number },
+        properties: any,
     ) => {
         tooltipRef?.current?.open({
-            position: {
-                x: event.clientX,
-                y: event.clientY,
-            },
+            position,
             content: (
                 <MapTooltipContent
-                    geo={geo}
+                    properties={properties}
                     displayWhoRegions={displayWhoRegions}
                 />
             ),
         })
     }
 
-    const onGeoMouseLeave = () => {
+    const onMouseLeave = () => {
         tooltipRef?.current?.close()
     }
 
-    const onGeoClick = (geo: any) => {
+    const onClick = (properties: any) => {
         const queryFilters = {
-            [grantField]: [geo.properties.id],
+            [grantField]: [properties.id],
         }
 
         router.push('/grants?filters=' + JSON.stringify(queryFilters))
@@ -141,9 +138,9 @@ export default function Map() {
             <div className="breakout">
                 <InteractiveMap
                     geojson={geojson}
-                    onGeoMouseEnterOrMove={onGeoMouseEnterOrMove}
-                    onGeoMouseLeave={onGeoMouseLeave}
-                    onGeoClick={onGeoClick}
+                    onMouseEnterOrMove={onMouseEnterOrMove}
+                    onMouseLeave={onMouseLeave}
+                    onClick={onClick}
                 />
             </div>
 
@@ -213,28 +210,26 @@ export default function Map() {
 }
 
 function MapTooltipContent({
-    geo,
+    properties,
     displayWhoRegions,
 }: {
-    geo: any
+    properties: any
     displayWhoRegions: boolean
 }) {
     const items = [
         {
             label: 'Grants',
-            value: geo.properties.totalGrants || 0,
+            value: properties.totalGrants || 0,
         },
         {
             label: 'Known Financial Commitments (USD)',
-            value: dollarValueFormatter(
-                geo.properties.totalAmountCommitted || 0,
-            ),
+            value: dollarValueFormatter(properties.totalAmountCommitted || 0),
         },
     ]
 
     return (
         <TooltipContent
-            title={geo.properties.name}
+            title={properties.name}
             items={items}
             footer={
                 <div className="px-4 py-2">
