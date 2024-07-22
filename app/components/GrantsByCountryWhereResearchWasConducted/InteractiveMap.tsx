@@ -66,7 +66,7 @@ export default function InteractiveMap({
 
                 stroked: true,
                 getLineColor: [255, 255, 255],
-                getLineWidth: 1,
+                getLineWidth: 1.25,
                 lineWidthUnits: 'pixels',
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -119,7 +119,7 @@ export default function InteractiveMap({
             initialViewState={{
                 zoom: 1.25,
                 transitionInterpolator: interpolator,
-                target: [0, 10, 0],
+                target: [0, 15, 0],
             }}
             controller={{
                 dragRotate: false,
