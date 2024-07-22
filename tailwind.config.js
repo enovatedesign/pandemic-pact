@@ -127,6 +127,7 @@ module.exports = {
                 },
                 DEFAULT: {
                     css: {
+                        maxWidth: '80ch',
                         'code::before': {
                             content: 'none',
                         },

@@ -23,7 +23,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
             metric: grant.FundingOrgName.join(', '),
         },
         {
-            text: 'Principle Investigator',
+            text: 'Principal Investigator',
             metric: grant.PrincipleInvestigator ?? 'Pending',
         },
         {
