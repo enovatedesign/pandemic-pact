@@ -66,7 +66,7 @@ export default function InteractiveMap({
 
                 stroked: true,
                 getLineColor: [255, 255, 255],
-                getLineWidth: 2,
+                getLineWidth: 1,
                 lineWidthUnits: 'pixels',
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
