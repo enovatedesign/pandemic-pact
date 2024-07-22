@@ -91,6 +91,25 @@ export default function InteractiveMap({
         [],
     )
 
+    const getCursor = useCallback(
+        ({
+            isDragging,
+            isHovering,
+        }: {
+            isDragging: boolean
+            isHovering: boolean
+        }) => {
+            if (isHovering) {
+                return 'pointer'
+            } else if (isDragging) {
+                return 'move'
+            } else {
+                return 'auto'
+            }
+        },
+        [],
+    )
+
     return (
         <DeckGL
             width="100%"
@@ -108,6 +127,7 @@ export default function InteractiveMap({
                 keyboard: false,
             }}
             layers={[layer]}
+            getCursor={getCursor}
         />
     )
 }
