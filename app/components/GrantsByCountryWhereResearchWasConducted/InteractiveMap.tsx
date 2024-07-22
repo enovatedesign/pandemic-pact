@@ -29,12 +29,12 @@ export default function InteractiveMap({
     )
 
     const onLayerHover = useCallback(
-        (info: PickingInfo) => {
+        (info: PickingInfo, event: any) => {
             if (info.picked) {
                 onMouseEnterOrMove(
                     {
-                        x: info.x,
-                        y: info.y,
+                        x: event.srcEvent.clientX,
+                        y: event.srcEvent.clientY,
                     },
                     info.object?.properties,
                 )
@@ -117,7 +117,7 @@ export default function InteractiveMap({
             style={{ position: 'relative' }}
             views={view}
             initialViewState={{
-                zoom: 1.0,
+                zoom: 1.25,
                 transitionInterpolator: interpolator,
                 target: [0, 10, 0],
             }}
