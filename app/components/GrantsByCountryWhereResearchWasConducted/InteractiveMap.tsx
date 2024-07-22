@@ -69,7 +69,7 @@ export default function InteractiveMap({
                 getLineWidth: 2,
                 lineWidthUnits: 'pixels',
                 pickable: true,
-                modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                modelMatrix: [1, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 onClick: onLayerClick,
                 onHover: onLayerHover,
             }),
@@ -100,7 +100,7 @@ export default function InteractiveMap({
             initialViewState={{
                 zoom: 1.0,
                 transitionInterpolator: interpolator,
-                target: [0, 0, 0],
+                target: [0, 10, 0],
             }}
             controller={{
                 dragRotate: false,
