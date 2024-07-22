@@ -1,13 +1,6 @@
-import { useState, useEffect, useMemo, useContext, MouseEvent } from 'react'
+import { useState, useMemo, useContext, MouseEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import {
-    ComposableMap,
-    Geographies,
-    Geography,
-    ZoomableGroup,
-    useZoomPanContext,
-} from 'react-simple-maps'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import RadioGroup from '../RadioGroup'
 import TooltipContent from '../TooltipContent'
@@ -20,7 +13,7 @@ import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { TooltipContext } from '../../helpers/tooltip'
 import { brandColours } from '../../helpers/colours'
 import selectOptions from '../../../data/dist/select-options.json'
-import { debounce } from 'lodash'
+import InteractiveMap from './InteractiveMap'
 
 const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 
@@ -28,8 +21,40 @@ type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
-    
+
+    const { tooltipRef } = useContext(TooltipContext)
+
     const router = useRouter()
+
+    const onGeoMouseEnterOrMove = (
+        event: MouseEvent<SVGPathElement>,
+        geo: any,
+    ) => {
+        tooltipRef?.current?.open({
+            position: {
+                x: event.clientX,
+                y: event.clientY,
+            },
+            content: (
+                <MapTooltipContent
+                    geo={geo}
+                    displayWhoRegions={displayWhoRegions}
+                />
+            ),
+        })
+    }
+
+    const onGeoMouseLeave = () => {
+        tooltipRef?.current?.close()
+    }
+
+    const onGeoClick = (geo: any) => {
+        const queryFilters = {
+            [grantField]: [geo.properties.id],
+        }
+
+        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+    }
 
     const [displayWhoRegions, setDisplayWhoRegions] = useState<boolean>(false)
 
@@ -55,13 +80,13 @@ export default function Map() {
             ].find(option => option.value === id)?.label
 
             const grants = dataset.filter(grant =>
-                grant[grantField].includes(id)
+                grant[grantField].includes(id),
             )
 
             const totalGrants = grants.length
 
             const totalAmountCommitted = grants.reduce(
-                ...sumNumericGrantAmounts
+                ...sumNumericGrantAmounts,
             )
 
             return {
@@ -87,6 +112,20 @@ export default function Map() {
             .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
             .range([brandColours.teal['300'], brandColours.teal['700']])
 
+        geojson.features = geojson.features.map((feature: any) => {
+            const value = feature.properties[key] ?? null
+
+            const colour = value ? colourScale(value) : '#D6D6DA'
+
+            return {
+                ...feature,
+                properties: {
+                    ...feature.properties,
+                    colour,
+                },
+            }
+        })
+
         return [geojson, colourScale]
     }, [
         dataset,
@@ -95,58 +134,17 @@ export default function Map() {
         grantField,
     ])
 
-    const [height, setHeight] = useState(450)
-    const [scale, setScale] = useState(200)
-
-    useEffect(() => {
-        const handleHeight = () => {
-            if (window.innerWidth > 1024) {
-                setHeight(350)
-                setScale(125)
-            } else {
-                setHeight(450)
-                setScale(200)
-            }
-        }
-
-        const debouncedHandleHeight = debounce(handleHeight, 200)
-
-        debouncedHandleHeight()
-
-        window.addEventListener('resize', debouncedHandleHeight)
-
-        return () => {
-            window.removeEventListener('resize', debouncedHandleHeight)
-        }
-    })
-
     const { sidebarOpen } = useContext(SidebarStateContext)
-
-    const center: [number, number] = [20, 10]
 
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
-                <ComposableMap
-                    projection="geoNaturalEarth1"
-                    projectionConfig={{
-                        scale,
-                        center,
-                    }}
-                    height={height}
-                >
-                    <ZoomableGroup center={center}>
-                        <GeographiesWithScalingOutlines
-                            displayKnownFinancialCommitments={
-                                displayKnownFinancialCommitments
-                            }
-                            displayWhoRegions={displayWhoRegions}
-                            grantField={grantField}
-                            geojson={geojson}
-                            colourScale={colourScale}
-                        />
-                    </ZoomableGroup>
-                </ComposableMap>
+                <InteractiveMap
+                    geojson={geojson}
+                    onGeoMouseEnterOrMove={onGeoMouseEnterOrMove}
+                    onGeoMouseLeave={onGeoMouseLeave}
+                    onGeoClick={onGeoClick}
+                />
             </div>
 
             <div
@@ -214,95 +212,6 @@ export default function Map() {
     )
 }
 
-interface GeographiesWithScalingOutlinesProps {
-    displayKnownFinancialCommitments: boolean
-    displayWhoRegions: boolean
-    grantField: string
-    geojson: any
-    colourScale: any
-}
-
-function GeographiesWithScalingOutlines({
-    displayKnownFinancialCommitments,
-    displayWhoRegions,
-    grantField,
-    geojson,
-    colourScale,
-}: GeographiesWithScalingOutlinesProps) {
-    const zoomContext = useZoomPanContext()
-
-    const { tooltipRef } = useContext(TooltipContext)
-
-    const router = useRouter()
-
-    const getColourOfGeo = (geo: any) => {
-        const properties = geo.properties
-
-        if (displayKnownFinancialCommitments) {
-            return properties.totalAmountCommitted
-                ? colourScale(properties.totalAmountCommitted)
-                : '#D6D6DA'
-        } else {
-            return properties.totalGrants
-                ? colourScale(properties.totalGrants)
-                : '#D6D6DA'
-        }
-    }
-
-    const onGeoMouseEnterOrMove = (
-        event: MouseEvent<SVGPathElement>,
-        geo: any
-    ) => {
-        tooltipRef?.current?.open({
-            position: {
-                x: event.clientX,
-                y: event.clientY,
-            },
-            content: (
-                <MapTooltipContent
-                    geo={geo}
-                    displayWhoRegions={displayWhoRegions}
-                />
-            ),
-        })
-    }
-
-    const onGeoMouseLeave = () => {
-        tooltipRef?.current?.close()
-    }
-
-    const onGeoClick = (geo: any) => {
-        const queryFilters = {
-            [grantField]: [geo.properties.id],
-        }
-
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
-    }
-
-    return (
-        <Geographies geography={geojson}>
-            {({ geographies }) =>
-                geographies.map(geo => (
-                    <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        fill={getColourOfGeo(geo)}
-                        stroke="#FFFFFF"
-                        strokeWidth={1.0 / zoomContext.k}
-                        className="cursor-pointer"
-                        onClick={() => onGeoClick(geo)}
-                        onMouseEnter={event =>
-                            onGeoMouseEnterOrMove(event, geo)
-                        }
-                        onMouseMove={event => onGeoMouseEnterOrMove(event, geo)}
-                        onMouseLeave={onGeoMouseLeave}
-                    />
-                ))
-            }
-        </Geographies>
-    )
-}
-
 function MapTooltipContent({
     geo,
     displayWhoRegions,
@@ -318,7 +227,7 @@ function MapTooltipContent({
         {
             label: 'Known Financial Commitments (USD)',
             value: dollarValueFormatter(
-                geo.properties.totalAmountCommitted || 0
+                geo.properties.totalAmountCommitted || 0,
             ),
         },
     ]
