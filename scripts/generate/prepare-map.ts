@@ -5,7 +5,9 @@ import _ from 'lodash'
 export default async function () {
     fs.ensureDirSync('./data/dist/geojson')
 
-    // Merge Somalia and Somaliland and write to an intermediate GeoJSON file
+    // Merge the Somalia and Somaliland features into a single feature,
+    // merge the Ukraine MultiPolygon (which contains Ukraine and the Crimean Peninsula)
+    // into a single Polygon, and write to an intermediate GeoJSON file
     execSync(`
         npx mapshaper ./data/source/geojson/ne_110m_admin_0_countries.json \
             -dissolve copy-fields=ISO_N3_EH where='SOVEREIGNT === "Somalia" || SOVEREIGNT === "Somaliland"' \
