@@ -1,16 +1,11 @@
 import { useState, useMemo, useContext } from 'react'
 import { useRouter } from 'next/navigation'
-import { scaleLog } from 'd3-scale'
 import { GlobalFilterContext } from '../../../helpers/filters'
-import countryGeojson from '../../../../public/data/geojson/countries.json'
-import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
-import { sumNumericGrantAmounts } from '../../../helpers/reducers'
 import { TooltipContext } from '../../../helpers/tooltip'
-import { brandColours } from '../../../helpers/colours'
-import selectOptions from '../../../../data/dist/select-options.json'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
 import TooltipContent from './TooltipContent'
+import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
 import type { FeatureProperties, MapControlState } from './types'
 
 export default function Map() {
@@ -58,65 +53,11 @@ export default function Map() {
         (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
     const [geojson, colourScale] = useMemo(() => {
-        const geojson = mapControlState.displayWhoRegions
-            ? { ...whoRegionGeojson }
-            : { ...countryGeojson }
-
-        geojson.features = geojson.features.map((feature: any) => {
-            const id = feature.properties.id
-
-            const name = selectOptions[
-                grantField as keyof typeof selectOptions
-            ].find(option => option.value === id)?.label
-
-            const grants = dataset.filter(grant =>
-                grant[grantField].includes(id),
-            )
-
-            const totalGrants = grants.length
-
-            const totalAmountCommitted = grants.reduce(
-                ...sumNumericGrantAmounts,
-            )
-
-            return {
-                ...feature,
-                properties: {
-                    id,
-                    name,
-                    totalGrants,
-                    totalAmountCommitted,
-                },
-            }
-        })
-
-        const key = mapControlState.displayKnownFinancialCommitments
-            ? 'totalAmountCommitted'
-            : 'totalGrants'
-
-        const allTotalGrants = geojson.features
-            .filter((country: any) => country.properties[key])
-            .map((country: any) => country.properties[key])
-
-        const colourScale = scaleLog<string>()
-            .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
-            .range([brandColours.teal['300'], brandColours.teal['700']])
-
-        geojson.features = geojson.features.map((feature: any) => {
-            const value = feature.properties[key] ?? null
-
-            const colour = value ? colourScale(value) : '#D6D6DA'
-
-            return {
-                ...feature,
-                properties: {
-                    ...feature.properties,
-                    colour,
-                },
-            }
-        })
-
-        return [geojson, colourScale]
+        return prepareGeoJsonAndColourScale(
+            dataset,
+            mapControlState,
+            grantField,
+        )
     }, [dataset, mapControlState, grantField])
 
     return (
