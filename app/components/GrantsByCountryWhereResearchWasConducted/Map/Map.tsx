@@ -1,17 +1,16 @@
 import { useState, useMemo, useContext } from 'react'
 import { useRouter } from 'next/navigation'
-import TooltipContent from '../../TooltipContent'
 import { scaleLog } from 'd3-scale'
 import { GlobalFilterContext } from '../../../helpers/filters'
 import countryGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
-import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../../helpers/reducers'
 import { TooltipContext } from '../../../helpers/tooltip'
 import { brandColours } from '../../../helpers/colours'
 import selectOptions from '../../../../data/dist/select-options.json'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
+import TooltipContent from './TooltipContent'
 import type { FeatureProperties, MapControlState } from './types'
 
 export default function Map() {
@@ -34,7 +33,7 @@ export default function Map() {
         tooltipRef?.current?.open({
             position,
             content: (
-                <MapTooltipContent
+                <TooltipContent
                     properties={properties}
                     displayWhoRegions={mapControlState.displayWhoRegions}
                 />
@@ -137,39 +136,5 @@ export default function Map() {
                 colourScale={colourScale}
             />
         </div>
-    )
-}
-
-function MapTooltipContent({
-    properties,
-    displayWhoRegions,
-}: {
-    properties: FeatureProperties
-    displayWhoRegions: boolean
-}) {
-    const items = [
-        {
-            label: 'Grants',
-            value: `${properties.totalGrants || 0}`,
-        },
-        {
-            label: 'Known Financial Commitments (USD)',
-            value: dollarValueFormatter(properties.totalAmountCommitted || 0),
-        },
-    ]
-
-    return (
-        <TooltipContent
-            title={properties.name}
-            items={items}
-            footer={
-                <div className="px-4 py-2">
-                    <p className="text-right text-sm text-gray-400">
-                        Click to explore grants in this{' '}
-                        {displayWhoRegions ? 'region' : 'country'}
-                    </p>
-                </div>
-            }
-        />
     )
 }
