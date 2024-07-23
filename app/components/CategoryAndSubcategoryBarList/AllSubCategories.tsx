@@ -14,7 +14,7 @@ import selectOptions from '../../../data/dist/select-options.json'
 interface Props {
     categoryField: string
     subcategoryField: string
-    setSelectedCategory: (category: string | null) => void
+    setSelectedCategory?: (category: string | null) => void
 }
 
 export default function AllSubCategories({
@@ -41,25 +41,25 @@ export default function AllSubCategories({
                 const subCategoryData = subCategories
                     .filter(
                         ({ parent }: { parent: string }) =>
-                            parent === categoryValue
+                            parent === categoryValue,
                     )
                     .map((category: any) =>
                         prepareBarListDataForCategory(
                             grants,
                             category,
-                            subcategoryField
-                        )
+                            subcategoryField,
+                        ),
                     )
 
                 return {
                     categoryLabel,
                     subCategoryData,
                 }
-            }
+            },
         )
 
         const subCategories = subCategoriesGroupedByParent.flatMap(
-            ({ subCategoryData }) => subCategoryData
+            ({ subCategoryData }) => subCategoryData,
         )
 
         return [subCategoriesGroupedByParent, subCategories]
@@ -69,10 +69,12 @@ export default function AllSubCategories({
 
     return (
         <>
-            <BackToParentButton
-                label="Viewing All Sub-Categories"
-                onClick={() => setSelectedCategory(null)}
-            />
+            {setSelectedCategory && (
+                <BackToParentButton
+                    label="Viewing All Sub-Categories"
+                    onClick={() => setSelectedCategory(null)}
+                />
+            )}
 
             <BarList
                 data={subCategories}
@@ -99,13 +101,13 @@ export default function AllSubCategories({
                                             subCategory =>
                                                 subCategory[
                                                     'Category Value'
-                                                ] === datum['Category Value']
+                                                ] === datum['Category Value'],
                                         )}
                                     />
                                 </Fragment>
                             ))}
                         </Fragment>
-                    )
+                    ),
                 )}
             </BarList>
         </>

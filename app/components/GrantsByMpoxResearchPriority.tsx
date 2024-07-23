@@ -1,5 +1,5 @@
-import CategoryAndSubcategoryBarList from './CategoryAndSubcategoryBarList/CategoryAndSubcategoryBarList'
 import VisualisationCard from './VisualisationCard'
+import AllSubCategoriesBarList from './CategoryAndSubcategoryBarList/AllSubCategories'
 
 export default function GrantsPerMpoxResearchPriority() {
     const subtitle = (
@@ -26,8 +26,7 @@ export default function GrantsPerMpoxResearchPriority() {
             title="Grants by Mpox Outbreak Specific Research Priorities"
             subtitle={subtitle}
         >
-            <CategoryAndSubcategoryBarList
-                topOfCardId="mpox-research-priorities"
+            <AllSubCategoriesBarList
                 categoryField="MPOXResearchPriority"
                 subcategoryField="MPOXResearchSubPriority"
             />
