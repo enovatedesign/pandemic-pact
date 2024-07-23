@@ -5,3 +5,11 @@ export interface MapControlState {
     displayWhoRegions: boolean
     locationType: LocationType
 }
+
+export interface FeatureProperties {
+    id: string
+    name: string
+    totalGrants: number
+    totalAmountCommitted: number
+    colour: string
+}

@@ -4,15 +4,16 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
 import { ColorTranslator } from 'colortranslator'
+import type { FeatureProperties } from './types'
 
 interface Props {
     geojson: any
     onMouseEnterOrMove: (
         position: { x: number; y: number },
-        properties: any,
+        properties: FeatureProperties,
     ) => void
     onMouseLeave: () => void
-    onClick: (properties: any) => void
+    onClick: (properties: FeatureProperties) => void
 }
 
 export default function InteractiveMap({
@@ -52,9 +53,9 @@ export default function InteractiveMap({
                 data: geojson,
 
                 filled: true,
-                getFillColor: (f: any) => {
+                getFillColor: (feature: any) => {
                     const colourTranslator = new ColorTranslator(
-                        f.properties.colour,
+                        feature.properties.colour,
                     )
 
                     return [

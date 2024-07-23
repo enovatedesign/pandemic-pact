@@ -12,7 +12,7 @@ import { brandColours } from '../../../helpers/colours'
 import selectOptions from '../../../../data/dist/select-options.json'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
-import type { MapControlState } from './types'
+import type { FeatureProperties, MapControlState } from './types'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
@@ -29,7 +29,7 @@ export default function Map() {
 
     const onMouseEnterOrMove = (
         position: { x: number; y: number },
-        properties: any,
+        properties: FeatureProperties,
     ) => {
         tooltipRef?.current?.open({
             position,
@@ -46,7 +46,7 @@ export default function Map() {
         tooltipRef?.current?.close()
     }
 
-    const onClick = (properties: any) => {
+    const onClick = (properties: FeatureProperties) => {
         const queryFilters = {
             [grantField]: [properties.id],
         }
@@ -144,13 +144,13 @@ function MapTooltipContent({
     properties,
     displayWhoRegions,
 }: {
-    properties: any
+    properties: FeatureProperties
     displayWhoRegions: boolean
 }) {
     const items = [
         {
             label: 'Grants',
-            value: properties.totalGrants || 0,
+            value: `${properties.totalGrants || 0}`,
         },
         {
             label: 'Known Financial Commitments (USD)',
