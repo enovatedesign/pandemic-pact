@@ -123,7 +123,9 @@ export default function VisualisationCard({
                         )}
 
                         {subtitle && (
-                            <p className="text-brand-grey-600">{subtitle}</p>
+                            <p className="text-brand-grey-600 max-w-none prose prose-a:text-secondary">
+                                {subtitle}
+                            </p>
                         )}
 
                         {chartInstructions && (
