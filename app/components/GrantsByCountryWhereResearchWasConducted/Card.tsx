@@ -1,6 +1,6 @@
 import VisualisationCard from '../VisualisationCard'
 import { ChartBarIcon, GlobeIcon } from '@heroicons/react/solid'
-import Map from './Map'
+import Map from './Map/Map'
 import BarChart from './BarChart'
 
 export default function GrantsByCountryWhereResearchWasConductedCard() {
