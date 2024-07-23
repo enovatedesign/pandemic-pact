@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import dynamic from 'next/dynamic'
-import DoubleLabelSwitch from '../DoubleLabelSwitch'
-import RadioGroup from '../RadioGroup'
-import { SidebarStateContext } from '../../helpers/filters'
+import DoubleLabelSwitch from '../../DoubleLabelSwitch'
+import RadioGroup from '../../RadioGroup'
+import { SidebarStateContext } from '../../../helpers/filters'
 import type { LocationType, MapControlState } from './types'
 
 // TODO do we need to use dynamic importing here?
