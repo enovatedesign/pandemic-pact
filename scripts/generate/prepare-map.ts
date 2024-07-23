@@ -9,13 +9,14 @@ export default async function () {
     execSync(`
         npx mapshaper ./data/source/geojson/ne_110m_admin_0_countries.json \
             -dissolve copy-fields=ISO_N3_EH where='SOVEREIGNT === "Somalia" || SOVEREIGNT === "Somaliland"' \
+            -dissolve copy-fields=ISO_N3_EH where='SOVEREIGNT === "Ukraine"' \
             -o gj2008 format=geojson ./data/dist/geojson/countries.json
     `)
 
     const inputGeojson = fs.readJsonSync('./data/dist/geojson/countries.json')
 
     const regionToCountryMapping: { [key: string]: string[] } = fs.readJsonSync(
-        './data/source/region-to-country-mapping.json'
+        './data/source/region-to-country-mapping.json',
     )
 
     const countriesGeojson = _.pick(inputGeojson, ['type', 'features', 'bbox'])
@@ -25,7 +26,7 @@ export default async function () {
             const id = feature.properties.ISO_N3_EH.replace(/^0+/, '')
 
             const who_region_id = Object.entries(regionToCountryMapping).find(
-                ([_, countries]) => countries.includes(id)
+                ([_, countries]) => countries.includes(id),
             )?.[0]
 
             return {
@@ -35,7 +36,7 @@ export default async function () {
                     who_region_id,
                 },
             }
-        }
+        },
     )
 
     fs.ensureDirSync('./public/data/geojson')
