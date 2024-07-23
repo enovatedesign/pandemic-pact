@@ -1,6 +1,6 @@
 'use client'
 
-import { SearchResult } from '../helpers/search'
+import type { SearchResult } from '../helpers/search'
 import { EyeIcon } from '@heroicons/react/solid'
 import RichText from './ContentBuilder/Common/RichText'
 import Button from './Button'

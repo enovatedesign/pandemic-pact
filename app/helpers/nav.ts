@@ -80,7 +80,26 @@ export const footerLinksFirstCollection = [
 ]
 
 export const footerLinksSecondCollection = [
-    { label: 'GloPID-R website', href: 'https://www.glopid-r.org/' },
-    { label: 'UKCDR website', href: 'https://ukcdr.org.uk/' },
-    { label: 'Pandemic Sciences Institute website', href: 'https://www.psi.ox.ac.uk/' },
+    { 
+        href: 'https://www.glopid-r.org/',
+        src: '/glopid-r-logo.png',
+        alt: 'GLOPID-R logo',
+        width: 335,
+        height: 79,
+        classes: 'col-span-2'
+    },
+    { 
+        href: 'https://ukcdr.org.uk/',
+        src: "/ukcdr-logo.png",
+        alt: 'UKCDR logo',
+        width: 276,
+        height: 114,
+    },
+    { 
+        href: 'https://www.psi.ox.ac.uk/' ,
+        src: '/psi-logo.png',
+        alt: 'Pandemic Sciences Institute logo',
+        width: 480,
+        height: 236,
+    },
 ]
