@@ -1,15 +1,25 @@
 import { dollarValueFormatter } from '../../../helpers/value-formatters'
+import Button from '../../../components/Button'
 import type { FeatureProperties } from './types'
 
 interface Props {
     selectedFeature: FeatureProperties
     setSelectedFeature: (feature: FeatureProperties | null) => void
+    grantField: string
 }
 
 export default function StatusBar({
     selectedFeature,
     setSelectedFeature,
+    grantField,
 }: Props) {
+    const viewButtonQueryFilters = {
+        [grantField]: [selectedFeature.id],
+    }
+
+    const viewButtonHref =
+        '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
+
     return (
         <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
             <div className="border-gray-100 border-b px-4 py-2 flex justify-between items-center">
@@ -53,6 +63,12 @@ export default function StatusBar({
                         </p>
                     </div>
                 </div>
+            </div>
+
+            <div className="pb-2 px-2 flex justify-end items-center">
+                <Button size="xsmall" href={viewButtonHref}>
+                    View Grants
+                </Button>
             </div>
         </div>
     )

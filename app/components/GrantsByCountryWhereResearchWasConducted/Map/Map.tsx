@@ -44,6 +44,7 @@ export default function Map() {
                 <StatusBar
                     selectedFeature={selectedFeature}
                     setSelectedFeature={setSelectedFeature}
+                    grantField={grantField}
                 />
             )}
 
