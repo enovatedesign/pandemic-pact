@@ -80,5 +80,5 @@ export default function prepareGeoJsonAndColourScale(
         }
     })
 
-    return [geojson, [selectedFeatureColorScale, jointColourScale]]
+    return { geojson, scales: [selectedFeatureColorScale, jointColourScale] }
 }

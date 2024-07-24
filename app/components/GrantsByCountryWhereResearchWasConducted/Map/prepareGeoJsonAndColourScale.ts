@@ -65,5 +65,5 @@ export default function prepareGeoJsonAndColourScale(
         }
     })
 
-    return [geojson, [colourScale]]
+    return { geojson, scales: [colourScale] }
 }

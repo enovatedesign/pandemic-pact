@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import dynamic from 'next/dynamic'
+import type { ScaleLogarithmic } from 'd3-scale'
 import DoubleLabelSwitch from '../../DoubleLabelSwitch'
 import RadioGroup from '../../RadioGroup'
 import { SidebarStateContext } from '../../../helpers/filters'
@@ -11,7 +12,7 @@ const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
-    colourScales: any // TODO type
+    colourScales: ScaleLogarithmic<string, string>[]
 }
 
 export default function MapControls({
