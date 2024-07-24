@@ -11,13 +11,13 @@ const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
-    colourScale: any
+    colourScales: any[] // TODO type
 }
 
 export default function MapControls({
     mapControlState,
     setMapControlState,
-    colourScale,
+    colourScales,
 }: Props) {
     const { sidebarOpen } = useContext(SidebarStateContext)
 
@@ -36,14 +36,21 @@ export default function MapControls({
             <div
                 className={`w-full ${
                     !sidebarOpen && 'xl:w-4/6'
-                } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
+                } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex flex-col pt-3`}
             >
-                <ColourScale
-                    colourScale={colourScale}
-                    displayKnownFinancialCommitments={
-                        displayKnownFinancialCommitments
-                    }
-                />
+                {colourScales.map((colourScale, index) => (
+                    <div
+                        className="flex items-center justify-center"
+                        key={index}
+                    >
+                        <ColourScale
+                            colourScale={colourScale}
+                            displayKnownFinancialCommitments={
+                                displayKnownFinancialCommitments
+                            }
+                        />
+                    </div>
+                ))}
             </div>
 
             <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">

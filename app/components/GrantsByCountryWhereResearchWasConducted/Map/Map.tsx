@@ -30,7 +30,7 @@ export default function Map() {
         mapControlState.locationType +
         (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
-    const [geojson, colourScale] = useMemo(() => {
+    const [geojson, colourScales] = useMemo(() => {
         if (highlightJointFundedCountries && selectedFeature) {
             return prepareJointFundedGeoJsonAndColourScale(
                 dataset,
@@ -76,7 +76,7 @@ export default function Map() {
             <MapControls
                 mapControlState={mapControlState}
                 setMapControlState={setMapControlState}
-                colourScale={colourScale}
+                colourScales={colourScales}
             />
         </div>
     )
