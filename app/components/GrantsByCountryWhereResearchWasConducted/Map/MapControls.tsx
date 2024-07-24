@@ -11,7 +11,7 @@ const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
-    colourScales: any[] // TODO type
+    colourScales: any // TODO type
 }
 
 export default function MapControls({
