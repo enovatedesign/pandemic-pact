@@ -6,12 +6,16 @@ import type { FeatureProperties } from './types'
 interface Props {
     selectedFeature: FeatureProperties
     setSelectedFeature: (feature: FeatureProperties | null) => void
+    highlightJointFundedCountries: boolean
+    setHighlightJointFundedCountries: (value: boolean) => void
     grantField: string
 }
 
 export default function StatusBar({
     selectedFeature,
     setSelectedFeature,
+    highlightJointFundedCountries,
+    setHighlightJointFundedCountries,
     grantField,
 }: Props) {
     const viewButtonQueryFilters = {
@@ -30,7 +34,10 @@ export default function StatusBar({
 
                 <button
                     className="text-xs"
-                    onClick={() => setSelectedFeature(null)}
+                    onClick={() => {
+                        setSelectedFeature(null)
+                        setHighlightJointFundedCountries(false)
+                    }}
                 >
                     X
                 </button>
@@ -68,8 +75,8 @@ export default function StatusBar({
 
             <div className="py-2 px-2 flex justify-between items-center">
                 <Switch
-                    checked={false}
-                    onChange={value => {}}
+                    checked={highlightJointFundedCountries}
+                    onChange={setHighlightJointFundedCountries}
                     label="Show Joint-funded Countries"
                     theme="light"
                 />

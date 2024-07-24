@@ -12,6 +12,9 @@ export default function Map() {
     const [selectedFeature, setSelectedFeature] =
         useState<FeatureProperties | null>(null)
 
+    const [highlightJointFundedCountries, setHighlightJointFundedCountries] =
+        useState<boolean>(false)
+
     const [mapControlState, setMapControlState] = useState<MapControlState>({
         displayKnownFinancialCommitments: false,
         displayWhoRegions: false,
@@ -44,6 +47,12 @@ export default function Map() {
                 <StatusBar
                     selectedFeature={selectedFeature}
                     setSelectedFeature={setSelectedFeature}
+                    highlightJointFundedCountries={
+                        highlightJointFundedCountries
+                    }
+                    setHighlightJointFundedCountries={
+                        setHighlightJointFundedCountries
+                    }
                     grantField={grantField}
                 />
             )}
