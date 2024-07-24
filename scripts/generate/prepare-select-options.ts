@@ -1,7 +1,10 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import { title, printWrittenFileStats } from '../helpers/log'
-import { convertSourceKeysToOurKeys } from '../helpers/key-mapping'
+import {
+    mpoxResearchPriorityAndSubPriorityMapping,
+    convertSourceKeysToOurKeys,
+} from '../helpers/key-mapping'
 
 type Row = { [key: string]: string }
 
@@ -23,7 +26,9 @@ export default function () {
 
     const path = './data/dist'
 
-    const optionsWithConvertedKeys = convertSourceKeysToOurKeys(rawOptions)
+    const optionsWithConvertedKeys = convertSourceKeysToOurKeys(
+        prepareMpoxResearchPriorityAndSubPriority(rawOptions)
+    )
 
     const selectOptions: { [key: string]: any[] } = {
         ...optionsWithConvertedKeys,
@@ -66,6 +71,33 @@ export default function () {
 
         printWrittenFileStats(pathname)
     })
+}
+
+function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
+    [key: string]: any[]
+}) {
+    const MPOXResearchPriorityOptions =
+        rawOptions.research_and_policy_roadmaps.filter(
+            ({ value }) => value in mpoxResearchPriorityAndSubPriorityMapping
+        )
+
+    const MPOXResearchSubPriorityOptions = MPOXResearchPriorityOptions.flatMap(
+        ({ value }) => {
+            const field = mpoxResearchPriorityAndSubPriorityMapping[value]
+
+            return rawOptions[field].map(subOption => ({
+                value: value + subOption.value,
+                label: subOption.label,
+                parent: value,
+            }))
+        }
+    )
+
+    return {
+        ...rawOptions,
+        mpox_research_priority: MPOXResearchPriorityOptions,
+        mpox_research_sub_priority: MPOXResearchSubPriorityOptions,
+    }
 }
 
 function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {

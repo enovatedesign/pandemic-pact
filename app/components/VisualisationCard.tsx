@@ -15,7 +15,7 @@ import LogoInverted from './LogoInverted'
 interface Props {
     id: string
     title: string
-    subtitle?: string
+    subtitle?: string | ReactNode
     chartInstructions?: string
     footnote?: string
     infoModalContents?: ReactNode
@@ -57,7 +57,7 @@ export default function VisualisationCard({
         }),
         {
             once: true,
-        }
+        },
     )
 
     const toolTipFilters = Object.entries(filters)
@@ -114,7 +114,7 @@ export default function VisualisationCard({
                                                             {`Filter by ${filter}`}
                                                         </li>
                                                     )
-                                                }
+                                                },
                                             )}
                                         </ul>
                                     </Tooltip>
@@ -123,11 +123,15 @@ export default function VisualisationCard({
                         )}
 
                         {subtitle && (
-                            <p className="text-brand-grey-600">{subtitle}</p>
+                            <p className="text-brand-grey-600 max-w-none prose prose-a:text-secondary">
+                                {subtitle}
+                            </p>
                         )}
 
                         {chartInstructions && (
-                            <p className="text-brand-grey-600">{chartInstructions}</p>
+                            <p className="text-brand-grey-600">
+                                {chartInstructions}
+                            </p>
                         )}
                     </div>
 
@@ -135,7 +139,13 @@ export default function VisualisationCard({
 
                     {tabs && tabs[selectedTabIndex].content}
 
-                    <div className={`ignore-in-image-export w-full flex ${!tabs ? 'flex-col items-center md:flex-row-reverse md:justify-between' : 'flex-row-reverse justify-between'} gap-y-4 justify-between items-center md:gap-y-0`}>
+                    <div
+                        className={`ignore-in-image-export w-full flex ${
+                            !tabs
+                                ? 'flex-col items-center md:flex-row-reverse md:justify-between'
+                                : 'flex-row-reverse justify-between'
+                        } gap-y-4 justify-between items-center md:gap-y-0`}
+                    >
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}
@@ -179,22 +189,22 @@ export default function VisualisationCard({
                     )}
 
                     <div className="image-export-footer w-full flex flex-row items-center gap-12 hidden">
-
                         <div className="grow">
                             <p className="font-bold italic text-sm text-gray-600">
                                 This image is licensed under a Creative Commons
-                                Attribution-ShareAlike 4.0 International License.
+                                Attribution-ShareAlike 4.0 International
+                                License.
                             </p>
                             <p className="mt-3 italic text-sm text-gray-600">
-                                Pandemic PACT Research Programme, Grant and Evidence Gap Tracker by the Pandemic PACT Team with GloPID-R and UKCDR (www.pandemicpact.org).
+                                Pandemic PACT Research Programme, Grant and
+                                Evidence Gap Tracker by the Pandemic PACT Team
+                                with GloPID-R and UKCDR (www.pandemicpact.org).
                             </p>
                         </div>
 
                         {/* Inline logo SVG so it's included in the image export */}
                         <LogoInverted className="w-40" />
-
                     </div>
-
                 </div>
             </animated.div>
         </>

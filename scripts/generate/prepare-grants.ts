@@ -1,7 +1,10 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import { RawGrant } from '../types/generate'
-import { convertSourceKeysToOurKeys } from '../helpers/key-mapping'
+import {
+    mpoxResearchPriorityAndSubPriorityMapping,
+    convertSourceKeysToOurKeys,
+} from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 
 type Row = { [key: string]: string }
@@ -77,6 +80,8 @@ export default function () {
             ])
         )
 
+        prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
+
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
             ...numericFieldValues,
@@ -117,6 +122,26 @@ export default function () {
     fs.writeJsonSync(pathname, grants)
 
     printWrittenFileStats(pathname)
+}
+
+function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
+    [key: string]: string[]
+}) {
+    const MPOXResearchPriority =
+        checkBoxFieldValues.research_and_policy_roadmaps.filter(
+            value => value in mpoxResearchPriorityAndSubPriorityMapping
+        )
+
+    const MPOXResearchSubPriority = MPOXResearchPriority.flatMap(priority => {
+        const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
+
+        return checkBoxFieldValues[field].map(
+            subPriority => priority + subPriority
+        )
+    })
+
+    checkBoxFieldValues.mpox_research_priority = MPOXResearchPriority
+    checkBoxFieldValues.mpox_research_sub_priority = MPOXResearchSubPriority
 }
 
 function convertCommaSeparatedValueFieldToArray(
