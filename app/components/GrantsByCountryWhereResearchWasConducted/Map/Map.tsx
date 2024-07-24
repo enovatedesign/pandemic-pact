@@ -2,6 +2,7 @@ import { useContext, useMemo, useState } from 'react'
 import { GlobalFilterContext } from '../../../helpers/filters'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
+import StatusBar from './StatusBar'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
 import type { FeatureProperties, MapControlState } from './types'
 
@@ -39,7 +40,7 @@ export default function Map() {
                 <InteractiveMap geojson={geojson} onClick={onClick} />
             </div>
 
-            {selectedFeature && <p>{selectedFeature.name}</p>}
+            {selectedFeature && <StatusBar selectedFeature={selectedFeature} />}
 
             <MapControls
                 mapControlState={mapControlState}
