@@ -40,7 +40,12 @@ export default function Map() {
                 <InteractiveMap geojson={geojson} onClick={onClick} />
             </div>
 
-            {selectedFeature && <StatusBar selectedFeature={selectedFeature} />}
+            {selectedFeature && (
+                <StatusBar
+                    selectedFeature={selectedFeature}
+                    setSelectedFeature={setSelectedFeature}
+                />
+            )}
 
             <MapControls
                 mapControlState={mapControlState}
