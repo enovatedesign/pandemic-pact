@@ -1,19 +1,15 @@
 import { useContext, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { GlobalFilterContext } from '../../../helpers/filters'
-import { TooltipContext } from '../../../helpers/tooltip'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
-import TooltipContent from './TooltipContent'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
 import type { FeatureProperties, MapControlState } from './types'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
-    const { tooltipRef } = useContext(TooltipContext)
-
-    const router = useRouter()
+    const [selectedFeature, setSelectedFeature] =
+        useState<FeatureProperties | null>(null)
 
     const [mapControlState, setMapControlState] = useState<MapControlState>({
         displayKnownFinancialCommitments: false,
@@ -21,31 +17,8 @@ export default function Map() {
         locationType: 'Funder',
     })
 
-    const onMouseEnterOrMove = (
-        position: { x: number; y: number },
-        properties: FeatureProperties,
-    ) => {
-        tooltipRef?.current?.open({
-            position,
-            content: (
-                <TooltipContent
-                    properties={properties}
-                    displayWhoRegions={mapControlState.displayWhoRegions}
-                />
-            ),
-        })
-    }
-
-    const onMouseLeave = () => {
-        tooltipRef?.current?.close()
-    }
-
     const onClick = (properties: FeatureProperties) => {
-        const queryFilters = {
-            [grantField]: [properties.id],
-        }
-
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+        setSelectedFeature(properties)
     }
 
     const grantField =
@@ -63,13 +36,10 @@ export default function Map() {
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
-                <InteractiveMap
-                    geojson={geojson}
-                    onMouseEnterOrMove={onMouseEnterOrMove}
-                    onMouseLeave={onMouseLeave}
-                    onClick={onClick}
-                />
+                <InteractiveMap geojson={geojson} onClick={onClick} />
             </div>
+
+            {selectedFeature && <p>{selectedFeature.name}</p>}
 
             <MapControls
                 mapControlState={mapControlState}
