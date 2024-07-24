@@ -1,5 +1,6 @@
 import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import Button from '../../../components/Button'
+import Switch from '../../../components/Switch'
 import type { FeatureProperties } from './types'
 
 interface Props {
@@ -65,7 +66,14 @@ export default function StatusBar({
                 </div>
             </div>
 
-            <div className="pb-2 px-2 flex justify-end items-center">
+            <div className="py-2 px-2 flex justify-between items-center">
+                <Switch
+                    checked={false}
+                    onChange={value => {}}
+                    label="Show Joint-funded Countries"
+                    theme="light"
+                />
+
                 <Button size="xsmall" href={viewButtonHref}>
                     View Grants
                 </Button>
