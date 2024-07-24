@@ -1,3 +1,4 @@
+import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import type { FeatureProperties } from './types'
 
 interface Props {
@@ -36,7 +37,9 @@ export default function StatusBar({ selectedFeature }: Props) {
 
                     <div className="flex justify-between items-center gap-x-2">
                         <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                            {selectedFeature.totalAmountCommitted}
+                            {dollarValueFormatter(
+                                selectedFeature.totalAmountCommitted,
+                            )}
                         </p>
                     </div>
                 </div>
