@@ -8,42 +8,15 @@ import type { FeatureProperties } from './types'
 
 interface Props {
     geojson: any
-    onMouseEnterOrMove: (
-        position: { x: number; y: number },
-        properties: FeatureProperties,
-    ) => void
-    onMouseLeave: () => void
     onClick: (properties: FeatureProperties) => void
 }
 
-export default function InteractiveMap({
-    geojson,
-    onMouseEnterOrMove,
-    onMouseLeave,
-    onClick,
-}: Props) {
+export default function InteractiveMap({ geojson, onClick }: Props) {
     const onLayerClick = useCallback(
         (info: PickingInfo) => {
             onClick(info.object?.properties ?? null)
         },
         [onClick],
-    )
-
-    const onLayerHover = useCallback(
-        (info: PickingInfo, event: any) => {
-            if (info.picked) {
-                onMouseEnterOrMove(
-                    {
-                        x: event.srcEvent.clientX,
-                        y: event.srcEvent.clientY,
-                    },
-                    info.object?.properties,
-                )
-            } else {
-                onMouseLeave()
-            }
-        },
-        [onMouseEnterOrMove, onMouseLeave],
     )
 
     const layer = useMemo(
@@ -72,9 +45,8 @@ export default function InteractiveMap({
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 onClick: onLayerClick,
-                onHover: onLayerHover,
             }),
-        [geojson, onLayerClick, onLayerHover],
+        [geojson, onLayerClick],
     )
 
     const view = useMemo(
