@@ -6,13 +6,23 @@ interface Props {
     setSelectedFeature: (feature: FeatureProperties | null) => void
 }
 
-export default function StatusBar({ selectedFeature }: Props) {
+export default function StatusBar({
+    selectedFeature,
+    setSelectedFeature,
+}: Props) {
     return (
         <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
-            <div className="border-gray-100 border-b px-4 py-2">
+            <div className="border-gray-100 border-b px-4 py-2 flex justify-between items-center">
                 <p className="font-medium text-gray-700">
                     {selectedFeature.name}
                 </p>
+
+                <button
+                    className="text-xs"
+                    onClick={() => setSelectedFeature(null)}
+                >
+                    X
+                </button>
             </div>
 
             <div className="px-4 py-2 space-y-1">
