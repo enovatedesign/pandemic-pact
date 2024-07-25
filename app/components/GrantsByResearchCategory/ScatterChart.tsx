@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import {
     ScatterChart as RechartScatterChart,
@@ -14,33 +14,75 @@ import {
 } from 'recharts'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
-import { BarListData } from '../../helpers/bar-list'
+import { sumNumericGrantAmounts } from '../../helpers/reducers'
+import selectOptions from '../../../data/dist/select-options.json'
 import { researchCategoryColours } from '../../helpers/colours'
 import {
     dollarValueFormatter,
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
+import { GlobalFilterContext } from '../../helpers/filters'
 import Legend from '../Legend'
 import ImageExportLegend from '../ImageExportLegend'
 import TooltipContent from '../TooltipContent'
-
-interface Props {
-    chartData: BarListData
-}
 
 const CustomDot = (props: any) => {
     const { cx, cy, fill } = props
     return <circle cx={cx} cy={cy} r={6} fill={fill} />
 }
 
-export default function ScatterChart({ chartData }: Props) {
-    const [showLegend, setShowLegend] = useState<boolean>(false)
-    const [showLegendButton, setShowLegendButton] = useState<boolean>(true)
+export default function ScatterChart() {
+    const { grants } = useContext(GlobalFilterContext)
 
-    const researchCategories = chartData.map(data => ({
-        label: data['Category Label'],
-        value: data['Category Value'],
-    }))
+    const [showLegend, setShowLegend] = useState<boolean>(false)
+
+    const { chartData, researchCategories } = useMemo(() => {
+        const chartData = selectOptions.ResearchCat.map(
+            function (researchCategory) {
+                const grantsWithKnownAmounts = grants
+                    .filter((grant: any) =>
+                        grant.ResearchCat.includes(researchCategory.value),
+                    )
+                    .filter(
+                        (grant: any) =>
+                            typeof grant.GrantAmountConverted === 'number',
+                    )
+
+                const grantsWithUnspecifiedAmounts = grants
+                    .filter((grant: any) =>
+                        grant.ResearchCat.includes(researchCategory.value),
+                    )
+                    .filter(
+                        (grant: any) =>
+                            typeof grant.GrantAmountConverted !== 'number',
+                    )
+
+                const moneyCommitted = grantsWithKnownAmounts.reduce(
+                    ...sumNumericGrantAmounts,
+                )
+
+                return {
+                    'Category Value': researchCategory.value,
+                    'Category Label': researchCategory.label,
+                    'Grants With Known Financial Commitments':
+                        grantsWithKnownAmounts.length,
+                    'Grants With Unspecified Financial Commitments':
+                        grantsWithUnspecifiedAmounts.length,
+                    'Total Grants':
+                        grantsWithKnownAmounts.length +
+                        grantsWithUnspecifiedAmounts.length,
+                    'Known Financial Commitments (USD)': moneyCommitted,
+                }
+            },
+        )
+
+        const researchCategories = chartData.map(data => ({
+            label: data['Category Label'],
+            value: data['Category Value'],
+        }))
+
+        return { chartData, researchCategories }
+    }, [grants])
 
     const tooltipContent = (props: any) => {
         const { active, payload } = props
@@ -63,31 +105,30 @@ export default function ScatterChart({ chartData }: Props) {
     return (
         <>
             <div className="space-y-2 ignore-in-image-export">
-                {showLegendButton && (
-                    <button
-                        onClick={() => setShowLegend(!showLegend)}
+                <button
+                    onClick={() => setShowLegend(!showLegend)}
+                    className={`${
+                        showLegend
+                            ? 'bg-brand-teal-600 hover:bg-brand-teal-700 text-white shadow'
+                            : 'bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-600'
+                    }  p-2 rounded-lg text-sm font-medium leading-5 flex gap-2 items-center`}
+                >
+                    Legend
+                    <ChevronDownIcon
                         className={`${
-                            showLegend
-                                ? 'bg-brand-teal-600 hover:bg-brand-teal-700 text-white shadow'
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-600'
-                        }  p-2 rounded-lg text-sm font-medium leading-5 flex gap-2 items-center`}
-                    >
-                        Legend
-                        <ChevronDownIcon
-                            className={`${
-                                showLegend && 'rotate-180'
-                            } transition duration-300 h-5 w-5`}
-                            aria-hidden="true"
-                        />
-                    </button>
-                )}
+                            showLegend && 'rotate-180'
+                        } transition duration-300 h-5 w-5`}
+                        aria-hidden="true"
+                    />
+                </button>
+
                 <AnimateHeight duration={300} height={showLegend ? 'auto' : 0}>
                     <Legend
                         categories={researchCategories.map(
-                            category => category.label
+                            category => category.label,
                         )}
                         colours={researchCategories.map(
-                            ({ value }) => researchCategoryColours[value]
+                            ({ value }) => researchCategoryColours[value],
                         )}
                         customWrapperClasses="grid grid-cols-1 gap-2 lg:grid-cols-3"
                         customTextClasses="whitespace-normal"
@@ -155,7 +196,7 @@ export default function ScatterChart({ chartData }: Props) {
             <ImageExportLegend
                 categories={researchCategories.map(category => category.label)}
                 colours={researchCategories.map(
-                    ({ value }) => researchCategoryColours[value]
+                    ({ value }) => researchCategoryColours[value],
                 )}
             />
         </>
