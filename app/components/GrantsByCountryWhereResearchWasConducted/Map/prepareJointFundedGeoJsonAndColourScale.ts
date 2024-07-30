@@ -60,19 +60,29 @@ export default function prepareGeoJsonAndColourScale(
     geojson.features = geojson.features.map((feature: any) => {
         const value = feature.properties[key] ?? null
 
-        let colour: string
+        const featureIsSelected = feature.properties.id === selectedFeature.id
 
-        if (feature.properties.id === selectedFeature.id) {
-            colour = brandColours.blue['600']
+        let fillColour: string
+
+        if (featureIsSelected) {
+            fillColour = brandColours.blue['600']
         } else {
-            colour = value ? jointColourScale(value) : '#D6D6DA'
+            fillColour = value ? jointColourScale(value) : '#D6D6DA'
         }
+
+        const lineColour = featureIsSelected
+            ? brandColours.orange['500']
+            : '#FFFFFF'
+
+        const lineWidth = featureIsSelected ? 2 : 1
 
         return {
             ...feature,
             properties: {
                 ...feature.properties,
-                colour,
+                fillColour,
+                lineColour,
+                lineWidth,
             },
         }
     })

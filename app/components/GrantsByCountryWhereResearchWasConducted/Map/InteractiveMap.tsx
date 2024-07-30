@@ -28,7 +28,7 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
                 filled: true,
                 getFillColor: (feature: any) => {
                     const colourTranslator = new ColorTranslator(
-                        feature.properties.colour,
+                        feature.properties.fillColour,
                     )
 
                     return [
@@ -39,8 +39,19 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
                 },
 
                 stroked: true,
-                getLineColor: [255, 255, 255],
-                getLineWidth: 1.25,
+                getLineColor: (feature: any) => {
+                    const colourTranslator = new ColorTranslator(
+                        feature.properties.lineColour,
+                    )
+
+                    return [
+                        colourTranslator.R,
+                        colourTranslator.G,
+                        colourTranslator.B,
+                    ]
+                },
+
+                getLineWidth: (feature: any) => feature.properties.lineWidth,
                 lineWidthUnits: 'pixels',
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],

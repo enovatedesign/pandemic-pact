@@ -1,5 +1,5 @@
 import { scaleLog } from 'd3-scale'
-import type { MapControlState } from './types'
+import type { FeatureProperties, MapControlState } from './types'
 import countryGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
 import { sumNumericGrantAmounts } from '../../../helpers/reducers'
@@ -10,6 +10,7 @@ export default function prepareGeoJsonAndColourScale(
     dataset: any[],
     mapControlState: MapControlState,
     grantField: string,
+    selectedFeature: FeatureProperties | null,
 ) {
     const geojson = mapControlState.displayWhoRegions
         ? { ...whoRegionGeojson }
@@ -54,13 +55,23 @@ export default function prepareGeoJsonAndColourScale(
     geojson.features = geojson.features.map((feature: any) => {
         const value = feature.properties[key] ?? null
 
-        const colour = value ? colourScale(value) : '#D6D6DA'
+        const fillColour = value ? colourScale(value) : '#D6D6DA'
+
+        const featureIsSelected = feature.properties.id === selectedFeature?.id
+
+        const lineColour = featureIsSelected
+            ? brandColours.orange['500']
+            : '#FFFFFF'
+
+        const lineWidth = featureIsSelected ? 2 : 1
 
         return {
             ...feature,
             properties: {
                 ...feature.properties,
-                colour,
+                fillColour,
+                lineColour,
+                lineWidth,
             },
         }
     })
