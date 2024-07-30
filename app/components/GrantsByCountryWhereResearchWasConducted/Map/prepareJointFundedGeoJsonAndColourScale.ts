@@ -53,10 +53,6 @@ export default function prepareGeoJsonAndColourScale(
         .filter((country: any) => country.properties[key])
         .map((country: any) => country.properties[key])
 
-    const selectedFeatureColorScale = scaleLog<string>()
-        .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
-        .range([brandColours.blue['300'], brandColours.blue['700']])
-
     const jointColourScale = scaleLog<string>()
         .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
         .range([brandColours.orange['300'], brandColours.orange['700']])
@@ -64,12 +60,13 @@ export default function prepareGeoJsonAndColourScale(
     geojson.features = geojson.features.map((feature: any) => {
         const value = feature.properties[key] ?? null
 
-        const scale =
-            feature.properties.id === selectedFeature.id
-                ? selectedFeatureColorScale
-                : jointColourScale
+        let colour: string
 
-        const colour = value ? scale(value) : '#D6D6DA'
+        if (feature.properties.id === selectedFeature.id) {
+            colour = brandColours.blue['600']
+        } else {
+            colour = value ? jointColourScale(value) : '#D6D6DA'
+        }
 
         return {
             ...feature,
