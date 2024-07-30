@@ -1,16 +1,18 @@
 import { scaleLog } from 'd3-scale'
-import type { FeatureProperties, MapControlState } from './types'
+import { ColorTranslator } from 'colortranslator'
 import countryGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
 import { sumNumericGrantAmounts } from '../../../helpers/reducers'
 import { brandColours } from '../../../helpers/colours'
 import selectOptions from '../../../../data/dist/select-options.json'
+import type { FeatureProperties, MapControlState } from './types'
 
 export default function prepareGeoJsonAndColourScale(
     dataset: any[],
     mapControlState: MapControlState,
     grantField: string,
     selectedFeature: FeatureProperties | null,
+    highlightJointFundedCountries: boolean,
 ) {
     const geojson = mapControlState.displayWhoRegions
         ? { ...whoRegionGeojson }
@@ -23,7 +25,14 @@ export default function prepareGeoJsonAndColourScale(
             grantField as keyof typeof selectOptions
         ].find(option => option.value === id)?.label
 
-        const grants = dataset.filter(grant => grant[grantField].includes(id))
+        const filterCallback = highlightJointFundedCountries
+            ? (grant: any) =>
+                  grant[grantField].includes(id) &&
+                  grant[grantField].includes(selectedFeature?.id) &&
+                  grant[grantField].length > 1
+            : (grant: any) => grant[grantField].includes(id)
+
+        const grants = dataset.filter(filterCallback)
 
         const totalGrants = grants.length
 
@@ -48,33 +57,39 @@ export default function prepareGeoJsonAndColourScale(
         .filter((country: any) => country.properties[key])
         .map((country: any) => country.properties[key])
 
+    const colourKey = highlightJointFundedCountries ? 'orange' : 'teal'
+
     const colourScale = scaleLog<string>()
         .domain([Math.min(...allTotalGrants), Math.max(...allTotalGrants)])
-        .range([brandColours.teal['300'], brandColours.teal['700']])
+        .range([brandColours[colourKey]['300'], brandColours[colourKey]['700']])
 
     geojson.features = geojson.features.map((feature: any) => {
         const value = feature.properties[key] ?? null
 
-        const fillColour = value ? colourScale(value) : '#D6D6DA'
-
         const featureIsSelected = feature.properties.id === selectedFeature?.id
 
-        const lineColour = featureIsSelected
-            ? brandColours.orange['500']
-            : '#FFFFFF'
+        let fillColour: string
 
-        const lineWidth = featureIsSelected ? 2 : 1
+        if (featureIsSelected) {
+            fillColour = brandColours.blue['600']
+        } else {
+            fillColour = value ? colourScale(value) : '#D6D6DA'
+        }
 
         return {
             ...feature,
             properties: {
                 ...feature.properties,
-                fillColour,
-                lineColour,
-                lineWidth,
+                fillColour: convertCssColourToDeckGLFormat(fillColour),
             },
         }
     })
 
     return { geojson, colourScale }
+}
+
+function convertCssColourToDeckGLFormat(colour: string) {
+    const colourTranslator = new ColorTranslator(colour)
+
+    return [colourTranslator.R, colourTranslator.G, colourTranslator.B]
 }

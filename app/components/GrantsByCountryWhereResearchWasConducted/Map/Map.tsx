@@ -4,7 +4,6 @@ import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
 import StatusBar from './StatusBar'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
-import prepareJointFundedGeoJsonAndColourScale from './prepareJointFundedGeoJsonAndColourScale'
 import type { FeatureProperties, MapControlState } from './types'
 
 export default function Map() {
@@ -30,29 +29,23 @@ export default function Map() {
         mapControlState.locationType +
         (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
-    const { geojson, colourScale } = useMemo(() => {
-        if (highlightJointFundedCountries && selectedFeature) {
-            return prepareJointFundedGeoJsonAndColourScale(
+    const { geojson, colourScale } = useMemo(
+        () =>
+            prepareGeoJsonAndColourScale(
                 dataset,
                 mapControlState,
                 grantField,
                 selectedFeature,
-            )
-        } else {
-            return prepareGeoJsonAndColourScale(
-                dataset,
-                mapControlState,
-                grantField,
-                selectedFeature,
-            )
-        }
-    }, [
-        dataset,
-        mapControlState,
-        grantField,
-        selectedFeature,
-        highlightJointFundedCountries,
-    ])
+                highlightJointFundedCountries,
+            ),
+        [
+            dataset,
+            mapControlState,
+            grantField,
+            selectedFeature,
+            highlightJointFundedCountries,
+        ],
+    )
 
     return (
         <div className="w-full h-full flex flex-col gap-y-4">

@@ -3,7 +3,6 @@ import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
-import { ColorTranslator } from 'colortranslator'
 import type { FeatureProperties } from './types'
 
 interface Props {
@@ -24,55 +23,17 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
             new GeoJsonLayer<any>({
                 id: 'GeoJsonLayer',
                 data: geojson,
-
                 filled: true,
-                getFillColor: (feature: any) => {
-                    const colourTranslator = new ColorTranslator(
-                        feature.properties.fillColour,
-                    )
-
-                    return [
-                        colourTranslator.R,
-                        colourTranslator.G,
-                        colourTranslator.B,
-                    ]
-                },
-
+                getFillColor: (feature: any) => feature.properties.fillColour,
                 stroked: true,
-                getLineColor: (feature: any) => {
-                    const colourTranslator = new ColorTranslator(
-                        feature.properties.lineColour,
-                    )
-
-                    return [
-                        colourTranslator.R,
-                        colourTranslator.G,
-                        colourTranslator.B,
-                    ]
-                },
-
-                getLineWidth: (feature: any) => feature.properties.lineWidth,
+                getLineColor: [255, 255, 255],
+                lineWidthScale: 1.25,
                 lineWidthUnits: 'pixels',
                 pickable: true,
                 modelMatrix: [1, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 onClick: onLayerClick,
             }),
         [geojson, onLayerClick],
-    )
-
-    const view = useMemo(
-        () =>
-            new OrthographicView({
-                id: 'orthographic-view',
-                flipY: false,
-                controller: true,
-            }),
-        [],
-    )
-
-    const interpolator = useMemo(
-        () => new LinearInterpolator(['target', 'zoom']),
-        [],
     )
 
     const getCursor = useCallback(
@@ -99,10 +60,19 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
             width="100%"
             height={450}
             style={{ position: 'relative' }}
-            views={view}
+            views={
+                new OrthographicView({
+                    id: 'orthographic-view',
+                    flipY: false,
+                    controller: true,
+                })
+            }
             initialViewState={{
                 zoom: 1.25,
-                transitionInterpolator: interpolator,
+                transitionInterpolator: new LinearInterpolator([
+                    'target',
+                    'zoom',
+                ]),
                 target: [0, 15, 0],
             }}
             controller={{
