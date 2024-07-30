@@ -9,13 +9,13 @@ import ColourScale from './ColourScale'
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
-    colourScales: ScaleLogarithmic<string, string>[]
+    colourScale: ScaleLogarithmic<string, string>
 }
 
 export default function MapControls({
     mapControlState,
     setMapControlState,
-    colourScales,
+    colourScale,
 }: Props) {
     const { sidebarOpen } = useContext(SidebarStateContext)
 
@@ -36,19 +36,14 @@ export default function MapControls({
                     !sidebarOpen && 'xl:w-4/6'
                 } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex flex-col pt-3`}
             >
-                {colourScales.map((colourScale, index) => (
-                    <div
-                        className="flex items-center justify-center"
-                        key={index}
-                    >
-                        <ColourScale
-                            colourScale={colourScale}
-                            displayKnownFinancialCommitments={
-                                displayKnownFinancialCommitments
-                            }
-                        />
-                    </div>
-                ))}
+                <div className="flex items-center justify-center">
+                    <ColourScale
+                        colourScale={colourScale}
+                        displayKnownFinancialCommitments={
+                            displayKnownFinancialCommitments
+                        }
+                    />
+                </div>
             </div>
 
             <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
