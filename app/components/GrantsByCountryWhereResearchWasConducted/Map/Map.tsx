@@ -4,13 +4,14 @@ import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
 import StatusBar from './StatusBar'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
-import type { FeatureProperties, MapControlState } from './types'
+import type { MapControlState } from './types'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
-    const [selectedFeature, setSelectedFeature] =
-        useState<FeatureProperties | null>(null)
+    const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(
+        null,
+    )
 
     const [highlightJointFundedCountries, setHighlightJointFundedCountries] =
         useState<boolean>(false)
@@ -21,28 +22,28 @@ export default function Map() {
         locationType: 'Funder',
     })
 
-    const onClick = (properties: FeatureProperties) => {
-        setSelectedFeature(properties)
+    const onClick = (featureId: string | null) => {
+        setSelectedFeatureId(featureId)
     }
 
     const grantField =
         mapControlState.locationType +
         (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
-    const { geojson, colourScale } = useMemo(
+    const { geojson, colourScale, selectedFeatureProperties } = useMemo(
         () =>
             prepareGeoJsonAndColourScale(
                 dataset,
                 mapControlState,
                 grantField,
-                selectedFeature,
+                selectedFeatureId,
                 highlightJointFundedCountries,
             ),
         [
             dataset,
             mapControlState,
             grantField,
-            selectedFeature,
+            selectedFeatureId,
             highlightJointFundedCountries,
         ],
     )
@@ -53,10 +54,10 @@ export default function Map() {
                 <InteractiveMap geojson={geojson} onClick={onClick} />
             </div>
 
-            {selectedFeature && (
+            {selectedFeatureProperties && (
                 <StatusBar
-                    selectedFeature={selectedFeature}
-                    setSelectedFeature={setSelectedFeature}
+                    selectedFeatureProperties={selectedFeatureProperties}
+                    setSelectedFeatureId={setSelectedFeatureId}
                     highlightJointFundedCountries={
                         highlightJointFundedCountries
                     }

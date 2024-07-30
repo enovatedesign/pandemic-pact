@@ -3,17 +3,16 @@ import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
-import type { FeatureProperties } from './types'
 
 interface Props {
     geojson: any
-    onClick: (properties: FeatureProperties) => void
+    onClick: (featureId: string | null) => void
 }
 
 export default function InteractiveMap({ geojson, onClick }: Props) {
     const onLayerClick = useCallback(
         (info: PickingInfo) => {
-            onClick(info.object?.properties ?? null)
+            onClick(info.object?.properties.id ?? null)
         },
         [onClick],
     )

@@ -11,7 +11,7 @@ export default function prepareGeoJsonAndColourScale(
     dataset: any[],
     mapControlState: MapControlState,
     grantField: string,
-    selectedFeature: FeatureProperties | null,
+    selectedFeatureId: string | null,
     highlightJointFundedCountries: boolean,
 ) {
     const geojson = mapControlState.displayWhoRegions
@@ -28,7 +28,7 @@ export default function prepareGeoJsonAndColourScale(
         const filterCallback = highlightJointFundedCountries
             ? (grant: any) =>
                   grant[grantField].includes(id) &&
-                  grant[grantField].includes(selectedFeature?.id) &&
+                  grant[grantField].includes(selectedFeatureId) &&
                   grant[grantField].length > 1
             : (grant: any) => grant[grantField].includes(id)
 
@@ -66,7 +66,7 @@ export default function prepareGeoJsonAndColourScale(
     geojson.features = geojson.features.map((feature: any) => {
         const value = feature.properties[key] ?? null
 
-        const featureIsSelected = feature.properties.id === selectedFeature?.id
+        const featureIsSelected = feature.properties.id === selectedFeatureId
 
         let fillColour: string
 
@@ -85,7 +85,15 @@ export default function prepareGeoJsonAndColourScale(
         }
     })
 
-    return { geojson, colourScale }
+    let selectedFeatureProperties: any = null
+
+    if (selectedFeatureId) {
+        selectedFeatureProperties = geojson.features.find(
+            (feature: any) => feature.properties.id === selectedFeatureId,
+        )?.properties
+    }
+
+    return { geojson, colourScale, selectedFeatureProperties }
 }
 
 function convertCssColourToDeckGLFormat(colour: string) {

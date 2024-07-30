@@ -4,22 +4,22 @@ import Switch from '../../../components/Switch'
 import type { FeatureProperties } from './types'
 
 interface Props {
-    selectedFeature: FeatureProperties
-    setSelectedFeature: (feature: FeatureProperties | null) => void
+    selectedFeatureProperties: FeatureProperties
+    setSelectedFeatureId: (featureId: string | null) => void
     highlightJointFundedCountries: boolean
     setHighlightJointFundedCountries: (value: boolean) => void
     grantField: string
 }
 
 export default function StatusBar({
-    selectedFeature,
-    setSelectedFeature,
+    selectedFeatureProperties,
+    setSelectedFeatureId,
     highlightJointFundedCountries,
     setHighlightJointFundedCountries,
     grantField,
 }: Props) {
     const viewButtonQueryFilters = {
-        [grantField]: [selectedFeature.id],
+        [grantField]: [selectedFeatureProperties.id],
     }
 
     const viewButtonHref =
@@ -29,13 +29,13 @@ export default function StatusBar({
         <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
             <div className="border-gray-100 border-b px-4 py-2 flex justify-between items-center">
                 <p className="font-medium text-gray-700">
-                    {selectedFeature.name}
+                    {selectedFeatureProperties.name}
                 </p>
 
                 <button
                     className="text-xs"
                     onClick={() => {
-                        setSelectedFeature(null)
+                        setSelectedFeatureId(null)
                         setHighlightJointFundedCountries(false)
                     }}
                 >
@@ -51,7 +51,7 @@ export default function StatusBar({
 
                     <div className="flex justify-between items-center gap-x-2">
                         <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                            {selectedFeature.totalGrants}
+                            {selectedFeatureProperties.totalGrants}
                         </p>
                     </div>
                 </div>
@@ -66,7 +66,7 @@ export default function StatusBar({
                     <div className="flex justify-between items-center gap-x-2">
                         <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
                             {dollarValueFormatter(
-                                selectedFeature.totalAmountCommitted,
+                                selectedFeatureProperties.totalAmountCommitted,
                             )}
                         </p>
                     </div>
