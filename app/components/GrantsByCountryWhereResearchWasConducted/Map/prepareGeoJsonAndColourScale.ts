@@ -5,7 +5,7 @@ import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
 import { sumNumericGrantAmounts } from '../../../helpers/reducers'
 import { brandColours } from '../../../helpers/colours'
 import selectOptions from '../../../../data/dist/select-options.json'
-import type { FeatureProperties, MapControlState } from './types'
+import type { MapControlState } from './types'
 
 export default function prepareGeoJsonAndColourScale(
     dataset: any[],
