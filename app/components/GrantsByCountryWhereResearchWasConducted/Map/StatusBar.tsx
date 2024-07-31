@@ -2,6 +2,7 @@ import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import Button from '../../../components/Button'
 import Switch from '../../../components/Switch'
 import type { FeatureProperties } from './types'
+import JointFeaturesModal from './JointFeaturesModal'
 
 interface Props {
     selectedFeatureProperties: FeatureProperties
@@ -53,6 +54,11 @@ export default function StatusBar({
         )
     }
 
+    const shouldShowJointFeaturesModal =
+        highlightJointFundedCountries &&
+        typeof selectedFeatureProperties.jointFeatureProperties === 'object' &&
+        selectedFeatureProperties.jointFeatureProperties.length > 0
+
     return (
         <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
             <div className="border-gray-100 border-b px-4 py-2 flex justify-between items-center">
@@ -100,12 +106,22 @@ export default function StatusBar({
             </div>
 
             <div className="py-2 px-2 flex justify-between items-center">
-                <Switch
-                    checked={highlightJointFundedCountries}
-                    onChange={setHighlightJointFundedCountries}
-                    label="Show Joint-funded Countries"
-                    theme="light"
-                />
+                <div className="flex items-center gap-x-4">
+                    <Switch
+                        checked={highlightJointFundedCountries}
+                        onChange={setHighlightJointFundedCountries}
+                        label="Show Joint-funded Countries"
+                        theme="light"
+                    />
+
+                    {shouldShowJointFeaturesModal && (
+                        <JointFeaturesModal
+                            selectedFeatureProperties={
+                                selectedFeatureProperties
+                            }
+                        />
+                    )}
+                </div>
 
                 <Button size="xsmall" href={viewButtonHref}>
                     View Grants
