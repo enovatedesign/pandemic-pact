@@ -97,7 +97,7 @@ export default function FilterSidebar({
                                         Total Number Of Grants
                                     </span>
                                     <span className="text-4xl font-bold text-primary">
-                                        {completeDataset.length}
+                                        {completeDataset.length.toLocaleString()}
                                     </span>
                                 </>
                             )}
