@@ -110,6 +110,16 @@ export default function prepareGeoJsonAndColourScale(
         selectedFeatureProperties = geojson.features.find(
             (feature: any) => feature.properties.id === selectedFeatureId,
         )?.properties
+
+        if (highlightJointFundedCountries) {
+            selectedFeatureProperties.jointFeatureProperties = geojson.features
+                .filter(
+                    (feature: any) =>
+                        feature.properties.id !== selectedFeatureId &&
+                        feature.properties.totalJointGrants > 0,
+                )
+                .map((feature: any) => feature.properties)
+        }
     }
 
     return { geojson, colourScale, selectedFeatureProperties }

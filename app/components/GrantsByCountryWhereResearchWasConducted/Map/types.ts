@@ -14,4 +14,5 @@ export interface FeatureProperties {
     totalAmountCommitted: number
     totalJointGrants?: number
     totalJointAmountCommitted?: number
+    jointFeatureProperties?: FeatureProperties[]
 }
