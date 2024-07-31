@@ -29,7 +29,7 @@ export default function StatusBar({
 
     if (
         highlightJointFundedCountries &&
-        selectedFeatureProperties.totalJointGrants
+        typeof selectedFeatureProperties.totalJointGrants === 'number'
     ) {
         totalGrants = `${selectedFeatureProperties.totalJointGrants} / ${selectedFeatureProperties.totalGrants}`
     } else {
@@ -40,7 +40,7 @@ export default function StatusBar({
 
     if (
         highlightJointFundedCountries &&
-        selectedFeatureProperties.totalJointAmountCommitted
+        typeof selectedFeatureProperties.totalJointAmountCommitted === 'number'
     ) {
         totalAmountCommitted = `${dollarValueFormatter(
             selectedFeatureProperties.totalJointAmountCommitted,
