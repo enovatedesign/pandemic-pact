@@ -11,6 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect } from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import homepageTotals from '../../data/dist/homepage-totals.json';
+import {useReducedMotion} from "@react-spring/web"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,10 +24,8 @@ interface imageLinkProps {
     classes?: string;
 }
 [];
-interface FooterProps {
-    sidebarOpen: boolean;
-}
-export default function Footer({ sidebarOpen }: FooterProps) {
+
+export default function Footer() {
     const NavItem = (link: { label: string; href: string }) => (
         <li key={link.href}>
             <Link href={link.href} className={`text-gray-700 hover:underline`}>
@@ -35,45 +34,57 @@ export default function Footer({ sidebarOpen }: FooterProps) {
         </li>
     );
 
+    const reducedMotion = useReducedMotion()
+
     useEffect(() => {
-        const logoCircles = document.querySelectorAll('#logo-circles path');
-        const svgBlurFilter = document.querySelector('#gaussianBlur');
-
-        // Position the logo circles randomly
-        gsap.set(logoCircles, {
-            x: () => gsap.utils.random(-100, 100),
-            y: () => gsap.utils.random(-100, 0),
-            opacity: 0,
-            scale: 3,
-        });
-
-        // Animate the logo circles back into position
-        gsap.to(logoCircles, {
-            scrollTrigger: {
-                trigger: '#logo-circles',
-                scrub: 4,
-                start: 'top bottom',
-                end: 'bottom max',
-            },
-            x: 0,
-            y: 0,
-            opacity: 1,
-            duration: 6,
-            stagger: 0.2,
-            scale: 1,
-        });
-
-        // Animate the SVG blur filter to zero
-        gsap.to(svgBlurFilter, {
-            scrollTrigger: {
-                trigger: '#logo-circles',
-                scrub: 4,
-                start: 'top bottom',
-                end: 'bottom max',
-            },
-            duration: 6,
-            attr: { stdDeviation: 0 },
-        });
+        if (!reducedMotion) {
+            const logoCircles = document.querySelectorAll('#logo-circles path');
+            const svgBlurFilter = document.querySelector('#gaussianBlur');
+    
+            // Position the logo circles randomly
+            gsap.set(logoCircles, {
+                x: () => gsap.utils.random(-100, 100),
+                y: () => gsap.utils.random(-100, 0),
+                opacity: 0,
+                scale: 3,
+            });
+    
+            // Animate the logo circles back into position
+            gsap.to(logoCircles, {
+                scrollTrigger: {
+                    trigger: '#logo-circles',
+                    scrub: 4,
+                    start: 'top bottom',
+                    end: 'bottom max',
+                },
+                x: 0,
+                y: 0,
+                opacity: 1,
+                duration: 6,
+                stagger: 0.2,
+                scale: 1,
+            });
+    
+            // Animate the SVG blur filter to zero
+            gsap.to(svgBlurFilter, {
+                scrollTrigger: {
+                    trigger: '#logo-circles',
+                    scrub: 4,
+                    start: 'top bottom',
+                    end: 'bottom max',
+                },
+                duration: 6,
+                attr: { stdDeviation: 0 },
+            });
+    
+            const timeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#logo-circles',
+                }
+            })
+    
+            timeline.scrollTrigger?.refresh()
+        }
     });
 
     const Logo = () => (
@@ -83,11 +94,13 @@ export default function Footer({ sidebarOpen }: FooterProps) {
             viewBox="0 0 183 96"
             className="overflow-visible"
         >
-            <defs>
-                <filter id="blur">
-                    <feGaussianBlur id="gaussianBlur" in="SourceGraphic" stdDeviation="4" />
-                </filter>
-            </defs>
+            {!reducedMotion && (
+                <defs>
+                    <filter id="blur">
+                        <feGaussianBlur id="gaussianBlur" in="SourceGraphic" stdDeviation="4" />
+                    </filter>
+                </defs>
+            )}
             <g id="logo-circles" filter="url(#blur)">
                 
                 <path
