@@ -25,33 +25,52 @@ export default function prepareGeoJsonAndColourScale(
             grantField as keyof typeof selectOptions
         ].find(option => option.value === id)?.label
 
-        const filterCallback = highlightJointFundedCountries
-            ? (grant: any) =>
-                  grant[grantField].includes(id) &&
-                  grant[grantField].includes(selectedFeatureId) &&
-                  grant[grantField].length > 1
-            : (grant: any) => grant[grantField].includes(id)
-
-        const grants = dataset.filter(filterCallback)
+        const grants = dataset.filter((grant: any) =>
+            grant[grantField].includes(id),
+        )
 
         const totalGrants = grants.length
 
         const totalAmountCommitted = grants.reduce(...sumNumericGrantAmounts)
 
+        let properties: any = {
+            id,
+            name,
+            totalGrants,
+            totalAmountCommitted,
+        }
+
+        if (highlightJointFundedCountries) {
+            const jointGrants = grants.filter(
+                (grant: any) =>
+                    grant[grantField].includes(selectedFeatureId) &&
+                    grant[grantField].length > 1,
+            )
+
+            properties.totalJointGrants = jointGrants.length
+
+            properties.totalJointAmountCommitted = jointGrants.reduce(
+                ...sumNumericGrantAmounts,
+            )
+        }
+
         return {
             ...feature,
-            properties: {
-                id,
-                name,
-                totalGrants,
-                totalAmountCommitted,
-            },
+            properties,
         }
     })
 
-    const key = mapControlState.displayKnownFinancialCommitments
-        ? 'totalAmountCommitted'
-        : 'totalGrants'
+    let key: string
+
+    if (highlightJointFundedCountries) {
+        key = mapControlState.displayKnownFinancialCommitments
+            ? 'totalJointAmountCommitted'
+            : 'totalJointGrants'
+    } else {
+        key = mapControlState.displayKnownFinancialCommitments
+            ? 'totalAmountCommitted'
+            : 'totalGrants'
+    }
 
     const allTotalGrants = geojson.features
         .filter((country: any) => country.properties[key])

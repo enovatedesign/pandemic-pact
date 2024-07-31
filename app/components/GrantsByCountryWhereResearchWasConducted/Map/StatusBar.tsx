@@ -25,6 +25,34 @@ export default function StatusBar({
     const viewButtonHref =
         '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
 
+    let totalGrants: string
+
+    if (
+        highlightJointFundedCountries &&
+        selectedFeatureProperties.totalJointGrants
+    ) {
+        totalGrants = `${selectedFeatureProperties.totalJointGrants} / ${selectedFeatureProperties.totalGrants}`
+    } else {
+        totalGrants = `${selectedFeatureProperties.totalGrants}`
+    }
+
+    let totalAmountCommitted: string
+
+    if (
+        highlightJointFundedCountries &&
+        selectedFeatureProperties.totalJointAmountCommitted
+    ) {
+        totalAmountCommitted = `${dollarValueFormatter(
+            selectedFeatureProperties.totalJointAmountCommitted,
+        )} / ${dollarValueFormatter(
+            selectedFeatureProperties.totalAmountCommitted,
+        )}`
+    } else {
+        totalAmountCommitted = dollarValueFormatter(
+            selectedFeatureProperties.totalAmountCommitted,
+        )
+    }
+
     return (
         <div className="max-w-full md:max-w-none rounded-lg text-sm border bg-white opacity-100 shadow border-gray-100">
             <div className="border-gray-100 border-b px-4 py-2 flex justify-between items-center">
@@ -51,7 +79,7 @@ export default function StatusBar({
 
                     <div className="flex justify-between items-center gap-x-2">
                         <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                            {selectedFeatureProperties.totalGrants}
+                            {totalGrants}
                         </p>
                     </div>
                 </div>
@@ -65,9 +93,7 @@ export default function StatusBar({
 
                     <div className="flex justify-between items-center gap-x-2">
                         <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                            {dollarValueFormatter(
-                                selectedFeatureProperties.totalAmountCommitted,
-                            )}
+                            {totalAmountCommitted}
                         </p>
                     </div>
                 </div>
