@@ -18,6 +18,7 @@ export interface SelectedStandardSearchFilters {
 export interface SearchParameters {
     q: string
     standardFilters: SelectedStandardSearchFilters
+    jointFunding: string | null
     advancedFilters: SearchFilters
     page: number
     limit: number

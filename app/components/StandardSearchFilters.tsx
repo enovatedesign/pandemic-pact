@@ -1,15 +1,23 @@
-import { SelectedStandardSearchFilters } from '../helpers/search'
+import {
+    SelectedStandardSearchFilters,
+    jointFundingFilterOptions,
+} from '../helpers/search'
+import Select from './Select'
 import MultiSelect from './MultiSelect'
 import selectOptions from '../../data/dist/select-options.json'
 
 interface Props {
     selectedFilters: SelectedStandardSearchFilters
     setSelectedFilters: (searchFilters: SelectedStandardSearchFilters) => void
+    jointFundingFilter: string | null
+    setJointFundingFilter: (jointFundingFilter: string | null) => void
 }
 
 export default function StandardSearchFilters({
     selectedFilters,
     setSelectedFilters,
+    jointFundingFilter,
+    setJointFundingFilter,
 }: Props) {
     const setSelectedOptions = (field: string, selectedOptions: string[]) => {
         const newFilters = {
@@ -29,6 +37,10 @@ export default function StandardSearchFilters({
         FunderRegion: 'Funder Regions',
         FundingOrgName: 'Funders',
     }
+
+    const jointFundingValue = jointFundingFilterOptions.find(
+        option => option.value === jointFundingFilter,
+    )
 
     return (
         <section className=" bg-white p-3">
@@ -56,6 +68,16 @@ export default function StandardSearchFilters({
                         className="col-span-1"
                     />
                 ))}
+
+                <Select
+                    value={jointFundingValue ?? null}
+                    options={jointFundingFilterOptions}
+                    onChange={option =>
+                        setJointFundingFilter(option?.value ?? null)
+                    }
+                    label="Joint Funding Status"
+                    className="col-span-1"
+                />
             </div>
         </section>
     )
