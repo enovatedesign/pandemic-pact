@@ -76,6 +76,9 @@ const searchParameterSchema: SearchParameterSchema = {
         defaultValue: {},
         queryStringParameter: 'filters',
     },
+    jointFunding: {
+        defaultValue: 'all-grants',
+    },
     advancedFilters: {
         defaultValue: { logicalAnd: true, filters: [] },
         excludeFromQueryString: true,
