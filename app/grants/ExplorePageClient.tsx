@@ -21,7 +21,7 @@ export default function ExplorePageClient() {
     const searchParams = useSearchParams()
 
     const [searchParameters, setSearchParameters] = useState<SearchParameters>(
-        prepareInitialSearchParameters(searchParams)
+        prepareInitialSearchParameters(searchParams),
     )
 
     const updateSearchParameters = (newSearchParameters: SearchParameters) => {
@@ -33,8 +33,8 @@ export default function ExplorePageClient() {
                     ([key, value]) =>
                         !isEqual(
                             value,
-                            oldSearchParameters[key as keyof SearchParameters]
-                        )
+                            oldSearchParameters[key as keyof SearchParameters],
+                        ),
                 )
 
             return {
@@ -71,7 +71,7 @@ export default function ExplorePageClient() {
                         field,
                         values,
                         logicalAnd: false,
-                    })
+                    }),
                 ),
             }
         }
@@ -80,6 +80,7 @@ export default function ExplorePageClient() {
             q: searchParameters.q,
             page: searchParameters.page,
             limit: searchParameters.limit,
+            jointFunding: searchParameters.jointFunding,
             filters,
         }
     }, [searchParameters, showAdvancedSearch])
