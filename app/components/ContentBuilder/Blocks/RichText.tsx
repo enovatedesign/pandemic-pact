@@ -30,7 +30,7 @@ export default function RichTextBlock({ block, firstBlock, lastBlock }: Props) {
 				<div
 					className={blockClasses}
 					dangerouslySetInnerHTML={{ __html: text }}
-					id={formatId(jumpCardId)}
+					id={jumpCardId ? formatId(jumpCardId) : undefined}
 				/>
 			</BlockWrapper>
 		);
