@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Client } from '@opensearch-project/opensearch'
-import { SearchFilters } from '../../helpers/search'
+import { jointFundingFilterOptions, SearchFilters } from '../../helpers/search'
 
 export function getSearchClient() {
     if (
@@ -36,13 +36,13 @@ export function searchUnavailableResponse() {
         {
             status: 503,
             statusText: 'Service Unavailable',
-        }
+        },
     )
 }
 
 export async function validateRequest(
     request: Request,
-    fieldsToValidate: string[]
+    fieldsToValidate: string[],
 ) {
     const rules = {
         q: (addError: (message: string) => void) => {
@@ -54,6 +54,25 @@ export async function validateRequest(
         filters: (addError: (message: string) => void) => {
             if (typeof parameters.filters !== 'object') {
                 addError('The filters parameter must be an object')
+            }
+        },
+
+        jointFunding: (addError: (message: string) => void) => {
+            if (typeof parameters.jointFunding !== 'string') {
+                addError('The jointFunding parameter must be a string')
+            }
+
+            const validJointFundingOption = jointFundingFilterOptions.some(
+                option => option.value === parameters.jointFunding,
+            )
+
+            if (!validJointFundingOption) {
+                addError(
+                    'The jointFunding parameter must be one of the following values: ' +
+                        jointFundingFilterOptions
+                            .map(option => option.value)
+                            .join(', '),
+                )
             }
         },
 
@@ -74,7 +93,7 @@ export async function validateRequest(
 
             if (parameters.limit > 100) {
                 addError(
-                    'The limit parameter must be less than or equal to 100'
+                    'The limit parameter must be less than or equal to 100',
                 )
             }
 
@@ -123,7 +142,7 @@ export async function validateRequest(
                 {
                     status: 422,
                     statusText: 'Unprocessable Entity',
-                }
+                },
             ),
         }
     }
@@ -174,7 +193,7 @@ export function getBooleanQuery(q: string, filters: SearchFilters) {
                                     })),
                                 },
                             }
-                        }
+                        },
                     ),
                 },
             },
@@ -199,7 +218,7 @@ export async function fetchAllGrantIDsInIndex(client: Client) {
 export async function fetchAllGrantIDsMatchingBooleanQuery(
     client: Client,
     q: string,
-    filters: SearchFilters
+    filters: SearchFilters,
 ) {
     const index = getIndexName()
 
