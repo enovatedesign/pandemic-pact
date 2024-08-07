@@ -31,6 +31,7 @@ export default async function () {
         Abstract: { type: 'text' },
         LaySummary: { type: 'text' },
         GrantAmountConverted: { type: 'long' },
+        JointFunding: { type: 'boolean' },
 
         ...Object.fromEntries(
             Object.keys(selectOptions).map(field => [
@@ -78,6 +79,8 @@ export default async function () {
 
         const bulkOperations: any[] = grants
             .map((grant: any) => {
+                const doc = _.pick(grant, Object.keys(mappingProperties))
+
                 return [
                     {
                         update: {
@@ -86,7 +89,10 @@ export default async function () {
                         },
                     },
                     {
-                        doc: _.pick(grant, Object.keys(mappingProperties)),
+                        doc: {
+                            ...doc,
+                            JointFunding: doc.FunderCountry.length > 1,
+                        },
                         doc_as_upsert: true,
                     },
                 ]
