@@ -23,7 +23,6 @@ interface JumpCardProps {
 }
 
 const JumpCardsBlock = ({block}: JumpCardProps) => {
-
     const jumpCards = block.jumpCards
     
     const [availableElements, setAvailableElements] = useState<Record<string, HTMLElement>>({})
@@ -51,22 +50,25 @@ const JumpCardsBlock = ({block}: JumpCardProps) => {
 
     return (
             <BlockWrapper options={{ fill: true, bgColourClass: '' }}>
-                <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
+                <ul className="flex flex-wrap justify-center gap-6">
                     {jumpCards.map((card, index: number) => {
-                        
                         const {heading, summary, jumpCardId} = card
+                        const id = formatId(jumpCardId)
 
                         const image = card.image[0] ?? null
                         
                         const entry = {
-                            url: `#${formatId(jumpCardId)}`,
+                            url: `#${id}`,
                             title: heading,
                             summary: summary
                         }
 
                         return (
-                            <li key={index}>
-                                {availableElements[formatId(jumpCardId)] && (
+                            <li 
+                                key={id}
+                                className="basis-full sm:basis-[calc(50%_-_(theme('spacing.6')/2))] lg:basis-[calc((100%/3)_-_((theme('spacing.6')*2)/3))] 2xl:basis-[calc(20%_-_((theme('spacing.6')*4)/5))]"
+                            >
+                                {availableElements[id] && (
                                     <Card
                                         entry={entry}
                                         tags={false}

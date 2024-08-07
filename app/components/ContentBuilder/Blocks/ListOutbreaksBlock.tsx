@@ -25,7 +25,6 @@ type Props = {
 }
 
 const ListOutbreaksBlock = ({block}: Props) => {
-
     const heading = block.heading ?? null
     const customEntries = block.customEntries ?? null
 
@@ -38,28 +37,31 @@ const ListOutbreaksBlock = ({block}: Props) => {
                     </div>
                 )}
 
-                <div className="mx-auto">
-
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <ul className="flex flex-wrap justify-center gap-6">
+                    {customEntries.map((entry, index: number) => {
+                        const cardData = {
+                            title: entry.title,
+                            summary: entry.outbreakPending ? 'Pending' : entry.summary,
+                            summaryClasses: '',
+                            url: entry.outbreakPending ? null : `/${entry.uri}`,
+                            thumbnailImage: entry.thumbnailImage,
+                        }
                         
-                        {customEntries.map((entry, index: number) => {
-                            
-                            const cardData = {
-                                title: entry.title,
-                                summary: entry.outbreakPending ? 'Pending' : entry.summary,
-                                summaryClasses: '',
-                                url: entry.outbreakPending ? null : `/${entry.uri}`,
-                                thumbnailImage: entry.thumbnailImage,
-                            }
-                            
-                            return (
-                                <Card entry={cardData} key={index} animatedIcon={<ChevronRightIcon className="w-6 h-6" />}/>
-                            )
-                        })}
+                        return (
+                            <li 
+                                key={entry.id}
+                                className="basis-full sm:basis-[calc(50%_-_(theme('spacing.6')/2))] lg:basis-[calc((100%/3)_-_((theme('spacing.6')*2)/3))] xl:basis-[calc(25%_-_((theme('spacing.6')*3)/4))]"
+                            >
+                                <Card 
+                                    entry={cardData}
+                                    key={index}
+                                    animatedIcon={<ChevronRightIcon className="w-6 h-6" />}
+                                />
+                            </li>
+                        )
+                    })}
+                </ul>
 
-                    </div>
-
-                </div>
             </BlockWrapper>
         </>
     )
