@@ -150,11 +150,15 @@ export async function validateRequest(
     return { values }
 }
 
-export function getBooleanQuery(q: string, filters: SearchFilters) {
+export function getBooleanQuery(
+    q: string,
+    filters: SearchFilters,
+    jointFunding: string,
+) {
     return {
         bool: {
             ...prepareMustClause(q),
-            ...prepareFilterClause(filters),
+            ...prepareFilterClause(filters, jointFunding),
         },
     }
 }
@@ -180,32 +184,49 @@ function prepareMustClause(q: string) {
     }
 }
 
-function prepareFilterClause(filters: SearchFilters) {
-    if (!filters) {
-        return {}
+function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
+    const boolClause: any = {
+        must: [],
+        should: [],
     }
 
-    const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
+    if (filters) {
+        const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
+
+        boolClause[outerBoolOperator] = filters.filters.map(
+            ({ field, values, logicalAnd }) => {
+                const innerBoolOperator = logicalAnd ? 'must' : 'should'
+
+                return {
+                    bool: {
+                        [innerBoolOperator]: values.map(value => ({
+                            term: {
+                                [field]: value,
+                            },
+                        })),
+                    },
+                }
+            },
+        )
+    }
+
+    if (jointFunding === 'only-joint-funded-grants') {
+        boolClause.must.push({
+            term: {
+                JointFunding: true,
+            },
+        })
+    } else if (jointFunding === 'exclude-joint-funded-grants') {
+        boolClause.must.push({
+            term: {
+                JointFunding: false,
+            },
+        })
+    }
 
     return {
         filter: {
-            bool: {
-                [outerBoolOperator]: filters.filters.map(
-                    ({ field, values, logicalAnd }) => {
-                        const innerBoolOperator = logicalAnd ? 'must' : 'should'
-
-                        return {
-                            bool: {
-                                [innerBoolOperator]: values.map(value => ({
-                                    term: {
-                                        [field]: value,
-                                    },
-                                })),
-                            },
-                        }
-                    },
-                ),
-            },
+            bool: boolClause,
         },
     }
 }

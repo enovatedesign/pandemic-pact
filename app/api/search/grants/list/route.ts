@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const { errorResponse, values } = await validateRequest(request, [
         'q',
         'filters',
+        'jointFunding',
         'page',
         'limit',
     ])
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
         return errorResponse
     }
 
-    const { q, filters, page, limit } = values
+    const { q, filters, jointFunding, page, limit } = values
 
     let highlightClause = {}
 
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters)
+    const query = getBooleanQuery(q, filters, jointFunding)
 
     const from = page && limit ? limit * (page - 1) : 0
 
