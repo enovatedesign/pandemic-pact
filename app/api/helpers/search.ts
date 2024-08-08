@@ -151,59 +151,61 @@ export async function validateRequest(
 }
 
 export function getBooleanQuery(q: string, filters: SearchFilters) {
-    let mustClause = {}
-
-    if (q) {
-        let query = q
-            .replace(/\bAND\b/g, '+')
-            .replace(/\bOR\b/g, '|')
-            .replace(/\bNOT\s+/g, '-')
-
-        mustClause = {
-            must: {
-                simple_query_string: {
-                    query,
-                    fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
-                    flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
-                },
-            },
-        }
-    }
-
-    let filterClause = {}
-
-    if (filters) {
-        const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
-
-        filterClause = {
-            filter: {
-                bool: {
-                    [outerBoolOperator]: filters.filters.map(
-                        ({ field, values, logicalAnd }) => {
-                            const innerBoolOperator = logicalAnd
-                                ? 'must'
-                                : 'should'
-
-                            return {
-                                bool: {
-                                    [innerBoolOperator]: values.map(value => ({
-                                        term: {
-                                            [field]: value,
-                                        },
-                                    })),
-                                },
-                            }
-                        },
-                    ),
-                },
-            },
-        }
-    }
-
     return {
         bool: {
-            ...mustClause,
-            ...filterClause,
+            ...prepareMustClause(q),
+            ...prepareFilterClause(filters),
+        },
+    }
+}
+
+function prepareMustClause(q: string) {
+    if (!q) {
+        return {}
+    }
+
+    const query = q
+        .replace(/\bAND\b/g, '+')
+        .replace(/\bOR\b/g, '|')
+        .replace(/\bNOT\s+/g, '-')
+
+    return {
+        must: {
+            simple_query_string: {
+                query,
+                fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+                flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
+            },
+        },
+    }
+}
+
+function prepareFilterClause(filters: SearchFilters) {
+    if (!filters) {
+        return {}
+    }
+
+    const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
+
+    return {
+        filter: {
+            bool: {
+                [outerBoolOperator]: filters.filters.map(
+                    ({ field, values, logicalAnd }) => {
+                        const innerBoolOperator = logicalAnd ? 'must' : 'should'
+
+                        return {
+                            bool: {
+                                [innerBoolOperator]: values.map(value => ({
+                                    term: {
+                                        [field]: value,
+                                    },
+                                })),
+                            },
+                        }
+                    },
+                ),
+            },
         },
     }
 }
