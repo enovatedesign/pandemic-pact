@@ -22,9 +22,7 @@ type Props = {
     }
 }
 
-
 const RichTextColumnsBlock = ({block} : Props) => {
-    
     const columns = block.columns ?? null
 
     const gridClasses = [
@@ -38,7 +36,6 @@ const RichTextColumnsBlock = ({block} : Props) => {
             {columns && (
                 <div className={gridClasses}>
                     {columns.map((column, index: number) => {
-                        
                         const button = column.button ?? null
 
                         return (

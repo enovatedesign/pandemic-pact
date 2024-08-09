@@ -14,3 +14,9 @@ export const dollarValueFormatter = (value: number) => {
 export const axisDollarFormatter = (value: number) => {
     return '$' + millify(value, {precision: 0})
 }
+
+export const formatId = (id:string) => {
+    const lowerCaseId = id.toLowerCase()
+    const formattedId = lowerCaseId.replace(/\s+/g, '-')
+    return formattedId
+}

@@ -16,6 +16,7 @@ export const contentBuilderQuery = `
             id
             text
             textAlign
+            jumpCardId
             typeHandle
           }
           ... on bodyContent_highlightedRichText_BlockType {
@@ -407,6 +408,22 @@ export const contentBuilderQuery = `
                   }
                 }
                 publicationType(label: true)
+              }
+            }
+          }
+          ... on bodyContent_jumpCards_BlockType {
+            typeHandle
+            jumpCards {
+              ... on jumpCards_BlockType {
+                heading
+                summary
+                image(withTransforms: "c480x480") {
+                  width
+                  height
+                  url
+                  alt
+                }
+                jumpCardId
               }
             }
           }
