@@ -124,7 +124,9 @@ export default function StatusBar({
                 </div>
 
                 <Button size="xsmall" href={viewButtonHref}>
-                    View Grants
+                    {highlightJointFundedCountries
+                        ? 'View Joint-funded Grants'
+                        : 'View Grants'}
                 </Button>
             </div>
         </div>
