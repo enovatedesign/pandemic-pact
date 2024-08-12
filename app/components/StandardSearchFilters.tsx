@@ -9,8 +9,8 @@ import selectOptions from '../../data/dist/select-options.json'
 interface Props {
     selectedFilters: SelectedStandardSearchFilters
     setSelectedFilters: (searchFilters: SelectedStandardSearchFilters) => void
-    jointFundingFilter: string | null
-    setJointFundingFilter: (jointFundingFilter: string | null) => void
+    jointFundingFilter: string
+    setJointFundingFilter: (jointFundingFilter: string) => void
 }
 
 export default function StandardSearchFilters({
@@ -40,7 +40,7 @@ export default function StandardSearchFilters({
 
     const jointFundingValue = jointFundingFilterOptions.find(
         option => option.value === jointFundingFilter,
-    )
+    ) as { value: string; label: string }
 
     return (
         <section className=" bg-white p-3">
@@ -70,11 +70,17 @@ export default function StandardSearchFilters({
                 ))}
 
                 <Select
-                    value={jointFundingValue ?? null}
+                    value={jointFundingValue}
                     options={jointFundingFilterOptions}
-                    onChange={option =>
-                        setJointFundingFilter(option?.value ?? null)
-                    }
+                    onChange={option => {
+                        if (option === null) {
+                            throw new Error(
+                                'joint funding select onChange received null for option when it should always have a value set',
+                            )
+                        }
+
+                        setJointFundingFilter(option.value)
+                    }}
                     label="Joint Funding Status"
                     className="col-span-1"
                 />

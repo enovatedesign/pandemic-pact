@@ -49,7 +49,7 @@ export default function SearchInput({
         })
     }
 
-    const setJointFundingFilter = (jointFunding: string | null) => {
+    const setJointFundingFilter = (jointFunding: string) => {
         setSearchParameters({
             ...searchParameters,
             jointFunding,

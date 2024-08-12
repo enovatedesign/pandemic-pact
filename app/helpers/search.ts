@@ -18,7 +18,7 @@ export interface SelectedStandardSearchFilters {
 export interface SearchParameters {
     q: string
     standardFilters: SelectedStandardSearchFilters
-    jointFunding: string | null
+    jointFunding: string
     advancedFilters: SearchFilters
     page: number
     limit: number
@@ -168,6 +168,7 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
                 },
             ],
         },
+        jointFunding: 'all-grants',
     })
 
     const hit = response.hits[0]
