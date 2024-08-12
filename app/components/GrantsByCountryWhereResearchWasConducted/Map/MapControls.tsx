@@ -9,12 +9,14 @@ import ColourScale from './ColourScale'
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
+    setHighlightJointFundedCountries: (value: boolean) => void
     colourScale: ScaleLogarithmic<string, string>
 }
 
 export default function MapControls({
     mapControlState,
     setMapControlState,
+    setHighlightJointFundedCountries,
     colourScale,
 }: Props) {
     const { sidebarOpen } = useContext(SidebarStateContext)
@@ -24,6 +26,19 @@ export default function MapControls({
         displayWhoRegions,
         locationType,
     } = mapControlState
+
+    const setMapControlAndHighlightJointFundedState = (
+        newState: MapControlState,
+    ) => {
+        setMapControlState(newState)
+
+        const displayingByFunderCountry =
+            newState.locationType === 'Funder' && !newState.displayWhoRegions
+
+        if (!displayingByFunderCountry) {
+            setHighlightJointFundedCountries(false)
+        }
+    }
 
     return (
         <div
@@ -50,7 +65,7 @@ export default function MapControls({
                 <DoubleLabelSwitch
                     checked={displayWhoRegions}
                     onChange={(value: boolean) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             displayWhoRegions: value,
                         })
@@ -77,7 +92,7 @@ export default function MapControls({
                     ]}
                     value={locationType}
                     onChange={(value: LocationType) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             locationType: value,
                         })
@@ -95,7 +110,7 @@ export default function MapControls({
                     ]}
                     value={displayKnownFinancialCommitments}
                     onChange={(value: boolean) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             displayKnownFinancialCommitments: value,
                         })

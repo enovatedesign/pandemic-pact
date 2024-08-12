@@ -71,6 +71,9 @@ export default function Map() {
             <MapControls
                 mapControlState={mapControlState}
                 setMapControlState={setMapControlState}
+                setHighlightJointFundedCountries={
+                    setHighlightJointFundedCountries
+                }
                 colourScale={colourScale}
             />
         </div>

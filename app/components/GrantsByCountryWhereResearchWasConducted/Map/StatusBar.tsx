@@ -23,6 +23,8 @@ export default function StatusBar({
         [grantField]: [selectedFeatureProperties.id],
     }
 
+    const allowHighlightingJointFundedCountries = grantField === 'FunderCountry'
+
     let viewButtonHref =
         '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
 
@@ -109,29 +111,32 @@ export default function StatusBar({
                 </div>
             </div>
 
-            <div className="py-2 px-2 flex justify-between items-center">
-                <div className="flex items-center gap-x-4">
-                    <Switch
-                        checked={highlightJointFundedCountries}
-                        onChange={setHighlightJointFundedCountries}
-                        label="Show Joint-funded Countries"
-                        theme="light"
-                    />
-
-                    {shouldShowJointFeaturesModal && (
-                        <JointFeaturesModal
-                            selectedFeatureProperties={
-                                selectedFeatureProperties
-                            }
-                        />
-                    )}
-                </div>
-
+            <div className="py-2 px-2 flex flex-row-reverse justify-between items-center">
                 <Button size="xsmall" href={viewButtonHref}>
-                    {highlightJointFundedCountries
+                    {allowHighlightingJointFundedCountries &&
+                    highlightJointFundedCountries
                         ? 'View Joint-funded Grants'
                         : 'View Grants'}
                 </Button>
+
+                {allowHighlightingJointFundedCountries && (
+                    <div className="flex items-center gap-x-4">
+                        <Switch
+                            checked={highlightJointFundedCountries}
+                            onChange={setHighlightJointFundedCountries}
+                            label="Show Joint-funded Countries"
+                            theme="light"
+                        />
+
+                        {shouldShowJointFeaturesModal && (
+                            <JointFeaturesModal
+                                selectedFeatureProperties={
+                                    selectedFeatureProperties
+                                }
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )
