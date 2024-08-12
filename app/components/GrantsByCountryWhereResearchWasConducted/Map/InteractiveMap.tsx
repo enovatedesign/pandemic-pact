@@ -38,7 +38,7 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
 
     const layer = useMemo(
         () =>
-            new GeoJsonLayer<any>({
+            new GeoJsonLayer({
                 id: 'GeoJsonLayer',
                 data: geojson,
                 filled: true,
