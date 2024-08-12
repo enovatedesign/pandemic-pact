@@ -23,8 +23,12 @@ export default function StatusBar({
         [grantField]: [selectedFeatureProperties.id],
     }
 
-    const viewButtonHref =
+    let viewButtonHref =
         '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
+
+    if (highlightJointFundedCountries) {
+        viewButtonHref += '&jointFunding=only-joint-funded-grants'
+    }
 
     let totalGrants: string
 
