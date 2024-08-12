@@ -66,6 +66,7 @@ export interface SearchFilters {
 export interface SearchRequestBody {
     q: string
     filters: SearchFilters
+    jointFunding: string
 }
 
 const searchParameterSchema: SearchParameterSchema = {
@@ -201,7 +202,8 @@ export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
         searchRequestBody.q !== '' ||
         Object.values(searchRequestBody.filters).some(
             filter => filter?.length > 0,
-        )
+        ) ||
+        searchRequestBody.jointFunding !== 'all-grants'
     )
 }
 
