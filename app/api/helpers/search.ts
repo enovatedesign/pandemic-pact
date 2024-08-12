@@ -153,7 +153,7 @@ export async function validateRequest(
 export function getBooleanQuery(
     q: string,
     filters: SearchFilters,
-    jointFunding: string,
+    jointFunding: string = 'all-grants',
 ) {
     return {
         bool: {
@@ -242,10 +242,11 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
     client: Client,
     q: string,
     filters: SearchFilters,
+    jointFunding: string = 'all-grants',
 ) {
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters)
+    const query = getBooleanQuery(q, filters, jointFunding)
 
     const grantIDs = []
 

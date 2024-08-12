@@ -181,8 +181,8 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
 
     return {
         GrantTitleEng: hit.highlight?.GrantTitleEng[0] || grant.GrantTitleEng,
-        Abstract: hit.highlight?.Abstract[0] || grant.Abstract,
-        LaySummary: (hit.highlight?.LaySummary ?? [])[0] || grant.LaySummary,
+        Abstract: hit.highlight?.Abstract?.[0] || grant.Abstract,
+        LaySummary: hit.highlight?.LaySummary?.[0] || grant.LaySummary,
     }
 }
 
