@@ -16,7 +16,13 @@ export const axisDollarFormatter = (value: number) => {
 }
 
 export const formatId = (id:string) => {
-    const lowerCaseId = id.toLowerCase()
-    const formattedId = lowerCaseId.replace(/\s+/g, '-')
-    return formattedId
+    let lowerCaseId = null
+    let formattedId = null
+    
+    if (id && typeof id === 'string') {
+        lowerCaseId = id.toLowerCase()
+        formattedId = lowerCaseId.replace(/\s+/g, '-')
+    }
+
+    return formattedId ? formattedId : undefined
 }
