@@ -32,16 +32,19 @@ const JumpCardsBlock = ({block}: JumpCardProps) => {
 
         jumpCards.forEach(card => {
             const formattedId = formatId(card.jumpCardId)
-            const element = document.getElementById(formattedId)
-            
-            if (!element) {
-                console.warn(`Element ID: ${formattedId}, does not exist within the page.`);
-                return 
-            } else if (formattedId in elementsObject) {
-                console.warn(`Duplicate ID found: ${formattedId}, jump card destination IDs must be unique within the context of the current page.`)
-                return
-            } else {
-                elementsObject[formattedId] = element
+
+            if (formattedId) {
+                const element = document.getElementById(formattedId)
+                
+                if (!element) {
+                    console.warn(`Element ID: ${formattedId}, does not exist within the page.`);
+                    return 
+                } else if (formattedId in elementsObject) {
+                    console.warn(`Duplicate ID found: ${formattedId}, jump card destination IDs must be unique within the context of the current page.`)
+                    return
+                } else {
+                    elementsObject[formattedId] = element
+                }
             }
         })
 
@@ -53,10 +56,14 @@ const JumpCardsBlock = ({block}: JumpCardProps) => {
                 <ul className="flex flex-wrap justify-center gap-6">
                     {jumpCards.map((card, index: number) => {
                         const {heading, summary, jumpCardId} = card
-                        const id = formatId(jumpCardId)
-
                         const image = card.image[0] ?? null
                         
+                        const id = formatId(jumpCardId)
+
+                        if (!id) {
+                            return
+                        }
+
                         const entry = {
                             url: `#${id}`,
                             title: heading,
