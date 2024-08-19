@@ -52,7 +52,7 @@ const JumpCardsBlock = ({block}: JumpCardProps) => {
     }, [jumpCards])
 
     return (
-            <BlockWrapper options={{ fill: true, bgColourClass: '' }}>
+            <BlockWrapper>
                 <ul className="flex flex-wrap justify-center gap-6">
                     {jumpCards.map((card, index: number) => {
                         const {heading, summary, jumpCardId} = card
@@ -73,7 +73,7 @@ const JumpCardsBlock = ({block}: JumpCardProps) => {
                         return (
                             <li 
                                 key={id}
-                                className="basis-full sm:basis-[calc(50%_-_(theme('spacing.6')/2))] lg:basis-[calc((100%/3)_-_((theme('spacing.6')*2)/3))] 2xl:basis-[calc(20%_-_((theme('spacing.6')*4)/5))]"
+                                className="basis-full sm:basis-[calc(50%_-_(theme('spacing.6')/2))] lg:basis-[calc((100%/3)_-_((theme('spacing.6')*2)/3))] xl:basis-[calc(20%_-_((theme('spacing.6')*4)/5))]"
                             >
                                 {availableElements[id] && (
                                     <Card
