@@ -16,7 +16,7 @@ export default function JointFeaturesModal({
         : []
 
     return (
-        <InfoModal customButtonClasses="align-middle -translate-y-[2px]">
+        <InfoModal>
             <div className="flex flex-col gap-y-4">
                 {properties.map(
                     ({
