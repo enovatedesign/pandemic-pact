@@ -14,3 +14,15 @@ export const dollarValueFormatter = (value: number) => {
 export const axisDollarFormatter = (value: number) => {
     return '$' + millify(value, {precision: 0})
 }
+
+export const formatId = (id:string) => {
+    let lowerCaseId = null
+    let formattedId = null
+    
+    if (id && typeof id === 'string') {
+        lowerCaseId = id.toLowerCase()
+        formattedId = lowerCaseId.replace(/\s+/g, '-')
+    }
+
+    return formattedId ? formattedId : undefined
+}

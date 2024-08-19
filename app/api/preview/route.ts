@@ -7,21 +7,21 @@ export async function GET(req: NextRequest) {
         'x-craft-live-preview'
     )
     const token = req.nextUrl.searchParams.get('token')
-    const slug = req.nextUrl.searchParams.get('uri')
+    const uri = req.nextUrl.searchParams.get('uri')
 
-    if (!craftLivePreview || !slug) {
+    if (!craftLivePreview || !uri) {
         return unauthorized()
     }
 
     const data = await GraphQL(
         `
-            query ($slug: [String]) {
-              entry: entry(status: "enabled", slug: $slug) {
-                slug
+            query ($uri: [String]) {
+              entry: entry(status: "enabled", uri: $uri) {
+                uri
               }
             }
         `,
-        { slug },
+        { uri },
         token ?? undefined
     )
 
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     return new Response(null, {
         status: 307,
         headers: {
-            Location: `/preview/${data.entry.slug}?token=${token}`,
+            Location: `/preview/${data.entry.uri}?token=${token}`,
         },
     })
 }

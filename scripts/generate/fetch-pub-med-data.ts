@@ -13,7 +13,7 @@ export default async function () {
 
     if (process.env.SKIP_FETCHING_PUBMED_DATA) {
         warn(
-            'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present'
+            'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present',
         )
         return
     }
@@ -23,7 +23,7 @@ export default async function () {
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(grantsDistPathname)
 
     const publications = await getPublications(
-        sourceGrants.map(grant => grant.PubMedGrantId as string)
+        sourceGrants.map(grant => grant.PubMedGrantId as string),
     )
 
     const grants = sourceGrants.map((grant: Grant) => {
@@ -50,7 +50,7 @@ async function getPublications(pubMedGrantIds: string[]) {
 
     if (!cacheResponse.ok && cacheResponse.status !== 404) {
         throw new Error(
-            `Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`
+            `Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`,
         )
     }
 
@@ -62,7 +62,7 @@ async function getPublications(pubMedGrantIds: string[]) {
 
             // check if all grant IDs are in the cache
             const allIdsInCache = grantIds.every(id =>
-                cachedGrantIds.includes(id)
+                cachedGrantIds.includes(id),
             )
 
             // check expired date has not passed
@@ -76,7 +76,7 @@ async function getPublications(pubMedGrantIds: string[]) {
     }
 
     info(
-        'Cached PubMed data is not available or has expired, fetching new data via API'
+        'Cached PubMed data is not available or has expired, fetching new data via API',
     )
 
     // Fetch new PubMed data for each Grant ID
@@ -103,8 +103,8 @@ async function getPublications(pubMedGrantIds: string[]) {
 
     info(
         `Stored PubMed data in cache file ${cacheFilename} until ${new Date(
-            expiresAt
-        ).toLocaleString()}`
+            expiresAt,
+        ).toLocaleString()}`,
     )
 
     return publications
@@ -121,9 +121,14 @@ function idIsValidPubMedGrantId(id?: string): boolean {
 async function getPubMedLinks(pubMedGrantId: string) {
     const query = encodeURIComponent(`GRANT_ID:"${pubMedGrantId}"`)
 
-    const data = await fetch(
-        `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
-    ).then(response => response.json())
+    const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
+
+    const data = await fetch(url).then(response => response.json())
+
+    if (!data.resultList) {
+        info(`No PubMed resultList found in response from ${url}`)
+        return []
+    }
 
     return data.resultList.result
         .map((result: any) =>
@@ -135,7 +140,7 @@ async function getPubMedLinks(pubMedGrantId: string) {
                 'doi',
                 'pubYear',
                 'journalInfo.journal.title',
-            ])
+            ]),
         )
         .map((result: any) => ({
             ...result,

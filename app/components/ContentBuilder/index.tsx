@@ -24,6 +24,7 @@ import ListPublicationsBlock from "./Blocks/ListPublicationsBlock";
 import ListOutbreaksBlock from "./Blocks/ListOutbreaksBlock";
 import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock";
 import BlockIndexWrapper from "./BlockIndexWrapper"
+import JumpCardsBlock from "./Blocks/JumpCards";
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -50,6 +51,7 @@ const blocks: any = {
 	listPublications: ListPublicationsBlock,
 	listOutbreaks: ListOutbreaksBlock,
 	featuredPublication: FeaturedPublicationBlock,
+	jumpCards: JumpCardsBlock
 };
 
 const Block = (props: any) => {

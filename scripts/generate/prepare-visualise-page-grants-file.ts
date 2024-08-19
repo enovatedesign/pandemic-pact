@@ -38,6 +38,8 @@ export default function () {
             'ResearchLocationCountry',
             'ResearchCat',
             'ResearchSubcat',
+            'MPOXResearchPriority',
+            'MPOXResearchSubPriority',
             'Tags',
         ])
     })

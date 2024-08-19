@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react';
+import React from 'react'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import Layout from '../components/Layout'
 import FilterSidebar from '../components/FilterSidebar'
+import GrantsByMpoxResearchPriorityCard from '../components/GrantsByMpoxResearchPriority'
 import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
@@ -31,11 +32,12 @@ interface VisualisationPageProps {
     showSummary?: boolean
     outbreak?: boolean
     fixedDiseaseOptions?: {
-        label: string 
+        label: string
         value: string
         isFixed?: boolean
-    }[],
-    children?: React.ReactNode,
+    }[]
+    children?: React.ReactNode
+    diseaseLabel?: string
 }
 export default function VisualisePageClient({
     title,
@@ -43,15 +45,14 @@ export default function VisualisePageClient({
     showSummary = true,
     outbreak = false,
     fixedDiseaseOptions,
-    children
+    children,
+    diseaseLabel,
 }: VisualisationPageProps) {
     const tooltipRef = useRef<TooltipRefProps>(null)
-    
+
     const [completeDataset, setCompleteDataset] = useState([])
 
     const [loadingDataset, setLoadingDataset] = useState(true)
-
-    const hasChildren = React.Children.toArray(children).length > 0
 
     useEffect(() => {
         fetch('/data/grants.json')
@@ -120,7 +121,13 @@ export default function VisualisePageClient({
                 </dl>
             ),
         }
-    }, [selectedFilters, completeDataset, globallyFilteredDataset, loadingDataset, fixedDiseaseOptions])
+    }, [
+        selectedFilters,
+        completeDataset,
+        globallyFilteredDataset,
+        loadingDataset,
+        fixedDiseaseOptions,
+    ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
 
@@ -172,39 +179,39 @@ export default function VisualisePageClient({
                     sidebar={sidebar}
                     outbreak={outbreak}
                 >
-                    {!outbreak && (
-                        <>
-                            <VisualisationJumpMenu dropdownVisible={dropdownVisible}/>
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} />
 
-                            <VisualisationCardLinks />
-                        </>
-                    )}
-
-                    {hasChildren && (
-                        <div className="mx-auto container flex justify-center mt-6 lg:mt-12">
-                            <Button
-                                size="small" 
-                                colour="primary"
-                                href="#visualisations-wrapper"
-                                customClasses="flex items-center gap-1"
-                            >
-                                Jump to visualisations
-                                <ChevronDownIcon className="size-6" />
-                            </Button>
-                        </div>
-                    )}
+                    <VisualisationCardLinks
+                        outbreak={outbreak}
+                        disease={diseaseLabel}
+                    />
 
                     {children}
 
-                    <div className="relative z-10 mx-auto my-6 lg:my-12 lg:container" id="visualisations-wrapper">
+                    <div
+                        className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
+                        id="visualisations-wrapper"
+                    >
                         <div className={`${gridClasses} mt-6`}>
                             <div id="disease" className={gridClasses}>
-                                <GrantsByDiseaseCard outbreak={outbreak}/>
+                                <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            <div id="research-category" className={gridClasses}>
-                                <GrantsByResearchCategoryCard />
-                            </div>
+                            {outbreak ? (
+                                <div
+                                    id="mpox-research-priorities"
+                                    className={gridClasses}
+                                >
+                                    <GrantsByMpoxResearchPriorityCard />
+                                </div>
+                            ) : (
+                                <div
+                                    id="research-category"
+                                    className={gridClasses}
+                                >
+                                    <GrantsByResearchCategoryCard />
+                                </div>
+                            )}
 
                             <div
                                 id="geographical-distribution"

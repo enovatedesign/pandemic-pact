@@ -206,7 +206,7 @@ export default function SearchInput({
                             <LoadingSpinner className="w-5 h-5 animate-spin shrink-0" />
                         ) : (
                             <span className="px-2 bg-primary-lightest rounded-lg font-bold text-secondary">
-                                {totalHits}
+                                {totalHits.toLocaleString()}
                             </span>
                         )}
                     </p>
