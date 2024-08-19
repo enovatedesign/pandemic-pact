@@ -17,45 +17,42 @@ export default function JointFeaturesModal({
 
     return (
         <InfoModal>
-            <div className="flex flex-col gap-y-4">
-                {properties.map(
-                    ({
-                        id,
-                        name,
-                        totalGrants,
-                        totalAmountCommitted,
-                        totalJointGrants,
-                        totalJointAmountCommitted,
-                    }) => (
-                        <div key={id}>
-                            <p className="text-sm font-semibold !m-0 !mb-2">
-                                {name}
-                            </p>
+            <table>
+                <thead className='border-b border-brand-grey-200'>
+                    <tr>
+                        <th className="text-left font-bold">Name</th>
+                        <th className="text-left font-bold">Grants (Joint / Total)</th>
+                        <th className="text-left font-bold">Known Financial Commitments (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {properties.map(
+                        ({
+                            id,
+                            name,
+                            totalGrants,
+                            totalAmountCommitted,
+                            totalJointGrants,
+                            totalJointAmountCommitted,
+                        }) => (
+                            <tr key={id} className="border-b border-brand-grey-200 py-2 px-4">
+                                <td className="text-secondary">
+                                    {name}
+                                </td>
 
-                            <div className="flex items-center justify-between space-x-8">
-                                <p className="!m-0 text-sm">Grants</p>
-                                <p className="!m-0 text-sm">
+                                <td className="text-secondary">
                                     {totalJointGrants} / {totalGrants}
-                                </p>
-                            </div>
+                                </td>
+                                
+                                <td className="text-secondary">
+                                    {dollarValueFormatter(totalJointAmountCommitted || 0)} / {dollarValueFormatter(totalAmountCommitted)}
+                                </td>
+                            </tr>
+                        )
+                    )}
+                </tbody>
+            </table>
 
-                            <div className="flex items-center justify-between space-x-8">
-                                <p className="!m-0 text-sm">
-                                    Known Financial Commitments (USD)
-                                </p>
-
-                                <p className="!m-0 text-sm">
-                                    {dollarValueFormatter(
-                                        totalJointAmountCommitted || 0,
-                                    )}{' '}
-                                    /{' '}
-                                    {dollarValueFormatter(totalAmountCommitted)}
-                                </p>
-                            </div>
-                        </div>
-                    ),
-                )}
-            </div>
         </InfoModal>
     )
 }
