@@ -42,9 +42,11 @@ export default function Header({ className, showMobileNav }: Props ) {
             >   
                 {link.label}
                 {outbreaks && (
-                    <span className="relative flex size-3 ml-0.5 items-center justify-center">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
-                        <span className="relative inline-flex rounded-full size-2.5 bg-brand-red-600"></span>
+                    <span className='relative ml-1 px-2 flex items-center rounded-full overflow-hidden'>
+                        <span className='absolute w-full h-full inset-0 bg-brand-red animate-pulse'></span>
+                        <span className='relative z-10 text-xs uppercase'>
+                            New
+                        </span>
                     </span>
                 )}
             </Link>
