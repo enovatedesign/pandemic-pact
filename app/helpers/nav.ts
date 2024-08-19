@@ -53,6 +53,10 @@ export const links = {
                 label: 'Our Data',
                 href: '/about/our-data',
             },
+            {
+                label: 'Use Cases',
+                href: '/about/use-cases'
+            }
         ],
     },
 }
