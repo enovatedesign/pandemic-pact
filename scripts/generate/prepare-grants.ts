@@ -109,6 +109,11 @@ export default function () {
             }
         }
 
+        // If the grant_title_eng field is empty copy the grant_title_original field into it
+        if (!rawGrant?.grant_title_eng && rawGrant?.grant_title_original) {
+            rawGrant.grant_title_eng = rawGrant.grant_title_original
+        }
+
         return {
             ...convertedKeysGrantData,
             ...customFields,
