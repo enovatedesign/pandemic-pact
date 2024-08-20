@@ -10,15 +10,22 @@ export default function InfoModal({
     children, 
     customButton = null, 
     customButtonClasses = '',
-    marginX = true
+    marginX = true,
+    customCloseButton = null,
 }: {
     children: React.ReactNode, 
     customButton?: React.ReactNode, 
     customButtonClasses?: string, 
     marginX?: boolean
+    customCloseButton?: React.ReactNode
 }) {
 
     const [isOpen, setIsOpen] = useState(false)
+
+    const dialogPanelClasses = [
+        'grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
+        customCloseButton ? 'relative' : 'space-y-6'
+    ].filter(Boolean).join(' ')
 
     return (
         <>
@@ -39,21 +46,28 @@ export default function InfoModal({
                 className="relative z-[80]"
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6 overflow-scroll">
-                    <Dialog.Panel className="grid gap-y-6 w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll">
+                    <Dialog.Panel className={dialogPanelClasses}>
                         
                         <div className={defaultProseClasses({ marginX: marginX })}>
                             {children}
                         </div>
 
-                        <div className="flex justify-end">
-                            <Button
-                                onClick={() => setIsOpen(false)}
-                                customClasses="self-end"
-                                size="small"
-                            >
-                                Close
-                            </Button>
-                        </div>
+
+                        {customCloseButton ? (
+                            <button onClick={() => setIsOpen(false)}>
+                                {customCloseButton}
+                            </button>
+                        ) : (
+                            <div className="flex justify-end">
+                                <Button
+                                    onClick={() => setIsOpen(false)}
+                                    customClasses="self-end"
+                                    size="small"
+                                >
+                                    Close
+                                </Button>
+                            </div>
+                        )}
                     </Dialog.Panel>
                 </div>
             </Dialog>
