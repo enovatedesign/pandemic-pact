@@ -12,19 +12,21 @@ export default function InfoModal({
     customButtonClasses = '',
     marginX = true,
     customCloseButton = null,
+    removeSpaceY = false
 }: {
     children: React.ReactNode, 
     customButton?: React.ReactNode, 
     customButtonClasses?: string, 
     marginX?: boolean
     customCloseButton?: React.ReactNode
+    removeSpaceY?: boolean
 }) {
 
     const [isOpen, setIsOpen] = useState(false)
 
     const dialogPanelClasses = [
-        'grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
-        customCloseButton ? 'relative' : 'space-y-6'
+        'relative grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
+        !removeSpaceY && 'space-y-6'
     ].filter(Boolean).join(' ')
 
     return (
