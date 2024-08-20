@@ -82,6 +82,11 @@ export default function () {
 
         prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
 
+        // If the grant_title_eng field is empty or undefined, copy the grant_title_original field into it
+        if (!rawGrant?.grant_title_eng && rawGrant?.grant_title_original) {
+            rawGrant.grant_title_eng = rawGrant.grant_title_original;
+        }
+
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
             ...numericFieldValues,
@@ -107,11 +112,6 @@ export default function () {
                     rawGrant.publication_year_of_award
                 )
             }
-        }
-
-        // If the grant_title_eng field is empty copy the grant_title_original field into it
-        if (!rawGrant?.grant_title_eng && rawGrant?.grant_title_original) {
-            rawGrant.grant_title_eng = rawGrant.grant_title_original
         }
 
         return {
