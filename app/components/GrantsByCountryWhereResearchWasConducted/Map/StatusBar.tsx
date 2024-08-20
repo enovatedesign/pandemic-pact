@@ -113,17 +113,17 @@ export default function StatusBar({
                             </p>
                         </div>
 
-                        <div className='h-[1px] w-full border-b border-dashed border-brand-grey-300'></div>
+                        <div className='hidden sm:block h-[1px] w-full border-b border-dashed border-brand-grey-300'></div>
 
                         <div className="flex justify-between items-center gap-x-2">
-                            <p className="font-medium tabular-nums text-right whitespace-nowrap text-brand-grey-700">
+                            <p className="font-medium tabular-nums text-right sm:whitespace-nowrap text-brand-grey-700">
                                 {totalAmountCommitted}
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div className="px-4 flex items-center justify-between">
+                <div className="px-4 flex max-sm:flex-col max-sm:space-y-2 max-sm:items-center sm:flex-row sm:justify-between">
 
                     {allowHighlightingJointFundedCountries && (
                         <div className="flex items-center gap-x-2">
@@ -145,7 +145,7 @@ export default function StatusBar({
                         </div>
                     )}
 
-                    <Button size="xsmall" href={viewButtonHref} customClasses='ml-auto'>
+                    <Button size="xsmall" href={viewButtonHref} customClasses='md:ml-auto'>
                         {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
                             'View Joint-funded Grants' :
                             'View Grants'
