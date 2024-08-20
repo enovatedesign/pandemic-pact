@@ -110,6 +110,9 @@ export default function ExportImageMenuItem({
             }
         }
 
+        // We have to manually redraw the DeckGL canvas before taking the
+        // screenshot, otherwise the map viz appears blank in the resulting
+        // image. See https://github.com/visgl/deck.gl/issues/8896
         deckGlRef?.current?.deck?.redraw('screenshot')
 
         html2canvas(element, {
