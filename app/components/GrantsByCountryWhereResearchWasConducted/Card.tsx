@@ -15,7 +15,7 @@ export default function GrantsByCountryWhereResearchWasConductedCard() {
                 icon: GlobeIcon,
                 label: 'Map',
             },
-            content: <Map deckGlRef={deckGlRef} />,
+            content: <Map />,
         },
         {
             tab: {
