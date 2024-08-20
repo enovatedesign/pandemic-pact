@@ -145,11 +145,11 @@ export default function StatusBar({
                         </div>
                     )}
 
-                    <Button size="xsmall" href={viewButtonHref}>
-                        {allowHighlightingJointFundedCountries &&
-                        highlightJointFundedCountries
-                            ? 'View Joint-funded Grants'
-                            : 'View Grants'}
+                    <Button size="xsmall" href={viewButtonHref} customClasses='ml-auto'>
+                        {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
+                            'View Joint-funded Grants' :
+                            'View Grants'
+                        }
                     </Button>
                     
                 </div>
