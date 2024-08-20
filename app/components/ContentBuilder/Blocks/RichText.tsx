@@ -22,7 +22,7 @@ export default function RichTextBlock({ block, firstBlock, lastBlock }: Props) {
 	if (text && textAlign) {
 		const blockClasses = [
 			"text-" + textAlign,
-			defaultProseClasses,
+			defaultProseClasses({ }),
 		].join(" ");
 
 		return (

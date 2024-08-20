@@ -1,4 +1,10 @@
-export const defaultProseClasses = [
+export const defaultProseClasses = ({ 
+    marginX = true, 
+    customClasses = ''
+}: { 
+    marginX?: boolean, 
+    customClasses?: string 
+}) => [
     'text-left',
     'prose',
     'lg:prose-lg',
@@ -7,5 +13,6 @@ export const defaultProseClasses = [
     'prose-a:text-secondary',
     'prose-headings:text-brand-teal-richText-h2',
     'prose-gray',
-    'mx-auto',
+    marginX && 'mx-auto',
+    customClasses
 ].join(' ')

@@ -6,7 +6,18 @@ import { InformationCircleIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import { defaultProseClasses } from '../helpers/prose-classes'
 
-export default function InfoModal({children, customButton = null, customButtonClasses = ''}: {children: React.ReactNode, customButton?: React.ReactNode, customButtonClasses?: string}) {
+export default function InfoModal({
+    children, 
+    customButton = null, 
+    customButtonClasses = '',
+    marginX = true
+}: {
+    children: React.ReactNode, 
+    customButton?: React.ReactNode, 
+    customButtonClasses?: string, 
+    marginX?: boolean
+}) {
+
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -29,7 +40,10 @@ export default function InfoModal({children, customButton = null, customButtonCl
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6 overflow-scroll">
                     <Dialog.Panel className="grid gap-y-6 w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll">
-                        <div className={defaultProseClasses}>{children}</div>
+                        
+                        <div className={defaultProseClasses({ marginX: marginX })}>
+                            {children}
+                        </div>
 
                         <div className="flex justify-end">
                             <Button
