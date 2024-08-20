@@ -1,7 +1,8 @@
 import Button from './Button'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { PhotographIcon } from '@heroicons/react/solid'
 import html2canvas from 'html2canvas'
+import { DeckGLRefContext } from '../../helpers/deck-gl'
 
 interface Props {
     chartSelector: string
@@ -13,6 +14,8 @@ export default function ExportImageMenuItem({
     imageFilename,
 }: Props) {
     const [exportingImage, setExportingImage] = useState(false)
+
+    const deckGlRef = useContext(DeckGLRefContext)
 
     const exportImage = () => {
         if (exportingImage) {
@@ -26,7 +29,7 @@ export default function ExportImageMenuItem({
 
         if (element === null) {
             console.error(
-                `ExportToPngButton: could not find element with selector ${chartSelector}`
+                `ExportToPngButton: could not find element with selector ${chartSelector}`,
             )
             return
         }
@@ -37,21 +40,29 @@ export default function ExportImageMenuItem({
         const onclone = (document: Document, element: HTMLElement) => {
             // Get the inner container of the visualisation card
             const vizWrapper = element.getElementsByClassName(
-                'visualisation-card-wrapper'
+                'visualisation-card-wrapper',
             )[0]
-            
-            const numberElements = vizWrapper.getElementsByClassName('total-grants-number')
-            
-            const dollarAmountElements = vizWrapper.getElementsByClassName('dollar-amount-text')
-            
-            const barChartCategoryLabelElements = vizWrapper.getElementsByClassName('bar-chart-category-label')
-            
-            const imageLegendListItems = vizWrapper.getElementsByClassName('image-legend-list-item')
-            const imageLegendSvgWrappers = vizWrapper.getElementsByClassName('image-legend-svg-wrapper')
-            
+
+            const numberElements = vizWrapper.getElementsByClassName(
+                'total-grants-number',
+            )
+
+            const dollarAmountElements =
+                vizWrapper.getElementsByClassName('dollar-amount-text')
+
+            const barChartCategoryLabelElements =
+                vizWrapper.getElementsByClassName('bar-chart-category-label')
+
+            const imageLegendListItems = vizWrapper.getElementsByClassName(
+                'image-legend-list-item',
+            )
+            const imageLegendSvgWrappers = vizWrapper.getElementsByClassName(
+                'image-legend-svg-wrapper',
+            )
+
             if (vizWrapper === undefined) {
                 console.error(
-                    'ExportToPngButton: could not find visualisation card wrapper'
+                    'ExportToPngButton: could not find visualisation card wrapper',
                 )
                 return
             }
@@ -60,36 +71,35 @@ export default function ExportImageMenuItem({
             vizWrapper.classList.remove(
                 'border-y-2',
                 'lg:border-2',
-                'lg:rounded-xl'
+                'lg:rounded-xl',
             )
 
             // Reveal the hidden visualisation card footer
             vizWrapper
                 .getElementsByClassName('image-export-footer')[0]
                 .classList.remove('hidden')
-            
-        
+
             for (let i = 0; i < numberElements.length; i++) {
                 numberElements[i].classList.add('-translate-y-[6px]')
             }
-            
+
             for (let i = 0; i < dollarAmountElements.length; i++) {
                 dollarAmountElements[i].classList.add('-translate-y-[6px]')
             }
-            
+
             for (let i = 0; i < barChartCategoryLabelElements.length; i++) {
                 barChartCategoryLabelElements[i].classList.add('pb-2')
             }
-            
+
             // Reveal the hidden visualisation legend (if it exists)
             const imageExportLegend = vizWrapper.getElementsByClassName(
-                'image-export-legend'
+                'image-export-legend',
             )[0]
-                
+
             if (imageExportLegend) {
                 imageExportLegend.classList.remove('hidden')
             }
-            
+
             for (let i = 0; i < imageLegendListItems.length; i++) {
                 imageLegendListItems[i].classList.add('-translate-y-[10px]')
             }
@@ -99,6 +109,8 @@ export default function ExportImageMenuItem({
                 imageLegendSvgWrappers[i].classList.remove('mt-[5px]')
             }
         }
+
+        deckGlRef?.current?.deck?.redraw('screenshot')
 
         html2canvas(element, {
             ignoreElements,
