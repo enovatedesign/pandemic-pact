@@ -17,11 +17,13 @@ const EntryTypes: EntryTemplateAndQuery = {
     templates: {
         page: PageTemplate,
         testPage: PageTemplate,
+        internalPublication: PageTemplate,
         outbreak: OutbreakTemplate,
     },
     queries: {
         page: PageQuery,
         testPage: PageQuery,
+        internalPublication: PageQuery,
         outbreak: OutbreakQuery,
     }
 }
