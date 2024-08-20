@@ -44,7 +44,7 @@ export default function Header({ className, showMobileNav }: Props ) {
                 {outbreaks && (
                     <span className='relative ml-1 px-2 flex items-center rounded-full overflow-hidden'>
                         <span className='absolute w-full h-full inset-0 bg-brand-red animate-pulse'></span>
-                        <span className='relative z-10 text-xs uppercase'>
+                        <span className='relative z-10 text-xs uppercase text-white'>
                             New
                         </span>
                     </span>
