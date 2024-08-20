@@ -1,10 +1,11 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
 import { ColorTranslator } from 'colortranslator'
 import type { FeatureProperties } from './types'
+import { DeckGLRefContext } from '../../../helpers/deck-gl'
 
 interface Props {
     geojson: any
@@ -22,6 +23,8 @@ export default function InteractiveMap({
     onMouseLeave,
     onClick,
 }: Props) {
+    const deckGlRef = useContext(DeckGLRefContext)
+
     const onLayerClick = useCallback(
         (info: PickingInfo) => {
             onClick(info.object?.properties ?? null)
@@ -129,6 +132,11 @@ export default function InteractiveMap({
             }}
             layers={[layer]}
             getCursor={getCursor}
+            ref={ref => {
+                if (deckGlRef) {
+                    deckGlRef.current = ref
+                }
+            }}
         />
     )
 }
