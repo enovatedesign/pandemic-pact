@@ -1,6 +1,7 @@
+import { ReactNode } from "react"
 import Image from "next/image";
 import BlockWrapper from "../BlockWrapper"
-import { ExternalLinkIcon } from "@heroicons/react/outline"
+import { ExternalLinkIcon, ChevronRightIcon } from "@heroicons/react/outline"
 import dayjs from 'dayjs'
 import Card from "../Common/Card";
 
@@ -21,6 +22,8 @@ interface Props {
                 width: number,
             }[],
             publicationType: string,
+			typeHandle: string,
+            uri: string,
         }[],
     }
 	firstBlock: boolean
@@ -49,15 +52,37 @@ export default function FeaturedPublicationBlock({ block, firstBlock, lastBlock 
 
 						<ul className={cardBlock ? 'grid gap-6 md:grid-cols-3' : 'flex flex-col gap-y-6'}>
 							{publications.map((publication, index: number) => {
+
+								let cardData: any = {}
+								let icon: ReactNode
+
+								if (publication.typeHandle === 'externalPublication') {
 								
-								const cardData = {
-									title: publication.title,
-									imageLabel: publication.publicationType,
-									summary: publication.summary,
-									summaryClasses: '',
-									image: publication.thumbnailImage[0],
-									url: publication.externalLink,
-									postDate: publication.postDate,
+									cardData = {
+										title: publication.title,
+										imageLabel: publication.publicationType,
+										summary: publication.summary,
+										summaryClasses: '',
+										image: publication.thumbnailImage[0],
+										url: publication.externalLink,
+										postDate: publication.postDate,
+									}
+
+									icon = <ExternalLinkIcon className="w-6 h-6" />
+
+								} else {
+
+									cardData = {
+										title: publication.title,
+										imageLabel: 'Pandemic PACT',
+										summary: publication.summary,
+										summaryClasses: '',
+										url: publication.uri,
+										thumbnailImage: publication.thumbnailImage[0],
+										postDate: publication.postDate,
+									}
+
+									icon = <ChevronRightIcon className="w-6 h-6" />
 								}
 								
 								const hoverClasses = [
@@ -101,7 +126,7 @@ export default function FeaturedPublicationBlock({ block, firstBlock, lastBlock 
 
 													<div className="sm:col-span-2 lg:col-span-3 flex justify-center items-center">
 
-														<div className="flex flex-col gap-4 p-6 lg:p-10 h-full">
+														<div className="flex flex-col gap-4 p-6 lg:p-10 h-full w-full">
 
 															<h2 className="text-secondary text-xl md:text-2xl">
 																{cardData.title}
@@ -120,12 +145,12 @@ export default function FeaturedPublicationBlock({ block, firstBlock, lastBlock 
 																<div className="mt-auto self-end relative h-12 w-12" aria-hidden="true">
 																	<div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
 																		<span>
-																			<ExternalLinkIcon className="w-6 h-6" />
+																			{icon}
 																		</span>
 																	</div>
 																	<div className="absolute inset-0 rounded-full bg-primary flex justify-center items-center p-4 transition-all duration-700 ease-in-out group-hover:[transform:rotateY(180deg)] [backface-visibility:hidden] text-white">
 																		<span>
-																			<ExternalLinkIcon className="w-6 h-6" />
+																			{icon}
 																		</span>
 																	</div>
 																</div>
@@ -140,7 +165,7 @@ export default function FeaturedPublicationBlock({ block, firstBlock, lastBlock 
 											<Card 
 												entry={cardData}  
 												image={cardData.image}
-												animatedIcon={<ExternalLinkIcon className="w-6 h-6" />}
+												animatedIcon={icon}
 											/>
 										)}	
 									</li>
