@@ -35,7 +35,7 @@ export default function FilterSidebar({
     let standardFilters = filters.filter(f => !f.advanced)
     const advancedFilters = filters.filter(f => f.advanced)
     
-    // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
+    // If fixed disease options exists, modify standard filters to remove 'Pathogen'
     // The Disease filter must remain to allow maniupulation of this field within the multi select
     if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
         standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
