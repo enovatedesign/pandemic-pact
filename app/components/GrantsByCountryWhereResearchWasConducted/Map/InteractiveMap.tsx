@@ -5,6 +5,7 @@ import { LinearInterpolator, OrthographicView } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
 import { ColorTranslator } from 'colortranslator'
 import type { FeatureProperties } from './types'
+import type { MutableDeckGlRefObject } from '../../../helpers/deck-gl'
 
 interface Props {
     geojson: any
@@ -14,6 +15,7 @@ interface Props {
     ) => void
     onMouseLeave: () => void
     onClick: (properties: FeatureProperties) => void
+    deckGlRef: MutableDeckGlRefObject
 }
 
 export default function InteractiveMap({
@@ -21,6 +23,7 @@ export default function InteractiveMap({
     onMouseEnterOrMove,
     onMouseLeave,
     onClick,
+    deckGlRef,
 }: Props) {
     const onLayerClick = useCallback(
         (info: PickingInfo) => {
@@ -129,6 +132,9 @@ export default function InteractiveMap({
             }}
             layers={[layer]}
             getCursor={getCursor}
+            ref={ref => {
+                deckGlRef.current = ref
+            }}
         />
     )
 }

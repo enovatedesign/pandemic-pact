@@ -7,8 +7,13 @@ import MapControls from './MapControls'
 import TooltipContent from './TooltipContent'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
 import type { FeatureProperties, MapControlState } from './types'
+import type { MutableDeckGlRefObject } from '../../../helpers/deck-gl'
 
-export default function Map() {
+interface Props {
+    deckGlRef: MutableDeckGlRefObject
+}
+
+export default function Map({ deckGlRef }: Props) {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
     const { tooltipRef } = useContext(TooltipContext)
@@ -68,6 +73,7 @@ export default function Map() {
                     onMouseEnterOrMove={onMouseEnterOrMove}
                     onMouseLeave={onMouseLeave}
                     onClick={onClick}
+                    deckGlRef={deckGlRef}
                 />
             </div>
 
