@@ -18,7 +18,7 @@ export default async function () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/48623476?private_link=74c1a289a1a1de9d66f5',
+        'https://figshare.com/ndownloader/files/48682318?private_link=74c1a289a1a1de9d66f5',
         'grants.json',
     )
 }
