@@ -8,7 +8,7 @@ export default async function () {
     fs.emptyDirSync('data/download')
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/47280502?private_link=74c1a289a1a1de9d66f5',
+        'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/dictionary-2024-08-20.csv',
         'dictionary.json',
     )
 
