@@ -57,6 +57,20 @@ export function availableFilters() {
         },
 
         {
+            label: 'Pandemic-prone influenza H antigen',
+            field: 'InfluenzaA',
+            subFilters: [
+                { label: 'H1 Subtype', field: 'InfluenzaH1' },
+                { label: 'H2 Subtype', field: 'InfluenzaH2' },
+                { label: 'H3 Subtype', field: 'InfluenzaH3' },
+                { label: 'H5 Subtype', field: 'InfluenzaH5' },
+                { label: 'H6 Subtype', field: 'InfluenzaH6' },
+                { label: 'H7 Subtype', field: 'InfluenzaH7' },
+                { label: 'H10 Subtype', field: 'InfluenzaH10' },
+            ],
+        },
+
+        {
             label: 'Study Subject',
             field: 'StudySubject',
             advanced: true,
@@ -93,7 +107,7 @@ export function emptyFilters() {
         availableFilters().map(({ field }) => [
             field,
             { values: [], excludeGrantsWithMultipleItems: false },
-        ])
+        ]),
     )
 }
 
@@ -121,7 +135,7 @@ export function filterGrants(grants: any, filters: any) {
 
             // if the grant has multiple values in the field, check if any of them match any of the filter values
             return grant[key].some((element: any) => values.includes(element))
-        })
+        }),
     )
 }
 
@@ -145,4 +159,3 @@ export const SidebarStateContext = createContext<{
 }>({
     sidebarOpen: false,
 })
-
