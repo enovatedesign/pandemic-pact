@@ -14,7 +14,7 @@ interface FilterSidebarProps {
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
     fixedDiseaseOptions?: {
-        label: string 
+        label: string
         value: string
         isFixed?: boolean
     }[]
@@ -26,7 +26,7 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    fixedDiseaseOptions
+    fixedDiseaseOptions,
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
@@ -34,7 +34,7 @@ export default function FilterSidebar({
     const filters = availableFilters()
     let standardFilters = filters.filter(f => !f.advanced)
     const advancedFilters = filters.filter(f => f.advanced)
-    
+
     // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
     // The Disease filter must remain to allow maniupulation of this field within the multi select
     if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
@@ -51,7 +51,7 @@ export default function FilterSidebar({
 
     const setExcludeGrantsWithMultipleItemsInField = (
         field: keyof Filters,
-        value: boolean
+        value: boolean,
     ) => {
         let selectedOptions: Filters = { ...selectedFilters }
 
@@ -59,7 +59,7 @@ export default function FilterSidebar({
 
         setSelectedFilters(selectedOptions)
     }
-    
+
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
@@ -69,9 +69,7 @@ export default function FilterSidebar({
                             <span className="text-xs font-bold text-gray-300 uppercase">
                                 Loading Dataset
                             </span>
-                            <LoadingSpinner
-                                className="size-9 animate-spin shrink-0 text-primary"
-                            />
+                            <LoadingSpinner className="size-9 animate-spin shrink-0 text-primary" />
                         </>
                     ) : (
                         <>
@@ -174,12 +172,12 @@ interface filterBlockProps {
     setSelectedOptions: (field: keyof Filters, options: string[]) => void
     setExcludeGrantsWithMultipleItemsInField: (
         field: keyof Filters,
-        value: boolean
+        value: boolean,
     ) => void
     fixedDiseaseOptions?: {
         label: string
         value: string
-        isFixed?: boolean 
+        isFixed?: boolean
     }[]
 }
 
@@ -188,13 +186,11 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    fixedDiseaseOptions
+    fixedDiseaseOptions,
 }: filterBlockProps) => {
-    
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
-                
                 let srOnlyText = null
 
                 if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
@@ -202,20 +198,23 @@ const FilterBlock = ({
                     if (fixedDiseaseOptions.length === 1) {
                         srOnlyText += ` is: ${fixedDiseaseOptions[0].label}`
                     } else {
-                        srOnlyText += `s are: ${fixedDiseaseOptions.map(disease => disease.label).join(', ')}`
+                        srOnlyText += `s are: ${fixedDiseaseOptions
+                            .map(disease => disease.label)
+                            .join(', ')}`
                     }
                 }
 
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
-
                         {fixedDiseaseOptions && label === 'Disease' ? (
                             <>
                                 <p className="sr-only">{srOnlyText}</p>
 
                                 <MultiSelect
                                     field={field}
-                                    selectedOptions={selectedFilters[field].values}
+                                    selectedOptions={
+                                        selectedFilters[field].values
+                                    }
                                     setSelectedOptions={options =>
                                         setSelectedOptions(field, options)
                                     }
@@ -229,7 +228,9 @@ const FilterBlock = ({
 
                                 <MultiSelect
                                     field={field}
-                                    selectedOptions={selectedFilters[field].values}
+                                    selectedOptions={
+                                        selectedFilters[field].values
+                                    }
                                     setSelectedOptions={options =>
                                         setSelectedOptions(field, options)
                                     }
@@ -246,7 +247,7 @@ const FilterBlock = ({
                                 onChange={value =>
                                     setExcludeGrantsWithMultipleItemsInField(
                                         field,
-                                        value
+                                        value,
                                     )
                                 }
                                 label={excludeGrantsWithMultipleItems.label}
