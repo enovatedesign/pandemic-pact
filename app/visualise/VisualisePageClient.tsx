@@ -34,7 +34,7 @@ interface VisualisationPageProps {
     fixedDiseaseOption?: {
         label: string
         value: string
-    }[]
+    }
     children?: React.ReactNode
     diseaseLabel?: string
 }

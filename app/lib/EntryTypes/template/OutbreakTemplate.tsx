@@ -9,7 +9,7 @@ export default function OutbreakTemplate({ data }: any) {
 
     const diseaseLabel = entry.outbreakDisease
 
-    const fixedDiseaseOption = selectOptions['Disease'].filter(
+    const fixedDiseaseOption = selectOptions['Disease'].find(
         disease => disease.label === diseaseLabel,
     )
 

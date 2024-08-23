@@ -16,7 +16,7 @@ interface FilterSidebarProps {
     fixedDiseaseOption?: {
         label: string
         value: string
-    }[]
+    }
 }
 
 export default function FilterSidebar({
@@ -34,9 +34,8 @@ export default function FilterSidebar({
     let standardFilters = filters.filter(f => !f.advanced)
     const advancedFilters = filters.filter(f => f.advanced)
 
-    // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
-    // The Disease filter must remain to allow maniupulation of this field within the multi select
-    if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
+    // If fixed disease options exists, modify standard filters to remove 'Pathogen'
+    if (fixedDiseaseOption) {
         standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
     }
 
@@ -176,7 +175,7 @@ interface filterBlockProps {
     fixedDiseaseOption?: {
         label: string
         value: string
-    }[]
+    }
 }
 
 const FilterBlock = ({
@@ -189,18 +188,9 @@ const FilterBlock = ({
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
-                let srOnlyText = null
-
-                if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
-                    srOnlyText = `Active ${label} filter`
-                    if (fixedDiseaseOption.length === 1) {
-                        srOnlyText += ` is: ${fixedDiseaseOption[0].label}`
-                    } else {
-                        srOnlyText += `s are: ${fixedDiseaseOption
-                            .map(disease => disease.label)
-                            .join(', ')}`
-                    }
-                }
+                const srOnlyText = fixedDiseaseOption
+                    ? `Active ${label} filter is: ${fixedDiseaseOption.label}`
+                    : null
 
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
@@ -216,7 +206,7 @@ const FilterBlock = ({
                                     setSelectedOptions={options =>
                                         setSelectedOptions(field, options)
                                     }
-                                    fixedDiseaseOption={fixedDiseaseOption}
+                                    fixedDiseaseOption={[fixedDiseaseOption]}
                                     className="hidden"
                                 />
                             </>
