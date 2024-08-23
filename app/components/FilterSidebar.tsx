@@ -31,13 +31,24 @@ export default function FilterSidebar({
         useState<boolean>(false)
 
     const filters = availableFilters()
-    let standardFilters = filters.filter(f => !f.advanced)
-    const advancedFilters = filters.filter(f => f.advanced)
 
-    // If fixed disease options exists, modify standard filters to remove 'Pathogen'
-    if (fixedDiseaseOption) {
-        standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
-    }
+    const standardFilters = filters.filter(filter => {
+        // Don't include advanced filters in the standard block
+        if (filter.advanced) {
+            return false
+        }
+
+        // If fixed disease option is not set, show all standard filters
+        if (!fixedDiseaseOption) {
+            return true
+        }
+
+        // If fixed disease option is set, keep all standard filters
+        // except 'Pathogen' and 'Disease'
+        return !(filter.field === 'Pathogen' || filter.field === 'Disease')
+    })
+
+    const advancedFilters = filters.filter(f => f.advanced)
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = { ...selectedFilters }
@@ -187,28 +198,21 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    fixedDiseaseOption,
 }: filterBlockProps) => {
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
-                        {fixedDiseaseOption && label === 'Disease' ? null : (
-                            <>
-                                <p className="text-white">Filter by {label}</p>
+                        <p className="text-white">Filter by {label}</p>
 
-                                <MultiSelect
-                                    field={field}
-                                    selectedOptions={
-                                        selectedFilters[field].values
-                                    }
-                                    setSelectedOptions={options =>
-                                        setSelectedOptions(field, options)
-                                    }
-                                />
-                            </>
-                        )}
+                        <MultiSelect
+                            field={field}
+                            selectedOptions={selectedFilters[field].values}
+                            setSelectedOptions={options =>
+                                setSelectedOptions(field, options)
+                            }
+                        />
 
                         {excludeGrantsWithMultipleItems && (
                             <Switch
