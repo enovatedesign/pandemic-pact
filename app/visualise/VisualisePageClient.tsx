@@ -23,8 +23,6 @@ import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
-import Button from '../components/Button'
-import { ChevronDownIcon } from '@heroicons/react/solid'
 
 interface VisualisationPageProps {
     title: string
