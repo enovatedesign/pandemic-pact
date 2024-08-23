@@ -150,7 +150,11 @@ export default function FilterSidebar({
                 <Button
                     size="xsmall"
                     customClasses="mt-3 flex items-center gap-1"
-                    onClick={() => setSelectedFilters(emptyFilters())}
+                    onClick={() =>
+                        setSelectedFilters(
+                            emptyFilters(fixedDiseaseOption?.value),
+                        )
+                    }
                 >
                     Clear All <XIcon className="w-5 h-5" />
                 </Button>

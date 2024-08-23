@@ -60,8 +60,9 @@ export default function VisualisePageClient({
             })
     }, [])
 
-    const [selectedFilters, setSelectedFilters] =
-        useState<Filters>(emptyFilters())
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(
+        emptyFilters(fixedDiseaseOption?.value),
+    )
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),

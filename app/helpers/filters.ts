@@ -102,12 +102,22 @@ export function availableFilters() {
     ]
 }
 
-export function emptyFilters() {
+export function emptyFilters(fixedDiseaseValue?: string) {
     return Object.fromEntries(
-        availableFilters().map(({ field }) => [
-            field,
-            { values: [], excludeGrantsWithMultipleItems: false },
-        ]),
+        availableFilters().map(({ field }) => {
+            const values =
+                field === 'Disease' && fixedDiseaseValue
+                    ? [fixedDiseaseValue]
+                    : []
+
+            return [
+                field,
+                {
+                    values,
+                    excludeGrantsWithMultipleItems: false,
+                },
+            ]
+        }),
     )
 }
 
