@@ -16,7 +16,6 @@ interface FilterSidebarProps {
     fixedDiseaseOptions?: {
         label: string
         value: string
-        isFixed?: boolean
     }[]
 }
 
@@ -177,7 +176,6 @@ interface filterBlockProps {
     fixedDiseaseOptions?: {
         label: string
         value: string
-        isFixed?: boolean
     }[]
 }
 

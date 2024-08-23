@@ -1,20 +1,20 @@
-"use client"
+'use client'
 
-import VisualisePageClient from "../../../visualise/VisualisePageClient"
-import selectOptions from "../../../../data/dist/select-options.json"
-import Matrix from "../../../components/ContentBuilder"
+import VisualisePageClient from '../../../visualise/VisualisePageClient'
+import selectOptions from '../../../../data/dist/select-options.json'
+import Matrix from '../../../components/ContentBuilder'
 
-export default function OutbreakTemplate({data}: any) {
-    const {entry} = data
+export default function OutbreakTemplate({ data }: any) {
+    const { entry } = data
 
     const diseaseLabel = entry.outbreakDisease
 
-    const fixedDiseaseOptions = selectOptions['Disease']
-        .filter(disease => disease.label === diseaseLabel)
-        .map(data => ({...data, isFixed: true}))
+    const fixedDiseaseOptions = selectOptions['Disease'].filter(
+        disease => disease.label === diseaseLabel,
+    )
 
     return (
-        <VisualisePageClient 
+        <VisualisePageClient
             outbreak={true}
             diseaseLabel={diseaseLabel}
             title={`OUTBREAK: ${entry.title}`}

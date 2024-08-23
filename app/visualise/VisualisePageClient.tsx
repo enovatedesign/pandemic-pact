@@ -34,7 +34,6 @@ interface VisualisationPageProps {
     fixedDiseaseOptions?: {
         label: string
         value: string
-        isFixed?: boolean
     }[]
     children?: React.ReactNode
     diseaseLabel?: string
@@ -63,13 +62,12 @@ export default function VisualisePageClient({
             })
     }, [])
 
-    const [selectedFilters, setSelectedFilters] = useState<Filters>(
-        emptyFilters()
-    )
+    const [selectedFilters, setSelectedFilters] =
+        useState<Filters>(emptyFilters())
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),
-        [completeDataset, selectedFilters]
+        [completeDataset, selectedFilters],
     )
 
     const sidebar = useMemo(() => {

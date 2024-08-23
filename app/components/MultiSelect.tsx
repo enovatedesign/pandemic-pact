@@ -18,7 +18,6 @@ interface Props {
     fixedDiseaseOptions?: {
         label: string
         value: string
-        isFixed?: boolean
     }[]
 }
 
@@ -29,10 +28,10 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
-    fixedDiseaseOptions
+    fixedDiseaseOptions,
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
-    
+
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const id = useId()
@@ -42,25 +41,28 @@ export default function MultiSelect({
             fixedDiseaseOptions && fixedDiseaseOptions[0],
             ...selectedOptions.map(option => {
                 return options.find(o => o.value === option)
-            })
+            }),
         ]
-    }, [selectedOptions, options, fixedDiseaseOptions]);
-    
+    }, [selectedOptions, options, fixedDiseaseOptions])
+
     useEffect(() => {
         if (
             fixedDiseaseOptions &&
             fixedDiseaseOptions.length > 0 &&
-            JSON.stringify(selectedOptions) !== JSON.stringify(fixedDiseaseOptions.map(o => o.value))
+            JSON.stringify(selectedOptions) !==
+                JSON.stringify(fixedDiseaseOptions.map(o => o.value))
         ) {
-            setSelectedOptions(fixedDiseaseOptions.map(o => o.value));
+            setSelectedOptions(fixedDiseaseOptions.map(o => o.value))
         }
-    }, [fixedDiseaseOptions, selectedOptions, setSelectedOptions]);
+    }, [fixedDiseaseOptions, selectedOptions, setSelectedOptions])
 
     const onChange = (newValue: MultiValue<Option | undefined>) => {
         if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
             return
         } else {
-            setSelectedOptions(newValue.filter(o => o !== undefined).map(o => o!.value))
+            setSelectedOptions(
+                newValue.filter(o => o !== undefined).map(o => o!.value),
+            )
         }
     }
 
@@ -83,7 +85,7 @@ export default function MultiSelect({
     }
 
     const fullLabel = label ? `All ${label}` : 'All'
-    
+
     return (
         <Select
             isMulti
@@ -96,13 +98,13 @@ export default function MultiSelect({
             instanceId={id}
             onFocus={loadOptions}
             isLoading={isLoading}
-            theme={(theme) => ({
+            theme={theme => ({
                 ...theme,
                 colors: {
-                  ...theme.colors,
-                  ...customSelectThemeColours,
+                    ...theme.colors,
+                    ...customSelectThemeColours,
                 },
-              })}
+            })}
         />
     )
 }
