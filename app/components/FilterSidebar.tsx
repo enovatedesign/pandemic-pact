@@ -194,22 +194,7 @@ const FilterBlock = ({
 
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
-                        {fixedDiseaseOption && label === 'Disease' ? (
-                            <>
-                                <p className="sr-only">{srOnlyText}</p>
-
-                                <MultiSelect
-                                    field={field}
-                                    selectedOptions={
-                                        selectedFilters[field].values
-                                    }
-                                    setSelectedOptions={options =>
-                                        setSelectedOptions(field, options)
-                                    }
-                                    className="hidden"
-                                />
-                            </>
-                        ) : (
+                        {fixedDiseaseOption && label === 'Disease' ? null : (
                             <>
                                 <p className="text-white">Filter by {label}</p>
 
