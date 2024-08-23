@@ -49,25 +49,83 @@ export function availableFilters() {
         },
 
         {
+            label: 'Pandemic-prone influenza H antigen',
+            field: 'InfluenzaA',
+            parent: {
+                filter: 'Disease',
+                value: '6142004', // Pandemic-prone influenza
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H1 Subtype',
+            field: 'InfluenzaH1',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H1',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H2 Subtype',
+            field: 'InfluenzaH2',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H2',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H3 Subtype',
+            field: 'InfluenzaH3',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H3',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H5 Subtype',
+            field: 'InfluenzaH5',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H5',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H6 Subtype',
+            field: 'InfluenzaH6',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H6',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H7 Subtype',
+            field: 'InfluenzaH7',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H7',
+            },
+        },
+
+        {
+            label: 'Pandemic-prone influenza H10 Subtype',
+            field: 'InfluenzaH10',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'H10',
+            },
+        },
+
+        {
             label: 'Pathogen Families',
             field: 'Pathogen',
             excludeGrantsWithMultipleItems: {
                 label: 'Exclude Grants with Multiple Pathogens',
             },
-        },
-
-        {
-            label: 'Pandemic-prone influenza H antigen',
-            field: 'InfluenzaA',
-            subFilters: [
-                { label: 'H1 Subtype', field: 'InfluenzaH1' },
-                { label: 'H2 Subtype', field: 'InfluenzaH2' },
-                { label: 'H3 Subtype', field: 'InfluenzaH3' },
-                { label: 'H5 Subtype', field: 'InfluenzaH5' },
-                { label: 'H6 Subtype', field: 'InfluenzaH6' },
-                { label: 'H7 Subtype', field: 'InfluenzaH7' },
-                { label: 'H10 Subtype', field: 'InfluenzaH10' },
-            ],
         },
 
         {
