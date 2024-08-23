@@ -15,7 +15,7 @@ interface Props {
     className?: string
     preloadedOptions?: Option[]
     label?: string
-    fixedDiseaseOptions?: {
+    fixedDiseaseOption?: {
         label: string
         value: string
     }[]
@@ -28,7 +28,7 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
-    fixedDiseaseOptions,
+    fixedDiseaseOption,
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 
@@ -38,26 +38,26 @@ export default function MultiSelect({
 
     const value = useMemo(() => {
         return [
-            fixedDiseaseOptions && fixedDiseaseOptions[0],
+            fixedDiseaseOption && fixedDiseaseOption[0],
             ...selectedOptions.map(option => {
                 return options.find(o => o.value === option)
             }),
         ]
-    }, [selectedOptions, options, fixedDiseaseOptions])
+    }, [selectedOptions, options, fixedDiseaseOption])
 
     useEffect(() => {
         if (
-            fixedDiseaseOptions &&
-            fixedDiseaseOptions.length > 0 &&
+            fixedDiseaseOption &&
+            fixedDiseaseOption.length > 0 &&
             JSON.stringify(selectedOptions) !==
-                JSON.stringify(fixedDiseaseOptions.map(o => o.value))
+                JSON.stringify(fixedDiseaseOption.map(o => o.value))
         ) {
-            setSelectedOptions(fixedDiseaseOptions.map(o => o.value))
+            setSelectedOptions(fixedDiseaseOption.map(o => o.value))
         }
-    }, [fixedDiseaseOptions, selectedOptions, setSelectedOptions])
+    }, [fixedDiseaseOption, selectedOptions, setSelectedOptions])
 
     const onChange = (newValue: MultiValue<Option | undefined>) => {
-        if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
+        if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
             return
         } else {
             setSelectedOptions(

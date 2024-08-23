@@ -31,7 +31,7 @@ interface VisualisationPageProps {
     summary?: string
     showSummary?: boolean
     outbreak?: boolean
-    fixedDiseaseOptions?: {
+    fixedDiseaseOption?: {
         label: string
         value: string
     }[]
@@ -43,7 +43,7 @@ export default function VisualisePageClient({
     summary,
     showSummary = true,
     outbreak = false,
-    fixedDiseaseOptions,
+    fixedDiseaseOption,
     children,
     diseaseLabel,
 }: VisualisationPageProps) {
@@ -80,7 +80,7 @@ export default function VisualisePageClient({
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
-                    fixedDiseaseOptions={fixedDiseaseOptions}
+                    fixedDiseaseOption={fixedDiseaseOption}
                 />
             ),
             closedContent: (
@@ -124,7 +124,7 @@ export default function VisualisePageClient({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
-        fixedDiseaseOptions,
+        fixedDiseaseOption,
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'

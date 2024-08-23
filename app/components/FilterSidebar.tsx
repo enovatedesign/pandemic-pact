@@ -13,7 +13,7 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
-    fixedDiseaseOptions?: {
+    fixedDiseaseOption?: {
         label: string
         value: string
     }[]
@@ -25,7 +25,7 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    fixedDiseaseOptions,
+    fixedDiseaseOption,
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
@@ -36,7 +36,7 @@ export default function FilterSidebar({
 
     // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
     // The Disease filter must remain to allow maniupulation of this field within the multi select
-    if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
+    if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
         standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
     }
 
@@ -110,7 +110,7 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
-                fixedDiseaseOptions={fixedDiseaseOptions}
+                fixedDiseaseOption={fixedDiseaseOption}
             />
 
             <AnimateHeight
@@ -173,7 +173,7 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean,
     ) => void
-    fixedDiseaseOptions?: {
+    fixedDiseaseOption?: {
         label: string
         value: string
     }[]
@@ -184,19 +184,19 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    fixedDiseaseOptions,
+    fixedDiseaseOption,
 }: filterBlockProps) => {
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
                 let srOnlyText = null
 
-                if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
+                if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
                     srOnlyText = `Active ${label} filter`
-                    if (fixedDiseaseOptions.length === 1) {
-                        srOnlyText += ` is: ${fixedDiseaseOptions[0].label}`
+                    if (fixedDiseaseOption.length === 1) {
+                        srOnlyText += ` is: ${fixedDiseaseOption[0].label}`
                     } else {
-                        srOnlyText += `s are: ${fixedDiseaseOptions
+                        srOnlyText += `s are: ${fixedDiseaseOption
                             .map(disease => disease.label)
                             .join(', ')}`
                     }
@@ -204,7 +204,7 @@ const FilterBlock = ({
 
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
-                        {fixedDiseaseOptions && label === 'Disease' ? (
+                        {fixedDiseaseOption && label === 'Disease' ? (
                             <>
                                 <p className="sr-only">{srOnlyText}</p>
 
@@ -216,7 +216,7 @@ const FilterBlock = ({
                                     setSelectedOptions={options =>
                                         setSelectedOptions(field, options)
                                     }
-                                    fixedDiseaseOptions={fixedDiseaseOptions}
+                                    fixedDiseaseOption={fixedDiseaseOption}
                                     className="hidden"
                                 />
                             </>

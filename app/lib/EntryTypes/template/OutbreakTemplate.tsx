@@ -9,7 +9,7 @@ export default function OutbreakTemplate({ data }: any) {
 
     const diseaseLabel = entry.outbreakDisease
 
-    const fixedDiseaseOptions = selectOptions['Disease'].filter(
+    const fixedDiseaseOption = selectOptions['Disease'].filter(
         disease => disease.label === diseaseLabel,
     )
 
@@ -20,7 +20,7 @@ export default function OutbreakTemplate({ data }: any) {
             title={`OUTBREAK: ${entry.title}`}
             summary={entry.summary}
             showSummary={entry.showSummary}
-            fixedDiseaseOptions={fixedDiseaseOptions}
+            fixedDiseaseOption={fixedDiseaseOption}
         >
             {entry.bodyContent && entry.bodyContent.length > 0 && (
                 <Matrix blocks={entry.bodyContent} />
