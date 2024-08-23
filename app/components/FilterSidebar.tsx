@@ -188,10 +188,6 @@ const FilterBlock = ({
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
-                const srOnlyText = fixedDiseaseOption
-                    ? `Active ${label} filter is: ${fixedDiseaseOption.label}`
-                    : null
-
                 return (
                     <div className="flex flex-col space-y-2 w-full" key={field}>
                         {fixedDiseaseOption && label === 'Disease' ? null : (
