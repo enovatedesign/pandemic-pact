@@ -1,4 +1,4 @@
-import { useId, useMemo, useState, useEffect } from 'react'
+import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import { customSelectThemeColours } from '../helpers/select-colours'
 
@@ -15,10 +15,6 @@ interface Props {
     className?: string
     preloadedOptions?: Option[]
     label?: string
-    fixedDiseaseOption?: {
-        label: string
-        value: string
-    }[]
 }
 
 export default function MultiSelect({
@@ -28,7 +24,6 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
-    fixedDiseaseOption,
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 
@@ -36,34 +31,14 @@ export default function MultiSelect({
 
     const id = useId()
 
-    const value = useMemo(() => {
-        return [
-            fixedDiseaseOption && fixedDiseaseOption[0],
-            ...selectedOptions.map(option => {
-                return options.find(o => o.value === option)
-            }),
-        ]
-    }, [selectedOptions, options, fixedDiseaseOption])
+    const value: Option[] = useMemo(() => {
+        return selectedOptions.map(option => {
+            return options.find(o => o.value === option)
+        }) as Option[]
+    }, [selectedOptions, options])
 
-    useEffect(() => {
-        if (
-            fixedDiseaseOption &&
-            fixedDiseaseOption.length > 0 &&
-            JSON.stringify(selectedOptions) !==
-                JSON.stringify(fixedDiseaseOption.map(o => o.value))
-        ) {
-            setSelectedOptions(fixedDiseaseOption.map(o => o.value))
-        }
-    }, [fixedDiseaseOption, selectedOptions, setSelectedOptions])
-
-    const onChange = (newValue: MultiValue<Option | undefined>) => {
-        if (fixedDiseaseOption && fixedDiseaseOption.length > 0) {
-            return
-        } else {
-            setSelectedOptions(
-                newValue.filter(o => o !== undefined).map(o => o!.value),
-            )
-        }
+    const onChange = (option: MultiValue<Option>) => {
+        setSelectedOptions(option.map(o => o.value))
     }
 
     const loadOptions = () => {
@@ -71,7 +46,9 @@ export default function MultiSelect({
         if (options.length > 0) {
             return options
         }
+
         setIsLoading(true)
+
         fetch(`/data/select-options/${field}.json`)
             .then(response => response.json())
             .then(data => {

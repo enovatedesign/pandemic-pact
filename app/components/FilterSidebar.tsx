@@ -206,7 +206,6 @@ const FilterBlock = ({
                                     setSelectedOptions={options =>
                                         setSelectedOptions(field, options)
                                     }
-                                    fixedDiseaseOption={[fixedDiseaseOption]}
                                     className="hidden"
                                 />
                             </>
