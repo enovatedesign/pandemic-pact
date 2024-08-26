@@ -3,7 +3,12 @@ import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import MultiSelect from './MultiSelect'
 import Switch from './Switch'
 import Button from './Button'
-import { availableFilters, emptyFilters, Filters } from '../helpers/filters'
+import {
+    availableFilters,
+    emptyFilters,
+    Filters,
+    FilterSchema,
+} from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 
@@ -30,23 +35,39 @@ export default function FilterSidebar({
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
-    const filters = availableFilters()
+    const filters = availableFilters().filter(filter => {
+        // Honour conditional filter logic
+        if (filter.parent) {
+            const parentFilter = selectedFilters[filter.parent.filter]
 
-    const standardFilters = filters.filter(filter => {
-        // Don't include advanced filters in the standard block
-        if (filter.advanced) {
-            return false
+            // If the parent filter doesn't have exactly one value selected,
+            // we don't want to show the child filter
+            if (parentFilter.values.length !== 1) {
+                return false
+            }
+
+            // If the parent has exactly one value but it isn't the value that
+            // the child filter is dependent on, we also don't show the child
+            if (parentFilter.values[0] !== filter.parent.value) {
+                return false
+            }
+
+            // Otherwise we will let the filter selection logic proceed
+            // as normal, which will show the child unless anything further
+            // logic hides it
         }
 
-        // If fixed disease option is not set, show all standard filters
+        // If fixed disease option is NOT set, show all filters
         if (!fixedDiseaseOption) {
             return true
         }
 
-        // If fixed disease option is set, keep all standard filters
-        // except 'Pathogen' and 'Disease'
+        // If fixed disease option IS set, keep all filters except 'Pathogen'
+        // and 'Disease'
         return !(filter.field === 'Pathogen' || filter.field === 'Disease')
     })
+
+    const standardFilters = filters.filter(f => !f.advanced)
 
     const advancedFilters = filters.filter(f => f.advanced)
 
@@ -175,12 +196,7 @@ export default function FilterSidebar({
 }
 
 interface filterBlockProps {
-    filters: {
-        field: string
-        label: string
-        advanced?: boolean
-        excludeGrantsWithMultipleItems?: { label: string }
-    }[]
+    filters: FilterSchema[]
     selectedFilters: Filters
     setSelectedOptions: (field: keyof Filters, options: string[]) => void
     setExcludeGrantsWithMultipleItemsInField: (
@@ -201,38 +217,36 @@ const FilterBlock = ({
 }: filterBlockProps) => {
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
-                return (
-                    <div className="flex flex-col space-y-2 w-full" key={field}>
-                        <p className="text-white">Filter by {label}</p>
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => (
+                <div className="flex flex-col space-y-2 w-full" key={field}>
+                    <p className="text-white">Filter by {label}</p>
 
-                        <MultiSelect
-                            field={field}
-                            selectedOptions={selectedFilters[field].values}
-                            setSelectedOptions={options =>
-                                setSelectedOptions(field, options)
+                    <MultiSelect
+                        field={field}
+                        selectedOptions={selectedFilters[field].values}
+                        setSelectedOptions={options =>
+                            setSelectedOptions(field, options)
+                        }
+                    />
+
+                    {excludeGrantsWithMultipleItems && (
+                        <Switch
+                            checked={
+                                selectedFilters[field]
+                                    .excludeGrantsWithMultipleItems
                             }
+                            onChange={value =>
+                                setExcludeGrantsWithMultipleItemsInField(
+                                    field,
+                                    value,
+                                )
+                            }
+                            label={excludeGrantsWithMultipleItems.label}
+                            textClassName="text-white"
                         />
-
-                        {excludeGrantsWithMultipleItems && (
-                            <Switch
-                                checked={
-                                    selectedFilters[field]
-                                        .excludeGrantsWithMultipleItems
-                                }
-                                onChange={value =>
-                                    setExcludeGrantsWithMultipleItemsInField(
-                                        field,
-                                        value,
-                                    )
-                                }
-                                label={excludeGrantsWithMultipleItems.label}
-                                textClassName="text-white"
-                            />
-                        )}
-                    </div>
-                )
-            })}
+                    )}
+                </div>
+            ))}
         </>
     )
 }

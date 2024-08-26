@@ -10,7 +10,15 @@ export interface Filters {
     [key: string]: Filter
 }
 
-export function availableFilters() {
+export interface FilterSchema {
+    label: string
+    field: string
+    excludeGrantsWithMultipleItems?: { label: string }
+    parent?: { filter: string; value: string }
+    advanced?: boolean
+}
+
+export function availableFilters(): FilterSchema[] {
     return [
         {
             label: 'Funder',
