@@ -11,6 +11,7 @@ import {
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
+import ConditionalWrapper from './ConditionalWrapper'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -217,23 +218,29 @@ const FilterBlock = ({
 }: filterBlockProps) => {
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => (
-                <div className="flex flex-col space-y-2 w-full" key={field}>
-                    <p className="text-white">Filter by {label}</p>
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => (
+                <ConditionalWrapper
+                    condition={parent != undefined}
+                    key={field}
+                    wrapper={children => <div className="flex gap-2 w-full" key={field}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-6 fill-current text-primary"><path d="M334.5 446c8.8 3.8 19 2 26-4.6l144-136c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22l0 88-192 0c-17.7 0-32-14.3-32-32L96 64c0-17.7-14.3-32-32-32L32 32C14.3 32 0 46.3 0 64L0 208c0 70.7 57.3 128 128 128l192 0 0 88c0 9.6 5.7 18.2 14.5 22z"/></svg>{children}</div>}
+                >  
+                    
+                    <div className="flex flex-col space-y-2 w-full" key={field}>
+                        <p className="text-white">Filter by {label}</p>
 
-                    <MultiSelect
-                        field={field}
-                        selectedOptions={selectedFilters[field].values}
-                        setSelectedOptions={options =>
-                            setSelectedOptions(field, options)
-                        }
-                    />
+                        <MultiSelect
+                            field={field}
+                            selectedOptions={selectedFilters[field].values}
+                            setSelectedOptions={options =>
+                                setSelectedOptions(field, options)
+                            }
+                            />
 
-                    {excludeGrantsWithMultipleItems && (
-                        <Switch
+                        {excludeGrantsWithMultipleItems && (
+                            <Switch
                             checked={
                                 selectedFilters[field]
-                                    .excludeGrantsWithMultipleItems
+                                .excludeGrantsWithMultipleItems
                             }
                             onChange={value =>
                                 setExcludeGrantsWithMultipleItemsInField(
@@ -243,9 +250,11 @@ const FilterBlock = ({
                             }
                             label={excludeGrantsWithMultipleItems.label}
                             textClassName="text-white"
-                        />
-                    )}
-                </div>
+                            />
+                        )}
+                    </div>
+                    
+                </ConditionalWrapper>
             ))}
         </>
     )
