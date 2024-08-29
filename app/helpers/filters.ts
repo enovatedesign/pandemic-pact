@@ -19,6 +19,11 @@ export function availableFilters() {
         },
 
         {
+            label: 'Research Category',
+            field: 'ResearchCat',
+        },
+        
+        {
             label: 'Funder Region',
             field: 'FunderRegion',
         },
@@ -54,7 +59,7 @@ export function availableFilters() {
             excludeGrantsWithMultipleItems: {
                 label: 'Exclude Grants with Multiple Pathogens',
             },
-        },
+        }, 
 
         {
             label: 'Study Subject',
