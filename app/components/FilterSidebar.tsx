@@ -220,45 +220,58 @@ const FilterBlock = ({
     
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => (
-                <ConditionalWrapper
-                    condition={parent != undefined}
-                    key={field}
-                    wrapper={children => <IndentMultiSelect>{children}</IndentMultiSelect>}
-                >  
-                    
-                    <div className="flex flex-col space-y-2 w-full" key={field}>
-                        <p className="text-white">Filter by {label}</p>
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => {
+                
+                const childOptions = {
+                    "Pandemic-prone influenza" : availableFilters().filter(filter => filter.label === 'H5 Subtype').map(f => {
+                        return {
+                            label: f["parent"]?.value,
+                            value: f["parent"]?.filter,
+                        }
+                    })
+                } as any
+                
+                return (    
+                    <ConditionalWrapper
+                        condition={parent != undefined}
+                        key={field}
+                        wrapper={children => <IndentMultiSelect>{children}</IndentMultiSelect>}
+                    >  
+                        <div className="flex flex-col space-y-2 w-full" key={field}>
+                            <p className="text-white">Filter by {label}</p>
 
-                        <MultiSelect
-                            field={field}
-                            selectedOptions={selectedFilters[field].values}
-                            setSelectedOptions={options =>
-                                setSelectedOptions(field, options)
-                            }
-                            fixedDiseaseOption={label === 'Disease' ? fixedDiseaseOption : null}
-                        />
-
-                        {excludeGrantsWithMultipleItems && (
-                            <Switch
-                            checked={
-                                selectedFilters[field]
-                                .excludeGrantsWithMultipleItems
-                            }
-                            onChange={value =>
-                                setExcludeGrantsWithMultipleItemsInField(
-                                    field,
-                                    value,
-                                )
-                            }
-                            label={excludeGrantsWithMultipleItems.label}
-                            textClassName="text-white"
+                            <MultiSelect
+                                field={field}
+                                selectedOptions={selectedFilters[field].values}
+                                setSelectedOptions={options =>
+                                    setSelectedOptions(field, options)
+                                }
+                                fixedDiseaseOption={label === 'Disease' ? 
+                                    fixedDiseaseOption : 
+                                    parent && childOptions[fixedDiseaseOption.label][0]
+                                }
                             />
-                        )}
-                    </div>
-                    
-                </ConditionalWrapper>
-            ))}
+
+                            {excludeGrantsWithMultipleItems && (
+                                <Switch
+                                checked={
+                                    selectedFilters[field]
+                                    .excludeGrantsWithMultipleItems
+                                }
+                                onChange={value =>
+                                    setExcludeGrantsWithMultipleItemsInField(
+                                        field,
+                                        value,
+                                    )
+                                }
+                                label={excludeGrantsWithMultipleItems.label}
+                                textClassName="text-white"
+                                />
+                            )}
+                        </div>
+                    </ConditionalWrapper>
+                )}
+            )}
         </>
     )
 }

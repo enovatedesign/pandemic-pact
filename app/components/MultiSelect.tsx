@@ -18,7 +18,7 @@ interface Props {
     fixedDiseaseOption?: {
         label: string
         value: string
-        isFixed: boolean
+        isFixed?: boolean
     } | null
 }
 
@@ -93,7 +93,7 @@ export default function MultiSelect({
                     ...customSelectThemeColours,
                 },
             })}
-            isDisabled={fixedDiseaseOption ? true : false}
+            isDisabled={fixedDiseaseOption?.isFixed ? true : false}
         />
     )
 }
