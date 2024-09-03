@@ -221,14 +221,18 @@ const FilterBlock = ({
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => {
+
+                const influenzaSubType = availableFilters().find(filter => filter.label === 'H5 Subtype')
                 
                 const childOptions = {
-                    "Pandemic-prone influenza" : availableFilters().filter(filter => filter.label === 'H5 Subtype').map(f => {
-                        return {
-                            label: f["parent"]?.value,
-                            value: f["parent"]?.filter,
-                        }
-                    })
+                    "Pandemic-prone influenza": {
+                        label: influenzaSubType?.parent?.value,
+                        value: influenzaSubType?.parent?.filter
+                    },
+                    "H5 Subtype": {
+                        label: influenzaSubType?.label,
+                        value: influenzaSubType?.field
+                    }
                 } as any
                 
                 return (    
@@ -250,7 +254,7 @@ const FilterBlock = ({
                                     fixedDiseaseOption.isFixed && label === 'Disease' 
                                         ? fixedDiseaseOption 
                                         : parent?.filter === 'Disease' && childOptions[fixedDiseaseOption.label]
-                                            ? childOptions[fixedDiseaseOption.label][0] 
+                                            ? childOptions[fixedDiseaseOption.label]
                                             : null
                                 }
                                 
