@@ -76,7 +76,7 @@ export default function FilterSidebar({
 
         // If fixed disease option IS set, keep all filters except 'Pathogen'
         // and 'Disease'
-        return !(filter.field === 'Pathogen' || filter.field === 'Disease')
+        return !(filter.field === 'Pathogen')
     })
 
     const standardFilters = filters.filter(f => !f.advanced)
