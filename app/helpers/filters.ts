@@ -240,3 +240,13 @@ export const SidebarStateContext = createContext<{
 }>({
     sidebarOpen: false,
 })
+
+export const FixedDiseaseOptionContext = createContext<{
+    label: string
+    value: string
+    isFixed: boolean
+}>({
+    label: '',
+    value: '',
+    isFixed: true
+})

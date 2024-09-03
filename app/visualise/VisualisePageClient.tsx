@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useMemo, useState, useEffect, useRef } from 'react'
+import { useMemo, useState, useEffect, useRef, useContext } from 'react'
 import Layout from '../components/Layout'
 import FilterSidebar from '../components/FilterSidebar'
 import GrantsByMpoxResearchPriorityCard from '../components/GrantsByMpoxResearchPriority'
@@ -17,20 +17,19 @@ import {
     GlobalFilterContext,
     countActiveFilters,
     Filters,
+    FixedDiseaseOptionContext,
 } from '../helpers/filters'
 import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
-import { FixedDiseaseOption } from '../helpers/types'
 
 interface VisualisationPageProps {
     title: string
     summary?: string
     showSummary?: boolean
     outbreak?: boolean
-    fixedDiseaseOption?: FixedDiseaseOption
     children?: React.ReactNode
     diseaseLabel?: string
 }
@@ -39,7 +38,6 @@ export default function VisualisePageClient({
     summary,
     showSummary = true,
     outbreak = false,
-    fixedDiseaseOption,
     children,
     diseaseLabel,
 }: VisualisationPageProps) {
@@ -48,6 +46,8 @@ export default function VisualisePageClient({
     const [completeDataset, setCompleteDataset] = useState([])
 
     const [loadingDataset, setLoadingDataset] = useState(true)
+
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
 
     useEffect(() => {
         fetch('/data/grants.json')
@@ -77,7 +77,6 @@ export default function VisualisePageClient({
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
-                    fixedDiseaseOption={fixedDiseaseOption}
                 />
             ),
             closedContent: (
@@ -121,7 +120,6 @@ export default function VisualisePageClient({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
-        fixedDiseaseOption,
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'

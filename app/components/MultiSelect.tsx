@@ -1,7 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import { customSelectThemeColours } from '../helpers/select-colours'
-import { FixedDiseaseOption } from '../helpers/types'
 
 interface Option {
     label: string
@@ -16,7 +15,11 @@ interface Props {
     className?: string
     preloadedOptions?: Option[]
     label?: string
-    fixedDiseaseOption?: FixedDiseaseOption
+    fixedDiseaseOption?: {
+        label: string
+        value: string
+        isFixed: boolean
+    } | null
 }
 
 export default function MultiSelect({
@@ -33,12 +36,17 @@ export default function MultiSelect({
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const id = useId()
+    
 
     const value: Option[] = useMemo(() => {
-        return selectedOptions.map(option => {
-            return options.find(o => o.value === option)
-        }) as Option[]
-    }, [selectedOptions, options])
+        if (fixedDiseaseOption) {
+            return [fixedDiseaseOption]
+        } else {
+            return selectedOptions.map(option => {
+                return options.find(o => o.value === option)
+            }) as Option[]
+        }
+    }, [selectedOptions, options, fixedDiseaseOption])
 
     const onChange = (option: MultiValue<Option>) => {
         setSelectedOptions(option.map(o => o.value))
@@ -65,7 +73,7 @@ export default function MultiSelect({
     }
 
     const fullLabel = label ? `All ${label}` : 'All'
-
+    
     return (
         <Select
             isMulti
@@ -85,6 +93,7 @@ export default function MultiSelect({
                     ...customSelectThemeColours,
                 },
             })}
+            isDisabled={fixedDiseaseOption ? true : false}
         />
     )
 }

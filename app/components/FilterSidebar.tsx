@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import MultiSelect from './MultiSelect'
 import Switch from './Switch'
@@ -8,11 +8,11 @@ import {
     emptyFilters,
     Filters,
     FilterSchema,
+    FixedDiseaseOptionContext,
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import ConditionalWrapper from './ConditionalWrapper'
-import { FixedDiseaseOption } from '../helpers/types'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -20,7 +20,6 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
-    fixedDiseaseOption?: FixedDiseaseOption
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -40,7 +39,6 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    fixedDiseaseOption,
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
@@ -65,11 +63,6 @@ export default function FilterSidebar({
             // Otherwise we will let the filter selection logic proceed
             // as normal, which will show the child unless anything further
             // logic hides it
-        }
-
-        // If fixed disease option is NOT set, show all filters
-        if (!fixedDiseaseOption) {
-            return true
         }
 
         // If fixed disease option IS set, keep all filters except 'Pathogen'
@@ -99,6 +92,8 @@ export default function FilterSidebar({
 
         setSelectedFilters(selectedOptions)
     }
+
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
 
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
@@ -151,7 +146,6 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
-                fixedDiseaseOption={fixedDiseaseOption}
             />
 
             <AnimateHeight
@@ -213,7 +207,6 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean,
     ) => void
-    fixedDiseaseOption?: FixedDiseaseOption
 }
 
 const FilterBlock = ({
@@ -221,8 +214,10 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    fixedDiseaseOption
 }: filterBlockProps) => {
+
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
+    
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => (
@@ -230,7 +225,7 @@ const FilterBlock = ({
                     condition={parent != undefined}
                     key={field}
                     wrapper={children => <IndentMultiSelect>{children}</IndentMultiSelect>}
-              >  
+                >  
                     
                     <div className="flex flex-col space-y-2 w-full" key={field}>
                         <p className="text-white">Filter by {label}</p>
@@ -241,7 +236,7 @@ const FilterBlock = ({
                             setSelectedOptions={options =>
                                 setSelectedOptions(field, options)
                             }
-                            fixedDiseaseOption={fixedDiseaseOption}
+                            fixedDiseaseOption={label === 'Disease' ? fixedDiseaseOption : null}
                         />
 
                         {excludeGrantsWithMultipleItems && (

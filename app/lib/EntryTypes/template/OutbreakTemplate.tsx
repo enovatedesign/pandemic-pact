@@ -3,7 +3,13 @@
 import VisualisePageClient from '../../../visualise/VisualisePageClient'
 import selectOptions from '../../../../data/dist/select-options.json'
 import Matrix from '../../../components/ContentBuilder'
-import { FixedDiseaseOption } from '@/app/helpers/types'
+import { FixedDiseaseOptionContext } from '@/app/helpers/filters'
+
+interface FixedDiseaseProps {
+    label: string
+    value: string
+    isFixed: boolean
+}
 
 export default function OutbreakTemplate({ data }: any) {
     const { entry } = data
@@ -12,24 +18,25 @@ export default function OutbreakTemplate({ data }: any) {
 
     const fixedDiseaseOption = selectOptions['Disease'].find(
         disease => disease.label === diseaseLabel,
-    ) as FixedDiseaseOption
+    ) as FixedDiseaseProps
 
     if (fixedDiseaseOption) {
         fixedDiseaseOption.isFixed = true
     }
-
+    
     return (
-        <VisualisePageClient
-            outbreak={true}
-            diseaseLabel={diseaseLabel}
-            title={`OUTBREAK: ${entry.title}`}
-            summary={entry.summary}
-            showSummary={entry.showSummary}
-            fixedDiseaseOption={fixedDiseaseOption}
-        >
-            {entry.bodyContent && entry.bodyContent.length > 0 && (
-                <Matrix blocks={entry.bodyContent} />
-            )}
-        </VisualisePageClient>
+        <FixedDiseaseOptionContext.Provider value={{...fixedDiseaseOption}}>
+            <VisualisePageClient
+                outbreak={true}
+                diseaseLabel={diseaseLabel}
+                title={`OUTBREAK: ${entry.title}`}
+                summary={entry.summary}
+                showSummary={entry.showSummary}
+            >
+                {entry.bodyContent && entry.bodyContent.length > 0 && (
+                    <Matrix blocks={entry.bodyContent} />
+                )}
+            </VisualisePageClient>
+        </FixedDiseaseOptionContext.Provider>
     )
 }
