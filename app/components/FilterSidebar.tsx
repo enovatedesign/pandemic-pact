@@ -246,26 +246,30 @@ const FilterBlock = ({
                                 setSelectedOptions={options =>
                                     setSelectedOptions(field, options)
                                 }
-                                fixedDiseaseOption={label === 'Disease' ? 
-                                    fixedDiseaseOption : 
-                                    parent && childOptions[fixedDiseaseOption.label][0]
+                                fixedDiseaseOption={
+                                    fixedDiseaseOption.isFixed && label === 'Disease' 
+                                        ? fixedDiseaseOption 
+                                        : parent?.filter === 'Disease' && childOptions[fixedDiseaseOption.label]
+                                            ? childOptions[fixedDiseaseOption.label][0] 
+                                            : null
                                 }
+                                
                             />
 
                             {excludeGrantsWithMultipleItems && (
                                 <Switch
-                                checked={
-                                    selectedFilters[field]
-                                    .excludeGrantsWithMultipleItems
-                                }
-                                onChange={value =>
-                                    setExcludeGrantsWithMultipleItemsInField(
-                                        field,
-                                        value,
-                                    )
-                                }
-                                label={excludeGrantsWithMultipleItems.label}
-                                textClassName="text-white"
+                                    checked={
+                                        selectedFilters[field]
+                                        .excludeGrantsWithMultipleItems
+                                    }
+                                    onChange={value =>
+                                        setExcludeGrantsWithMultipleItemsInField(
+                                            field,
+                                            value,
+                                        )
+                                    }
+                                    label={excludeGrantsWithMultipleItems.label}
+                                    textClassName="text-white"
                                 />
                             )}
                         </div>

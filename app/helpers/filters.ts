@@ -248,5 +248,5 @@ export const FixedDiseaseOptionContext = createContext<{
 }>({
     label: '',
     value: '',
-    isFixed: true
+    isFixed: false
 })
