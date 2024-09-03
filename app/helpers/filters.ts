@@ -112,6 +112,11 @@ export function availableFilters(): FilterSchema[] {
         },
 
         {
+            label: 'Research Category',
+            field: 'ResearchCat',
+        },
+        
+        {
             label: 'Funder Region',
             field: 'FunderRegion',
         },
