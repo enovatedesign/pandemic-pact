@@ -12,6 +12,7 @@ import {
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import ConditionalWrapper from './ConditionalWrapper'
+import { FixedDiseaseOption } from '../helpers/types'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -19,10 +20,7 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
-    fixedDiseaseOption?: {
-        label: string
-        value: string
-    }
+    fixedDiseaseOption?: FixedDiseaseOption
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -215,10 +213,7 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean,
     ) => void
-    fixedDiseaseOption?: {
-        label: string
-        value: string
-    }
+    fixedDiseaseOption?: FixedDiseaseOption
 }
 
 const FilterBlock = ({
@@ -226,6 +221,7 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
+    fixedDiseaseOption
 }: filterBlockProps) => {
     return (
         <>
@@ -245,7 +241,8 @@ const FilterBlock = ({
                             setSelectedOptions={options =>
                                 setSelectedOptions(field, options)
                             }
-                            />
+                            fixedDiseaseOption={fixedDiseaseOption}
+                        />
 
                         {excludeGrantsWithMultipleItems && (
                             <Switch

@@ -3,6 +3,7 @@
 import VisualisePageClient from '../../../visualise/VisualisePageClient'
 import selectOptions from '../../../../data/dist/select-options.json'
 import Matrix from '../../../components/ContentBuilder'
+import { FixedDiseaseOption } from '@/app/helpers/types'
 
 export default function OutbreakTemplate({ data }: any) {
     const { entry } = data
@@ -11,7 +12,11 @@ export default function OutbreakTemplate({ data }: any) {
 
     const fixedDiseaseOption = selectOptions['Disease'].find(
         disease => disease.label === diseaseLabel,
-    )
+    ) as FixedDiseaseOption
+
+    if (fixedDiseaseOption) {
+        fixedDiseaseOption.isFixed = true
+    }
 
     return (
         <VisualisePageClient

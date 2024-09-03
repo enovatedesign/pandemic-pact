@@ -1,6 +1,7 @@
 import { useId, useMemo, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import { customSelectThemeColours } from '../helpers/select-colours'
+import { FixedDiseaseOption } from '../helpers/types'
 
 interface Option {
     label: string
@@ -15,6 +16,7 @@ interface Props {
     className?: string
     preloadedOptions?: Option[]
     label?: string
+    fixedDiseaseOption?: FixedDiseaseOption
 }
 
 export default function MultiSelect({
@@ -24,6 +26,7 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
+    fixedDiseaseOption
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 

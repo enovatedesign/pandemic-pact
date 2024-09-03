@@ -23,16 +23,14 @@ import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
+import { FixedDiseaseOption } from '../helpers/types'
 
 interface VisualisationPageProps {
     title: string
     summary?: string
     showSummary?: boolean
     outbreak?: boolean
-    fixedDiseaseOption?: {
-        label: string
-        value: string
-    }
+    fixedDiseaseOption?: FixedDiseaseOption
     children?: React.ReactNode
     diseaseLabel?: string
 }
