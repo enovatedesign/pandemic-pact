@@ -8,7 +8,6 @@ import { FixedDiseaseOptionContext } from '@/app/helpers/filters'
 interface FixedDiseaseProps {
     label: string
     value: string
-    isFixed: boolean
 }
 
 export default function OutbreakTemplate({ data }: any) {
@@ -20,10 +19,6 @@ export default function OutbreakTemplate({ data }: any) {
         disease => disease.label === diseaseLabel,
     ) as FixedDiseaseProps
 
-    if (fixedDiseaseOption) {
-        fixedDiseaseOption.isFixed = true
-    }
-    
     return (
         <FixedDiseaseOptionContext.Provider value={{...fixedDiseaseOption}}>
             <VisualisePageClient
