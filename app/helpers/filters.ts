@@ -48,7 +48,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH1',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H1',
+                value: 'h1',
             },
         },
 
@@ -57,7 +57,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH2',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H2',
+                value: 'h2',
             },
         },
 
@@ -66,7 +66,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH3',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H3',
+                value: 'h3',
             },
         },
 
@@ -75,7 +75,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH5',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H5',
+                value: 'h5',
             },            
             loadOnClick: false,
         },
@@ -85,7 +85,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH6',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H6',
+                value: 'h6',
             },
         },
 
@@ -94,7 +94,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH7',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H7',
+                value: 'h7',
             },
         },
 
@@ -103,7 +103,7 @@ export function availableFilters(): FilterSchema[] {
             field: 'InfluenzaH10',
             parent: {
                 filter: 'InfluenzaA',
-                value: 'H10',
+                value: 'h10',
             },
         },
 
@@ -187,9 +187,9 @@ export function emptyFilters(fixedDiseaseValue?: string) {
                     values = [fixedDiseaseValue];
                 } else if (fixedDiseaseValue === '6142004') { // Pandemic Prone Influenza
                     if (field === 'InfluenzaA') {
-                        values = ['H5']
+                        values = ['h5']
                     } else if (field === 'InfluenzaH5') {
-                        values = ['H5N']
+                        values = ['h5n']
                     }
                 }
             }
