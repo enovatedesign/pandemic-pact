@@ -68,7 +68,7 @@ export const visualisationCardData = (outbreak = false, disease = '') => {
             {
                 title: 'Policy Roadmaps',
                 summary: cardSummary[whichSummary].policyRoadmaps,
-                url: null,
+                url: '#policy-roadmaps',
                 image: {
                     url: `/images/visualisation-cards/${outbreak ? 'outbreak' : 'vis'}-road-maps.svg`,
                     altText: 'Illustration of a road with central road markings going into the distance',
