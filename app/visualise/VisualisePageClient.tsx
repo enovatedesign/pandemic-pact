@@ -176,7 +176,7 @@ export default function VisualisePageClient({
                     sidebar={sidebar}
                     outbreak={outbreak}
                 >
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} />
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak}/>
 
                     <VisualisationCardLinks
                         outbreak={outbreak}
