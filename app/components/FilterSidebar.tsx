@@ -227,14 +227,22 @@ const FilterBlock = ({
                 const childOptions = {
                     "Pandemic-prone influenza": {
                         label: influenzaSubType?.parent?.value,
-                        value: influenzaSubType?.parent?.filter
+                        value: influenzaSubType?.parent?.filter,
+                        isFixed: false
                     },
                     "H5 Subtype": {
                         label: influenzaSubType?.label,
-                        value: influenzaSubType?.field
+                        value: influenzaSubType?.field,
+                        isFixed: false
                     }
                 } as any
                 
+                const selectedFixedDiseaseOption = fixedDiseaseOption.isFixed && label === 'Disease' 
+                    ? fixedDiseaseOption 
+                    : parent?.filter === 'Disease' && childOptions[fixedDiseaseOption.label]
+                        ? childOptions[fixedDiseaseOption.label]
+                        : null
+
                 return (    
                     <ConditionalWrapper
                         condition={parent != undefined}
@@ -250,13 +258,7 @@ const FilterBlock = ({
                                 setSelectedOptions={options =>
                                     setSelectedOptions(field, options)
                                 }
-                                fixedDiseaseOption={
-                                    fixedDiseaseOption.isFixed && label === 'Disease' 
-                                        ? fixedDiseaseOption 
-                                        : parent?.filter === 'Disease' && childOptions[fixedDiseaseOption.label]
-                                            ? childOptions[fixedDiseaseOption.label]
-                                            : null
-                                }
+                                fixedDiseaseOption={selectedFixedDiseaseOption}
                                 
                             />
 
