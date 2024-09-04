@@ -6,7 +6,7 @@ export const visualisationCardData = (outbreak = false, disease = '') => {
             researchCategory: `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
             geographicalDistribution: `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
             annualTrends: `Charts for trends in research funding in ${disease} and associated research categories.`,
-            policyRoadmaps: `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
+            policyRoadmaps: `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
         },
         default: {
             disease: 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, Mpox and Plague.',
