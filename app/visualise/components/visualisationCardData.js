@@ -35,7 +35,7 @@ export const visualisationCardData = (outbreak = false, disease = '') => {
             {
                 title: 'Research Categories',
                 summary: cardSummary[whichSummary].researchCategory,
-                url: '#research-category',
+                url: '#research-visualisation',
                 image: {
                     url: `/images/visualisation-cards/${outbreak ? 'outbreak' : 'vis'}-category-chart.svg`,
                     altText: 'Illustration of a horizontal bar chart',

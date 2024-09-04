@@ -225,21 +225,12 @@ export default function VisualisePageClient({
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            {outbreak ? (
-                                <div
-                                    id="mpox-research-priorities"
-                                    className={gridClasses}
-                                >
-                                    <GrantsByMpoxResearchPriorityCard />
-                                </div>
-                            ) : (
-                                <div
-                                    id="research-category"
-                                    className={gridClasses}
-                                >
-                                    <GrantsByResearchCategoryCard />
-                                </div>
-                            )}
+                            <div id="research-visualisation" className={gridClasses}>
+                                {diseaseLabel && diseaseLabel === 'Mpox' 
+                                    ? <GrantsByMpoxResearchPriorityCard /> 
+                                    : <GrantsByResearchCategoryCard />
+                                }
+                            </div>
 
                             <div
                                 id="geographical-distribution"
