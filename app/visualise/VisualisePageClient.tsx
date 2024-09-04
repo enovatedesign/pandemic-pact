@@ -182,9 +182,9 @@ export default function VisualisePageClient({
 
                     {outbreak && (
                         <div className='flex justify-center'>
-                            <Button onClick={() => {
-                                
-                            }}>
+                            <Button onClick={() => setSelectedFilters(
+                                emptyFilters(fixedDiseaseOption?.value)
+                            )}>
                                 Reset Values
                             </Button>
                         </div>
