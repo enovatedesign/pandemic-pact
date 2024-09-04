@@ -177,7 +177,8 @@ export function availableFilters(): FilterSchema[] {
     ]
 }
 
-export function emptyFilters(fixedDiseaseValue?: string) {
+
+export function emptyFilters(fixedDiseaseValue?: string, resetFirstChild: boolean = true, resetSecondChild: boolean  = true) {
     return Object.fromEntries(
         availableFilters().map(({ field }) => {
             let values:string[] = [];
@@ -186,9 +187,9 @@ export function emptyFilters(fixedDiseaseValue?: string) {
                 if (field === 'Disease') {
                     values = [fixedDiseaseValue];
                 } else if (fixedDiseaseValue === '6142004') { // Pandemic Prone Influenza
-                    if (field === 'InfluenzaA') {
+                    if (resetFirstChild && field === 'InfluenzaA') {
                         values = ['h5']
-                    } else if (field === 'InfluenzaH5') {
+                    } else if (resetSecondChild && field === 'InfluenzaH5') {
                         values = ['h5n']
                     }
                 }

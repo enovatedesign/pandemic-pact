@@ -122,6 +122,7 @@ export default function VisualisePageClient({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
+        outbreak
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
@@ -182,11 +183,23 @@ export default function VisualisePageClient({
                     />
 
                     {outbreak && (
-                        <div className='flex justify-center'>
+                        <div className='container flex justify-between'>
+                            <Button onClick={() => setSelectedFilters(
+                                emptyFilters(fixedDiseaseOption?.value, false, false)
+                            )}>
+                                Pandemic-prone Influenza
+                            </Button>
+                            
+                            <Button onClick={() => setSelectedFilters(
+                                emptyFilters(fixedDiseaseOption?.value, true, false)
+                            )}>
+                                H5
+                            </Button>
+
                             <Button onClick={() => setSelectedFilters(
                                 emptyFilters(fixedDiseaseOption?.value)
                             )}>
-                                Reset Values
+                                H5N1
                             </Button>
                         </div>
                     )}
