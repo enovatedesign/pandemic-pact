@@ -183,8 +183,10 @@ export default function VisualisePageClient({
                         disease={diseaseLabel}
                     />
 
+                    {children}
+
                     {(outbreak && diseaseLabel && diseaseLabel.toLocaleLowerCase() === 'pandemic-prone influenza') && (
-                        <div className='container max-lg:pt-8 flex flex-col md:flex-row md:justify-center gap-6'>
+                        <div className='container pb-8 lg:pb-12 flex flex-col md:flex-row md:justify-center gap-6'>
                             <Button 
                                 onClick={() => setSelectedFilters(
                                     emptyFilters(fixedDiseaseOption?.value, false, false)
@@ -213,8 +215,6 @@ export default function VisualisePageClient({
                             </Button>
                         </div>
                     )}
-
-                    {children}
 
                     <div
                         className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
