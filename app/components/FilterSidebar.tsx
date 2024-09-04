@@ -66,7 +66,6 @@ export default function FilterSidebar({
         }
 
         // If fixed disease option IS set, keep all filters except 'Pathogen'
-        // and 'Disease'
         return !(filter.field === 'Pathogen')
     })
 
@@ -220,28 +219,7 @@ const FilterBlock = ({
     
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent }) => {
-
-                const influenzaSubType = availableFilters().find(filter => filter.label === 'H5 Subtype')
-                
-                const childOptions = {
-                    "Pandemic-prone influenza": {
-                        label: influenzaSubType?.parent?.value,
-                        value: influenzaSubType?.parent?.filter,
-                        isFixed: false
-                    },
-                    "H5 Subtype": {
-                        label: influenzaSubType?.label,
-                        value: influenzaSubType?.field,
-                        isFixed: false
-                    }
-                } as any
-                
-                const selectedFixedDiseaseOption = fixedDiseaseOption.isFixed && label === 'Disease' 
-                    ? fixedDiseaseOption 
-                    : parent?.filter === 'Disease' && childOptions[fixedDiseaseOption.label]
-                        ? childOptions[fixedDiseaseOption.label]
-                        : null
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick }) => {
 
                 return (    
                     <ConditionalWrapper
@@ -258,8 +236,8 @@ const FilterBlock = ({
                                 setSelectedOptions={options =>
                                     setSelectedOptions(field, options)
                                 }
-                                fixedDiseaseOption={selectedFixedDiseaseOption}
-                                
+                                loadOnClick={loadOnClick ?? true}
+                                label={label}
                             />
 
                             {excludeGrantsWithMultipleItems && (
