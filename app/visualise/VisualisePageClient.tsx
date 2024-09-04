@@ -25,6 +25,7 @@ import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
+import BlockWrapper from '../components/ContentBuilder/BlockWrapper'
 
 interface VisualisationPageProps {
     title: string
@@ -182,24 +183,33 @@ export default function VisualisePageClient({
                         disease={diseaseLabel}
                     />
 
-                    {outbreak && (
-                        <div className='container flex justify-between'>
-                            <Button onClick={() => setSelectedFilters(
-                                emptyFilters(fixedDiseaseOption?.value, false, false)
-                            )}>
-                                Pandemic-prone Influenza
-                            </Button>
-                            
-                            <Button onClick={() => setSelectedFilters(
-                                emptyFilters(fixedDiseaseOption?.value, true, false)
-                            )}>
-                                H5
+                    {(outbreak && diseaseLabel && diseaseLabel.toLocaleLowerCase() === 'pandemic-prone influenza') && (
+                        <div className='container max-lg:pt-8 flex flex-col md:flex-row md:justify-center gap-6'>
+                            <Button 
+                                onClick={() => setSelectedFilters(
+                                    emptyFilters(fixedDiseaseOption?.value, false, false)
+                                )}
+                                customClasses='!normal-case'
+                            >
+                                {`All ${diseaseLabel} grants`}
                             </Button>
 
-                            <Button onClick={() => setSelectedFilters(
-                                emptyFilters(fixedDiseaseOption?.value)
-                            )}>
-                                H5N1
+                            <Button 
+                                onClick={() => setSelectedFilters(
+                                    emptyFilters(fixedDiseaseOption?.value, true, false)
+                                )}
+                                customClasses='!normal-case'
+                            >
+                                Only H5 grants
+                            </Button>
+
+                            <Button 
+                                onClick={() => setSelectedFilters(
+                                    emptyFilters(fixedDiseaseOption?.value)
+                                )}
+                                customClasses='!normal-case'
+                            >
+                                Only H5N1 grants
                             </Button>
                         </div>
                     )}
