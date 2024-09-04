@@ -14,6 +14,7 @@ interface Props {
             width?: number,
         },
         id?: string,
+        url?: string | null
     }[]
 }
 
@@ -60,7 +61,7 @@ export default function JumpMenu({cardData}: Props) {
                             >
                                 <ul className="grid grid-cols-2 gap-2 p-4">
 
-                                    {cardData.filter((card: any) => card.url).map((card: any, index: number) => {
+                                    {cardData.filter(card => card.url).map((card: any, index: number) => {
                                         
                                         const {title, image, url} = card
 
