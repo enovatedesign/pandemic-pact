@@ -20,6 +20,7 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
+    outbreak?: boolean
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -39,6 +40,7 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
+    outbreak
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
@@ -145,6 +147,7 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
+                outbreak={outbreak}
             />
 
             <AnimateHeight
@@ -206,6 +209,7 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean,
     ) => void
+    outbreak?: boolean
 }
 
 const FilterBlock = ({
@@ -213,6 +217,7 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
+    outbreak
 }: filterBlockProps) => {
 
     const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
@@ -238,6 +243,7 @@ const FilterBlock = ({
                                 }
                                 loadOnClick={loadOnClick ?? true}
                                 label={label}
+                                outbreak={outbreak}
                             />
 
                             {excludeGrantsWithMultipleItems && (

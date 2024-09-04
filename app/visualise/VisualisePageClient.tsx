@@ -78,6 +78,7 @@ export default function VisualisePageClient({
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
+                    outbreak={outbreak}
                 />
             ),
             closedContent: (

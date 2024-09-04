@@ -21,6 +21,7 @@ interface Props {
         isFixed?: boolean
     } | null
     loadOnClick?: boolean
+    outbreak?: boolean
 }
 
 export default function MultiSelect({
@@ -30,7 +31,8 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
-    loadOnClick = true
+    loadOnClick = true,
+    outbreak
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
 
@@ -104,7 +106,7 @@ export default function MultiSelect({
                         ...customSelectThemeColours,
                     },
                 })}
-                isDisabled={label === 'Disease' ? true : false}
+                isDisabled={outbreak && label === 'Disease' ? true : false}
             />
         </>
     )
