@@ -24,6 +24,7 @@ import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
+import Button from '../components/Button'
 
 interface VisualisationPageProps {
     title: string
@@ -178,6 +179,16 @@ export default function VisualisePageClient({
                         outbreak={outbreak}
                         disease={diseaseLabel}
                     />
+
+                    {outbreak && (
+                        <div className='flex justify-center'>
+                            <Button onClick={() => {
+                                
+                            }}>
+                                Reset Values
+                            </Button>
+                        </div>
+                    )}
 
                     {children}
 

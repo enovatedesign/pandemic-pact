@@ -30,7 +30,6 @@ export default function MultiSelect({
     className,
     preloadedOptions = [],
     label = '',
-    fixedDiseaseOption,
     loadOnClick = true
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
