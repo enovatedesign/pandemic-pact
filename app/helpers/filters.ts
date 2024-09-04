@@ -16,6 +16,7 @@ export interface FilterSchema {
     excludeGrantsWithMultipleItems?: { label: string }
     parent?: { filter: string; value: string }
     advanced?: boolean
+    loadOnClick?: boolean
 }
 
 export function availableFilters(): FilterSchema[] {
@@ -29,6 +30,7 @@ export function availableFilters(): FilterSchema[] {
         {
             label: 'Disease',
             field: 'Disease',
+            loadOnClick: false,
         },
 
         {
@@ -38,6 +40,7 @@ export function availableFilters(): FilterSchema[] {
                 filter: 'Disease',
                 value: '6142004', // Pandemic-prone influenza
             },
+            loadOnClick: false,
         },
 
         {
@@ -73,7 +76,8 @@ export function availableFilters(): FilterSchema[] {
             parent: {
                 filter: 'InfluenzaA',
                 value: 'H5',
-            },
+            },            
+            loadOnClick: false,
         },
 
         {
@@ -176,10 +180,19 @@ export function availableFilters(): FilterSchema[] {
 export function emptyFilters(fixedDiseaseValue?: string) {
     return Object.fromEntries(
         availableFilters().map(({ field }) => {
-            const values =
-                field === 'Disease' && fixedDiseaseValue
-                    ? [fixedDiseaseValue]
-                    : []
+            let values:string[] = [];
+
+            if (fixedDiseaseValue) {
+                if (field === 'Disease') {
+                    values = [fixedDiseaseValue];
+                } else if (fixedDiseaseValue === '6142004') { // Pandemic Prone Influenza
+                    if (field === 'InfluenzaA') {
+                        values = ['H5']
+                    } else if (field === 'InfluenzaH5') {
+                        values = ['H5N']
+                    }
+                }
+            }
 
             return [
                 field,
@@ -244,9 +257,7 @@ export const SidebarStateContext = createContext<{
 export const FixedDiseaseOptionContext = createContext<{
     label: string
     value: string
-    isFixed: boolean
 }>({
     label: '',
     value: '',
-    isFixed: false
 })
