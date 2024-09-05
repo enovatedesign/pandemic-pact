@@ -26,6 +26,7 @@ import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
 import BlockWrapper from '../components/ContentBuilder/BlockWrapper'
+import { DiseaseLabel } from '../helpers/types'
 
 interface VisualisationPageProps {
     title: string
@@ -33,7 +34,7 @@ interface VisualisationPageProps {
     showSummary?: boolean
     outbreak?: boolean
     children?: React.ReactNode
-    diseaseLabel?: string
+    diseaseLabel?: DiseaseLabel
 }
 export default function VisualisePageClient({
     title,
@@ -176,7 +177,7 @@ export default function VisualisePageClient({
                     sidebar={sidebar}
                     outbreak={outbreak}
                 >
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak}/>
+                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak} disease={diseaseLabel}/>
 
                     <VisualisationCardLinks
                         outbreak={outbreak}
