@@ -31,7 +31,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             title: "Disease",
             summary: {
                 "Mpox": `We bring together grant information on ${disease}.`,
-                "Pandemic-prone influenza": `We bring together grant information on ${disease}.`,
+                "Pandemic-prone influenza": `We bring together grant information on H5N1.`,
                 "default": 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, Mpox and Plague.'
             },
             url: '#disease',
@@ -56,7 +56,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             title: 'Research Categories',
             summary: {
                 "Mpox": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
-                "Pandemic-prone influenza": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
+                "Pandemic-prone influenza": `Charts showing H5N1 grants assigned to twelve research categories with respective subcategories.`,
                 "default": 'Charts showing the grants assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of grants going into different areas of research.'
             },
             url: '#research-visualisation',
@@ -81,7 +81,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             title: 'Geographical Distribution',
             summary: {
                 "Mpox": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
-                "Pandemic-prone influenza": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
+                "Pandemic-prone influenza": `Charts showing the location of funding organisations and where funding flows to support H5N1 research activities.`,
                 "default": 'Charts showing the location of funding organisations and where the funding flows to support research activities. charts can be visualised at the level of the WHO regions or individual countries.'
             },
             url: '#geographical-distribution',
@@ -106,7 +106,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             title: 'Annual Trends',
             summary: {
                 "Mpox": `Charts for trends in research funding in ${disease} and associated research categories.`,
-                "Pandemic-prone influenza": `Charts for trends in research funding in ${disease} and associated research categories.`,
+                "Pandemic-prone influenza": `Charts for trends in research funding in H5N1 and associated research categories.`,
                 "default": 'Charts for trends in research funding for selected diseases, research categories and other items by year starting from 2020, to align with the COVID-19 Pandemic.'
             },
             url: '#annual-trends',
@@ -131,7 +131,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             title: 'Policy Roadmaps',
             summary: {
                 "Mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
-                "Pandemic-prone influenza": `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
+                "Pandemic-prone influenza": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
             url: '#policy-roadmaps',
