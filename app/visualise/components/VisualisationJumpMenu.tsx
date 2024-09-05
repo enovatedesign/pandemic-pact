@@ -23,7 +23,7 @@ const VisualisationJumpMenu = ({dropdownVisible, outbreak, disease}: Props) => {
             height={dropdownVisible ? 'auto' : 0}
             className="sticky w-full z-20 top-0 backdrop-blur-sm bg-primary-lighter/75"
         >
-            <JumpMenu cardData={cardData}/>
+            <JumpMenu cardData={cardData} disease={disease}/>
         </AnimateHeight>
     )
 }

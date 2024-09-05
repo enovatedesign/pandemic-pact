@@ -2,9 +2,10 @@ import {useState, useEffect, useRef} from 'react'
 import {ChevronDownIcon} from '@heroicons/react/solid'
 import Image from "next/image"
 import AnimateHeight from 'react-animate-height';
+import { DiseaseLabel } from '../helpers/types';
 
 interface Props {
-    dropdownVisible?: boolean,
+    disease?: DiseaseLabel
     cardData: {
         title?: string,
         image?: {
@@ -14,11 +15,15 @@ interface Props {
             width?: number,
         },
         id?: string,
-        url?: string | null
+        url?: {
+            "Mpox": string
+             "Pandemic-prone influenza": string
+             "default": string 
+         } | string 
     }[]
 }
 
-export default function JumpMenu({cardData}: Props) {
+export default function JumpMenu({cardData, disease}: Props) {
 
     const [isOpen, setIsOpen] = useState<Boolean>(false)
 
@@ -61,7 +66,11 @@ export default function JumpMenu({cardData}: Props) {
 
                                 {cardData.filter(card => card.url).map((card: any, index: number) => {
                                     
-                                    const {title, image, url} = card
+                                    const cardSwitch: DiseaseLabel = disease ?? 'default'
+
+                                    const {title, image} = card
+
+                                    const url = disease ? card.url[cardSwitch] : card.url
 
                                     return (
                                         <li ref={dropdown}

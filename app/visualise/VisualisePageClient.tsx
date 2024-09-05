@@ -225,9 +225,15 @@ export default function VisualisePageClient({
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            <div id="research-visualisation" className={gridClasses}>
-                                <GrantsByResearchCategoryCard />
-                            </div>
+                            {diseaseLabel && diseaseLabel === 'Mpox' ? (
+                                <div id="research-categories-policy-roadmaps" className={gridClasses}>
+                                    <GrantsByMpoxResearchPriorityCard /> 
+                                </div>
+                            ) : (
+                                <div id="research-categories" className={gridClasses}>
+                                    <GrantsByResearchCategoryCard />
+                                </div>
+                            )}
 
                             <div
                                 id="geographical-distribution"
@@ -243,12 +249,6 @@ export default function VisualisePageClient({
                             <div id="annual-trends" className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
-
-                            {diseaseLabel && diseaseLabel === 'Mpox' && (
-                                <div id="policy-roadmaps" className={gridClasses}>
-                                    <GrantsByMpoxResearchPriorityCard /> 
-                                </div>
-                            )}
                         </div>
 
                         <Tooltip
