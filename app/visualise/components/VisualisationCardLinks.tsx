@@ -13,13 +13,16 @@ const VisualisationCardLinks = ({ outbreak = false, disease }: VisualisationCard
         <section className="hidden lg:block container mx-auto my-6 lg:my-12">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
                 {visualisationCardData(outbreak, disease).map((card, index) => {
+
+                    const element = document.getElementById(card?.url.replace('#', ''))
+
                     return (
                         <Card
                             key={index}
                             entry={card}
                             tags={false}
                             image={card.image}
-                            animatedIcon={card?.url && <ChevronDownIcon className="w-6 h-6" />}
+                            animatedIcon={element && <ChevronDownIcon className="w-6 h-6" />}
                         />   
                     )
                 })}

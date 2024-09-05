@@ -65,31 +65,38 @@ export default function JumpMenu({cardData}: Props) {
                                         
                                         const {title, image, url} = card
 
+                                        const element = document.getElementById(card.url.replace('#', ''))
+
                                         return (
-                                            <li ref={dropdown}
-                                                key={index}
-                                                className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
-                                            >
-                                                <a href={url}>
-                                                    <button onClick={() => setIsOpen(false)}>
-                                                        {image && (
-                                                            <Image
-                                                                src={image.url}
-                                                                alt={image.altText}
-                                                                width={image.width}
-                                                                height={image.height}
-                                                                className="w-full rounded-lg"
-                                                                loading="lazy"
-                                                            />
-                                                        )}
-                                                        {title && (
-                                                            <p className="text-left pt-4">
-                                                                {title}
-                                                            </p>
-                                                        )}
-                                                    </button>
-                                                </a>
-                                            </li>
+                                            <>
+                                                {element && (
+
+                                                    <li ref={dropdown}
+                                                        key={index}
+                                                        className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
+                                                    >
+                                                        <a href={url}>
+                                                            <button onClick={() => setIsOpen(false)}>
+                                                                {image && (
+                                                                    <Image
+                                                                        src={image.url}
+                                                                        alt={image.altText}
+                                                                        width={image.width}
+                                                                        height={image.height}
+                                                                        className="w-full rounded-lg"
+                                                                        loading="lazy"
+                                                                    />
+                                                                )}
+                                                                {title && (
+                                                                    <p className="text-left pt-4">
+                                                                        {title}
+                                                                    </p>
+                                                                )}
+                                                            </button>
+                                                        </a>
+                                                    </li>
+                                                )}
+                                            </>
                                         )
                                     })}
                                 </ul>
