@@ -28,7 +28,7 @@ const VisualisationCardLinks = ({ outbreak = false, disease }: VisualisationCard
                     const entry = {
                         title: card.title,
                         summary: card.summary[cardSwitch],
-                        url: card.url,
+                        url: showChevron ? card.url : null,
                     }
                     
                     return (
