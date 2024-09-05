@@ -67,12 +67,12 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 480,
             },
             showCard: {
-                "Mpox": false,
+                "Mpox": true,
                 "Pandemic-prone influenza": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": false,
+                "Mpox": true,
                 "Pandemic-prone influenza": true,
                 "default": true
             }

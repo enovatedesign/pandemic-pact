@@ -25,7 +25,6 @@ import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
-import BlockWrapper from '../components/ContentBuilder/BlockWrapper'
 import { DiseaseLabel } from '../helpers/types'
 
 interface VisualisationPageProps {
@@ -226,15 +225,9 @@ export default function VisualisePageClient({
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            {diseaseLabel && diseaseLabel === 'Mpox' ? (
-                                <div id="policy-roadmaps" className={gridClasses}>
-                                    <GrantsByMpoxResearchPriorityCard /> 
-                                </div>
-                            ) : (
-                                <div id="research-visualisation" className={gridClasses}>
-                                    <GrantsByResearchCategoryCard />
-                                </div>
-                            )}
+                            <div id="research-visualisation" className={gridClasses}>
+                                <GrantsByResearchCategoryCard />
+                            </div>
 
                             <div
                                 id="geographical-distribution"
@@ -250,6 +243,12 @@ export default function VisualisePageClient({
                             <div id="annual-trends" className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
                             </div>
+
+                            {diseaseLabel && diseaseLabel === 'Mpox' && (
+                                <div id="policy-roadmaps" className={gridClasses}>
+                                    <GrantsByMpoxResearchPriorityCard /> 
+                                </div>
+                            )}
                         </div>
 
                         <Tooltip
