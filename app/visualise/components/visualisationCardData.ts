@@ -130,7 +130,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Policy Roadmaps',
             summary: {
-                "Mpox": `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
+                "Mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "Pandemic-prone influenza": `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
