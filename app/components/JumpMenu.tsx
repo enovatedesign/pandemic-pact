@@ -4,6 +4,7 @@ import Image from "next/image"
 import AnimateHeight from 'react-animate-height';
 
 interface Props {
+    outbreak?: boolean
     dropdownVisible?: boolean,
     cardData: {
         title?: string,
@@ -63,40 +64,33 @@ export default function JumpMenu({cardData}: Props) {
 
                                     {cardData.filter(card => card.url).map((card: any, index: number) => {
                                         
-                                        const {title, image, url} = card
+                                        const {title, image, url, showCard} = card
 
-                                        const element = document.getElementById(card.url.replace('#', ''))
-
-                                        return (
-                                            <>
-                                                {element && (
-
-                                                    <li ref={dropdown}
-                                                        key={index}
-                                                        className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
-                                                    >
-                                                        <a href={url}>
-                                                            <button onClick={() => setIsOpen(false)}>
-                                                                {image && (
-                                                                    <Image
-                                                                        src={image.url}
-                                                                        alt={image.altText}
-                                                                        width={image.width}
-                                                                        height={image.height}
-                                                                        className="w-full rounded-lg"
-                                                                        loading="lazy"
-                                                                    />
-                                                                )}
-                                                                {title && (
-                                                                    <p className="text-left pt-4">
-                                                                        {title}
-                                                                    </p>
-                                                                )}
-                                                            </button>
-                                                        </a>
-                                                    </li>
-                                                )}
-                                            </>
+                                        if (showCard && title !== 'Policy Roadmaps' && !outbreak) return (
+                                            <li ref={dropdown}
+                                                key={index}
+                                                className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
+                                            >
+                                                <a href={url}>
+                                                    <button onClick={() => setIsOpen(false)}>
+                                                        {image && (
+                                                            <Image
+                                                                src={image.url}
+                                                                alt={image.altText}
+                                                                width={image.width}
+                                                                height={image.height}
+                                                                className="w-full rounded-lg"
+                                                                loading="lazy"
+                                                            />
+                                                        )}
+                                                        {title && (
+                                                            <p className="text-left pt-4">
+                                                                {title}
+                                                            </p>
+                                                        )}
+                                                    </button>
+                                                </a>
+                                            </li>
                                         )
                                     })}
                                 </ul>
