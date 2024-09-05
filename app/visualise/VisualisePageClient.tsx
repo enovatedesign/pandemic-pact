@@ -185,7 +185,7 @@ export default function VisualisePageClient({
 
                     {children}
 
-                    {(outbreak && diseaseLabel && diseaseLabel.toLocaleLowerCase() === 'pandemic-prone influenza') && (
+                    {(outbreak && diseaseLabel && diseaseLabel.toLowerCase() === 'pandemic-prone influenza') && (
                         <div className='container pb-8 lg:pb-12 flex flex-col md:flex-row md:justify-center gap-6'>
                             <Button 
                                 onClick={() => setSelectedFilters(
