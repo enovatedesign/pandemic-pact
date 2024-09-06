@@ -104,7 +104,6 @@ export const contentBuilderQuery = `
             }
             limit
             paginate
-            addTagsMenu
           }
           ... on bodyContent_listTeamMembers_BlockType {
             id

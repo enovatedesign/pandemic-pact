@@ -1,30 +1,37 @@
-"use client"
+'use client'
 
-import VisualisePageClient from "../../../visualise/VisualisePageClient"
-import selectOptions from "../../../../data/dist/select-options.json"
-import Matrix from "../../../components/ContentBuilder"
+import VisualisePageClient from '../../../visualise/VisualisePageClient'
+import selectOptions from '../../../../data/dist/select-options.json'
+import Matrix from '../../../components/ContentBuilder'
+import { FixedDiseaseOptionContext } from '@/app/helpers/filters'
 
-export default function OutbreakTemplate({data}: any) {
-    const {entry} = data
+interface FixedDiseaseProps {
+    label: string
+    value: string
+}
+
+export default function OutbreakTemplate({ data }: any) {
+    const { entry } = data
 
     const diseaseLabel = entry.outbreakDisease
 
-    const fixedDiseaseOptions = selectOptions['Disease']
-        .filter(disease => disease.label === diseaseLabel)
-        .map(data => ({...data, isFixed: true}))
+    const fixedDiseaseOption = selectOptions['Disease'].find(
+        disease => disease.label === diseaseLabel,
+    ) as FixedDiseaseProps
 
     return (
-        <VisualisePageClient 
-            outbreak={true}
-            diseaseLabel={diseaseLabel}
-            title={`OUTBREAK: ${entry.title}`}
-            summary={entry.summary}
-            showSummary={entry.showSummary}
-            fixedDiseaseOptions={fixedDiseaseOptions}
-        >
-            {entry.bodyContent && entry.bodyContent.length > 0 && (
-                <Matrix blocks={entry.bodyContent} />
-            )}
-        </VisualisePageClient>
+        <FixedDiseaseOptionContext.Provider value={{...fixedDiseaseOption}}>
+            <VisualisePageClient
+                outbreak={true}
+                diseaseLabel={diseaseLabel}
+                title={`OUTBREAK: ${entry.title}`}
+                summary={entry.summary}
+                showSummary={entry.showSummary}
+            >
+                {entry.bodyContent && entry.bodyContent.length > 0 && (
+                    <Matrix blocks={entry.bodyContent} />
+                )}
+            </VisualisePageClient>
+        </FixedDiseaseOptionContext.Provider>
     )
 }

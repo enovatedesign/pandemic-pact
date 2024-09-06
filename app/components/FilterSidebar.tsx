@@ -1,11 +1,18 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import MultiSelect from './MultiSelect'
 import Switch from './Switch'
 import Button from './Button'
-import { availableFilters, emptyFilters, Filters } from '../helpers/filters'
+import {
+    availableFilters,
+    emptyFilters,
+    Filters,
+    FilterSchema,
+    FixedDiseaseOptionContext,
+} from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
+import ConditionalWrapper from './ConditionalWrapper'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -13,11 +20,18 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
-    fixedDiseaseOptions?: {
-        label: string 
-        value: string
-        isFixed?: boolean
-    }[]
+    outbreak?: boolean
+}
+
+export function IndentMultiSelect({children}: {children: React.ReactNode}) {
+    return (
+        <div className="flex gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-6 fill-current text-primary">
+                <path d="M334.5 446c8.8 3.8 19 2 26-4.6l144-136c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22l0 88-192 0c-17.7 0-32-14.3-32-32L96 64c0-17.7-14.3-32-32-32L32 32C14.3 32 0 46.3 0 64L0 208c0 70.7 57.3 128 128 128l192 0 0 88c0 9.6 5.7 18.2 14.5 22z"/>
+            </svg>
+            {children}
+        </div>
+    )
 }
 
 export default function FilterSidebar({
@@ -26,20 +40,40 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    fixedDiseaseOptions
+    outbreak = false
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
-    const filters = availableFilters()
-    let standardFilters = filters.filter(f => !f.advanced)
+    const filters = availableFilters().filter(filter => {
+        // Honour conditional filter logic
+        if (filter.parent) {
+            const parentFilter = selectedFilters[filter.parent.filter]
+
+            // If the parent filter doesn't have exactly one value selected,
+            // we don't want to show the child filter
+            if (parentFilter.values.length !== 1) {
+                return false
+            }
+
+            // If the parent has exactly one value but it isn't the value that
+            // the child filter is dependent on, we also don't show the child
+            if (parentFilter.values[0] !== filter.parent.value) {
+                return false
+            }
+
+            // Otherwise we will let the filter selection logic proceed
+            // as normal, which will show the child unless anything further
+            // logic hides it
+        }
+
+        // If fixed disease option IS set, keep all filters except 'Pathogen'
+        return !(filter.field === 'Pathogen')
+    })
+
+    const standardFilters = filters.filter(f => !f.advanced)
+
     const advancedFilters = filters.filter(f => f.advanced)
-    
-    // If fixed disease options exists, modify standrad filters to remove 'Pathogen'
-    // The Disease filter must remain to allow maniupulation of this field within the multi select
-    if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
-        standardFilters = standardFilters.filter(f => f.field !== 'Pathogen')
-    }
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = { ...selectedFilters }
@@ -51,7 +85,7 @@ export default function FilterSidebar({
 
     const setExcludeGrantsWithMultipleItemsInField = (
         field: keyof Filters,
-        value: boolean
+        value: boolean,
     ) => {
         let selectedOptions: Filters = { ...selectedFilters }
 
@@ -59,7 +93,9 @@ export default function FilterSidebar({
 
         setSelectedFilters(selectedOptions)
     }
-    
+
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
+
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
             <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
@@ -69,9 +105,7 @@ export default function FilterSidebar({
                             <span className="text-xs font-bold text-gray-300 uppercase">
                                 Loading Dataset
                             </span>
-                            <LoadingSpinner
-                                className="size-9 animate-spin shrink-0 text-primary"
-                            />
+                            <LoadingSpinner className="size-9 animate-spin shrink-0 text-primary" />
                         </>
                     ) : (
                         <>
@@ -113,7 +147,7 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
-                fixedDiseaseOptions={fixedDiseaseOptions}
+                outbreak={outbreak}
             />
 
             <AnimateHeight
@@ -154,7 +188,11 @@ export default function FilterSidebar({
                 <Button
                     size="xsmall"
                     customClasses="mt-3 flex items-center gap-1"
-                    onClick={() => setSelectedFilters(emptyFilters())}
+                    onClick={() =>
+                        setSelectedFilters(
+                            emptyFilters(fixedDiseaseOption?.value),
+                        )
+                    }
                 >
                     Clear All <XIcon className="w-5 h-5" />
                 </Button>
@@ -164,23 +202,14 @@ export default function FilterSidebar({
 }
 
 interface filterBlockProps {
-    filters: {
-        field: string
-        label: string
-        advanced?: boolean
-        excludeGrantsWithMultipleItems?: { label: string }
-    }[]
+    filters: FilterSchema[]
     selectedFilters: Filters
     setSelectedOptions: (field: keyof Filters, options: string[]) => void
     setExcludeGrantsWithMultipleItemsInField: (
         field: keyof Filters,
-        value: boolean
+        value: boolean,
     ) => void
-    fixedDiseaseOptions?: {
-        label: string
-        value: string
-        isFixed?: boolean 
-    }[]
+    outbreak?: boolean
 }
 
 const FilterBlock = ({
@@ -188,74 +217,55 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    fixedDiseaseOptions
+    outbreak
 }: filterBlockProps) => {
+
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
     
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems }) => {
-                
-                let srOnlyText = null
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick }) => {
 
-                if (fixedDiseaseOptions && fixedDiseaseOptions.length > 0) {
-                    srOnlyText = `Active ${label} filter`
-                    if (fixedDiseaseOptions.length === 1) {
-                        srOnlyText += ` is: ${fixedDiseaseOptions[0].label}`
-                    } else {
-                        srOnlyText += `s are: ${fixedDiseaseOptions.map(disease => disease.label).join(', ')}`
-                    }
-                }
+                return (    
+                    <ConditionalWrapper
+                        condition={parent != undefined}
+                        key={field}
+                        wrapper={children => <IndentMultiSelect>{children}</IndentMultiSelect>}
+                    >  
+                        <div className="flex flex-col space-y-2 w-full" key={field}>
+                            <p className="text-white">Filter by {label}</p>
 
-                return (
-                    <div className="flex flex-col space-y-2 w-full" key={field}>
-
-                        {fixedDiseaseOptions && label === 'Disease' ? (
-                            <>
-                                <p className="sr-only">{srOnlyText}</p>
-
-                                <MultiSelect
-                                    field={field}
-                                    selectedOptions={selectedFilters[field].values}
-                                    setSelectedOptions={options =>
-                                        setSelectedOptions(field, options)
-                                    }
-                                    fixedDiseaseOptions={fixedDiseaseOptions}
-                                    className="hidden"
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-white">Filter by {label}</p>
-
-                                <MultiSelect
-                                    field={field}
-                                    selectedOptions={selectedFilters[field].values}
-                                    setSelectedOptions={options =>
-                                        setSelectedOptions(field, options)
-                                    }
-                                />
-                            </>
-                        )}
-
-                        {excludeGrantsWithMultipleItems && (
-                            <Switch
-                                checked={
-                                    selectedFilters[field]
-                                        .excludeGrantsWithMultipleItems
+                            <MultiSelect
+                                field={field}
+                                selectedOptions={selectedFilters[field].values}
+                                setSelectedOptions={options =>
+                                    setSelectedOptions(field, options)
                                 }
-                                onChange={value =>
-                                    setExcludeGrantsWithMultipleItemsInField(
-                                        field,
-                                        value
-                                    )
-                                }
-                                label={excludeGrantsWithMultipleItems.label}
-                                textClassName="text-white"
+                                loadOnClick={loadOnClick ?? true}
+                                label={label}
+                                outbreak={outbreak}
                             />
-                        )}
-                    </div>
-                )
-            })}
+
+                            {excludeGrantsWithMultipleItems && (
+                                <Switch
+                                    checked={
+                                        selectedFilters[field]
+                                        .excludeGrantsWithMultipleItems
+                                    }
+                                    onChange={value =>
+                                        setExcludeGrantsWithMultipleItemsInField(
+                                            field,
+                                            value,
+                                        )
+                                    }
+                                    label={excludeGrantsWithMultipleItems.label}
+                                    textClassName="text-white"
+                                />
+                            )}
+                        </div>
+                    </ConditionalWrapper>
+                )}
+            )}
         </>
     )
 }

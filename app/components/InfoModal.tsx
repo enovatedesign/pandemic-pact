@@ -6,8 +6,26 @@ import { InformationCircleIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import { defaultProseClasses } from '../helpers/prose-classes'
 
-export default function InfoModal({children, customButton = null, customButtonClasses = ''}: {children: React.ReactNode, customButton?: React.ReactNode, customButtonClasses?: string}) {
+interface InfoModalProps {
+    children: React.ReactNode, 
+    customButton?: React.ReactNode, 
+    customButtonClasses?: string, 
+    iconSize?: string
+}
+
+export default function InfoModal({
+    children, 
+    customButton = null, 
+    customButtonClasses = '', 
+    iconSize = 'size-6'
+}: InfoModalProps) {
+    
     const [isOpen, setIsOpen] = useState(false)
+    
+    const iconClasses = [
+        'text-secondary ignore-in-image-export',
+        iconSize
+    ].filter(Boolean).join(' ')
 
     return (
         <>
@@ -17,7 +35,7 @@ export default function InfoModal({children, customButton = null, customButtonCl
                 ) : (
                     <>
                         <span className="sr-only">Information</span>
-                        <InformationCircleIcon className="w-6 h-6 text-secondary ignore-in-image-export" />
+                        <InformationCircleIcon className={iconClasses} />
                     </>
                 )}
             </button>
