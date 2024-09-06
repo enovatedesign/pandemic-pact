@@ -10,12 +10,109 @@ export interface Filters {
     [key: string]: Filter
 }
 
-export function availableFilters() {
+export interface FilterSchema {
+    label: string
+    field: string
+    excludeGrantsWithMultipleItems?: { label: string }
+    parent?: { filter: string; value: string }
+    advanced?: boolean
+    loadOnClick?: boolean
+}
+
+export function availableFilters(): FilterSchema[] {
     return [
         {
             label: 'Funder',
             field: 'FundingOrgName',
             excludeGrantsWithMultipleItems: { label: 'Exclude Joint Funding' },
+        },
+
+        {
+            label: 'Disease',
+            field: 'Disease',
+            loadOnClick: false,
+        },
+
+        {
+            label: 'H Antigen',
+            field: 'InfluenzaA',
+            parent: {
+                filter: 'Disease',
+                value: '6142004', // Pandemic-prone influenza
+            },
+            loadOnClick: false,
+        },
+
+        {
+            label: 'H1 Subtype',
+            field: 'InfluenzaH1',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h1',
+            },
+        },
+
+        {
+            label: 'H2 Subtype',
+            field: 'InfluenzaH2',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h2',
+            },
+        },
+
+        {
+            label: 'H3 Subtype',
+            field: 'InfluenzaH3',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h3',
+            },
+        },
+
+        {
+            label: 'H5 Subtype',
+            field: 'InfluenzaH5',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h5',
+            },            
+            loadOnClick: false,
+        },
+
+        {
+            label: 'H6 Subtype',
+            field: 'InfluenzaH6',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h6',
+            },
+        },
+
+        {
+            label: 'H7 Subtype',
+            field: 'InfluenzaH7',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h7',
+            },
+        },
+
+        {
+            label: 'H10 Subtype',
+            field: 'InfluenzaH10',
+            parent: {
+                filter: 'InfluenzaA',
+                value: 'h10',
+            },
+        },
+
+        {
+            label: 'Pathogen Families',
+            field: 'Pathogen',
+            excludeGrantsWithMultipleItems: {
+                label: 'Exclude Grants with Multiple Pathogens',
+            },
         },
 
         {
@@ -49,19 +146,6 @@ export function availableFilters() {
         },
 
         {
-            label: 'Disease',
-            field: 'Disease',
-        },
-
-        {
-            label: 'Pathogen Families',
-            field: 'Pathogen',
-            excludeGrantsWithMultipleItems: {
-                label: 'Exclude Grants with Multiple Pathogens',
-            },
-        }, 
-
-        {
             label: 'Study Subject',
             field: 'StudySubject',
             advanced: true,
@@ -93,12 +177,32 @@ export function availableFilters() {
     ]
 }
 
-export function emptyFilters() {
+
+export function emptyFilters(fixedDiseaseValue?: string, resetFirstChild: boolean = true, resetSecondChild: boolean  = true) {
     return Object.fromEntries(
-        availableFilters().map(({ field }) => [
-            field,
-            { values: [], excludeGrantsWithMultipleItems: false },
-        ])
+        availableFilters().map(({ field }) => {
+            let values:string[] = [];
+
+            if (fixedDiseaseValue) {
+                if (field === 'Disease') {
+                    values = [fixedDiseaseValue];
+                } else if (fixedDiseaseValue === '6142004') { // Pandemic Prone Influenza
+                    if (resetFirstChild && field === 'InfluenzaA') {
+                        values = ['h5']
+                    } else if (resetSecondChild && field === 'InfluenzaH5') {
+                        values = ['h5n']
+                    }
+                }
+            }
+
+            return [
+                field,
+                {
+                    values,
+                    excludeGrantsWithMultipleItems: false,
+                },
+            ]
+        }),
     )
 }
 
@@ -126,7 +230,7 @@ export function filterGrants(grants: any, filters: any) {
 
             // if the grant has multiple values in the field, check if any of them match any of the filter values
             return grant[key].some((element: any) => values.includes(element))
-        })
+        }),
     )
 }
 
@@ -151,3 +255,10 @@ export const SidebarStateContext = createContext<{
     sidebarOpen: false,
 })
 
+export const FixedDiseaseOptionContext = createContext<{
+    label: string
+    value: string
+}>({
+    label: '',
+    value: '',
+})

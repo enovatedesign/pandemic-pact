@@ -47,6 +47,15 @@ export default function () {
         ),
     }
 
+    // Adjust case for Pandemic-prone influenza values to lowercase
+    Object.keys(selectOptions).forEach(key => {
+        if (key.startsWith('Influenza')) {
+            selectOptions[key].forEach(option => {
+                option.value = option.value.toLowerCase()
+            })
+        }
+    })
+
     // Remove funders that don't have any grants
     const grants: any[] = fs.readJsonSync('./data/dist/grants.json')
 

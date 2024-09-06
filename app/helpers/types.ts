@@ -1,0 +1,1 @@
+export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'default'
