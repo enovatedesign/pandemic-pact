@@ -93,7 +93,9 @@ export default function GrantsPerResearchCategoryByRegion() {
 
     // If all regions have zero grants, hide the entire visualisation card
     const allRegionsHaveZeroGrants = chartData.every(datum => {
-        return datum['All Research Categories'] === 0
+        return researchCategoryOptions.every(({ label }: { label: string }) => {
+            return datum[label] === 0
+        })
     })
 
     if (allRegionsHaveZeroGrants) {
