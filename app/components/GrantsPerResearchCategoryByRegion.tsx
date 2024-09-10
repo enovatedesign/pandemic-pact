@@ -59,14 +59,14 @@ export default function GrantsPerResearchCategoryByRegion() {
         researchCategoryOptions = researchCatOptions.filter(
             researchCategoryOption =>
                 selectedResearchCategories.includes(
-                    researchCategoryOption.value
-                )
+                    researchCategoryOption.value,
+                ),
         )
     }
 
     const chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset.filter((grant: any) =>
-            grant.ResearchLocationRegion.includes(regionOption.value)
+            grant.ResearchLocationRegion.includes(regionOption.value),
         )
 
         if (showingAllResearchCategories) {
@@ -80,9 +80,9 @@ export default function GrantsPerResearchCategoryByRegion() {
             researchCategoryOptions.map(({ label, value }: any) => [
                 label,
                 grantsInRegion.filter((grant: any) =>
-                    grant.ResearchCat.includes(value)
+                    grant.ResearchCat.includes(value),
                 ).length,
-            ])
+            ]),
         )
 
         return {
@@ -90,6 +90,15 @@ export default function GrantsPerResearchCategoryByRegion() {
             ...totalGrantsPerResearchCategory,
         }
     })
+
+    // If all regions have zero grants, hide the entire visualisation card
+    const allRegionsHaveZeroGrants = chartData.every(datum => {
+        return datum['All Research Categories'] === 0
+    })
+
+    if (allRegionsHaveZeroGrants) {
+        return null
+    }
 
     return (
         <VisualisationCard
@@ -154,14 +163,14 @@ export default function GrantsPerResearchCategoryByRegion() {
 
                     <ImageExportLegend
                         categories={researchCategoryOptions.map(
-                            ({ label }) => label
+                            ({ label }) => label,
                         )}
                         colours={
                             showingAllResearchCategories
                                 ? [allResearchCategoriesColour]
                                 : researchCategoryOptions.map(
                                       ({ value }) =>
-                                          researchCategoryColours[value]
+                                          researchCategoryColours[value],
                                   )
                         }
                     />
