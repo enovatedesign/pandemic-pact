@@ -21,18 +21,18 @@ export default function () {
     const dataHeadings = Object.keys(rawGrants[0])
     // Also, get the keys from the dictionary
     const dictionaryHeadings = dictionary.map(
-        row => row['Variable / Field Name'],
+        row => row['Variable / Field Name']
     )
 
     // Merge them and remove duplicates
     const headings = _.uniq([...dictionaryHeadings, ...dataHeadings])
 
     const checkboxAndTextFields = _.partition(headings, heading =>
-        heading.includes('___'),
+        heading.includes('___')
     )
 
     const checkBoxFields = _.uniq(
-        checkboxAndTextFields[0].map(field => field.split('___')[0]),
+        checkboxAndTextFields[0].map(field => field.split('___')[0])
     )
 
     const [commaSeparatedFields, textFields] = _.partition(
@@ -45,12 +45,12 @@ export default function () {
                 'research_location_country_iso',
                 'main_research_priority_area_number_new',
                 'main_research_sub_priority_number_new',
-            ].includes(field),
+            ].includes(field)
     )
 
     const [numericFields, stringFields] = _.partition(
         textFields,
-        field => field === 'award_amount_converted',
+        field => field === 'award_amount_converted'
     )
 
     const grants = rawGrants.map((rawGrant, index, array) => {
@@ -60,32 +60,34 @@ export default function () {
 
         // If the grant_title_eng field is empty or undefined, copy the grant_title_original field into it
         if (!rawGrant?.grant_title_eng && rawGrant?.grant_title_original) {
-            rawGrant['grant_title_eng'] = rawGrant.grant_title_original
+            rawGrant['grant_title_eng'] = rawGrant.grant_title_original;
         }
 
         const stringFieldValues = _.pick(rawGrant, stringFields)
 
         const numericFieldValues = Object.fromEntries(
             Object.entries(_.pick(rawGrant, numericFields)).map(
-                ([key, value]) => [key, parseFloat(value)],
-            ),
+                ([key, value]) => [key, parseFloat(value)]
+            )
         )
 
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(field => [
                 field,
                 convertCheckBoxFieldToArray(rawGrant, field),
-            ]),
+            ])
         )
 
         const commaSeparatedFieldValues = Object.fromEntries(
             commaSeparatedFields.map(field => [
                 field,
                 convertCommaSeparatedValueFieldToArray(rawGrant, field),
-            ]),
+            ])
         )
 
         prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
+
+        
 
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
@@ -95,27 +97,12 @@ export default function () {
         })
 
         // Add custom data fields of our own
-        let customFields: { [key: string]: number | string | string[] } = {
+        let customFields = {
             // Add 'TrendStartYear' default value if 'grant_start_year' is missing
             TrendStartYear: Number(
-                rawGrant.grant_start_year ?? rawGrant.publication_year_of_award,
+                rawGrant.grant_start_year ?? rawGrant.publication_year_of_award
             ),
         }
-
-        // If FunderRegion, ResearchInstitutionRegion or ResearchLocationRegion
-        // are empty, set them to "Unspecified"
-        const regionFields = [
-            'FunderRegion',
-            'ResearchInstitutionRegion',
-            'ResearchLocationRegion',
-        ]
-
-        regionFields.forEach(field => {
-            if (convertedKeysGrantData[field].length === 0) {
-                // -99 always maps "Unspecified" in the source data
-                customFields[field] = ['-99']
-            }
-        })
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020
         // use 'publication_year_of_award' instead. Also, if it's a NaN year
@@ -124,7 +111,7 @@ export default function () {
             const year = Number(rawGrant.grant_start_year)
             if ((!isNaN(year) && year < 2020) || isNaN(year)) {
                 customFields.TrendStartYear = Number(
-                    rawGrant.publication_year_of_award,
+                    rawGrant.publication_year_of_award
                 )
             }
         }
@@ -152,6 +139,7 @@ export default function () {
             console.log(grant.GrantTitleEng)
         }
     })
+
 }
 
 function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
@@ -159,14 +147,14 @@ function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
 }) {
     const MPOXResearchPriority =
         checkBoxFieldValues.research_and_policy_roadmaps.filter(
-            value => value in mpoxResearchPriorityAndSubPriorityMapping,
+            value => value in mpoxResearchPriorityAndSubPriorityMapping
         )
 
     const MPOXResearchSubPriority = MPOXResearchPriority.flatMap(priority => {
         const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
 
         return checkBoxFieldValues[field].map(
-            subPriority => priority + subPriority,
+            subPriority => priority + subPriority
         )
     })
 
@@ -176,7 +164,7 @@ function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
 
 function convertCommaSeparatedValueFieldToArray(
     grant: RawGrant,
-    field: string,
+    field: string
 ) {
     if (!grant[field]) {
         return []
@@ -191,7 +179,7 @@ function convertCommaSeparatedValueFieldToArray(
 function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
     return Object.entries(grant)
         .filter(
-            ([key, value]) => key.startsWith(`${field}___`) && value === '1',
+            ([key, value]) => key.startsWith(`${field}___`) && value === '1'
         )
         .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
 }
