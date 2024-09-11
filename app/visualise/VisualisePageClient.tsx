@@ -124,7 +124,7 @@ export default function VisualisePageClient({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
-        outbreak
+        outbreak,
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
@@ -161,6 +161,10 @@ export default function VisualisePageClient({
         }
     }, [dropdownVisible])
 
+    // Hide the radar and sankey visualisations if we are on the
+    // "Pandemic-prone influenza" outbreak page
+    const shouldShowRadarAndSankey = fixedDiseaseOption.value !== '6142004'
+
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -177,7 +181,11 @@ export default function VisualisePageClient({
                     sidebar={sidebar}
                     outbreak={outbreak}
                 >
-                    <VisualisationJumpMenu dropdownVisible={dropdownVisible} outbreak={outbreak} disease={diseaseLabel}/>
+                    <VisualisationJumpMenu
+                        dropdownVisible={dropdownVisible}
+                        outbreak={outbreak}
+                        disease={diseaseLabel}
+                    />
 
                     <VisualisationCardLinks
                         outbreak={outbreak}
@@ -186,46 +194,86 @@ export default function VisualisePageClient({
 
                     {children}
 
-                    {(outbreak && diseaseLabel && diseaseLabel.toLowerCase() === 'pandemic-prone influenza') && (
-                        <div className="container pb-8 lg:pb-12 flex flex-col md:flex-row md:justify-center gap-6 lg:gap-8 xl:gap-12">
-                            <div className="relative">
-                                <Button 
-                                    onClick={() => setSelectedFilters(
-                                        emptyFilters(fixedDiseaseOption?.value, false, false)
-                                    )}
-                                    customClasses='max-md:w-full !normal-case'
+                    {outbreak &&
+                        diseaseLabel &&
+                        diseaseLabel.toLowerCase() ===
+                            'pandemic-prone influenza' && (
+                            <div className="container pb-8 lg:pb-12 flex flex-col md:flex-row md:justify-center gap-6 lg:gap-8 xl:gap-12">
+                                <div className="relative">
+                                    <Button
+                                        onClick={() =>
+                                            setSelectedFilters(
+                                                emptyFilters(
+                                                    fixedDiseaseOption?.value,
+                                                    false,
+                                                    false,
+                                                ),
+                                            )
+                                        }
+                                        customClasses="max-md:w-full !normal-case"
+                                    >
+                                        <span className="pr-5">
+                                            {`All ${diseaseLabel} grants`}
+                                        </span>
+                                    </Button>
+
+                                    <InfoModal
+                                        customButtonClasses="absolute right-3 top-1/2 -translate-y-1/2 z-"
+                                        iconSize="size-8"
+                                    >
+                                        <p>
+                                            Pandemic-prone influenza includes
+                                            any influenza strain that has been
+                                            known to result in pandemics,
+                                            outbreaks, or extensive spread among
+                                            or between species, i.e. H1N1, H2N2,
+                                            H3N2, H5N1, H5N6, H7N9, or strains
+                                            that may pose potential pandemic
+                                            risk, or deemed as priority
+                                            pathogens i.e. highly pathogenic
+                                            avian influenza, influenza A H
+                                            antigens - H1, H2, H3, H5, H6, H7,
+                                            H10. Research projects that include
+                                            terms such as ‘influenza A’,
+                                            ‘pandemic influenza’, ‘emerging
+                                            influenza viruses’, ‘universal
+                                            influenza vaccine’, or ‘influenza’
+                                            and ‘pandemic potential’, were
+                                            considered under pandemic-prone
+                                            influenza.
+                                        </p>
+                                    </InfoModal>
+                                </div>
+
+                                <Button
+                                    onClick={() =>
+                                        setSelectedFilters(
+                                            emptyFilters(
+                                                fixedDiseaseOption?.value,
+                                                true,
+                                                false,
+                                            ),
+                                        )
+                                    }
+                                    customClasses="!normal-case"
                                 >
-                                    <span className="pr-5">
-                                        {`All ${diseaseLabel} grants`}
-                                    </span>
+                                    Only H5 grants
                                 </Button>
-                                
-                                <InfoModal customButtonClasses='absolute right-3 top-1/2 -translate-y-1/2 z-' iconSize='size-8'>
-                                    <p>
-                                        Pandemic-prone influenza includes any influenza strain that has been known to result in pandemics, outbreaks, or extensive spread among or between species, i.e. H1N1, H2N2, H3N2, H5N1, H5N6, H7N9, or strains that may pose potential pandemic risk, or deemed as priority pathogens i.e. highly pathogenic avian influenza, influenza A H antigens - H1, H2, H3, H5, H6, H7, H10. Research projects that include terms such as ‘influenza A’, ‘pandemic influenza’, ‘emerging influenza viruses’, ‘universal influenza vaccine’, or ‘influenza’ and ‘pandemic potential’, were considered under pandemic-prone influenza.
-                                    </p>
-                                </InfoModal>
+
+                                <Button
+                                    onClick={() =>
+                                        setSelectedFilters(
+                                            emptyFilters(
+                                                fixedDiseaseOption?.value,
+                                            ),
+                                        )
+                                    }
+                                    customClasses="!normal-case"
+                                >
+                                    Only H5N1 grants
+                                </Button>
                             </div>
-
-                            <Button 
-                                onClick={() => setSelectedFilters(
-                                    emptyFilters(fixedDiseaseOption?.value, true, false)
-                                )}
-                                customClasses='!normal-case'
-                            >
-                                Only H5 grants
-                            </Button>
-
-                            <Button 
-                                onClick={() => setSelectedFilters(
-                                    emptyFilters(fixedDiseaseOption?.value)
-                                )}
-                                customClasses='!normal-case'
-                            >
-                                Only H5N1 grants
-                            </Button>
-                        </div>
-                    )}
+                        )}
 
                     <div
                         className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
@@ -237,11 +285,17 @@ export default function VisualisePageClient({
                             </div>
 
                             {diseaseLabel && diseaseLabel === 'Mpox' ? (
-                                <div id="research-categories-policy-roadmaps" className={gridClasses}>
-                                    <GrantsByMpoxResearchPriorityCard /> 
+                                <div
+                                    id="research-categories-policy-roadmaps"
+                                    className={gridClasses}
+                                >
+                                    <GrantsByMpoxResearchPriorityCard />
                                 </div>
                             ) : (
-                                <div id="research-categories" className={gridClasses}>
+                                <div
+                                    id="research-categories"
+                                    className={gridClasses}
+                                >
                                     <GrantsByResearchCategoryCard />
                                 </div>
                             )}
@@ -252,9 +306,13 @@ export default function VisualisePageClient({
                             >
                                 <GrantsByCountryWhereResearchWasConductedCard />
 
-                                <GrantsPerResearchCategoryByRegion />
+                                {shouldShowRadarAndSankey && (
+                                    <>
+                                        <GrantsPerResearchCategoryByRegion />
 
-                                <RegionalFlowOfGrantsCard />
+                                        <RegionalFlowOfGrantsCard />
+                                    </>
+                                )}
                             </div>
 
                             <div id="annual-trends" className={gridClasses}>
