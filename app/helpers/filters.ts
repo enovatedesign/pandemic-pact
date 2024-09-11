@@ -76,7 +76,7 @@ export function availableFilters(): FilterSchema[] {
             parent: {
                 filter: 'InfluenzaA',
                 value: 'h5',
-            },            
+            },
             loadOnClick: false,
         },
 
@@ -119,7 +119,7 @@ export function availableFilters(): FilterSchema[] {
             label: 'Research Category',
             field: 'ResearchCat',
         },
-        
+
         {
             label: 'Funder Region',
             field: 'FunderRegion',
@@ -177,16 +177,20 @@ export function availableFilters(): FilterSchema[] {
     ]
 }
 
-
-export function emptyFilters(fixedDiseaseValue?: string, resetFirstChild: boolean = true, resetSecondChild: boolean  = true) {
+export function emptyFilters(
+    fixedDiseaseValue?: string,
+    resetFirstChild: boolean = true,
+    resetSecondChild: boolean = true,
+) {
     return Object.fromEntries(
-        availableFilters().map(({ field }) => {
-            let values:string[] = [];
+        availableFilters().map(({ field, parent }) => {
+            let values: string[] = []
 
             if (fixedDiseaseValue) {
                 if (field === 'Disease') {
-                    values = [fixedDiseaseValue];
-                } else if (fixedDiseaseValue === '6142004') { // Pandemic Prone Influenza
+                    values = [fixedDiseaseValue]
+                } else if (fixedDiseaseValue === '6142004') {
+                    // Pandemic Prone Influenza
                     if (resetFirstChild && field === 'InfluenzaA') {
                         values = ['h5']
                     } else if (resetSecondChild && field === 'InfluenzaH5') {
@@ -199,6 +203,7 @@ export function emptyFilters(fixedDiseaseValue?: string, resetFirstChild: boolea
                 field,
                 {
                     values,
+                    parent,
                     excludeGrantsWithMultipleItems: false,
                 },
             ]
@@ -208,29 +213,48 @@ export function emptyFilters(fixedDiseaseValue?: string, resetFirstChild: boolea
 
 export function filterGrants(grants: any, filters: any) {
     return grants.filter((grant: any) =>
-        every(filters, ({ values, excludeGrantsWithMultipleItems }, key) => {
-            // if the grant has multiple items in the field and the switch is on, exclude it
-            if (excludeGrantsWithMultipleItems && grant[key].length > 1) {
-                return false
-            }
+        every(
+            filters,
+            ({ values, excludeGrantsWithMultipleItems, parent }, key) => {
+                // if the grant has multiple items in the field and the switch is on, exclude it
+                if (excludeGrantsWithMultipleItems && grant[key].length > 1) {
+                    return false
+                }
 
-            // if no filter values are selected, all grants match
-            if (values.length === 0) {
-                return true
-            }
+                // if no filter values are selected, all grants match
+                if (values.length === 0) {
+                    return true
+                }
 
-            if (typeof grant[key] === 'undefined') {
-                return false
-            }
+                if (typeof grant[key] === 'undefined') {
+                    return false
+                }
 
-            // if the grant has a single value in the field, check if it matches any of the filter values
-            if (typeof grant[key] === 'string') {
-                return values.includes(grant[key])
-            }
+                // If the filter has a parent filter, check that it's parent is currently selected
+                // before applying it
+                if (typeof parent !== 'undefined') {
+                    const parentFilterValues = filters[parent.filter].values
 
-            // if the grant has multiple values in the field, check if any of them match any of the filter values
-            return grant[key].some((element: any) => values.includes(element))
-        }),
+                    const childFilterShouldBeApplied =
+                        parentFilterValues.length === 1 &&
+                        parentFilterValues[0] === parent.value
+
+                    if (!childFilterShouldBeApplied) {
+                        return true
+                    }
+                }
+
+                // if the grant has a single value in the field, check if it matches any of the filter values
+                if (typeof grant[key] === 'string') {
+                    return values.includes(grant[key])
+                }
+
+                // if the grant has multiple values in the field, check if any of them match any of the filter values
+                return grant[key].some((element: any) =>
+                    values.includes(element),
+                )
+            },
+        ),
     )
 }
 
@@ -262,3 +286,4 @@ export const FixedDiseaseOptionContext = createContext<{
     label: '',
     value: '',
 })
+
