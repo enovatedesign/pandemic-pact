@@ -7,7 +7,7 @@ export default function () {
     title('Preparing optimised visualise-page grants data file')
 
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(
-        './data/dist/grants.json'
+        './data/dist/grants.json',
     )
 
     const optimisedGrants: ProcessedGrant[] = sourceGrants.map(grant => {
@@ -40,6 +40,14 @@ export default function () {
             'ResearchSubcat',
             'MPOXResearchPriority',
             'MPOXResearchSubPriority',
+            'InfluenzaA',
+            'InfluenzaH1',
+            'InfluenzaH2',
+            'InfluenzaH3',
+            'InfluenzaH5',
+            'InfluenzaH6',
+            'InfluenzaH7',
+            'InfluenzaH10',
             'Tags',
         ])
     })

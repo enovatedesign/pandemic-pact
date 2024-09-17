@@ -31,6 +31,14 @@ export const keyMapping: { [key: string]: string } = {
     main_research_sub_priority_number_new: 'ResearchSubcat',
     mpox_research_priority: 'MPOXResearchPriority',
     mpox_research_sub_priority: 'MPOXResearchSubPriority',
+    influenza_a: 'InfluenzaA',
+    influenza_h1: 'InfluenzaH1',
+    influenza_h2: 'InfluenzaH2',
+    influenza_h3: 'InfluenzaH3',
+    influenza_h5: 'InfluenzaH5',
+    influenza_h6: 'InfluenzaH6',
+    influenza_h7: 'InfluenzaH7',
+    influenza_h10: 'InfluenzaH10',
     tags: 'Tags',
 }
 

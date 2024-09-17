@@ -58,6 +58,11 @@ export default function () {
             info(`Processed ${index} of ${array.length} grants`)
         }
 
+        // If the grant_title_eng field is empty or undefined, copy the grant_title_original field into it
+        if (!rawGrant?.grant_title_eng && rawGrant?.grant_title_original) {
+            rawGrant['grant_title_eng'] = rawGrant.grant_title_original;
+        }
+
         const stringFieldValues = _.pick(rawGrant, stringFields)
 
         const numericFieldValues = Object.fromEntries(
@@ -81,6 +86,8 @@ export default function () {
         )
 
         prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
+
+        
 
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
@@ -122,6 +129,17 @@ export default function () {
     fs.writeJsonSync(pathname, grants)
 
     printWrittenFileStats(pathname)
+
+    // Check
+
+    const checkGrants: RawGrant[] = fs.readJsonSync('./data/dist/grants.json')
+
+    checkGrants.map((grant, index, array) => {
+        if (grant.GrantID === 'P29941') {
+            console.log(grant.GrantTitleEng)
+        }
+    })
+
 }
 
 function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {

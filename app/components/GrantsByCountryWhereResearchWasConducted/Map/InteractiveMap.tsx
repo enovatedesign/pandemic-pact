@@ -1,16 +1,25 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView, OrthographicViewState } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
 import { RefreshIcon } from '@heroicons/react/solid'
+import { ColorTranslator } from 'colortranslator'
+import type { FeatureProperties } from './types'
+import { DeckGLRefContext } from '../../../helpers/deck-gl'
 
 interface Props {
     geojson: any
     onClick: (featureId: string | null) => void
 }
 
-export default function InteractiveMap({ geojson, onClick }: Props) {
+export default function InteractiveMap({
+    geojson,
+    onMouseEnterOrMove,
+    onMouseLeave,
+    onClick,
+}: Props) {
+    const deckGlRef = useContext(DeckGLRefContext)
 
     const onLayerClick = useCallback(
         (info: PickingInfo) => {
@@ -105,6 +114,11 @@ export default function InteractiveMap({ geojson, onClick }: Props) {
                 }}
                 layers={[layer]}
                 getCursor={getCursor}
+                ref={ref => {
+                    if (deckGlRef) {
+                        deckGlRef.current = ref
+                    }
+                }}
             />
             {hasViewStateChanged() && (<button 
                 onClick={() => setViewState(INITIAL_VIEW_STATE)}

@@ -104,7 +104,6 @@ export const contentBuilderQuery = `
             }
             limit
             paginate
-            addTagsMenu
           }
           ... on bodyContent_listTeamMembers_BlockType {
             id
@@ -133,7 +132,7 @@ export const contentBuilderQuery = `
             typeHandle
             heading
             customEntries (orderBy: "postDate DESC") {
-              ... on publications_publication_Entry {
+              ... on publications_externalPublication_Entry {
                 id
                 title
                 summary
@@ -148,6 +147,23 @@ export const contentBuilderQuery = `
                   }
                 }
                 publicationType(label: true)
+                typeHandle
+              }
+              ... on publications_internalPublication_Entry {
+                id
+                title
+                summary
+                postDate
+                thumbnailImage  @transform(transform: "c480x300") {
+                  ... on contentAssets_Asset {
+                    altText
+                    height
+                    url
+                    width
+                  }
+                }
+                typeHandle
+                uri
               }
             }
           }
@@ -393,7 +409,7 @@ export const contentBuilderQuery = `
             id
             typeHandle
             featuredPublication {
-              ... on publications_publication_Entry {
+              ... on publications_externalPublication_Entry {
                 id
                 title
                 summary
@@ -408,6 +424,23 @@ export const contentBuilderQuery = `
                   }
                 }
                 publicationType(label: true)
+                typeHandle
+              }
+              ... on publications_internalPublication_Entry {
+                id
+                title
+                summary
+                postDate
+                thumbnailImage  @transform(transform: "c480x300") {
+                  ... on contentAssets_Asset {
+                    altText
+                    height
+                    url
+                    width
+                  }
+                }
+                typeHandle
+                uri
               }
             }
           }

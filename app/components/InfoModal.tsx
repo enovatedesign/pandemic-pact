@@ -6,23 +6,32 @@ import { InformationCircleIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import { defaultProseClasses } from '../helpers/prose-classes'
 
+interface InfoModalProps {
+    children: React.ReactNode, 
+    customButton?: React.ReactNode, 
+    customButtonClasses?: string,
+    marginX?: boolean,
+    iconSize?: string,
+    customCloseButton?: React.ReactNode
+    removeSpaceY?: boolean
+}
+
 export default function InfoModal({
     children, 
     customButton = null, 
     customButtonClasses = '',
     marginX = true,
+    iconSize = 'size-6',
     customCloseButton = null,
     removeSpaceY = false
-}: {
-    children: React.ReactNode, 
-    customButton?: React.ReactNode, 
-    customButtonClasses?: string, 
-    marginX?: boolean
-    customCloseButton?: React.ReactNode
-    removeSpaceY?: boolean
-}) {
-
+}: InfoModalProps) {
+    
     const [isOpen, setIsOpen] = useState(false)
+    
+    const iconClasses = [
+        'text-secondary ignore-in-image-export',
+        iconSize
+    ].filter(Boolean).join(' ')
 
     const dialogPanelClasses = [
         'relative grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
@@ -37,7 +46,7 @@ export default function InfoModal({
                 ) : (
                     <>
                         <span className="sr-only">Information</span>
-                        <InformationCircleIcon className="w-6 h-6 text-secondary ignore-in-image-export" />
+                        <InformationCircleIcon className={iconClasses} />
                     </>
                 )}
             </button>

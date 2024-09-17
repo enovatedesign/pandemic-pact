@@ -60,7 +60,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
             metric: grant.Tags,
         },
         {
-            text: 'Study Subject',
+            text: 'Study Type',
             metric: grant.StudyType[0],
         },
         {
