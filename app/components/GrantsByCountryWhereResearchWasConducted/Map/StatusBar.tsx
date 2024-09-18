@@ -33,15 +33,18 @@ export default function StatusBar({
         viewButtonHref += '&jointFunding=only-joint-funded-grants'
     }
 
+    const jointGrantsTotalNumber = selectedFeatureProperties.totalJointGrants
+    const grantsTotalNumber = selectedFeatureProperties.totalGrants
+
     let totalGrants: string
 
     if (
         highlightJointFundedCountries &&
-        typeof selectedFeatureProperties.totalJointGrants === 'number'
+        typeof jointGrantsTotalNumber === 'number'
     ) {
-        totalGrants = `${selectedFeatureProperties.totalJointGrants} / ${selectedFeatureProperties.totalGrants}`
+        totalGrants = `${jointGrantsTotalNumber} / ${grantsTotalNumber}`
     } else {
-        totalGrants = `${selectedFeatureProperties.totalGrants}`
+        totalGrants = `${grantsTotalNumber}`
     }
 
     let totalAmountCommitted: string
@@ -60,6 +63,9 @@ export default function StatusBar({
             selectedFeatureProperties.totalAmountCommitted,
         )
     }
+
+    const shouldShowJointGrantsLink = typeof jointGrantsTotalNumber === 'number' && jointGrantsTotalNumber > 0
+    const shouldShowGrantsLink = typeof grantsTotalNumber === 'number' && grantsTotalNumber > 0
 
     const shouldShowJointFeaturesModal =
         highlightJointFundedCountries &&
@@ -147,12 +153,17 @@ export default function StatusBar({
                             />
                         )}
 
-                        <Button size="xxsmall" href={viewButtonHref}>
-                            {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
-                                'Explore Joint-funded Grants' :
-                                'Explore Grants'
-                            }
-                        </Button>
+                        {(allowHighlightingJointFundedCountries && highlightJointFundedCountries && shouldShowJointGrantsLink) &&
+                            <Button size="xxsmall" href={viewButtonHref}>
+                                Explore Joint-funded Grants
+                            </Button>
+                        }
+
+                        {(shouldShowGrantsLink && !highlightJointFundedCountries) && (
+                            <Button size="xxsmall" href={viewButtonHref}>
+                                Explore Grants
+                            </Button>
+                        )}
                     </div>
                     
                 </div>
