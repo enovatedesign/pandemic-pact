@@ -69,7 +69,7 @@ export default function StatusBar({
     const wrapperClasses = [
         'w-full py-2 rounded-lg text-sm shadow-lg',
         'border border-brand-grey-200',
-        'lg:max-w-2xl'
+        'lg:max-w-3xl'
     ].join(' ')
 
     return (
@@ -135,22 +135,32 @@ export default function StatusBar({
                                 textClassName="text-brand-grey-700"
                             />
 
-                            {shouldShowJointFeaturesModal && (
+                            {/* {shouldShowJointFeaturesModal && (
                                 <JointFeaturesModal
                                     selectedFeatureProperties={
                                         selectedFeatureProperties
                                     }
                                 />
-                            )}
+                            )} */}
                         </div>
                     )}
 
-                    <Button size="xsmall" href={viewButtonHref} customClasses='md:ml-auto'>
-                        {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
-                            'View Joint-funded Grants' :
-                            'View Grants'
+                    <div className="flex flex-col gap-2 md:ml-auto md:flex-row">
+
+                        {(shouldShowJointFeaturesModal) ?
+                            <Button size="xxsmall" href={viewButtonHref}>
+                                Joint-funded breakdown
+                            </Button> : null
                         }
-                    </Button>
+
+                        <Button size="xxsmall" href={viewButtonHref}>
+                            {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
+                                'Explore Joint-funded Grants' :
+                                'Explore Grants'
+                            }
+                        </Button>
+
+                    </div>
                     
                 </div>
             </div>
