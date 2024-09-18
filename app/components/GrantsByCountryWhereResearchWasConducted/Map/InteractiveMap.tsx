@@ -13,8 +13,6 @@ interface Props {
 
 export default function InteractiveMap({
     geojson,
-    onMouseEnterOrMove,
-    onMouseLeave,
     onClick,
 }: Props) {
     const deckGlRef = useContext(DeckGLRefContext)
