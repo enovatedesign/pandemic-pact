@@ -2,6 +2,7 @@ import type { FeatureProperties } from './types'
 import InfoModal from '../../InfoModal'
 import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import { XIcon } from '@heroicons/react/solid'
+import Button from '../../Button'
 
 interface Props {
     selectedFeatureProperties: FeatureProperties
@@ -18,6 +19,11 @@ export default function JointFeaturesModal({
 
     return (
         <InfoModal 
+            customButton={
+                <Button size="xxsmall">
+                    Joint-funded breakdown
+                </Button>
+            }
             marginX={false} 
             customCloseButton={
                 <XIcon className="text-brand-grey-700 size-5 hover:scale-[1.2] transition duration-150 absolute top-1 right-1 cursor-pointer" aria-hidden="true"/>

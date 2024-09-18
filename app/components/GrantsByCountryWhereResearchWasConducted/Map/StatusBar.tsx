@@ -135,23 +135,17 @@ export default function StatusBar({
                                 textClassName="text-brand-grey-700"
                             />
 
-                            {/* {shouldShowJointFeaturesModal && (
-                                <JointFeaturesModal
-                                    selectedFeatureProperties={
-                                        selectedFeatureProperties
-                                    }
-                                />
-                            )} */}
                         </div>
                     )}
 
                     <div className="flex flex-col gap-2 md:ml-auto md:flex-row">
-
-                        {(shouldShowJointFeaturesModal) ?
-                            <Button size="xxsmall" href={viewButtonHref}>
-                                Joint-funded breakdown
-                            </Button> : null
-                        }
+                        {shouldShowJointFeaturesModal && (
+                            <JointFeaturesModal
+                                selectedFeatureProperties={
+                                    selectedFeatureProperties
+                                }
+                            />
+                        )}
 
                         <Button size="xxsmall" href={viewButtonHref}>
                             {(allowHighlightingJointFundedCountries && highlightJointFundedCountries) ?
@@ -159,7 +153,6 @@ export default function StatusBar({
                                 'Explore Grants'
                             }
                         </Button>
-
                     </div>
                     
                 </div>
