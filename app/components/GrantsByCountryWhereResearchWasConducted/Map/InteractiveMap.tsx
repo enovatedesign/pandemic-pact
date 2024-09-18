@@ -4,8 +4,6 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { LinearInterpolator, OrthographicView, OrthographicViewState } from '@deck.gl/core'
 import type { PickingInfo } from '@deck.gl/core'
 import { RefreshIcon } from '@heroicons/react/solid'
-import { ColorTranslator } from 'colortranslator'
-import type { FeatureProperties } from './types'
 import { DeckGLRefContext } from '../../../helpers/deck-gl'
 
 interface Props {
