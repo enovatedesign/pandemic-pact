@@ -17,7 +17,7 @@ interface Props {
     title: string
     subtitle?: string | ReactNode
     chartInstructions?: string
-    footnote?: string | ReactNode
+    footnote?: string
     infoModalContents?: ReactNode
     children?: ReactNode
     tabs?: Array<{
