@@ -24,10 +24,19 @@ export const links = {
         href: '/rapid-research-needs-appraisals', 
         subPages: null,
     },
-    publications: {
-        label: 'Publications', 
-        href: '/publications' ,
-        subPages: null,
+    outputs: {
+        label: 'Outputs', 
+        href: '/outputs',
+        subPages: [
+            {
+                label: 'Publications',
+                href: '/outputs/publications',
+            },
+            {
+                label: 'News',
+                href: '/outputs/news'
+            }
+        ]
     },
     about: { 
         label: 'About', 

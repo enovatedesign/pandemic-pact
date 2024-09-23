@@ -19,6 +19,7 @@ type Props = {
     },
     hover?: boolean,
     customImageClasses?: string,
+    fallbackImageAspectRatio?: string
 }
 
 const CardBottomContent = ({ cardBottomContent }: { cardBottomContent?: React.ReactNode }) => {
@@ -29,7 +30,15 @@ const CardBottomContent = ({ cardBottomContent }: { cardBottomContent?: React.Re
     )
 }
 
-const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, customImageClasses = "w-full"}: Props) => {
+const Card = ({
+    entry, 
+    tags = false, 
+    animatedIcon, 
+    cardBottomContent, 
+    image, 
+    customImageClasses = "w-full",
+    fallbackImageAspectRatio = "aspect-[16/10]"
+}: Props) => {
     
     const {
         index,
@@ -102,7 +111,7 @@ const Card = ({entry, tags = false, animatedIcon, cardBottomContent, image, cust
                                 alt=''
                                 width='480'
                                 height='480'
-                                className="w-full"
+                                className={`w-full object-cover ${fallbackImageAspectRatio}`}
                             />
                         )}
                     </div>                

@@ -91,10 +91,9 @@ export const contentBuilderQuery = `
             typeHandle
             customEntries {
               ... on news_newsArticle_Entry {
-                url
                 title
                 summary
-                thumbnailImage @transform(transform: "c480x480") {
+                thumbnailImage @transform(transform: "c480x300") {
                   url
                   width
                   height
