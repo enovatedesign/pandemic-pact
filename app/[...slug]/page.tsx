@@ -7,6 +7,7 @@ import {
     Parameters,
     fetchMetadataFromCraft
 } from '../helpers/cms-page'
+import { queryAnnouncementEntry } from '../helpers/announcement-query'
 
 type generateMetadataProps = {
     params: Parameters
@@ -22,6 +23,8 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Parameters }) {
     const data = await getPageContent(params)
+    
+    const announcement = await queryAnnouncementEntry()
 
     if (!data) {
         notFound()
@@ -29,7 +32,7 @@ export default async function Page({ params }: { params: Parameters }) {
 
     return (
         <>
-            <PageClient data={data} />
+            <PageClient data={data} announcement={announcement} />
         </>
     )
 }

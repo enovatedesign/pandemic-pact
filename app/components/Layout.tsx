@@ -13,6 +13,8 @@ import PageTitle from './PageTitle'
 import InteractiveBackground from './InteractiveBackground'
 import UtilityBar from './UtilityBar'
 import { SidebarStateContext } from "../helpers/filters"
+import { AnnouncementProps } from '../helpers/types'
+import Announcement from './ContentBuilder/Common/Announcement'
 
 type Props = {
     sidebar?: {
@@ -25,6 +27,7 @@ type Props = {
     summary?: string
     showSummary?: boolean
     outbreak?: boolean
+    announcement: AnnouncementProps
 }
 
 const Layout = ({
@@ -34,7 +37,8 @@ const Layout = ({
     sidebar,
     mastheadContent,
     children,
-    outbreak = false
+    outbreak = false,
+    announcement
 }: Props) => {
     const [animateImmediately, setAnimateImmediately] = useState(true);
 
@@ -153,6 +157,9 @@ const Layout = ({
                 )}
 
                 <div className="w-full relative">
+
+                    <Announcement announcement={announcement}/>
+                    
                     <Header
                         className="absolute w-full left-0 z-50"
                         showMobileNav={showMobileNav}
