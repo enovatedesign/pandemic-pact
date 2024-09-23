@@ -3,6 +3,10 @@ import PageTemplate from './template/PageTemplate';
 import OutbreakTemplate from './template/OutbreakTemplate';
 import PageQuery from './query/PageQuery';
 import OutbreakQuery from './query/OutbreakQuery';
+import NewsArticleQuery from './query/NewsArticleQuery';
+import NewsArticleTemplate from './template/NewsArticleTemplate';
+import RedirectTemplate from './template/RedirectTemplate';
+import RedirectQuery from './query/RedirectQuery';
 import { AnnouncementProps } from '@/app/helpers/types';
 
 interface EntryTemplateAndQuery {
@@ -20,12 +24,16 @@ const EntryTypes: EntryTemplateAndQuery = {
         testPage: PageTemplate,
         internalPublication: PageTemplate,
         outbreak: OutbreakTemplate,
+        newsArticle: NewsArticleTemplate,
+        redirect: RedirectTemplate,
     },
     queries: {
         page: PageQuery,
         testPage: PageQuery,
         internalPublication: PageQuery,
         outbreak: OutbreakQuery,
+        newsArticle: NewsArticleQuery,
+        redirect: RedirectQuery,
     }
 }
 

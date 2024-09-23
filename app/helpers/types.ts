@@ -1,3 +1,17 @@
+export interface CardEntryProps {
+    url: string,
+    title: string,
+    summary: string
+    thumbnailImage: {
+        url: string,
+        width: number,
+        height: number,
+        alt: string,
+    }
+}
+
+export type CardEntriesProps = Array<CardEntryProps>
+
 export interface AnnouncementProps {
     dateUpdated: string
     announcementPersistent: boolean
