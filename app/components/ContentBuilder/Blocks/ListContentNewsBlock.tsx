@@ -100,25 +100,27 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
                         setLastItemIndex={setLastItemIndex}
                     />
                 </BlockWrapper>
+            ) : limitedEntries && limitedEntries.length > 0 ? (
+                    <BlockWrapper>
+                        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
+                            {limitedEntries?.map((entry: CardEntryProps, index: number) => {
+                                return (
+                                    <li key={index}>
+                                        <Card 
+                                            entry={entry} 
+                                            animatedIcon={<ChevronRightIcon className="w-6 h-6" />}
+                                        />
+                                    </li>
+                                )
+                            })}
+                        </div>
+                    </BlockWrapper>
             ) : (
-                <>
-                    {limitedEntries && limitedEntries.length > 0 && (
-                        <BlockWrapper>
-                            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
-                                {limitedEntries?.map((entry: CardEntryProps, index: number) => {
-                                    return (
-                                        <li key={index}>
-                                            <Card 
-                                                entry={entry} 
-                                                animatedIcon={<ChevronRightIcon className="w-6 h-6" />}
-                                            />
-                                        </li>
-                                    )
-                                })}
-                            </div>
-                        </BlockWrapper>
-                    )}
-                </>
+                <BlockWrapper>
+                    <p>
+                        No news items exist currently, please check back soon.
+                    </p>
+                </BlockWrapper>
             )}
         </Suspense>
     )
