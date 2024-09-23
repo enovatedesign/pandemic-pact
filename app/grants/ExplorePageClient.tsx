@@ -14,8 +14,13 @@ import {
 } from '../helpers/search'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import SearchPagination from '../components/SearchPagination'
+import { AnnouncementProps } from '../helpers/types'
 
-export default function ExplorePageClient() {
+interface Props {
+    announcement: AnnouncementProps
+}
+
+export default function ExplorePageClient({announcement}: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -110,6 +115,7 @@ export default function ExplorePageClient() {
             title="Grant Search"
             showSummary={true}
             summary="Find, filter and explore grant abstracts, linked publications and other curated data on research grants for infectious disease with a pandemic potential."
+            announcement={announcement}
         >
             <div className="container mx-auto my-6 lg:my-12">
                 <div className="flex flex-col space-y-6 lg:space-y-8 mt-6">

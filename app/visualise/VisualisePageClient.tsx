@@ -25,7 +25,7 @@ import { TooltipContext } from '../helpers/tooltip'
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
-import { DiseaseLabel } from '../helpers/types'
+import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
 import InfoModal from '../components/InfoModal'
 
 interface VisualisationPageProps {
@@ -35,7 +35,9 @@ interface VisualisationPageProps {
     outbreak?: boolean
     children?: React.ReactNode
     diseaseLabel?: DiseaseLabel
+    announcement: AnnouncementProps
 }
+
 export default function VisualisePageClient({
     title,
     summary,
@@ -43,6 +45,7 @@ export default function VisualisePageClient({
     outbreak = false,
     children,
     diseaseLabel,
+    announcement
 }: VisualisationPageProps) {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
@@ -180,6 +183,7 @@ export default function VisualisePageClient({
                     summary={summary}
                     sidebar={sidebar}
                     outbreak={outbreak}
+                    announcement={announcement}
                 >
                     <VisualisationJumpMenu
                         dropdownVisible={dropdownVisible}
