@@ -89,13 +89,10 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const grant = fs.readJsonSync(path);
 
-    const announcement = await queryAnnouncementEntry()
-
     return (
         <Layout
             title={<PageTitle grant={grant} />}
             mastheadContent={<Masthead grant={grant} />}
-            announcement={announcement}
         >
             <div className="container mx-auto my-12 relative">
                 <BackToGrantSearchLink />

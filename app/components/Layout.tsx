@@ -27,7 +27,7 @@ type Props = {
     summary?: string
     showSummary?: boolean
     outbreak?: boolean
-    announcement: AnnouncementProps
+    announcement?: AnnouncementProps
 }
 
 const Layout = ({
@@ -158,7 +158,9 @@ const Layout = ({
 
                 <div className="w-full relative">
 
-                    <Announcement announcement={announcement}/>
+                    {announcement && (
+                        <Announcement announcement={announcement}/>
+                    )}
                     
                     <Header
                         className="absolute w-full left-0 z-50"
