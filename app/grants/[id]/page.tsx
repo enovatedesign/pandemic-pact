@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 import '../../css/components/highlighted-search-results.css';
 import numDigits from '@/app/api/helpers/metadata-functions';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
+import { queryAnnouncementEntry } from '@/app/helpers/announcement-query';
 
 type Props = {
     params: { id: string };
@@ -79,7 +80,7 @@ export async function generateStaticParams() {
         .map((grantId: number) => ({ id: `${grantId}` }));
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
     const path = `./data/dist/grants/${params.id}.json`;
     
     if (!fs.existsSync(path)) {
@@ -88,10 +89,13 @@ export default function Page({ params }: { params: { id: string } }) {
 
     const grant = fs.readJsonSync(path);
 
+    const announcement = await queryAnnouncementEntry()
+
     return (
         <Layout
             title={<PageTitle grant={grant} />}
             mastheadContent={<Masthead grant={grant} />}
+            announcement={announcement}
         >
             <div className="container mx-auto my-12 relative">
                 <BackToGrantSearchLink />

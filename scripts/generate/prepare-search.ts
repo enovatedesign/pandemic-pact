@@ -6,6 +6,7 @@ import {
     getSearchClient,
     fetchAllGrantIDsInIndex,
 } from '../../app/api/helpers/search'
+import { execSync } from 'child_process'
 
 export default async function () {
     const client = getSearchClient()
@@ -106,6 +107,8 @@ export default async function () {
             .catch(e => {
                 error(e)
             })
+
+        execSync('sleep 1')
     }
 
     info(`Bulk Indexed ${indexName} with upserts`)
@@ -154,6 +157,8 @@ export default async function () {
                     .catch(e => {
                         error(e)
                     })
+
+                execSync('sleep 1')
             }
 
             info(
