@@ -1,22 +1,22 @@
 import { useContext } from 'react'
-import dynamic from 'next/dynamic'
+import type { ScaleLogarithmic } from 'd3-scale'
 import DoubleLabelSwitch from '../../DoubleLabelSwitch'
 import RadioGroup from '../../RadioGroup'
 import { SidebarStateContext } from '../../../helpers/filters'
 import type { LocationType, MapControlState } from './types'
-
-// TODO do we need to use dynamic importing here?
-const ColourScale = dynamic(() => import('./ColourScale'), { ssr: false })
+import ColourScale from './ColourScale'
 
 interface Props {
     mapControlState: MapControlState
     setMapControlState: (state: MapControlState) => void
-    colourScale: any
+    setHighlightJointFundedCountries: (value: boolean) => void
+    colourScale: ScaleLogarithmic<string, string>
 }
 
 export default function MapControls({
     mapControlState,
     setMapControlState,
+    setHighlightJointFundedCountries,
     colourScale,
 }: Props) {
     const { sidebarOpen } = useContext(SidebarStateContext)
@@ -27,6 +27,19 @@ export default function MapControls({
         locationType,
     } = mapControlState
 
+    const setMapControlAndHighlightJointFundedState = (
+        newState: MapControlState,
+    ) => {
+        setMapControlState(newState)
+
+        const displayingByFunderCountry =
+            newState.locationType === 'Funder' && !newState.displayWhoRegions
+
+        if (!displayingByFunderCountry) {
+            setHighlightJointFundedCountries(false)
+        }
+    }
+
     return (
         <div
             className={`flex flex-col w-full rounded-md overflow-hidden ${
@@ -36,21 +49,23 @@ export default function MapControls({
             <div
                 className={`w-full ${
                     !sidebarOpen && 'xl:w-4/6'
-                } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex items-center justify-center pt-3`}
+                } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex flex-col pt-3`}
             >
-                <ColourScale
-                    colourScale={colourScale}
-                    displayKnownFinancialCommitments={
-                        displayKnownFinancialCommitments
-                    }
-                />
+                <div className="flex items-center justify-center">
+                    <ColourScale
+                        colourScale={colourScale}
+                        displayKnownFinancialCommitments={
+                            displayKnownFinancialCommitments
+                        }
+                    />
+                </div>
             </div>
 
             <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
                 <DoubleLabelSwitch
                     checked={displayWhoRegions}
                     onChange={(value: boolean) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             displayWhoRegions: value,
                         })
@@ -77,7 +92,7 @@ export default function MapControls({
                     ]}
                     value={locationType}
                     onChange={(value: LocationType) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             locationType: value,
                         })
@@ -95,7 +110,7 @@ export default function MapControls({
                     ]}
                     value={displayKnownFinancialCommitments}
                     onChange={(value: boolean) =>
-                        setMapControlState({
+                        setMapControlAndHighlightJointFundedState({
                             ...mapControlState,
                             displayKnownFinancialCommitments: value,
                         })

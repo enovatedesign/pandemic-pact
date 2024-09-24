@@ -41,11 +41,18 @@ export default function SearchInput({
     }
 
     const setStandardSearchFilters = (
-        filters: SelectedStandardSearchFilters
+        filters: SelectedStandardSearchFilters,
     ) => {
         setSearchParameters({
             ...searchParameters,
             standardFilters: filters,
+        })
+    }
+
+    const setJointFundingFilter = (jointFunding: string) => {
+        setSearchParameters({
+            ...searchParameters,
+            jointFunding,
         })
     }
 
@@ -65,7 +72,7 @@ export default function SearchInput({
                             type="search"
                             placeholder="Search..."
                             onInput={(
-                                event: React.ChangeEvent<HTMLInputElement>
+                                event: React.ChangeEvent<HTMLInputElement>,
                             ) => setSearchQuery(event.target.value)}
                             value={searchParameters.q}
                             className="block w-full placeholder:text-gray-400 border-none p-0 text-sm md:text-lg xl:text-xl focus:outline-none focus:border-none focus:ring-0"
@@ -179,6 +186,10 @@ export default function SearchInput({
                                     searchParameters.standardFilters
                                 }
                                 setSelectedFilters={setStandardSearchFilters}
+                                jointFundingFilter={
+                                    searchParameters.jointFunding
+                                }
+                                setJointFundingFilter={setJointFundingFilter}
                             />
                         </div>
                     </div>

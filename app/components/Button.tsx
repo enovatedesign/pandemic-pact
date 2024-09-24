@@ -21,6 +21,7 @@ const Button = ({size = 'base', colour = 'primary', customClasses = '', children
     const styles = {
         base: 'text-center uppercase font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled',
         sizes: {
+            xxsmall: 'py-1 px-2 text-xs',
             xsmall: 'py-1 px-3 text-sm',
             small: 'py-2 px-4',
             base: 'py-4 px-8',

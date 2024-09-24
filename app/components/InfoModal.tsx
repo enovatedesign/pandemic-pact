@@ -9,15 +9,21 @@ import { defaultProseClasses } from '../helpers/prose-classes'
 interface InfoModalProps {
     children: React.ReactNode, 
     customButton?: React.ReactNode, 
-    customButtonClasses?: string, 
-    iconSize?: string
+    customButtonClasses?: string,
+    marginX?: boolean,
+    iconSize?: string,
+    customCloseButton?: React.ReactNode
+    removeSpaceY?: boolean
 }
 
 export default function InfoModal({
     children, 
     customButton = null, 
-    customButtonClasses = '', 
-    iconSize = 'size-6'
+    customButtonClasses = '',
+    marginX = true,
+    iconSize = 'size-6',
+    customCloseButton = null,
+    removeSpaceY = false
 }: InfoModalProps) {
     
     const [isOpen, setIsOpen] = useState(false)
@@ -25,6 +31,11 @@ export default function InfoModal({
     const iconClasses = [
         'text-secondary ignore-in-image-export',
         iconSize
+    ].filter(Boolean).join(' ')
+
+    const dialogPanelClasses = [
+        'relative grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
+        !removeSpaceY && 'space-y-6'
     ].filter(Boolean).join(' ')
 
     return (
@@ -46,18 +57,28 @@ export default function InfoModal({
                 className="relative z-[80]"
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6 overflow-scroll">
-                    <Dialog.Panel className="grid gap-y-6 w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll">
-                        <div className={defaultProseClasses}>{children}</div>
-
-                        <div className="flex justify-end">
-                            <Button
-                                onClick={() => setIsOpen(false)}
-                                customClasses="self-end"
-                                size="small"
-                            >
-                                Close
-                            </Button>
+                    <Dialog.Panel className={dialogPanelClasses}>
+                        
+                        <div className={defaultProseClasses({ marginX: marginX })}>
+                            {children}
                         </div>
+
+
+                        {customCloseButton ? (
+                            <button onClick={() => setIsOpen(false)}>
+                                {customCloseButton}
+                            </button>
+                        ) : (
+                            <div className="flex justify-end">
+                                <Button
+                                    onClick={() => setIsOpen(false)}
+                                    customClasses="self-end"
+                                    size="small"
+                                >
+                                    Close
+                                </Button>
+                            </div>
+                        )}
                     </Dialog.Panel>
                 </div>
             </Dialog>

@@ -1,19 +1,20 @@
-import { useState, useMemo, useContext } from 'react'
-import { useRouter } from 'next/navigation'
+import { useContext, useMemo, useState } from 'react'
 import { GlobalFilterContext } from '../../../helpers/filters'
-import { TooltipContext } from '../../../helpers/tooltip'
 import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
-import TooltipContent from './TooltipContent'
+import StatusBar from './StatusBar'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
-import type { FeatureProperties, MapControlState } from './types'
+import type { MapControlState } from './types'
 
 export default function Map() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
-    const { tooltipRef } = useContext(TooltipContext)
+    const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(
+        null,
+    )
 
-    const router = useRouter()
+    const [highlightJointFundedCountries, setHighlightJointFundedCountries] =
+        useState<boolean>(false)
 
     const [mapControlState, setMapControlState] = useState<MapControlState>({
         displayKnownFinancialCommitments: false,
@@ -21,59 +22,58 @@ export default function Map() {
         locationType: 'Funder',
     })
 
-    const onMouseEnterOrMove = (
-        position: { x: number; y: number },
-        properties: FeatureProperties,
-    ) => {
-        tooltipRef?.current?.open({
-            position,
-            content: (
-                <TooltipContent
-                    properties={properties}
-                    displayWhoRegions={mapControlState.displayWhoRegions}
-                />
-            ),
-        })
-    }
-
-    const onMouseLeave = () => {
-        tooltipRef?.current?.close()
-    }
-
-    const onClick = (properties: FeatureProperties) => {
-        const queryFilters = {
-            [grantField]: [properties.id],
-        }
-
-        router.push('/grants?filters=' + JSON.stringify(queryFilters))
+    const onClick = (featureId: string | null) => {
+        setSelectedFeatureId(featureId)
     }
 
     const grantField =
         mapControlState.locationType +
         (mapControlState.displayWhoRegions ? 'Region' : 'Country')
 
-    const [geojson, colourScale] = useMemo(() => {
-        return prepareGeoJsonAndColourScale(
+    const { geojson, colourScale, selectedFeatureProperties } = useMemo(
+        () =>
+            prepareGeoJsonAndColourScale(
+                dataset,
+                mapControlState,
+                grantField,
+                selectedFeatureId,
+                highlightJointFundedCountries,
+            ),
+        [
             dataset,
             mapControlState,
             grantField,
-        )
-    }, [dataset, mapControlState, grantField])
+            selectedFeatureId,
+            highlightJointFundedCountries,
+        ],
+    )
 
     return (
         <div className="w-full h-full flex flex-col gap-y-4">
             <div className="breakout">
-                <InteractiveMap
-                    geojson={geojson}
-                    onMouseEnterOrMove={onMouseEnterOrMove}
-                    onMouseLeave={onMouseLeave}
-                    onClick={onClick}
-                />
+                <InteractiveMap geojson={geojson} onClick={onClick} />
             </div>
+
+            {selectedFeatureProperties && (
+                <StatusBar
+                    selectedFeatureProperties={selectedFeatureProperties}
+                    setSelectedFeatureId={setSelectedFeatureId}
+                    highlightJointFundedCountries={
+                        highlightJointFundedCountries
+                    }
+                    setHighlightJointFundedCountries={
+                        setHighlightJointFundedCountries
+                    }
+                    grantField={grantField}
+                />
+            )}
 
             <MapControls
                 mapControlState={mapControlState}
                 setMapControlState={setMapControlState}
+                setHighlightJointFundedCountries={
+                    setHighlightJointFundedCountries
+                }
                 colourScale={colourScale}
             />
         </div>
