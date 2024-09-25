@@ -16,6 +16,20 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: false,
     },
+    async redirects() {
+        return [
+            {
+                source: '/publications',
+                destination: '/outputs/publications',
+                permanent: true
+            },
+            {
+                source: '/publications/:slug',
+                destination: '/outputs/publications/:slug',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 module.exports = nextConfig;

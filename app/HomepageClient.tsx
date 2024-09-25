@@ -12,9 +12,15 @@ import FooterMenu from "./components/FooterMenu"
 import FooterCopyrightStatement from "./components/FooterCopyrightStatement"
 import UtilityBar from "./components/UtilityBar"
 import homepageTotals from "../data/dist/homepage-totals.json"
+import Announcement from "./components/ContentBuilder/Common/Announcement"
+import { AnnouncementProps } from "./helpers/types"
 
+interface Props {
+    announcement: AnnouncementProps
+}
 
-export default function HomepageClient() {
+export default function HomepageClient(announcement: Props) {
+    
     const [showMobileNav, setShowMobileNav] = useState(false)
     const counterClasses = "text-primary font-bold"
 
@@ -34,6 +40,8 @@ export default function HomepageClient() {
             />
 
             <div className={`masthead-background ${styles.background} flex flex-col h-full min-h-screen relative pb-24 md:pb-28 lg:pb-12`}>
+
+                <Announcement {...announcement}/>
 
                 <Header className="w-full relative z-20" showMobileNav={showMobileNav} />
 

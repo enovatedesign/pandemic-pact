@@ -17,18 +17,20 @@ export async function POST(request: NextRequest) {
     const { errorResponse, values } = await validateRequest(request, [
         'q',
         'filters',
+        'jointFunding',
     ])
 
     if (errorResponse) {
         return errorResponse
     }
 
-    const { q, filters } = values
+    const { q, filters, jointFunding } = values
 
     const grantIDs = await fetchAllGrantIDsMatchingBooleanQuery(
         client,
         q,
-        filters
+        filters,
+        jointFunding,
     )
 
     return NextResponse.json({ grantIDs })

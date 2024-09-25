@@ -9,7 +9,10 @@ export interface MapControlState {
 export interface FeatureProperties {
     id: string
     name: string
+    colour: string
     totalGrants: number
     totalAmountCommitted: number
-    colour: string
+    totalJointGrants?: number
+    totalJointAmountCommitted?: number
+    jointFeatureProperties?: FeatureProperties[]
 }

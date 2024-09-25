@@ -6,6 +6,7 @@ import {
     getSearchClient,
     fetchAllGrantIDsInIndex,
 } from '../../app/api/helpers/search'
+import { execSync } from 'child_process'
 
 export default async function () {
     const client = getSearchClient()
@@ -31,6 +32,7 @@ export default async function () {
         Abstract: { type: 'text' },
         LaySummary: { type: 'text' },
         GrantAmountConverted: { type: 'long' },
+        JointFunding: { type: 'boolean' },
 
         ...Object.fromEntries(
             Object.keys(selectOptions).map(field => [
@@ -78,6 +80,8 @@ export default async function () {
 
         const bulkOperations: any[] = grants
             .map((grant: any) => {
+                const doc = _.pick(grant, Object.keys(mappingProperties))
+
                 return [
                     {
                         update: {
@@ -86,7 +90,10 @@ export default async function () {
                         },
                     },
                     {
-                        doc: _.pick(grant, Object.keys(mappingProperties)),
+                        doc: {
+                            ...doc,
+                            JointFunding: doc.FunderCountry.length > 1,
+                        },
                         doc_as_upsert: true,
                     },
                 ]
@@ -100,6 +107,8 @@ export default async function () {
             .catch(e => {
                 error(e)
             })
+
+        execSync('sleep 1')
     }
 
     info(`Bulk Indexed ${indexName} with upserts`)
@@ -148,6 +157,8 @@ export default async function () {
                     .catch(e => {
                         error(e)
                     })
+
+                execSync('sleep 1')
             }
 
             info(

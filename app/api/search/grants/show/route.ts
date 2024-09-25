@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const { errorResponse, values } = await validateRequest(request, [
         'q',
         'filters',
+        'jointFunding',
     ])
 
     if (errorResponse) {

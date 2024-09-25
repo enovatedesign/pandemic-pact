@@ -24,7 +24,7 @@ const AccordionBlock = ( {block}: Props ) => {
 
     const textClasses = [
         'mx-auto w-full border-2 border-gray-200 rounded-2xl bg-white max-w-prose',
-        defaultProseClasses
+        defaultProseClasses({ })
     ].join(' ')
     
     const [activeIndex, setActiveIndex] = useState(-1)

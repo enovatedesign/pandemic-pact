@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Client } from '@opensearch-project/opensearch'
-import { SearchFilters } from '../../helpers/search'
+import { jointFundingFilterOptions, SearchFilters } from '../../helpers/search'
 
 export function getSearchClient() {
     if (
@@ -36,13 +36,13 @@ export function searchUnavailableResponse() {
         {
             status: 503,
             statusText: 'Service Unavailable',
-        }
+        },
     )
 }
 
 export async function validateRequest(
     request: Request,
-    fieldsToValidate: string[]
+    fieldsToValidate: string[],
 ) {
     const rules = {
         q: (addError: (message: string) => void) => {
@@ -54,6 +54,25 @@ export async function validateRequest(
         filters: (addError: (message: string) => void) => {
             if (typeof parameters.filters !== 'object') {
                 addError('The filters parameter must be an object')
+            }
+        },
+
+        jointFunding: (addError: (message: string) => void) => {
+            if (typeof parameters.jointFunding !== 'string') {
+                addError('The jointFunding parameter must be a string')
+            }
+
+            const validJointFundingOption = jointFundingFilterOptions.some(
+                option => option.value === parameters.jointFunding,
+            )
+
+            if (!validJointFundingOption) {
+                addError(
+                    'The jointFunding parameter must be one of the following values: ' +
+                        jointFundingFilterOptions
+                            .map(option => option.value)
+                            .join(', '),
+                )
             }
         },
 
@@ -74,7 +93,7 @@ export async function validateRequest(
 
             if (parameters.limit > 100) {
                 addError(
-                    'The limit parameter must be less than or equal to 100'
+                    'The limit parameter must be less than or equal to 100',
                 )
             }
 
@@ -123,7 +142,7 @@ export async function validateRequest(
                 {
                     status: 422,
                     statusText: 'Unprocessable Entity',
-                }
+                },
             ),
         }
     }
@@ -131,60 +150,83 @@ export async function validateRequest(
     return { values }
 }
 
-export function getBooleanQuery(q: string, filters: SearchFilters) {
-    let mustClause = {}
+export function getBooleanQuery(
+    q: string,
+    filters: SearchFilters,
+    jointFunding: string = 'all-grants',
+) {
+    return {
+        bool: {
+            ...prepareMustClause(q),
+            ...prepareFilterClause(filters, jointFunding),
+        },
+    }
+}
 
-    if (q) {
-        let query = q
-            .replace(/\bAND\b/g, '+')
-            .replace(/\bOR\b/g, '|')
-            .replace(/\bNOT\s+/g, '-')
-
-        mustClause = {
-            must: {
-                simple_query_string: {
-                    query,
-                    fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
-                    flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
-                },
-            },
-        }
+function prepareMustClause(q: string) {
+    if (!q) {
+        return {}
     }
 
-    let filterClause = {}
+    const query = q
+        .replace(/\bAND\b/g, '+')
+        .replace(/\bOR\b/g, '|')
+        .replace(/\bNOT\s+/g, '-')
+
+    return {
+        must: {
+            simple_query_string: {
+                query,
+                fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+                flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
+            },
+        },
+    }
+}
+
+function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
+    const boolClause: any = {
+        must: [],
+        should: [],
+    }
 
     if (filters) {
         const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
 
-        filterClause = {
-            filter: {
-                bool: {
-                    [outerBoolOperator]: filters.filters.map(
-                        ({ field, values, logicalAnd }) => {
-                            const innerBoolOperator = logicalAnd
-                                ? 'must'
-                                : 'should'
+        boolClause[outerBoolOperator] = filters.filters.map(
+            ({ field, values, logicalAnd }) => {
+                const innerBoolOperator = logicalAnd ? 'must' : 'should'
 
-                            return {
-                                bool: {
-                                    [innerBoolOperator]: values.map(value => ({
-                                        term: {
-                                            [field]: value,
-                                        },
-                                    })),
-                                },
-                            }
-                        }
-                    ),
-                },
+                return {
+                    bool: {
+                        [innerBoolOperator]: values.map(value => ({
+                            term: {
+                                [field]: value,
+                            },
+                        })),
+                    },
+                }
             },
-        }
+        )
+    }
+
+    if (jointFunding === 'only-joint-funded-grants') {
+        boolClause.must.push({
+            term: {
+                JointFunding: true,
+            },
+        })
+    } else if (jointFunding === 'exclude-joint-funded-grants') {
+        boolClause.must.push({
+            term: {
+                JointFunding: false,
+            },
+        })
     }
 
     return {
-        bool: {
-            ...mustClause,
-            ...filterClause,
+        filter: {
+            bool: boolClause,
         },
     }
 }
@@ -199,11 +241,12 @@ export async function fetchAllGrantIDsInIndex(client: Client) {
 export async function fetchAllGrantIDsMatchingBooleanQuery(
     client: Client,
     q: string,
-    filters: SearchFilters
+    filters: SearchFilters,
+    jointFunding: string = 'all-grants',
 ) {
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters)
+    const query = getBooleanQuery(q, filters, jointFunding)
 
     const grantIDs = []
 

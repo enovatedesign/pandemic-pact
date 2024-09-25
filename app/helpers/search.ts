@@ -18,6 +18,7 @@ export interface SelectedStandardSearchFilters {
 export interface SearchParameters {
     q: string
     standardFilters: SelectedStandardSearchFilters
+    jointFunding: string
     advancedFilters: SearchFilters
     page: number
     limit: number
@@ -65,6 +66,7 @@ export interface SearchFilters {
 export interface SearchRequestBody {
     q: string
     filters: SearchFilters
+    jointFunding: string
 }
 
 const searchParameterSchema: SearchParameterSchema = {
@@ -74,6 +76,9 @@ const searchParameterSchema: SearchParameterSchema = {
     standardFilters: {
         defaultValue: {},
         queryStringParameter: 'filters',
+    },
+    jointFunding: {
+        defaultValue: 'all-grants',
     },
     advancedFilters: {
         defaultValue: { logicalAnd: true, filters: [] },
@@ -95,7 +100,7 @@ export function prepareInitialSearchParameters(searchParams: URLSearchParams) {
             }
 
             const searchParamValue = searchParams.get(
-                schema.queryStringParameter ?? key
+                schema.queryStringParameter ?? key,
             )
 
             if (!searchParamValue) {
@@ -111,7 +116,7 @@ export function prepareInitialSearchParameters(searchParams: URLSearchParams) {
             }
 
             return [key, searchParamValue]
-        }
+        },
     )
 
     return Object.fromEntries(initialSearchParameters)
@@ -119,7 +124,7 @@ export function prepareInitialSearchParameters(searchParams: URLSearchParams) {
 
 export function updateUrlQueryString(
     url: URL,
-    searchParameters: SearchParameters
+    searchParameters: SearchParameters,
 ) {
     Object.entries(searchParameterSchema).forEach(([key, schema]) => {
         if (schema.excludeFromQueryString) {
@@ -163,6 +168,7 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
                 },
             ],
         },
+        jointFunding: 'all-grants',
     })
 
     const hit = response.hits[0]
@@ -177,14 +183,14 @@ export async function highlightMatchesInGrant(grant: any, query: string) {
 
     return {
         GrantTitleEng: hit.highlight?.GrantTitleEng[0] || grant.GrantTitleEng,
-        Abstract: hit.highlight?.Abstract[0] || grant.Abstract,
-        LaySummary: (hit.highlight?.LaySummary ?? [])[0] || grant.LaySummary,
+        Abstract: hit.highlight?.Abstract?.[0] || grant.Abstract,
+        LaySummary: hit.highlight?.LaySummary?.[0] || grant.LaySummary,
     }
 }
 
 export async function searchRequest(
     endpoint: string = 'list',
-    body: SearchRequestBody
+    body: SearchRequestBody,
 ) {
     return fetch(`/api/search/grants/${endpoint}`, {
         method: 'POST',
@@ -196,7 +202,23 @@ export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
     return (
         searchRequestBody.q !== '' ||
         Object.values(searchRequestBody.filters).some(
-            filter => filter?.length > 0
-        )
+            filter => filter?.length > 0,
+        ) ||
+        searchRequestBody.jointFunding !== 'all-grants'
     )
 }
+
+export const jointFundingFilterOptions = [
+    {
+        label: 'All grants (including joint-funded grants)',
+        value: 'all-grants',
+    },
+    {
+        label: 'Only joint-funded grants',
+        value: 'only-joint-funded-grants',
+    },
+    {
+        label: 'Exclude joint-funded grants',
+        value: 'exclude-joint-funded-grants',
+    },
+]

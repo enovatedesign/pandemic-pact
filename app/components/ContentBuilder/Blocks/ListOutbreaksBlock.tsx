@@ -32,7 +32,7 @@ const ListOutbreaksBlock = ({block}: Props) => {
         <>
             <BlockWrapper>
                 {heading && (
-                    <div className={`${defaultProseClasses} text-center mb-12`}>
+                    <div className={defaultProseClasses({ customClasses: 'text-center mb-12' })}>
                         <h2 dangerouslySetInnerHTML={{ __html: heading }}></h2>
                     </div>
                 )}

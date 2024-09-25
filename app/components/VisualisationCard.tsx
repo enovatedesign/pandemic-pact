@@ -71,9 +71,9 @@ export default function VisualisationCard({
     return (
         <>
             <animated.div id={id} ref={ref} style={springs}>
-                <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative overflow-hidden">
+                <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative">
                     <div className="flex flex-col items-start gap-y-6">
-                        <div className="mr-16">
+                        <div className="mr-16 z-10">
                             <h2 className="text-lg capitalize inline">
                                 {title}
                             </h2>{' '}
@@ -85,7 +85,7 @@ export default function VisualisationCard({
                         </div>
 
                         {numberOfActiveFilters > 0 && (
-                            <div>
+                            <div className='absolute z-10 top-0 right-0 aspect-square w-full h-28 lg:rounded-tr-xl border-2 border-transparent translate-x-0.5 -translate-y-0.5 overflow-hidden'>
                                 <div className="absolute -right-16 -top-16 aspect-square size-32 rotate-45 bg-gradient-to-b from-primary"></div>
                                 <div className="absolute right-5 top-5">
                                     <FilterIcon
