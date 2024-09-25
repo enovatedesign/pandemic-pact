@@ -10,6 +10,7 @@ import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
 import Pagination from "../Common/Pagination"
 import { ChevronRightIcon } from "@heroicons/react/outline"
+import { Block } from "@react-three/fiber/dist/declarations/src/core/utils"
 
 interface ListContentNewsProps {
     blockHandle: string
@@ -39,12 +40,17 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
     
     const [totalEntries, setTotalEntries] = useState<number>(0)
 
+    const [isLoading, setIsLoading] = useState<boolean>(
+        customEntries && customEntries.length > 0 ? 
+            false : 
+            true
+    )
+
     const params = useSearchParams()
     const pageParam = params.get(`page`)
 
     useEffect(() => {
         if (customEntries?.length === 0 && paginate) {
-            
             const pageNumber = pageParam ? Number(pageParam) : 1
             
             fetchSectionEntries({
@@ -54,7 +60,10 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
                     limit: limit,
                     pageNumber: pageNumber,  
                 },
-                setEntries: setPaginatedEntries,
+                setEntries: (data) => {
+                    setPaginatedEntries(data),
+                    setIsLoading(false)
+                } 
             })
 
             fetchTotalSectionEntries({
@@ -71,8 +80,12 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
                     entryTypeHandle: entryTypeHandle,
                     limit: limit,
                 },
-                setEntries: setEntries,
+                setEntries: (data) => {
+                    setEntries(data),
+                    setIsLoading(false)
+                } 
             })
+
         } else if (customEntries && customEntries?.length > 0 && paginate) {
             setPaginatedEntries(customEntries.slice(firstItemIndex, lastItemIndex))
             setTotalEntries(customEntries.length)
@@ -81,7 +94,13 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
     
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            {paginate && paginatedEntries && paginatedEntries.length > 0 ? (
+            {isLoading ? (
+                <BlockWrapper>
+                    <p>
+                        Loading News Articles...
+                    </p>
+                </BlockWrapper>
+            ) : paginate && paginatedEntries && paginatedEntries.length > 0 ? (
                 <BlockWrapper>
                     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
                         {paginatedEntries?.map((entry: CardEntryProps, index: number) => {
@@ -92,13 +111,15 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
                             )
                         })}
                     </ul>
-
-                    <Pagination 
-                        totalPosts={totalEntries}
-                        postsPerPage={limit}
-                        setFirstItemIndex={setFirstItemIndex}
-                        setLastItemIndex={setLastItemIndex}
-                    />
+                    
+                    {totalEntries > limit && (
+                        <Pagination 
+                            totalPosts={totalEntries}
+                            postsPerPage={limit}
+                            setFirstItemIndex={setFirstItemIndex}
+                            setLastItemIndex={setLastItemIndex}
+                        />
+                    )}
                 </BlockWrapper>
             ) : limitedEntries && limitedEntries.length > 0 ? (
                     <BlockWrapper>
