@@ -103,7 +103,10 @@ export default function () {
             ])
         )
 
-        // TODO
+        // MPOX Research Priorities and Sub-Priorities are conceptually similar
+        // to Research Categories and Subcategories, but in the source dataset
+        // they are in a completely different format, so we need to transform them
+        // to look like the Research Categories and Subcategories
         prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
 
         // Create a new object with all the transformed data,
@@ -156,11 +159,17 @@ export default function () {
 function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
     [key: string]: string[]
 }) {
+    // For some reason the MPOX Research Priorities are stored in the
+    // research_and_policy_roadmaps field in the source dataset, so we get them
+    // from that field (which is a checkbox field)
     const MPOXResearchPriority =
         checkBoxFieldValues.research_and_policy_roadmaps.filter(
             value => value in mpoxResearchPriorityAndSubPriorityMapping
         )
 
+    // Prepare the MPOX Research Sub-Priorities by combining the MPOX Research
+    // Priorities number with the sub-priority letter to get an alphanumeric
+    // value, like Research Categories and Subcategories
     const MPOXResearchSubPriority = MPOXResearchPriority.flatMap(priority => {
         const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
 
