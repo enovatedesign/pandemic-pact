@@ -27,12 +27,17 @@ export default function () {
 
         const sourceGrant = sourceGrants[i]
 
+        // Replace all select option field values with their corresponding labels
         const grantWithFullText = Object.fromEntries(
             Object.entries(sourceGrant).map(([key, value]) => {
+                // If there isn't a select option for this value, just return it
+                // as is since there isn't a label
                 if (selectOptions[key] === undefined) {
                     return [key, value]
                 }
 
+                // If it's an array, iterate over all the values in said array
+                // and get the label for each value
                 if (Array.isArray(value)) {
                     return [
                         key,
@@ -47,6 +52,7 @@ export default function () {
                     ]
                 }
 
+                // Otherwise just get the label for the value
                 return [
                     key,
                     getLabelFromSelectOptionValue(
@@ -68,6 +74,7 @@ export default function () {
         fs.writeJsonSync(apiPathname, grantWithFullText)
     }
 
+    // Store all the IDs in a separate file for use in generateStaticParams
     fs.writeJsonSync(
         `${path}/index.json`,
         sourceGrants.map(grant => grant['GrantID'])
@@ -85,9 +92,12 @@ function getLabelFromSelectOptionValue(
     const option = options.find(option => option.value === value)
 
     if (option === undefined) {
+        // TODO consider turning this off since it adds a lot of noise to the build
+        // and we don't seem to mind the outcome
         warn(
             `Could not find option with value ${value} for key ${key} for grant ${grantId}`
         )
+
         return value
     }
 
