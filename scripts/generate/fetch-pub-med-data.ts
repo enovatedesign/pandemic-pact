@@ -22,10 +22,13 @@ export default async function () {
 
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(grantsDistPathname)
 
+    // Fetch all the publications from PubMed that match the PubMed Grant IDs in our
+    // dataset 
     const publications = await getPublications(
         sourceGrants.map(grant => grant.PubMedGrantId as string),
     )
 
+    // Assign publications to each grant in our dataset
     const grants = sourceGrants.map((grant: Grant) => {
         const PubMedLinks = publications[grant.PubMedGrantId as string] ?? []
 
@@ -40,8 +43,11 @@ export default async function () {
 }
 
 async function getPublications(pubMedGrantIds: string[]) {
+    // Filter out invalid PubMed Grant IDs (such as null, '', 'unknown', 'not applicable')
+    // and remove duplicates
     const grantIds = _.uniq(pubMedGrantIds.filter(idIsValidPubMedGrantId))
 
+    // Try to get the publications from the cache first
     const cacheFilename = 'cached-pub-med-publications.json'
 
     const cacheUrl = `https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/${cacheFilename}`
@@ -54,9 +60,12 @@ async function getPublications(pubMedGrantIds: string[]) {
         )
     }
 
+    // If there is cached data and it has not expired, use that
     if (cacheResponse.ok) {
         const cache = await cacheResponse.json()
 
+        // Note that if the source dataset has changed, it might have new PubMed Grant IDs
+        // that are not in the cache, so we check that in addition to the expiration date
         if (cache.expiresAt && cache.publications) {
             const cachedGrantIds = Object.keys(cache.publications)
 
@@ -83,6 +92,7 @@ async function getPublications(pubMedGrantIds: string[]) {
     const publications: { [key: string]: string } = {}
 
     for (let i = 0; i < grantIds.length; i++) {
+        // Print the progress every 500 grants or at the end
         if (i > 0 && (i % 500 === 0 || i === grantIds.length - 1)) {
             info(`Fetched ${i}/${grantIds.length} PubMed publications`)
         }
