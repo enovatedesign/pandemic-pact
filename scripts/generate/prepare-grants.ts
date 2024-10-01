@@ -6,7 +6,6 @@ import {
     convertSourceKeysToOurKeys,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
-import { fetchInternalImage } from 'next/dist/server/image-optimizer'
 
 type Row = { [key: string]: string }
 
