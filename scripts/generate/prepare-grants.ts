@@ -6,7 +6,6 @@ import {
     convertSourceKeysToOurKeys,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
-import { fetchInternalImage } from 'next/dist/server/image-optimizer'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function () {
