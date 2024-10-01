@@ -2,6 +2,11 @@ import fs from 'fs-extra'
 import { execSync } from 'child_process'
 import _ from 'lodash'
 
+// This script generates two GeoJSON files for the map visualisation: one for countries
+// and one for WHO regions. Features in both files will have a single `id` property. In
+// the countries file, this is the Country value, and in the WHO regions file,
+// this is the WHO Region value.
+// Mapshaper docs: https://github.com/mbloch/mapshaper/wiki
 export default async function () {
     fs.ensureDirSync('./data/dist/geojson')
 
@@ -23,14 +28,21 @@ export default async function () {
 
     const countriesGeojson = _.pick(inputGeojson, ['type', 'features', 'bbox'])
 
+    // Replace all the ISO_N3_EH properties with a corresponding Country value from 
+    // our dataset, and a WHO Region value from the region-to-country mapping
     countriesGeojson.features = countriesGeojson.features.map(
         (feature: { type: string; properties: { ISO_N3_EH: string } }) => {
+            // Remove leading zeroes from the ISO_N3_EH property because in our 
+            // data set it is a number, not a string
             const id = feature.properties.ISO_N3_EH.replace(/^0+/, '')
 
+            // Use the region-to-country mapping to determine which region
+            // this country belongs to
             const who_region_id = Object.entries(regionToCountryMapping).find(
                 ([_, countries]) => countries.includes(id),
             )?.[0]
 
+            // Replace the properties on the existing GeoJSON with our new ones
             return {
                 ...feature,
                 properties: {

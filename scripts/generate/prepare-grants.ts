@@ -25,16 +25,22 @@ export default function () {
     )
 
     // Merge them and remove duplicates
+    // TODO: Seb to double check this as it may not be necessary
     const headings = _.uniq([...dictionaryHeadings, ...dataHeadings])
 
+    // Get an array where the first value is the checkbox headings and the 
+    // second value is all other headings
     const checkboxAndTextFields = _.partition(headings, heading =>
         heading.includes('___')
     )
 
+    // Get all the unique checkbox field names
     const checkBoxFields = _.uniq(
         checkboxAndTextFields[0].map(field => field.split('___')[0])
     )
 
+    // Get an array where the first value is is fields containing comma-separated
+    // values, and the second value is text fields
     const [commaSeparatedFields, textFields] = _.partition(
         checkboxAndTextFields[1],
         field =>
@@ -48,6 +54,9 @@ export default function () {
             ].includes(field)
     )
 
+    // Get an array where the first value is numeric fields and the second value
+    // is string fields - note that the only numeric field is award_amount_converted,
+    // so this partition might be overkill.
     const [numericFields, stringFields] = _.partition(
         textFields,
         field => field === 'award_amount_converted'
@@ -63,14 +72,20 @@ export default function () {
             rawGrant['grant_title_eng'] = rawGrant.grant_title_original;
         }
 
+        // Get an object containing only the string fields and values
         const stringFieldValues = _.pick(rawGrant, stringFields)
 
+        // Get an object containing only the numeric fields and values,
+        // converting the values to numbers
+        // TODO Seb to tidy this up
         const numericFieldValues = Object.fromEntries(
             Object.entries(_.pick(rawGrant, numericFields)).map(
                 ([key, value]) => [key, parseFloat(value)]
             )
         )
 
+        // Get an object containing only the checkbox fields with values as 
+        // arrays of the checked values
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(field => [
                 field,
@@ -78,6 +93,8 @@ export default function () {
             ])
         )
 
+        // Get an object containing only the comma-separated fields with values as
+        // arrays of the values
         const commaSeparatedFieldValues = Object.fromEntries(
             commaSeparatedFields.map(field => [
                 field,
@@ -85,10 +102,14 @@ export default function () {
             ])
         )
 
+        // MPOX Research Priorities and Sub-Priorities are conceptually similar
+        // to Research Categories and Subcategories, but in the source dataset
+        // they are in a completely different format, so we need to transform them
+        // to look like the Research Categories and Subcategories
         prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
 
-        
-
+        // Create a new object with all the transformed data,
+        // using our field names instead of the field names of the source data
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
             ...stringFieldValues,
             ...numericFieldValues,
@@ -109,6 +130,7 @@ export default function () {
         // use 'publication_year_of_award' instead too.
         if (rawGrant?.grant_start_year) {
             const year = Number(rawGrant.grant_start_year)
+
             if ((!isNaN(year) && year < 2020) || isNaN(year)) {
                 customFields.TrendStartYear = Number(
                     rawGrant.publication_year_of_award
@@ -116,6 +138,8 @@ export default function () {
             }
         }
 
+        // Create the final grant object using the converted data combined with
+        // the custom fields
         return {
             ...convertedKeysGrantData,
             ...customFields,
@@ -129,27 +153,22 @@ export default function () {
     fs.writeJsonSync(pathname, grants)
 
     printWrittenFileStats(pathname)
-
-    // Check
-
-    const checkGrants: RawGrant[] = fs.readJsonSync('./data/dist/grants.json')
-
-    checkGrants.map((grant, index, array) => {
-        if (grant.GrantID === 'P29941') {
-            console.log(grant.GrantTitleEng)
-        }
-    })
-
 }
 
 function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
     [key: string]: string[]
 }) {
+    // For some reason the MPOX Research Priorities are stored in the
+    // research_and_policy_roadmaps field in the source dataset, so we get them
+    // from that field (which is a checkbox field)
     const MPOXResearchPriority =
         checkBoxFieldValues.research_and_policy_roadmaps.filter(
             value => value in mpoxResearchPriorityAndSubPriorityMapping
         )
 
+    // Prepare the MPOX Research Sub-Priorities by combining the MPOX Research
+    // Priorities number with the sub-priority letter to get an alphanumeric
+    // value, like Research Categories and Subcategories
     const MPOXResearchSubPriority = MPOXResearchPriority.flatMap(priority => {
         const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
 
@@ -181,5 +200,6 @@ function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
         .filter(
             ([key, value]) => key.startsWith(`${field}___`) && value === '1'
         )
+        // TODO explain why we need to replace the underscores with hyphens
         .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
 }

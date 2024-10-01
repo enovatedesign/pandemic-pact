@@ -3,6 +3,10 @@ import _ from 'lodash'
 import { ProcessedGrant } from '../types/generate'
 import { title, printWrittenFileStats } from '../helpers/log'
 
+// Filtering and visualisation of grants data for the visualise page
+// doesn't require all the fields in the grants data file, such as
+// the grant title, abstract, etc, and they take up lots of space in
+// the JSON file. This script removes those unneeded fields.
 export default function () {
     title('Preparing optimised visualise-page grants data file')
 
