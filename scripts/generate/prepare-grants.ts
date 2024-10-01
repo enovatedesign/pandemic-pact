@@ -67,11 +67,9 @@ export default function () {
 
         // Get an object containing only the numeric fields and values,
         // converting the values to numbers
-        // TODO Seb to tidy this up
-        const numericFieldValues = Object.fromEntries(
-            Object.entries(_.pick(rawGrant, numericFields)).map(
-                ([key, value]) => [key, parseFloat(value)],
-            ),
+        const numericFieldValues = _.mapValues(
+            _.pick(rawGrant, numericFields),
+            parseFloat,
         )
 
         // Get an object containing only the checkbox fields with values as
