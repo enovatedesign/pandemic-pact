@@ -192,7 +192,10 @@ function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
                 ([key, value]) =>
                     key.startsWith(`${field}___`) && value === '1',
             )
-            // TODO explain why we need to replace the underscores with hyphens
+            // In the source data, columns that represent checkbox values
+            // have '-' replaced with '_' - for instance '-99' is replaced
+            // with '_99'. Thus we have to replace '_' with '-' after
+            // splitting by '___'
             .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
     )
 }
