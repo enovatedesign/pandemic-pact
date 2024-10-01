@@ -7,11 +7,11 @@ export default function () {
     title('Writing full grant data to individual files')
 
     const selectOptions: SelectOptions = fs.readJsonSync(
-        './data/dist/select-options.json'
+        './data/dist/select-options.json',
     )
 
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(
-        './data/dist/grants.json'
+        './data/dist/grants.json',
     )
 
     const path = './data/dist/grants'
@@ -19,7 +19,7 @@ export default function () {
 
     const apiPath = `./public/grants/`
     fs.emptyDirSync(apiPath)
-    
+
     for (let i = 0; i < sourceGrants.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
             info(`Processed ${i} of ${sourceGrants.length} grants`)
@@ -46,8 +46,8 @@ export default function () {
                                 selectOptions,
                                 key,
                                 v,
-                                sourceGrant['GrantID'] as string
-                            )
+                                sourceGrant['GrantID'] as string,
+                            ),
                         ),
                     ]
                 }
@@ -59,10 +59,10 @@ export default function () {
                         selectOptions,
                         key,
                         value as string,
-                        sourceGrant['GrantID'] as string
+                        sourceGrant['GrantID'] as string,
                     ),
                 ]
-            })
+            }),
         )
 
         const pathname = `${path}/${grantWithFullText['GrantID']}.json`
@@ -70,14 +70,14 @@ export default function () {
         fs.writeJsonSync(pathname, grantWithFullText)
 
         const apiPathname = `${apiPath}/${grantWithFullText['GrantID']}.json`
-        
+
         fs.writeJsonSync(apiPathname, grantWithFullText)
     }
 
     // Store all the IDs in a separate file for use in generateStaticParams
     fs.writeJsonSync(
         `${path}/index.json`,
-        sourceGrants.map(grant => grant['GrantID'])
+        sourceGrants.map(grant => grant['GrantID']),
     )
 }
 
@@ -85,18 +85,20 @@ function getLabelFromSelectOptionValue(
     selectOptions: SelectOptions,
     key: string,
     value: string,
-    grantId: string
+    grantId: string,
 ) {
     const options = selectOptions[key]
 
     const option = options.find(option => option.value === value)
 
     if (option === undefined) {
-        // TODO consider turning this off since it adds a lot of noise to the build
-        // and we don't seem to mind the outcome
-        warn(
-            `Could not find option with value ${value} for key ${key} for grant ${grantId}`
-        )
+        // Only warn about the missing value if it is not 'N/A' because we are
+        // okay with keeping that as 'N/A'
+        if (value !== 'N/A') {
+            warn(
+                `Could not find option with value ${value} for key ${key} for grant ${grantId}`,
+            )
+        }
 
         return value
     }
