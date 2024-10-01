@@ -3,11 +3,13 @@ export interface CardDataProps {
     summary: {
         "Mpox": string
         "Pandemic-prone influenza": string
+        "Marburg virus disease": string
         "default": string
     }
     url: {
        "Mpox": string
         "Pandemic-prone influenza": string
+        "Marburg virus disease": string
         "default": string 
     }
     image: {
@@ -19,11 +21,13 @@ export interface CardDataProps {
     showCard: {
         "Mpox": boolean
         "Pandemic-prone influenza": boolean
+        "Marburg virus disease": boolean
         "default": boolean
     }
     showChevron: {
         "Mpox": boolean
         "Pandemic-prone influenza": boolean
+        "Marburg virus disease": boolean
         "default": boolean
     }
 }
@@ -36,11 +40,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `We bring together grant information on ${disease}.`,
                 "Pandemic-prone influenza": `We bring together grant information on H5N1.`,
+                "Marburg virus disease": `We bring together grant information on ${disease}.`,
                 "default": 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, Mpox and Plague.'
             },
             url: {
                 "Mpox": '#disease',
                 "Pandemic-prone influenza": '#disease',
+                "Marburg virus disease": '#disease',
                 "default": '#disease',
             },
             image: {
@@ -52,11 +58,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showCard: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             },
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             }
         },
@@ -65,11 +73,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
                 "Pandemic-prone influenza": `Charts showing H5N1 grants assigned to twelve research categories with respective subcategories.`,
+                "Marburg virus disease": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
                 "default": 'Charts showing the grants assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of grants going into different areas of research.'
             },
             url: {
                 "Mpox": '#research-categories-policy-roadmaps',
                 "Pandemic-prone influenza": '#research-categories',
+                "Marburg virus disease": '#research-categories',
                 "default": '#research-categories',
             },
             image: {
@@ -81,11 +91,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showCard: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             },
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             }
         },
@@ -94,11 +106,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
                 "Pandemic-prone influenza": `Charts showing the location of funding organisations and where funding flows to support H5N1 research activities.`,
+                "Marburg virus disease": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
                 "default": 'Charts showing the location of funding organisations and where the funding flows to support research activities. charts can be visualised at the level of the WHO regions or individual countries.'
             },
             url: {
                 "Mpox": '#geographical-distribution',
                 "Pandemic-prone influenza": '#geographical-distribution',
+                "Marburg virus disease": '#geographical-distribution',
                 "default": '#geographical-distribution',
             },
             image: {
@@ -110,11 +124,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showCard: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             },
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             }
         },
@@ -123,11 +139,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `Charts for trends in research funding in ${disease} and associated research categories.`,
                 "Pandemic-prone influenza": `Charts for trends in research funding in H5N1 and associated research categories.`,
+                "Marburg virus disease": `Charts for trends in research funding in ${disease} and associated research categories.`,
                 "default": 'Charts for trends in research funding for selected diseases, research categories and other items by year starting from 2020, to align with the COVID-19 Pandemic.'
             },
             url: {
                 "Mpox": '#annual-trends',
                 "Pandemic-prone influenza": '#annual-trends',
+                "Marburg virus disease": '#annual-trends',
                 "default": '#annual-trends',
             },
             image: {
@@ -139,11 +157,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showCard: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             },
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             }
         },
@@ -152,11 +172,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "Pandemic-prone influenza": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
+                "Marburg virus disease": `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
             url: {
                 "Mpox": '#research-categories-policy-roadmaps',
                 "Pandemic-prone influenza": '#policy-roadmaps',
+                "Marburg virus disease": '#research-categories-policy-roadmaps',
                 "default": '#policy-roadmaps',
             },
             image: {
@@ -168,11 +190,13 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showCard: {
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
                 "default": true
             },
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": false,
+                "Marburg virus disease": false,
                 "default": false
             }
         },

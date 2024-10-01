@@ -15,15 +15,17 @@ export default function () {
     const dictionary: Row[] = fs.readJsonSync('./data/download/dictionary.json')
 
     const researchCategoryMapping: Row[] = fs.readJsonSync(
-        './data/download/research-category-mapping.json'
+        './data/download/research-category-mapping.json',
     )
+
+    const grants: any[] = fs.readJsonSync('./data/dist/grants.json')
 
     // Merge options from the dictionary checkbox fields and the research category mapping
     // fields into an array of key-value pairs of the same format
     const rawOptions = Object.fromEntries(
         parseCheckboxOptionsFromDictionary(dictionary).concat(
-            parseResearchCategoriesAndSubcategories(researchCategoryMapping)
-        )
+            parseResearchCategoriesAndSubcategories(researchCategoryMapping),
+        ),
     )
 
     const path = './data/dist'
@@ -31,7 +33,7 @@ export default function () {
     // Create a new object with all the select options keyed by field name,
     // including the MPOX Research Priorities and Sub-Priorities
     const optionsWithConvertedKeys = convertSourceKeysToOurKeys(
-        prepareMpoxResearchPriorityAndSubPriority(rawOptions)
+        prepareMpoxResearchPriorityAndSubPriority(rawOptions),
     )
 
     // Get the full list of select options by adding some additional option
@@ -42,20 +44,21 @@ export default function () {
         // don't have options in the dictionary, so we re-use the FunderCountry and
         // FunderRegion options for these fields
         ResearchInstitutionCountry: _.cloneDeep(
-            optionsWithConvertedKeys.FunderCountry
+            optionsWithConvertedKeys.FunderCountry,
         ),
         ResearchLocationCountry: _.cloneDeep(
-            optionsWithConvertedKeys.FunderCountry
+            optionsWithConvertedKeys.FunderCountry,
         ),
         ResearchLocationRegion: _.cloneDeep(
-            optionsWithConvertedKeys.FunderRegion
+            optionsWithConvertedKeys.FunderRegion,
         ),
         // Since GrantStartYear and ResearchInstitutionName are text fields in the
         // source data, we need to determine all the distinct values in the grants
         // data ourself
-        GrantStartYear: getUniqueValuesFromRawGrants('grant_start_year'),
+        GrantStartYear: getUniqueValuesFromRawGrants(grants, 'GrantStartYear'),
         ResearchInstitutionName: getUniqueValuesFromRawGrants(
-            'research_institition_name'
+            grants,
+            'ResearchInstitutionName',
         ),
     }
 
@@ -69,12 +72,8 @@ export default function () {
     })
 
     // Remove funders that don't have any grants
-    // TODO determine whether the inconsistency between the use of dist/grants.json vs
-    // download/grants.json (elsewhere in this file) is intentional
-    const grants: any[] = fs.readJsonSync('./data/dist/grants.json')
-
     selectOptions.FundingOrgName = selectOptions.FundingOrgName.filter(funder =>
-        grants.some(grant => grant.FundingOrgName.includes(funder.value))
+        grants.some(grant => grant.FundingOrgName.includes(funder.value)),
     )
 
     // Write all the select options to a single file to be imported by
@@ -108,10 +107,10 @@ function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
     // from that field (which is a checkbox field)
     const MPOXResearchPriorityOptions =
         rawOptions.research_and_policy_roadmaps.filter(
-            ({ value }) => value in mpoxResearchPriorityAndSubPriorityMapping
+            ({ value }) => value in mpoxResearchPriorityAndSubPriorityMapping,
         )
 
-    // Prepare the MPOX Research Sub-Priorities options in the same format as 
+    // Prepare the MPOX Research Sub-Priorities options in the same format as
     // Subcategories
     const MPOXResearchSubPriorityOptions = MPOXResearchPriorityOptions.flatMap(
         ({ value }) => {
@@ -122,7 +121,7 @@ function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
                 label: subOption.label,
                 parent: value,
             }))
-        }
+        },
     )
 
     return {
@@ -135,7 +134,7 @@ function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
 function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {
     // Get dictionary rows that are checkbox fields
     const checkBoxFields = dictionary.filter(
-        row => row['Field Type'] === 'checkbox'
+        row => row['Field Type'] === 'checkbox',
     )
 
     // Return an array of objects with value and label properties
@@ -143,7 +142,7 @@ function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {
     return checkBoxFields.map(row => [
         row['Variable / Field Name'],
         parseSelectOptionsFromChoices(
-            row['Choices, Calculations, OR Slider Labels']
+            row['Choices, Calculations, OR Slider Labels'],
         ),
     ])
 }
@@ -169,18 +168,18 @@ function parseSelectOptionsFromChoices(choices: string) {
 }
 
 function parseResearchCategoriesAndSubcategories(
-    researchCategoryMapping: Row[]
+    researchCategoryMapping: Row[],
 ) {
     // Get all the distinct Research Category values
     const researchCategoryValues = _.uniq(
-        researchCategoryMapping.map(row => row['Broad categories Codes'])
+        researchCategoryMapping.map(row => row['Broad categories Codes']),
     )
 
     // Create an object with value and label properties for each Research Category
     // by finding the first row with the same value and using it's description.
     const researchCategoryOptions = researchCategoryValues.map(value => {
         const row = researchCategoryMapping.find(
-            row => row['Broad categories Codes'] === value
+            row => row['Broad categories Codes'] === value,
         )
 
         if (typeof row === 'undefined') {
@@ -218,11 +217,7 @@ function parseResearchCategoriesAndSubcategories(
     ]
 }
 
-function getUniqueValuesFromRawGrants(key: string) {
-    // TODO load this once at the start of the script instead of each
-    // time this function is called
-    const grants: Row[] = fs.readJsonSync('./data/download/grants.json')
-
+function getUniqueValuesFromRawGrants(grants: any[], key: string) {
     const values = grants.map(grant => grant[key])
 
     return _.uniq(values)

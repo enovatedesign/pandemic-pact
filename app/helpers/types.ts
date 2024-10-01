@@ -25,4 +25,4 @@ export interface AnnouncementProps {
     }
 }
 
-export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'default'
+export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'Marburg virus disease' | 'default'
