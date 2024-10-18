@@ -1,5 +1,6 @@
-import { FilterIcon, MenuIcon, SearchIcon, XIcon } from '@heroicons/react/solid'
+import { FilterIcon, MenuIcon, SearchIcon, XIcon, ShareIcon } from '@heroicons/react/solid'
 import { useSpring, animated } from '@react-spring/web'
+import ShareButton from './ShareButton'
 
 type Props = {
     sidebarOpen?: boolean,
@@ -96,6 +97,10 @@ const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileN
                         <span className="sr-only">Menu</span>
                         <AnimatedIcons Icon={MenuIcon} state={showMobileNav} />
                     </button>
+                </li>
+                
+                <li className="ml-auto text-secondary flex items-center">
+                    <ShareButton colourClasses="bg-secondary text-white" iconClasses="size-8 md:size-9"/>
                 </li>
 
                 {searchOpen !== undefined && setSearchOpen !== undefined &&
