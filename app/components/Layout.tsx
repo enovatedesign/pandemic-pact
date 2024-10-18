@@ -13,6 +13,7 @@ import PageTitle from './PageTitle'
 import InteractiveBackground from './InteractiveBackground'
 import UtilityBar from './UtilityBar'
 import { SidebarStateContext } from "../helpers/filters"
+import ShareButton from './ShareButton'
 import { AnnouncementProps } from '../helpers/types'
 import Announcement from './ContentBuilder/Common/Announcement'
 
@@ -38,7 +39,7 @@ const Layout = ({
     mastheadContent,
     children,
     outbreak = false,
-    announcement
+    announcement,
 }: Props) => {
     const [animateImmediately, setAnimateImmediately] = useState(true);
 
@@ -98,7 +99,6 @@ const Layout = ({
             setAnimateImmediately(false)
         }
     }, [])
-    
     return (
         <>
             <div id="skiplink-container">
@@ -112,49 +112,57 @@ const Layout = ({
                 </a>
             </div>
 
-            <UtilityBar
-                showMobileNav={showMobileNav}
-                setShowMobileNav={setShowMobileNav}
-                {...optionalUtilityBarAttributes}
-            />
+            <SidebarStateContext.Provider value={{sidebarOpen}}>
+                <UtilityBar
+                    showMobileNav={showMobileNav}
+                    setShowMobileNav={setShowMobileNav}
+                    {...optionalUtilityBarAttributes}
+                />
 
-            <div className={`${sidebar && 'flex'}`}>
-                {sidebar && (
-                    <animated.aside
-                        className={`fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none sidebar ${sidebarOpen ? 'open' : 'closed'}`}
-                        style={transformAnimationProps}
-                    >
-                        <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25 text-white h-screen">
-                            <button
-                                onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="hidden lg:block p-6 text-primary hover:text-white duration-300 transition-colors"
-                            >
-                                <span className="sr-only">Filters</span>
-                                <AdjustmentsIcon
-                                    className="h-8 w-8"
-                                    aria-hidden="true"
-                                />
-                            </button>
+                <div className={`${sidebar && 'flex'}`}>
+                    {sidebar && (
+                        <animated.aside
+                            className={`fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none sidebar ${sidebarOpen ? 'open' : 'closed'}`}
+                            style={transformAnimationProps}
+                        >
+                            <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25 text-white h-screen">
+                                <div className={`
+                                    hidden p-6 lg:flex gap-6 text-primary
+                                    ${sidebarOpen ? 'justify-between items-center' : 'flex-col'}
+                                `}>
+                                    <button
+                                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                                        className="hover:text-white duration-300 transition-colors"
+                                    >
+                                        <span className="sr-only">Filters</span>
+                                        <AdjustmentsIcon
+                                            className="h-8 w-8"
+                                            aria-hidden="true"
+                                        />
+                                    </button>
 
-                            {showClosedContent && !sidebarOpen && sidebar.closedContent}
-                            
-                            <animated.div
-                                className={`grow p-6 max-w-[100vw] overflow-x-hidden ${
-                                    sidebarOpen
-                                        ? 'overflow-y-auto'
-                                        : 'overflow-y-hidden'
-                                }`}
-                                style={widthAnimationProps}
-                            >
-                                <animated.div style={opacityAnimationProps}>
-                                    <div className="sidebar-open-content">
-                                        {sidebar.openContent}
-                                    </div>
+                                    <ShareButton colourClasses="bg-primary text-secondary" iconClasses="size-8"/>
+                                </div>
+
+                                {showClosedContent && !sidebarOpen && sidebar.closedContent}
+                                
+                                <animated.div
+                                    className={`grow p-6 max-w-[100vw] overflow-x-hidden ${
+                                        sidebarOpen
+                                            ? 'overflow-y-auto'
+                                            : 'overflow-y-hidden'
+                                    }`}
+                                    style={widthAnimationProps}
+                                >
+                                    <animated.div style={opacityAnimationProps}>
+                                        <div className="sidebar-open-content">
+                                            {sidebar.openContent}
+                                        </div>
+                                    </animated.div>
                                 </animated.div>
-                            </animated.div>
-                        </div>
-                    </animated.aside>
-                )}
+                            </div>
+                        </animated.aside>
+                    )}
 
                 <div className="w-full relative">
 
@@ -163,59 +171,59 @@ const Layout = ({
                     )}
                     
                     <Header
-                        className="absolute w-full left-0 z-50"
-                        showMobileNav={showMobileNav}
-                    />
+                            className="absolute w-full left-0 z-50"
+                            showMobileNav={showMobileNav}
+                        />
 
-                    <main id="content">
-                        <article aria-labelledby="page-title">
-                            <InteractiveBackground
-                                className={`relative masthead-background ${mastheadStyles.background}`}
-                            >
-                                <div
-                                    className={`masthead-background ${!outbreak ? mastheadStyles.visualise : mastheadStyles.outbreak}`}
+                        <main id="content">
+                            <article aria-labelledby="page-title">
+                                <InteractiveBackground
+                                    className={`relative masthead-background ${mastheadStyles.background}`}
                                 >
-                                    <div className="h-full flex items-end pb-6 lg:pb-12">
-                                        {title && (
-                                            <div className="container mt-44 lg:mt-52">
-                                                <div className="flex gap-x-2 items-center">
-                                                    {outbreak && (
-                                                        <ShieldExclamationIcon 
-                                                            className="size-10 text-brand-red-500"
-                                                            aria-hidden="true"
-                                                        />
+                                    <div
+                                        className={`masthead-background ${!outbreak ? mastheadStyles.visualise : mastheadStyles.outbreak}`}
+                                    >
+                                        <div className="h-full flex items-end pb-6 lg:pb-12">
+                                            {title && (
+                                                <div className="container mt-44 lg:mt-52">
+                                                    <div className="flex gap-x-2 items-center">
+                                                        {outbreak && (
+                                                            <ShieldExclamationIcon 
+                                                                className="size-10 text-brand-red-500"
+                                                                aria-hidden="true"
+                                                            />
+                                                        )}
+                                                        {isValidElement(title) ? (
+                                                            title
+                                                        ) : (
+                                                            <PageTitle>
+                                                                {title}
+                                                            </PageTitle>
+                                                        )}
+                                                    </div>
+
+                                                    {summary && showSummary && (
+                                                        <p className="mt-2 text-white opacity-50 lg:text-xl">
+                                                            {summary}
+                                                        </p>
                                                     )}
-                                                    {isValidElement(title) ? (
-                                                        title
-                                                    ) : (
-                                                        <PageTitle>
-                                                            {title}
-                                                        </PageTitle>
-                                                    )}
+
+                                                    {mastheadContent}
                                                 </div>
-
-                                                {summary && showSummary && (
-                                                    <p className="mt-2 text-white opacity-50 lg:text-xl">
-                                                        {summary}
-                                                    </p>
-                                                )}
-
-                                                {mastheadContent}
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </InteractiveBackground>
+                                </InteractiveBackground>
 
-                            <SidebarStateContext.Provider value={{sidebarOpen}}>
                                 {children}
-                            </SidebarStateContext.Provider>
-                        </article>
-                    </main>
+                                
+                            </article>
+                        </main>
 
-                    <Footer/>
+                        <Footer/>
+                    </div>
                 </div>
-            </div>
+            </SidebarStateContext.Provider>
         </>
     )
 }

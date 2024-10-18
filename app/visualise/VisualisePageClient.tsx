@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useMemo, useState, useEffect, useRef, useContext } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Layout from '../components/Layout'
 import FilterSidebar from '../components/FilterSidebar'
 import GrantsByMpoxResearchPriorityCard from '../components/GrantsByMpoxResearchPriority'
@@ -27,6 +28,7 @@ import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
 import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
 import InfoModal from '../components/InfoModal'
+import { getKvDatabase } from '../helpers/kv'
 
 interface VisualisationPageProps {
     title: string
@@ -64,15 +66,32 @@ export default function VisualisePageClient({
             })
     }, [])
 
+    const params = useSearchParams()
+    const sharedFiltersId = params.get('share')
+
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
         emptyFilters(fixedDiseaseOption?.value),
     )
+    
+    useEffect(() => {
+        const getSharedFilters = async () => {
+            if (sharedFiltersId) {
+                const sharedFilterSet = await getKvDatabase(sharedFiltersId)
+                
+                if (sharedFilterSet) {
+                    setSelectedFilters(sharedFilterSet)
+                }
+            }
+        }
+
+        getSharedFilters()
+    }, [sharedFiltersId])
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),
         [completeDataset, selectedFilters],
     )
-
+    
     const sidebar = useMemo(() => {
         const numberOfActiveFilters = countActiveFilters(selectedFilters)
         return {
@@ -84,6 +103,7 @@ export default function VisualisePageClient({
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     outbreak={outbreak}
+                    sharedFiltersId={sharedFiltersId}
                 />
             ),
             closedContent: (
@@ -128,6 +148,7 @@ export default function VisualisePageClient({
         globallyFilteredDataset,
         loadingDataset,
         outbreak,
+        sharedFiltersId
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'

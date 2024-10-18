@@ -21,6 +21,7 @@ interface FilterSidebarProps {
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
     outbreak?: boolean
+    sharedFiltersId?: string | null
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -40,7 +41,8 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    outbreak = false
+    outbreak = false,
+    sharedFiltersId
 }: FilterSidebarProps) {
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
@@ -98,7 +100,7 @@ export default function FilterSidebar({
 
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
-            <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)]">
+            <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)] flex">
                 <p className="flex flex-col gap-1">
                     {loadingDataset ? (
                         <>
@@ -148,6 +150,7 @@ export default function FilterSidebar({
                 }
                 setSelectedOptions={setSelectedOptions}
                 outbreak={outbreak}
+                sharedFiltersId={sharedFiltersId}
             />
 
             <AnimateHeight
@@ -163,6 +166,7 @@ export default function FilterSidebar({
                             setExcludeGrantsWithMultipleItemsInField
                         }
                         setSelectedOptions={setSelectedOptions}
+                        sharedFiltersId={sharedFiltersId}
                     />
                 </div>
             </AnimateHeight>
@@ -210,6 +214,7 @@ interface filterBlockProps {
         value: boolean,
     ) => void
     outbreak?: boolean
+    sharedFiltersId?: string | null
 }
 
 const FilterBlock = ({
@@ -217,11 +222,10 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    outbreak
+    outbreak,
+    sharedFiltersId
 }: filterBlockProps) => {
 
-    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
-    
     return (
         <>
             {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick }) => {
@@ -241,7 +245,10 @@ const FilterBlock = ({
                                 setSelectedOptions={options =>
                                     setSelectedOptions(field, options)
                                 }
-                                loadOnClick={loadOnClick ?? true}
+                                loadOnClick={sharedFiltersId ? 
+                                    false : 
+                                    loadOnClick ?? true
+                                }
                                 label={label}
                                 outbreak={outbreak}
                             />

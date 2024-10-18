@@ -39,7 +39,6 @@ export default function MultiSelect({
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const id = useId()
-    
 
     const value: Option[] = useMemo(() => {
         return selectedOptions.map(option => {

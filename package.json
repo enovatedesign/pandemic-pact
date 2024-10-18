@@ -28,6 +28,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/three": "^0.166.0",
     "@vercel/blob": "^0.23.4",
+    "@vercel/kv": "^2.0.0",
     "@vercel/og": "^0.6.2",
     "autoprefixer": "^10.4.19",
     "chalk": "4.1.2",
@@ -59,6 +60,7 @@
     "tailwindcss": "^3.4.4",
     "three": "^0.166.1",
     "typescript": "5.3.3",
+    "uuid": "^10.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "devDependencies": {
@@ -66,6 +68,7 @@
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
     "@types/seedrandom": "^3.0.8",
+    "@types/uuid": "^10.0.0",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.9",
     "mapshaper": "^0.6.98"
