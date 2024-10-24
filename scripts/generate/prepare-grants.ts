@@ -139,7 +139,6 @@ export default async function prepareGrants() {
     const pathname = './data/dist/grants.json'
 
     fs.writeJsonSync(pathname, grants)
-    console.log('GRANTS_HAVE_BEEN_WRITTEN')
 
     printWrittenFileStats(pathname)
     
