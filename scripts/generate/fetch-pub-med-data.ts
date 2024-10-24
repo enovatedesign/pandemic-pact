@@ -2,9 +2,10 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import { put } from '@vercel/blob'
 import { ProcessedGrant, Grant } from '../types/generate'
+import readLargeJson from '../helpers/read-large-json'
 import { title, info, printWrittenFileStats, warn } from '../helpers/log'
 
-export default async function () {
+export default async function fetchPubMedData() {
     title('Fetching publication data from PubMed')
 
     const timeLogLabel = 'Fetched publication data from PubMed'
@@ -20,7 +21,7 @@ export default async function () {
 
     const grantsDistPathname = './data/dist/grants.json'
 
-    const sourceGrants: ProcessedGrant[] = fs.readJsonSync(grantsDistPathname)
+    const sourceGrants = await readLargeJson(grantsDistPathname) as ProcessedGrant[]
 
     // Fetch all the publications from PubMed that match the PubMed Grant IDs in our
     // dataset 
