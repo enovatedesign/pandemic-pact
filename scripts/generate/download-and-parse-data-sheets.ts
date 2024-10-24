@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
-import { read, utils } from 'xlsx'
+import { parse } from 'fast-csv'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 
-export default async function () {
+export default async function downloadAndParseDataSheet () {
     title('Fetching data sheets')
 
     fs.emptyDirSync('data/download')
@@ -15,54 +15,89 @@ export default async function () {
     await downloadCsvAndConvertToJson(
         'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/research-categories.csv',
         'research-category-mapping',
+        false,
+        ';'
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/49566828?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/49817379?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
+}
+
+interface ParseOptions {
+    headers: boolean
+    ignoreEmpty: boolean
+    maxRows?: number
+    delimiter?: string
 }
 
 async function downloadCsvAndConvertToJson(
     url: string,
     outputFileName: string,
     dumpHeadingRow: boolean = false,
+    delimiter?: string
 ) {
-    const buffer = await fetch(url).then(res => res.arrayBuffer())
-
-    info(`Fetched file from ${url}`)
-
-    const workbook = read(buffer, { raw: true, dense: true })
-
-    const sheetName = workbook.SheetNames[0]
-
-    const sheet = workbook.Sheets[sheetName]
-
     const outputPath = `data/download`
-
-    if (dumpHeadingRow) {
-        const rows: string[][] = utils.sheet_to_json(sheet, {
-            // Load all cells as strings instead of attempting to parse numbers, dates etc.
-            raw: true,
-            // Load each row as a simple array of strings
-            header: 1,
+    const csv = await fetch(url).then(res => res.text())
+    
+    info(`Fetched file from ${url}`)
+    
+    async function streamToJson(
+        filePath: string, 
+        headers: boolean = true,
+        maxRows?: number
+    )  { 
+        const writeStream = fs.createWriteStream(filePath)
+        
+        const options: ParseOptions = {
+            headers,
+            ignoreEmpty: true
+        }
+        
+        if (!headers) {
+            options.maxRows = 1
+        }
+        
+        if (delimiter) {
+            options.delimiter = delimiter
+        }
+        
+        let firstWrite = true
+        
+        return new Promise((resolve: any, reject: any) => {
+            const stream = parse(options)
+                .on('error', error => {
+                    writeStream.end()
+                    console.error(filePath, error)
+                    reject(error)
+                })
+                .on('data', row => {
+                    if (!firstWrite) {
+                        writeStream.write(',')
+                    } else {
+                        if (headers) writeStream.write('[')
+                        firstWrite = false
+                    }
+                    
+                    writeStream.write(JSON.stringify(row))
+                })
+                .on('end', () => {
+                    if (headers) writeStream.write(']')
+                    writeStream.end()
+                    printWrittenFileStats(filePath)
+                    resolve()
+                })
+            
+            stream.write(csv)
+            stream.end()
         })
-
-        const outputPathname = `${outputPath}/${outputFileName}-headings.json`
-
-        const headingRow = rows[0]
-
-        fs.writeJsonSync(outputPathname, headingRow)
-
-        printWrittenFileStats(outputPathname)
     }
-
-    const data = utils.sheet_to_json(sheet)
-
-    const outputPathname = `${outputPath}/${outputFileName}.json`
-
-    fs.writeJsonSync(outputPathname, data)
-
-    printWrittenFileStats(outputPathname)
+    
+    if (dumpHeadingRow) {
+        await streamToJson(`${outputPath}/${outputFileName}-headings.json`, false)
+    }
+    
+    await streamToJson(`${outputPath}/${outputFileName}.json`)
 }

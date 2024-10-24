@@ -1,7 +1,10 @@
 'use client'
 
-import React from 'react'
-import { useMemo, useState, useEffect, useRef, useContext } from 'react'
+import { useMemo, useState, useEffect, useRef, useContext, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { throttle, debounce } from 'lodash'
+import { Tooltip, TooltipRefProps } from 'react-tooltip'
+
 import Layout from '../components/Layout'
 import FilterSidebar from '../components/FilterSidebar'
 import GrantsByMpoxResearchPriorityCard from '../components/GrantsByMpoxResearchPriority'
@@ -19,13 +22,13 @@ import {
     Filters,
     FixedDiseaseOptionContext,
 } from '../helpers/filters'
-import { throttle, debounce } from 'lodash'
-import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import { TooltipContext } from '../helpers/tooltip'
+import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
+import { getKvDatabase } from '../helpers/kv'
+
 import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
-import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
 import InfoModal from '../components/InfoModal'
 
 interface VisualisationPageProps {
@@ -38,7 +41,7 @@ interface VisualisationPageProps {
     announcement: AnnouncementProps
 }
 
-export default function VisualisePageClient({
+const VisualisePageClientComponent = ({
     title,
     summary,
     showSummary = true,
@@ -46,7 +49,7 @@ export default function VisualisePageClient({
     children,
     diseaseLabel,
     announcement
-}: VisualisationPageProps) {
+}: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
     const [completeDataset, setCompleteDataset] = useState([])
@@ -62,17 +65,35 @@ export default function VisualisePageClient({
                 setCompleteDataset(data)
                 setLoadingDataset(false)
             })
+            .catch(error => console.error(error))
     }, [])
+
+    const params = useSearchParams()
+    const sharedFiltersId = params.get('share')
 
     const [selectedFilters, setSelectedFilters] = useState<Filters>(
         emptyFilters(fixedDiseaseOption?.value),
     )
+    
+    useEffect(() => {
+        const getSharedFilters = async () => {
+            if (sharedFiltersId) {
+                const sharedFilterSet = await getKvDatabase(sharedFiltersId)
+                
+                if (sharedFilterSet) {
+                    setSelectedFilters(sharedFilterSet)
+                }
+            }
+        }
+
+        getSharedFilters()
+    }, [sharedFiltersId])
 
     const globallyFilteredDataset = useMemo(
         () => filterGrants(completeDataset, selectedFilters),
         [completeDataset, selectedFilters],
     )
-
+    
     const sidebar = useMemo(() => {
         const numberOfActiveFilters = countActiveFilters(selectedFilters)
         return {
@@ -84,6 +105,7 @@ export default function VisualisePageClient({
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     outbreak={outbreak}
+                    sharedFiltersId={sharedFiltersId}
                 />
             ),
             closedContent: (
@@ -128,6 +150,7 @@ export default function VisualisePageClient({
         globallyFilteredDataset,
         loadingDataset,
         outbreak,
+        sharedFiltersId
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
@@ -340,3 +363,11 @@ export default function VisualisePageClient({
         </GlobalFilterContext.Provider>
     )
 }
+
+const VisualisePageClient = (props: VisualisationPageProps) => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <VisualisePageClientComponent {...props} />
+    </Suspense>
+)
+
+export default VisualisePageClient

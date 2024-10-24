@@ -1,13 +1,10 @@
-import VisualisePageClient from "./VisualisePageClient"
-import { fetchMetadataFromCraft, Parameters } from "../helpers/cms-page"
-import type {Metadata, ResolvingMetadata} from 'next'
+import type { Metadata } from 'next'
+
+import { fetchMetadataFromCraft } from "../helpers/cms-page"
 import { queryAnnouncementEntry } from "../helpers/announcement-query"
+import VisualisePageClient from "./VisualisePageClient"
 
-type generateMetadataProps = {
-    params: Parameters
-}
-
-export async function generateMetadata({ params }: generateMetadataProps, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     return fetchMetadataFromCraft('visualise')
 }
 

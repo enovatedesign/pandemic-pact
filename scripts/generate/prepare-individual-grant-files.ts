@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info, warn } from '../helpers/log'
 
-export default function () {
+export default function prepareIndividualGrantFiles() {
     title('Writing full grant data to individual files')
 
     const selectOptions: SelectOptions = fs.readJsonSync(

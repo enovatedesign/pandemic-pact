@@ -10,10 +10,8 @@ import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
 import Pagination from "../Common/Pagination"
 import { ChevronRightIcon } from "@heroicons/react/outline"
-import { Block } from "@react-three/fiber/dist/declarations/src/core/utils"
 
 interface ListContentNewsProps {
-    blockHandle: string
     block: {
         customEntries?: CardEntriesProps | undefined,
         limit: number,
@@ -21,7 +19,7 @@ interface ListContentNewsProps {
     }
 }
 
-const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
+const ListContentNewsBlockComponent = ({ block }: ListContentNewsProps) => {
     const {
         customEntries,
         limit,
@@ -93,59 +91,62 @@ const ListContentNewsBlock = ({block}: ListContentNewsProps) => {
     }, [customEntries, customEntries?.length, firstItemIndex, lastItemIndex, limit, pageParam, paginate])
     
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            {isLoading ? (
+        isLoading ? (
+            <BlockWrapper>
+                <p>
+                    Loading News Articles...
+                </p>
+            </BlockWrapper>
+        ) : paginate && paginatedEntries && paginatedEntries.length > 0 ? (
+            <BlockWrapper>
+                <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
+                    {paginatedEntries?.map((entry: CardEntryProps, index: number) => {
+                        return (
+                            <li key={index}>
+                                <Card entry={entry}/>
+                            </li>
+                        )
+                    })}
+                </ul>
+                
+                {totalEntries > limit && (
+                    <Pagination 
+                        totalPosts={totalEntries}
+                        postsPerPage={limit}
+                        setFirstItemIndex={setFirstItemIndex}
+                        setLastItemIndex={setLastItemIndex}
+                    />
+                )}
+            </BlockWrapper>
+        ) : limitedEntries && limitedEntries.length > 0 ? (
                 <BlockWrapper>
-                    <p>
-                        Loading News Articles...
-                    </p>
-                </BlockWrapper>
-            ) : paginate && paginatedEntries && paginatedEntries.length > 0 ? (
-                <BlockWrapper>
-                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
-                        {paginatedEntries?.map((entry: CardEntryProps, index: number) => {
+                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
+                        {limitedEntries?.map((entry: CardEntryProps, index: number) => {
                             return (
                                 <li key={index}>
-                                    <Card entry={entry}/>
+                                    <Card 
+                                        entry={entry} 
+                                        animatedIcon={<ChevronRightIcon className="w-6 h-6" />}
+                                    />
                                 </li>
                             )
                         })}
-                    </ul>
-                    
-                    {totalEntries > limit && (
-                        <Pagination 
-                            totalPosts={totalEntries}
-                            postsPerPage={limit}
-                            setFirstItemIndex={setFirstItemIndex}
-                            setLastItemIndex={setLastItemIndex}
-                        />
-                    )}
+                    </div>
                 </BlockWrapper>
-            ) : limitedEntries && limitedEntries.length > 0 ? (
-                    <BlockWrapper>
-                        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !list-none">
-                            {limitedEntries?.map((entry: CardEntryProps, index: number) => {
-                                return (
-                                    <li key={index}>
-                                        <Card 
-                                            entry={entry} 
-                                            animatedIcon={<ChevronRightIcon className="w-6 h-6" />}
-                                        />
-                                    </li>
-                                )
-                            })}
-                        </div>
-                    </BlockWrapper>
-            ) : (
-                <BlockWrapper>
-                    <p>
-                        No news items exist currently, please check back soon.
-                    </p>
-                </BlockWrapper>
-            )}
-        </Suspense>
+        ) : (
+            <BlockWrapper>
+                <p>
+                    No news items exist currently, please check back soon.
+                </p>
+            </BlockWrapper>
+        )
     )
 }
 
-export default ListContentNewsBlock
+const ListContentNewsBlock = (props: ListContentNewsProps) => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <ListContentNewsBlockComponent {...props} />
+    </Suspense>
+)
 
+export default ListContentNewsBlock

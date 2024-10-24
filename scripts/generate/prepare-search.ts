@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import { title, info, error } from '../helpers/log'
+import { title, info, error, warn } from '../helpers/log'
 import {
     getIndexName,
     getSearchClient,
@@ -9,6 +9,14 @@ import {
 import { execSync } from 'child_process'
 
 export default async function () {
+
+    if (process.env.SKIP_OPENSEARCH_INDEXING) {
+        warn(
+            'Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present',
+        )
+        return
+    }
+
     const client = getSearchClient()
 
     if (!client) {

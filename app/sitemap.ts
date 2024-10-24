@@ -5,15 +5,24 @@ import path from 'path';
 
 const siteUrl = 'https://www.pandemicpact.org'
 
+interface craftEntryProps {
+    uri: string, 
+    typeHandle: string
+    dateUpdated: string
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
-    const craftPages = await GraphQL(
+    const craftEntries = await GraphQL(
         `{
-            entries(section: "pages") {
-              uri
-              dateUpdated
-            }
-        }`
+			entries(
+				status: "enabled",
+				uri: ":notempty:"
+			) {
+                uri
+                typeHandle
+			}
+		}`
     )
 
     const homepage = await GraphQL(
@@ -24,22 +33,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             }
         }`
     )
-
-    interface craftPageProps {
-        uri: string, 
-        dateUpdated: string
-    }
     
-    const homepageSitemapData = homepage.entries.map((homepage: craftPageProps) => ({
+    const typeHandlesToRemove = [
+        'homepage',
+        'redirect',
+        'testPage'
+    ]
+
+    const homepageSitemapData = homepage.entries.map((homepage: craftEntryProps) => ({
         // Homepage does not need a uri set in the url field of the sitemap
         url: `${siteUrl}`,
         lastModified: homepage.dateUpdated
     }))
     
-    const entriesSitemapData = craftPages.entries.map((entry: craftPageProps) => ({
-        url: `${siteUrl}/${entry.uri}`,
-        lastModified: entry.dateUpdated
-    }))
+    const entriesSitemapData = craftEntries.entries.filter((entry: craftEntryProps) => 
+        !typeHandlesToRemove.includes(entry.typeHandle)
+    ).map((entry: craftEntryProps) => ({
+            url: `${siteUrl}/${entry.uri}`,
+            lastModified: entry.dateUpdated
+        }
+    ))
 
     const grantDirectory = path.join(process.cwd(), 'data', 'dist', 'grants');
     
@@ -66,9 +79,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const grantJsonDataArray = await readJsonFiles();
 
     const grantPageSitemapData = grantJsonDataArray
-        .filter(grant => grant.id !== undefined)
-        .map((grant: {GrantID: string, updated_at: string}) => ({
-            url: `${siteUrl}/grants/${grant.GrantID}`, 
+        .filter(({GrantID}) => 
+            GrantID !== undefined
+        ).map(({ GrantID }: { GrantID: string }) => ({
+            url: `${siteUrl}/grants/${GrantID}`
         }))
     
     return [
