@@ -1,18 +1,19 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+
 import { RawGrant } from '../types/generate'
+import readLargeJson from '../helpers/read-large-json'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default function () {
+export default async function prepareGrants() {
     title('Preparing grants')
-
-    const rawGrants: RawGrant[] = fs.readJsonSync('./data/download/grants.json')
-
+    
+    const rawGrants = await readLargeJson('./data/download/grants.json') as RawGrant[]
+    
     const headings: string[] = fs.readJsonSync(
         './data/download/grants-headings.json',
     )
@@ -138,8 +139,11 @@ export default function () {
     const pathname = './data/dist/grants.json'
 
     fs.writeJsonSync(pathname, grants)
+    console.log('GRANTS_HAVE_BEEN_WRITTEN')
 
     printWrittenFileStats(pathname)
+    
+    return Promise.resolve(grants)
 }
 
 function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {

@@ -17,8 +17,8 @@ async function main() {
 
     await downloadAndParseDataSheets()
 
-    prepareGrants()
-
+    await prepareGrants()
+    
     prepareSelectOptions()
 
     prepareHomepageTotals()
