@@ -55,13 +55,14 @@ export default function prepareSelectOptions() {
         // Since GrantStartYear and ResearchInstitutionName are text fields in the
         // source data, we need to determine all the distinct values in the grants
         // data ourself
-        GrantStartYear: getUniqueValuesFromRawGrants(grants, 'GrantStartYear').filter(year => Number(year.value) >= 2020), // Only show years 2020 and onwards, other years are included in the data for other purposes
+        
+        // Only show years 2020 and onwards, other years are included in the data for other purposes
+        GrantStartYear: getUniqueValuesFromRawGrants(grants, 'GrantStartYear').filter(year => Number(year.value) >= 2020),
         ResearchInstitutionName: getUniqueValuesFromRawGrants(
             grants,
             'ResearchInstitutionName',
         ),
     }
-    console.log(selectOptions)
 
     // Adjust case for Pandemic-prone influenza values to lowercase
     Object.keys(selectOptions).forEach(key => {
