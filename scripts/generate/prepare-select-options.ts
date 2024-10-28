@@ -61,7 +61,6 @@ export default function prepareSelectOptions() {
             'ResearchInstitutionName',
         ),
     }
-    console.log(selectOptions)
 
     // Adjust case for Pandemic-prone influenza values to lowercase
     Object.keys(selectOptions).forEach(key => {
