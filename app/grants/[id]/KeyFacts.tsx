@@ -4,21 +4,33 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
+    const investigatorTitle = grant?.InvestigatorTitle
     const investigatorFirstName = grant?.InvestigatorFirstName
     const investigatorLastName = grant?.InvestigatorLastName
-
-    const nameIsAvailable = (name: string) => typeof name === 'string' && name !== 'N/A'
+    const investigatorORCID = grant?.InvestigatorORCID 
+    
+    const nameContentIsAvailable = (nameDetail: string) => typeof nameDetail === 'string' && nameDetail !== 'N/A'
 
     let principalInvestigatorName
 
-    if ((nameIsAvailable(investigatorFirstName) && nameIsAvailable(investigatorLastName))) {
+    if ((nameContentIsAvailable(investigatorFirstName) && nameContentIsAvailable(investigatorLastName))) {
         principalInvestigatorName = `${investigatorFirstName} ${investigatorLastName}`
-    } else if (nameIsAvailable(investigatorFirstName)) {
+    } else if (nameContentIsAvailable(investigatorFirstName)) {
         principalInvestigatorName = investigatorFirstName
-    } else if (nameIsAvailable(investigatorLastName)) {
+    } else if (nameContentIsAvailable(investigatorLastName)) {
         principalInvestigatorName = investigatorLastName
     } else {
         principalInvestigatorName = "Pending"
+    }
+
+    if (principalInvestigatorName !== "Pending") {
+        if (nameContentIsAvailable(investigatorTitle)) {
+            principalInvestigatorName = `${investigatorTitle}. ` + principalInvestigatorName 
+        }
+
+        if (nameContentIsAvailable(investigatorORCID)) {
+            principalInvestigatorName = principalInvestigatorName + ` (${investigatorORCID})`
+        }
     }
 
     const keyFactsHeadings = [
