@@ -4,6 +4,12 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
+    const principalInvestigatorName = (grant?.InvestigatorFirstName && grant?.InvestigatorLastName)
+        ? `${grant.InvestigatorFirstName} ${grant.InvestigatorLastName}` 
+        : grant?.InvestigatorFirstName 
+            ?? grant?.InvestigatorLastName 
+            ?? "Pending"
+
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -24,7 +30,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Principal Investigator',
-            metric: grant.PrincipleInvestigator ?? 'Pending',
+            metric: principalInvestigatorName,
         },
         {
             text: 'Research Location',
