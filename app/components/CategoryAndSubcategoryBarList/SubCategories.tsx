@@ -41,15 +41,16 @@ export default function SubCategories({
                 )
             )
     }, [subcategoryField, grants, selectedCategory])
-    
-    const categories = selectOptions[categoryField as keyof typeof selectOptions]
+
+    const categories =
+        selectOptions[categoryField as keyof typeof selectOptions]
 
     const categoryLabel = categories.find(
         ({ value }: { value: string }) => value === selectedCategory
     )?.label
 
     const { brightColours, dimColours } = getColoursByField(subcategoryField)
-    
+
     return (
         <>
             <BackToParentButton

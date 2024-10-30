@@ -28,7 +28,7 @@ export default function BarListRow({ dataIndex }: Props) {
     } = useContext(BarListContext)
 
     const datum = data[dataIndex]
-    
+
     const onChartMouseEnterOrMove = (
         nextState: any,
         event: MouseEvent<SVGPathElement>
