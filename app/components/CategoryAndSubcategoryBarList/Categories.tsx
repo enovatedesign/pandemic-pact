@@ -24,9 +24,8 @@ export default function Categories({
 
     const { brightColours, dimColours } = getColoursByField(categoryField)
 
-    const categories =
-        selectOptions[categoryField as keyof typeof selectOptions]
-
+    const categories = selectOptions[categoryField as keyof typeof selectOptions]
+    
     const chartData = useMemo(
         () =>
             categories.map(category =>
@@ -34,7 +33,6 @@ export default function Categories({
             ),
         [grants, categories, categoryField],
     )
-
     return (
         <>
             <BarList
@@ -69,7 +67,7 @@ export default function Categories({
                     subCategoryValue="all"
                     setSelectedCategory={setSelectedCategory}
                     customClasses="px-4 py-1 lg:text-base uppercase text-white bg-secondary hover:bg-secondary-lighter"
-                />
+                    />
             </div>
         </>
     )

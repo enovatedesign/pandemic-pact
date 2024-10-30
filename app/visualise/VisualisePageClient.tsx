@@ -30,6 +30,7 @@ import VisualisationCardLinks from './components/VisualisationCardLinks'
 import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
 import InfoModal from '../components/InfoModal'
+import ClinicalTrialsTherapeuticsAndVaccines from '../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 
 interface VisualisationPageProps {
     title: string
@@ -307,7 +308,7 @@ const VisualisePageClientComponent = ({
                         id="visualisations-wrapper"
                     >
                         <div className={`${gridClasses} mt-6`}>
-                            <div id="disease" className={gridClasses}>
+                            {/* <div id="disease" className={gridClasses}>
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
@@ -344,7 +345,9 @@ const VisualisePageClientComponent = ({
 
                             <div id="annual-trends" className={gridClasses}>
                                 <FundingAmountsForEachResearchCategoryOverTime />
-                            </div>
+                            </div> */}
+
+                            <ClinicalTrialsTherapeuticsAndVaccines/>
                         </div>
 
                         <Tooltip

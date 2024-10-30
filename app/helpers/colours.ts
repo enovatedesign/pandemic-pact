@@ -334,6 +334,24 @@ export const mpoxResearchSubPriorityDimColours: Colours = {
     '23b': brandColours.blue['300'],
 }
 
+export const clinicalTrialPhaseColours: Colours = {
+    'Phase 0': brandColours.blue['400'],
+    'Phase 1': brandColours.teal['500'],
+    'Phase 2': brandColours.green['500'],
+    'Phase 3': brandColours.orange['500'],
+    'Phase 4': brandColours.grey['400'],
+    'Clinical trial (unspecified trial phase)': brandColours.red['500'],
+}
+
+export const clinicalTrialPhaseDimColours: Colours = {
+    'Phase 0': brandColours.blue['300'],
+    'Phase 1': brandColours.teal['400'],
+    'Phase 2': brandColours.green['400'],
+    'Phase 3': brandColours.orange['400'],
+    'Phase 4': brandColours.grey['300'],
+    'Clinical trial (unspecified trial phase)': brandColours.red['400'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,
@@ -351,4 +369,8 @@ export const coloursByField = {
         bright: mpoxResearchSubPriorityColours,
         dim: mpoxResearchSubPriorityDimColours,
     },
+    ClinicalTrialPhase: {
+        bright: clinicalTrialPhaseColours,
+        dim: clinicalTrialPhaseDimColours,
+    }
 }
