@@ -203,7 +203,7 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
                             term: {
                                 [field]: value,
                             },
-                        })),
+                        })) 
                     },
                 }
             },
