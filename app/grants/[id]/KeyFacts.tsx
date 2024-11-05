@@ -24,7 +24,12 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Principal Investigator',
-            metric: grant.PrincipleInvestigator ?? 'Pending',
+            metric: grant.InvestigatorNames.map((
+                investigator: {
+                    title: string, 
+                    firstName: string, 
+                    lastName: string
+                }) => Object.values(investigator).filter(value => value).join(' ')),
         },
         {
             text: 'Research Location',
@@ -123,7 +128,12 @@ export default function KeyFacts({ grant }: { grant: any }) {
 
                             const metricIsArray = Array.isArray(heading?.metric)
                             const filteredMetric = metricIsArray ? heading.metric.filter((m: any) => m) : heading.metric
-                            const metric = metricIsArray ? filteredMetric.slice(0, 2).join(', ') : heading?.metric
+                            const metric = metricIsArray 
+                                ? heading.text === 'Principal Investigator'
+                                    ? filteredMetric.join(', ')
+                                    : filteredMetric.slice(0, 2).join(', ')
+                                : heading.metric
+
                             const infoModalMetric = metricIsArray && filteredMetric.length > 3 ? heading.metric.join(', ') : ''
 
                             let headingText = ''

@@ -36,6 +36,7 @@ export default function StandardSearchFilters({
         FunderCountry: 'Funder Countries',
         FunderRegion: 'Funder Regions',
         FundingOrgName: 'Funders',
+        ResearchCat: 'Research Categories'
     }
 
     const jointFundingValue = jointFundingFilterOptions.find(

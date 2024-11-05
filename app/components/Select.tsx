@@ -34,7 +34,7 @@ export default function Select({
             onChange={onChange}
             placeholder={label}
             aria-label={label}
-            className={`text-black ${className}`}
+            className=  {className}
             instanceId={id}
             theme={theme => ({
                 ...theme,

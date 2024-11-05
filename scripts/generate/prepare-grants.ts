@@ -8,6 +8,7 @@ import {
     convertSourceKeysToOurKeys,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
+import { formatInvestigatorNames } from '../helpers/principle-investigators'
 
 export default async function prepareGrants() {
     title('Preparing grants')
@@ -105,12 +106,21 @@ export default async function prepareGrants() {
             ...commaSeparatedFieldValues,
         })
 
+        const investigatorNames = formatInvestigatorNames(
+            rawGrant?.investigator_title,
+            rawGrant?.investigator_firstname, 
+            rawGrant?.investigator_lastname
+        )
+
         // Add custom data fields of our own
         let customFields = {
             // Add 'TrendStartYear' default value if 'grant_start_year' is missing
             TrendStartYear: Number(
                 rawGrant.grant_start_year ?? rawGrant.publication_year_of_award,
             ),
+            
+            // Add the formatted investigator names for use on the frontend
+            InvestigatorNames: investigatorNames
         }
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020

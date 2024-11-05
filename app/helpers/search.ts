@@ -54,13 +54,15 @@ export interface SearchResponse {
     }
 }
 
+export interface Filter {
+    field: string
+    values: string[]
+    logicalAnd: boolean
+}
+
 export interface SearchFilters {
     logicalAnd: boolean
-    filters: {
-        field: string
-        values: string[]
-        logicalAnd: boolean
-    }[]
+    filters: Filter[]
 }
 
 export interface SearchRequestBody {
@@ -81,7 +83,10 @@ const searchParameterSchema: SearchParameterSchema = {
         defaultValue: 'all-grants',
     },
     advancedFilters: {
-        defaultValue: { logicalAnd: true, filters: [] },
+        defaultValue: { 
+            logicalAnd: true, 
+            filters: [], 
+        },
         excludeFromQueryString: true,
     },
     page: {
@@ -210,15 +215,15 @@ export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
 
 export const jointFundingFilterOptions = [
     {
-        label: 'All grants (including joint-funded grants)',
+        label: 'All Grants (including joint-funded grants)',
         value: 'all-grants',
     },
     {
-        label: 'Only joint-funded grants',
+        label: 'Only Joint-funded Grants',
         value: 'only-joint-funded-grants',
     },
     {
-        label: 'Exclude joint-funded grants',
+        label: 'Exclude Joint-funded Grants',
         value: 'exclude-joint-funded-grants',
     },
 ]

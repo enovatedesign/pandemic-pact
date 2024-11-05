@@ -41,7 +41,7 @@ export default function ExplorePageClient({announcement}: Props) {
                             oldSearchParameters[key as keyof SearchParameters],
                         ),
                 )
-
+            
             return {
                 ...oldSearchParameters,
                 ...newSearchParameters,
