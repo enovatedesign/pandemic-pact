@@ -62,12 +62,12 @@ export default function SearchInput({
             advancedFilters: filters,
         })
     }
-
+    
     return (
         <div>
             <div className="space-y-3">
                 <div className="flex gap-x-4">
-                    <div className="focus-within:border-primary bg-white pl-2 pr-1 md:pr-2 rounded-xl border-2 border-gray-200 pl-4 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
+                    <div className="focus-within:border-primary bg-white pl-4 pr-1 md:pr-2 rounded-xl border-2 border-gray-200 py-1 md:py-2 text-gray-900 flex items-center justify-between gap-4 w-full">
                         <input
                             type="search"
                             placeholder="Search..."
@@ -175,6 +175,7 @@ export default function SearchInput({
                         >
                             <AdvancedSearchFilters
                                 setSearchFilters={setShowAdvancedSearchFilters}
+                                setJointFundingFilter={setJointFundingFilter}
                             />
                         </div>
 
