@@ -4,35 +4,6 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
-    const investigatorTitle = grant?.InvestigatorTitle
-    const investigatorFirstName = grant?.InvestigatorFirstName
-    const investigatorLastName = grant?.InvestigatorLastName
-    const investigatorORCID = grant?.InvestigatorORCID 
-    
-    const nameContentIsAvailable = (nameDetail: string) => typeof nameDetail === 'string' && nameDetail !== 'N/A'
-
-    let principalInvestigatorName
-
-    if ((nameContentIsAvailable(investigatorFirstName) && nameContentIsAvailable(investigatorLastName))) {
-        principalInvestigatorName = `${investigatorFirstName} ${investigatorLastName}`
-    } else if (nameContentIsAvailable(investigatorFirstName)) {
-        principalInvestigatorName = investigatorFirstName
-    } else if (nameContentIsAvailable(investigatorLastName)) {
-        principalInvestigatorName = investigatorLastName
-    } else {
-        principalInvestigatorName = "Pending"
-    }
-
-    if (principalInvestigatorName !== "Pending") {
-        if (nameContentIsAvailable(investigatorTitle)) {
-            principalInvestigatorName = `${investigatorTitle}. ` + principalInvestigatorName 
-        }
-
-        if (nameContentIsAvailable(investigatorORCID)) {
-            principalInvestigatorName = principalInvestigatorName + ` (${investigatorORCID})`
-        }
-    }
-
     const keyFactsHeadings = [
         {
             text: 'Disease',
@@ -53,7 +24,12 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
         {
             text: 'Principal Investigator',
-            metric: principalInvestigatorName,
+            metric: grant.InvestigatorNames.map((
+                investigator: {
+                    title: string, 
+                    firstName: string, 
+                    lastName: string
+                }) => Object.values(investigator).filter(value => value).join(' ')),
         },
         {
             text: 'Research Location',
@@ -152,7 +128,12 @@ export default function KeyFacts({ grant }: { grant: any }) {
 
                             const metricIsArray = Array.isArray(heading?.metric)
                             const filteredMetric = metricIsArray ? heading.metric.filter((m: any) => m) : heading.metric
-                            const metric = metricIsArray ? filteredMetric.slice(0, 2).join(', ') : heading?.metric
+                            const metric = metricIsArray 
+                                ? heading.text === 'Principal Investigator'
+                                    ? filteredMetric.join(', ')
+                                    : filteredMetric.slice(0, 2).join(', ')
+                                : heading.metric
+
                             const infoModalMetric = metricIsArray && filteredMetric.length > 3 ? heading.metric.join(', ') : ''
 
                             let headingText = ''

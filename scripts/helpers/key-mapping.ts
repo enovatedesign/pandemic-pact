@@ -40,10 +40,6 @@ export const keyMapping: { [key: string]: string } = {
     influenza_h7: 'InfluenzaH7',
     influenza_h10: 'InfluenzaH10',
     tags: 'Tags',
-    investigator_title: 'InvestigatorTitle',
-    investigator_firstname: 'InvestigatorFirstName',
-    investigator_lastname: 'InvestigatorLastName',
-    investigator_orcid: 'InvestigatorORCID'
 }
 
 export const mpoxResearchPriorityAndSubPriorityMapping: {
