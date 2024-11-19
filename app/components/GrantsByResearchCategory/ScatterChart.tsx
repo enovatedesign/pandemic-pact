@@ -13,18 +13,23 @@ import {
     Cell,
 } from 'recharts'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+
+import selectOptions from '../../../data/dist/select-options.json'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import selectOptions from '../../../data/dist/select-options.json'
 import { researchCategoryColours } from '../../helpers/colours'
 import {
     dollarValueFormatter,
     axisDollarFormatter,
 } from '../../helpers/value-formatters'
 import { GlobalFilterContext } from '../../helpers/filters'
+import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
+import { isChartDataUnavailable } from '@/app/helpers/bar-list'
+
 import Legend from '../Legend'
 import ImageExportLegend from '../ImageExportLegend'
 import TooltipContent from '../TooltipContent'
+import NoDataText from '../NoData/NoDataText'
 
 const CustomDot = (props: any) => {
     const { cx, cy, fill } = props
@@ -33,6 +38,8 @@ const CustomDot = (props: any) => {
 
 export default function ScatterChart() {
     const { grants } = useContext(GlobalFilterContext)
+
+    const { scatterFallback } = grantsByResearchCategoriesFallbackData
 
     const [showLegend, setShowLegend] = useState<boolean>(false)
 
@@ -101,9 +108,17 @@ export default function ScatterChart() {
 
         return <TooltipContent title={title} items={items} />
     }
+    
+    const scatterChartDataIsNotAvailable = isChartDataUnavailable(chartData)
+    
+    const scatterChartData = scatterChartDataIsNotAvailable ? scatterFallback : chartData
 
+    const responsiveContainerWrapperClasses = [
+        'w-full',
+        scatterChartData === scatterFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
     return (
-        <>
+        <div className="w-full relative">
             <div className="space-y-2 ignore-in-image-export">
                 <button
                     onClick={() => setShowLegend(!showLegend)}
@@ -121,77 +136,83 @@ export default function ScatterChart() {
                         aria-hidden="true"
                     />
                 </button>
-
-                <AnimateHeight duration={300} height={showLegend ? 'auto' : 0}>
-                    <Legend
-                        categories={researchCategories.map(
-                            category => category.label,
-                        )}
-                        colours={researchCategories.map(
-                            ({ value }) => researchCategoryColours[value],
-                        )}
-                        customWrapperClasses="grid grid-cols-1 gap-2 lg:grid-cols-3"
-                        customTextClasses="whitespace-normal"
-                    />
-                </AnimateHeight>
+                
+                {researchCategories.length > 0 && (
+                    <AnimateHeight duration={300} height={showLegend ? 'auto' : 0}>
+                        <Legend
+                            categories={researchCategories.map(
+                                category => category.label,
+                            )}
+                            colours={researchCategories.map(
+                                ({ value }) => researchCategoryColours[value],
+                            )}
+                            customWrapperClasses="grid grid-cols-1 gap-2 lg:grid-cols-3"
+                            customTextClasses="whitespace-normal"
+                        />
+                    </AnimateHeight>
+                )}
             </div>
-
-            <ResponsiveContainer width="100%" height={500}>
-                <RechartScatterChart
-                    margin={{
-                        top: 30,
-                        right: 30,
-                        bottom: 30,
-                        left: 30,
-                    }}
-                >
-                    <CartesianGrid />
-
-                    <XAxis
-                        type="number"
-                        dataKey="Total Grants"
-                        allowDecimals={false}
-                        label={{
-                            value: 'Grants',
-                            position: 'bottom',
+            
+            <div className={responsiveContainerWrapperClasses}>
+                <ResponsiveContainer width="100%" height={500}>
+                    <RechartScatterChart
+                        margin={{
+                            top: 30,
+                            right: 30,
+                            bottom: 30,
+                            left: 30,
                         }}
-                        className="text-lg"
-                    />
+                    >
+                        <CartesianGrid />
 
-                    <YAxis
-                        type="number"
-                        dataKey="Known Financial Commitments (USD)"
-                        tickFormatter={axisDollarFormatter}
-                        label={{
-                            value: 'Known Financial Commitments (USD)',
-                            position: 'left',
-                            angle: -90,
-                            style: { textAnchor: 'middle' },
-                            offset: 20,
-                        }}
-                        className="text-lg"
-                    />
+                        <XAxis
+                            type="number"
+                            dataKey="Total Grants"
+                            allowDecimals={false}
+                            label={{
+                                value: 'Grants',
+                                position: 'bottom',
+                            }}
+                            className="text-lg"
+                        />
 
-                    <Tooltip
-                        cursor={{ strokeDasharray: '3 3' }}
-                        content={tooltipContent}
-                        {...rechartBaseTooltipProps}
-                    />
+                        <YAxis
+                            type="number"
+                            dataKey="Known Financial Commitments (USD)"
+                            tickFormatter={axisDollarFormatter}
+                            label={{
+                                value: 'Known Financial Commitments (USD)',
+                                position: 'left',
+                                angle: -90,
+                                style: { textAnchor: 'middle' },
+                                offset: 20,
+                            }}
+                            className="text-lg"
+                        />
 
-                    <Scatter data={chartData} shape={<CustomDot />}>
-                        {chartData.map((datum: any, index: number) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={
-                                    researchCategoryColours[
-                                        datum['Category Value']
-                                    ]
-                                }
+                        {scatterChartData !== scatterFallback && (
+                            <Tooltip
+                                cursor={{ strokeDasharray: '3 3' }}
+                                content={tooltipContent}
+                                {...rechartBaseTooltipProps}
                             />
-                        ))}
-                    </Scatter>
-                </RechartScatterChart>
-            </ResponsiveContainer>
+                        )}
+
+                        <Scatter data={scatterChartData} shape={<CustomDot />}>
+                            {scatterChartData.map((datum: any, index: number) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={
+                                        researchCategoryColours[
+                                            datum['Category Value']
+                                        ]
+                                    }
+                                />
+                            ))}
+                        </Scatter>
+                    </RechartScatterChart>
+                </ResponsiveContainer>
+            </div>
 
             <ImageExportLegend
                 categories={researchCategories.map(category => category.label)}
@@ -199,6 +220,8 @@ export default function ScatterChart() {
                     ({ value }) => researchCategoryColours[value],
                 )}
             />
-        </>
+
+            {scatterChartData === scatterFallback && <NoDataText/>}
+        </div>
     )
 }

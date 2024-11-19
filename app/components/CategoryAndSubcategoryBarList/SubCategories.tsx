@@ -2,6 +2,7 @@ import { Fragment, useContext, useMemo } from 'react'
 import { GlobalFilterContext } from '../../helpers/filters'
 import {
     getColoursByField,
+    isChartDataUnavailable,
     prepareBarListDataForCategory,
 } from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
@@ -9,6 +10,8 @@ import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 import BackToParentButton from '../BackToParentButton'
 import selectOptions from '../../../data/dist/select-options.json'
+import NoDataText from '../NoData/NoDataText'
+import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
 
 interface Props {
     categoryField: string
@@ -25,7 +28,9 @@ export default function SubCategories({
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
 
-    const chartData = useMemo(() => {
+    const { categoriesAndSubCategoriesFallback } = grantsByResearchCategoriesFallbackData
+
+    let chartData = useMemo(() => {
         const subCategories: any =
             selectOptions[subcategoryField as keyof typeof selectOptions]
 
@@ -51,30 +56,40 @@ export default function SubCategories({
 
     const { brightColours, dimColours } = getColoursByField(subcategoryField)
 
+    const chartDataIsNotAvailable = isChartDataUnavailable(chartData)
+    
+    if (chartDataIsNotAvailable) chartData = categoriesAndSubCategoriesFallback
+
     return (
         <>
             <BackToParentButton
                 label={`Viewing Sub-Categories Of ${categoryLabel}`}
                 onClick={() => setSelectedCategory(null)}
             />
+            
+            <div className="w-full h-full relative">
+                <div className={chartDataIsNotAvailable ? 'w-full blur-md' : ''}>
+                    <BarList
+                        data={chartData}
+                        brightColours={brightColours}
+                        dimColours={dimColours}
+                    >
+                        {chartData.map((datum: any, index: number) => (
+                            <Fragment key={datum['Category Value']}>
+                                <BarListRowHeading>
+                                    <p className="bar-chart-category-label text-gray-600 text-sm">
+                                        {datum['Category Label']}
+                                    </p>
+                                </BarListRowHeading>
 
-            <BarList
-                data={chartData}
-                brightColours={brightColours}
-                dimColours={dimColours}
-            >
-                {chartData.map((datum: any, index: number) => (
-                    <Fragment key={datum['Category Value']}>
-                        <BarListRowHeading>
-                            <p className="bar-chart-category-label text-gray-600 text-sm">
-                                {datum['Category Label']}
-                            </p>
-                        </BarListRowHeading>
-
-                        <BarListRow dataIndex={index} />
-                    </Fragment>
-                ))}
-            </BarList>
+                                <BarListRow dataIndex={index} />
+                            </Fragment>
+                        ))}
+                    </BarList>
+                </div>
+    
+                {chartDataIsNotAvailable && <NoDataText/>}
+            </div>
         </>
     )
 }

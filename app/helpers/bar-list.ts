@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import { Colours, coloursByField } from './colours'
 import { sumNumericGrantAmounts } from './reducers'
+import { subclip } from 'three/src/animation/AnimationUtils'
 
 export interface BarListDatum {
     'Known Financial Commitments (USD)': number
@@ -64,4 +65,13 @@ export function prepareBarListDataForCategory(
             grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
         'Known Financial Commitments (USD)': moneyCommitted,
     }
+}
+
+export const isChartDataUnavailable = (data: BarListDatum[]) => {
+    return data.every((data: BarListDatum) => 
+        data['Grants With Known Financial Commitments'] === 0 &&
+        data["Grants With Unspecified Financial Commitments"] === 0 &&
+        data["Known Financial Commitments (USD)"] === 0 && 
+        data["Total Grants"] === 0
+    )
 }

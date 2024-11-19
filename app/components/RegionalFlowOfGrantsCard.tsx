@@ -16,9 +16,13 @@ import { dollarValueFormatter } from '../helpers/value-formatters'
 import { brandColours } from '../helpers/colours'
 import selectOptions from '../../data/dist/select-options.json'
 import { rechartBaseTooltipProps } from '../helpers/tooltip'
+import NoDataText from './NoData/NoDataText'
+import { regionalFlowOfGrantsFallback } from './NoData/visualisationFallbackData'
 
 export default function RegionalFlowOfGrantsCard() {
     const { grants } = useContext(GlobalFilterContext)
+
+    const { linksFallback, nodesFallback } = regionalFlowOfGrantsFallback
 
     const [displayTotalMoneyCommitted, setDisplayTotalMoneyCommitted] =
         useState<boolean>(false)
@@ -57,7 +61,7 @@ export default function RegionalFlowOfGrantsCard() {
             grant.ResearchLocationRegion.length === 1
     )
 
-    const nodes = nodeGroups
+    let nodes = nodeGroups
         .map(({ field, options }, group) =>
             options
                 .filter((option: any) =>
@@ -128,6 +132,16 @@ export default function RegionalFlowOfGrantsCard() {
         return <TooltipContent items={items} />
     }
 
+    if (links.length === 0) {
+        links = linksFallback
+        nodes = nodesFallback
+    }
+    
+    const visualisationWrapperClasses = [
+        'w-full',
+        links === linksFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+
     return (
         <VisualisationCard
             id="regional-flow-of-grants"
@@ -136,9 +150,9 @@ export default function RegionalFlowOfGrantsCard() {
             chartInstructions="If the full chart is not visible, please scroll horizontally to view."
             footnote="Please note: Funding amounts are included only when they have been published by the funder. Some research projects are undertaken in multiple locations (countries). Where research location is not explicitly specified the default used is the location of the research institution receiving the funds."
         >
-            <div className="w-full">
+            <div className="w-full relative">
                 {links.length > 0 && (
-                    <>
+                    <div className={visualisationWrapperClasses}>
                         <div className="breakout">
                             <div className="overflow-x-auto">
                                 <div className="inline-block min-w-full align-middle">
@@ -174,10 +188,13 @@ export default function RegionalFlowOfGrantsCard() {
                                                     />
                                                 }
                                             >
-                                                <Tooltip
-                                                    content={tooltipContent}
-                                                    {...rechartBaseTooltipProps}
-                                                />
+
+                                                {links !== linksFallback && (
+                                                    <Tooltip
+                                                        content={tooltipContent}
+                                                        {...rechartBaseTooltipProps}
+                                                    />
+                                                )}
 
                                                 <text
                                                     x={0}
@@ -223,12 +240,11 @@ export default function RegionalFlowOfGrantsCard() {
                             screenReaderLabel="Display Total Money Committed"
                             className="justify-center mt-6 ignore-in-image-export"
                         />
-                    </>
+                    </div>
                 )}
 
-                {links.length === 0 && (
-                    <p className="p-4 text-center">No Data.</p>
-                )}
+                {links === linksFallback && <NoDataText/>}
+                
             </div>
         </VisualisationCard>
     )
