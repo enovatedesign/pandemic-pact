@@ -9,7 +9,7 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
-import { groupBy } from 'lodash'
+import { filter, groupBy } from 'lodash'
 import ImageExportLegend from '../ImageExportLegend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
@@ -19,6 +19,8 @@ import { diseaseColours } from '../../helpers/colours'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import Switch from '../Switch'
 import RadioGroup from '../RadioGroup'
+import NoDataText from '../NoData/NoDataText'
+import { grantsByDiseaseFallbackData } from '../NoData/visualisationFallbackData'
 
 interface TemporalChartProps {
     outbreak?: boolean
@@ -26,14 +28,14 @@ interface TemporalChartProps {
 
 export default function TemporalChart({outbreak}: TemporalChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
-
+    const { temporalFallback } = grantsByDiseaseFallbackData
     const [
         displayKnownFinancialCommitments,
         setDisplayKnownFinancialCommitments,
     ] = useState(false)
 
     const { grants } = useContext(GlobalFilterContext)
-
+    
     const datasetGroupedByYear = groupBy(
         grants.filter(
             (grant: any) =>
@@ -44,7 +46,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
         'TrendStartYear'
     )
 
-    const chartData = Object.keys(datasetGroupedByYear).map(year => {
+    let chartData = Object.keys(datasetGroupedByYear).map(year => {
         const grants = datasetGroupedByYear[year]
 
         let dataPoint: { [key: string]: string | number } = { year }
@@ -73,9 +75,21 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
             ? axisDollarFormatter(value)
             : value.toString()
 
+    if (chartData.length  === 0) chartData = temporalFallback
+    
+    const controlsWrapperClasses = [
+        'w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export',
+        chartData === temporalFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+
+    const responsiveContainerClasses = [
+        'z-10',
+         chartData === temporalFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+
     return (
         <>
-            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
+            <div className={controlsWrapperClasses}>
                 {!outbreak && (
                     <Switch
                         checked={hideCovid}
@@ -97,8 +111,8 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                     onChange={setDisplayKnownFinancialCommitments}
                 />
             </div>
-
-            <ResponsiveContainer width="100%" height={500} className="z-10">
+        
+            <ResponsiveContainer width="100%" height={500} className={responsiveContainerClasses}>
                 <LineChart
                     margin={{
                         top: 5,
@@ -136,16 +150,18 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                         className="text-lg"
                     />
 
-                    <Tooltip
-                        content={props => (
-                            <RechartTrendsTooltipContent
-                                props={props}
-                                chartData={chartData}
-                                formatValuesToDollars={displayKnownFinancialCommitments}
-                            />
-                        )}
-                        {...rechartBaseTooltipProps}
-                    />
+                    {chartData !== temporalFallback && (
+                        <Tooltip
+                            content={props => (
+                                <RechartTrendsTooltipContent
+                                    props={props}
+                                    chartData={chartData}
+                                    formatValuesToDollars={displayKnownFinancialCommitments}
+                                />
+                            )}
+                            {...rechartBaseTooltipProps}
+                        />
+                    )}
 
                     {selectOptions.Disease.map(({ value, label }) => (
                         <Line
@@ -157,13 +173,15 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                     ))}
                 </LineChart>
             </ResponsiveContainer>
-
+                    
             <ImageExportLegend
                 categories={selectOptions.Disease.map(({ label }) => label)}
                 colours={selectOptions.Disease.map(
                     ({ value }) => diseaseColours[value]
                 )}
             />
+
+            {chartData === temporalFallback && <NoDataText/>}
         </>
     )
 }

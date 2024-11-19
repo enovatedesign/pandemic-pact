@@ -22,13 +22,14 @@ import selectOptions from '../../../data/dist/select-options.json'
 import { rechartBaseTooltipProps } from '../../helpers/tooltip'
 import DoubleLabelSwitch from '../DoubleLabelSwitch'
 import TooltipContent from '../TooltipContent'
+import NoDataText from '../NoData/NoDataText'
+import { grantsPerResearchCategoryByRegionBarsFallback } from '../NoData/visualisationFallbackData'
 
 export default function BarChart() {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
-    const [usingFunderLocation, setUsingFunderLocation] =
-        useState<boolean>(false)
+    const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
 
     let data: any[] = []
 
@@ -141,7 +142,21 @@ export default function BarChart() {
     const selectedRegionName = selectOptions.ResearchInstitutionRegion.find(
         option => option.value === selectedRegion
     )?.label
+    
+    const dataIsNotAvailable = data.every(dataPoint => (
+        dataPoint['Known Financial Commitments'] === 0 &&
+        dataPoint['Number of Grants'] === 0
+    ));
+    
+    if (dataIsNotAvailable || data.length === 0) {
+        data = grantsPerResearchCategoryByRegionBarsFallback
+    }
 
+    const responsiveContainerWrapper = [
+        'w-full mt-4 flex flex-col gap-y-4',
+        data === grantsPerResearchCategoryByRegionBarsFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+    
     return (
         <div className="w-full">
             <div className="flex justify-center items-center gap-x-2 ignore-in-image-export">
@@ -163,65 +178,70 @@ export default function BarChart() {
                         : 'Click a region bar to expand to countries'}
                 </p>
             </div>
-
-            <div className="w-full mt-4 flex flex-col gap-y-4">
-                <ResponsiveContainer width="100%" height={500}>
-                    <RechartBarChart
-                        data={data}
-                        layout="vertical"
-                        margin={{ top: 5, right: 50, left: 20, bottom: 20 }}
-                        onClick={handleBarClick}
-                    >
-                        <XAxis
-                            type="number"
-                            tickFormatter={axisDollarFormatter}
-                            label={{
-                                value: 'Known Financial Commitments (USD)',
-                                position: 'bottom',
-                                offset: 0,
-                            }}
-                        />
-
-                        <YAxis
-                            dataKey="country"
-                            type="category"
-                            width={100}
-                            tickFormatter={countryOrRegionFormatter}
-                        />
-
-                        <Tooltip
-                            content={tooltipContent}
-                            cursor={{ fill: 'transparent' }}
-                            {...rechartBaseTooltipProps}
-                        />
-
-                        <Bar
-                            dataKey="Known Financial Commitments"
-                            cursor={selectedRegion ? 'default' : 'pointer'}
+            
+            <div className="w-full relative">
+                <div className={responsiveContainerWrapper}>
+                    <ResponsiveContainer width="100%" height={500}>
+                        <RechartBarChart
+                            data={data}
+                            layout="vertical"
+                            margin={{ top: 5, right: 50, left: 20, bottom: 20 }}
+                            onClick={handleBarClick}
                         >
-                            {data.map(({ country }) => (
-                                <Cell
-                                    key={`cell-${country}`}
-                                    fill={
-                                        selectedRegion
-                                            ? regionColours[selectedRegion]
-                                            : regionColours[country]
-                                    }
-                                />
-                            ))}
-                        </Bar>
-                    </RechartBarChart>
-                </ResponsiveContainer>
+                            <XAxis
+                                type="number"
+                                tickFormatter={axisDollarFormatter}
+                                label={{
+                                    value: 'Known Financial Commitments (USD)',
+                                    position: 'bottom',
+                                    offset: 0,
+                                }}
+                            />
 
-                <div className="self-center ignore-in-image-export">
-                    <DoubleLabelSwitch
-                        checked={usingFunderLocation}
-                        onChange={setUsingFunderLocation}
-                        leftLabel="Research Institution"
-                        rightLabel="Funder"
-                        screenReaderLabel="Using Funder Location"
-                    />
+                            <YAxis
+                                dataKey="country"
+                                type="category"
+                                width={100}
+                                tickFormatter={countryOrRegionFormatter}
+                            />
+
+                            <Tooltip
+                                content={tooltipContent}
+                                cursor={{ fill: 'transparent' }}
+                                {...rechartBaseTooltipProps}
+                            />
+
+                            <Bar
+                                dataKey="Known Financial Commitments"
+                                cursor={selectedRegion ? 'default' : 'pointer'}
+                            >
+                                {data.map(({ country }) => (
+                                    <Cell
+                                        key={`cell-${country}`}
+                                        fill={
+                                            selectedRegion
+                                                ? regionColours[selectedRegion]
+                                                : regionColours[country]
+                                        }
+                                    />
+                                ))}
+                            </Bar>
+                        </RechartBarChart>
+                    </ResponsiveContainer>
+                
+                    <div className="self-center ignore-in-image-export">
+                        <DoubleLabelSwitch
+                            checked={usingFunderLocation}
+                            onChange={setUsingFunderLocation}
+                            leftLabel="Research Institution"
+                            rightLabel="Funder"
+                            screenReaderLabel="Using Funder Location"
+                            />
+                    </div>
                 </div>
+                
+                {(dataIsNotAvailable || data.length === 0) && <NoDataText />}
+
             </div>
         </div>
     )
