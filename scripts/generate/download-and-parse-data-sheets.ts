@@ -20,7 +20,7 @@ export default async function downloadAndParseDataSheet () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/49817379?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/50659272?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
