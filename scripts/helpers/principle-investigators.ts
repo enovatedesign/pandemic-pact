@@ -12,9 +12,15 @@ export const formatInvestigatorNames = (
         .replace(/ & /g, ', ')
         .split(', ')
         
-    // Format the name strings removing full stops
-    const investigatorFirstNames = firstName.replace(/\./g, '').split(', ')
-    const investigatorLastNames = lastName.replace(/\./g, '').split(', ')
+    // Format the name strings removing full stops and N/A
+    const investigatorFirstNames = firstName
+        .replace(/\./g, '')
+        .replace(/[nN]\/[aA]/g, '')
+        .split(', ')
+    const investigatorLastNames = lastName
+        .replace(/\./g, '')
+        .replace(/[nN]\/[aA]/g, '')
+        .split(', ')
 
     // Map over the investigator first names and use the index to find the corresponding title and last name to build the correct investigator name
     const investigatorNames = investigatorFirstNames.map((firstName: string, index: number) => {
