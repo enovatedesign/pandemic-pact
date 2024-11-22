@@ -1,6 +1,7 @@
 import { useContext, useMemo, Fragment } from 'react'
 import {
     getColoursByField,
+    isChartDataUnavailable,
     prepareBarListDataForCategory,
 } from '../../helpers/bar-list'
 import { GlobalFilterContext } from '../../helpers/filters'
@@ -8,6 +9,8 @@ import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 import selectOptions from '../../../data/dist/select-options.json'
+import NoDataText from '../NoData/NoDataText'
+import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
 
 interface Props {
     topOfCardId: string
@@ -24,43 +27,55 @@ export default function Categories({
 
     const { brightColours, dimColours } = getColoursByField(categoryField)
 
+    const { categoriesAndSubCategoriesFallback } = grantsByResearchCategoriesFallbackData
+
     const categories =
         selectOptions[categoryField as keyof typeof selectOptions]
 
-    const chartData = useMemo(
+    let chartData = useMemo(
         () =>
             categories.map(category =>
                 prepareBarListDataForCategory(grants, category, categoryField),
             ),
         [grants, categories, categoryField],
     )
-
+    
+    const chartDataIsNotAvailable = isChartDataUnavailable(chartData)
+    
+    if (chartDataIsNotAvailable) chartData = categoriesAndSubCategoriesFallback
+    
     return (
-        <>
-            <BarList
-                data={chartData}
-                brightColours={brightColours}
-                dimColours={dimColours}
-            >
-                {chartData.map((datum: any, index: number) => (
-                    <Fragment key={datum['Category Value']}>
-                        <BarListRowHeading>
-                            <p className="bar-chart-category-label text-gray-600 text-sm">
-                                {datum['Category Label']}
-                            </p>
+        <>  
+            <div className="w-full relative">
+                <div className={`w-full ${chartDataIsNotAvailable ? 'blur-md' : ''}`}>
+                    <BarList
+                        data={chartData}
+                        brightColours={brightColours}
+                        dimColours={dimColours}
+                    >
+                        {chartData.map((datum: any, index: number) => (
+                            <Fragment key={datum['Category Value']}>
+                                <BarListRowHeading>
+                                    <p className="bar-chart-category-label text-gray-600 text-sm">
+                                        {datum['Category Label']}
+                                    </p>
 
-                            <ViewSubCategoryButton
-                                topOfCardId={topOfCardId}
-                                label="View sub-categories"
-                                subCategoryValue={datum['Category Value']}
-                                setSelectedCategory={setSelectedCategory}
-                            />
-                        </BarListRowHeading>
+                                    <ViewSubCategoryButton
+                                        topOfCardId={topOfCardId}
+                                        label="View sub-categories"
+                                        subCategoryValue={datum['Category Value']}
+                                        setSelectedCategory={setSelectedCategory}
+                                    />
+                                </BarListRowHeading>
 
-                        <BarListRow dataIndex={index} />
-                    </Fragment>
-                ))}
-            </BarList>
+                                <BarListRow dataIndex={index} />
+                            </Fragment>
+                        ))}
+                    </BarList>
+                </div>
+    
+                {chartDataIsNotAvailable && <NoDataText/>}
+            </div>
 
             <div className="flex justify-end w-full">
                 <ViewSubCategoryButton

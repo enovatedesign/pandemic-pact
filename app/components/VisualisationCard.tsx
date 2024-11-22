@@ -140,7 +140,7 @@ export default function VisualisationCard({
                     {tabs && tabs[selectedTabIndex].content}
 
                     <div
-                        className={`ignore-in-image-export w-full flex ${
+                        className={`ignore-in-image-export w-full flex relative z-30 ${
                             !tabs
                                 ? 'flex-col items-center md:flex-row-reverse md:justify-between'
                                 : 'flex-row-reverse justify-between'

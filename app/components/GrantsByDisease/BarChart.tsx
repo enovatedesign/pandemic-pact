@@ -8,6 +8,8 @@ import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 import Switch from '../Switch'
 import RadioGroup from '../RadioGroup'
+import NoDataText from '../NoData/NoDataText'
+import { grantsByDiseaseFallbackData } from '../NoData/visualisationFallbackData'
 
 interface BarChartProps {
     outbreak?: boolean
@@ -15,6 +17,7 @@ interface BarChartProps {
 
 export default function BarChart({outbreak}: BarChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
+    const { barsFallback } = grantsByDiseaseFallbackData
 
     const [
         sortByKnownFinancialCommitments,
@@ -27,7 +30,7 @@ export default function BarChart({outbreak}: BarChartProps) {
 
     const { grants } = useContext(GlobalFilterContext)
 
-    const chartData = useMemo(() => {
+    let chartData = useMemo(() => {
         const diseases = selectOptions.Disease.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
         )
@@ -71,10 +74,22 @@ export default function BarChart({outbreak}: BarChartProps) {
             .filter(disease => disease['Total Grants'] > 0)
             .sort((a, b) => b[orderSortingValue] - a[orderSortingValue])
     }, [grants, hideCovid, orderSortingValue])
+    
+    if (chartData.length === 0) chartData = barsFallback
+    
+    const controlsWrapperClasses = [
+        'w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export',
+        chartData === barsFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+
+    const barsWrapperClasses = [
+        'z-10 w-full',
+         chartData === barsFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
 
     return (
         <>
-            <div className="w-full flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row lg:justify-between items-center ignore-in-image-export">
+            <div className={controlsWrapperClasses}>
                 {!outbreak && (
                     <Switch
                         checked={hideCovid}
@@ -97,24 +112,29 @@ export default function BarChart({outbreak}: BarChartProps) {
                     onChange={setSortByKnownFinancialCommitments}
                 />
             </div>
+            
+            <div className={barsWrapperClasses}>
+                <BarList
+                    data={chartData}
+                    brightColours={diseaseColours}
+                    dimColours={diseaseDimColours}
+                >
+                    {chartData.map((datum: any, index: number) => (
+                        <Fragment key={datum['Category Value']}>
+                            <BarListRowHeading>
+                                <p className="bar-chart-category-label text-gray-600 text-sm">
+                                    {datum['Category Label']}
+                                </p>
+                            </BarListRowHeading>
 
-            <BarList
-                data={chartData}
-                brightColours={diseaseColours}
-                dimColours={diseaseDimColours}
-            >
-                {chartData.map((datum: any, index: number) => (
-                    <Fragment key={datum['Category Value']}>
-                        <BarListRowHeading>
-                            <p className="bar-chart-category-label text-gray-600 text-sm">
-                                {datum['Category Label']}
-                            </p>
-                        </BarListRowHeading>
-
-                        <BarListRow dataIndex={index} />
-                    </Fragment>
-                ))}
-            </BarList>
+                            <BarListRow dataIndex={index} />
+                        </Fragment>
+                    ))}
+                </BarList>
+            </div>
+            
+            {chartData === barsFallback && <NoDataText/>}
         </>
     )
+    
 }

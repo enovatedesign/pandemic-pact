@@ -12,7 +12,7 @@ import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory
 import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
 import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
 import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
-import FundingAmountsForEachResearchCategoryOverTime from '../components/FundingAmountsForEachResearchCategoryOverTime'
+import FundingAmountsForEachResearchCategoryOverTime from '../components/FundingAmountsForEachResearchCategoryOverTime/FundingAmountsForEachResearchCategoryOverTime'
 import GrantsByDiseaseCard from '../components/GrantsByDisease/Card'
 import {
     emptyFilters,

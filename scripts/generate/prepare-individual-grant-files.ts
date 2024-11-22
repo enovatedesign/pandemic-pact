@@ -92,14 +92,6 @@ function getLabelFromSelectOptionValue(
     const option = options.find(option => option.value === value)
 
     if (option === undefined) {
-        // Only warn about the missing value if it is not 'N/A' because we are
-        // okay with keeping that as 'N/A'
-        if (value !== 'N/A') {
-            warn(
-                `Could not find option with value ${value} for key ${key} for grant ${grantId}`,
-            )
-        }
-
         return value
     }
 
