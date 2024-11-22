@@ -21,6 +21,8 @@ import {
     allResearchCategoriesColour,
 } from '../helpers/colours'
 import { rechartBaseTooltipProps } from '../helpers/tooltip'
+import NoDataText from './NoData/NoDataText'
+import { grantsPerResearchCategoryByRegionFallback } from './NoData/visualisationFallbackData'
 
 export default function GrantsPerResearchCategoryByRegion() {
     const {
@@ -29,8 +31,7 @@ export default function GrantsPerResearchCategoryByRegion() {
         filters: selectedFilters,
     } = useContext(GlobalFilterContext)
 
-    const [selectedResearchCategories, setSelectedResearchCategories] =
-        useState<string[]>([])
+    const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
     const filteredDataset = filterGrants(dataset, {
         ...selectedFilters,
@@ -64,7 +65,7 @@ export default function GrantsPerResearchCategoryByRegion() {
         )
     }
 
-    const chartData = regionOptions.map(function (regionOption) {
+    let chartData = regionOptions.map(function (regionOption) {
         const grantsInRegion = filteredDataset.filter((grant: any) =>
             grant.ResearchLocationRegion.includes(regionOption.value),
         )
@@ -92,16 +93,19 @@ export default function GrantsPerResearchCategoryByRegion() {
     })
 
     // If all regions have zero grants, hide the entire visualisation card
-    const allRegionsHaveZeroGrants = chartData.every(datum => {
-        return researchCategoryOptions.every(({ label }: { label: string }) => {
-            return datum[label] === 0
-        })
+    const allRegionsHaveZeroGrants = chartData.every(data => {
+        return Object.values(data)
+            .filter(value => typeof value === 'number')
+            .every(dataPoint => dataPoint === 0)
     })
 
-    if (allRegionsHaveZeroGrants) {
-        return null
-    }
-
+    if (allRegionsHaveZeroGrants) chartData = grantsPerResearchCategoryByRegionFallback
+    
+    const responsiveContainerWrapperClasses = [
+        'w-full',
+        chartData === grantsPerResearchCategoryByRegionFallback && 'blur-md'
+    ].filter(Boolean).join(' ')
+    
     return (
         <VisualisationCard
             id="grant-per-research-category-by-region"
@@ -110,21 +114,23 @@ export default function GrantsPerResearchCategoryByRegion() {
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
         >
             <div className="flex flex-col w-full">
-                <div className="flex items-center justify-between ignore-in-image-export">
-                    <MultiSelect
-                        field="ResearchCat"
-                        selectedOptions={selectedResearchCategories}
-                        setSelectedOptions={setSelectedResearchCategories}
-                        label="Research Categories"
-                        className="max-w-xs ignore-in-image-export"
-                    />
+                {chartData !== grantsPerResearchCategoryByRegionFallback && (
+                    <div className="flex items-center justify-between ignore-in-image-export">
+                        <MultiSelect
+                            field="ResearchCat"
+                            selectedOptions={selectedResearchCategories}
+                            setSelectedOptions={setSelectedResearchCategories}
+                            label="Research Categories"
+                            className="max-w-xs ignore-in-image-export"
+                        />
 
-                    {filteredDataset.length < globalGrants.length && (
-                        <p>Filtered Grants: {filteredDataset.length}</p>
-                    )}
-                </div>
-
-                <div className="w-full">
+                        {filteredDataset.length < globalGrants.length && (
+                            <p>Filtered Grants: {filteredDataset.length}</p>
+                        )}
+                    </div>
+                )}
+                
+                <div className={responsiveContainerWrapperClasses}>
                     <ResponsiveContainer width="100%" height={500}>
                         <RadarChart
                             cx="50%"
@@ -156,10 +162,12 @@ export default function GrantsPerResearchCategoryByRegion() {
                                 />
                             ))}
 
-                            <Tooltip
-                                content={rechartTooltipContentFunction}
-                                {...rechartBaseTooltipProps}
-                            />
+                            {chartData !== grantsPerResearchCategoryByRegionFallback && (
+                                <Tooltip
+                                    content={rechartTooltipContentFunction}
+                                    {...rechartBaseTooltipProps}
+                                />
+                            )}
                         </RadarChart>
                     </ResponsiveContainer>
 
@@ -169,14 +177,16 @@ export default function GrantsPerResearchCategoryByRegion() {
                         )}
                         colours={
                             showingAllResearchCategories
-                                ? [allResearchCategoriesColour]
-                                : researchCategoryOptions.map(
-                                      ({ value }) =>
-                                          researchCategoryColours[value],
-                                  )
+                            ? [allResearchCategoriesColour]
+                            : researchCategoryOptions.map(
+                                ({ value }) =>
+                                    researchCategoryColours[value],
+                            )
                         }
-                    />
+                        />
                 </div>
+                
+                {chartData === grantsPerResearchCategoryByRegionFallback && <NoDataText/>}
             </div>
         </VisualisationCard>
     )
