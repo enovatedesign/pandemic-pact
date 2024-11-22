@@ -54,7 +54,7 @@ export default async function prepareGrants() {
     )
 
     const grants = rawGrants.map((rawGrant, index, array) => {
-        if (index > 0 && index % 500 === 0) {
+        if (index > 0 && index % 1000 === 0) {
             info(`Processed ${index} of ${array.length} grants`)
         }
 
