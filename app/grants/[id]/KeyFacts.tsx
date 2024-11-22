@@ -4,7 +4,6 @@ import InfoModal from '../../components/InfoModal'
 import '/app/css/components/breakout.css'
 
 export default function KeyFacts({ grant }: { grant: any }) {
-    console.log(grant.InvestigatorNames)
     const keyFactsHeadings = [
         {
             text: 'Disease',
