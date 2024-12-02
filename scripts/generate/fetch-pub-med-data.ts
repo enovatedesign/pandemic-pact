@@ -62,7 +62,7 @@ async function getPublications(pubMedGrantIds: string[]) {
     }
 
     // If there is cached data and it has not expired, use that
-    if (cacheResponse.ok) {
+    if (cacheResponse.ok && !process.env.FETCH_PUBMED_DATA) {
         const cache = await cacheResponse.json()
 
         // Note that if the source dataset has changed, it might have new PubMed Grant IDs
