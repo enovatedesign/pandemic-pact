@@ -1,13 +1,6 @@
 default:
     image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.0-node${NODE_VERSION}
 
-fetch_pubmed_data:
-    stage: build
-    script:
-        - npm run fetch-pubmed-data
-    rules:
-        - if: '$FETCH_PUBMED_DATA == "true"'
-
 deploy_review:
     stage: deploy
     except:

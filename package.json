@@ -9,8 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc && next lint",
-    "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate",
-    "fetch-pubmed-data": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate/fetch-pub-med-data.ts"
+    "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate"
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.2",
