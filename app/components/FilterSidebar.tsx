@@ -44,6 +44,8 @@ export default function FilterSidebar({
     outbreak = false,
     sharedFiltersId
 }: FilterSidebarProps) {
+    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
+    
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
@@ -70,9 +72,11 @@ export default function FilterSidebar({
         }
 
         // If fixed disease option IS set, keep all filters except 'Pathogen'
-        return !(filter.field === 'Pathogen')
+        return fixedDiseaseOption.value
+            ? !(filter.field === 'Pathogen') 
+            : filter
     })
-
+    
     const standardFilters = filters.filter(f => !f.advanced)
 
     const advancedFilters = filters.filter(f => f.advanced)
@@ -95,8 +99,6 @@ export default function FilterSidebar({
 
         setSelectedFilters(selectedOptions)
     }
-
-    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
 
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">

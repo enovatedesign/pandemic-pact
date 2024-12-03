@@ -28,6 +28,14 @@ export function availableFilters(): FilterSchema[] {
         },
 
         {
+            label: 'Pathogen Families',
+            field: 'Pathogen',
+            excludeGrantsWithMultipleItems: {
+                label: 'Exclude Grants with Multiple Pathogens',
+            },
+        },
+
+        {
             label: 'Disease',
             field: 'Disease',
             loadOnClick: false,
@@ -104,14 +112,6 @@ export function availableFilters(): FilterSchema[] {
             parent: {
                 filter: 'InfluenzaA',
                 value: 'h10',
-            },
-        },
-
-        {
-            label: 'Pathogen Families',
-            field: 'Pathogen',
-            excludeGrantsWithMultipleItems: {
-                label: 'Exclude Grants with Multiple Pathogens',
             },
         },
 
