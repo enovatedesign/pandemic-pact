@@ -1,6 +1,19 @@
 default:
     image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.0-node${NODE_VERSION}
 
+stages:
+    - build
+    - deploy
+
+fetch_pubmed_data:
+    stage: build
+    before_script:
+        - npm ci --cache .npm --prefer-offline 
+    script:
+        - npm run fetch-pubmed-data
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master" && $FETCH_PUBMED_DATA == "true"
+
 deploy_review:
     stage: deploy
     except:
