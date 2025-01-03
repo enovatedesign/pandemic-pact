@@ -6,9 +6,7 @@ export default async function downloadAndParseDataSheet () {
     title('Fetching dataset and data dictionary from Figshare')
 
     // Pandemic PACT collection on Figshare
-    // https://figshare.com/s/58527668245cb63f14f5
-    // Pandemic PACT dataset and data dictionary on Figshare
-    // https://figshare.com/s/58527668245cb63f14f5/articles/25370686
+    // https://figshare.com/s/9e712aa1f4255e37b0db
 
     fs.emptyDirSync('data/download')
 
@@ -25,7 +23,7 @@ export default async function downloadAndParseDataSheet () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/50659272?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/51450629?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
