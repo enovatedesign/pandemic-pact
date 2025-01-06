@@ -3,7 +3,10 @@ import { title } from '../helpers/log'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
 
 export default async function downloadAndParseDataSheet () {
-    title('Fetching data sheets')
+    title('Fetching dataset and data dictionary from Figshare')
+
+    // Pandemic PACT collection on Figshare
+    // https://figshare.com/s/9e712aa1f4255e37b0db
 
     fs.emptyDirSync('data/download')
 
@@ -20,7 +23,7 @@ export default async function downloadAndParseDataSheet () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/50659272?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/51471326?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
