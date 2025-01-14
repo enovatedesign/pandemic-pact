@@ -54,7 +54,7 @@ export default function ResultsTable({
                           1 +
                           index
                         : index + 1
-
+                    
                     return (
                         <article
                             key={result._id}

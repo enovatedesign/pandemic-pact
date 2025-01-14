@@ -1,17 +1,19 @@
 import fs from 'fs-extra';
+
 import { notFound } from 'next/navigation';
-import Layout from '../../components/Layout';
-import PageTitle from './PageTitle';
-import Masthead from './Masthead';
-import BackToGrantSearchLink from './BackToGrantSearchLink';
-import AbstractAndLaySummary from './AbstractAndLaySummary';
-import KeyFacts from './KeyFacts';
-import Publications from './Publications';
 import type { Metadata } from 'next';
-import '../../css/components/highlighted-search-results.css';
-import numDigits from '@/app/api/helpers/metadata-functions';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
-import { queryAnnouncementEntry } from '@/app/helpers/announcement-query';
+import numDigits from '@/app/api/helpers/metadata-functions';
+
+import Layout from '@/app/components/Layout';
+import AbstractAndLaySummary from './AbstractAndLaySummary';
+import BackToGrantSearchLink from './BackToGrantSearchLink';
+import KeyFacts from './KeyFacts';
+import Masthead from './Masthead';
+import PageTitle from './PageTitle';
+import Publications from './Publications';
+
+import '../../css/components/highlighted-search-results.css';
 
 type Props = {
     params: { id: string };
@@ -88,7 +90,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     }
 
     const grant = fs.readJsonSync(path);
-
+    
     return (
         <Layout
             title={<PageTitle grant={grant} />}
@@ -108,5 +110,5 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
             </div>
         </Layout>
-    );
+    )
 }
