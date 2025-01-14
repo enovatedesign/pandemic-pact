@@ -45,6 +45,7 @@ export default async function () {
         LaySummary: { type: 'text' },
         GrantAmountConverted: { type: 'long' },
         JointFunding: { type: 'boolean' },
+        PublicationCount: { type: 'long'},
 
         // Prepare a keyword type field for each select option
         ...Object.fromEntries(
@@ -119,6 +120,9 @@ export default async function () {
                             // one funder country for filtering purposes on the
                             // frontend
                             JointFunding: doc.FunderCountry.length > 1,
+                            // Retrieve the number of publications the grant has
+                            // This is to display in the search result 
+                            PublicationCount: grant.PubMedLinks?.length ?? 0,
                         },
                         doc_as_upsert: true,
                     },

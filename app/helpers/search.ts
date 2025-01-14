@@ -36,6 +36,7 @@ export interface SearchResult {
         GrantAmountConverted: number
         GrantStartYear: string
         FundingOrgName: string[]
+        PublicationCount: number
     }
     highlight: {
         GrantTitleEng: string[]

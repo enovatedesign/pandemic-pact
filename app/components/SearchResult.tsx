@@ -8,6 +8,7 @@ import { dollarValueFormatter } from '../helpers/value-formatters'
 import selectOptions from '../../data/dist/select-options.json'
 
 import '../css/components/highlighted-search-results.css'
+import NumberOfPublications from './NumberOfPublications'
 
 interface SearchMatchesProps {
     result: SearchResult
@@ -87,47 +88,46 @@ export default function SearchResult({ result, href }: SearchMatchesProps) {
             value: result._source.GrantStartYear,
         },
     ]
-
+    
+    const numberOfPublications = result._source.PublicationCount
+    
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-12 lg:gap-8">
-                {totalMatchText > 0 && (
-                    <div className="flex items-center gap-2 row-start-1 row-span-1 lg:row-start-1 lg:col-start-1 lg:col-span-5 xl:col-span-4 truncate">
-                        <p className="inline-flex gap-1">
-                            <span className="hidden md:block">Search</span>
-                            Matches:
-                        </p>
-                        <span className="px-2 lg:px-4 py-1 bg-searchResult rounded-lg font-bold text-secondary text-sm md:text-base">
-                            {totalMatchText}
-                        </span>
-                        <p className="bg-white/60 p-2 rounded-lg whitespace-nowrap text-xs lg:text-md">
-                            {matchText.map((text, index: number) => {
-                                const formattedText =
-                                    index !== matchText.length - 1 &&
-                                    text.length > 0
-                                        ? `${text}, `
-                                        : text
-
-                                return <span key={index}>{formattedText}</span>
-                            })}
-                        </p>
-                    </div>
-                )}
-
-                {funderNames && (
-                    <div
-                        className={`${
-                            totalMatchText > 0
-                                ? 'lg:col-start-6 lg:col-span-4 xl:col-start-5 xl:col-span-5'
-                                : 'lg:col-start-1 lg:col-span-9'
-                        } lg:row-start-1 text-sm lg:text-lg flex items-center gap-2 overflow-hidden truncate`}
-                    >
+                <div className="w-full flex flex-col lg:flex-row lg:items-center gap-2 justify-between lg:col-span-9">
+                    {funderNames && (
                         <p className="truncate">
                             <span className="font-bold">Funders:</span>{' '}
                             {funderNames.join(', ')}
                         </p>
+                    )}
+                    <div className="flex justify-between gap-x-2">
+                        {totalMatchText > 0 && (
+                            <div className="flex items-center gap-x-2">
+                                <p className="inline-flex gap-1">
+                                    <span className="hidden md:block">Search</span>
+                                    Matches:
+                                </p>
+                                <span className="px-2 lg:px-4 py-1 bg-searchResult rounded-lg font-bold text-secondary text-sm md:text-base">
+                                    {totalMatchText}
+                                </span>
+                                <p className="bg-white/60 p-2 rounded-lg whitespace-nowrap text-xs lg:text-md">
+                                    {matchText.map((text, index: number) => {
+                                        const formattedText =
+                                            index !== matchText.length - 1 &&
+                                            text.length > 0
+                                                ? `${text}, `
+                                                : text
+
+                                        return <span key={index}>{formattedText}</span>
+                                    })}
+                                </p>
+                            </div>
+                        )}
+
+                        <NumberOfPublications numberOfPublications={numberOfPublications} href={href} />
                     </div>
-                )}
+                </div>
 
                 <div className="row-span-1 lg:row-start-1 lg:col-start-10 lg:col-span-3 flex items-center">
                     <Button
