@@ -17,3 +17,12 @@ body {
         box-shadow: inset 0 0 16px 8px rgba(255, 255, 255, 0.08);
     }
 }
+
+/*  
+    Info modal package adds overflow hidden to the documents html element. 
+    This causes issues with the 'sticky' class on the visualisation page's side bar.
+    The following code ensures overflow-visible is applied when the info modal is open.
+*/
+html:has([role="dialog"][aria-modal="true"][data-headlessui-state="open"]) {
+    @apply !overflow-visible;
+}
