@@ -8,6 +8,7 @@ type Props = {
         id: string,
         typeHandle: string,
         heading: string,
+        outbreakType: 'outbreak' | 'pastOutbreak'
         customEntries: {
             id: number,
             title: string,
@@ -20,13 +21,14 @@ type Props = {
                 url: string,
                 width: number,
             }[],
+            typeHandle: string
         }[],
     }
 }
 
-const ListOutbreaksBlock = ({block}: Props) => {
-    const heading = block.heading ?? null
-    const customEntries = block.customEntries ?? null
+const ListOutbreaksBlock = ({ block }: Props) => {
+    const { heading, outbreakType } = block
+    const customEntries = block.customEntries.filter(entry => entry['typeHandle'] === outbreakType) ?? null
 
     return (
         <>

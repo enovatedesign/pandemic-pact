@@ -24,6 +24,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         testPage: PageTemplate,
         internalPublication: PageTemplate,
         outbreak: OutbreakTemplate,
+        pastOutbreak: OutbreakTemplate,
         newsArticle: NewsArticleTemplate,
         redirect: RedirectTemplate,
     },
@@ -32,6 +33,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         testPage: PageQuery,
         internalPublication: PageQuery,
         outbreak: OutbreakQuery,
+        pastOutbreak: OutbreakQuery,
         newsArticle: NewsArticleQuery,
         redirect: RedirectQuery,
     }

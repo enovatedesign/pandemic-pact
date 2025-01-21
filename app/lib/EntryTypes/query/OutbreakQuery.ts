@@ -1,8 +1,12 @@
 import GraphQL from '../../GraphQl'
 import {contentBuilderQuery, seomaticQuery} from '../../Queries'
 
-export default async function PageQuery(uri: string, entryType: string = 'page', sectionHandle: string = 'pages', previewToken?: string) {
-
+export default async function PageQuery(
+    uri: string, 
+    entryType: string = 'outbreak', 
+    sectionHandle: string = 'outbreaks', 
+    previewToken?: string
+) {
     const data = await GraphQL(
         `
 			query($uri:[String]){
@@ -14,7 +18,7 @@ export default async function PageQuery(uri: string, entryType: string = 'page',
                     slug
                     ... on ${sectionHandle}_${entryType}_Entry {
                         outbreakDisease
-                        outbreakPending
+                        ${entryType === 'outbreak' ? 'outbreakPending' : ''}
                         summary
                         showSummary
                         ${contentBuilderQuery}
