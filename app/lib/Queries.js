@@ -170,14 +170,32 @@ export const contentBuilderQuery = `
             id
             typeHandle
             heading
+            outbreakType
             customEntries (orderBy: "title DESC") {
               ... on outbreaks_outbreak_Entry {
                 id
+                typeHandle
                 title
                 summary
                 uri
                 postDate
                 outbreakPending
+                thumbnailImage  @transform(transform: "c480x300") {
+                  ... on contentAssets_Asset {
+                    altText
+                    height
+                    url
+                    width
+                  }
+                }
+              }
+              ... on outbreaks_pastOutbreak_Entry {
+                id
+                typeHandle
+                title
+                summary
+                uri
+                postDate
                 thumbnailImage  @transform(transform: "c480x300") {
                   ... on contentAssets_Asset {
                     altText
