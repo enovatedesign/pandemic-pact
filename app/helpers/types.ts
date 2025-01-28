@@ -26,3 +26,14 @@ export interface AnnouncementProps {
 }
 
 export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'Marburg virus disease' | 'default'
+
+export interface ClinicalTrialCategoryPhase { 
+    title: string
+    value: string
+    label: string 
+}
+
+export interface ClinicalTrialSubCategoryPhase { 
+    value: string
+    label: string 
+}

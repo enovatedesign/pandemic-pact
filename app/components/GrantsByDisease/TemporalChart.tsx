@@ -28,7 +28,9 @@ interface TemporalChartProps {
 
 export default function TemporalChart({outbreak}: TemporalChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
+    
     const { temporalFallback } = grantsByDiseaseFallbackData
+
     const [
         displayKnownFinancialCommitments,
         setDisplayKnownFinancialCommitments,

@@ -63,15 +63,11 @@ export default function JumpMenu({cardData, disease}: Props) {
                             height={isOpen ? 'auto' : 0}
                         >
                             <ul className="grid grid-cols-2 gap-2 p-4">
-
                                 {cardData.filter(card => card.url).map((card: any, index: number) => {
-                                    
+                                    const { title, image } = card
                                     const cardSwitch: DiseaseLabel = disease ?? 'default'
-
-                                    const {title, image} = card
-
-                                    const url = disease ? card.url[cardSwitch] : card.url
-
+                                    const url = card.url[cardSwitch]
+                                    
                                     return (
                                         <li ref={dropdown}
                                             key={index}
