@@ -39,7 +39,6 @@ const Card = ({
     customImageClasses = "w-full",
     fallbackImageAspectRatio = "aspect-[16/10]"
 }: Props) => {
-    
     const {
         index,
         title,
@@ -77,7 +76,8 @@ const Card = ({
         {
             once: true,
         }
-    );
+    )
+    
     return (
         <animated.article key={index} 
             className={`h-full flex flex-col bg-white border-2 border-gray-200 rounded-2xl overflow-hidden [perspective:1000px] group ${hoverClasses}`}
@@ -88,9 +88,7 @@ const Card = ({
                 condition={url}
                 wrapper={children => <a href={url} className="h-full flex flex-col" target={targetAttr} rel={relAttr}>{children}</a>}
             >   
-
                 <Fragment>
-
                     <div className="relative">
                         {imageLabel && (
                             <div className="absolute top-6 left-0 bg-black/50 text-white ring-2 ring-white/20 text-sm font-bold tracking-widest uppercase px-6 py-2 rounded-r-full">

@@ -973,3 +973,119 @@ export const fundingAmountsForEachResearchCategoryOverTimeFallback = [
         "Research on Capacity Strengthening": 0
     }
 ]
+
+export const clinicalTrialCategoriesFallbackData = {
+    "Pre-clinical studies": {
+        "Category Label": "Pre-clinical studies",
+        "Therapeutics research, development and implementation": 1061,
+        "Vaccines research, development and implementation": 458,
+        "Diagnostics": 0,
+        "Clinical trials for disease management": 0
+    },
+    "Phase 0": {
+        "Category Label": "Phase 0",
+        "Therapeutics research, development and implementation": 2,
+        "Vaccines research, development and implementation": 1,
+        "Diagnostics": 1,
+        "Clinical trials for disease management": 1
+    },
+    "Phase 1": {
+        "Category Label": "Phase 1",
+        "Therapeutics research, development and implementation": 26,
+        "Vaccines research, development and implementation": 57,
+        "Diagnostics": 0,
+        "Clinical trials for disease management": 6
+    },
+    "Phase 2": {
+        "Category Label": "Phase 2",
+        "Therapeutics research, development and implementation": 68,
+        "Vaccines research, development and implementation": 50,
+        "Diagnostics": 1,
+        "Clinical trials for disease management": 10
+    },
+    "Phase 3": {
+        "Category Label": "Phase 3",
+        "Therapeutics research, development and implementation": 32,
+        "Vaccines research, development and implementation": 35,
+        "Diagnostics": 1,
+        "Clinical trials for disease management": 9
+    },
+    "Phase 4": {
+        "Category Label": "Phase 4",
+        "Therapeutics research, development and implementation": 3,
+        "Vaccines research, development and implementation": 2,
+        "Diagnostics": 0,
+        "Clinical trials for disease management": 0
+    },
+    "Unspecified phase": {
+        "Category Label": "Unspecified phase",
+        "Therapeutics research, development and implementation": 191,
+        "Vaccines research, development and implementation": 63,
+        "Diagnostics": 35,
+        "Clinical trials for disease management": 157
+    }
+}
+
+export const clinicalTrialSubCategoriesFallbackData = [
+    {
+        "label": "Therapeutics research, development and implementation",
+        "data": [
+            {
+                "Category Value": "6a",
+                "Category Label": "Pre-clinical studies",
+                "Grants With Known Financial Commitments": 760,
+                "Grants With Unspecified Financial Commitments": 301,
+                "Total Grants": 1061,
+                "Known Financial Commitments (USD)": 830048519.8999994
+            },
+            {
+                "Category Value": "6b",
+                "Category Label": "Phase 0",
+                "Grants With Known Financial Commitments": 1,
+                "Grants With Unspecified Financial Commitments": 1,
+                "Total Grants": 2,
+                "Known Financial Commitments (USD)": 237676.5
+            },
+            {
+                "Category Value": "6c",
+                "Category Label": "Phase 1",
+                "Grants With Known Financial Commitments": 17,
+                "Grants With Unspecified Financial Commitments": 9,
+                "Total Grants": 26,
+                "Known Financial Commitments (USD)": 65400559.65
+            },
+            {
+                "Category Value": "6d",
+                "Category Label": "Phase 2",
+                "Grants With Known Financial Commitments": 48,
+                "Grants With Unspecified Financial Commitments": 20,
+                "Total Grants": 68,
+                "Known Financial Commitments (USD)": 179498871.4
+            },
+            {
+                "Category Value": "6e",
+                "Category Label": "Phase 3",
+                "Grants With Known Financial Commitments": 26,
+                "Grants With Unspecified Financial Commitments": 6,
+                "Total Grants": 32,
+                "Known Financial Commitments (USD)": 168177296.89000002
+            },
+            {
+                "Category Value": "6f",
+                "Category Label": "Phase 4",
+                "Grants With Known Financial Commitments": 2,
+                "Grants With Unspecified Financial Commitments": 1,
+                "Total Grants": 3,
+                "Known Financial Commitments (USD)": 1250554
+            },
+            {
+                "Category Value": "6h",
+                "Category Label": "Unspecified phase",
+                "Grants With Known Financial Commitments": 120,
+                "Grants With Unspecified Financial Commitments": 71,
+                "Total Grants": 191,
+                "Known Financial Commitments (USD)": 496279760.6899999
+            }
+        ]
+    },
+]

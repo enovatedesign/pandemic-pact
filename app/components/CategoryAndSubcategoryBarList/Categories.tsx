@@ -1,16 +1,19 @@
 import { useContext, useMemo, Fragment } from 'react'
+
 import {
     getColoursByField,
     isChartDataUnavailable,
     prepareBarListDataForCategory,
 } from '../../helpers/bar-list'
 import { GlobalFilterContext } from '../../helpers/filters'
+import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
+
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
 import BarListRowHeading from '../BarList/BarListRowHeading'
 import selectOptions from '../../../data/dist/select-options.json'
+import ViewSubCategoryButton from './ViewAllSubCategoriesButton'
 import NoDataText from '../NoData/NoDataText'
-import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
 
 interface Props {
     topOfCardId: string
@@ -29,8 +32,7 @@ export default function Categories({
 
     const { categoriesAndSubCategoriesFallback } = grantsByResearchCategoriesFallbackData
 
-    const categories =
-        selectOptions[categoryField as keyof typeof selectOptions]
+    const categories = selectOptions[categoryField as keyof typeof selectOptions]
 
     let chartData = useMemo(
         () =>
@@ -87,40 +89,5 @@ export default function Categories({
                 />
             </div>
         </>
-    )
-}
-
-interface ViewSubCategoryButtonProps {
-    topOfCardId: string
-    label: string
-    subCategoryValue: string
-    setSelectedCategory: (category: string) => void
-    customClasses?: string
-}
-
-function ViewSubCategoryButton({
-    topOfCardId,
-    label,
-    subCategoryValue,
-    setSelectedCategory,
-    customClasses,
-}: ViewSubCategoryButtonProps) {
-    const handleClick = () => {
-        location.href = `#${topOfCardId}`
-
-        setSelectedCategory(subCategoryValue)
-    }
-
-    return (
-        <button
-            className={`self-start text-center font-medium rounded-full no-underline transition-colors duration-200 ease-in-out disabled:bg-disabled disabled:cursor-default disabled:hover:bg-disabled text-sm ${
-                customClasses
-                    ? customClasses
-                    : 'px-3 bg-primary hover:bg-primary-lighter text-secondary'
-            } ignore-in-image-export`}
-            onClick={handleClick}
-        >
-            {label}
-        </button>
     )
 }

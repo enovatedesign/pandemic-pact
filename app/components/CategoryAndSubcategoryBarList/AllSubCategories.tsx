@@ -28,7 +28,7 @@ export default function AllSubCategories({
     const { grants } = useContext(GlobalFilterContext)
 
     const [subCategoriesGroupedByParent, subCategories] = useMemo(() => {
-        const categories =
+        let categories =
             selectOptions[categoryField as keyof typeof selectOptions]
 
         const subCategoriesGroupedByParent: {
@@ -37,9 +37,9 @@ export default function AllSubCategories({
         }[] = categories.map(
             ({ label: categoryLabel, value: categoryValue }) => {
                 const subCategories: any =
-                    selectOptions[
-                        subcategoryField as keyof typeof selectOptions
-                    ]
+                selectOptions[
+                    subcategoryField as keyof typeof selectOptions
+                ]
 
                 const subCategoryData = subCategories
                     .filter(

@@ -102,6 +102,39 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             }
         },
         {
+            title: 'Clinical Research',
+            summary: {
+                "Mpox": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
+                "Pandemic-prone influenza": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
+                "Marburg virus disease": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
+                "default": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.'
+            },
+            url: {
+                "Mpox": '#clinical-trials',
+                "Pandemic-prone influenza": '#clinical-trials',
+                "Marburg virus disease": '#clinical-trials',
+                "default": '#clinical-trials',
+            },
+            image: {
+                url: `/images/visualisation-cards/${outbreak ? 'outbreak' : 'vis'}-pie-chart.svg`,
+                altText: 'Illustration of a pie chart',
+                width: 480,
+                height: 480,
+            },
+            showCard: {
+                "Mpox": true,
+                "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
+                "default": true
+            },
+            showChevron: {
+                "Mpox": true,
+                "Pandemic-prone influenza": true,
+                "Marburg virus disease": true,
+                "default": true
+            }
+        },
+        {
             title: 'Geographical Distribution',
             summary: {
                 "Mpox": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
