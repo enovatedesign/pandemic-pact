@@ -4,7 +4,6 @@ import { useContext } from "react"
 import { GlobalFilterContext } from "../../helpers/filters"
 
 const NoDataText = () => {
-
     const { filters } = useContext(GlobalFilterContext)
     
     const filterLength = Object.entries(filters)
@@ -13,6 +12,7 @@ const NoDataText = () => {
         .length
     
     const text = `No data available due to applied ${filterLength === 1 ? 'filter' : 'filters'}.`
+    
     return (
         <div className="w-full h-full absolute inset-0 z-20 flex items-center justify-center">
             <div className="bg-white px-4 py-3 rounded-md border border-brand-grey-600">

@@ -28,7 +28,7 @@ export default function BarListRow({ dataIndex }: Props) {
     } = useContext(BarListContext)
 
     const datum = data[dataIndex]
-
+    
     const onChartMouseEnterOrMove = (
         nextState: any,
         event: MouseEvent<SVGPathElement>
@@ -91,7 +91,7 @@ export default function BarListRow({ dataIndex }: Props) {
                             stackId="a"
                             background={{ fill: '#eee' }}
                         />
-
+                        
                         <Bar
                             dataKey="Grants With Unspecified Financial Commitments"
                             fill={dimColours[datum['Category Value']]}

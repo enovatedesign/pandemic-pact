@@ -13,7 +13,7 @@ const VisualisationJumpMenu = ({dropdownVisible, outbreak, disease}: Props) => {
     
     const cardSwitch: DiseaseLabel = disease ?? 'default'
 
-    const cardData = visualisationCardData(outbreak ,disease).filter(
+    const cardData = visualisationCardData(outbreak, disease).filter(
         card => card.showCard[cardSwitch] && card.showChevron[cardSwitch]
     )
 

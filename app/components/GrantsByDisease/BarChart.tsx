@@ -17,6 +17,7 @@ interface BarChartProps {
 
 export default function BarChart({outbreak}: BarChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
+
     const { barsFallback } = grantsByDiseaseFallbackData
 
     const [
