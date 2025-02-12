@@ -11,7 +11,7 @@ export default async function downloadAndParseDataSheet () {
     fs.emptyDirSync('data/download')
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/49506642?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/52153913?private_link=9e712aa1f4255e37b0db',
         'dictionary',
     )
 
@@ -23,7 +23,7 @@ export default async function downloadAndParseDataSheet () {
     )
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/51471326?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/52153892?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )

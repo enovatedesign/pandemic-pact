@@ -25,7 +25,6 @@ export default function InfoModal({
     customCloseButton = null,
     removeSpaceY = false
 }: InfoModalProps) {
-    
     const [isOpen, setIsOpen] = useState(false)
     
     const iconClasses = [

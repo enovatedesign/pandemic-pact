@@ -97,12 +97,12 @@ export default function KeyFacts({ grant }: { grant: any }) {
     if (grant.Disease.includes('Mpox')) {
         keyFactsSubHeadings.push({
             text: 'Mpox Research Priorities',
-            metric: grant.MPOXResearchPriority,
+            metric: grant.GlobalMpoxResearchPriorities,
         })
 
         keyFactsSubHeadings.push({
             text: 'Mpox Research Sub Priorities',
-            metric: grant.MPOXResearchSubPriority,
+            metric: grant.GlobalMpoxResearchSubPriorities,
         })
     }
 

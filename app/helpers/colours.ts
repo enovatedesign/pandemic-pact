@@ -269,20 +269,7 @@ export const mpoxResearchPriorityColours: Colours = {
     '23': brandColours.green['700'],
 }
 
-export const mpoxResearchPriorityDimColours: Colours = {
-    '14': brandColours.blue['300'],
-    '15': brandColours.teal['400'],
-    '16': brandColours.green['400'],
-    '17': brandColours.orange['400'],
-    '18': brandColours.grey['300'],
-    '19': brandColours.red['400'],
-    '20': brandColours.yellow['400'],
-    '21': brandColours.blue['600'],
-    '22': brandColours.teal['600'],
-    '23': brandColours.green['600'],
-}
-
-export const mpoxResearchSubPriorityColours: Colours = {
+export const priorityStatementsRegionalFieldsColours: Colours = {
     '14a': brandColours.blue['400'],
     '14b': brandColours.teal['500'],
     '14c': brandColours.green['500'],
@@ -308,7 +295,7 @@ export const mpoxResearchSubPriorityColours: Colours = {
     '23b': brandColours.blue['400'],
 }
 
-export const mpoxResearchSubPriorityDimColours: Colours = {
+export const priorityStatementsRegionalFieldsDimColours: Colours = {
     '14a': brandColours.blue['300'],
     '14b': brandColours.teal['400'],
     '14c': brandColours.green['400'],
@@ -361,6 +348,59 @@ export const categoryColours = {
     'Diagnostics': brandColours.orange['500'],
 }    
 
+export const marburgResearchPriorityColours: Colours = {
+    '1': brandColours.blue['400'],
+    '2': brandColours.teal['500'],
+    '3': brandColours.green['500'],
+    '4': brandColours.orange['500'],
+    '5': brandColours.grey['400'],
+    '6': brandColours.red['500'],
+    '7': brandColours.yellow['600'],
+    '8': brandColours.blue['700'],
+    '9': brandColours.teal['700'],
+    '10': brandColours.green['700'],
+}
+
+export const marburgResearchPriorityDimColours: Colours = {
+    '1': brandColours.blue['300'],
+    '2': brandColours.teal['400'],
+    '3': brandColours.green['400'],
+    '4': brandColours.orange['400'],
+    '5': brandColours.grey['300'],
+    '6': brandColours.red['400'],
+    '7': brandColours.yellow['400'],
+    '8': brandColours.blue['600'],
+    '9': brandColours.teal['600'],
+    '10': brandColours.green['600'],
+}
+
+
+export const priorityStatementsWhoImmediateColours: Colours = {
+    '1': brandColours.blue['400'],
+    '2': brandColours.teal['500'],
+    '3': brandColours.green['500'],
+    '4': brandColours.orange['500'],
+    '5': brandColours.grey['400'],
+    '6': brandColours.red['500'],
+    '7': brandColours.blue['400'],
+    '8': brandColours.teal['500'],
+    '9': brandColours.green['500'],
+    '10': brandColours.blue['400'],
+}
+
+export const priorityStatementsWhoImmediateDimColours: Colours = {
+    '1': brandColours.blue['300'],
+    '2': brandColours.teal['400'],
+    '3': brandColours.green['400'],
+    '4': brandColours.orange['400'],
+    '5': brandColours.grey['300'],
+    '6': brandColours.red['400'],
+    '7': brandColours.blue['300'],
+    '8': brandColours.teal['400'],
+    '9': brandColours.green['400'],
+    '10': brandColours.blue['300'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,
@@ -370,16 +410,24 @@ export const coloursByField = {
         bright: researchSubCategoryColours,
         dim: researchSubCategoryDimColours,
     },
-    MPOXResearchPriority: {
-        bright: mpoxResearchPriorityColours,
-        dim: mpoxResearchPriorityDimColours,
+    GlobalMpoxResearchSubPriorities: {
+        bright: priorityStatementsRegionalFieldsColours,
+        dim: priorityStatementsRegionalFieldsDimColours,
     },
-    MPOXResearchSubPriority: {
-        bright: mpoxResearchSubPriorityColours,
-        dim: mpoxResearchSubPriorityDimColours,
+    WHOMpoxResearchSubPriorities: {
+        bright: priorityStatementsWhoImmediateColours,
+        dim: priorityStatementsWhoImmediateDimColours,
     },
     ClinicalTrialPhase: {
         bright: clinicalTrialPhaseColours,
         dim: clinicalTrialPhaseDimColours,
-    }
+    },
+    MarburgCORCResearchPriorities: {
+        bright: marburgResearchPriorityColours,
+        dim: marburgResearchPriorityDimColours,
+    },
+    MarburgCORCResearchSubPriorities: {
+        bright: marburgResearchPriorityColours,
+        dim: marburgResearchPriorityDimColours,
+    },
 }

@@ -7,6 +7,7 @@ import { title, printWrittenFileStats } from '../helpers/log'
 // doesn't require all the fields in the grants data file, such as
 // the grant title, abstract, etc, and they take up lots of space in
 // the JSON file. This script removes those unneeded fields.
+
 export default function () {
     title('Preparing optimised visualise-page grants data file')
 
@@ -42,8 +43,12 @@ export default function () {
             'ResearchLocationCountry',
             'ResearchCat',
             'ResearchSubcat',
-            'MPOXResearchPriority',
-            'MPOXResearchSubPriority',
+            'GlobalMpoxResearchPriorities',
+            'GlobalMpoxResearchSubPriorities',
+            'WHOMpoxResearchPriorities',
+            'WHOMpoxResearchSubPriorities',
+            'MarburgCORCResearchPriorities',
+            'MarburgCORCResearchSubPriorities',
             'InfluenzaA',
             'InfluenzaH1',
             'InfluenzaH2',

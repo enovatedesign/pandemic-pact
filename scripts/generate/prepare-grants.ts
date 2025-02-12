@@ -24,7 +24,7 @@ export default async function prepareGrants() {
     const [checkboxFields, nonCheckboxFields] = _.partition(headings, heading =>
         heading.includes('___'),
     )
-
+    
     // Get all the unique checkbox field names
     const checkBoxFields = _.uniq(
         checkboxFields.map(field => field.split('___')[0]),
@@ -95,7 +95,7 @@ export default async function prepareGrants() {
         // to Research Categories and Subcategories, but in the source dataset
         // they are in a completely different format, so we need to transform them
         // to look like the Research Categories and Subcategories
-        prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues)
+        prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues)
 
         // Create a new object with all the transformed data,
         // using our field names instead of the field names of the source data
@@ -155,31 +155,51 @@ export default async function prepareGrants() {
     return Promise.resolve(grants)
 }
 
-function prepareMpoxResearchPriorityAndSubPriority(checkBoxFieldValues: {
+function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
     [key: string]: string[]
 }) {
-    // For some reason the MPOX Research Priorities are stored in the
-    // research_and_policy_roadmaps field in the source dataset, so we get them
-    // from that field (which is a checkbox field)
-    const MPOXResearchPriority =
-        checkBoxFieldValues.research_and_policy_roadmaps.filter(
-            value => value in mpoxResearchPriorityAndSubPriorityMapping,
-        )
+    // '24': 'priority_statements_regional' is stored in research_and_policy_roadmaps
+    // mpoxResearchPriorityAndSubPriorityMapping has been updated to include the relevant data where by the key is the value in 
+    // research_and_policy_roadmaps and the value to that key is the corelating field in rawOptions eg '14': 'pathogen_natural_history_transmission_and_diagnostics_list',
+    // Filter out the desired priorities using mpoxResearchPriorityAndSubPriorityMapping (eg: '24': 'priority_statements_regional')
+    const filteredMpoxPriorityOptions = checkBoxFieldValues.research_and_policy_roadmaps.filter(
+        (value) => value in mpoxResearchPriorityAndSubPriorityMapping,
+    )
+    
+    // using the value from the filtered priority options (eg '24') 
+    // retrieve the field required to access the sub priority options from rawOptions (eg: priority_statements_regional)
+    const MPOXResearchPriorityOptions = filteredMpoxPriorityOptions.flatMap(
+        (value) => {
+            // Retrieve the necessary field
+            const field = mpoxResearchPriorityAndSubPriorityMapping[value]
+            
+            // Return the values on that field
+            return checkBoxFieldValues[field]
+        }
+    )
+    
+    // Map over the priority options and the checkbox fields returning the priority + subPriority
+    const PriorityStatementsRegionalFields = MPOXResearchPriorityOptions.flatMap(priority => {
+            const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
+            
+            return checkBoxFieldValues[field].map(
+                subPriority => priority + subPriority,
+            )
+        },
+    )
+    
+    checkBoxFieldValues.mpox_research_priority = MPOXResearchPriorityOptions
+    checkBoxFieldValues.priority_statements_regional = PriorityStatementsRegionalFields
+    
+    // For the GrantsByWhoMpoxRoadmap visualisation, the parent option is '25': 'priority_statements_who_immediate'
+    // Filter down to the desired research_and_policy_roadmaps option
+    // This MUST return an array and so filter is used, not find.
+    checkBoxFieldValues.priority_statements_who_immediate_parent = checkBoxFieldValues.research_and_policy_roadmaps.filter(option => option === '25')
 
-    // Prepare the MPOX Research Sub-Priorities by combining the MPOX Research
-    // Priorities number with the sub-priority letter to get an alphanumeric
-    // value, like Research Categories and Subcategories
-    const MPOXResearchSubPriority = MPOXResearchPriority.flatMap(priority => {
-        const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
-
-        return checkBoxFieldValues[field].map(
-            subPriority => priority + subPriority,
-        )
-    })
-
-    checkBoxFieldValues.mpox_research_priority = MPOXResearchPriority
-    checkBoxFieldValues.mpox_research_sub_priority = MPOXResearchSubPriority
+    checkBoxFieldValues.marburg_parent = checkBoxFieldValues.research_and_policy_roadmaps
+        .filter(value => value === '26')
 }
+
 
 function convertCommaSeparatedValueFieldToArray(
     grant: RawGrant,

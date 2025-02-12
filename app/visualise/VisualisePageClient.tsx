@@ -31,6 +31,8 @@ import VisualisationJumpMenu from './components/VisualisationJumpMenu'
 import Button from '../components/Button'
 import InfoModal from '../components/InfoModal'
 import ClinicalTrialsTherapeuticsAndVaccines from '../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
+import MarburgResearchAndPolicyRoadmaps from '../components/MarburgResearchAndPolicyRoadmaps'
+import GrantsByWHOMpoxRoadmap from '../components/GrantsByWHOMpoxRoadmap'
 
 interface VisualisationPageProps {
     title: string
@@ -191,7 +193,7 @@ const VisualisePageClientComponent = ({
     // Hide the radar and sankey visualisations if we are on the
     // "Pandemic-prone influenza" outbreak page
     const shouldShowRadarAndSankey = fixedDiseaseOption.value !== '6142004'
-
+    
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -312,13 +314,27 @@ const VisualisePageClientComponent = ({
                                 <GrantsByDiseaseCard outbreak={outbreak} />
                             </div>
 
-                            {diseaseLabel && diseaseLabel === 'Mpox' ? (
-                                <div
-                                    id="research-categories-policy-roadmaps"
-                                    className={gridClasses}
-                                >
-                                    <GrantsByMpoxResearchPriorityCard />
-                                </div>
+                            {diseaseLabel ? (
+                                diseaseLabel === 'Mpox' ? (
+                                    <>
+                                        <div
+                                            id="grants-by-who-mpox-roadmap"
+                                            className={gridClasses}
+                                        >
+                                            <GrantsByWHOMpoxRoadmap />
+                                        </div>
+                                        <div
+                                            id="research-categories-policy-roadmaps"
+                                            className={gridClasses}
+                                        >
+                                            <GrantsByMpoxResearchPriorityCard />
+                                        </div>
+                                    </>
+                                ) : diseaseLabel === 'Marburg virus disease' ? (
+                                    <div id="marburg-research-policy-and-roadmaps" className={gridClasses}>
+                                        <MarburgResearchAndPolicyRoadmaps />
+                                    </div>
+                                ) : null
                             ) : (
                                 <div
                                     id="research-categories"
