@@ -8,6 +8,7 @@ import { fromPairs, groupBy, indexOf, orderBy } from 'lodash'
 export interface BarListDatum {
     'Title'?: string
     'Category Label': string
+    'Category Description'?: string
     'Category Value': string
     'Grants With Known Financial Commitments': number
     'Grants With Unspecified Financial Commitments': number
@@ -41,12 +42,12 @@ export function getColoursByField(field: string) {
 
 export function prepareBarListDataForCategory(
     grants: any[],
-    category: { value: string; label: string },
+    category: { value: string; label: string, description?: string },
     field: string,
     clinicalTrialLabelPrep?: boolean
 ) {
     const labelPrep = clinicalTrialLabelPrep ?? false
-
+    
     const grantsWithKnownAmounts = grants
         .filter((grant: any) => grant[field].includes(category.value))
         .filter((grant: any) => typeof grant.GrantAmountConverted === 'number')
@@ -63,6 +64,7 @@ export function prepareBarListDataForCategory(
     return {
         'Category Value': category.value,
         'Category Label': labelPrep ? formatClinicalTrialCategoryLabel(category.label) : category.label,
+        ...(category.description ? { 'Category Description': category.description } : {}), // Only add the category description if it exists
         'Grants With Known Financial Commitments':
             grantsWithKnownAmounts.length,
         'Grants With Unspecified Financial Commitments':
