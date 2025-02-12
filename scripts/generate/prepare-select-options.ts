@@ -4,6 +4,7 @@ import { title, printWrittenFileStats } from '../helpers/log'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
+    marbugCorcPriorityDescriptions,
 } from '../helpers/key-mapping'
 
 type Row = { [key: string]: string }
@@ -29,13 +30,13 @@ export default function prepareSelectOptions() {
     )
 
     const path = './data/dist'
-
+    
     // Create a new object with all the select options keyed by field name,
     // including the MPOX Research Priorities and Sub-Priorities
     const optionsWithConvertedKeys = convertSourceKeysToOurKeys(
-        prepareMpoxResearchPriorityAndSubPriority(rawOptions),
+        prepareOutbreakResearchPriorityAndSubPriority(rawOptions),
     )
-
+    
     // Get the full list of select options by adding some additional option
     // fields that are not present in the source data dictionary.
     const selectOptions: { [key: string]: any[] } = {
@@ -63,7 +64,7 @@ export default function prepareSelectOptions() {
             'ResearchInstitutionName',
         ),
     }
-
+    
     // Adjust case for Pandemic-prone influenza values to lowercase
     Object.keys(selectOptions).forEach(key => {
         if (key.startsWith('Influenza')) {
@@ -81,7 +82,7 @@ export default function prepareSelectOptions() {
     // Write all the select options to a single file to be imported by
     // server-side components
     const pathname = `${path}/select-options.json`
-
+    
     fs.writeJsonSync(pathname, selectOptions)
 
     printWrittenFileStats(pathname)
@@ -89,7 +90,7 @@ export default function prepareSelectOptions() {
     const publicPath = './public/data/select-options'
 
     fs.emptyDirSync(publicPath)
-
+    
     // Write each select option to a separate file in public so that they can
     // be fetched by the frontend
     Object.entries(selectOptions).forEach(([key, value]) => {
@@ -101,23 +102,38 @@ export default function prepareSelectOptions() {
     })
 }
 
-function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
+function prepareOutbreakResearchPriorityAndSubPriority(rawOptions: {
     [key: string]: any[]
 }) {
-    // For some reason the MPOX Research Priorities are stored in the
-    // research_and_policy_roadmaps field in the source dataset, so we get them
-    // from that field (which is a checkbox field)
-    const MPOXResearchPriorityOptions =
+    // As of 23/01/2025 '24': 'priority_statements_regional' is the field storing MPOX research sub priorities 14 through 23
+    // '24': 'priority_statements_regional' is stored in research_and_policy_roadmaps
+    // mpoxResearchPriorityAndSubPriorityMapping has been updated to include the relevant data where by the key is the value in 
+    // research_and_policy_roadmaps and the value to that key is the corelating field in rawOptions eg '14': 'pathogen_natural_history_transmission_and_diagnostics_list',
+
+    // Filter out the desired priorities using mpoxResearchPriorityAndSubPriorityMapping (eg: '24': 'priority_statements_regional')
+    const filteredMpoxPriorityOptions =
         rawOptions.research_and_policy_roadmaps.filter(
             ({ value }) => value in mpoxResearchPriorityAndSubPriorityMapping,
         )
 
-    // Prepare the MPOX Research Sub-Priorities options in the same format as
-    // Subcategories
-    const MPOXResearchSubPriorityOptions = MPOXResearchPriorityOptions.flatMap(
+    // using the value from the filtered priority options (eg '24') 
+    // retrieve the field required to access the sub priority options from rawOptions (eg: priority_statements_regional)
+    const MPOXResearchPriorityOptions = filteredMpoxPriorityOptions.flatMap(
         ({ value }) => {
+            // Retrieve the necessary field
             const field = mpoxResearchPriorityAndSubPriorityMapping[value]
 
+            // Return the options on that field
+            return rawOptions[field]
+        }
+    )
+    
+    // Map over the options, within the MPOXResearchPriorityOptions
+    // using the field on those options, return an array of the sub priorities appending the parent as the value of the priority option
+    const PriorityStatementsRegionalFields = MPOXResearchPriorityOptions.flatMap(
+        ({ value }) => {
+            const field = mpoxResearchPriorityAndSubPriorityMapping[value]
+            
             return rawOptions[field].map(subOption => ({
                 value: value + subOption.value,
                 label: subOption.label,
@@ -125,11 +141,37 @@ function prepareMpoxResearchPriorityAndSubPriority(rawOptions: {
             }))
         },
     )
+    
+    // For the GrantsByWhoMpoxRoadmap visualisation, the parent option is '25': 'priority_statements_who_immediate'
+    // Filter down to the desired research_and_policy_roadmaps option
+    // This MUST return an array and so filter is used, not find.
+    const PriorityStatementsWhoImmediateParent = rawOptions.research_and_policy_roadmaps.filter(({ value }) => value === '25')
 
+    // Append the aprent value to the options within the priority_statements_who_immediate field
+    const PriorityStatementsWhoImmediate = PriorityStatementsWhoImmediateParent.flatMap(({ value: parentValue }) => {
+        return rawOptions.priority_statements_who_immediate.map(priority => ({
+            ...priority,
+            parent: parentValue
+        }))
+    })
+
+    // Append the formatted data to rawOptions
+    // The keys used here must correspond to the keys within keyMapping, where we reassign the keys to remain consistent with the rest of the code
     return {
         ...rawOptions,
         mpox_research_priority: MPOXResearchPriorityOptions,
-        mpox_research_sub_priority: MPOXResearchSubPriorityOptions,
+        priority_statements_regional: PriorityStatementsRegionalFields,
+        
+        priority_statements_who_immediate_parent: PriorityStatementsWhoImmediateParent,
+        priority_statements_who_immediate: PriorityStatementsWhoImmediate,
+        
+        marburg_parent: rawOptions.research_and_policy_roadmaps.filter(({ value }) => value === '26'),
+        marburg_corc_priorities: rawOptions.marburg_corc_priorities.map(({ value, label }) => ({
+            value,
+            label,
+            parent: '26',
+            description: marbugCorcPriorityDescriptions[value as keyof typeof marbugCorcPriorityDescriptions],
+        })),
     }
 }
 
@@ -138,7 +180,7 @@ function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {
     const checkBoxFields = dictionary.filter(
         row => row['Field Type'] === 'checkbox',
     )
-
+    
     // Return an array of objects with value and label properties
     // for each checkbox field
     return checkBoxFields.map(row => [

@@ -209,9 +209,9 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
             url: {
-                "Mpox": '#research-categories-policy-roadmaps',
+                "Mpox": '#grants-by-who-mpox-roadmap',
                 "Pandemic-prone influenza": '#policy-roadmaps',
-                "Marburg virus disease": '#research-categories-policy-roadmaps',
+                "Marburg virus disease": '#marburg-research-policy-and-roadmaps',
                 "default": '#policy-roadmaps',
             },
             image: {
@@ -229,7 +229,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             showChevron: {
                 "Mpox": true,
                 "Pandemic-prone influenza": false,
-                "Marburg virus disease": false,
+                "Marburg virus disease": true,
                 "default": false
             }
         },

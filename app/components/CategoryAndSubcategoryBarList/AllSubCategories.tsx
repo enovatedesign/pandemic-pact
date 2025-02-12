@@ -13,25 +13,28 @@ import BackToParentButton from '../BackToParentButton'
 import selectOptions from '../../../data/dist/select-options.json'
 import NoDataText from '../NoData/NoDataText'
 import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
+import CategoryLabelTitle from './CategoryLabelTitle'
 
 interface Props {
     categoryField: string
     subcategoryField: string
     setSelectedCategory?: (category: string | null) => void
+    removeCategoryLabels?: boolean
 }
 
 export default function AllSubCategories({
     categoryField,
     subcategoryField,
     setSelectedCategory,
+    removeCategoryLabels = false
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
-
+    
     const [subCategoriesGroupedByParent, subCategories] = useMemo(() => {
         let categories =
             selectOptions[categoryField as keyof typeof selectOptions]
 
-        const subCategoriesGroupedByParent: {
+            const subCategoriesGroupedByParent: {
             categoryLabel: string
             subCategoryData: BarListData
         }[] = categories.map(
@@ -39,8 +42,9 @@ export default function AllSubCategories({
                 const subCategories: any =
                 selectOptions[
                     subcategoryField as keyof typeof selectOptions
-                ]
-
+                ]   
+                
+                
                 const subCategoryData = subCategories
                     .filter(
                         ({ parent }: { parent: string }) =>
@@ -88,7 +92,7 @@ export default function AllSubCategories({
     const backToParentButtonLabel = excludedParents.length === 0 
         ? 'Viewing All Sub-Categories'
         : 'Viewing All Available Sub-Categories'
-
+    
     return (
         <>
             {setSelectedCategory && (
@@ -114,16 +118,19 @@ export default function AllSubCategories({
 
                 {filteredSubCategoriesGroupedByParent.length > 0 ? filteredSubCategoriesGroupedByParent.map(({ categoryLabel, subCategoryData }) => (
                     <Fragment key={categoryLabel}>
-                        <h3 className="text-lg mb-2 mt-6 col-span-4">
-                            {categoryLabel}
-                        </h3>
+                        {!removeCategoryLabels && (
+                            <h3 className="text-lg mb-2 mt-6 col-span-4">
+                                {categoryLabel}
+                            </h3>
+                        )}
 
                         {subCategoryData.map((datum: any) => (
                             <Fragment key={datum['Category Value']}>
                                 <BarListRowHeading>
-                                    <p className="bar-chart-category-label text-gray-600 text-sm">
-                                        {datum['Category Label']}
-                                    </p>
+                                    <CategoryLabelTitle 
+                                        title={datum['Category Label']} 
+                                        categoryDescription={datum['Category Description']} 
+                                    />
                                 </BarListRowHeading>
 
                                 <BarListRow
