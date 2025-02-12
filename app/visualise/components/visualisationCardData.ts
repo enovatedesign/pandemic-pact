@@ -205,7 +205,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             summary: {
                 "Mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "Pandemic-prone influenza": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
-                "Marburg virus disease": `Coming soon: Alignment of ${disease} research grant data to outbreak specific research priorities.`,
+                "Marburg virus disease": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
             url: {
