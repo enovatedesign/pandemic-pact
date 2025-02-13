@@ -1,12 +1,16 @@
+import { useEffect, useRef, useState } from 'react'
+import { debounce } from 'lodash'
 import { SearchIcon } from '@heroicons/react/solid'
-import DownloadFullDataButton from './DownloadFullDataButton'
-import DownloadFilteredDataButton from './DownloadFilteredDataButton'
+
 import {
     queryOrFiltersAreSet,
     SearchFilters,
     SelectedStandardSearchFilters,
     SearchParameters,
 } from '../helpers/search'
+
+import DownloadFullDataButton from './DownloadFullDataButton'
+import DownloadFilteredDataButton from './DownloadFilteredDataButton'
 import Button from './Button'
 import InfoModal from './InfoModal'
 import StandardSearchFilters from './StandardSearchFilters'
@@ -32,12 +36,29 @@ export default function SearchInput({
     setShowAdvancedSearch,
     searchRequestBody,
 }: Props) {
+    const [localSearchQuery, setLocalSearchQuery] = useState<string>("")
+
+    // useRef is used here to store the debounced function so it is not re-created
+    // on every render, preventing unnecessary re-creations of the function and 
+    // avoiding an infinite loop of state updates caused by `useEffect`.
+    const debouncedSetSearchQuery = useRef(
+        debounce((query: string) => {
+            setSearchParameters(({ ...searchParameters, q: query }));
+        }, 200)
+    ).current
+    
+    // This useEffect calls the debounced function whenever `localSearchQuery` changes,
+    // ensuring that `setSearchParameters` is only triggered after the debounce period.
+    useEffect(() => {
+        debouncedSetSearchQuery(localSearchQuery);
+    
+        return () => {
+            debouncedSetSearchQuery.cancel()
+        }
+    }, [localSearchQuery, debouncedSetSearchQuery])
+    
     const handleSearchToggleButtons = (value: boolean) => {
         setShowAdvancedSearch(value)
-    }
-
-    const setSearchQuery = (query: string) => {
-        setSearchParameters({ ...searchParameters, q: query })
     }
 
     const setStandardSearchFilters = (
@@ -73,8 +94,8 @@ export default function SearchInput({
                             placeholder="Search..."
                             onInput={(
                                 event: React.ChangeEvent<HTMLInputElement>,
-                            ) => setSearchQuery(event.target.value)}
-                            value={searchParameters.q}
+                            ) => setLocalSearchQuery(event.target.value)}
+                            value={localSearchQuery}
                             className="block w-full placeholder:text-gray-400 border-none p-0 text-sm md:text-lg xl:text-xl focus:outline-none focus:border-none focus:ring-0"
                         />
 
