@@ -4,10 +4,7 @@ import AllSubCategoriesBarList from './CategoryAndSubcategoryBarList/AllSubCateg
 export default function GrantsPerMpoxResearchPriority() {
     const subtitle = (
         <>
-            Research priorities as outlined in a coordinated research roadmap - <a href="https://www.who.int/publications/m/item/a-coordinated-research-roadmap-on-monkeypox-virus--immediate-research-next-steps-to-contribute-to-control-the-outbreak" target="_blank" rel="noreferrer noopener">
-                Mpox virus: Immediate research next steps to contribute to control the outbreak
-            </a>
-            .
+            Research priorities as outlined in a <a href="https://www.who.int/publications/m/item/a-coordinated-research-roadmap-on-monkeypox-virus--immediate-research-next-steps-to-contribute-to-control-the-outbreak" target="_blank" rel="noreferrer noopener">coordinated research roadmap - Mpox Virus: Immediate Research Next Steps to Contribute to Control the Outbreak</a>
         </>
     )
 
