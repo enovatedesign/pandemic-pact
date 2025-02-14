@@ -41,7 +41,7 @@ export default function BarList({
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
                     <p className="text-brand-grey-500">
-                        Number of grants
+                        Number of Grants
                     </p>
                 </div>
 
