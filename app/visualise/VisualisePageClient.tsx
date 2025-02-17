@@ -331,9 +331,18 @@ const VisualisePageClientComponent = ({
                                         </div>
                                     </>
                                 ) : diseaseLabel === 'Marburg virus disease' ? (
-                                    <div id="marburg-research-policy-and-roadmaps" className={gridClasses}>
-                                        <MarburgResearchAndPolicyRoadmaps />
-                                    </div>
+                                    <>
+                                        <div id="marburg-research-policy-and-roadmaps" className={gridClasses}>
+                                            <MarburgResearchAndPolicyRoadmaps />
+                                        </div>
+                                        
+                                        <div
+                                            id="research-categories"
+                                            className={gridClasses}
+                                        >
+                                            <GrantsByResearchCategoryCard />
+                                        </div>
+                                    </>
                                 ) : null
                             ) : (
                                 <div
