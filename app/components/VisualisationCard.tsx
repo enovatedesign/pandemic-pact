@@ -85,7 +85,7 @@ export default function VisualisationCard({
                         </div>
 
                         {numberOfActiveFilters > 0 && (
-                            <div className='absolute z-10 top-0 right-0 aspect-square w-full h-28 lg:rounded-tr-xl border-2 border-transparent translate-x-0.5 -translate-y-0.5 overflow-hidden'>
+                            <div className='absolute z-10 top-0 right-0 aspect-square w-full h-20 lg:rounded-tr-xl border-2 border-transparent translate-x-0.5 -translate-y-0.5 overflow-hidden'>
                                 <div className="absolute -right-16 -top-16 aspect-square size-32 rotate-45 bg-gradient-to-b from-primary"></div>
                                 <div className="absolute right-5 top-5">
                                     <FilterIcon

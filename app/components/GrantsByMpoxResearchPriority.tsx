@@ -4,14 +4,26 @@ import AllSubCategoriesBarList from './CategoryAndSubcategoryBarList/AllSubCateg
 export default function GrantsPerMpoxResearchPriority() {
     const subtitle = (
         <>
-            Research priorities as outlined in a <a href="https://www.who.int/publications/m/item/a-coordinated-research-roadmap-on-monkeypox-virus--immediate-research-next-steps-to-contribute-to-control-the-outbreak" target="_blank" rel="noreferrer noopener">coordinated research roadmap - Mpox Virus: Immediate Research Next Steps to Contribute to Control the Outbreak</a>
+            Research priorities as outlined in the{' '}
+            <a
+                href="https://africacdc.org/news-item/communique-united-in-the-fight-against-mpox-in-africa-high-level-emergency-regional-meeting/"
+                className="text-auto"
+            >
+                African Ministers of Health communique
+            </a>{' '}
+            and the{' '}
+            <a href="https://www.who.int/publications/i/item/9789240092907">
+                WHO’s strategic framework for enhancing prevention and control
+                of mpox – 2024-2027
+            </a>
+            .
         </>
     )
 
     return (
         <VisualisationCard
             id="combined-regional-mpox-priorities"
-            title="Global Mpox Research Priorities"
+            title="Grants by Mpox Outbreak Specific Research Priorities"
             subtitle={subtitle}
         >
             <AllSubCategoriesBarList
