@@ -4,7 +4,13 @@ import AllSubCategoriesBarList from './CategoryAndSubcategoryBarList/AllSubCateg
 const MarburgResearchAndPolicyRoadmaps = () => {
   const subTitle = (
     <>
-      Research Priorities outlined by Filoviridae Collaborative Open Research Consortium (CORC) <a href="https://cdn.who.int/media/docs/default-source/blue-print/marburg-response--building-research-readiness-for-a-future-filovirus-outbreak/meeting-outcomes-top-10-priorities-for-research-to-develop-marburg-medical-countermeasures.pdf?sfvrsn=d1ec535f_4" target="_blank" rel="noreferrer noopener">WHO - Filoviridae CORC Marburg Building research readiness for a future filovirus outbreak</a>
+      Research Priorities outlined by Filoviridae Collaborative Open Research Consortium (CORC) WHO - <a 
+        href="https://cdn.who.int/media/docs/default-source/blue-print/marburg-response--building-research-readiness-for-a-future-filovirus-outbreak/meeting-outcomes-top-10-priorities-for-research-to-develop-marburg-medical-countermeasures.pdf?sfvrsn=d1ec535f_4" 
+        target="_blank" 
+        rel="noreferrer noopener"
+      >
+          Filoviridae CORC Marburg Building research readiness for a future filovirus outbreak
+      </a>
     </>
   )
   return (
