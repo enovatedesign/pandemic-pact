@@ -17,6 +17,9 @@ export function getSearchClient() {
             username: process.env.SEARCH_USERNAME,
             password: process.env.SEARCH_PASSWORD,
         },
+        ssl: {
+            rejectUnauthorized: false,
+        },
     })
 }
 
