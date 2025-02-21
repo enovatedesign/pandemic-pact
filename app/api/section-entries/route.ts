@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
                 ... on ${sectionHandle}_${entryTypeHandle}_Entry {
                     title
                     summary
-                    url
                     uri
                     thumbnailImage @transform(transform: "c480x300") {
                         url

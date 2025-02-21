@@ -1,5 +1,6 @@
 export interface CardEntryProps {
-    url: string,
+    uri?: string,
+    url?: string,
     title: string,
     summary: string
     thumbnailImage: {
