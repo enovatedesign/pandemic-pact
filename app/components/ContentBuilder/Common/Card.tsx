@@ -48,6 +48,7 @@ const Card = ({
         text,
         summaryClasses,
         url,
+        uri,
         thumbnailImage,
         postDate,
     } = entry
@@ -59,7 +60,7 @@ const Card = ({
     const relAttr = externalUrl ? 'nofollow noopener noreferrer' : undefined
 
     const hoverClasses = [
-        url ? 'hover:shadow-lg transition-shadow duration-300' : ''
+        (url || uri) ? 'hover:shadow-lg transition-shadow duration-300' : ''
     ].join(' ')
 
     const [ref, springs] = useInView(
@@ -85,8 +86,8 @@ const Card = ({
             style={springs}
         >   
             <ConditionalWrapper
-                condition={url}
-                wrapper={children => <a href={url} className="h-full flex flex-col" target={targetAttr} rel={relAttr}>{children}</a>}
+                condition={url ? url : uri}
+                wrapper={children => <a href={url ? url : `/${uri}`} className="h-full flex flex-col" target={targetAttr} rel={relAttr}>{children}</a>}
             >   
                 <Fragment>
                     <div className="relative">
@@ -147,7 +148,7 @@ const Card = ({
                                 <CardBottomContent cardBottomContent={cardBottomContent}/>
                             )}
 
-                            {animatedIcon && url && (
+                            {animatedIcon && (url || uri) && (
                                 <>
                                     <div className="relative h-12 w-12" aria-hidden="true">
                                         <div className="absolute inset-0 rounded-full bg-secondary border-[1px] border-white flex justify-center items-center p-4 transition-all duration-700 ease-in-out [transform-style:preserve-3d] [transform:rotateY(180deg)] group-hover:[transform:rotateY(0deg)] text-white">
