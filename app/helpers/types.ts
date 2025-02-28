@@ -26,7 +26,7 @@ export interface AnnouncementProps {
     }
 }
 
-export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'Marburg virus disease' | 'default'
+export type DiseaseLabel = 'Mpox' | 'Pandemic-prone influenza' | 'Marburg virus disease' | 'Ebola virus disease' | 'default'
 
 export interface ClinicalTrialCategoryPhase { 
     title: string
