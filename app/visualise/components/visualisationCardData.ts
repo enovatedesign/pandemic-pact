@@ -250,7 +250,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "Mpox": true,
                 "Pandemic-prone influenza": true,
                 "Marburg virus disease": true,
-                "Ebola virus disease": true,
+                "Ebola virus disease": false,
                 "default": true
             },
             showChevron: {
