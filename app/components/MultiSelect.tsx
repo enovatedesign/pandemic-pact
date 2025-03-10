@@ -1,6 +1,15 @@
-import { useId, useMemo, useState, useEffect, useCallback } from 'react'
+import { 
+    useId, 
+    useMemo, 
+    useState, 
+    useEffect, 
+    useCallback, 
+    useContext 
+} from 'react'
 import Select, { MultiValue } from 'react-select'
+import { FixedSelectOptionContext } from '../helpers/filters'
 import { customSelectThemeColours } from '../helpers/select-colours'
+import { Lalezar } from 'next/font/google'
 
 interface Option {
     label: string
@@ -21,7 +30,6 @@ interface Props {
         isFixed?: boolean
     } | null
     loadOnClick?: boolean
-    outbreak?: boolean
 }
 
 export default function MultiSelect({
@@ -32,11 +40,10 @@ export default function MultiSelect({
     preloadedOptions = [],
     label = '',
     loadOnClick = true,
-    outbreak = false
 }: Props) {
     const [options, setOptions] = useState<Option[]>(preloadedOptions)
-
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const fixedSelectOptions = useContext(FixedSelectOptionContext)
 
     const id = useId()
 
@@ -85,6 +92,29 @@ export default function MultiSelect({
 
     const fullLabel = label ? `All ${label}` : 'All'
     
+    let disabled = false
+
+    // If the fixed select option contains data, for each field within the fixedSelectOptions we will ensure 
+    // the corresponding filter is being disabled using the label provided in the filters array.
+    if (fixedSelectOptions) {
+        let formattedLabel = label
+
+        if (label === 'Pathogen' && (fixedSelectOptions && fixedSelectOptions.Families?.label)) {
+            formattedLabel = `${fixedSelectOptions.Families.label}Pathogen`
+        }
+
+        if (label === 'Family') {
+            formattedLabel = "Families"
+        }
+        
+        const labelIsInFixedOptions = Object.keys(fixedSelectOptions).includes(formattedLabel)
+        const fixedOptionValue = fixedSelectOptions[formattedLabel as keyof typeof fixedSelectOptions]?.value ?? ''
+        
+        if (labelIsInFixedOptions && fixedOptionValue) {
+            disabled = fixedOptionValue !== ''
+        }
+    }
+
     return (
         <>
             <Select
@@ -105,7 +135,7 @@ export default function MultiSelect({
                         ...customSelectThemeColours,
                     },
                 })}
-                isDisabled={outbreak && label === 'Disease' ? true : false}
+                isDisabled={disabled}
             />
         </>
     )

@@ -1,3 +1,5 @@
+import { uniq } from "lodash"
+
 // Note that some of the columns in the source spreadsheets are not included
 // here because we don't need them.
 
@@ -23,6 +25,7 @@ export const keyMapping: { [key: string]: string } = {
     occupational_groups: 'OccupationalGroups',
     study_type_main: 'StudyType',
     clinical_trial: 'ClinicalTrial',
+    families: 'Families',
     pathogen: 'Pathogen',
     disease: 'Disease',
     funder_name: 'FundingOrgName',
@@ -78,6 +81,7 @@ export function convertSourceKeysToOurKeys(originalObject: {
     const convertedObject: { [key: string]: any } = {}
 
     for (const [key, value] of Object.entries(originalObject)) {
+            
         if (keyMapping[key] === undefined) {
             continue
         }
@@ -102,4 +106,71 @@ export const marbugCorcPriorityDescriptions = {
     '8': 'For each outbreak, the aim is to do even better in initiating early clinical trials to collect key data on efficacy and safety. Continued evaluation of candidates MCMs is crucial using panfilovirus CORE protocols for generating evidence on their safety and clinical efficacy is critical.  Due to the sporadic nature of MARV outbreaks, this includes use of panfilovirus CORE protocols for clinical trials designed in advance and benefiting from inputs from researchers from 17 at risk countries. The CORE Protocol - A phase 1/2/3 study to evaluate the safety, tolerability, immunogenicity, and efficacy of vaccine candidates against (Filoviruses) virus disease in healthy individuals at risk of (Filovirus) virus disease allows clinical trials to be conducted quickly and efficiently during the event of an outbreak. The protocol is flexible, meets vaccines where they are, considers outbreak and inter-outbreak phases. During outbreak a ring vaccination trial of delayed vs immediate vaccination will generate evidence on clinical efficacy. The Solidarity Partners – Platform adaptive randomized trial for new and repurposed Filovirus treatments– Core Trial Protocol for candidate therapeutics has factorial design that can randomize separately to monoclonal, antiviral, and host directed therapies with a primary outcome on all-cause mortality at 28 days. No host directed therapy component for MARV. This was successfully implemented in Rwanda with strong support, but some challenges e.g., supply chain/logistics, clinical load for physicians,transition from off-label/expanded access, and use of verified lab methods for 2ndary outcomes.',
     '9': 'Promote that knowledge outputs and methodological limitations are easily understood by non-social scientists. Develop and employ strong methodologies and theoretical frameworks to tackle current epidemic challenges. Implement societal measures such as Good Participatory Practices to work with communities to enhance acceptance of clinical trials for testing of candidate vaccines and therapeutics. Research priorities include in-depth studies on sociocultural, economic, and behavioral determinants of health, integrating social science methods with epidemiological research to build trust and inform community-centered Filoviruses outbreak responses. There is a need to engage community stakeholders early in co-designing participatory tools, fostering trust through ongoing feedback mechanisms, and addressing barriers like fear and misinformation to ensure acceptance and uptake of vaccines and therapeutics through culturally relevant and ethical practices. Efforts should be encouraged to simplify and disseminate research findings in actionable formats while institutionalizing Good Participatory Practices (GPP) to enhance transparency, accountability, and trust, and ensuring community-centered approaches to vaccine and therapeutic trials.',
     '10': 'Contribute to enhance collaboration through a ‘Network of Networks’ approach. The Interim Medical Countermeasures Network (i-MCM-Net) vision is to provide timely and equitable access to quality, safe, effective and affordable MCMs in response to public health emergencies by building on existing networks and fostering global collaboration. Continued development and improvement of the infrastructure required for conducting clinical trials in the countries at risk of outbreaks, as well as establishing and improving partnerships with Ministers of Health, local research institutions and other stakeholders. Leadership of studies launched by local scientist should be a continuous goal.'
+}
+
+// Map outbreak diseases to their corresponding pathogen family label
+// Using this label we can find the correct value from selectOptions[Pathogen]
+export const outbreakDiseaseToPathogenFamilyMapping = {
+    "Ebola virus disease": "Filoviridae"
+}
+
+export const formatRawKeyToOurKey = (key: string) => {
+    return key.split('_').map(text => 
+        text.charAt(0).toLocaleUpperCase() + text.slice(1)
+    ).join('')
+}
+
+export const prepareSpecificSelectOptions = (rawOptions: any, target: string) => {
+
+    const optionsWithConvertedKeys = Object.keys(rawOptions)
+        .filter(( rawKey: string ) => rawKey.includes(target))
+        .map(rawKey => {
+            const rawValues = rawOptions[rawKey as keyof typeof rawOptions]
+            const convertedKey = formatRawKeyToOurKey(rawKey)
+            
+            return {
+                [convertedKey]: rawValues
+            }
+        })
+        
+    return optionsWithConvertedKeys
+        .reduce((acc, entry) => {
+            const [key, values] = Object.entries(entry)[0]
+            acc[key as any] = values
+            
+            return acc
+        }, {}
+    )
+}
+
+export const convertRawGrantKeysAndReturnOriginalObject = (rawGrant: any, target: string, keyArrayToBuild?: string[]) => {
+    return Object.keys(rawGrant)
+        .filter(key => key.includes(target))
+        .map(key => {
+            // If the value is not checked, return
+            if (rawGrant[key] !== '1') {
+                return 
+            }
+
+            // Now we have the values on the grant that are checked
+            // Split the key to get the disease strain and the value as separate indexes in an array
+            const splitData = key.split('___')
+            // Format the first index as the key eg: FiloviridaeDiseasesStrains
+            const formattedKey = formatRawKeyToOurKey(splitData[0])
+            // Some keys include 3x "_" and others include 4x "_"
+            // As we have already split the key by 3x "_", the second index may in some cases contain a trailing underscore, if this is the case, it relates to -88, and -99 values
+            // Replace the trailing underscore with "-"
+            const formattedValue = splitData[1].replace('_', '-')
+            
+            // If an array is passed in, push the key to it
+            if (keyArrayToBuild) {
+                keyArrayToBuild.push(formattedKey)
+            } 
+            
+            // Return the structured object
+            return {
+                [formattedKey]: formattedValue
+            }
+        })
+        .reduce((acc, obj) => ({ ...acc, ...obj }), {}) // Flatten the array of objects to allow object destructuring in the return statement
 }

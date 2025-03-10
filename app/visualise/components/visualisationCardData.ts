@@ -8,7 +8,7 @@ export interface CardDataProps {
         "default": string
     }
     url: {
-       "Mpox": string
+        "Mpox": string
         "Pandemic-prone influenza": string
         "Marburg virus disease": string
         "Ebola virus disease": string
@@ -37,7 +37,6 @@ export interface CardDataProps {
 }
 
 export const visualisationCardData = (outbreak: boolean = false, disease: string = '') => {
-
     const cardData: CardDataProps[] = [
         {
             title: "Disease",

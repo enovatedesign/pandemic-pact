@@ -29,7 +29,8 @@ export default function StandardSearchFilters({
     }
 
     const fields = {
-        Pathogen: 'Pathogen Families',
+        Families: 'Families',
+        Pathogens: 'Pathogens',
         Disease: 'Diseases',
         ResearchInstitutionCountry: 'Research Institution Countries',
         ResearchInstitutionRegion: 'Research Institution Regions',
