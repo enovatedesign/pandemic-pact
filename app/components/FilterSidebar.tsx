@@ -8,7 +8,7 @@ import {
     emptyFilters,
     Filters,
     FilterSchema,
-    FixedDiseaseOptionContext,
+    FixedSelectOptionContext,
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
@@ -20,7 +20,6 @@ interface FilterSidebarProps {
     completeDataset: any[]
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
-    outbreak?: boolean
     sharedFiltersId?: string | null
 }
 
@@ -41,15 +40,14 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    outbreak = false,
     sharedFiltersId
 }: FilterSidebarProps) {
-    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
+    const fixedSelectOptions = useContext(FixedSelectOptionContext)
     
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
-    const filters = availableFilters().filter(filter => {
+    const filters = availableFilters(fixedSelectOptions).filter(filter => {
         // Honour conditional filter logic
         if (filter.parent) {
             const parentFilter = selectedFilters[filter.parent.filter]
@@ -71,10 +69,7 @@ export default function FilterSidebar({
             // logic hides it
         }
 
-        // If fixed disease option IS set, keep all filters except 'Pathogen'
-        return fixedDiseaseOption.value
-            ? !(filter.field === 'Pathogen') 
-            : filter
+        return filter
     })
     
     const standardFilters = filters.filter(f => !f.advanced)
@@ -151,7 +146,6 @@ export default function FilterSidebar({
                     setExcludeGrantsWithMultipleItemsInField
                 }
                 setSelectedOptions={setSelectedOptions}
-                outbreak={outbreak}
                 sharedFiltersId={sharedFiltersId}
             />
 
@@ -196,7 +190,7 @@ export default function FilterSidebar({
                     customClasses="mt-3 flex items-center gap-1"
                     onClick={() =>
                         setSelectedFilters(
-                            emptyFilters(fixedDiseaseOption?.value),
+                            emptyFilters(fixedSelectOptions),
                         )
                     }
                 >
@@ -215,7 +209,6 @@ interface filterBlockProps {
         field: keyof Filters,
         value: boolean,
     ) => void
-    outbreak?: boolean
     sharedFiltersId?: string | null
 }
 
@@ -224,15 +217,14 @@ const FilterBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
-    outbreak,
     sharedFiltersId
 }: filterBlockProps) => {
 
     return (
         <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick }) => {
+            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick, isHidden }) => {
 
-                return (    
+                return !isHidden && (    
                     <ConditionalWrapper
                         condition={parent != undefined}
                         key={field}
@@ -252,7 +244,6 @@ const FilterBlock = ({
                                     loadOnClick ?? true
                                 }
                                 label={label}
-                                outbreak={outbreak}
                             />
 
                             {excludeGrantsWithMultipleItems && (

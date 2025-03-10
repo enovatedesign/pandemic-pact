@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect, useRef, useContext, Suspense } from 'react'
+import { useMemo, useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { throttle, debounce } from 'lodash'
+import { throttle, debounce, uniq } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 
 import Layout from '../components/Layout'
@@ -20,10 +20,9 @@ import {
     GlobalFilterContext,
     countActiveFilters,
     Filters,
-    FixedDiseaseOptionContext,
 } from '../helpers/filters'
 import { TooltipContext } from '../helpers/tooltip'
-import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
+import { AnnouncementProps, DiseaseLabel, FixedSelectOptions } from '../helpers/types'
 import { getKvDatabase } from '../helpers/kv'
 
 import VisualisationCardLinks from './components/VisualisationCardLinks'
@@ -42,6 +41,7 @@ interface VisualisationPageProps {
     children?: React.ReactNode
     diseaseLabel?: DiseaseLabel
     announcement: AnnouncementProps
+    fixedSelectOptions?: FixedSelectOptions
 }
 
 const VisualisePageClientComponent = ({
@@ -51,15 +51,14 @@ const VisualisePageClientComponent = ({
     outbreak = false,
     children,
     diseaseLabel,
-    announcement
+    announcement,
+    fixedSelectOptions
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
     const [completeDataset, setCompleteDataset] = useState([])
 
     const [loadingDataset, setLoadingDataset] = useState(true)
-
-    const fixedDiseaseOption = useContext(FixedDiseaseOptionContext)
 
     useEffect(() => {
         fetch('/data/grants.json')
@@ -73,10 +72,15 @@ const VisualisePageClientComponent = ({
 
     const params = useSearchParams()
     const sharedFiltersId = params.get('share')
-
-    const [selectedFilters, setSelectedFilters] = useState<Filters>(
-        emptyFilters(fixedDiseaseOption?.value),
-    )
+    
+    // Define filters using useMemo to pass in the fixedSelectOptions
+    // This ensures calculations are completed before rendering 
+    const filters = useMemo(() => 
+        emptyFilters(fixedSelectOptions), 
+        [fixedSelectOptions]
+    ) 
+    
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
     
     useEffect(() => {
         const getSharedFilters = async () => {
@@ -92,9 +96,9 @@ const VisualisePageClientComponent = ({
         getSharedFilters()
     }, [sharedFiltersId])
 
-    const globallyFilteredDataset = useMemo(
-        () => filterGrants(completeDataset, selectedFilters),
-        [completeDataset, selectedFilters],
+    const globallyFilteredDataset = useMemo(() => 
+        filterGrants(completeDataset, selectedFilters, fixedSelectOptions),
+        [completeDataset, selectedFilters, fixedSelectOptions],
     )
     
     const sidebar = useMemo(() => {
@@ -107,7 +111,6 @@ const VisualisePageClientComponent = ({
                     completeDataset={completeDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
-                    outbreak={outbreak}
                     sharedFiltersId={sharedFiltersId}
                 />
             ),
@@ -152,7 +155,6 @@ const VisualisePageClientComponent = ({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
-        outbreak,
         sharedFiltersId
     ])
 
@@ -192,7 +194,7 @@ const VisualisePageClientComponent = ({
 
     // Hide the radar and sankey visualisations if we are on the
     // "Pandemic-prone influenza" outbreak page
-    const shouldShowRadarAndSankey = fixedDiseaseOption.value !== '6142004'
+    const shouldShowRadarAndSankey = fixedSelectOptions && fixedSelectOptions['Disease'].value !== '6142004'
     
     return (
         <GlobalFilterContext.Provider
@@ -234,7 +236,7 @@ const VisualisePageClientComponent = ({
                                         onClick={() =>
                                             setSelectedFilters(
                                                 emptyFilters(
-                                                    fixedDiseaseOption?.value,
+                                                    fixedSelectOptions,
                                                     false,
                                                     false,
                                                 ),
@@ -279,7 +281,7 @@ const VisualisePageClientComponent = ({
                                     onClick={() =>
                                         setSelectedFilters(
                                             emptyFilters(
-                                                fixedDiseaseOption?.value,
+                                                fixedSelectOptions,
                                                 true,
                                                 false,
                                             ),
@@ -294,7 +296,7 @@ const VisualisePageClientComponent = ({
                                     onClick={() =>
                                         setSelectedFilters(
                                             emptyFilters(
-                                                fixedDiseaseOption?.value,
+                                                fixedSelectOptions,
                                             ),
                                         )
                                     }
@@ -343,7 +345,14 @@ const VisualisePageClientComponent = ({
                                             <GrantsByResearchCategoryCard />
                                         </div>
                                     </>
-                                ) : null
+                                ) : (
+                                    <div
+                                        id="research-categories"
+                                        className={gridClasses}
+                                    >
+                                        <GrantsByResearchCategoryCard />
+                                    </div>
+                                )
                             ) : (
                                 <div
                                     id="research-categories"
