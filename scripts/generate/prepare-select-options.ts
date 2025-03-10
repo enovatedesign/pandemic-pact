@@ -5,11 +5,12 @@ import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
     marbugCorcPriorityDescriptions,
+    prepareSpecificSelectOptions,
 } from '../helpers/key-mapping'
+import { FLAG_UNRESTRICTED } from 'html2canvas/dist/types/css/syntax/tokenizer'
 
 type Row = { [key: string]: string }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default function prepareSelectOptions() {
     title('Generating select options')
 
@@ -30,17 +31,30 @@ export default function prepareSelectOptions() {
     )
 
     const path = './data/dist'
+
+    // Get the options relating to strains
+    const strainOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_diseases_strains')
     
+    // Get the options relating to pathogen
+    const pathogenFamilyOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_pathogen')
+
+    const pathogenOptions = Object.values(pathogenFamilyOptionsWithConvertedKeys).flat()
+        .sort((a, b) => a.label.localeCompare(b.label))
+
     // Create a new object with all the select options keyed by field name,
     // including the MPOX Research Priorities and Sub-Priorities
     const optionsWithConvertedKeys = convertSourceKeysToOurKeys(
         prepareOutbreakResearchPriorityAndSubPriority(rawOptions),
     )
-    
+
     // Get the full list of select options by adding some additional option
     // fields that are not present in the source data dictionary.
     const selectOptions: { [key: string]: any[] } = {
         ...optionsWithConvertedKeys,
+        ...strainOptionsWithConvertedKeys,
+        ...pathogenFamilyOptionsWithConvertedKeys,
+
+        Pathogens: pathogenOptions,
         // ResearchInstitutionCountry, ResearchLocationCountry and ResearchLocationRegion
         // don't have options in the dictionary, so we re-use the FunderCountry and
         // FunderRegion options for these fields
@@ -78,6 +92,12 @@ export default function prepareSelectOptions() {
     selectOptions.FundingOrgName = selectOptions.FundingOrgName.filter(funder =>
         grants.some(grant => grant.FundingOrgName.includes(funder.value)),
     )
+
+    // Remove the legacy "Pathogen" field, this has been replaced by "Pathogens" which is 
+    // intended for use in the disease filter hierarchy
+    if (selectOptions.Pathogen) {
+        delete selectOptions.Pathogen
+    }
 
     // Write all the select options to a single file to be imported by
     // server-side components

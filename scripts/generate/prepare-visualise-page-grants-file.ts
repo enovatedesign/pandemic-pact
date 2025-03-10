@@ -8,13 +8,21 @@ import { title, printWrittenFileStats } from '../helpers/log'
 // the grant title, abstract, etc, and they take up lots of space in
 // the JSON file. This script removes those unneeded fields.
 
-export default function () {
+export default function prepareVisualisePageGrantsFile() {
     title('Preparing optimised visualise-page grants data file')
 
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(
         './data/dist/grants.json',
     )
 
+    const diseaseStrainFields: string[] = fs.readJsonSync(
+        './data/dist/disease-strains.json',
+    )
+
+    const pathogenFamilyFields: string[] = fs.readJsonSync(
+        './data/dist/pathogen-families.json',
+    )
+    
     const optimisedGrants: ProcessedGrant[] = sourceGrants.map(grant => {
         return _.pick(grant, [
             'GrantID',
@@ -31,6 +39,7 @@ export default function () {
             'OccupationalGroups',
             'StudyType',
             'ClinicalTrial',
+            'Families',
             'Pathogen',
             'Disease',
             'FundingOrgName',
@@ -58,6 +67,9 @@ export default function () {
             'InfluenzaH7',
             'InfluenzaH10',
             'Tags',
+            'Pathogens',
+            ...diseaseStrainFields,
+            ...pathogenFamilyFields
         ])
     })
 

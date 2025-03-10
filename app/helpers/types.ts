@@ -38,3 +38,24 @@ export interface ClinicalTrialSubCategoryPhase {
     value: string
     label: string 
 }
+
+export type PathogenKey = `${string}Pathogen` // Dynamic keys ending in "Pathogen"
+
+export interface FixedSelectOptionsBase {
+    "Families": {
+        label: string
+        value: string
+    }
+    "Disease": {
+        label: string
+        value: string
+    }
+}
+
+// Use `&` to merge with dynamic keys
+export type FixedSelectOptions = FixedSelectOptionsBase & {
+    [K in PathogenKey]?: {
+        label: string
+        value: string
+    }
+}

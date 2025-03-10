@@ -17,8 +17,8 @@ interface Props {
         id?: string,
         url?: {
             "Mpox": string
-             "Pandemic-prone influenza": string
-             "default": string 
+            "Pandemic-prone influenza": string
+            "default": string 
          } | string 
     }[]
 }

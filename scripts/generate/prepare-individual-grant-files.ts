@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
-import { title, info, warn } from '../helpers/log'
+import { title, info } from '../helpers/log'
 
 export default function prepareIndividualGrantFiles() {
     title('Writing full grant data to individual files')

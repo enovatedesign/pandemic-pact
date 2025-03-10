@@ -1,11 +1,13 @@
 import fs from 'fs-extra'
-import _ from 'lodash'
+import _, { uniq } from 'lodash'
 
 import { RawGrant } from '../types/generate'
 import readLargeJson from '../helpers/read-large-json'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
+    formatRawKeyToOurKey,
+    convertRawGrantKeysAndReturnOriginalObject,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
@@ -52,6 +54,10 @@ export default async function prepareGrants() {
         textFields,
         field => field === 'award_amount_converted',
     )
+
+    // Build an empty array to push converted keys to for writing files
+    let strainKeys: string[] = []
+    let pathogenFamilyKeys: string[] = []
 
     const grants = rawGrants.map((rawGrant, index, array) => {
         if (index > 0 && index % 1000 === 0) {
@@ -112,6 +118,12 @@ export default async function prepareGrants() {
             rawGrant?.investigator_lastname
         )
 
+        // Convert the disease strain keys into an object with a formatted Key and value
+        const strainFields = convertRawGrantKeysAndReturnOriginalObject(rawGrant, '_diseases_strains_', strainKeys) 
+        
+        // Convert the pathogen keys into an object with a formatted Key and value
+        const pathogenFamilyFields = convertRawGrantKeysAndReturnOriginalObject(rawGrant, '_pathogen_', pathogenFamilyKeys) 
+
         // Add custom data fields of our own
         let customFields = {
             // Add 'TrendStartYear' default value if 'grant_start_year' is missing
@@ -120,7 +132,9 @@ export default async function prepareGrants() {
             ),
             
             // Add the formatted investigator names for use on the frontend
-            InvestigatorNames: investigatorNames
+            InvestigatorNames: investigatorNames,
+
+            Pathogens: pathogenFamilyFields ? Object.values(pathogenFamilyFields) : []
         }
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020
@@ -135,11 +149,13 @@ export default async function prepareGrants() {
                 )
             }
         }
-
+        
         // Create the final grant object using the converted data combined with
         // the custom fields
         return {
             ...convertedKeysGrantData,
+            ...strainFields,
+            ...pathogenFamilyFields,
             ...customFields,
         }
     })
@@ -149,8 +165,16 @@ export default async function prepareGrants() {
     const pathname = './data/dist/grants.json'
 
     fs.writeJsonSync(pathname, grants)
-
+    
     printWrittenFileStats(pathname)
+    
+    // Write the strain fields to a file for use in visualise page grants
+    const strainsPathname = './data/dist/disease-strains.json'
+    fs.writeJsonSync(strainsPathname, uniq(strainKeys))
+
+    // Write the strain fields to a file for use in visualise page grants
+    const pathogenFamiliesPathname = './data/dist/pathogen-families.json'
+    fs.writeJsonSync(pathogenFamiliesPathname, uniq(pathogenFamilyKeys))
     
     return Promise.resolve(grants)
 }
@@ -181,7 +205,7 @@ function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
     // Map over the priority options and the checkbox fields returning the priority + subPriority
     const PriorityStatementsRegionalFields = MPOXResearchPriorityOptions.flatMap(priority => {
             const field = mpoxResearchPriorityAndSubPriorityMapping[priority]
-            
+
             return checkBoxFieldValues[field].map(
                 subPriority => priority + subPriority,
             )

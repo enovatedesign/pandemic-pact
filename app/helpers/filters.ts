@@ -1,5 +1,6 @@
 import { createContext } from 'react'
 import { every } from 'lodash'
+import { FixedSelectOptions, PathogenKey } from './types'
 
 export interface Filter {
     values: string[]
@@ -17,30 +18,89 @@ export interface FilterSchema {
     parent?: { filter: string; value: string }
     advanced?: boolean
     loadOnClick?: boolean
+    isHidden?: boolean
 }
 
-export function availableFilters(): FilterSchema[] {
-    return [
+
+export function availableFilters(fixedSelectOptions?: FixedSelectOptions,): FilterSchema[] {
+    // Define base filters for pathogen, disease and strain
+    let pathogenFilter: FilterSchema = {
+        label: 'Pathogen',
+        field: 'Pathogens',
+        excludeGrantsWithMultipleItems: { 
+            label: 'Exclude Grants with Multiple Pathogens' 
+        },
+    }
+
+    let diseaseFilter: FilterSchema = {
+        label: 'Disease',
+        field: 'Disease',
+        loadOnClick: false,
+    }
+
+    let strainFilter: FilterSchema = {
+        label: 'Strain',
+        field: '',
+        loadOnClick: false,
+        isHidden: true
+    }
+    
+    // If fixedSelectOptions are present, link the filters to the corresponding parents 
+    // Parent values are hard coded for ebola until global hierarchy is implemented
+    if (fixedSelectOptions && fixedSelectOptions.Families?.label) {
+        pathogenFilter = {
+            ...pathogenFilter,
+            field: `${fixedSelectOptions.Families.label}Pathogen`,
+            parent: {
+                filter: 'Families',
+                value: '407325004'
+            },
+            loadOnClick: false,
+        }
+
+        diseaseFilter = {
+            ...diseaseFilter,
+            parent: {
+                filter: `${fixedSelectOptions.Families.label}Pathogen`,
+                value: '424206003'
+            }
+        }
+
+        if (fixedSelectOptions.Disease?.value) {
+            strainFilter = {
+                ...strainFilter,
+                field: `${fixedSelectOptions.Families.label}DiseasesStrains`,
+                parent: {
+                    filter: 'Disease',
+                    value: fixedSelectOptions.Disease.value
+                },
+                loadOnClick: false,
+                isHidden: false
+            }
+        }        
+    }
+
+    const filters = [
         {
             label: 'Funder',
             field: 'FundingOrgName',
-            excludeGrantsWithMultipleItems: { label: 'Exclude Joint Funding' },
-        },
-
-        {
-            label: 'Pathogen Families',
-            field: 'Pathogen',
-            excludeGrantsWithMultipleItems: {
-                label: 'Exclude Grants with Multiple Pathogens',
+            excludeGrantsWithMultipleItems: { 
+                label: 'Exclude Joint Funding' 
             },
         },
 
         {
-            label: 'Disease',
-            field: 'Disease',
+            label: 'Family',
+            field: 'Families',
             loadOnClick: false,
         },
 
+        pathogenFilter,
+
+        diseaseFilter,
+        
+        strainFilter,
+        
         {
             label: 'H Antigen',
             field: 'InfluenzaA',
@@ -175,21 +235,34 @@ export function availableFilters(): FilterSchema[] {
             advanced: true,
         },
     ]
+
+    return filters
 }
 
 export function emptyFilters(
-    fixedDiseaseValue?: string,
+    fixedSelectOptions?: FixedSelectOptions,
     resetFirstChild: boolean = true,
     resetSecondChild: boolean = true,
 ) {
-    return Object.fromEntries(
-        availableFilters().map(({ field, parent }) => {
-            let values: string[] = []
+    const initialFilters = availableFilters(fixedSelectOptions)
+    
+    const filtersObject = Object.fromEntries(initialFilters.map(({ field, parent }) => {
+        let values: string[] = []
 
-            if (fixedDiseaseValue) {
+        if (fixedSelectOptions) {
+            // Retrieve the fixed values from fixedSelectOptions
+            const fixedFieldValue = fixedSelectOptions[field as keyof typeof fixedSelectOptions]?.value
+            
+            // Push the fixed disease into the values array, 
+            // this will ensure the value is present on the first page load
+            if (fixedFieldValue && fixedFieldValue !== '') {
+                values.push(fixedFieldValue)
+            }
+
+            if (fixedSelectOptions['Disease'].value) {
                 if (field === 'Disease') {
-                    values = [fixedDiseaseValue]
-                } else if (fixedDiseaseValue === '6142004') {
+                    values = [fixedSelectOptions['Disease'].value]
+                } else if (fixedSelectOptions['Disease'].value === '6142004') {
                     // Pandemic Prone Influenza
                     if (resetFirstChild && field === 'InfluenzaA') {
                         values = ['h5']
@@ -198,26 +271,39 @@ export function emptyFilters(
                     }
                 }
             }
-
-            return [
-                field,
-                {
-                    values,
-                    parent,
-                    excludeGrantsWithMultipleItems: false,
-                },
-            ]
-        }),
-    )
+        }
+        
+        return [
+            field,
+            {
+                values,
+                parent,
+                excludeGrantsWithMultipleItems: false,
+            },
+        ]
+    }))
+    
+    return filtersObject
 }
 
-export function filterGrants(grants: any, filters: any) {
+export function filterGrants(grants: any, filters: any, fixedSelectOptions?: FixedSelectOptions) {
     return grants.filter((grant: any) =>
         every(
             filters,
             ({ values, excludeGrantsWithMultipleItems, parent }, key) => {
+                let formattedKey = key                
+
+                // If fixed select options are set, the pathogen key is defined as '{someSpecificPathogen}Pathogen'
+                // This is to ensure the hierarchy will only show the relevant pathogens related to the family selected
+                // To ensure excludeGrantsWithMultipleItems works as expected, we need to switch the key to 'Pathogens' 
+                // which is a full array of all pathogens on the grant
+                if ((fixedSelectOptions && fixedSelectOptions.Families?.label) && 
+                    (key === `${fixedSelectOptions.Families?.label}Pathogen`)) {
+                    formattedKey = 'Pathogens'
+                }
+
                 // if the grant has multiple items in the field and the switch is on, exclude it
-                if (excludeGrantsWithMultipleItems && grant[key].length > 1) {
+                if (excludeGrantsWithMultipleItems && grant[formattedKey].length > 1) {
                     return false
                 }
 
@@ -226,7 +312,7 @@ export function filterGrants(grants: any, filters: any) {
                     return true
                 }
 
-                if (typeof grant[key] === 'undefined') {
+                if (typeof grant[formattedKey] === 'undefined') {
                     return false
                 }
 
@@ -245,12 +331,12 @@ export function filterGrants(grants: any, filters: any) {
                 }
 
                 // if the grant has a single value in the field, check if it matches any of the filter values
-                if (typeof grant[key] === 'string') {
-                    return values.includes(grant[key])
+                if (typeof grant[formattedKey] === 'string') {
+                    return values.includes(grant[formattedKey])
                 }
 
                 // if the grant has multiple values in the field, check if any of them match any of the filter values
-                return grant[key].some((element: any) =>
+                return grant[formattedKey].some((element: any) =>
                     values.includes(element),
                 )
             },
@@ -279,11 +365,34 @@ export const SidebarStateContext = createContext<{
     sidebarOpen: false,
 })
 
-export const FixedDiseaseOptionContext = createContext<{
-    label: string
-    value: string
+
+export const FixedSelectOptionContext = createContext<{
+    "Families": {
+        label: string
+        value: string
+    },
+    "Disease": {
+        label: string
+        value: string
+    },
+
+} & {
+    [k in PathogenKey]?: {
+        label: string
+        value: string
+    }
 }>({
-    label: '',
-    value: '',
+    "Families": {
+        label: '',
+        value: ''
+    },
+    "Disease": {
+        label: '',
+        value: ''
+    },
+    "FiloviridaePathogen": {
+        label: '',
+        value: ''
+    }
 })
 
