@@ -12,7 +12,8 @@ fetch_pubmed_data:
     script:
         - npm run fetch-pubmed-data
     rules:
-        - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "fix-scheduled-pipeline" && $FETCH_PUBMED_DATA == "true"
+        - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master" && $FETCH_PUBMED_DATA == "true"
+    retry: 1
 
 deploy_review:
     stage: deploy
