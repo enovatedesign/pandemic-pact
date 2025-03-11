@@ -1,5 +1,5 @@
 default:
-    image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.0-node${NODE_VERSION}
+    image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.2-node${NODE_VERSION}
 
 stages:
     - build
