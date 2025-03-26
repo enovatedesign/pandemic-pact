@@ -143,34 +143,24 @@ export const prepareSpecificSelectOptions = (rawOptions: any, target: string) =>
     )
 }
 
-export const convertRawGrantKeysAndReturnOriginalObject = (rawGrant: any, target: string, keyArrayToBuild?: string[]) => {
+export const convertRawGrantKeyToValuesArray = (rawGrant: any, target: string) => {
     return Object.keys(rawGrant)
-        .filter(key => key.includes(target))
+        .filter(key => 
+            key.includes(target) &&
+            rawGrant[key] &&
+            parseInt(rawGrant[key]) === 1
+        )
         .map(key => {
-            // If the value is not checked, return
-            if (rawGrant[key] !== '1') {
-                return 
-            }
-
             // Now we have the values on the grant that are checked
             // Split the key to get the disease strain and the value as separate indexes in an array
-            const splitData = key.split('___')
-            // Format the first index as the key eg: FiloviridaeDiseasesStrains
-            const formattedKey = formatRawKeyToOurKey(splitData[0])
+            const splitKey = key.split('___')
+            
             // Some keys include 3x "_" and others include 4x "_"
             // As we have already split the key by 3x "_", the second index may in some cases contain a trailing underscore, if this is the case, it relates to -88, and -99 values
             // Replace the trailing underscore with "-"
-            const formattedValue = splitData[1].replace('_', '-')
-            
-            // If an array is passed in, push the key to it
-            if (keyArrayToBuild) {
-                keyArrayToBuild.push(formattedKey)
-            } 
+            const formattedValue = splitKey[1].includes('_') ? splitKey[1].replace('_', '-') : splitKey[1]
             
             // Return the structured object
-            return {
-                [formattedKey]: formattedValue
-            }
+            return formattedValue !== null && formattedValue
         })
-        .reduce((acc, obj) => ({ ...acc, ...obj }), {}) // Flatten the array of objects to allow object destructuring in the return statement
 }

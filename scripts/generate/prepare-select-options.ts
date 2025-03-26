@@ -33,11 +33,14 @@ export default function prepareSelectOptions() {
     const path = './data/dist'
 
     // Get the options relating to strains
-    const strainOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_diseases_strains')
+    const strainOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_strains')
     
     // Get the options relating to pathogen
     const pathogenFamilyOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_pathogen')
-
+    
+    // Get the options relating to diseases
+    const diseaseOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_diseases')
+    
     const pathogenOptions = Object.values(pathogenFamilyOptionsWithConvertedKeys).flat()
         .sort((a, b) => a.label.localeCompare(b.label))
 
@@ -51,10 +54,10 @@ export default function prepareSelectOptions() {
     // fields that are not present in the source data dictionary.
     const selectOptions: { [key: string]: any[] } = {
         ...optionsWithConvertedKeys,
-        ...strainOptionsWithConvertedKeys,
-        ...pathogenFamilyOptionsWithConvertedKeys,
 
         Pathogens: pathogenOptions,
+        Diseases: Object.values(diseaseOptionsWithConvertedKeys).flat(),
+        Strains: Object.values(strainOptionsWithConvertedKeys).flat(),
         // ResearchInstitutionCountry, ResearchLocationCountry and ResearchLocationRegion
         // don't have options in the dictionary, so we re-use the FunderCountry and
         // FunderRegion options for these fields

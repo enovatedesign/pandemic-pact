@@ -17,10 +17,10 @@ export default async function PageQuery(
                     postDate
                     slug
                     ... on ${sectionHandle}_${entryType}_Entry {
-                        outbreakDisease
                         ${entryType === 'outbreak' ? 'outbreakPending' : ''}
                         summary
                         showSummary
+                        outbreakDisease
                         ${contentBuilderQuery}
                     }
                     ${seomaticQuery}

@@ -7,7 +7,7 @@ import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
     formatRawKeyToOurKey,
-    convertRawGrantKeysAndReturnOriginalObject,
+    convertRawGrantKeyToValuesArray,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
@@ -119,10 +119,12 @@ export default async function prepareGrants() {
         )
 
         // Convert the disease strain keys into an object with a formatted Key and value
-        const strainFields = convertRawGrantKeysAndReturnOriginalObject(rawGrant, '_diseases_strains_', strainKeys) 
+        const Strains = convertRawGrantKeyToValuesArray(rawGrant, '_diseases_strains_') 
         
         // Convert the pathogen keys into an object with a formatted Key and value
-        const pathogenFamilyFields = convertRawGrantKeysAndReturnOriginalObject(rawGrant, '_pathogen_', pathogenFamilyKeys) 
+        const Pathogens = convertRawGrantKeyToValuesArray(rawGrant, '_pathogen__') 
+
+        const Diseases = convertRawGrantKeyToValuesArray(rawGrant, '_diseases__')
 
         // Add custom data fields of our own
         let customFields = {
@@ -131,10 +133,11 @@ export default async function prepareGrants() {
                 rawGrant.grant_start_year ?? rawGrant.publication_year_of_award,
             ),
             
+            Pathogens: Pathogens,
+            Diseases: Diseases,
+            Strains: Strains, 
             // Add the formatted investigator names for use on the frontend
-            InvestigatorNames: investigatorNames,
-
-            Pathogens: pathogenFamilyFields ? Object.values(pathogenFamilyFields) : []
+            InvestigatorNames: investigatorNames
         }
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020
@@ -154,8 +157,6 @@ export default async function prepareGrants() {
         // the custom fields
         return {
             ...convertedKeysGrantData,
-            ...strainFields,
-            ...pathogenFamilyFields,
             ...customFields,
         }
     })
@@ -167,14 +168,6 @@ export default async function prepareGrants() {
     fs.writeJsonSync(pathname, grants)
     
     printWrittenFileStats(pathname)
-    
-    // Write the strain fields to a file for use in visualise page grants
-    const strainsPathname = './data/dist/disease-strains.json'
-    fs.writeJsonSync(strainsPathname, uniq(strainKeys))
-
-    // Write the strain fields to a file for use in visualise page grants
-    const pathogenFamiliesPathname = './data/dist/pathogen-families.json'
-    fs.writeJsonSync(pathogenFamiliesPathname, uniq(pathogenFamilyKeys))
     
     return Promise.resolve(grants)
 }

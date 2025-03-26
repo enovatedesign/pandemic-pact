@@ -12,7 +12,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
 
     if (!grantsOnly) {
         await downloadCsvAndConvertToJson(
-            'https://figshare.com/ndownloader/files/52661744?private_link=9e712aa1f4255e37b0db',
+            'https://figshare.com/ndownloader/files/53222348?private_link=9e712aa1f4255e37b0db',
             'dictionary',
         )
 
@@ -25,7 +25,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     }
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/52661729?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/53187722?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
