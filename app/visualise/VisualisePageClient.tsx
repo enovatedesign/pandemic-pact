@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useEffect, useRef, Suspense } from 'react'
+import { useMemo, useState, useEffect, useRef, Suspense, useContext } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { throttle, debounce, uniq } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
@@ -20,6 +20,7 @@ import {
     GlobalFilterContext,
     countActiveFilters,
     Filters,
+    FixedSelectOptionContext,
 } from '../helpers/filters'
 import { TooltipContext } from '../helpers/tooltip'
 import { AnnouncementProps, DiseaseLabel, FixedSelectOptions } from '../helpers/types'
@@ -41,7 +42,6 @@ interface VisualisationPageProps {
     children?: React.ReactNode
     diseaseLabel?: DiseaseLabel
     announcement: AnnouncementProps
-    fixedSelectOptions?: FixedSelectOptions
 }
 
 const VisualisePageClientComponent = ({
@@ -52,13 +52,14 @@ const VisualisePageClientComponent = ({
     children,
     diseaseLabel,
     announcement,
-    fixedSelectOptions
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
     const [completeDataset, setCompleteDataset] = useState([])
 
     const [loadingDataset, setLoadingDataset] = useState(true)
+
+    const { outbreakSelectOptions } = useContext(FixedSelectOptionContext)
 
     useEffect(() => {
         fetch('/data/grants.json')
@@ -76,8 +77,8 @@ const VisualisePageClientComponent = ({
     // Define filters using useMemo to pass in the fixedSelectOptions
     // This ensures calculations are completed before rendering 
     const filters = useMemo(() => 
-        emptyFilters(fixedSelectOptions), 
-        [fixedSelectOptions]
+        emptyFilters(outbreakSelectOptions), 
+        [outbreakSelectOptions]
     ) 
     
     const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
@@ -97,8 +98,8 @@ const VisualisePageClientComponent = ({
     }, [sharedFiltersId])
 
     const globallyFilteredDataset = useMemo(() => 
-        filterGrants(completeDataset, selectedFilters, fixedSelectOptions),
-        [completeDataset, selectedFilters, fixedSelectOptions],
+        filterGrants(completeDataset, selectedFilters, outbreakSelectOptions),
+        [completeDataset, selectedFilters, outbreakSelectOptions],
     )
     
     const sidebar = useMemo(() => {
@@ -112,6 +113,7 @@ const VisualisePageClientComponent = ({
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     sharedFiltersId={sharedFiltersId}
+                    outbreak={outbreak}
                 />
             ),
             closedContent: (
@@ -155,7 +157,8 @@ const VisualisePageClientComponent = ({
         completeDataset,
         globallyFilteredDataset,
         loadingDataset,
-        sharedFiltersId
+        sharedFiltersId,
+        outbreak
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
@@ -194,7 +197,7 @@ const VisualisePageClientComponent = ({
 
     // Hide the radar and sankey visualisations if we are on the
     // "Pandemic-prone influenza" outbreak page
-    const shouldShowRadarAndSankey = fixedSelectOptions && fixedSelectOptions['Disease'].value !== '6142004'
+    const shouldShowRadarAndSankey = outbreakSelectOptions && outbreakSelectOptions['Diseases'].value !== '6142004'
     
     return (
         <GlobalFilterContext.Provider
@@ -235,11 +238,7 @@ const VisualisePageClientComponent = ({
                                     <Button
                                         onClick={() =>
                                             setSelectedFilters(
-                                                emptyFilters(
-                                                    fixedSelectOptions,
-                                                    false,
-                                                    false,
-                                                ),
+                                                emptyFilters(outbreakSelectOptions)
                                             )
                                         }
                                         customClasses="max-md:w-full !normal-case"
@@ -280,11 +279,7 @@ const VisualisePageClientComponent = ({
                                 <Button
                                     onClick={() =>
                                         setSelectedFilters(
-                                            emptyFilters(
-                                                fixedSelectOptions,
-                                                true,
-                                                false,
-                                            ),
+                                            emptyFilters(outbreakSelectOptions),
                                         )
                                     }
                                     customClasses="!normal-case"
@@ -295,9 +290,7 @@ const VisualisePageClientComponent = ({
                                 <Button
                                     onClick={() =>
                                         setSelectedFilters(
-                                            emptyFilters(
-                                                fixedSelectOptions,
-                                            ),
+                                            emptyFilters(outbreakSelectOptions)
                                         )
                                     }
                                     customClasses="!normal-case"

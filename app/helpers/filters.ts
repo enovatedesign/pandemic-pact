@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { every } from 'lodash'
-import { FixedSelectOptions, PathogenKey } from './types'
+import { FixedOutbreakSelectOptions, FixedSelectOptions } from './types'
 
 export interface Filter {
     values: string[]
@@ -21,65 +21,7 @@ export interface FilterSchema {
     isHidden?: boolean
 }
 
-
-export function availableFilters(fixedSelectOptions?: FixedSelectOptions,): FilterSchema[] {
-    // Define base filters for pathogen, disease and strain
-    let pathogenFilter: FilterSchema = {
-        label: 'Pathogen',
-        field: 'Pathogens',
-        excludeGrantsWithMultipleItems: { 
-            label: 'Exclude Grants with Multiple Pathogens' 
-        },
-    }
-
-    let diseaseFilter: FilterSchema = {
-        label: 'Disease',
-        field: 'Disease',
-        loadOnClick: false,
-    }
-
-    let strainFilter: FilterSchema = {
-        label: 'Strain',
-        field: '',
-        loadOnClick: false,
-        isHidden: true
-    }
-    
-    // If fixedSelectOptions are present, link the filters to the corresponding parents 
-    // Parent values are hard coded for ebola until global hierarchy is implemented
-    if (fixedSelectOptions && fixedSelectOptions.Families?.label) {
-        pathogenFilter = {
-            ...pathogenFilter,
-            field: `${fixedSelectOptions.Families.label}Pathogen`,
-            parent: {
-                filter: 'Families',
-                value: '407325004'
-            },
-            loadOnClick: false,
-        }
-
-        diseaseFilter = {
-            ...diseaseFilter,
-            parent: {
-                filter: `${fixedSelectOptions.Families.label}Pathogen`,
-                value: '424206003'
-            }
-        }
-
-        if (fixedSelectOptions.Disease?.value) {
-            strainFilter = {
-                ...strainFilter,
-                field: `${fixedSelectOptions.Families.label}DiseasesStrains`,
-                parent: {
-                    filter: 'Disease',
-                    value: fixedSelectOptions.Disease.value
-                },
-                loadOnClick: false,
-                isHidden: false
-            }
-        }        
-    }
-
+export function availableFilters(): FilterSchema[] {
     const filters = [
         {
             label: 'Funder',
@@ -93,86 +35,30 @@ export function availableFilters(fixedSelectOptions?: FixedSelectOptions,): Filt
             label: 'Family',
             field: 'Families',
             loadOnClick: false,
+            isHidden: true
         },
-
-        pathogenFilter,
-
-        diseaseFilter,
-        
-        strainFilter,
         
         {
-            label: 'H Antigen',
-            field: 'InfluenzaA',
-            parent: {
-                filter: 'Disease',
-                value: '6142004', // Pandemic-prone influenza
+            label: 'Pathogen',
+            field: 'Pathogens',
+            excludeGrantsWithMultipleItems: { 
+                label: 'Exclude Grants with Multiple Pathogens' 
             },
+            isHidden: true
+        },
+
+        {
+            label: 'Disease',
+            field: 'Diseases',
             loadOnClick: false,
+            isHidden: true
         },
 
         {
-            label: 'H1 Subtype',
-            field: 'InfluenzaH1',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h1',
-            },
-        },
-
-        {
-            label: 'H2 Subtype',
-            field: 'InfluenzaH2',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h2',
-            },
-        },
-
-        {
-            label: 'H3 Subtype',
-            field: 'InfluenzaH3',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h3',
-            },
-        },
-
-        {
-            label: 'H5 Subtype',
-            field: 'InfluenzaH5',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h5',
-            },
+            label: 'Strain',
+            field: 'Strains',
             loadOnClick: false,
-        },
-
-        {
-            label: 'H6 Subtype',
-            field: 'InfluenzaH6',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h6',
-            },
-        },
-
-        {
-            label: 'H7 Subtype',
-            field: 'InfluenzaH7',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h7',
-            },
-        },
-
-        {
-            label: 'H10 Subtype',
-            field: 'InfluenzaH10',
-            parent: {
-                filter: 'InfluenzaA',
-                value: 'h10',
-            },
+            isHidden: true
         },
 
         {
@@ -241,12 +127,8 @@ export function availableFilters(fixedSelectOptions?: FixedSelectOptions,): Filt
 
 export function emptyFilters(
     fixedSelectOptions?: FixedSelectOptions,
-    resetFirstChild: boolean = true,
-    resetSecondChild: boolean = true,
 ) {
-    const initialFilters = availableFilters(fixedSelectOptions)
-    
-    const filtersObject = Object.fromEntries(initialFilters.map(({ field, parent }) => {
+    const filtersObject = Object.fromEntries(availableFilters().map(({ field, parent }) => {
         let values: string[] = []
 
         if (fixedSelectOptions) {
@@ -257,19 +139,6 @@ export function emptyFilters(
             // this will ensure the value is present on the first page load
             if (fixedFieldValue && fixedFieldValue !== '') {
                 values.push(fixedFieldValue)
-            }
-
-            if (fixedSelectOptions['Disease'].value) {
-                if (field === 'Disease') {
-                    values = [fixedSelectOptions['Disease'].value]
-                } else if (fixedSelectOptions['Disease'].value === '6142004') {
-                    // Pandemic Prone Influenza
-                    if (resetFirstChild && field === 'InfluenzaA') {
-                        values = ['h5']
-                    } else if (resetSecondChild && field === 'InfluenzaH5') {
-                        values = ['h5n']
-                    }
-                }
             }
         }
         
@@ -292,7 +161,7 @@ export function filterGrants(grants: any, filters: any, fixedSelectOptions?: Fix
             filters,
             ({ values, excludeGrantsWithMultipleItems, parent }, key) => {
                 let formattedKey = key                
-
+                
                 // If fixed select options are set, the pathogen key is defined as '{someSpecificPathogen}Pathogen'
                 // This is to ensure the hierarchy will only show the relevant pathogens related to the family selected
                 // To ensure excludeGrantsWithMultipleItems works as expected, we need to switch the key to 'Pathogens' 
@@ -367,32 +236,44 @@ export const SidebarStateContext = createContext<{
 
 
 export const FixedSelectOptionContext = createContext<{
-    "Families": {
-        label: string
-        value: string
-    },
-    "Disease": {
-        label: string
-        value: string
-    },
-
-} & {
-    [k in PathogenKey]?: {
-        label: string
-        value: string
+    outbreakSelectOptions: {
+        "Families": {
+            label: string
+            value: string
+        },
+        "Pathogens": {
+            label: string 
+            value: string
+        }
+        "Diseases": {
+            label: string
+            value: string
+        },
+        "Strain"?: {
+            label: string
+            value: string
+        },
     }
+    outbreakLevel: number
 }>({
-    "Families": {
-        label: '',
-        value: ''
+    outbreakSelectOptions: {
+        "Families": {
+            label: '',
+            value: ''
+        },
+        "Pathogens": {
+            label: '',
+            value: ''
+        },
+        "Diseases": {
+            label: '',
+            value: ''
+        },
+        "Strain": {
+            label: '',
+            value: ''
+        }
     },
-    "Disease": {
-        label: '',
-        value: ''
-    },
-    "FiloviridaePathogen": {
-        label: '',
-        value: ''
-    }
+    outbreakLevel: 3
 })
 

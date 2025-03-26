@@ -14,14 +14,6 @@ export default function prepareVisualisePageGrantsFile() {
     const sourceGrants: ProcessedGrant[] = fs.readJsonSync(
         './data/dist/grants.json',
     )
-
-    const diseaseStrainFields: string[] = fs.readJsonSync(
-        './data/dist/disease-strains.json',
-    )
-
-    const pathogenFamilyFields: string[] = fs.readJsonSync(
-        './data/dist/pathogen-families.json',
-    )
     
     const optimisedGrants: ProcessedGrant[] = sourceGrants.map(grant => {
         return _.pick(grant, [
@@ -68,8 +60,8 @@ export default function prepareVisualisePageGrantsFile() {
             'InfluenzaH10',
             'Tags',
             'Pathogens',
-            ...diseaseStrainFields,
-            ...pathogenFamilyFields
+            'Strains',
+            'Diseases'
         ])
     })
 
