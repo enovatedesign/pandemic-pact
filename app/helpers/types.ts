@@ -39,23 +39,73 @@ export interface ClinicalTrialSubCategoryPhase {
     label: string 
 }
 
-export type PathogenKey = `${string}Pathogen` // Dynamic keys ending in "Pathogen"
-
-export interface FixedSelectOptionsBase {
+export interface FixedSelectOptions {
     "Families": {
         label: string
         value: string
     }
-    "Disease": {
+    "Diseases": {
+        label: string
+        value: string
+    }
+    "Pathogens": {
+        label: string
+        value: string
+    }
+    "Strains"?: {
         label: string
         value: string
     }
 }
 
-// Use `&` to merge with dynamic keys
-export type FixedSelectOptions = FixedSelectOptionsBase & {
-    [K in PathogenKey]?: {
+export interface FixedOutbreakSelectOptions {
+    outbreakSelectOptions: FixedSelectOptions
+    outbreakLevel: number
+}
+
+export interface CMSFamilyFilter {
+    label: string
+    value: string
+    pathogens: CMSPathogenFilter[]
+}
+
+export interface CMSPathogenFilter {
+    label: string
+    value: string
+    family: {
         label: string
         value: string
+    }
+    diseases: CMSDiseaseFilter[]
+}
+
+export interface CMSDiseaseFilter {
+    label: string
+    value: string
+    pathogen: {
+        label: string
+        value: string
+        family: {
+            label: string
+            value: string
+        }
+    }
+    strains: CMSStrainFilter[]
+}
+
+export interface CMSStrainFilter {
+    label: string
+    value: string
+    disease: {
+        label: string
+        value: string
+        pathogen: {
+            label: string
+            value: string
+            family: {
+                label: string
+                value: string
+            }
+        }
     }
 }

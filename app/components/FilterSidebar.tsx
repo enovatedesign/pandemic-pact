@@ -13,6 +13,7 @@ import {
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import ConditionalWrapper from './ConditionalWrapper'
+import CMSFilterBlock from './CMS/CMSFilterBlock'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -21,6 +22,7 @@ interface FilterSidebarProps {
     globallyFilteredDataset: any[]
     loadingDataset?: boolean
     sharedFiltersId?: string | null
+    outbreak?: boolean
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -40,14 +42,15 @@ export default function FilterSidebar({
     completeDataset,
     globallyFilteredDataset,
     loadingDataset,
-    sharedFiltersId
+    sharedFiltersId,
+    outbreak = false
 }: FilterSidebarProps) {
-    const fixedSelectOptions = useContext(FixedSelectOptionContext)
+    const { outbreakSelectOptions } = useContext(FixedSelectOptionContext)
     
     const [showAdvancedFilters, setShowAdvancedFilters] =
         useState<boolean>(false)
 
-    const filters = availableFilters(fixedSelectOptions).filter(filter => {
+    const filters = availableFilters().filter(filter => {
         // Honour conditional filter logic
         if (filter.parent) {
             const parentFilter = selectedFilters[filter.parent.filter]
@@ -63,10 +66,6 @@ export default function FilterSidebar({
             if (parentFilter.values[0] !== filter.parent.value) {
                 return false
             }
-
-            // Otherwise we will let the filter selection logic proceed
-            // as normal, which will show the child unless anything further
-            // logic hides it
         }
 
         return filter
@@ -78,9 +77,13 @@ export default function FilterSidebar({
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = { ...selectedFilters }
+        
+        if (!selectedOptions[field]) {
+            selectedOptions[field] = { values: [], excludeGrantsWithMultipleItems: false }
+        }
 
         selectedOptions[field].values = options
-
+        
         setSelectedFilters(selectedOptions)
     }
 
@@ -139,6 +142,16 @@ export default function FilterSidebar({
                 </p>
             </div>
 
+            <CMSFilterBlock 
+                selectedFilters={selectedFilters}
+                setExcludeGrantsWithMultipleItemsInField={
+                    setExcludeGrantsWithMultipleItemsInField
+                }
+                setSelectedOptions={setSelectedOptions}
+                fixedSelectOptions={outbreakSelectOptions}
+                outbreak={outbreak}
+            />
+
             <FilterBlock
                 filters={standardFilters}
                 selectedFilters={selectedFilters}
@@ -190,7 +203,7 @@ export default function FilterSidebar({
                     customClasses="mt-3 flex items-center gap-1"
                     onClick={() =>
                         setSelectedFilters(
-                            emptyFilters(fixedSelectOptions),
+                            emptyFilters(outbreakSelectOptions),
                         )
                     }
                 >
