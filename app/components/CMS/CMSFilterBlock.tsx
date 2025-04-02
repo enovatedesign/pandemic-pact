@@ -45,11 +45,16 @@ const CMSFilterBlock = ({
     // Clear the value of the desired react select component using the key
     const clearSelectValue = (key: string) => {
         if (selectRefs.current[key] && selectRefs.current[key].hasValue()) {
+            if (selectRefs.current[key].cleared) {
+                return
+            }
+
+            selectRefs.current[key].cleared = true
             selectRefs.current[key].clearValue()
         }
     }
 
-    const uniqAndSortedFilters = (array: any[]) => {
+    const uniqAndSortedFilters = (array: any[], appendOtherAndUnspecified: boolean) => {
         const uniqueFilters = uniqBy(array, 'label')
         const labelsToAppend = ['other', 'unspecified']
         const filtersToAppend = uniqueFilters
@@ -66,7 +71,7 @@ const CMSFilterBlock = ({
                 a['label'].localeCompare(b['label'])
             )
 
-        return [...standardFilters, ...filtersToAppend]
+        return [...standardFilters, ...(appendOtherAndUnspecified ? filtersToAppend : [])]
     }
     
     // Each key in the cms filters object is used as the reference for useRef eg: selectRefs['Disease']
@@ -99,20 +104,20 @@ const CMSFilterBlock = ({
         if (localSelectedOptions?.Families?.value) {
             const selectedFamily = hierarchyFilters.find(family => family.value === localSelectedOptions.Families.value)
             
-            pathogens = uniqAndSortedFilters(selectedFamily?.pathogens || [])
-            diseases = uniqAndSortedFilters(pathogens.flatMap(pathogen => pathogen.diseases))
+            pathogens = uniqAndSortedFilters(selectedFamily?.pathogens || [], true)
+            diseases = uniqAndSortedFilters(pathogens.flatMap(pathogen => pathogen.diseases), false)
         }
 
         if (localSelectedOptions?.Pathogens?.value) {
             const selectedPathogen = pathogens.find(pathogen => pathogen.value === localSelectedOptions.Pathogens.value)
 
-            diseases = uniqAndSortedFilters(selectedPathogen?.diseases || []    )
+            diseases = uniqAndSortedFilters(selectedPathogen?.diseases || [], true)
         }
 
         if (localSelectedOptions?.Diseases?.value) {
             const selectedDisease = diseases.find(disease => disease.value === localSelectedOptions?.Diseases?.value)
 
-            strains = uniqAndSortedFilters(selectedDisease?.strains || [])
+            strains = uniqAndSortedFilters(selectedDisease?.strains || [], true)
         }
 
         return {
@@ -139,32 +144,38 @@ const CMSFilterBlock = ({
                 [field]: { label: '', value: null }
             }))
             
+            
             if (isVisualisePage) {
                 clearSelectValue(field)
                 setSelectedOptions(field, [])
             } else {
-                
                 let nullOptions 
                 switch (field) {
                     case "Families":
                         nullOptions = { 
                             "Families": { value:  null },
+                            "Strains": { value:  null },
                         }
                         setSelectedOptions(nullOptions)
+                        clearSelectValue("Strain")
                         
                         break;
                     case "Pathogens":
                         nullOptions = { 
                             "Pathogens": { value: null },
+                            "Strains": { value:  null },
                         }
                         setSelectedOptions(nullOptions)
+                        clearSelectValue("Strain")
 
                         break;
                     case "Diseases":
                         nullOptions = { 
                             "Diseases": { value: null }, 
+                            "Strains": { value:  null },
                         }
                         setSelectedOptions(nullOptions)
+                        clearSelectValue("Strain")
 
                         break;
                     case "Strains":
