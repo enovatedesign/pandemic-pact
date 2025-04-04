@@ -80,6 +80,7 @@ export default function InteractiveMap({
         () => ({
             zoom: 1.25,
             target: [0, 15, 0],
+            minZoom: 1,
             transitionInterpolator,
         }),
         [transitionInterpolator]
