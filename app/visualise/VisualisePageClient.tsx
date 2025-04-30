@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect, useRef, Suspense, useContext } from 'react'
+import { useMemo, useState, useEffect, useRef, Suspense, useContext, ReactNode } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { throttle, debounce, uniq } from 'lodash'
+import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 
 import Layout from '../components/Layout'
@@ -36,10 +36,10 @@ import GrantsByWHOMpoxRoadmap from '../components/GrantsByWHOMpoxRoadmap'
 
 interface VisualisationPageProps {
     title: string
-    summary?: string
+    summary?: string | ReactNode
     showSummary?: boolean
     outbreak?: boolean
-    children?: React.ReactNode
+    children?: ReactNode
     diseaseLabel?: DiseaseLabel
     announcement: AnnouncementProps
 }
