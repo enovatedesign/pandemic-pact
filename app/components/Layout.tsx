@@ -25,7 +25,7 @@ type Props = {
     mastheadContent?: ReactNode
     children: ReactNode
     title?: string | ReactNode
-    summary?: string
+    summary?: string | ReactNode
     showSummary?: boolean
     outbreak?: boolean
     announcement?: AnnouncementProps
@@ -202,7 +202,9 @@ const Layout = ({
                                                         )}
                                                     </div>
 
-                                                    {summary && showSummary && (
+                                                    {(summary && showSummary) && isValidElement(summary) ? (
+                                                        summary
+                                                    ) : (
                                                         <p className="mt-2 text-white opacity-50 lg:text-xl">
                                                             {summary}
                                                         </p>
