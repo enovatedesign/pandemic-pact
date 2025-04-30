@@ -1,10 +1,9 @@
 'use client'
 
 import { Suspense, useState, useEffect, useMemo } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { isEqual } from 'lodash'
-import Layout from '../components/Layout'
-import SearchInput from '../components/SearchInput'
-import ResultsTable from '../components/ResultsTable'
+
 import {
     prepareInitialSearchParameters,
     updateUrlQueryString,
@@ -12,9 +11,13 @@ import {
     SearchParameters,
     SearchResponse,
 } from '../helpers/search'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import SearchPagination from '../components/SearchPagination'
 import { AnnouncementProps } from '../helpers/types'
+
+import Layout from '../components/Layout'
+import Summary from '../components/VisualiseAndExplorePageSummary'
+import SearchInput from '../components/SearchInput'
+import ResultsTable from '../components/ResultsTable'
+import SearchPagination from '../components/SearchPagination'
 
 interface Props {
     announcement: AnnouncementProps
@@ -115,7 +118,9 @@ export default function ExplorePageClient({announcement}: Props) {
         <Layout
             title="Grant Search"
             showSummary={true}
-            summary="Find, filter and explore grant abstracts, linked publications and other curated data on research grants for infectious disease with a pandemic potential."
+            summary={Summary({
+                mainSummary: "Find, filter and explore grant abstracts, linked publications and other curated data on research grants for infectious disease with a pandemic potential."
+            })}
             announcement={announcement}
         >
             <div className="container mx-auto my-6 lg:my-12">

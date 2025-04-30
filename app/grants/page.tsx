@@ -1,8 +1,10 @@
-import ExplorePageClient from "./ExplorePageClient"
-import { fetchMetadataFromCraft, Parameters } from "../helpers/cms-page"
-import type {Metadata, ResolvingMetadata} from 'next'
 import { Suspense } from "react"
+import type {Metadata, ResolvingMetadata} from 'next'
+
+import { fetchMetadataFromCraft, Parameters } from "../helpers/cms-page"
 import { queryAnnouncementEntry } from "../helpers/announcement-query"
+
+import ExplorePageClient from "./ExplorePageClient"
 
 type generateMetadataProps = {
     params: Parameters

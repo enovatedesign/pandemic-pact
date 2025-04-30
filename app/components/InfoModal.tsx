@@ -14,6 +14,7 @@ interface InfoModalProps {
     iconSize?: string,
     customCloseButton?: React.ReactNode
     removeSpaceY?: boolean
+    iconColour?: string
 }
 
 export default function InfoModal({
@@ -23,13 +24,15 @@ export default function InfoModal({
     marginX = true,
     iconSize = 'size-6',
     customCloseButton = null,
-    removeSpaceY = false
+    removeSpaceY = false,
+    iconColour = 'text-secondary'
 }: InfoModalProps) {
     const [isOpen, setIsOpen] = useState(false)
     
     const iconClasses = [
-        'text-secondary ignore-in-image-export',
-        iconSize
+        'ignore-in-image-export',
+        iconSize,
+        iconColour
     ].filter(Boolean).join(' ')
 
     const dialogPanelClasses = [
