@@ -2412,7 +2412,7 @@
         "pathogens": [
             {
                 "label": "Alphavirus chikungunya",
-                "value": "59774002",
+                "value": "2423009",
                 "family": {
                     "label": "Togaviridae",
                     "value": "129231002"
@@ -2423,7 +2423,7 @@
                         "value": "111864006",
                         "pathogen": {
                             "label": "Alphavirus chikungunya",
-                            "value": "59774002",
+                            "value": "2423009",
                             "family": {
                                 "label": "Togaviridae",
                                 "value": "129231002"
@@ -2436,7 +2436,7 @@
                         "value": "-88",
                         "pathogen": {
                             "label": "Alphavirus chikungunya",
-                            "value": "59774002",
+                            "value": "2423009",
                             "family": {
                                 "label": "Togaviridae",
                                 "value": "129231002"
@@ -2449,7 +2449,7 @@
                         "value": "-99",
                         "pathogen": {
                             "label": "Alphavirus chikungunya",
-                            "value": "59774002",
+                            "value": "2423009",
                             "family": {
                                 "label": "Togaviridae",
                                 "value": "129231002"
