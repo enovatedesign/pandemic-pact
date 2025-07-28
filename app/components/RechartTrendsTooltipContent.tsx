@@ -1,4 +1,5 @@
 import { dollarValueFormatter } from '../helpers/value-formatters'
+
 import TooltipContent from './TooltipContent'
 
 interface Props {
@@ -26,7 +27,7 @@ export default function RechartTrendsTooltipContent({
         let trendPercentageDifference = undefined
 
         const year = item.payload.year
-
+        
         const yearIndex = years.indexOf(year)
 
         if (yearIndex > 0) {
@@ -55,8 +56,11 @@ export default function RechartTrendsTooltipContent({
                 trendPercentageDifference = null
             }
         }
+
+        const itemName = item.name 
+
         return {
-            label: item.name,
+            label: itemName,
             value: formatValuesToDollars
                 ? dollarValueFormatter(item.value)
                 : item.value,
