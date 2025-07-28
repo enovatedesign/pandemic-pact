@@ -1,7 +1,9 @@
 import { Fragment, useContext, useMemo, useState } from 'react'
+
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
 import selectOptions from '../../../data/dist/select-options.json'
+
 import { diseaseColours, diseaseDimColours } from '../../helpers/colours'
 import BarList from '../BarList/BarList'
 import BarListRow from '../BarList/BarListRow'
@@ -32,7 +34,7 @@ export default function BarChart({outbreak}: BarChartProps) {
     const { grants } = useContext(GlobalFilterContext)
 
     let chartData = useMemo(() => {
-        const diseases = selectOptions.Disease.filter(
+        const diseases = selectOptions.Diseases.filter(
             disease => !hideCovid || disease.label !== 'COVID-19'
         )
 
@@ -40,7 +42,7 @@ export default function BarChart({outbreak}: BarChartProps) {
             .map(function (disease) {
                 const grantsWithKnownAmounts = grants
                     .filter((grant: any) =>
-                        grant.Disease.includes(disease.value)
+                        grant.Diseases.includes(disease.value)
                     )
                     .filter(
                         (grant: any) =>
@@ -48,7 +50,7 @@ export default function BarChart({outbreak}: BarChartProps) {
                     )
                 const grantsWithUnspecifiedAmounts = grants
                     .filter((grant: any) =>
-                        grant.Disease.includes(disease.value)
+                        grant.Diseases.includes(disease.value)
                     )
                     .filter(
                         (grant: any) =>
@@ -73,6 +75,10 @@ export default function BarChart({outbreak}: BarChartProps) {
                 }
             })
             .filter(disease => disease['Total Grants'] > 0)
+            .filter(disease => 
+                disease['Category Label'] !== 'Unspecified' && 
+                disease['Category Label'] !== 'Other'
+            )
             .sort((a, b) => b[orderSortingValue] - a[orderSortingValue])
     }, [grants, hideCovid, orderSortingValue])
     

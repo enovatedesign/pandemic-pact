@@ -47,20 +47,24 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
         ),
         'TrendStartYear'
     )
-
+    
     let chartData = Object.keys(datasetGroupedByYear).map(year => {
         const grants = datasetGroupedByYear[year]
 
         let dataPoint: { [key: string]: string | number } = { year }
 
-        selectOptions.Disease.forEach(({ value, label }) => {
+        selectOptions.Diseases.forEach(({ value, label }) => {
             const filteredGrants = grants.filter(grant =>
-                grant.Disease.includes(value)
+                grant['Diseases'].includes(value)
             )
 
-            dataPoint[label] = displayKnownFinancialCommitments
+            const valueToUse = displayKnownFinancialCommitments
                 ? filteredGrants.reduce(...sumNumericGrantAmounts)
                 : filteredGrants.length
+
+            if (valueToUse > 0) {
+                dataPoint[label] = valueToUse
+            }
         })
 
         return dataPoint
@@ -88,7 +92,13 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
         'z-10',
          chartData === temporalFallback && 'blur-md'
     ].filter(Boolean).join(' ')
-
+    
+    const diseaseLines = selectOptions['Diseases']
+        .filter(({ label }) => 
+            label !== 'Other' && 
+            label !== 'Unspecified'
+        )
+    
     return (
         <>
             <div className={controlsWrapperClasses}>
@@ -165,7 +175,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                         />
                     )}
 
-                    {selectOptions.Disease.map(({ value, label }) => (
+                    {diseaseLines.map(({ value, label }) => (
                         <Line
                             key={label}
                             dataKey={label}
@@ -177,8 +187,8 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
             </ResponsiveContainer>
                     
             <ImageExportLegend
-                categories={selectOptions.Disease.map(({ label }) => label)}
-                colours={selectOptions.Disease.map(
+                categories={selectOptions.Diseases.map(({ label }) => label)}
+                colours={selectOptions.Diseases.map(
                     ({ value }) => diseaseColours[value]
                 )}
             />

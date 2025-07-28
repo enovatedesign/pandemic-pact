@@ -7,7 +7,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
     const keyFactsHeadings = [
         {
             text: 'Disease',
-            metric: grant.Disease,
+            metric: grant.Diseases,
         },
         {
             text: 'Start & end year',
@@ -94,7 +94,7 @@ export default function KeyFacts({ grant }: { grant: any }) {
         },
     ]
 
-    if (grant.Disease.includes('Mpox')) {
+    if (grant.Diseases.includes('mpox')) {
         keyFactsSubHeadings.push({
             text: 'Mpox Research Priorities',
             metric: grant.GlobalMpoxResearchPriorities,

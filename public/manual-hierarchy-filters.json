@@ -445,7 +445,7 @@
             },
             {
                 "label": "Klebsiella pneumoniae",
-                "value": "110378009",
+                "value": "56415008",
                 "family": {
                     "label": "Enterobacteriaceae",
                     "value": "106544002"
@@ -456,7 +456,7 @@
                         "value": "186435004",
                         "pathogen": {
                             "label": "Klebsiella pneumoniae",
-                            "value": "110378009",
+                            "value": "56415008",
                             "family": {
                                 "label": "Enterobacteriaceae",
                                 "value": "106544002"
@@ -469,7 +469,7 @@
                         "value": "-88",
                         "pathogen": {
                             "label": "Klebsiella pneumoniae",
-                            "value": "110378009",
+                            "value": "56415008",
                             "family": {
                                 "label": "Enterobacteriaceae",
                                 "value": "106544002"
@@ -482,7 +482,7 @@
                         "value": "-99",
                         "pathogen": {
                             "label": "Klebsiella pneumoniae",
-                            "value": "110378009",
+                            "value": "56415008",
                             "family": {
                                 "label": "Enterobacteriaceae",
                                 "value": "106544002"
@@ -699,6 +699,19 @@
                         "strains": []
                     },
                     {
+                        "label": "Congenital infection caused by Zika virus",
+                        "value": "762725007",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "50471002",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
                         "label": "Other",
                         "value": "-88",
                         "pathogen": {
@@ -736,7 +749,7 @@
                 "diseases": [
                     {
                         "label": "Tick-Borne Encephalitis",
-                        "value": "3928003",
+                        "value": "414093008",
                         "pathogen": {
                             "label": "Orthoflavivirus encephalitidis",
                             "value": "32323003",
@@ -834,7 +847,7 @@
                 "diseases": [
                     {
                         "label": "Dengue",
-                        "value": "3928005",
+                        "value": "38362002",
                         "pathogen": {
                             "label": "Orthoflavivirus denguei",
                             "value": "34348001",
@@ -883,7 +896,7 @@
                 "diseases": [
                     {
                         "label": "Yellow Fever",
-                        "value": "3928006",
+                        "value": "16541001",
                         "pathogen": {
                             "label": "Orthoflavivirus flavi",
                             "value": "26630006",
@@ -1151,7 +1164,7 @@
                 "diseases": [
                     {
                         "label": "Influenza caused by Influenza A virus subtype H1",
-                        "value": "442438000",
+                        "value": "442438000-01",
                         "pathogen": {
                             "label": "Alphainfluenzavirus Influenzae H1",
                             "value": "446396002",
@@ -1347,7 +1360,7 @@
                 "diseases": [
                     {
                         "label": "Influenza caused by Influenza A virus subtype H3",
-                        "value": "442438000",
+                        "value": "442438000-02",
                         "pathogen": {
                             "label": "Alphainfluenza virus influenzae H3",
                             "value": "446645007",
@@ -2176,7 +2189,7 @@
                 "diseases": [
                     {
                         "label": "Severe Fever with Thrombocytopenia Syndrome",
-                        "value": "402917004",
+                        "value": "722401001",
                         "pathogen": {
                             "label": "Bandavirus dabieense",
                             "value": "1288039000",

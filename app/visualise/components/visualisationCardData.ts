@@ -37,7 +37,7 @@ export interface CardDataProps {
 }
 
 export const visualisationCardData = (outbreak: boolean = false, disease: string = '') => {
-    console.log(disease)
+    
     const cardData: CardDataProps[] = [
         {
             title: "Disease",
