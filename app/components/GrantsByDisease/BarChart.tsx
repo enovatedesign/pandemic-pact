@@ -90,8 +90,8 @@ export default function BarChart({outbreak}: BarChartProps) {
     ].filter(Boolean).join(' ')
 
     const barsWrapperClasses = [
-        'z-10 w-full',
-         chartData === barsFallback && 'blur-md'
+        'w-full',
+        chartData === barsFallback && 'blur-md'
     ].filter(Boolean).join(' ')
 
     return (
