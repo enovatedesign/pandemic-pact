@@ -25,7 +25,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     }
 
     await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/55956335?private_link=9e712aa1f4255e37b0db',
+        'https://figshare.com/ndownloader/files/56891432?private_link=9e712aa1f4255e37b0db',
         'grants',
         true,
     )
