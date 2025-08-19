@@ -16,7 +16,7 @@ interface Props {
         },
         id?: string,
         url?: {
-            "Mpox": string
+            "mpox": string
             "H5N1": string
             "default": string 
          } | string 
