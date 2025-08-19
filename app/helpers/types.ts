@@ -26,7 +26,7 @@ export interface AnnouncementProps {
     }
 }
 
-export type DiseaseLabel = 'Mpox' | 'H5N1' | 'Marburg virus disease' | 'Ebola' | 'default'
+export type DiseaseLabel = 'mpox' | 'H5N1' | 'Marburg virus disease' | 'Ebola' | 'default'
 
 export interface ClinicalTrialCategoryPhase { 
     title: string
