@@ -310,7 +310,7 @@ const VisualisePageClientComponent = ({
                             </div>
 
                             {diseaseLabel ? (
-                                diseaseLabel === 'Mpox' ? (
+                                diseaseLabel === 'mpox' ? (
                                     <>
                                         <div
                                             id="grants-by-who-mpox-roadmap"

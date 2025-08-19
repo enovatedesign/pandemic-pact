@@ -1,14 +1,14 @@
 export interface CardDataProps {
     title: string
     summary: {
-        "Mpox": string
+        "mpox": string
         "H5N1": string
         "Marburg virus disease": string
         "Ebola": string
         "default": string
     }
     url: {
-        "Mpox": string
+        "mpox": string
         "H5N1": string
         "Marburg virus disease": string
         "Ebola": string
@@ -21,14 +21,14 @@ export interface CardDataProps {
         height: number
     }
     showCard: {
-        "Mpox": boolean
+        "mpox": boolean
         "H5N1": boolean
         "Marburg virus disease": boolean
         "Ebola": boolean
         "default": boolean
     }
     showChevron: {
-        "Mpox": boolean
+        "mpox": boolean
         "H5N1": boolean
         "Marburg virus disease": boolean
         "Ebola": boolean
@@ -42,14 +42,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: "Disease",
             summary: {
-                "Mpox": `We bring together grant information on ${disease}.`,
+                "mpox": `We bring together grant information on ${disease}.`,
                 "H5N1": `We bring together grant information on H5N1.`,
                 "Marburg virus disease": `We bring together grant information on ${disease}.`,
                 "Ebola": `We bring together grant information on ${disease}.`,
-                "default": 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, Mpox and Plague.'
+                "default": 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, mpox and Plague.'
             },
             url: {
-                "Mpox": '#disease',
+                "mpox": '#disease',
                 "H5N1": '#disease',
                 "Marburg virus disease": '#disease',
                 "Ebola": '#disease',
@@ -62,14 +62,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 480,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
@@ -79,14 +79,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Research Categories',
             summary: {
-                "Mpox": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
+                "mpox": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
                 "H5N1": `Charts showing H5N1 grants assigned to twelve research categories with respective subcategories.`,
                 "Marburg virus disease": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
                 "Ebola": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
                 "default": 'Charts showing the grants assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of grants going into different areas of research.'
             },
             url: {
-                "Mpox": '#research-categories-policy-roadmaps',
+                "mpox": '#research-categories-policy-roadmaps',
                 "H5N1": '#research-categories',
                 "Marburg virus disease": '#research-categories',
                 "Ebola": '#research-categories',
@@ -99,14 +99,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 480,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
@@ -116,14 +116,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Clinical Research',
             summary: {
-                "Mpox": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
+                "mpox": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
                 "H5N1": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
                 "Marburg virus disease": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
                 "Ebola": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.',
                 "default": 'Explore how clinical research funding is allocated across various trial phases and diseases to support clinical trial activities.'
             },
             url: {
-                "Mpox": '#clinical-trials',
+                "mpox": '#clinical-trials',
                 "H5N1": '#clinical-trials',
                 "Marburg virus disease": '#clinical-trials',
                 "Ebola": '#clinical-trials',
@@ -136,14 +136,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 480,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
@@ -153,14 +153,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Geographical Distribution',
             summary: {
-                "Mpox": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
+                "mpox": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
                 "H5N1": `Charts showing the location of funding organisations and where funding flows to support H5N1 research activities.`,
                 "Marburg virus disease": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
                 "Ebola": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
                 "default": 'Charts showing the location of funding organisations and where the funding flows to support research activities. charts can be visualised at the level of the WHO regions or individual countries.'
             },
             url: {
-                "Mpox": '#geographical-distribution',
+                "mpox": '#geographical-distribution',
                 "H5N1": '#geographical-distribution',
                 "Marburg virus disease": '#geographical-distribution',
                 "Ebola": '#geographical-distribution',
@@ -173,14 +173,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 480,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
@@ -190,14 +190,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Annual Trends',
             summary: {
-                "Mpox": `Charts for trends in research funding in ${disease} and associated research categories.`,
+                "mpox": `Charts for trends in research funding in ${disease} and associated research categories.`,
                 "H5N1": `Charts for trends in research funding in H5N1 and associated research categories.`,
                 "Marburg virus disease": `Charts for trends in research funding in ${disease} and associated research categories.`,
                 "Ebola": `Charts for trends in research funding in ${disease} and associated research categories.`,
                 "default": 'Charts for trends in research funding for selected diseases, research categories and other items by year starting from 2020, to align with the COVID-19 Pandemic.'
             },
             url: {
-                "Mpox": '#annual-trends',
+                "mpox": '#annual-trends',
                 "H5N1": '#annual-trends',
                 "Marburg virus disease": '#annual-trends',
                 "Ebola": '#annual-trends',
@@ -210,14 +210,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 300,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": true,
@@ -227,14 +227,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
         {
             title: 'Policy Roadmaps',
             summary: {
-                "Mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
+                "mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "H5N1": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
                 "Marburg virus disease": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "Ebola": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
             },
             url: {
-                "Mpox": '#grants-by-who-mpox-roadmap',
+                "mpox": '#grants-by-who-mpox-roadmap',
                 "H5N1": '#policy-roadmaps',
                 "Marburg virus disease": '#marburg-research-policy-and-roadmaps',
                 "Ebola": '#marburg-research-policy-and-roadmaps',
@@ -247,14 +247,14 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 height: 300,
             },
             showCard: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
                 "Ebola": false,
                 "default": true
             },
             showChevron: {
-                "Mpox": true,
+                "mpox": true,
                 "H5N1": false,
                 "Marburg virus disease": true,
                 "Ebola": true,
