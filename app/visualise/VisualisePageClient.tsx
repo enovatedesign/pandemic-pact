@@ -36,7 +36,7 @@ import GrantsByWHOMpoxRoadmap from '../components/GrantsByWHOMpoxRoadmap'
 
 interface VisualisationPageProps {
     title: string
-    summary?: string | ReactNode
+    summary?: string
     showSummary?: boolean
     outbreak?: boolean
     children?: ReactNode
