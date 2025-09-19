@@ -26,8 +26,6 @@ export const keyMapping: { [key: string]: string } = {
     study_type_main: 'StudyType',
     clinical_trial: 'ClinicalTrial',
     families: 'Families',
-    pathogen: 'Pathogen',
-    disease: 'Disease',
     funder_name: 'FundingOrgName',
     funder_country: 'FunderCountry',
     funder_region: 'FunderRegion',
