@@ -8,7 +8,7 @@ interface SelectOptions {
     [key: string]: { value: string; label: string }[]
 }
 
-export default function () {
+export default function prepareXsvExportFile() {
     title('Preparing CSV export file')
 
     const grants = fs.readJsonSync('./data/dist/grants.json')
@@ -32,7 +32,23 @@ export default function () {
         selectOptionsMap.set(field, map)
     })
 
+    // The new "Pathogens", "Diseases" and "Strains" fields are added to the select options manually and therefore do not exist within the keyMapping object
+    // It has been requested that these fields are visible in the export and are in a defined order after the existing "Families" field.
+
+    // Get the defined values from keyMapping
     const fieldsForExport = Object.values(keyMapping)
+    
+    // Find the index of "Families"
+    const familiesIndex = fieldsForExport.indexOf("Families")
+
+    // Add the new fields after the "Families" field
+    fieldsForExport.splice(
+        familiesIndex + 1,
+        0,
+        "Pathogens",
+        "Diseases",
+        "Strains"
+    )
 
     // Prepare a export row for each grant
     const rows = grants.map((grant: any, index: number, array: any[]) => {
@@ -42,11 +58,10 @@ export default function () {
 
         let row: any = {}
 
-        Object.entries(grant).forEach(([field, value]) => {
-            // Skip fields that are not needed in the export
-            if (!fieldsForExport.includes(field)) {
-                return
-            }
+        // Instead of iterating through the grant object, we iterate through our predefined `fieldsForExport` array. 
+        // This ensures the columns are created in the correct order.
+        fieldsForExport.forEach(field => {
+            const value = grant[field]
 
             // If the field is a select option, replace the value(s) with the
             // corresponding label(s)
