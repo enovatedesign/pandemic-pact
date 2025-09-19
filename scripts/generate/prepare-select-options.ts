@@ -7,7 +7,6 @@ import {
     marbugCorcPriorityDescriptions,
     prepareSpecificSelectOptions,
 } from '../helpers/key-mapping'
-import { FLAG_UNRESTRICTED } from 'html2canvas/dist/types/css/syntax/tokenizer'
 
 type Row = { [key: string]: string }
 
