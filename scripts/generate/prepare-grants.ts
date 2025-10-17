@@ -1,16 +1,16 @@
 import fs from 'fs-extra'
-import _, { uniq } from 'lodash'
+import _ from 'lodash'
 
 import { RawGrant } from '../types/generate'
 import readLargeJson from '../helpers/read-large-json'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
-    formatRawKeyToOurKey,
     convertRawGrantKeyToValuesArray,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
+import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
 
 export default async function prepareGrants() {
     title('Preparing grants')
@@ -54,10 +54,6 @@ export default async function prepareGrants() {
         textFields,
         field => field === 'award_amount_converted',
     )
-
-    // Build an empty array to push converted keys to for writing files
-    let strainKeys: string[] = []
-    let pathogenFamilyKeys: string[] = []
 
     const grants = rawGrants.map((rawGrant, index, array) => {
         if (index > 0 && index % 1000 === 0) {
@@ -112,20 +108,6 @@ export default async function prepareGrants() {
             ...commaSeparatedFieldValues,
         })
 
-        const investigatorNames = formatInvestigatorNames(
-            rawGrant?.investigator_title,
-            rawGrant?.investigator_firstname, 
-            rawGrant?.investigator_lastname
-        )
-
-        // Convert the disease strain keys into an object with a formatted Key and value
-        const Strains = convertRawGrantKeyToValuesArray(rawGrant, '_diseases_strains_') 
-        
-        // Convert the pathogen keys into an object with a formatted Key and value
-        const Pathogens = convertRawGrantKeyToValuesArray(rawGrant, '_pathogen__') 
-
-        const Diseases = convertRawGrantKeyToValuesArray(rawGrant, '_diseases__')
-
         // Add custom data fields of our own
         let customFields = {
             // Add 'TrendStartYear' default value if 'grant_start_year' is missing
@@ -133,11 +115,19 @@ export default async function prepareGrants() {
                 rawGrant.grant_start_year ?? rawGrant.publication_year_of_award,
             ),
             
-            Pathogens: Pathogens,
-            Diseases: Diseases,
-            Strains: Strains, 
+            Pathogens: convertRawGrantKeyToValuesArray(rawGrant, '_pathogen__') ,
+            Diseases: convertRawGrantKeyToValuesArray(rawGrant, '_diseases__'),
+            Strains: convertRawGrantKeyToValuesArray(rawGrant, '_diseases_strains_') , 
+            
             // Add the formatted investigator names for use on the frontend
-            InvestigatorNames: investigatorNames
+            InvestigatorNames: formatInvestigatorNames(
+                rawGrant?.investigator_title,
+                rawGrant?.investigator_firstname, 
+                rawGrant?.investigator_lastname
+            ),
+
+            // Prepare the Corc Priorities
+            CorcPriorities: prepareEbolaCorcPriorities(rawGrant)
         }
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020

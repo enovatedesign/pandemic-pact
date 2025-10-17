@@ -237,7 +237,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "mpox": '#grants-by-who-mpox-roadmap',
                 "H5N1": '#policy-roadmaps',
                 "Marburg virus disease": '#marburg-research-policy-and-roadmaps',
-                "Ebola": '#marburg-research-policy-and-roadmaps',
+                "Ebola": '#ebola-corc-priorities',
                 "default": '#policy-roadmaps',
             },
             image: {
@@ -250,7 +250,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "mpox": true,
                 "H5N1": true,
                 "Marburg virus disease": true,
-                "Ebola": false,
+                "Ebola": true,
                 "default": true
             },
             showChevron: {

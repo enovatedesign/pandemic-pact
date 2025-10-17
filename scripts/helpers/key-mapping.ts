@@ -51,6 +51,7 @@ export const keyMapping: { [key: string]: string } = {
     influenza_h7: 'InfluenzaH7',
     influenza_h10: 'InfluenzaH10',
     tags: 'Tags',
+    ebola_corc_priorities: 'EbolaCorcPriorityGrant' // If the value is '1' the grant is included in the corc priorities
 }
 
 export const mpoxResearchPriorityAndSubPriorityMapping: {
