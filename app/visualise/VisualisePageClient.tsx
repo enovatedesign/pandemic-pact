@@ -23,7 +23,7 @@ import {
     FixedSelectOptionContext,
 } from '../helpers/filters'
 import { TooltipContext } from '../helpers/tooltip'
-import { AnnouncementProps, DiseaseLabel, FixedSelectOptions } from '../helpers/types'
+import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
 import { getKvDatabase } from '../helpers/kv'
 
 import VisualisationCardLinks from './components/VisualisationCardLinks'
@@ -33,6 +33,7 @@ import InfoModal from '../components/InfoModal'
 import ClinicalTrialsTherapeuticsAndVaccines from '../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 import MarburgResearchAndPolicyRoadmaps from '../components/MarburgResearchAndPolicyRoadmaps'
 import GrantsByWHOMpoxRoadmap from '../components/GrantsByWHOMpoxRoadmap'
+import EbolaCorcPrioritiesCard from '../components/EbolaCorcPrioritiesCard'
 
 interface VisualisationPageProps {
     title: string
@@ -42,6 +43,7 @@ interface VisualisationPageProps {
     children?: ReactNode
     diseaseLabel?: DiseaseLabel
     announcement: AnnouncementProps
+    slug?: string
 }
 
 const VisualisePageClientComponent = ({
@@ -52,6 +54,7 @@ const VisualisePageClientComponent = ({
     children,
     diseaseLabel,
     announcement,
+    slug
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
@@ -198,7 +201,7 @@ const VisualisePageClientComponent = ({
     // Hide the radar and sankey visualisations if we are on the
     // "Pandemic-prone influenza" outbreak page
     const shouldShowRadarAndSankey = outbreakSelectOptions && outbreakSelectOptions['Diseases'].value !== '6142004'
-    
+
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -338,6 +341,10 @@ const VisualisePageClientComponent = ({
                                             <GrantsByResearchCategoryCard />
                                         </div>
                                     </>
+                                ) : slug && slug === 'ebola-2' ? (
+                                    <div id="ebola-corc-priorities">
+                                        <EbolaCorcPrioritiesCard/>
+                                    </div>
                                 ) : (
                                     <div
                                         id="research-categories"

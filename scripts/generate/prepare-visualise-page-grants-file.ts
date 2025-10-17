@@ -61,7 +61,9 @@ export default function prepareVisualisePageGrantsFile() {
             'Tags',
             'Pathogens',
             'Strains',
-            'Diseases'
+            'Diseases',
+            'EbolaCorcPriorityGrant',
+            'CorcPriorities'
         ])
     })
 
