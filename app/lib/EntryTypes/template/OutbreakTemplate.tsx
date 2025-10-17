@@ -27,7 +27,7 @@ export default function OutbreakTemplate({data, announcement}: Props) {
         outbreakSelectOptions,
         outbreakLevel
     }
-
+    
     return (
         <FixedSelectOptionContext.Provider value={outbreakContext}>
             <VisualisePageClient
@@ -37,6 +37,7 @@ export default function OutbreakTemplate({data, announcement}: Props) {
                 summary={entry.summary}
                 showSummary={entry.showSummary}
                 announcement={announcement}
+                slug={entry.slug}
             >
                 {entry.bodyContent && entry.bodyContent.length > 0 && (
                     <Matrix blocks={entry.bodyContent} />
