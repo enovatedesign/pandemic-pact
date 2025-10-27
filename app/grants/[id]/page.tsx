@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import path from 'path';
 
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -20,13 +21,13 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const path = `./data/dist/grants/${params.id}.json`;
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
 
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(filePath)) {
         return {...defaultMetaData}
     }
 
-    const grant = fs.readJsonSync(path);
+    const grant = fs.readJsonSync(filePath);
 
     const truncateString = (str: string, maxLength: number) => {
         if (str.length <= maxLength) {
@@ -76,20 +77,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return metaData;
 }
 
+export const dynamicParams = true;
+export const revalidate = false; // Pages cached indefinitely until next deployment
+
 export async function generateStaticParams() {
-    return fs
-        .readJsonSync('./data/dist/grants/index.json')
-        .map((grantId: number) => ({ id: `${grantId}` }));
+    // Return empty array to pre-render zero pages at build time
+    // All pages will be generated on-demand and cached via ISR
+    return [];
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const path = `./data/dist/grants/${params.id}.json`;
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
     
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(filePath)) {
         notFound();
     }
 
-    const grant = fs.readJsonSync(path);
+    const grant = fs.readJsonSync(filePath);
     
     return (
         <Layout
