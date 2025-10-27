@@ -76,10 +76,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return metaData;
 }
 
+export const dynamicParams = true;
+export const revalidate = false; // Pages cached indefinitely until next deployment
+
 export async function generateStaticParams() {
-    return fs
-        .readJsonSync('./data/dist/grants/index.json')
-        .map((grantId: number) => ({ id: `${grantId}` }));
+    // Return empty array to pre-render zero pages at build time
+    // All pages will be generated on-demand and cached via ISR
+    return [];
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
