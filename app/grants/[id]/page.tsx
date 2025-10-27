@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import path from 'path';
 
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -20,13 +21,13 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const path = `./data/dist/grants/${params.id}.json`;
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
 
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(filePath)) {
         return {...defaultMetaData}
     }
 
-    const grant = fs.readJsonSync(path);
+    const grant = fs.readJsonSync(filePath);
 
     const truncateString = (str: string, maxLength: number) => {
         if (str.length <= maxLength) {
@@ -86,13 +87,13 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const path = `./data/dist/grants/${params.id}.json`;
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
     
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(filePath)) {
         notFound();
     }
 
-    const grant = fs.readJsonSync(path);
+    const grant = fs.readJsonSync(filePath);
     
     return (
         <Layout

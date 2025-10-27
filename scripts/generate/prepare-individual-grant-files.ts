@@ -14,11 +14,8 @@ export default function prepareIndividualGrantFiles() {
         './data/dist/grants.json',
     )
 
-    const path = './data/dist/grants'
-    fs.emptyDirSync(path)
-
-    const apiPath = `./public/grants/`
-    fs.emptyDirSync(apiPath)
+    const outputPath = `./public/grants/`
+    fs.emptyDirSync(outputPath)
 
     for (let i = 0; i < sourceGrants.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
@@ -65,18 +62,14 @@ export default function prepareIndividualGrantFiles() {
             }),
         )
 
-        const pathname = `${path}/${grantWithFullText['GrantID']}.json`
+        const pathname = `${outputPath}/${grantWithFullText['GrantID']}.json`
 
         fs.writeJsonSync(pathname, grantWithFullText)
-
-        const apiPathname = `${apiPath}/${grantWithFullText['GrantID']}.json`
-
-        fs.writeJsonSync(apiPathname, grantWithFullText)
     }
 
     // Store all the IDs in a separate file for use in generateStaticParams
     fs.writeJsonSync(
-        `${path}/index.json`,
+        `${outputPath}/index.json`,
         sourceGrants.map(grant => grant['GrantID']),
     )
 }
