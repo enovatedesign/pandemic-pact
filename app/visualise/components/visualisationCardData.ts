@@ -1,4 +1,4 @@
-export interface CardDataProps {
+export interface VisualisationCardDataProps {
     title: string
     summary: {
         "mpox": string
@@ -38,7 +38,7 @@ export interface CardDataProps {
 
 export const visualisationCardData = (outbreak: boolean = false, disease: string = '') => {
     
-    const cardData: CardDataProps[] = [
+    const cardData: VisualisationCardDataProps[] = [
         {
             title: "Disease",
             summary: {
@@ -238,7 +238,8 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "H5N1": '#policy-roadmaps',
                 "Marburg virus disease": '#marburg-research-policy-and-roadmaps',
                 "Ebola": '#ebola-corc-priorities',
-                "default": '#policy-roadmaps',
+                "default": '/visualise/policy-roadmaps',
+
             },
             image: {
                 url: `/images/visualisation-cards/${outbreak ? 'outbreak' : 'vis'}-road-maps.svg`,
@@ -258,7 +259,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "H5N1": false,
                 "Marburg virus disease": true,
                 "Ebola": true,
-                "default": false
+                "default": true
             }
         },
     ]
@@ -266,4 +267,175 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
     return cardData
 } 
 
+export interface HundredDaysMissionCardDataProps {
+    title: string
+    summary: {
+        "default": string
+    }
+    url: {
+        "default": string
+    }
+    image: {
+        url: string
+        altText: string
+        width: number
+        height: number
+    }
+    showCard: {
+        "default": boolean
+    }
+    showChevron: {
+        "default": boolean
+    }
+}
 
+export const hundredDaysMissionVisualisationCardData: HundredDaysMissionCardDataProps[] = [
+    {
+        title: 'Research Grants',
+        summary: {
+            "default": 'Explore how funding is allocated across Clinical and Preclinical Research grants'
+        },
+        url: {
+            "default": '#clinical-research-grants'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis-pie-chart.svg`,
+            altText: 'Illustration of a bar chart',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Pathogen',
+        summary: {
+            "default": 'Charts showing distribution of research grants by pathogen families and pathogens'
+        },
+        url: {
+            "default": '#pathogen'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis-bar-chart.svg`,
+            altText: '',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true,
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Clinical Trials',
+        summary: {
+            "default": 'Explore how funding is allocated across various Trial Phases'
+        },
+        url: {
+            "default": '#clinical-trials'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis-category-chart.svg`,
+            altText: 'Illustration of a bar chart',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Study Populations',
+        summary: {
+            "default": 'Charts showing the distribution of Study Populations across Clinical Research Grants'
+        },
+        url: {
+            "default": '#study-populations'
+        },
+        
+        image: {
+            url: `/images/visualisation-cards/vis-study-populations.svg`,
+            altText: 'New chart to be designed',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Geographical Distribution',
+        summary: {
+            "default": 'Charts showing research locations and location of Capacity Strengthening Grants'
+        },
+        url: {
+            "default": '#geographical-distribution'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis-radar-chart.svg`,
+            altText: 'Illustration of a bar chart',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Implementation & Access',
+        summary: {
+            "default": 'Charts showing research on implementation of clinical research and access to Vaccines, Therapeutics and Vaccines'
+        },
+        url: {
+            "default": '#implementation-and-access'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis-implementation-and-access.svg`,
+            altText: 'New chart to be designed',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": true
+        },
+        showChevron: {
+            "default": true,
+        },
+    },
+    {
+        title: 'Coordination & Collaboration',
+        summary: {
+            "default": 'Explore networks of funders and researchers of Clinical Research Grants'
+        },
+        url: {
+            "default": '#coordination-and-collaboration'
+        },
+        image: {
+            url: `/images/visualisation-cards/vis--chart.svg`,
+            altText: '',
+            width: 480,
+            height: 480,
+        },
+        showCard: {
+            "default": false,
+        },
+        showChevron: {
+            "default": false,
+        },
+    },
+]

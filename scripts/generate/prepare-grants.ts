@@ -7,6 +7,9 @@ import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
     convertRawGrantKeyToValuesArray,
+    convertCheckBoxFieldToArray,
+    convertCommaSeparatedValueFieldToArray,
+    grantPolicyRoadmaps,
 } from '../helpers/key-mapping'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
@@ -127,7 +130,9 @@ export default async function prepareGrants() {
             ),
 
             // Prepare the Corc Priorities
-            CorcPriorities: prepareEbolaCorcPriorities(rawGrant)
+            CorcPriorities: prepareEbolaCorcPriorities(rawGrant),
+            
+            ...grantPolicyRoadmaps(rawGrant)
         }
 
         // If we have a 'grant_start_year' and it's a valid year, but before 2020
@@ -150,7 +155,7 @@ export default async function prepareGrants() {
             ...customFields,
         }
     })
-
+    
     fs.emptyDirSync('./data/dist')
 
     const pathname = './data/dist/grants.json'
@@ -205,34 +210,4 @@ function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
 
     checkBoxFieldValues.marburg_parent = checkBoxFieldValues.research_and_policy_roadmaps
         .filter(value => value === '26')
-}
-
-
-function convertCommaSeparatedValueFieldToArray(
-    grant: RawGrant,
-    field: string,
-) {
-    if (!grant[field]) {
-        return []
-    }
-
-    return grant[field]
-        .split(',')
-        .map(value => value.trim())
-        .filter(value => value !== '')
-}
-
-function convertCheckBoxFieldToArray(grant: RawGrant, field: string) {
-    return (
-        Object.entries(grant)
-            .filter(
-                ([key, value]) =>
-                    key.startsWith(`${field}___`) && value === '1',
-            )
-            // In the source data, columns that represent checkbox values
-            // have '-' replaced with '_' - for instance '-99' is replaced
-            // with '_99'. Thus we have to replace '_' with '-' after
-            // splitting by '___'
-            .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
-    )
 }

@@ -1,4 +1,4 @@
-import { uniq } from "lodash"
+import { RawGrant } from "../types/generate"
 
 // Note that some of the columns in the source spreadsheets are not included
 // here because we don't need them.
@@ -51,7 +51,12 @@ export const keyMapping: { [key: string]: string } = {
     influenza_h7: 'InfluenzaH7',
     influenza_h10: 'InfluenzaH10',
     tags: 'Tags',
-    ebola_corc_priorities: 'EbolaCorcPriorityGrant' // If the value is '1' the grant is included in the corc priorities
+    ebola_corc_priorities: 'EbolaCorcPriorityGrant', // If the value is '1' the grant is included in the corc priorities
+    hundred_dm_flag: 'HundredDaysMissionFlag',
+    'onehundreddm_research_area': 'HundredDaysMissionResearchArea',
+    'onehundreddm_implementation': 'HundredDaysMissionImplementation',
+    research_location_country: 'HundredDaysMissionResearchLocationCountry',
+    capacity_strengthening_list: 'HundredDaysMissionCapacityStrengthening'
 }
 
 export const mpoxResearchPriorityAndSubPriorityMapping: {
@@ -74,18 +79,20 @@ export const mpoxResearchPriorityAndSubPriorityMapping: {
     '24': 'priority_statements_regional', // Grants By Mpox Research Priority Category
 }
 
-export function convertSourceKeysToOurKeys(originalObject: {
-    [key: string]: any
-}) {
+export function convertSourceKeysToOurKeys(
+    originalObject: { [key: string]: any },
+    retainOriginalKeys: boolean = false
+) {
     const convertedObject: { [key: string]: any } = {}
 
     for (const [key, value] of Object.entries(originalObject)) {
-            
-        if (keyMapping[key] === undefined) {
-            continue
-        }
+        const mappedKey = keyMapping[key]
 
-        convertedObject[keyMapping[key]] = value
+        if (mappedKey) {
+            convertedObject[mappedKey] = value
+        } else if (retainOriginalKeys) {
+            convertedObject[key] = value
+        }
     }
 
     return convertedObject
@@ -142,7 +149,7 @@ export const prepareSpecificSelectOptions = (rawOptions: any, target: string) =>
     )
 }
 
-export const convertRawGrantKeyToValuesArray = (rawGrant: any, target: string) => {
+export const convertRawGrantKeyToValuesArray = (rawGrant: RawGrant, target: string) => {
     return Object.keys(rawGrant)
         .filter(key => 
             key.includes(target) &&
@@ -162,4 +169,60 @@ export const convertRawGrantKeyToValuesArray = (rawGrant: any, target: string) =
             // Return the structured object
             return formattedValue !== null && formattedValue
         })
+}
+
+export const convertCheckBoxFieldToArray = (grant: RawGrant, field: string) => {
+    return (
+        Object.entries(grant)
+            .filter(
+                ([key, value]) =>
+                    key.startsWith(`${field}___`) && value === '1',
+            )
+            // In the source data, columns that represent checkbox values
+            // have '-' replaced with '_' - for instance '-99' is replaced
+            // with '_99'. Thus we have to replace '_' with '-' after
+            // splitting by '___'
+            .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
+    )
+}
+
+export const convertCommaSeparatedValueFieldToArray = (
+    grant: RawGrant,
+    field: string,
+) => {
+    if (!grant[field]) {
+        return []
+    }
+
+    return grant[field]
+        .split(',')
+        .map(value => value.trim())
+        .filter(value => value !== '')
+}
+
+export const grantPolicyRoadmaps =(rawGrant: any) => {
+    // There are multiple policy roadmap visualization pages.
+    // A grant can be marked for a specific roadmap using a flag (e.g., 'hundred_dm_flag').
+    // If the flag is set to '1' (true), that grant is included in the hundred days mission visualizations.
+    //
+    // To enable search in the policy roadmap dropdown, we assign a new key to each grant called PolicyRoadmaps.
+    // If a roadmap field is true, we add its corresponding label to the PolicyRoadmaps array.
+    // This way, each dropdown option can be built from a label/value pair that matches entries in the array.
+    // When a user selects a roadmap from the dropdown, we filter the dataset to include only grants tagged with that roadmap.
+    
+    const policyRoadmapFields = {
+        'hundred_dm_flag': 'HundredDaysMissionFlag'
+    }
+        
+    let policyRoadmapValues: string[] = []
+
+    Object.entries(policyRoadmapFields).forEach(([ key, value]) => {
+        if (rawGrant[key] === '1') {
+            policyRoadmapValues.push(value)
+        }
+    })
+
+    return {
+        PolicyRoadmaps: policyRoadmapValues
+    }
 }

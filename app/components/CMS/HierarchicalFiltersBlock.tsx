@@ -13,10 +13,10 @@ import {
     CMSStrainFilter
 } from '@/app/helpers/types'
 
-import CMSFilterSelect from './CMSFilter'
+import CMSFilterSelect from './HierarchicalFilter'
 import { uniqBy } from 'lodash'
 
-interface CMSFilterBlockProps {
+interface HierarchicalFiltersBlockProps {
     selectedFilters: any
     setSelectedOptions: any
     setExcludeGrantsWithMultipleItemsInField?: (
@@ -28,14 +28,14 @@ interface CMSFilterBlockProps {
     outbreak?: boolean
 }
 
-const CMSFilterBlock = ({
+const HierarchicalFiltersBlock = ({
     selectedFilters,
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
     fixedSelectOptions,
     isVisualisePage = true,
-    outbreak = false
-}: CMSFilterBlockProps) => {
+    outbreak = false,
+}: HierarchicalFiltersBlockProps) => {
     const [localSelectedOptions, setLocalSelectedOptions] = useState<FixedSelectOptions | undefined>(fixedSelectOptions)
 
     // Build a dynamic object of refs to be used within 
@@ -376,4 +376,4 @@ const CMSFilterBlock = ({
     )
 }
 
-export default CMSFilterBlock
+export default HierarchicalFiltersBlock

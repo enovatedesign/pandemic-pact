@@ -3,19 +3,17 @@
 import { useId } from 'react'
 import ReactSelect from 'react-select'
 import type { ActionMeta } from 'react-select'
-import { customSelectThemeColours } from '../helpers/select-colours'
 
-interface Option {
-    label: string
-    value: string
-}
+import { customSelectThemeColours } from '../helpers/select-colours'
+import { SelectOption } from '@/scripts/types/generate'
 
 interface Props {
-    value: Option | null
-    options: Option[]
-    onChange: (option: Option | null, actionMeta: ActionMeta<Option>) => void
+    value: SelectOption | null
+    options: SelectOption[]
+    onChange: (option: SelectOption | null, actionMeta: ActionMeta<SelectOption>) => void
     label: string
     className?: string
+    isClearable?: boolean
 }
 
 export default function Select({
@@ -24,17 +22,18 @@ export default function Select({
     onChange,
     label,
     className,
+    isClearable = false
 }: Props) {
     const id = useId()
 
     return (
-        <ReactSelect<Option>
+        <ReactSelect<SelectOption>
             value={value}
             options={options}
             onChange={onChange}
             placeholder={label}
             aria-label={label}
-            className=  {className}
+            className={className}
             instanceId={id}
             theme={theme => ({
                 ...theme,
@@ -43,6 +42,7 @@ export default function Select({
                     ...customSelectThemeColours,
                 },
             })}
+            isClearable={isClearable}
         />
     )
 }

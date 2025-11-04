@@ -6,7 +6,13 @@ import BarChart from './BarChart'
 import { DeckGLRefContext } from '../../helpers/deck-gl'
 import type { DeckGlRef } from '../../helpers/deck-gl'
 
-export default function GrantsByCountryWhereResearchWasConductedCard() {
+const GrantsByCountryWhereResearchWasConductedCard = ({ 
+    showColourScaleOnly = true,
+    highlightJointFundedOnClick = false
+}: {
+    showColourScaleOnly?: boolean 
+    highlightJointFundedOnClick?: boolean
+}) => {
     const deckGlRef = useRef<DeckGlRef>(null)
 
     const tabs = [
@@ -15,7 +21,10 @@ export default function GrantsByCountryWhereResearchWasConductedCard() {
                 icon: GlobeIcon,
                 label: 'Map',
             },
-            content: <Map />,
+            content: <Map 
+                showColourScaleOnly={showColourScaleOnly} 
+                highlightJointFundedOnClick={highlightJointFundedOnClick}
+            />,
         },
         {
             tab: {
@@ -38,3 +47,5 @@ export default function GrantsByCountryWhereResearchWasConductedCard() {
         </DeckGLRefContext.Provider>
     )
 }
+
+export default GrantsByCountryWhereResearchWasConductedCard

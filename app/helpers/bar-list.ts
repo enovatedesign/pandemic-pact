@@ -1,8 +1,9 @@
 import { createContext } from 'react'
-import { Colours, coloursByField } from './colours'
+import { Colours, coloursByField, hundredDaysMissionResearchAreaBrightColours } from './colours'
 import { sumNumericGrantAmounts } from './reducers'
 import selectOptions from '../../data/dist/select-options.json'
-import { fromPairs, groupBy, indexOf, orderBy } from 'lodash'
+import { fromPairs, groupBy, indexOf, orderBy, sumBy } from 'lodash'
+import { SelectOption } from '@/scripts/types/generate'
 
 
 export interface BarListDatum {
@@ -48,18 +49,18 @@ export function prepareBarListDataForCategory(
 ) {
     const labelPrep = clinicalTrialLabelPrep ?? false
     
-    const grantsWithKnownAmounts = grants
-        .filter((grant: any) => grant[field].includes(category.value))
-        .filter((grant: any) => typeof grant.GrantAmountConverted === 'number')
+    const relatedGrants = grants
+        .filter(grant => grant[field].includes(category.value))
+        .map(grant => ({
+            ...grant,
+            GrantAmountConverted: Number(grant['GrantAmountConverted']),
+        }))
+
+    const grantsWithKnownAmounts = relatedGrants.filter(grant => grant['GrantAmountConverted'] > 0)
     
-    const grantsWithUnspecifiedAmounts = grants
-        .filter((grant: any) => grant[field].includes(category.value))
-        .filter((grant: any) => typeof grant.GrantAmountConverted !== 'number')
+    const grantsWithUnspecifiedAmounts = relatedGrants.filter(grant => grant['GrantAmountConverted'] <= 0)
 
-
-    const moneyCommitted = grantsWithKnownAmounts.reduce(
-        ...sumNumericGrantAmounts
-    )
+    const moneyCommitted = sumBy(relatedGrants, 'GrantAmountConverted')
     
     return {
         'Category Value': category.value,
@@ -292,4 +293,68 @@ export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLa
         label: subCategoryLabel,
         data: orderedSubCategoryChartData
     }
+}
+
+export const prepareBarChartData = (
+    grants: any[], 
+    field: string, 
+    tooltipfield ?:  string, 
+    additionalFilterDetails?: { field: string, value: string} | null
+) => {
+    const options: SelectOption[] = selectOptions[field as keyof typeof selectOptions]
+    
+    return options.map(({ label, value }) => {
+        let relatedGrants = grants
+            .filter(grant => grant[field].includes(value))
+            .map(grant => ({
+                ...grant,
+                GrantAmountConverted: Number(grant['GrantAmountConverted']),
+            }))
+
+        if (additionalFilterDetails) {
+            relatedGrants = relatedGrants.filter(grant => {
+                const fieldValue = grant[additionalFilterDetails.field]
+                
+                return Array.isArray(fieldValue) && fieldValue.includes(additionalFilterDetails.value)
+            })
+        }
+
+        const grantsWithKnownAmounts = relatedGrants.filter(grant => grant['GrantAmountConverted'] > 0)
+        const grantsWithUnspecifiedAmounts = relatedGrants.filter(grant => grant['GrantAmountConverted'] <= 0)
+        const moneyCommitted = sumBy(relatedGrants, 'GrantAmountConverted')
+
+        let toolTipData: Record<string, any> = {}
+        
+        if (tooltipfield) {
+            const toolTipOptions = selectOptions[tooltipfield as keyof typeof selectOptions]
+            
+            toolTipOptions.forEach(({ label, value }) => {
+                const toolTipGrants = relatedGrants
+                    .filter(grant => 
+                        grant[tooltipfield].includes(value)
+                    ).map(grant => ({
+                        ...grant,
+                        GrantAmountConverted: Number(grant['GrantAmountConverted']),
+                    }))
+                
+                toolTipData[label] = {
+                    'Colour': '#A6A8AB',
+                    'Total Grants': toolTipGrants.length,
+                    'Known Financial Commitments (USD)': sumBy(toolTipGrants, 'GrantAmountConverted'),
+                }
+            })
+        }
+        
+        return {
+            'Category Label': label,
+            'Category Value': value,
+            'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
+            'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
+            'Total Grants': relatedGrants.length,
+            'Known Financial Commitments (USD)': moneyCommitted,
+            ...(tooltipfield ? {
+                "Tooltip Grants": toolTipData
+            } : {})
+        }
+    }).sort((a: any, b: any) => b['Total Grants'] - a['Total Grants'])
 }

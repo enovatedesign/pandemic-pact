@@ -191,18 +191,14 @@ export default function SearchInput({
                     </div>
 
                     <div className="rounded-lg col-span-2 bg-white p-3">
-                        <div
-                            className={showAdvancedSearch ? 'block' : 'hidden'}
-                        >
+                        <div className={showAdvancedSearch ? 'block' : 'hidden'}>
                             <AdvancedSearchFilters
                                 setSearchFilters={setShowAdvancedSearchFilters}
                                 setJointFundingFilter={setJointFundingFilter}
                             />
                         </div>
 
-                        <div
-                            className={showAdvancedSearch ? 'hidden' : 'block'}
-                        >
+                        <div className={showAdvancedSearch ? 'hidden' : 'block'} >
                             <StandardSearchFilters
                                 selectedFilters={
                                     searchParameters.standardFilters

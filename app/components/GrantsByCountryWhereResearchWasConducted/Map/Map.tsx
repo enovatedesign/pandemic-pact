@@ -7,15 +7,22 @@ import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
 import type { MapControlState } from './types'
 import NoDataText from '../../NoData/NoDataText'
 
-export default function Map() {
-    const { grants: dataset } = useContext(GlobalFilterContext)
+export default function Map({
+    showColourScaleOnly = false, 
+    highlightJointFundedOnClick = false,
+    showJointFundedByDefault = false,
+    showCapacityStrengthening = false
+}: { 
+    showColourScaleOnly?: boolean 
+    highlightJointFundedOnClick?: boolean
+    showJointFundedByDefault?: boolean
+    showCapacityStrengthening?: boolean
+}) {
+    const { grants } = useContext(GlobalFilterContext)
+    
+    const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(null)
 
-    const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(
-        null,
-    )
-
-    const [highlightJointFundedCountries, setHighlightJointFundedCountries] =
-        useState<boolean>(false)
+    const [highlightJointFundedCountries, setHighlightJointFundedCountries] = useState<boolean>(false)
 
     const [mapControlState, setMapControlState] = useState<MapControlState>({
         displayKnownFinancialCommitments: false,
@@ -25,6 +32,8 @@ export default function Map() {
 
     const onClick = (featureId: string | null) => {
         setSelectedFeatureId(featureId)
+        
+        highlightJointFundedOnClick && setHighlightJointFundedCountries(true)
     }
 
     const grantField =
@@ -34,18 +43,20 @@ export default function Map() {
     const { geojson, colourScale, selectedFeatureProperties } = useMemo(
         () =>
             prepareGeoJsonAndColourScale(
-                dataset,
+                grants,
                 mapControlState,
                 grantField,
                 selectedFeatureId,
                 highlightJointFundedCountries,
+                showCapacityStrengthening
             ),
         [
-            dataset,
+            grants,
             mapControlState,
             grantField,
             selectedFeatureId,
             highlightJointFundedCountries,
+            showCapacityStrengthening
         ],
     )
     
@@ -68,11 +79,11 @@ export default function Map() {
                     <InteractiveMap geojson={geojson} onClick={onClick} />
                 </div>
             
-
                 {selectedFeatureProperties && (
                     <StatusBar
                         selectedFeatureProperties={selectedFeatureProperties}
                         setSelectedFeatureId={setSelectedFeatureId}
+                        highlightJointFundedOnClick={highlightJointFundedOnClick}
                         highlightJointFundedCountries={
                             highlightJointFundedCountries
                         }
@@ -80,6 +91,8 @@ export default function Map() {
                             setHighlightJointFundedCountries
                         }
                         grantField={grantField}
+                        showJointFundedByDefault={showJointFundedByDefault}
+                        showCapacityStrengthening={showCapacityStrengthening}
                     />
                 )}
 
@@ -90,6 +103,7 @@ export default function Map() {
                         setHighlightJointFundedCountries
                     }
                     colourScale={colourScale}
+                    showColourScaleOnly={showColourScaleOnly}
                 />
             </div>
 

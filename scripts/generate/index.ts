@@ -9,6 +9,9 @@ import prepareVisualisePageGrantsFile from './prepare-visualise-page-grants-file
 import prepareCsvExportFile from './prepare-csv-export-file'
 import prepareMap from './prepare-map'
 import prepareSearch from './prepare-search'
+import prepare100DaysMission from './prepare-100-days-mission'
+import prepare100DaysMissionSelectOptions from './prepare-100-days-mission-select-options'
+import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-options'
 
 main()
 
@@ -32,6 +35,12 @@ async function main() {
     prepareCsvExportFile()
 
     prepareMap()
+    
+    await prepare100DaysMission()
+    
+    await prepare100DaysMissionSelectOptions()
+    
+    await preparePolicyRoadmapSelectOptions()
 
     await prepareSearch()
 }
