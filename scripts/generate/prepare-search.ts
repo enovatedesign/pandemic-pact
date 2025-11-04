@@ -8,12 +8,10 @@ import {
 } from '../../app/api/helpers/search'
 import { execSync } from 'child_process'
 
-export default async function () {
+export default async function prepareSearch() {
 
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
-        warn(
-            'Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present',
-        )
+        warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
         return
     }
 
@@ -29,9 +27,7 @@ export default async function () {
     const indexName = getIndexName()
 
     // Check if the index already exists
-    const { body: updatingExistingIndex } = await client.indices.exists({
-        index: indexName,
-    })
+    const { body: updatingExistingIndex } = await client.indices.exists({ index: indexName })
 
     const selectOptions = fs.readJsonSync('./data/dist/select-options.json')
 

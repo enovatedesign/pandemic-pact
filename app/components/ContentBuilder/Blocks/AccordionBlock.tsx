@@ -1,10 +1,14 @@
+"use client"
+
+import { useState } from "react"
+import { useInView, animated } from '@react-spring/web'
+import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
+import AnimateHeight from 'react-animate-height'
+
+import { defaultProseClasses } from '@/app/helpers/prose-classes'
+
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
-import { useState } from "react"
-import AnimateHeight from 'react-animate-height';
-import { useInView, animated } from '@react-spring/web';
-import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
-import { defaultProseClasses } from '@/app/helpers/prose-classes';
 
 type Props = {
     block: {
@@ -43,7 +47,7 @@ const AccordionBlock = ( {block}: Props ) => {
         {
             once: true,
         }
-    );
+    )
 
     return (
         <BlockWrapper>

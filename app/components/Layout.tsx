@@ -25,10 +25,11 @@ type Props = {
     mastheadContent?: ReactNode
     children: ReactNode
     title?: string | ReactNode
-    summary?: string
+    summary?: string | ReactNode
     showSummary?: boolean
     outbreak?: boolean
     announcement?: AnnouncementProps
+    mastheadStyle?: string
 }
 
 const Layout = ({
@@ -40,6 +41,7 @@ const Layout = ({
     children,
     outbreak = false,
     announcement,
+    mastheadStyle = 'visualise'
 }: Props) => {
     const [animateImmediately, setAnimateImmediately] = useState(true);
 
@@ -164,13 +166,13 @@ const Layout = ({
                         </animated.aside>
                     )}
 
-                <div className="w-full relative">
+                    <div className="w-full relative">
 
-                    {announcement && (
-                        <Announcement announcement={announcement}/>
-                    )}
-                    
-                    <Header
+                        {announcement && (
+                            <Announcement announcement={announcement}/>
+                        )}
+                        
+                        <Header
                             className="absolute w-full left-0 z-50"
                             showMobileNav={showMobileNav}
                         />
@@ -180,9 +182,7 @@ const Layout = ({
                                 <InteractiveBackground
                                     className={`relative masthead-background ${mastheadStyles.background}`}
                                 >
-                                    <div
-                                        className={`masthead-background ${!outbreak ? mastheadStyles.visualise : mastheadStyles.outbreak}`}
-                                    >
+                                    <div className={`masthead-background ${outbreak ? mastheadStyles.outbreak : mastheadStyles[mastheadStyle]}`}>
                                         <div className="h-full flex items-end pb-6 lg:pb-12">
                                             {title && (
                                                 <div className="container mt-44 lg:mt-52">
@@ -193,16 +193,15 @@ const Layout = ({
                                                                 aria-hidden="true"
                                                             />
                                                         )}
-                                                        {isValidElement(title) ? (
-                                                            title
-                                                        ) : (
+                                                        
+                                                        {isValidElement(title) ? title : (
                                                             <PageTitle>
                                                                 {title}
                                                             </PageTitle>
                                                         )}
                                                     </div>
 
-                                                    {summary && (
+                                                    {isValidElement(summary) ? summary : (
                                                         <p className="mt-2 text-white opacity-50 lg:text-xl">
                                                             {summary}
                                                         </p>

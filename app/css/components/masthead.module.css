@@ -13,6 +13,11 @@
     background: radial-gradient(circle at 50% 200%, rgb(255, 25, 0) -70%, rgb(103, 16, 0) 80%);
 }
 
+.policy-roadmap {
+    background: theme(colors.brand.grey.900);
+    background: radial-gradient(circle at theme(colors.brand.grey.DEFAULT) -70%, rgb(0, 0, 62) 60%);
+}
+
 .button {
     @apply relative flex justify-center items-center space-x-3 px-6 py-2 bg-[#051C51] rounded-full shadow-lg uppercase text-center text-white font-medium tracking-wider sm:px-10 sm:py-3 sm:text-xl;
 }

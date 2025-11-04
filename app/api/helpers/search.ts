@@ -199,12 +199,13 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
         boolClause[outerBoolOperator] = filters.filters.map(
             ({ field, values, logicalAnd }) => {
                 const innerBoolOperator = logicalAnd ? 'must' : 'should'
-
+                const formattedField = field === 'PolicyRoadmaps' ? `${field}.keyword` : field
+                
                 return {
                     bool: {
                         [innerBoolOperator]: values.map(value => ({
                             term: {
-                                [field]: value,
+                                [formattedField]: value,
                             },
                         })) 
                     },

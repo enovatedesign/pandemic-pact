@@ -8,6 +8,8 @@ import NewsArticleTemplate from './template/NewsArticleTemplate';
 import RedirectTemplate from './template/RedirectTemplate';
 import RedirectQuery from './query/RedirectQuery';
 import { AnnouncementProps } from '@/app/helpers/types';
+import HundredDaysMissionTemplate from './template/PolicyRoadMapTemplate';
+import HundredDaysMissionQuery from './query/PolicyRoadmapQuery';
 
 interface EntryTemplateAndQuery {
     templates: {
@@ -27,6 +29,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         pastOutbreak: OutbreakTemplate,
         newsArticle: NewsArticleTemplate,
         redirect: RedirectTemplate,
+        hundredDaysMission: HundredDaysMissionTemplate
     },
     queries: {
         page: PageQuery,
@@ -36,6 +39,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         pastOutbreak: OutbreakQuery,
         newsArticle: NewsArticleQuery,
         redirect: RedirectQuery,
+        hundredDaysMission: HundredDaysMissionQuery
     }
 }
 

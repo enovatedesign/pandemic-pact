@@ -421,6 +421,14 @@ export const clinicalTrialPhaseDimColours: Colours = {
     'Unspecified phase': brandColours.teal['800'],
 }
 
+
+export const researchAreaByClinicalTrialPhaseColours = {
+    'Clinical characterisation and management': brandColours.green['400'],
+    'Therapeutics': brandColours.orange['400'],
+    'Diagnostics': brandColours.grey['300'],
+    'Vaccines': brandColours.red['400'],
+}
+
 export const categoryColours = {
     'Therapeutics research, development and implementation': brandColours.red['500'],
     'Vaccines research, development and implementation': brandColours.yellow['600'],
@@ -481,6 +489,108 @@ export const priorityStatementsWhoImmediateDimColours: Colours = {
     '10': brandColours.blue['300'],
 }
 
+export const hundredDaysMissionResearchAreaDimColours: Colours = {
+    '1': brandColours.blue['200'],
+    '2': brandColours.teal['200'],
+    '3': brandColours.green['200'],
+    '4': brandColours.orange['200'],
+}
+
+export const hundredDaysMissionResearchAreaBrightColours: Colours = {
+    '1': brandColours.blue['400'],
+    '2': brandColours.teal['400'],
+    '3': brandColours.green['400'],
+    '4': brandColours.orange['400'],
+}
+
+export const hundredDayMissionStudyPopulationColours: Record<string, Colours> = {
+    "Age Groups": {
+        "Unspecified": brandColours.blue['400'],
+        "Adults (18 and older)": brandColours.teal['400'],
+        "Children (1 year to 12 years)": brandColours.green['400'],
+        "Older adults (65 and older)": brandColours.orange['400'],
+        "Not Applicable": brandColours.grey['400'],
+        "Newborns (birth to 1 month)": brandColours.red['400'],
+        "Infants (1 month to 1 year)": brandColours.yellow['400'],
+        "Adolescent (13 years to 17 years)": brandColours.blue['600']
+    },
+    "Vulnerable Populations": {
+        "Unspecified": brandColours.blue['400'],
+        "Other": brandColours.teal['400'],
+        "Pregnant women": brandColours.green['400'],
+        "Individuals with multimorbidity": brandColours.orange['400'],
+        "Not applicable": brandColours.grey['400'],
+        "Minority communities unspecified": brandColours.red['400'],
+        "Women": brandColours.yellow['400'],
+        "Drug users": brandColours.blue['600'],
+        "Vulnerable populations unspecified": brandColours.teal['600'],
+        "Sex workers": brandColours.green['600'],
+        "Indigenous People": brandColours.orange['600'],
+        "Disabled persons": brandColours.grey['400'],
+        "Internally Displaced and Migrants": brandColours.red['600'],
+        "Sexual and gender minorities": brandColours.yellow['600'],
+        "Prisoners": brandColours.blue['800'],
+        "Smokers": brandColours.teal['800'],
+    },
+    "Rurality": {
+        "Unspecified": brandColours.blue['400'],
+        "Urban Population/Setting": brandColours.teal['400'],
+        "Not applicable": brandColours.green['400'],
+        "Rural Population/Setting": brandColours.orange['400'],
+        "Suburban Population/Setting": brandColours.grey['400'],
+        "Other": brandColours.red['400'],   
+    },
+    "Occupational Groups": {
+        "Unspecified": brandColours.blue['400'],
+        "Not applicable": brandColours.teal['400'],
+        "Health Personnel": brandColours.green['400'],
+        "Hospital personnel": brandColours.orange['400'],
+        "Physicians": brandColours.grey['400'],
+        "Nurses and Nursing Staff": brandColours.red['400'],   
+        "Other": brandColours.yellow['400'],
+        "Caregivers": brandColours.blue['600'],
+        "Emergency Responders": brandColours.teal['600'],
+        "Social Workers": brandColours.green['600'],
+        "Dentists and dental staff": brandColours.orange['600'],
+        "Farmers": brandColours.grey['400'],
+        "Military Personnel": brandColours.red['600'],
+        "Volunteers": brandColours.yellow['600'],
+        "Veterinarians": brandColours.blue['800'],
+    },
+    "Ethnicity": {
+        "Unspecified": brandColours.blue['400'],
+        "Not applicable": brandColours.teal['400'],
+        "Black": brandColours.green['400'],
+        "Other": brandColours.orange['400'],
+        "Asian": brandColours.grey['400'],
+        "White": brandColours.red['400'],   
+        "Mixed": brandColours.yellow['400'],
+    }
+}
+
+export const hundredDaysMissionImplementationColours: Colours = {
+    "Manufacturing and logistics": brandColours.blue['300'],
+    "Health systems research": brandColours.teal['400'],
+    "Costs of products": brandColours.green['400'],
+    "Product acceptance": brandColours.orange['400'],
+    "Equitable allocation": brandColours.grey['400']
+}
+
+export const hundredDaysMissionClinicalTrialColours: Colours = {
+    "2": brandColours.blue['400'],
+    "3": brandColours.teal['500'],
+    "4": brandColours.green['500'],
+    "5": brandColours.orange['500'],
+    "-99": brandColours.grey['400'],
+}
+export const hundredDaysMissionClinicalTrialDimColours: Colours = {
+    "2": brandColours.blue['200'],
+    "3": brandColours.teal['300'],
+    "4": brandColours.green['300'],
+    "5": brandColours.orange['300'],
+    "-99": brandColours.grey['300'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,
@@ -510,4 +620,8 @@ export const coloursByField = {
         bright: marburgResearchPriorityColours,
         dim: marburgResearchPriorityDimColours,
     },
+    hundredDaysMissionClinicalTrial: {
+        bright: hundredDaysMissionClinicalTrialColours,
+        dim: hundredDaysMissionClinicalTrialDimColours
+    }
 }

@@ -11,6 +11,7 @@ interface Props {
     setMapControlState: (state: MapControlState) => void
     setHighlightJointFundedCountries: (value: boolean) => void
     colourScale: ScaleLogarithmic<string, string>
+    showColourScaleOnly?: boolean
 }
 
 export default function MapControls({
@@ -18,6 +19,7 @@ export default function MapControls({
     setMapControlState,
     setHighlightJointFundedCountries,
     colourScale,
+    showColourScaleOnly = false
 }: Props) {
     const { sidebarOpen } = useContext(SidebarStateContext)
 
@@ -40,84 +42,91 @@ export default function MapControls({
         }
     }
 
+    const wrapperClasses = [
+        'flex flex-col w-full rounded-md overflow-hidden',
+        sidebarOpen ? 'flex-col' : 'xl:flex-row'
+    ].filter(Boolean).join(' ')
+
     return (
-        <div
-            className={`flex flex-col w-full rounded-md overflow-hidden ${
-                sidebarOpen ? 'flex-col' : 'xl:flex-row'
-            }`}
-        >
+        <div className={wrapperClasses}>
             <div
-                className={`w-full ${
-                    !sidebarOpen && 'xl:w-4/6'
-                } bg-gradient-to-b from-gray-50 to-gray-100 h-full flex flex-col pt-3`}
+                className={`w-full bg-gradient-to-b from-gray-50 to-gray-100 h-full flex flex-col  ${!sidebarOpen && 'xl:w-4/6'} ${showColourScaleOnly ? 'py-3' : 'pt-3'}`}
             >
-                <div className="flex items-center justify-center">
+                <div className={`w-full flex items-center justify-center ${showColourScaleOnly ? 'flex-col' : ''}`}>
                     <ColourScale
                         colourScale={colourScale}
                         displayKnownFinancialCommitments={
                             displayKnownFinancialCommitments
                         }
                     />
+                    
+                    {showColourScaleOnly && (
+                        <p className='text-brand-grey-600'>
+                            Number of Joint Grants
+                        </p>
+                    )}
                 </div>
             </div>
+            
+            {!showColourScaleOnly && (
+                <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
+                    <DoubleLabelSwitch
+                        checked={displayWhoRegions}
+                        onChange={(value: boolean) =>
+                            setMapControlAndHighlightJointFundedState({
+                                ...mapControlState,
+                                displayWhoRegions: value,
+                            })
+                        }
+                        leftLabel="Countries"
+                        rightLabel="WHO Regions"
+                        screenReaderLabel="Display WHO Regions"
+                    />
 
-            <div className="flex w-full flex-col items-start py-3 xl:py-6 px-4 bg-gradient-to-b from-primary-lightest to-primary-lighter gap-y-2 md:flex-row md:justify-between md:gap-y-0 ignore-in-image-export">
-                <DoubleLabelSwitch
-                    checked={displayWhoRegions}
-                    onChange={(value: boolean) =>
-                        setMapControlAndHighlightJointFundedState({
-                            ...mapControlState,
-                            displayWhoRegions: value,
-                        })
-                    }
-                    leftLabel="Countries"
-                    rightLabel="WHO Regions"
-                    screenReaderLabel="Display WHO Regions"
-                />
+                    <RadioGroup<LocationType>
+                        options={[
+                            {
+                                label: 'Funder',
+                                value: 'Funder',
+                            },
+                            {
+                                label: 'Research Institution',
+                                value: 'ResearchInstitution',
+                            },
+                            {
+                                label: 'Research Location',
+                                value: 'ResearchLocation',
+                            },
+                        ]}
+                        value={locationType}
+                        onChange={(value: LocationType) =>
+                            setMapControlAndHighlightJointFundedState({
+                                ...mapControlState,
+                                locationType: value,
+                            })
+                        }
+                        fieldsetClassName="flex flex-col"
+                    />
 
-                <RadioGroup<LocationType>
-                    options={[
-                        {
-                            label: 'Funder',
-                            value: 'Funder',
-                        },
-                        {
-                            label: 'Research Institution',
-                            value: 'ResearchInstitution',
-                        },
-                        {
-                            label: 'Research Location',
-                            value: 'ResearchLocation',
-                        },
-                    ]}
-                    value={locationType}
-                    onChange={(value: LocationType) =>
-                        setMapControlAndHighlightJointFundedState({
-                            ...mapControlState,
-                            locationType: value,
-                        })
-                    }
-                    fieldsetClassName="flex flex-col"
-                />
-
-                <RadioGroup<boolean>
-                    options={[
-                        { label: 'Number of grants', value: false },
-                        {
-                            label: 'Known financial commitments (USD)',
-                            value: true,
-                        },
-                    ]}
-                    value={displayKnownFinancialCommitments}
-                    onChange={(value: boolean) =>
-                        setMapControlAndHighlightJointFundedState({
-                            ...mapControlState,
-                            displayKnownFinancialCommitments: value,
-                        })
-                    }
-                    fieldsetClassName="flex flex-col"
-                />
-            </div>
+                    <RadioGroup<boolean>
+                        options={[
+                            { label: 'Number of grants', value: false },
+                            {
+                                label: 'Known financial commitments (USD)',
+                                value: true,
+                            },
+                        ]}
+                        value={displayKnownFinancialCommitments}
+                        onChange={(value: boolean) =>
+                            setMapControlAndHighlightJointFundedState({
+                                ...mapControlState,
+                                displayKnownFinancialCommitments: value,
+                            })
+                        }
+                        fieldsetClassName="flex flex-col"
+                    />
+                </div>
+            )}
         </div>
     )
 }
