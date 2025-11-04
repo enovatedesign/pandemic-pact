@@ -6,12 +6,9 @@ import {
     useCallback,
 } from 'react'
 import Select, { MultiValue } from 'react-select'
-import { customSelectThemeColours } from '../helpers/select-colours'
 
-interface Option {
-    label: string
-    value: string
-}
+import { customSelectThemeColours } from '../helpers/select-colours'
+import { SelectOption } from '@/scripts/types/generate'
 
 interface Props {
     field: string
@@ -19,7 +16,7 @@ interface Props {
     setSelectedOptions: (options: string[]) => void
     placeholder?: string
     className?: string
-    preloadedOptions?: Option[]
+    preloadedOptions?: SelectOption[]
     label?: string
     fixedDiseaseOption?: {
         label: string
@@ -38,18 +35,18 @@ export default function MultiSelect({
     label = '',
     loadOnClick = true,
 }: Props) {
-    const [options, setOptions] = useState<Option[]>(preloadedOptions)
+    const [options, setOptions] = useState<SelectOption[]>(preloadedOptions)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const id = useId()
 
-    const value: Option[] = useMemo(() => {
+    const value: SelectOption[] = useMemo(() => {
         return selectedOptions.map(option => {
             return options.find(o => o.value === option)
-        }) as Option[]
+        }) as SelectOption[]
     }, [selectedOptions, options])
 
-    const onChange = (option: MultiValue<Option>) => {
+    const onChange = (option: MultiValue<SelectOption>) => {
         setSelectedOptions(option.map(o => o.value))
     }
 

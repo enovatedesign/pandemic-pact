@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!client) {
         return searchUnavailableResponse()
     }
-
+ 
     const { errorResponse, values } = await validateRequest(request, [
         'q',
         'filters',
@@ -22,13 +22,13 @@ export async function POST(request: NextRequest) {
         'page',
         'limit',
     ])
-
+    
     if (errorResponse) {
         return errorResponse
     }
 
     const { q, filters, jointFunding, page, limit } = values
-
+    
     let highlightClause = {}
 
     if (q) {
@@ -59,10 +59,9 @@ export async function POST(request: NextRequest) {
     const query = getBooleanQuery(q, filters, jointFunding)
 
     const from = page && limit ? limit * (page - 1) : 0
-
-    const results = await client.search({
+    
+    const searchQuery = {
         index,
-
         _source: [
             'GrantTitleEng',
             'Abstract',
@@ -71,19 +70,20 @@ export async function POST(request: NextRequest) {
             'GrantStartYear',
             'FundingOrgName',
             'PublicationCount',
-            'JointFundedGrants'
+            'JointFundedGrants',
+            'PolicyRoadmaps'
         ],
-
         from: from,
         size: limit,
         track_total_hits: true,
-
         body: {
             query,
             ...highlightClause,
         },
-    })
+    }
 
+    const results = await client.search(searchQuery)
+    
     return NextResponse.json({
         query: q,
         page: page,

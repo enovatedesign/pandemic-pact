@@ -3,24 +3,11 @@ import {ChevronDownIcon} from '@heroicons/react/solid'
 import Image from "next/image"
 import AnimateHeight from 'react-animate-height';
 import { DiseaseLabel } from '../helpers/types';
+import { VisualisationCardDataProps, HundredDaysMissionCardDataProps } from '../visualise/components/visualisationCardData';
 
 interface Props {
     disease?: DiseaseLabel
-    cardData: {
-        title?: string,
-        image?: {
-            url?: string,
-            altText?: string,
-            height?: number,
-            width?: number,
-        },
-        id?: string,
-        url?: {
-            "mpox": string
-            "H5N1": string
-            "default": string 
-         } | string 
-    }[]
+    cardData: VisualisationCardDataProps[] | HundredDaysMissionCardDataProps[]
 }
 
 export default function JumpMenu({cardData, disease}: Props) {
@@ -68,7 +55,7 @@ export default function JumpMenu({cardData, disease}: Props) {
                                     const cardSwitch: DiseaseLabel = disease ?? 'default'
                                     const url = card.url[cardSwitch]
                                     
-                                    return (
+                                    return card.showCard[cardSwitch as keyof typeof card.showCard] && (
                                         <li ref={dropdown}
                                             key={index}
                                             className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"

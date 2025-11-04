@@ -5,18 +5,12 @@ import { XIcon } from '@heroicons/react/solid'
 import Button from '../../Button'
 
 interface Props {
-    selectedFeatureProperties: FeatureProperties
+    jointFundedProperties: FeatureProperties[]
 }
 
 export default function JointFeaturesModal({
-    selectedFeatureProperties,
+    jointFundedProperties
 }: Props) {
-    const properties = Array.isArray(
-        selectedFeatureProperties.jointFeatureProperties,
-    )
-        ? selectedFeatureProperties.jointFeatureProperties
-        : []
-
     return (
         <InfoModal 
             customButton={
@@ -39,40 +33,38 @@ export default function JointFeaturesModal({
                     </tr>
                 </thead>
                 <tbody className="bg-primary !pl-4 border-t-2 border-secondary/30">
-                    {properties.map((data, index: number) => {
+                    {jointFundedProperties.map((data, index: number) => {
+                        const {
+                            name,
+                            totalGrants,
+                            totalAmountCommitted,
+                            totalJointGrants,
+                            totalJointAmountCommitted,
+                        } = data
 
-                            const {
-                                name,
-                                totalGrants,
-                                totalAmountCommitted,
-                                totalJointGrants,
-                                totalJointAmountCommitted,
-                            } = data
+                        const trClasses = [
+                            index !== jointFundedProperties.length -1 && 'border-b-2 border-secondary/30 '
+                        ].filter(Boolean).join(' ')
+                        
+                        const tdClasses = [
+                            'text-secondary whitespace-nowrap',
+                        ].filter(Boolean).join(' ')
 
-                            const trClasses = [
-                                index !== properties.length -1 && 'border-b-2 border-secondary/30 '
-                            ].filter(Boolean).join(' ')
-                            
-                            const tdClasses = [
-                                'text-secondary whitespace-nowrap',
-                            ].filter(Boolean).join(' ')
+                        return (
+                            <tr key={index} className={trClasses}>
+                                <td className={`${tdClasses} !pl-4 border-r-2 border-secondary/30`}>
+                                    {name}
+                                </td>
 
-                            return (
-                                <tr key={index} className={trClasses}>
-                                    <td className={`${tdClasses} !pl-4 border-r-2 border-secondary/30`}>
-                                        {name}
-                                    </td>
-
-                                    <td className={`${tdClasses} border-r-2 border-secondary/30`}>
-                                        {totalJointGrants} / {totalGrants}
-                                    </td>
-                                    
-                                    <td className={`${tdClasses}`}>
-                                        {dollarValueFormatter(totalJointAmountCommitted || 0)} / {dollarValueFormatter(totalAmountCommitted)}  (USD)
-                                    </td>
-                                </tr>
-                            )
-                        }
+                                <td className={`${tdClasses} border-r-2 border-secondary/30`}>
+                                    {totalJointGrants} / {totalGrants}
+                                </td>
+                                
+                                <td className={`${tdClasses}`}>
+                                    {dollarValueFormatter(totalJointAmountCommitted || 0)} / {dollarValueFormatter(totalAmountCommitted)}  (USD)
+                                </td>
+                            </tr>
+                        )}
                     )}
                 </tbody>
             </table>

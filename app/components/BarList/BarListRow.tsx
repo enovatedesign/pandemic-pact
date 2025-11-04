@@ -49,7 +49,7 @@ export default function BarListRow({ dataIndex }: Props) {
     const onChartMouseLeave = () => {
         tooltipRef?.current?.close()
     }
-
+    
     return (
         <>
             <div className="col-span-3 md:col-span-1">

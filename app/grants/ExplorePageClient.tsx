@@ -27,9 +27,7 @@ export default function ExplorePageClient({announcement}: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
-    const [searchParameters, setSearchParameters] = useState<SearchParameters>(
-        prepareInitialSearchParameters(searchParams),
-    )
+    const [searchParameters, setSearchParameters] = useState<SearchParameters>(prepareInitialSearchParameters(searchParams))
 
     const updateSearchParameters = (newSearchParameters: SearchParameters) => {
         setSearchParameters(oldSearchParameters => {
@@ -51,7 +49,7 @@ export default function ExplorePageClient({announcement}: Props) {
             }
         })
     }
-
+    
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
@@ -91,7 +89,7 @@ export default function ExplorePageClient({announcement}: Props) {
             filters,
         }
     }, [searchParameters, showAdvancedSearch])
-
+    
     useEffect(() => {
         searchRequest('list', searchRequestBody)
             .then(data => {
@@ -112,7 +110,7 @@ export default function ExplorePageClient({announcement}: Props) {
 
         router.replace(url.href)
     }, [searchParams, pathname, router, searchParameters])
-
+    
     return (
         <Layout
             title="Grant Search"

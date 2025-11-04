@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { every } from 'lodash'
-import { FixedOutbreakSelectOptions, FixedSelectOptions } from './types'
+import { FixedSelectOptions } from './types'
 
 export interface Filter {
     values: string[]
@@ -15,7 +15,6 @@ export interface FilterSchema {
     label: string
     field: string
     excludeGrantsWithMultipleItems?: { label: string }
-    parent?: { filter: string; value: string }
     advanced?: boolean
     loadOnClick?: boolean
     isHidden?: boolean
@@ -125,10 +124,42 @@ export function availableFilters(): FilterSchema[] {
     return filters
 }
 
+export function available100DaysMissionFilters(): FilterSchema[] {
+    const filters = [
+        {
+            label: 'Research Area',
+            field: 'HundredDaysMissionResearchArea',
+            loadOnClick: false
+        },
+        
+        {
+            label: 'Implementation',
+            field: 'HundredDaysMissionImplementation',
+            loadOnClick: false
+        },
+        
+        {
+            label: 'Clinical Trial',
+            field: 'ClinicalTrial',
+        },
+
+
+        {
+            label: 'Funder Country',
+            field: 'FunderCountry',
+        },
+    ]
+
+    return filters
+}
+
 export function emptyFilters(
     fixedSelectOptions?: FixedSelectOptions,
+    is100DaysMission: boolean = false
 ) {
-    const filtersObject = Object.fromEntries(availableFilters().map(({ field, parent }) => {
+    const filters = is100DaysMission ? available100DaysMissionFilters() : availableFilters()
+    
+    const filtersObject = Object.fromEntries(filters.map(({ field }) => {
         let values: string[] = []
 
         if (fixedSelectOptions) {
@@ -146,7 +177,6 @@ export function emptyFilters(
             field,
             {
                 values,
-                parent,
                 excludeGrantsWithMultipleItems: false,
             },
         ]
@@ -159,7 +189,7 @@ export function filterGrants(grants: any, filters: any, fixedSelectOptions?: Fix
     return grants.filter((grant: any) =>
         every(
             filters,
-            ({ values, excludeGrantsWithMultipleItems, parent }, key) => {
+            ({ values, excludeGrantsWithMultipleItems }, key) => {
                 let formattedKey = key                
                 
                 // If fixed select options are set, the pathogen key is defined as '{someSpecificPathogen}Pathogen'
@@ -183,20 +213,6 @@ export function filterGrants(grants: any, filters: any, fixedSelectOptions?: Fix
 
                 if (typeof grant[formattedKey] === 'undefined') {
                     return false
-                }
-
-                // If the filter has a parent filter, check that it's parent is currently selected
-                // before applying it
-                if (typeof parent !== 'undefined') {
-                    const parentFilterValues = filters[parent.filter].values
-
-                    const childFilterShouldBeApplied =
-                        parentFilterValues.length === 1 &&
-                        parentFilterValues[0] === parent.value
-
-                    if (!childFilterShouldBeApplied) {
-                        return true
-                    }
                 }
 
                 // if the grant has a single value in the field, check if it matches any of the filter values

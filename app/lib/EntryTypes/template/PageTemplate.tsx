@@ -9,8 +9,8 @@ interface Props {
     announcement: AnnouncementProps
 }
 
-export default function PageTemplate({data, announcement}: Props) {
-    const {entry} = data
+export default function PageTemplate({ data, announcement }: Props) {
+    const { entry } = data
 
     return (
         <>

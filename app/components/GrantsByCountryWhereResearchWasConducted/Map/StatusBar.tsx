@@ -4,34 +4,37 @@ import Switch from '../../../components/Switch'
 import type { FeatureProperties } from './types'
 import JointFeaturesModal from './JointFeaturesModal'
 import { XIcon } from '@heroicons/react/solid'
+import StandardFeatureProperties from './StandardFeatureProperties'
+import JointFeatureProperties from '@/app/visualise/policy-roadmaps/100-days-mission/visualisations/GeographicalDistribution/JointFeatureProperties'
 
 interface Props {
     selectedFeatureProperties: FeatureProperties
     setSelectedFeatureId: (featureId: string | null) => void
+    highlightJointFundedOnClick?: boolean
     highlightJointFundedCountries: boolean
     setHighlightJointFundedCountries: (value: boolean) => void
     grantField: string
+    showJointFundedByDefault?: boolean
+    showCapacityStrengthening?: boolean
 }
 
 export default function StatusBar({
     selectedFeatureProperties,
     setSelectedFeatureId,
+    highlightJointFundedOnClick = false,
     highlightJointFundedCountries,
     setHighlightJointFundedCountries,
     grantField,
+    showJointFundedByDefault = false,
+    showCapacityStrengthening = false
 }: Props) {
-    const viewButtonQueryFilters = {
-        [grantField]: [selectedFeatureProperties.id],
-    }
+    const viewButtonQueryFilters = { [grantField]: [selectedFeatureProperties.id]}
 
     const allowHighlightingJointFundedCountries = grantField === 'FunderCountry'
 
-    let viewButtonHref =
-        '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
+    let viewButtonHref = '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
 
-    if (highlightJointFundedCountries) {
-        viewButtonHref += '&jointFunding=only-joint-funded-grants'
-    }
+    if (highlightJointFundedCountries) { viewButtonHref += '&jointFunding=only-joint-funded-grants' }
 
     const jointGrantsTotalNumber = selectedFeatureProperties.totalJointGrants
     const grantsTotalNumber = selectedFeatureProperties.totalGrants
@@ -72,6 +75,12 @@ export default function StatusBar({
         typeof selectedFeatureProperties.jointFeatureProperties === 'object' &&
         selectedFeatureProperties.jointFeatureProperties.length > 0
 
+    const jointFundedProperties = Array.isArray(
+        selectedFeatureProperties.jointFeatureProperties,
+    )
+        ? selectedFeatureProperties.jointFeatureProperties
+        : []
+
     const wrapperClasses = [
         'w-full py-2 rounded-lg text-sm shadow-lg',
         'border border-brand-grey-200',
@@ -96,42 +105,24 @@ export default function StatusBar({
                         <XIcon className="text-brand-grey-700 size-4 hover:scale-[1.2] transition duration-150" aria-hidden="true"/>
                     </button>
                 </div>
-
-                <div className="p-4 space-y-2">
-                    <div className="flex items-center justify-between space-x-8">
-                        <div className="flex items-center space-x-2">
-                            <p className="text-left text-brand-grey-700">Grants</p>
-                        </div>
-                        
-                        <div className='h-[1px] w-full border-b border-dashed border-brand-grey-300'></div>
-
-                        <div className="flex justify-between items-center gap-x-2">
-                            <p className="font-medium tabular-nums text-right whitespace-nowrap text-brand-grey-700">
-                                {totalGrants}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-between space-x-8">
-                        <div className="flex items-center space-x-2">
-                            <p className="text-left text-brand-grey-700 whitespace-nowrap">
-                                Known Financial Commitments (USD)
-                            </p>
-                        </div>
-
-                        <div className='hidden sm:block h-[1px] w-full border-b border-dashed border-brand-grey-300'></div>
-
-                        <div className="flex justify-between items-center gap-x-2">
-                            <p className="font-medium tabular-nums text-right sm:whitespace-nowrap text-brand-grey-700">
-                                {totalAmountCommitted}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                
+                {showJointFundedByDefault ? (
+                    <JointFeatureProperties 
+                        jointFundedProperties={jointFundedProperties}
+                        totalGrants={totalGrants} 
+                        totalAmountCommitted={totalAmountCommitted}
+                        showCapacityStrengthening={showCapacityStrengthening}
+                    />
+                ) : (
+                    <StandardFeatureProperties 
+                        totalGrants={totalGrants} 
+                        totalAmountCommitted={totalAmountCommitted}
+                    />
+                )}
 
                 <div className="px-4 flex max-sm:flex-col max-sm:space-y-2 max-sm:items-center sm:flex-row sm:justify-between">
 
-                    {allowHighlightingJointFundedCountries && (
+                    {(allowHighlightingJointFundedCountries && !highlightJointFundedOnClick) && (
                         <div className="flex items-center gap-x-2">
                             <Switch
                                 checked={highlightJointFundedCountries}
@@ -140,16 +131,13 @@ export default function StatusBar({
                                 theme="light"
                                 textClassName="text-brand-grey-700"
                             />
-
                         </div>
                     )}
 
                     <div className="flex flex-col gap-2 md:ml-auto md:flex-row">
-                        {shouldShowJointFeaturesModal && (
+                        {(shouldShowJointFeaturesModal && !showJointFundedByDefault) && (
                             <JointFeaturesModal
-                                selectedFeatureProperties={
-                                    selectedFeatureProperties
-                                }
+                                jointFundedProperties={jointFundedProperties}
                             />
                         )}
 

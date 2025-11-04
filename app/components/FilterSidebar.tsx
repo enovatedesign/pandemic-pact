@@ -1,9 +1,10 @@
-import { useContext, useState } from 'react'
+import { ReactNode, useContext, useState } from 'react'
 import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import MultiSelect from './MultiSelect'
 import Switch from './Switch'
 import Button from './Button'
 import {
+    available100DaysMissionFilters,
     availableFilters,
     emptyFilters,
     Filters,
@@ -12,8 +13,7 @@ import {
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
-import ConditionalWrapper from './ConditionalWrapper'
-import CMSFilterBlock from './CMS/CMSFilterBlock'
+import CMSFilterBlock from './CMS/HierarchicalFiltersBlock'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -23,6 +23,10 @@ interface FilterSidebarProps {
     loadingDataset?: boolean
     sharedFiltersId?: string | null
     outbreak?: boolean
+    showHierarchicalFilters?: boolean
+    is100DaysMission?: boolean
+    customFilters?: ReactNode
+    bottomContent?: ReactNode
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -43,33 +47,17 @@ export default function FilterSidebar({
     globallyFilteredDataset,
     loadingDataset,
     sharedFiltersId,
-    outbreak = false
+    outbreak = false,
+    showHierarchicalFilters = true,
+    is100DaysMission = false,
+    customFilters,
+    bottomContent
 }: FilterSidebarProps) {
     const { outbreakSelectOptions } = useContext(FixedSelectOptionContext)
     
-    const [showAdvancedFilters, setShowAdvancedFilters] =
-        useState<boolean>(false)
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
 
-    const filters = availableFilters().filter(filter => {
-        // Honour conditional filter logic
-        if (filter.parent) {
-            const parentFilter = selectedFilters[filter.parent.filter]
-
-            // If the parent filter doesn't have exactly one value selected,
-            // we don't want to show the child filter
-            if (parentFilter.values.length !== 1) {
-                return false
-            }
-
-            // If the parent has exactly one value but it isn't the value that
-            // the child filter is dependent on, we also don't show the child
-            if (parentFilter.values[0] !== filter.parent.value) {
-                return false
-            }
-        }
-
-        return filter
-    })
+    const filters = is100DaysMission ? available100DaysMissionFilters() : availableFilters()
     
     const standardFilters = filters.filter(f => !f.advanced)
 
@@ -141,16 +129,18 @@ export default function FilterSidebar({
                     )}
                 </p>
             </div>
-
-            <CMSFilterBlock 
-                selectedFilters={selectedFilters}
-                setExcludeGrantsWithMultipleItemsInField={
-                    setExcludeGrantsWithMultipleItemsInField
-                }
-                setSelectedOptions={setSelectedOptions}
-                fixedSelectOptions={outbreakSelectOptions}
-                outbreak={outbreak}
-            />
+            
+            {showHierarchicalFilters && (
+                <CMSFilterBlock 
+                    selectedFilters={selectedFilters}
+                    setExcludeGrantsWithMultipleItemsInField={
+                        setExcludeGrantsWithMultipleItemsInField
+                    }
+                    setSelectedOptions={setSelectedOptions}
+                    fixedSelectOptions={outbreakSelectOptions}
+                    outbreak={outbreak}
+                />
+            )}
 
             <FilterBlock
                 filters={standardFilters}
@@ -161,6 +151,8 @@ export default function FilterSidebar({
                 setSelectedOptions={setSelectedOptions}
                 sharedFiltersId={sharedFiltersId}
             />
+
+            {customFilters && customFilters}
 
             <AnimateHeight
                 duration={300}
@@ -180,23 +172,25 @@ export default function FilterSidebar({
                 </div>
             </AnimateHeight>
 
-            <div className="pb-20 lg:pb-0 flex items-center justify-between w-full">
-                <Button
-                    size="xsmall"
-                    customClasses="mt-3 flex items-center gap-1"
-                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                >
-                    {showAdvancedFilters ? (
-                        <>
-                            Hide Advanced <ChevronUpIcon className="w-5 h-5" />
-                        </>
-                    ) : (
-                        <>
-                            Show Advanced{' '}
-                            <ChevronDownIcon className="w-5 h-5" />
-                        </>
-                    )}
-                </Button>
+            <div className={`flex items-center justify-between w-full ${!bottomContent && 'pb-20 lg:pb-0'}`}>
+                {advancedFilters.length > 0 && (
+                    <Button
+                        size="xsmall"
+                        customClasses="mt-3 flex items-center gap-1"
+                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    >
+                        {showAdvancedFilters ? (
+                            <>
+                                Hide Advanced <ChevronUpIcon className="w-5 h-5" />
+                            </>
+                        ) : (
+                            <>
+                                Show Advanced{' '}
+                                <ChevronDownIcon className="w-5 h-5" />
+                            </>
+                        )}
+                    </Button>
+                )}
 
                 <Button
                     size="xsmall"
@@ -209,7 +203,14 @@ export default function FilterSidebar({
                 >
                     Clear All <XIcon className="w-5 h-5" />
                 </Button>
+                
             </div>
+
+            {bottomContent && (
+                <div className="pb-20 lg:pb-0">
+                    {bottomContent}
+                </div>
+            )}
         </div>
     )
 }
@@ -231,54 +232,38 @@ const FilterBlock = ({
     setExcludeGrantsWithMultipleItemsInField,
     setSelectedOptions,
     sharedFiltersId
-}: filterBlockProps) => {
+}: filterBlockProps) => filters.map(({ field, label, excludeGrantsWithMultipleItems, loadOnClick, isHidden }) => !isHidden &&  (
+    <div className="flex flex-col space-y-2 w-full" key={field}>
+        <p className="text-white">Filter by {label}</p>
 
-    return (
-        <>
-            {filters.map(({ field, label, excludeGrantsWithMultipleItems, parent, loadOnClick, isHidden }) => {
+        <MultiSelect
+            field={field}
+            selectedOptions={selectedFilters[field] ? selectedFilters[field].values : []}
+            setSelectedOptions={options =>
+                setSelectedOptions(field, options)
+            }
+            loadOnClick={sharedFiltersId ? 
+                false : 
+                loadOnClick ?? true
+            }
+            label={label}
+        />
 
-                return !isHidden && (    
-                    <ConditionalWrapper
-                        condition={parent != undefined}
-                        key={field}
-                        wrapper={children => <IndentMultiSelect>{children}</IndentMultiSelect>}
-                    >  
-                        <div className="flex flex-col space-y-2 w-full" key={field}>
-                            <p className="text-white">Filter by {label}</p>
-
-                            <MultiSelect
-                                field={field}
-                                selectedOptions={selectedFilters[field].values}
-                                setSelectedOptions={options =>
-                                    setSelectedOptions(field, options)
-                                }
-                                loadOnClick={sharedFiltersId ? 
-                                    false : 
-                                    loadOnClick ?? true
-                                }
-                                label={label}
-                            />
-
-                            {excludeGrantsWithMultipleItems && (
-                                <Switch
-                                    checked={
-                                        selectedFilters[field]
-                                        .excludeGrantsWithMultipleItems
-                                    }
-                                    onChange={value =>
-                                        setExcludeGrantsWithMultipleItemsInField(
-                                            field,
-                                            value,
-                                        )
-                                    }
-                                    label={excludeGrantsWithMultipleItems.label}
-                                    textClassName="text-white"
-                                />
-                            )}
-                        </div>
-                    </ConditionalWrapper>
-                )}
-            )}
-        </>
-    )
-}
+        {excludeGrantsWithMultipleItems && (
+            <Switch
+                checked={
+                    selectedFilters[field]
+                    .excludeGrantsWithMultipleItems
+                }
+                onChange={value =>
+                    setExcludeGrantsWithMultipleItemsInField(
+                        field,
+                        value,
+                    )
+                }
+                label={excludeGrantsWithMultipleItems.label}
+                textClassName="text-white"
+            />
+        )}
+    </div>
+))

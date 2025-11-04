@@ -5,7 +5,7 @@ import {
 import Select from './Select'
 import MultiSelect from './MultiSelect'
 import selectOptions from '../../data/dist/select-options.json'
-import CMSFilterBlock from './CMS/CMSFilterBlock'
+import CMSFilterBlock from './CMS/HierarchicalFiltersBlock'
 
 interface Props {
     selectedFilters: SelectedStandardSearchFilters
@@ -51,13 +51,14 @@ export default function StandardSearchFilters({
         FunderCountry: 'Funder Countries',
         FunderRegion: 'Funder Regions',
         FundingOrgName: 'Funders',
-        ResearchCat: 'Research Categories'
+        ResearchCat: 'Research Categories',
+        PolicyRoadmaps: 'Policy Roadmaps'
     }
 
     const jointFundingValue = jointFundingFilterOptions.find(
         option => option.value === jointFundingFilter,
     ) as { value: string; label: string }
-
+    
     return (
         <section className="bg-white p-3">
             <h3 className="sr-only text-secondary uppercase tracking-widest text-xl font-bold">
@@ -104,9 +105,7 @@ export default function StandardSearchFilters({
                         options={jointFundingFilterOptions}
                         onChange={option => {
                             if (option === null) {
-                                throw new Error(
-                                    'joint funding select onChange received null for option when it should always have a value set',
-                                )
+                                throw new Error('joint funding select onChange received null for option when it should always have a value set')
                             }
 
                             setJointFundingFilter(option.value)

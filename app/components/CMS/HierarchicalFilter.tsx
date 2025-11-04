@@ -11,7 +11,7 @@ import Switch from '../Switch'
 import ConditionalWrapper from '../ConditionalWrapper'
 import { IndentMultiSelect } from '../FilterSidebar'
 
-interface CMSFilterSelectProps {
+interface HierarchicalFilterProps {
     filterObject: Record<string, any[]>
     handleFilterSelection: (field: string, value: string) => void
     selectedFilters: Filters
@@ -26,7 +26,7 @@ interface CMSFilterSelectProps {
     selectRefs: any
 }
 
-const CMSFilterSelect = ({
+const HierarchicalFilter = ({
     filterObject, 
     handleFilterSelection,
     selectedFilters,
@@ -35,7 +35,7 @@ const CMSFilterSelect = ({
     fixedSelectOptions,
     outbreak = false,
     selectRefs
-}: CMSFilterSelectProps) => {
+}: HierarchicalFilterProps) => {
     const { outbreakLevel } = useContext(FixedSelectOptionContext)
 
     const fieldMapping = {
@@ -145,4 +145,4 @@ const CMSFilterSelect = ({
     )
 }
 
-export default CMSFilterSelect
+export default HierarchicalFilter
