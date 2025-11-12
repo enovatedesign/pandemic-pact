@@ -10,7 +10,7 @@ import {
   Cell, 
   Tooltip
 } from "recharts"
-
+import selectOptions from '../../../../../../data/dist/select-options.json'
 import { GlobalFilterContext } from "@/app/helpers/filters"
 import { prepareBarChartData } from "@/app/helpers/bar-list"
 import { rechartBaseTooltipProps } from "@/app/helpers/tooltip"
@@ -22,12 +22,28 @@ import ImplementationAndAccessTooltipContent from "./Tooptip"
 const ImplementationAndAccess = () => {
     const { grants } = useContext(GlobalFilterContext)
 
-    const chartData = useMemo(() => prepareBarChartData(
-        grants, 
-        'HundredDaysMissionImplementation', 
-        'HundredDaysMissionResearchArea'
-    ), [grants])
-
+    const chartData = useMemo(() => {
+        const barChartData = prepareBarChartData(
+            grants, 
+            'HundredDaysMissionImplementation', 
+            'HundredDaysMissionResearchArea'
+        )
+        const equitableAllocationDataIsZero = barChartData.filter(data => data["Category Value"] === "3").length === 0
+        
+        if (equitableAllocationDataIsZero) {
+            barChartData.push({
+                "Category Label": "Equitable allocation",
+                "Category Value": "3",
+                'Grants With Known Financial Commitments': 0,
+                'Grants With Unspecified Financial Commitments': 0,
+                'Total Grants': 0,
+                'Known Financial Commitments (USD)': 0,
+            })
+        }
+        
+        return barChartData
+    }, [grants])
+    
     const tooltipContent = (props: any) => {
         const label = props.payload[0]?.payload['Category Label']
         const tooltipGrantsData = props.payload[0]?.payload['Tooltip Grants']
