@@ -231,7 +231,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "H5N1": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
                 "Marburg virus disease": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "Ebola": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
-                "default": 'Coming soon: Alignment of research grant data to research agendas and policy roadmaps eg. 100 Days Mission.'
+                "default": 'Alignment of research grant data to research agendas and policy roadmaps e.g 100 Days Mission, WHO Pandemic & Epidemic Intelligence priorities'
             },
             url: {
                 "mpox": '#grants-by-who-mpox-roadmap',
