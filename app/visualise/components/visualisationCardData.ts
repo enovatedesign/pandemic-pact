@@ -238,7 +238,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "H5N1": '#policy-roadmaps',
                 "Marburg virus disease": '#marburg-research-policy-and-roadmaps',
                 "Ebola": '#ebola-corc-priorities',
-                "default": '#policy-roadmaps',
+                "default": '/visualise/policy-roadmaps',
 
             },
             image: {
