@@ -501,6 +501,23 @@ export const contentBuilderQuery = `
               }
             }
           }
+          ... on policyRoadmaps_pandemicIntelligence_Entry {
+            id
+            typeHandle
+            title
+            richTextSummary
+            comingSoon
+            uri
+            postDate
+            thumbnailImage  @transform(transform: "c480x300") {
+              ... on contentAssets_Asset {
+                altText
+                height
+                url
+                width
+              }
+            }
+          }
         }
       }
   }
