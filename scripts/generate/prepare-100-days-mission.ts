@@ -22,7 +22,8 @@ export default async function prepare100DaysMission() {
     
     // Filter the grants down to only those where the hundred_dm_flag variable is set to '1'
     const oneHundredDaysMissionGrants = rawGrants.filter(grant => 
-        parseInt(grant['hundred_dm_flag']) === 1
+        parseInt(grant['hundred_dm_flag']) === 1 ||
+        grant['pactid'] === 'P43011' // Allow missed grant to pass through, updated data to follow
     ).map(grant => {
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(field => [
