@@ -22,27 +22,11 @@ import ImplementationAndAccessTooltipContent from "./Tooptip"
 const ImplementationAndAccess = () => {
     const { grants } = useContext(GlobalFilterContext)
 
-    const chartData = useMemo(() => {
-        const barChartData = prepareBarChartData(
-            grants, 
-            'HundredDaysMissionImplementation', 
-            'HundredDaysMissionResearchArea'
-        )
-        const equitableAllocationDataIsZero = barChartData.filter(data => data["Category Value"] === "3").length === 0
-        
-        if (equitableAllocationDataIsZero) {
-            barChartData.push({
-                "Category Label": "Equitable allocation",
-                "Category Value": "3",
-                'Grants With Known Financial Commitments': 0,
-                'Grants With Unspecified Financial Commitments': 0,
-                'Total Grants': 0,
-                'Known Financial Commitments (USD)': 0,
-            })
-        }
-        
-        return barChartData
-    }, [grants])
+    const chartData = useMemo(() => prepareBarChartData(
+        grants, 
+        'HundredDaysMissionImplementation', 
+        'HundredDaysMissionResearchArea'
+    ), [grants])
     
     const tooltipContent = (props: any) => {
         const label = props.payload[0]?.payload['Category Label']
