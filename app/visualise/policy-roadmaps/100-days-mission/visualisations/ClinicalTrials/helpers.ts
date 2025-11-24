@@ -1,6 +1,7 @@
 import { BarListDatum, prepareBarChartData } from '@/app/helpers/bar-list'
 import selectOptions from '../../../../../../data/dist/select-options.json' 
 import { sumBy } from 'lodash'
+import { a } from '@react-spring/web'
 
 interface Option {
     label: string
@@ -212,7 +213,10 @@ const prepareHundredDaysClinicalTrialSubCategoryData = (grants: any[]) => {
         const clinicalTrialData = formattedClinicalTrialData.filter(
             (clinicalTrial) => !keysToMerge.includes(formatClinicalTrialsLabel(clinicalTrial["Category Label"]))
         )
-
+        
+        clinicalTrialData.sort((a, b) =>
+            Number(a['Category Value']) - Number(b['Category Value'])
+        )
 
         // Add the aggregated "Unspecified" trial as a single object
         clinicalTrialData.push(unspecifiedClinicalTrialsData)
