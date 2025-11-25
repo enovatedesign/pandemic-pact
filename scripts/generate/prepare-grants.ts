@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import zlib from 'zlib'
 
 import { RawGrant } from '../types/generate'
 import readLargeJson from '../helpers/read-large-json'
@@ -158,11 +159,18 @@ export default async function prepareGrants() {
     
     fs.emptyDirSync('./data/dist')
 
-    const pathname = './data/dist/grants.json'
-
-    fs.writeJsonSync(pathname, grants)
+    // const pathname = './data/dist/grants.json'
+    // fs.writeJsonSync(pathname, grants)
     
-    printWrittenFileStats(pathname)
+    const gzippedPath = './data/dist/grants.json.gz'
+
+    // Convert JSON to a string
+    const jsonString = JSON.stringify(grants)
+
+    // Convert string to Buffer, then to Uint8Array
+    const gzipBuffer = zlib.gzipSync(Buffer.from(jsonString) as any)
+    fs.writeFileSync(gzippedPath, new Uint8Array(gzipBuffer))
+    printWrittenFileStats(gzippedPath)
     
     return Promise.resolve(grants)
 }
