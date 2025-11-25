@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import zlib from 'zlib'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info } from '../helpers/log'
 
@@ -10,9 +11,10 @@ export default function prepareIndividualGrantFiles() {
         './data/dist/select-options.json',
     )
 
-    const sourceGrants: ProcessedGrant[] = fs.readJsonSync(
-        './data/dist/grants.json',
-    )
+    const zippedGrantsPath = './data/dist/grants.json.gz'
+    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
+    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
+    const sourceGrants: ProcessedGrant[] = JSON.parse(jsonBuffer.toString())
 
     const outputPath = `./public/grants/`
     fs.emptyDirSync(outputPath)

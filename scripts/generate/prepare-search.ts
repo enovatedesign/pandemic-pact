@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import zlib from 'zlib'
 import { title, info, error, warn } from '../helpers/log'
 import {
     getIndexName,
@@ -7,6 +8,7 @@ import {
     fetchAllGrantIDsInIndex,
 } from '../../app/api/helpers/search'
 import { execSync } from 'child_process'
+import { Grant } from '../types/generate'
 
 export default async function prepareSearch() {
 
@@ -77,7 +79,10 @@ export default async function prepareSearch() {
 
     info(`Bulk indexing ${indexName} with upserts...`)
 
-    const allGrants = fs.readJsonSync('./data/dist/grants.json')
+    const zippedGrantsPath = './data/dist/grants.json.gz'
+    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
+    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
+    const allGrants: Grant[] = JSON.parse(jsonBuffer.toString())
 
     const chunkSize = 500
 

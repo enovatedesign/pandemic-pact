@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
+import fs from 'fs-extra'
 import GraphQL from './lib/GraphQl'
-import grants from '../public/data/grants.json'
+import path from 'path'
 
 const siteUrl = 'https://www.pandemicpact.org'
 
@@ -10,11 +11,10 @@ interface craftEntryProps {
     dateUpdated: string
 }
 
-interface Grant {
-    "GrantID": string
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const grantDataPath = path.join(process.cwd(), 'public/data/grant-ids.json')
+    const grantData = await fs.readFile(grantDataPath, 'utf8')
+    const grantIds: string[] = JSON.parse(grantData)
     
     const craftEntries = await GraphQL(
         `{
@@ -57,12 +57,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
     ))
 
-    const grantPageSitemapData = (grants as Grant[])
-        .filter((grant: Grant) => 
-            grant["GrantID"] !== undefined
-        ).map(({ GrantID }: { GrantID: string }) => ({
-            url: `${siteUrl}/grants/${GrantID}`
-        }))
+    const grantPageSitemapData = grantIds.map(id => ({
+        url: `${siteUrl}/grants/${id}`
+    }))
     
     return [
         ...homepageSitemapData,

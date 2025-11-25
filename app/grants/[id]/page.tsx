@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 
 import { notFound } from 'next/navigation';
@@ -20,22 +20,25 @@ type Props = {
     params: { id: string };
 };
 
+const loadGrant = (filePath: string) => { 
+    if (!fs.existsSync(filePath)) return null 
+    const json = fs.readFileSync(filePath, "utf8") 
+    return JSON.parse(json) 
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`) 
+    const grant = loadGrant(filePath)
 
-    if (!fs.existsSync(filePath)) {
-        return {...defaultMetaData}
-    }
-
-    const grant = fs.readJsonSync(filePath);
+    if (!grant) return { ...defaultMetaData }
 
     const truncateString = (str: string, maxLength: number) => {
         if (str.length <= maxLength) {
-            return str;
+            return str
         } else {
-            return str.slice(0, maxLength - 1) + '…';
+            return str.slice(0, maxLength - 1) + '…'
         }
-    };
+    }
 
     let metaTitle = `${params.id} | Pandemic PACT Tracker`
     
@@ -87,13 +90,12 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`);
-    
-    if (!fs.existsSync(filePath)) {
-        notFound();
-    }
+    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`) 
+    const grant = loadGrant(filePath)
 
-    const grant = fs.readJsonSync(filePath);
+    if (!grant) {
+        notFound()
+    }
     
     return (
         <Layout

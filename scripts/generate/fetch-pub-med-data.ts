@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
+import zlib from 'zlib'
 import { put } from '@vercel/blob'
-import { ProcessedGrant, Grant } from '../types/generate'
-import readLargeJson from '../helpers/read-large-json'
+import { Grant } from '../types/generate'
 import { title, info, printWrittenFileStats, warn } from '../helpers/log'
 
 export default async function fetchPubMedData() {
@@ -20,8 +20,11 @@ export default async function fetchPubMedData() {
     }
 
     const grantsDistPathname = './data/dist/grants.json'
+    const zippedGrantsPath = './data/dist/grants.json.gz'
+    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
+    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
+    const sourceGrants: Grant[] = JSON.parse(jsonBuffer.toString())
 
-    const sourceGrants = await readLargeJson(grantsDistPathname) as ProcessedGrant[]
 
     // Fetch all the publications from PubMed that match the PubMed Grant IDs in our
     // dataset 
