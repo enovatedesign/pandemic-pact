@@ -12,6 +12,7 @@ import prepareSearch from './prepare-search'
 import prepare100DaysMission from './prepare-100-days-mission'
 import prepare100DaysMissionSelectOptions from './prepare-100-days-mission-select-options'
 import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-options'
+import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 
 main()
 
@@ -43,4 +44,6 @@ async function main() {
     await preparePolicyRoadmapSelectOptions()
 
     await prepareSearch()
+
+    await prepareGrantIdsForSitemap()
 }

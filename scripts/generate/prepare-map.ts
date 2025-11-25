@@ -7,7 +7,7 @@ import _ from 'lodash'
 // the countries file, this is the Country value, and in the WHO regions file,
 // this is the WHO Region value.
 // Mapshaper docs: https://github.com/mbloch/mapshaper/wiki
-export default async function () {
+export default async function prepareMap() {
     fs.ensureDirSync('./data/dist/geojson')
 
     // Merge the Somalia and Somaliland features into a single feature,

@@ -1,8 +1,10 @@
 import fs from 'fs-extra'
+import zlib from 'zlib'
 import { utils } from 'xlsx'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { keyMapping } from '../helpers/key-mapping'
 import { fullDataFilename } from '../../app/helpers/export'
+import { Grant } from '../types/generate'
 
 interface SelectOptions {
     [key: string]: { value: string; label: string }[]
@@ -11,7 +13,10 @@ interface SelectOptions {
 export default function prepareXsvExportFile() {
     title('Preparing CSV export file')
 
-    const grants = fs.readJsonSync('./data/dist/grants.json')
+    const zippedGrantsPath = './data/dist/grants.json.gz'
+    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
+    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
+    const grants: Grant[] = JSON.parse(jsonBuffer.toString())
 
     const selectOptions: SelectOptions = fs.readJsonSync(
         './data/dist/select-options.json'
