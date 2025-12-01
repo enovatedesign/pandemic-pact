@@ -26,6 +26,7 @@ import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock"
 import BlockIndexWrapper from "./BlockIndexWrapper"
 import JumpCardsBlock from "./Blocks/JumpCards"
 import ListPolicyRoadmapsBlock from "./Blocks/ListPolicyRoadmapsBlock"
+import GoogleSheetEmbed from "./Blocks/GoogleSheetEmbed"
 
 const blocks: any = {
 	button: ButtonBlock,
@@ -53,7 +54,8 @@ const blocks: any = {
 	listOutbreaks: ListOutbreaksBlock,
 	featuredPublication: FeaturedPublicationBlock,
 	jumpCards: JumpCardsBlock,
-	listPolicyRoadmaps: ListPolicyRoadmapsBlock
+	listPolicyRoadmaps: ListPolicyRoadmapsBlock,
+	googleSheetEmbed: GoogleSheetEmbed,
 }
 
 const Block = (props: any) => {
