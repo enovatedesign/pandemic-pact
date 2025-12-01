@@ -520,5 +520,11 @@ export const contentBuilderQuery = `
           }
         }
       }
+      ... on bodyContent_googleSheetEmbed_BlockType {
+        id
+        typeHandle
+        googleSheetId
+        width
+      }
   }
 `
