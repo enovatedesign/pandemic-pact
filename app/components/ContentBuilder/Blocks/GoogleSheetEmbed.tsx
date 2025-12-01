@@ -18,7 +18,7 @@ const GoogleSheetEmbed = ({ block }: Props) => {
     
     const classes = [
         `w-${width}`, // w-1/2 w-2/3 w-3/4 w-full
-        'mx-auto min-h-[500px]'
+        'mx-auto min-h-[750px]'
     ].filter(Boolean).join(' ')
 
     return (
