@@ -225,7 +225,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             }
         },
         {
-            title: 'Policy Roadmaps',
+            title: 'Research and Policy Roadmaps',
             summary: {
                 "mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
                 "H5N1": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
