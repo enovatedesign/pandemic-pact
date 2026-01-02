@@ -1,9 +1,10 @@
 import fs from 'fs-extra'
-import _ from 'lodash'
 import zlib from 'zlib'
+import _ from 'lodash'
 import { put } from '@vercel/blob'
 import { Grant } from '../types/generate'
 import { title, info, printWrittenFileStats, warn } from '../helpers/log'
+import { createJsonArrayWriteStream, streamLargeJson } from '../helpers/stream-io'
 
 export default async function fetchPubMedData() {
     title('Fetching publication data from PubMed')
@@ -21,27 +22,36 @@ export default async function fetchPubMedData() {
 
     const grantsDistPathname = './data/dist/grants.json'
     const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const sourceGrants: Grant[] = JSON.parse(jsonBuffer.toString())
 
+    const pubMedIds = new Set<string>();
+    await streamLargeJson(zippedGrantsPath, (grant: Grant) => {
+        if (idIsValidPubMedGrantId(String(grant.PubMedGrantId))) {
+            pubMedIds.add(String(grant.PubMedGrantId));
+        }
+    });
 
-    // Fetch all the publications from PubMed that match the PubMed Grant IDs in our
-    // dataset 
-    const publications = await getPublications(
-        sourceGrants.map(grant => grant.PubMedGrantId as string),
-    )
+    const publications = await getPublications(Array.from(pubMedIds));
 
-    // Assign publications to each grant in our dataset
-    const grants = sourceGrants.map((grant: Grant) => {
-        const PubMedLinks = publications[grant.PubMedGrantId as string] ?? []
+    info('Adding PubMed publications to grants and writing to disk...');
+    const writer = createJsonArrayWriteStream(grantsDistPathname);
 
-        return { ...grant, PubMedLinks }
-    })
+    await streamLargeJson(zippedGrantsPath, (grant: Grant) => {
+        const PubMedLinks = publications[grant.PubMedGrantId as string] ?? [];
+        writer.writeItem({ ...grant, PubMedLinks });
+    });
 
-    fs.writeJsonSync(grantsDistPathname, grants)
+    await writer.end();
 
-    printWrittenFileStats(grantsDistPathname)
+    // Gzip the output file
+    info('Creating gzipped version...');
+    const jsonBuffer = fs.readFileSync(grantsDistPathname);
+    const gzipBuffer = zlib.gzipSync(jsonBuffer as any);
+    fs.writeFileSync(zippedGrantsPath, new Uint8Array(gzipBuffer));
+    
+    // Remove uncompressed file to save space
+    fs.unlinkSync(grantsDistPathname);
+    
+    printWrittenFileStats(zippedGrantsPath);
 
     console.timeEnd(timeLogLabel)
 }

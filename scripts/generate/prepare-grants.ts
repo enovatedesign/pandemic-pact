@@ -3,7 +3,7 @@ import _ from 'lodash'
 import zlib from 'zlib'
 
 import { RawGrant } from '../types/generate'
-import readLargeJson from '../helpers/read-large-json'
+import { streamLargeJson, createJsonArrayWriteStream } from '../helpers/stream-io'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
@@ -18,8 +18,6 @@ import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
 
 export default async function prepareGrants() {
     title('Preparing grants')
-    
-    const rawGrants = await readLargeJson('./data/download/grants.json') as RawGrant[]
     
     const headings: string[] = fs.readJsonSync(
         './data/download/grants-headings.json',
@@ -59,9 +57,18 @@ export default async function prepareGrants() {
         field => field === 'award_amount_converted',
     )
 
-    const grants = rawGrants.map((rawGrant, index, array) => {
-        if (index > 0 && index % 1000 === 0) {
-            info(`Processed ${index} of ${array.length} grants`)
+    fs.emptyDirSync('./data/dist')
+
+    const pathname = './data/dist/grants.json'
+    const writer = createJsonArrayWriteStream(pathname)
+
+    let processedCount = 0
+
+    await streamLargeJson('./data/download/grants.json', (rawGrant: RawGrant) => {
+        processedCount++
+        
+        if (processedCount % 1000 === 0) {
+            info(`Processed ${processedCount} grants`)
         }
 
         // If the grant_title_eng field is empty or undefined, copy the grant_title_original field into it
@@ -151,28 +158,31 @@ export default async function prepareGrants() {
         
         // Create the final grant object using the converted data combined with
         // the custom fields
-        return {
+        const grant = {
             ...convertedKeysGrantData,
             ...customFields,
         }
+
+        writer.writeItem(grant)
     })
-    
-    fs.emptyDirSync('./data/dist')
 
-    // const pathname = './data/dist/grants.json'
-    // fs.writeJsonSync(pathname, grants)
+    await writer.end()
     
+    // Gzip the output file
+    info('Creating gzipped version...');
     const gzippedPath = './data/dist/grants.json.gz'
-
-    // Convert JSON to a string
-    const jsonString = JSON.stringify(grants)
-
-    // Convert string to Buffer, then to Uint8Array
-    const gzipBuffer = zlib.gzipSync(Buffer.from(jsonString) as any)
+    const jsonBuffer = fs.readFileSync(pathname)
+    const gzipBuffer = zlib.gzipSync(jsonBuffer as any)
     fs.writeFileSync(gzippedPath, new Uint8Array(gzipBuffer))
+    
+    // Remove uncompressed file to save space
+    fs.unlinkSync(pathname)
+    
     printWrittenFileStats(gzippedPath)
     
-    return Promise.resolve(grants)
+    info(`Processed ${processedCount} grants total`)
+    
+    return Promise.resolve()
 }
 
 function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
