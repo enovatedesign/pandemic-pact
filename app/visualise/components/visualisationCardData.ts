@@ -46,7 +46,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
                 "H5N1": `We bring together grant information on H5N1.`,
                 "Marburg virus disease": `We bring together grant information on ${disease}.`,
                 "Ebola": `We bring together grant information on ${disease}.`,
-                "default": 'We bring together grant information on all diseases on the current WHO R&D Blueprint Priority Disease List plus Pandemic Influenza, mpox and Plague.'
+                "default": 'We bring together grant information on diseases caused by all high PHEIC risk pathogens on the current WHO Priority Pathogens list.'
             },
             url: {
                 "mpox": '#disease',
