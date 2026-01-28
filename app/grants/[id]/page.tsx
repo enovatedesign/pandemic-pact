@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
 import numDigits from '@/app/api/helpers/metadata-functions';
+import { normaliseBranchName } from '@/app/helpers/normalise-branch-name';
 
 import Layout from '@/app/components/Layout';
 import AbstractAndLaySummary from './AbstractAndLaySummary';
@@ -20,15 +21,63 @@ type Props = {
     params: { id: string };
 };
 
-const loadGrant = (filePath: string) => { 
-    if (!fs.existsSync(filePath)) return null 
-    const json = fs.readFileSync(filePath, "utf8") 
-    return JSON.parse(json) 
+/**
+ * Get branch name for runtime blob storage paths
+ */
+const getBranchNameForRuntime = (): string => {
+    const ciBranch =
+        process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
+        process.env.NEXT_PUBLIC_CI_COMMIT_REF_NAME ||
+        null;
+
+    if (!ciBranch) {
+        console.warn('No branch environment variable found, defaulting to "master"')
+        return 'master'
+    }
+
+    return normaliseBranchName(ciBranch)
+}
+
+const loadGrant = async (id: string) => {
+    const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
+    
+    if (useBlobStorage) {
+        // Fetch from Vercel Blob Storage
+        const baseUrl = process.env.BLOB_BASE_URL
+        
+        if (!baseUrl) {
+            console.error('BLOB_BASE_URL not set but USE_BLOB_STORAGE is true')
+            return null
+        }
+        
+        try {
+            const branchName = getBranchNameForRuntime()
+            const url = `${baseUrl}/${branchName}/grants/${id}.json`
+            const response = await fetch(url)
+            
+            if (!response.ok) {
+                console.error(`Failed to fetch grant ${id} from blob storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
+                return null
+            }
+            
+            return await response.json()
+        } catch (error) {
+            console.error(`Error fetching grant ${id} from blob storage:`, error)
+            return null
+        }
+    } else {
+        // Load from local filesystem
+        const filePath = path.join(process.cwd(), 'public/grants', `${id}.json`)
+        
+        if (!fs.existsSync(filePath)) return null
+        
+        const json = fs.readFileSync(filePath, 'utf8')
+        return JSON.parse(json)
+    }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`) 
-    const grant = loadGrant(filePath)
+    const grant = await loadGrant(params.id)
 
     if (!grant) return { ...defaultMetaData }
 
@@ -90,8 +139,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const filePath = path.join(process.cwd(), 'public/grants', `${params.id}.json`) 
-    const grant = loadGrant(filePath)
+    const grant = await loadGrant(params.id)
 
     if (!grant) {
         notFound()

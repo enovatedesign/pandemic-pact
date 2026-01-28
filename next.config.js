@@ -16,6 +16,11 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: false,
     },
+    env: {
+        // Expose branch name at runtime for blob storage paths
+        NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
+        NEXT_PUBLIC_CI_COMMIT_REF_NAME: process.env.CI_COMMIT_REF_NAME,
+    },
     async redirects() {
         return [
             {

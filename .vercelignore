@@ -1,0 +1,2 @@
+# Exclude grant files from deployment - stored in Vercel Blob Storage
+public/grants/

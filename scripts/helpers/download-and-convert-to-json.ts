@@ -40,7 +40,8 @@ export default async function downloadCsvAndConvertToJson(
             options.delimiter = delimiter
         }
         
-        let firstWrite = true
+        let rowCount = 0
+        let arrayStarted = false
         
         return new Promise((resolve: any, reject: any) => {
             const stream = parse(options)
@@ -50,20 +51,40 @@ export default async function downloadCsvAndConvertToJson(
                     reject(error)
                 })
                 .on('data', row => {
-                    if (!firstWrite) {
+                    if (!arrayStarted && headers) {
+                        writeStream.write('[')
+                        arrayStarted = true
+                    }
+                    
+                    if (rowCount > 0) {
                         writeStream.write(',')
-                    } else {
-                        if (headers) writeStream.write('[')
-                        firstWrite = false
                     }
                     
                     writeStream.write(JSON.stringify(row))
+                    rowCount++
                 })
                 .on('end', () => {
-                    if (headers) writeStream.write(']')
-                    writeStream.end()
-                    printWrittenFileStats(filePath)
-                    resolve()
+                    if (headers) {
+                        if (!arrayStarted) {
+                            writeStream.write('[')
+                        }
+                        writeStream.write(']')
+                    }
+                    
+                    if (rowCount === 0) {
+                        writeStream.end()
+                        const error = new Error(`No rows parsed from CSV for ${filePath}. Check delimiter and CSV format.`)
+                        console.error(error.message)
+                        reject(error)
+                        return
+                    }
+                    
+                    info(`Parsed ${rowCount} rows`)
+                    
+                    writeStream.end(() => {
+                        printWrittenFileStats(filePath)
+                        resolve()
+                    })
                 })
             
             stream.write(csv)
