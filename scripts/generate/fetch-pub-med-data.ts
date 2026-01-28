@@ -64,7 +64,7 @@ async function getPublications(pubMedGrantIds: string[]) {
     // Try to get the publications from the cache first
     const cacheFilename = 'cached-pub-med-publications.json'
 
-    const cacheUrl = `https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/${cacheFilename}`
+    const cacheUrl = `${process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'}/${cacheFilename}`
 
     const cacheResponse = await fetch(cacheUrl)
 

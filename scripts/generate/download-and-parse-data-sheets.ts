@@ -1,32 +1,74 @@
 import fs from 'fs-extra'
-import { title } from '../helpers/log'
+import path from 'path'
+import { title, info, error } from '../helpers/log'
+import dataSources from '../config/data-sources'
+import { id as grantsPreviousFileId } from '../config/grants-last-used-file-id.json'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
+import { downloadStaticFilesFromBlob } from '../helpers/download-static-files-from-blob'
 
 export default async function downloadAndParseDataSheet (grantsOnly: boolean = false) {
+    if (!process.env.FIGSHARE_PA_TOKEN) {
+        throw new Error('FIGSHARE_PA_TOKEN not set, cannot download data from Figshare')
+    }
+
     title('Fetching dataset and data dictionary from Figshare')
 
-    // Pandemic PACT collection on Figshare
-    // https://figshare.com/s/9e712aa1f4255e37b0db
+    const {
+        FIGSHARE_ARTICLE_ID: ARTICLE_ID,
+        FIGSHARE_GRANTS_FILE_ID: GRANTS_FILE_ID,
+        FIGSHARE_DATA_DICTIONARY_FILE_ID: DICTIONARY_FILE_ID
+    } = dataSources
+
+    const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
+    
+    // If source hasn't changed, download cached static files from blob
+    if (!grantsFileIdHasChanged) {
+        info('Grants data source has not changed since last fetch')
+        
+        // This will throw an error if download fails, stopping the build
+        const downloadedSuccessfully = await downloadStaticFilesFromBlob()
+        
+        info('Using cached static files from Blob Storage')
+        return { shouldProcessGrants: false, useCachedFiles: true }
+    }
 
     fs.emptyDirSync('data/download')
 
-    if (!grantsOnly) {
-        await downloadCsvAndConvertToJson(
-            'https://figshare.com/ndownloader/files/53222348?private_link=9e712aa1f4255e37b0db',
-            'dictionary',
-        )
+    const headers = { 'Authorization': `token ${process.env.FIGSHARE_PA_TOKEN}` }
+    const url = `https://api.figshare.com/v2/account/articles/${ARTICLE_ID}/files?page_size=100`
+
+    try {
+        info("Fetching latest file list from FigShare")
+        const listFilesResponse = await fetch(url, { headers })
+        const figShareFiles = await listFilesResponse.json()
+
+        const dataDictionaryFile = figShareFiles.find((f: any) => f.id === DICTIONARY_FILE_ID)
+        if (!dataDictionaryFile) {
+            throw new Error(`FigShare file with ID "${DICTIONARY_FILE_ID}" not found.`)
+        }
+
+        const grantsFile = figShareFiles.find((f: any) => f.id === GRANTS_FILE_ID)
+        if (!grantsFile) {
+            throw new Error(`FigShare file with ID "${GRANTS_FILE_ID}" not found.`)
+        }
 
         await downloadCsvAndConvertToJson(
-            'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com/research-categories.csv',
+            dataSources.RESEARCH_CATEGORIES_URL,
             'research-category-mapping',
             false,
             ';'
         )
+
+        await downloadCsvAndConvertToJson(dataDictionaryFile.download_url, 'dictionary')
+
+        await downloadCsvAndConvertToJson(grantsFile.download_url, 'grants', true)
+    } catch (err: any) {
+        error(`Error: ${err.message}`)
     }
 
-    await downloadCsvAndConvertToJson(
-        'https://figshare.com/ndownloader/files/59953199?private_link=9e712aa1f4255e37b0db',
-        'grants',
-        true,
-    )
+    // Store the URL for future comparison
+    const configPath = path.join(__dirname, '../../../scripts/config/grants-last-used-file-id.json')
+    fs.writeJsonSync(configPath, { id: dataSources.FIGSHARE_GRANTS_FILE_ID })
+    
+    return { useCachedFiles: false }
 }
