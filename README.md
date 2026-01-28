@@ -9,6 +9,31 @@ This project uses the following technologies and packages:
 -   [React Simple Maps](https://www.react-simple-maps.io)
 -   [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 
+## Vercel Blob Storage Caching
+
+This project uses [Vercel Blob Storage](https://vercel.com/docs/storage/vercel-blob) to cache and serve generated data assets (such as grants, select options, and research category mappings) for each branch. This enables faster builds and consistent data access across environments.
+
+### How it works
+- When you run the data generation script (`npm run generate`), the build will check if the source data has changed.
+- If the data has changed, the generated assets are uploaded to Vercel Blob Storage under a path for your current branch.
+- If the data has not changed, the build will fetch and use the cached assets from Blob Storage for your branch.
+
+### Controlling Blob Uploads
+- The environment variable `FORCE_BLOB_UPLOAD` controls whether assets are uploaded to Blob Storage.
+	- **For local development:** Set `FORCE_BLOB_UPLOAD=false` (default). This prevents unnecessary uploads and uses local files.
+	- **For deployment or sharing assets:** Set `FORCE_BLOB_UPLOAD=true` to force the upload of generated assets for your current branch. This is useful if you want your branch's data to be available to others or to Vercel deployments.
+
+You can set this in your `.env.local`:
+```
+FORCE_BLOB_UPLOAD=false
+```
+or
+```
+FORCE_BLOB_UPLOAD=true
+```
+
+**Note:** Blob uploads require the `BLOB_READ_WRITE_TOKEN` and `BLOB_BASE_URL` environment variables to be set (see Vercel project settings).
+
 ## Getting Started
 
 Start by ensuring that you are on the correct version of NodeJS by using NVM:
@@ -89,6 +114,8 @@ Next you will need to run our `generate` script which prepares the source data i
 ```bash
 npm run generate
 ```
+
+If you want to upload the generated data to Vercel Blob Storage for your branch, set `FORCE_BLOB_UPLOAD=true` in `.env.local` before running the `npm generate` command.
 
 ### Run the Development server
 
