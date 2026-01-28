@@ -28,8 +28,12 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         // This will throw an error if download fails, stopping the build
         const downloadedSuccessfully = await downloadStaticFilesFromBlob()
         
-        info('Using cached static files from Blob Storage')
-        return { shouldProcessGrants: false, useCachedFiles: true }
+        if (downloadedSuccessfully) {
+            info('Using cached static files from Blob Storage')
+            return { shouldProcessGrants: false, useCachedFiles: true }
+        } else {
+            info('Cached static files download failed, proceeding to fetch fresh data.')
+        }
     }
 
     fs.emptyDirSync('data/download')

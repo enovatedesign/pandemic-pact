@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { info } from './log'
+import { info, error } from './log'
 import { getBranchName } from './get-branch-name'
 
 /**
@@ -33,10 +33,11 @@ export async function downloadStaticFilesFromBlob(): Promise<boolean> {
         const response = await fetch(file.url)
 
         if (!response.ok) {
-            throw new Error(
-                `Failed to download ${file.url}: ${response.status} ${response.statusText}. ` +
-                `Build cannot proceed without complete cached files.`
+            error(
+                `Failed to download ${file.url}: ${response.status} ${response.statusText}.`
             )
+            
+            return false
         }
 
         const buffer = Buffer.from(await response.arrayBuffer())
