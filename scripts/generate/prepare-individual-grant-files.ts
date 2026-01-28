@@ -3,8 +3,9 @@ import _ from 'lodash'
 import zlib from 'zlib'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info } from '../helpers/log'
+import { uploadGrantsToBlob } from '../helpers/upload-grants-to-blob'
 
-export default function prepareIndividualGrantFiles() {
+export default async function prepareIndividualGrantFiles(shouldUploadToBlob: boolean = false) {
     title('Writing full grant data to individual files')
 
     const selectOptions: SelectOptions = fs.readJsonSync(
@@ -18,6 +19,8 @@ export default function prepareIndividualGrantFiles() {
 
     const outputPath = `./public/grants/`
     fs.emptyDirSync(outputPath)
+
+    const grantsForBlob: Array<{ id: string; data: any }> = []
 
     for (let i = 0; i < sourceGrants.length; i++) {
         if (i > 0 && (i % 500 === 0 || i === sourceGrants.length - 1)) {
@@ -67,13 +70,29 @@ export default function prepareIndividualGrantFiles() {
         const pathname = `${outputPath}/${grantWithFullText['GrantID']}.json`
 
         fs.writeJsonSync(pathname, grantWithFullText)
+
+        // Collect grant data for blob upload if needed
+        if (shouldUploadToBlob) {
+            grantsForBlob.push({
+                id: grantWithFullText['GrantID'] as string,
+                data: grantWithFullText
+            })
+        }
     }
 
     // Store all the IDs in a separate file for use in generateStaticParams
+    const grantIds = sourceGrants.map(grant => grant['GrantID'])
     fs.writeJsonSync(
         `${outputPath}/index.json`,
-        sourceGrants.map(grant => grant['GrantID']),
+        grantIds,
     )
+
+    // Upload to Vercel Blob if requested
+    if (shouldUploadToBlob && grantsForBlob.length > 0) {
+        await uploadGrantsToBlob({ grants: grantsForBlob })
+    }
+
+    return grantIds
 }
 
 function getLabelFromSelectOptionValue(
