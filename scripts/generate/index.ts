@@ -33,6 +33,9 @@ async function main() {
     // OpenSearch will be skipped if SKIP_OPENSEARCH_INDEXING is set
     if (useCachedFiles) {
         info('Using cached static files - skipping grant processing and file generation')
+
+        await prepareSearch()
+
         info('Build complete using cached files')
         return
     }
