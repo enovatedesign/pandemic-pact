@@ -127,7 +127,7 @@ const Layout = ({
                             className={`fixed left-0 inset-y-0 -translate-x-full z-[60] bg-secondary border-r border-primary/25 lg:relative lg:!transform-none sidebar ${sidebarOpen ? 'open' : 'closed'}`}
                             style={transformAnimationProps}
                         >
-                            <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25 text-white h-screen">
+                            <div className="sticky top-0 flex flex-col bg-gradient-to-t from-primary/25 text-white h-d-screen">
                                 <div className={`
                                     hidden p-6 lg:flex gap-6 text-primary
                                     ${sidebarOpen ? 'justify-between items-center' : 'flex-col'}
