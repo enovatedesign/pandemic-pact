@@ -5,7 +5,6 @@ import PageQuery from './query/PageQuery';
 import OutbreakQuery from './query/OutbreakQuery';
 import NewsArticleQuery from './query/NewsArticleQuery';
 import NewsArticleTemplate from './template/NewsArticleTemplate';
-import RedirectTemplate from './template/RedirectTemplate';
 import RedirectQuery from './query/RedirectQuery';
 import { AnnouncementProps } from '@/app/helpers/types';
 import HundredDaysMissionTemplate from './template/PolicyRoadMapTemplate';
@@ -28,7 +27,6 @@ const EntryTypes: EntryTemplateAndQuery = {
         outbreak: OutbreakTemplate,
         pastOutbreak: OutbreakTemplate,
         newsArticle: NewsArticleTemplate,
-        redirect: RedirectTemplate,
         hundredDaysMission: HundredDaysMissionTemplate
     },
     queries: {

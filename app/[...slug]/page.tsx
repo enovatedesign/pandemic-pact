@@ -1,5 +1,5 @@
 import PageClient from '../components/PageClient'
-import {notFound} from 'next/navigation'
+import {notFound, redirect} from 'next/navigation'
 import type {Metadata, ResolvingMetadata} from 'next'
 import {
     generateStaticParamsForCmsPages,
@@ -27,6 +27,22 @@ export default async function Page({ params }: { params: Parameters }) {
     const announcement = await queryAnnouncementEntry()
 
     if (!data) {
+        notFound()
+    }
+
+    if (data.entry.typeHandle === 'redirect') {
+        const children = data.entry.children ?? []
+        const redirectEntry = data.entry.redirectEntry ?? []
+        const redirectUrl = children.length > 0
+            ? children[0].url
+            : redirectEntry.length > 0
+                ? redirectEntry[0].url
+                : null
+
+        if (redirectUrl) {
+            redirect(redirectUrl)
+        }
+
         notFound()
     }
 
