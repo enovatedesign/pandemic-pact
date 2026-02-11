@@ -104,7 +104,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         metaTitle = `${truncateString(grant.GrantTitleEng, 200)} | Pandemic PACT Tracker`
     }
 
-    const metadataBaseUrl = new URL(process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : 'https://localhost:3000')
+    const metadataBaseUrl = new URL(
+        process.env.VERCEL_ENV === 'production'
+            ? 'https://www.pandemicpact.org'
+            : process.env.VERCEL_URL
+                ? `https://${process.env.VERCEL_URL}`
+                : 'https://localhost:3000'
+    )
 
     let metaData: Metadata = {
         metadataBase: metadataBaseUrl,

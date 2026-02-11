@@ -16,15 +16,13 @@ export async function GET(request: NextRequest) {
 
   const url = process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
   const path = `${url}/grants/${grantId}.json`
-  
-  const grant = await fetch(path)
-    .then(result => {
-      if (!result.ok) {
-        console.error('Error fetching grant', result.statusText)
-      }
-      return result.json();
-    }
-  )
+
+  const grantResponse = await fetch(path)
+  if (!grantResponse.ok) {
+    console.error(`Failed to fetch grant ${grantId}: ${grantResponse.status} ${grantResponse.statusText}`)
+    notFound()
+  }
+  const grant = await grantResponse.json()
 
   const grantTitle = grant.GrantTitleEng ?? 'Pandemic PACT Tracker'
   const title =  grantTitle.length > 140 ? `${grantTitle.slice(0, 140)}...` : grantTitle;
