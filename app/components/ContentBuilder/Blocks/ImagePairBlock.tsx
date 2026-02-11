@@ -76,7 +76,7 @@ const ImagePairBlock = ( {block} : Props ) => {
                         />
 
                         {imageLeftCaption && (
-                            <figcaption className="mt-4 font-medium text-base text-gray-600 text-center">{ imageLeftCaption }</figcaption>
+                            <figcaption className="mt-4 font-medium text-sm lg:text-base text-gray-400 text-center">{ imageLeftCaption }</figcaption>
                         )}
                     </animated.figure>
 
@@ -91,7 +91,7 @@ const ImagePairBlock = ( {block} : Props ) => {
                         />
 
                         {imageRightCaption && (
-                            <figcaption className="mt-4 font-medium text-base text-gray-600 text-center">{ imageRightCaption }</figcaption>
+                            <figcaption className="mt-4 font-medium text-sm lg:text-base text-gray-400 text-center">{ imageRightCaption }</figcaption>
                         )}
                     </animated.figure>
                 </div>

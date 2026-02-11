@@ -1,14 +1,17 @@
+'use client'
+
 import Image from 'next/image';
 import BlockWrapper from '../BlockWrapper';
+import PopupImage from '../Common/PopupImage';
 import { useInView, animated } from '@react-spring/web';
 
 interface Props {
     block: {
         caption: string,
         width: string,
-        popIpBox: boolean,
+        popUpBox: boolean,
         image: {
-            height: number, 
+            height: number,
             width: number,
             url: string,
             altText: string,
@@ -39,10 +42,11 @@ export default function ImageBlock({ block, firstBlock, lastBlock }: Props) {
     const caption = block.caption;
     const image = block.image[0];
     const width = block.width;
+    const popUpBox = block.popUpBox;
 
     const imageWidthLookup = {
-        full: { 
-			classes: 'w-full', 
+        full: {
+			classes: 'w-full',
 			sizes: '100vw'
 		},
         'three-quarters': {
@@ -60,8 +64,6 @@ export default function ImageBlock({ block, firstBlock, lastBlock }: Props) {
     };
 
     if (image && width) {
-        const blockClasses = ['mx-auto w-full'].join(' ');
-
         return (
             <BlockWrapper>
                 <animated.div ref={ref} style={springs}>
@@ -69,18 +71,25 @@ export default function ImageBlock({ block, firstBlock, lastBlock }: Props) {
                         className={`${imageWidthLookup[width as keyof typeof imageWidthLookup].classes} px-0 mx-auto`}
                     >
                         <div className="breakout">
-                            <Image
-                                alt={image.altText}
-                                height={image.height}
-                                src={image.url}
-                                width={image.width}
-                                sizes={imageWidthLookup[width as keyof typeof imageWidthLookup].sizes}
-                                className="w-full"
-                                loading="lazy"
-                            />
+                            {popUpBox ? (
+                                <PopupImage
+                                    image={image}
+                                    sizes={imageWidthLookup[width as keyof typeof imageWidthLookup].sizes}
+                                />
+                            ) : (
+                                <Image
+                                    alt={image.altText}
+                                    height={image.height}
+                                    src={image.url}
+                                    width={image.width}
+                                    sizes={imageWidthLookup[width as keyof typeof imageWidthLookup].sizes}
+                                    className="w-full"
+                                    loading="lazy"
+                                />
+                            )}
                         </div>
                         {caption && (
-                            <figcaption className="mt-4 font-medium text-sm text-gray-600">
+                            <figcaption className="mt-4 font-medium text-sm lg:text-base text-center text-gray-400">
                                 {caption}
                             </figcaption>
                         )}

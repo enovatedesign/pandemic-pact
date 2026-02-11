@@ -61,8 +61,17 @@
         @apply text-lg;
     }
 
+}
+
+#content-slider-swiper,
+#hero-image-slider-swiper {
+
     .swiper-pagination-bullet {
-        @apply size-5 bg-primary;
+        @apply size-5 bg-primary opacity-40;
+    }
+
+    .swiper-pagination-bullet-active {
+        @apply opacity-100;
     }
 
 }

@@ -248,6 +248,7 @@ export const contentBuilderQuery = `
         }
         width
         caption
+        popUpBox
         typeHandle
       }
       ... on imagePair_Entry {
