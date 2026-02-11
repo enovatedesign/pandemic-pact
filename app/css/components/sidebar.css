@@ -1,4 +1,7 @@
 .sidebar {
+    scrollbar-color: theme('colors.primary.lighter') transparent;
+    scrollbar-width: thin;
+
     .sidebar-open-content {
         @apply hidden;
     }

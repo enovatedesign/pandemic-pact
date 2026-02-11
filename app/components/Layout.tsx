@@ -149,7 +149,7 @@ const Layout = ({
                                 {showClosedContent && !sidebarOpen && sidebar.closedContent}
                                 
                                 <animated.div
-                                    className={`grow p-6 max-w-[100vw] overflow-x-hidden ${
+                                    className={`grow p-6 pb-16 lg:pb-6 lg:pt-0 max-w-[100vw] overflow-x-hidden ${
                                         sidebarOpen
                                             ? 'overflow-y-auto'
                                             : 'overflow-y-hidden'

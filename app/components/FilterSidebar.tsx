@@ -154,60 +154,61 @@ export default function FilterSidebar({
 
             {customFilters && customFilters}
 
-            <AnimateHeight
-                duration={300}
-                height={showAdvancedFilters ? 'auto' : 0}
-                className="w-full"
-            >
-                <div className="flex flex-col items-start justify-start gap-y-4">
-                    <FilterBlock
-                        filters={advancedFilters}
-                        selectedFilters={selectedFilters}
-                        setExcludeGrantsWithMultipleItemsInField={
-                            setExcludeGrantsWithMultipleItemsInField
-                        }
-                        setSelectedOptions={setSelectedOptions}
-                        sharedFiltersId={sharedFiltersId}
-                    />
-                </div>
-            </AnimateHeight>
-
-            <div className={`flex items-center justify-between w-full ${!bottomContent && 'pb-20 lg:pb-0'}`}>
+            <div className={`flex flex-col w-full ${!bottomContent && 'pb-12 lg:pb-0'}`}>
                 {advancedFilters.length > 0 && (
+                    <AnimateHeight
+                        duration={300}
+                        height={showAdvancedFilters ? 'auto' : 0}
+                        className="w-full"
+                    >
+                        <div className="flex flex-col items-start justify-start gap-y-4 mb-4">
+                            <FilterBlock
+                                filters={advancedFilters}
+                                selectedFilters={selectedFilters}
+                                setExcludeGrantsWithMultipleItemsInField={
+                                    setExcludeGrantsWithMultipleItemsInField
+                                }
+                                setSelectedOptions={setSelectedOptions}
+                                sharedFiltersId={sharedFiltersId}
+                            />
+                        </div>
+                    </AnimateHeight>
+                )}
+                <div className="flex items-center justify-between w-full mt-4">
+                    {advancedFilters.length > 0 && (
+                        <Button
+                            size="xsmall"
+                            customClasses="flex items-center gap-1"
+                            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                        >
+                            {showAdvancedFilters ? (
+                                <>
+                                    Hide Advanced <ChevronUpIcon className="w-5 h-5" />
+                                </>
+                            ) : (
+                                <>
+                                    Show Advanced{' '}
+                                    <ChevronDownIcon className="w-5 h-5" />
+                                </>
+                            )}
+                        </Button>
+                    )}
                     <Button
                         size="xsmall"
-                        customClasses="mt-3 flex items-center gap-1"
-                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                        customClasses="flex items-center gap-1"
+                        onClick={() =>
+                            setSelectedFilters(
+                                emptyFilters(outbreakSelectOptions),
+                            )
+                        }
                     >
-                        {showAdvancedFilters ? (
-                            <>
-                                Hide Advanced <ChevronUpIcon className="w-5 h-5" />
-                            </>
-                        ) : (
-                            <>
-                                Show Advanced{' '}
-                                <ChevronDownIcon className="w-5 h-5" />
-                            </>
-                        )}
+                        Clear All <XIcon className="w-5 h-5" />
                     </Button>
-                )}
-
-                <Button
-                    size="xsmall"
-                    customClasses="mt-3 flex items-center gap-1"
-                    onClick={() =>
-                        setSelectedFilters(
-                            emptyFilters(outbreakSelectOptions),
-                        )
-                    }
-                >
-                    Clear All <XIcon className="w-5 h-5" />
-                </Button>
-                
+                </div>
             </div>
 
             {bottomContent && (
-                <div className="pb-20 lg:pb-0">
+                <div className="mt-4 pb-12 lg:pb-0">
                     {bottomContent}
                 </div>
             )}
