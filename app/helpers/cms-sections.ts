@@ -56,6 +56,34 @@ export const fetchTotalSectionEntries = async ({body, setTotal}: FetchTotalSecti
 }
 
 
+interface FetchPublicationEntriesProps {
+    body: {
+        limit?: number
+        pageNumber?: number
+    }
+    setEntries: (entries: any) => void
+}
+
+export const fetchPublicationEntries = async ({body, setEntries}: FetchPublicationEntriesProps) => {
+
+    const response = await fetch('/api/publication-entries', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch publication entries');
+    }
+
+    const data = await response.json()
+
+    setEntries(data)
+}
+
+
 interface FetchChildrenEntriesProps {
     body: {
         sectionHandle: string
