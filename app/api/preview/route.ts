@@ -26,12 +26,21 @@ export async function GET(req: NextRequest) {
         return unauthorized()
     }
 
-    draftMode().enable()
+    if (token) {
+        draftMode().enable()
+
+        return new Response(null, {
+            status: 307,
+            headers: {
+                Location: `/preview/${data.entry.uri}?token=${token}`,
+            },
+        })
+    }
 
     return new Response(null, {
         status: 307,
         headers: {
-            Location: `/preview/${data.entry.uri}?token=${token}`,
+            Location: `/${data.entry.uri}`,
         },
     })
 }

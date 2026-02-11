@@ -3,3 +3,6 @@
 sitemap: https://www.pandemicpact.org/sitemap.xml
 
 Allow: /api/og/*
+
+Disallow: /preview/
+Disallow: /api/preview
