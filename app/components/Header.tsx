@@ -142,7 +142,7 @@ export default function Header({ className, showMobileNav }: Props ) {
                                                     height={activeIndex === index ? 'auto' : 0}
                                                     className={activeIndex === index ? 'lg:block' : 'lg:hidden'}
                                                 >
-                                                    <ul className='bg-white/10 p-4 lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-64 lg:shadow-xl lg:flex lg:flex-col rounded-2xl lg:p-2'>
+                                                    <ul className='mt-3 lg:mt-0 bg-white/10 p-4 lg:bg-white lg:absolute lg:top-12 lg:-right-5 lg:w-64 lg:shadow-xl lg:flex lg:flex-col rounded-2xl lg:p-2'>
                                                         {link.subPages.map((subPage, index) => {
                                                             return (
                                                                 <NavSubPages
