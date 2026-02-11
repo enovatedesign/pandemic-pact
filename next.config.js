@@ -21,6 +21,23 @@ const nextConfig = {
         NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
         NEXT_PUBLIC_CI_COMMIT_REF_NAME: process.env.CI_COMMIT_REF_NAME,
     },
+    async rewrites() {
+        if (process.env.USE_BLOB_STORAGE === 'true' && process.env.BLOB_BASE_URL) {
+            const branch = process.env.VERCEL_GIT_COMMIT_REF || process.env.CI_COMMIT_REF_NAME || 'master'
+            const branchName = branch
+                .replace(/^refs\/heads\//, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9-]/g, '-')
+                .slice(0, 63)
+            return [
+                {
+                    source: '/grants/:id.json',
+                    destination: `${process.env.BLOB_BASE_URL}/${branchName}/grants/:id.json`,
+                },
+            ]
+        }
+        return []
+    },
     async redirects() {
         return [
             {
