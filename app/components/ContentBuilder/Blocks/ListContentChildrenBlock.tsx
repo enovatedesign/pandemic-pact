@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation"
 import { CardEntryProps, CardEntriesProps } from "@/app/helpers/types"
 import { fetchChildrenEntries, fetchTotalChildrenEntries } from "@/app/helpers/cms-sections"
 import { CurrentEntry } from "@/app/helpers/context"
+import { allowedSectionQueries } from "@/app/helpers/allowed-section-queries"
 
 import BlockWrapper from "../BlockWrapper"
 import Card from "../Common/Card"
@@ -42,6 +43,11 @@ const ListContentChildrenBlockComponent = ({ block }: ListContentChildrenProps) 
     const pageParam = params.get('page')
 
     useEffect(() => {
+        if (!allowedSectionQueries.includes(sectionHandle)) {
+            setIsLoading(false)
+            return
+        }
+
         if (customEntries?.length === 0 && paginate) {
             const pageNumber = pageParam ? Number(pageParam) : 1
 
