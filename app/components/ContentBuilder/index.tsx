@@ -25,6 +25,7 @@ import ListOutbreaksBlock from "./Blocks/ListOutbreaksBlock"
 import FeaturedPublicationBlock from "./Blocks/FeaturedPublicationBlock"
 import BlockIndexWrapper from "./BlockIndexWrapper"
 import JumpCardsBlock from "./Blocks/JumpCards"
+import ListContentChildrenBlock from "./Blocks/ListContentChildrenBlock"
 import ListPolicyRoadmapsBlock from "./Blocks/ListPolicyRoadmapsBlock"
 import GoogleSheetEmbed from "./Blocks/GoogleSheetEmbed"
 
@@ -43,6 +44,7 @@ const blocks: any = {
 	tabbedContent: TabbedContentBlock,
 	imagePair: ImagePairBlock,
 	accordion: AccordionBlock,
+	listContentChildren: ListContentChildrenBlock,
 	listContentNews: ListContentNewsBlock,
 	richTextColumns: RichTextColumnsBlock,
 	contentSlider: ContentSliderBlock,
@@ -62,7 +64,7 @@ const Block = (props: any) => {
 	const { block } = props
 	const type = block.typeHandle
 	const Component = blocks[type]
-
+	
 	if (Object.keys(blocks).includes(type)) {
 		return <Component {...props} />
 	} else {

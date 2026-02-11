@@ -12,11 +12,11 @@ interface Props {
 }
 
 export default function ButtonBlock({ block }: Props) {
-	const button = block.button;
+	const button = block.button?.[0];
 	const colour = block.colour;
 	const position = block.position;
 	
-	if (button.url && colour && position) {
+	if (button?.url && colour && position) {
 		return (
 			<BlockWrapper>
 				<div className={"text-" + position}>

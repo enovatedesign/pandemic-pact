@@ -7,10 +7,10 @@ type Props = {
         columns: {
             id: number,
             button: {
-              customText: string,
+                newWindow: boolean
               url: string,
               text: string,
-            }
+            }[]
             text: string,
             image: {
               width: number,
@@ -36,15 +36,16 @@ const RichTextColumnsBlock = ({block} : Props) => {
             {columns && (
                 <div className={gridClasses}>
                     {columns.map((column, index: number) => {
-                        const button = column.button ?? null
-
+                        const button = column.button[0] ?? null
+                        const buttonText = button?.text ?? 'Read more'
+                        console.log(button)
                         return (
                             <Card 
                                 entry={column} 
                                 image={column.image[0]} 
                                 key={index}
                                 customImageClasses="aspect-video object-cover w-full"
-                                cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>Read more</Button>}
+                                cardBottomContent={button?.url && <Button size="small" href={button?.url && button.url}>{buttonText}</Button>}
                             />
                         )
                     })}

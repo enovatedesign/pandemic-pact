@@ -16,6 +16,27 @@
 
 }
 
+.mySwiper .swiper-slide {
+    position: relative;
+}
+
+.mySwiper .swiper-slide::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0.5rem;
+    width: 100%;
+    background-color: theme('colors.primary.DEFAULT');
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+.mySwiper .swiper-slide-thumb-active::after {
+    opacity: 1;
+}
+
 #content-slider-swiper {
 
     position: static;

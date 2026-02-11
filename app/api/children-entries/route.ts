@@ -3,39 +3,41 @@ import { NextRequest, NextResponse } from 'next/server'
 import { allowedSectionQueries } from "@/app/helpers/allowed-section-queries";
 
 export async function POST(request: NextRequest) {
-
     const requestBody = await request.json();
-    
-    const { sectionHandle, entryTypeHandle, limit, pageNumber, relation } = requestBody;
-    const queryLimit = limit && limit < 12 ? limit : 12
+
+    const { sectionHandle, uri, typeHandle, limit, pageNumber } = requestBody;
+
+    const queryLimit = limit < 12 ? limit : 12
     const queryOffset = pageNumber ? queryLimit * (pageNumber - 1) : 0
-    
-    // To Do: Handle error accordingly
+
     if (!allowedSectionQueries.includes(sectionHandle)) {
         throw new Error(`Unauthorized access to section: ${sectionHandle}`)
     }
 
-    let relationQuery = relation ? relation : null
-
     const query = `
-        query {    
+        query {
             entries(
-                status: "enabled", 
-                section: "${sectionHandle}", 
-                orderBy: "dateCreated",
-                limit: ${queryLimit}, 
-                offset: ${queryOffset}
-                ${relationQuery ? `, relatedToEntries: [{uri: "${relationQuery}"}]` : ''}
-            ) {    
-                ... on ${entryTypeHandle}_Entry {
-                    title
-                    summary
-                    uri
-                    thumbnailImage @transform(transform: "c480x300") {
-                        url
-                        alt
-                        width
-                        height
+                status: "enabled",
+                section: "${sectionHandle}",
+                uri: "${uri}",
+            ) {
+                ... on ${typeHandle}_Entry {
+                    children(
+                        orderBy: "dateCreated",
+                        limit: ${queryLimit},
+                        offset: ${queryOffset}
+                    ) {
+                        ... on ${typeHandle}_Entry {
+                            title
+                            summary
+                            uri
+                            thumbnailImage @transform(transform: "c480x300") {
+                                url
+                                alt
+                                width
+                                height
+                            }
+                        }
                     }
                 }
             }
@@ -43,7 +45,6 @@ export async function POST(request: NextRequest) {
     `
     const fetchRequest: RequestInit = {
         method: "POST",
-        // cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${API_TOKEN}`
@@ -52,9 +53,8 @@ export async function POST(request: NextRequest) {
             query,
         })
     };
-
     const response = await fetch(API_URL as string, fetchRequest);
-    
+
     if (!response.ok) {
         throw new Error(`Network error: ${response.status} ${response.statusText}`);
     }
@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
     if (json.errors) {
         throw new Error(`GraphQL error: ${JSON.stringify(json.errors)}`);
     }
-    
-    return NextResponse.json(json.data.entries);
+
+    const children = json.data.entries?.[0]?.children ?? [];
+
+    return NextResponse.json(children);
 };

@@ -12,21 +12,22 @@ export const seomaticQuery = `
 
 export const contentBuilderQuery = `
   bodyContent(status: "enabled") {
-    ... on bodyContent_richText_BlockType {
+    ... on richText_Entry {
         id
         text
         textAlign
         jumpCardId
         typeHandle
       }
-      ... on bodyContent_highlightedRichText_BlockType {
+      ... on highlightedRichText_Entry {
         id
         colour
         typeHandle
         text
+        textAlign
         status
       }
-      ... on bodyContent_button_BlockType {
+      ... on button_Entry {
         id
         typeHandle
         status
@@ -37,7 +38,7 @@ export const contentBuilderQuery = `
         colour
         position
       }
-      ... on bodyContent_pullQuote_BlockType {
+      ... on pullQuote_Entry {
         id
         typeHandle
         text
@@ -45,12 +46,10 @@ export const contentBuilderQuery = `
         quotePosition
         quoteCompany
       }
-      ... on bodyContent_download_BlockType {
+      ... on download_Entry {
         id
         typeHandle
         download {
-          customText
-          ariaLabel
           text
           title
           type
@@ -64,7 +63,7 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_googleMap_BlockType {
+      ... on googleMap_Entry {
         id
         typeHandle
         useCompanyAddress
@@ -83,14 +82,41 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_listContentChildren_BlockType {
+      ... on listContentChildren_Entry {
         id
+        typeHandle
+        limit
+        paginate
+        customEntries {
+          ... on newsArticle_Entry {
+            uri
+            title
+            summary
+            thumbnailImage @transform(transform: "c480x300") {
+              url
+              width
+              height
+              alt
+            }
+          }
+          ... on page_Entry {
+            uri
+            title
+            summary
+            thumbnailImage @transform(transform: "c480x300") {
+              url
+              width
+              height
+              alt
+            }
+          }
+        }
       }
-      ... on bodyContent_listContentNews_BlockType {
+      ... on listContentNews_Entry {
         id
         typeHandle
         customEntries {
-          ... on news_newsArticle_Entry {
+          ... on newsArticle_Entry {
             uri
             title
             summary
@@ -105,13 +131,13 @@ export const contentBuilderQuery = `
         limit
         paginate
       }
-      ... on bodyContent_listTeamMembers_BlockType {
+      ... on listTeamMembers_Entry {
         id
         typeHandle
         heading
         summary
         customEntries {
-          ... on teamMembers_teamMember_Entry {
+          ... on teamMember_Entry {
             title
             jobTitle
             postNominalLetters
@@ -127,12 +153,12 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_listPublications_BlockType {
+      ... on listPublications_Entry {
         id
         typeHandle
         heading
         customEntries (orderBy: "postDate DESC") {
-          ... on publications_externalPublication_Entry {
+          ... on externalPublication_Entry {
             id
             title
             summary
@@ -149,7 +175,7 @@ export const contentBuilderQuery = `
             publicationType(label: true)
             typeHandle
           }
-          ... on publications_internalPublication_Entry {
+          ... on internalPublication_Entry {
             id
             title
             summary
@@ -167,13 +193,13 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_listOutbreaks_BlockType {
+      ... on listOutbreaks_Entry {
         id
         typeHandle
         heading
         outbreakType
         customEntries (orderBy: "title DESC") {
-          ... on outbreaks_outbreak_Entry {
+          ... on outbreak_Entry {
             id
             typeHandle
             title
@@ -190,7 +216,7 @@ export const contentBuilderQuery = `
               }
             }
           }
-          ... on outbreaks_pastOutbreak_Entry {
+          ... on pastOutbreak_Entry {
             id
             typeHandle
             title
@@ -208,7 +234,7 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_image_BlockType {
+      ... on image_Entry {
         id
         image @transform(transform: "c2000xauto") {
           ... on contentAssets_Asset {
@@ -222,7 +248,7 @@ export const contentBuilderQuery = `
         caption
         typeHandle
       }
-      ... on bodyContent_imagePair_BlockType {
+      ... on imagePair_Entry {
         id
         typeHandle
         imageLeft @transform(transform: "c1000xauto") {
@@ -244,11 +270,11 @@ export const contentBuilderQuery = `
         }
         imageRightCaption
       }
-      ... on bodyContent_imageSlider_BlockType {
+      ... on imageSlider_Entry {
         id
         typeHandle
         heroImageSlides {
-          ... on heroImageSlides_BlockType {
+          ... on heroImageSlidesBlock_Entry {
             slideHeading
             slideText
             slideImage @transform(transform: "c2000xauto") {
@@ -270,11 +296,11 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_accordion_BlockType {
+      ... on accordion_Entry {
         id
         typeHandle
         accordions {
-          ... on accordions_BlockType {
+          ... on accordionsBlock_Entry {
             id
             accordionContent
             accordionHeading
@@ -282,16 +308,15 @@ export const contentBuilderQuery = `
         }
         headingLevel
       }
-      ... on bodyContent_richTextColumns_BlockType {
+      ... on richTextColumns_Entry {
         id
         typeHandle
         columns {
-          ... on columns_BlockType {
+          ... on columnsBlock_Entry {
             id
             button {
-              customText
-              url
               text
+              url
             }
             text
             image @transform(transform: "c480x480") {
@@ -303,11 +328,11 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_contentSlider_BlockType {
+      ... on contentSlider_Entry {
         id
         typeHandle
         slides {
-          ... on slides_BlockType {
+          ... on slidesBlock_Entry {
             id
             button {
               text
@@ -325,18 +350,18 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_tabbedContent_BlockType {
+      ... on tabbedContent_Entry {
         id
         typeHandle
         tabs {
-          ... on tabs_BlockType {
+          ... on tabsBlock_Entry {
             id
             heading
             richText
           }
         }
       }
-      ... on bodyContent_table_BlockType {
+      ... on table_Entry {
         id
         typeHandle
         table {
@@ -345,17 +370,16 @@ export const contentBuilderQuery = `
             heading
             width
           }
-          rows
           table
         }
         caption
       }
-      ... on bodyContent_divider_BlockType {
+      ... on divider_Entry {
         id
         typeHandle
         style
       }
-      ... on bodyContent_gallery_BlockType {
+      ... on gallery_Entry {
         id
         typeHandle
         images @transform(transform: "c2000x1125") {
@@ -370,7 +394,7 @@ export const contentBuilderQuery = `
         autoPlay
         thumbnailsOnly
       }
-      ... on bodyContent_embeddedMedia_BlockType {
+      ... on embeddedMedia_Entry {
         id
         typeHandle
         width
@@ -381,12 +405,12 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_logosAndText_BlockType {
+      ... on logosAndText_Entry {
         id
         typeHandle
         heading
         blockContent {
-          ... on blockContent_BlockType {
+          ... on blockContentBlock_Entry {
             id
             logos {
               ... on contentAssets_Asset {
@@ -401,7 +425,7 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_splitImageText_BlockType {
+      ... on splitImageText_Entry {
         id
         typeHandle
         image(withTransforms: "c2000xauto") {
@@ -423,11 +447,11 @@ export const contentBuilderQuery = `
         reverse
         text
       }
-      ... on bodyContent_featuredPublication_BlockType {
+      ... on featuredPublication_Entry {
         id
         typeHandle
         featuredPublication {
-          ... on publications_externalPublication_Entry {
+          ... on externalPublication_Entry {
             id
             title
             summary
@@ -444,12 +468,12 @@ export const contentBuilderQuery = `
             publicationType(label: true)
             typeHandle
           }
-          ... on publications_internalPublication_Entry {
+          ... on internalPublication_Entry {
             id
             title
             summary
             postDate
-            thumbnailImage  @transform(transform: "c480x300") {
+            thumbnailImage @transform(transform: "c480x300") {
               ... on contentAssets_Asset {
                 altText
                 height
@@ -462,10 +486,10 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_jumpCards_BlockType {
+      ... on jumpCards_Entry {
         typeHandle
         jumpCards {
-          ... on jumpCards_BlockType {
+          ... on jumpCardsBlock_Entry {
             heading
             summary
             image(withTransforms: "c480x480") {
@@ -478,13 +502,13 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_listPolicyRoadmaps_BlockType {
+      ... on listPolicyRoadmaps_Entry {
         id
         typeHandle
         heading
         comingSoonOnly
         customEntries (orderBy: "title DESC") {
-          ... on policyRoadmaps_hundredDaysMission_Entry {
+          ... on hundredDaysMission_Entry {
             id
             typeHandle
             title
@@ -501,7 +525,7 @@ export const contentBuilderQuery = `
               }
             }
           }
-          ... on policyRoadmaps_pandemicIntelligence_Entry {
+          ... on pandemicIntelligence_Entry {
             id
             typeHandle
             title
@@ -520,7 +544,7 @@ export const contentBuilderQuery = `
           }
         }
       }
-      ... on bodyContent_googleSheetEmbed_BlockType {
+      ... on googleSheetEmbed_Entry {
         id
         typeHandle
         googleSheetId

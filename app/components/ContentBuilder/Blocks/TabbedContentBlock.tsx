@@ -2,8 +2,7 @@
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
 import { useState } from "react"
-import AnimateHeight from 'react-animate-height';
-import { useInView, animated } from '@react-spring/web';
+import { useInView, useTransition, animated } from '@react-spring/web';
 
 type Props = {
     block: {
@@ -22,6 +21,13 @@ const TabbedContentBlock = ( {block}: Props ) => {
     const tabs = block.tabs ?? null
 
     const [activeIndex, setActiveIndex] = useState(0)
+
+    const transitions = useTransition(activeIndex, {
+        from: { opacity: 0 },
+        enter: { opacity: 1 },
+        leave: { opacity: 0 },
+        config: { duration: 200 },
+    })
 
     const [ref, springs] = useInView(
         () => ({
@@ -83,19 +89,16 @@ const TabbedContentBlock = ( {block}: Props ) => {
                                     className="p-6 md:p-8"
                                     role="tabpanel"
                                 >
-                                    {tabs.map((tab, index: number) => {
-                                        return (
-                                            <AnimateHeight 
-                                                key={index}
-                                                duration={300}
-                                                height={activeIndex === index ? 'auto' : 0}
-                                            >
-                                                {activeIndex === index && (
+                                    <div className="relative">
+                                        {transitions((style, item) => {
+                                            const tab = tabs[item]
+                                            return (
+                                                <animated.div style={style} className={item !== activeIndex ? 'absolute inset-0' : ''}>
                                                     <RichText text={tab.richText} customClasses='max-w-none' invert={false} typeScale={""}/>
-                                                )}
-                                            </AnimateHeight>
-                                        )
-                                    })}
+                                                </animated.div>
+                                            )
+                                        })}
+                                    </div>
                                 </section>
                             </div>
                         </div>

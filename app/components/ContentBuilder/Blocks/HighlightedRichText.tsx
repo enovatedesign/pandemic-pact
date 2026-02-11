@@ -1,43 +1,37 @@
 import BlockWrapper from "../BlockWrapper";
+import { defaultProseClasses } from '@/app/helpers/prose-classes';
 
 interface Props {
 	block: {
 		colour: string,
 		text: string,
 		textAlign: string,
-		width: string,
 	}
 	firstBlock: boolean
 	lastBlock: boolean
 }
 
+const colourConfig: Record<string, { bg: string, invert: boolean }> = {
+	primary: { bg: "bg-primary", invert: false },
+	secondary: { bg: "bg-secondary", invert: true },
+	light: { bg: "bg-brand-grey-100", invert: false },
+	dark: { bg: "bg-brand-grey-800", invert: true },
+};
+
 export default function HighlightedRichTextBlock({ block, firstBlock, lastBlock }: Props) {
 	const colour = block.colour;
 	const text = block.text;
 	const textAlign = block.textAlign;
-	const width = block.width;
 
-	let widthClasses = ''
-	
-	if (colour && text && textAlign && width) {
-		if (width === "one-quarter") {
-			let widthClasses = "md:w-1/4";
-		} else if (width === "one-third") {
-			let widthClasses = "md:w-1/3";
-		} else if (width === "one-half") {
-			let widthClasses = "md:w-1/2";
-		} else if (width === "two-thirds") {
-			let widthClasses = "md:w-2/3";
-		} else if (width === "three-quarters") {
-			let widthClasses = "md:w-3/4";
-		}
+	const config = colourConfig[colour];
 
+	if (config && text && textAlign) {
 		const blockClasses = [
-			"mx-auto p-6 max-w-none w-full prose-sm",
-			"md:p-8 md:prose",
+			"p-6 md:p-8 rounded-2xl shadow",
 			"text-" + textAlign,
-			widthClasses,
-			colour === "light" ? "bg-gray-40 text-body" : "bg-gray-930 text-white",
+			defaultProseClasses({}),
+			config.bg,
+			config.invert && "prose-invert",
 		].join(" ");
 
 		return (

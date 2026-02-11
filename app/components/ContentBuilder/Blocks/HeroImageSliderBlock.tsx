@@ -23,11 +23,11 @@ type Props = {
             slideButton: {
                 url: string,
                 text: string,
-            }
+            }[]
             slideTextLink: {
                 url: string,
                 text: string,
-            }
+            }[]
         }[],
     }
 }
@@ -58,11 +58,11 @@ const HeroImageSliderBlock = ({block}: Props) => {
                         const image = slide.slideImage[0] ?? null
                         const heading = slide.slideHeading ?? null
                         const text = slide.slideText ?? null
-                        const button = slide.slideButton ?? null
-                        const textLink = slide. slideTextLink ?? null
+                        const button = slide.slideButton?.[0] ?? null
+                        const textLink = slide.slideTextLink?.[0] ?? null
 
                         const buttonContainerClasses = [
-                            button.url || textLink.url ? "mt-6 md:mt-8 flex flex-row items-center gap-4" : ""
+                            button?.url || textLink?.url ? "mt-6 md:mt-8 flex flex-row items-center gap-4" : ""
                         ].join(' ')
 
                         return(
@@ -107,11 +107,11 @@ const HeroImageSliderBlock = ({block}: Props) => {
 
 
                                                         <div className={buttonContainerClasses}>
-                                                            {button.url && (
+                                                            {button?.url && (
                                                                 <Button href={button.url}>{button.text}</Button>
                                                             )}
 
-                                                            {textLink.url && (
+                                                            {textLink?.url && (
                                                                 <li><a href={textLink.url} className="text-white underline text-sm sm:text-base">{ textLink.text }</a></li>
                                                             )}
                                                         </div>
