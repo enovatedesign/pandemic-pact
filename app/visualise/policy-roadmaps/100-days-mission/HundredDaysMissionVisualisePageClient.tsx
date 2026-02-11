@@ -130,8 +130,8 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                                 Filtered Grants Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length} /{' '}
-                                {completeDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()} /{' '}
+                                {completeDataset.length.toLocaleString()}
                             </dd>
                         </>
                     ) : (
@@ -140,7 +140,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                                 Total grants
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()}
                             </dd>
                         </>
                     )}
