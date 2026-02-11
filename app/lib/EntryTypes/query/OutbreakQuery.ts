@@ -16,7 +16,7 @@ export default async function PageQuery(
                     typeHandle
                     postDate
                     slug
-                    ... on ${sectionHandle}_${entryType}_Entry {
+                    ... on ${entryType}_Entry {
                         ${entryType === 'outbreak' ? 'outbreakPending' : ''}
                         summary
                         showSummary

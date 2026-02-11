@@ -12,7 +12,7 @@ export default async function NewsArticleQuery(uri: string, previewToken?: strin
                     typeHandle
                     postDate
                     slug
-                    ... on news_newsArticle_Entry {
+                    ... on newsArticle_Entry {
                         summary
                         ${contentBuilderQuery}
                     }

@@ -1,3 +1,5 @@
+import { defaultProseClasses } from '@/app/helpers/prose-classes';
+
 interface Props {
     text: string
     invert?: boolean,
@@ -9,25 +11,22 @@ interface Props {
 const RichText = ({
     text,
     invert = false,
-    typeScale = 'lg:prose-lg',
+    typeScale = '',
     noMaxWidth = false,
     customClasses = '',
 }: Props) => {
 
     const classes = [
-        'prose',
-        'prose-headings:font-normal prose-a:underline',
-        typeScale,
-        !invert && 'prose-a:text-secondary prose-headings:text-secondary',
-        invert ? 'prose-invert' : 'prose-gray',
-        customClasses,
+        defaultProseClasses({ marginX: !noMaxWidth, customClasses }),
+        invert && 'prose-invert',
         noMaxWidth && 'max-w-none',
-    ].join(' ') 
+        typeScale,
+    ].join(' ')
 
     return (
 
         <div className={classes} dangerouslySetInnerHTML={{ __html: text }}></div>
-        
+
     )
 }
 

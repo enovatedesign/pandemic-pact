@@ -10,12 +10,14 @@ interface Props {
 }
 const Announcement = ({announcement}: Props) => {
     
-    const { dateUpdated, announcementPersistent, announcementTarget, announcementText, announcementShow } = announcement
+    const { dateUpdated, announcementPersistent, announcementText, announcementShow } = announcement
+
+    const announcementTarget = announcement ? announcement?.announcementTarget?.[0] : null
 
     const url = announcementTarget?.url ?? null
     const text = announcementTarget?.text ?? null
-    const type = announcementTarget?.type ?? null
-
+    const newWindow = announcementTarget?.newWindow ?? false
+    
     const linkTitle = announcementText ? announcementText : text ?? null
     
     const cookieName = `hideAnnouncement-${dateUpdated}`
@@ -94,8 +96,8 @@ const Announcement = ({announcement}: Props) => {
                         {url && linkTitle ? (
                             <a 
                                 href={url}  
-                                target={type === 'url' ? '_blank' : ''} 
-                                rel={type === 'url' ? 'noopener noreferrer' : ''}
+                                target={newWindow ? '_blank' : ''} 
+                                rel={newWindow ? 'noopener noreferrer' : ''}
                                 className={`${titleClasses} underline`}
                             >
                                 {linkTitle}

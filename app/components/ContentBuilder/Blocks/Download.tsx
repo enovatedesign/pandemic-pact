@@ -6,7 +6,6 @@ type Props = {
 	block: {
 		download: {
 			customText: string,
-			ariaLabel: string,
 			text: string,
 			title: string,
 			type: string,
@@ -15,16 +14,33 @@ type Props = {
 				kind: string,
 				size: number,
 			},
-		},
+		}[]
 	}
-	firstBlock: boolean
-	lastBlock: boolean
 }
 
-const DownloadBlock = ({ block, firstBlock, lastBlock }: Props) => {
+const DownloadBlock = ({ block }: Props) => {
+	const download = block.download[0] ?? null
+
+	const [ref, springs] = useInView(
+		() => ({
+			from: {
+				opacity: 0,
+				y: 100,
+			},
+			to: {
+				opacity: 1,
+				y: 0,
+			},
+		}),
+		{
+			once: true,
+		}
+	)
 	
-	const {url, text, customText, element} = block.download ?? null
-	
+	if (!download) return
+
+	const { url, text, customText, element } = download ?? null
+
 	const title = customText ? customText : text
 	const downloadKind = element.kind ?? null
 	const downloadSize = element.size ?? null
@@ -67,27 +83,11 @@ const DownloadBlock = ({ block, firstBlock, lastBlock }: Props) => {
 	const fallbackImage = "/images/file-types/file.png"
 	const image = filteredKind[0].image ?? fallbackImage
 	
-	const [ref, springs] = useInView(
-		() => ({
-			from: {
-				opacity: 0,
-				y: 100,
-			},
-			to: {
-				opacity: 1,
-				y: 0,
-			},
-		}),
-		{
-			once: true,
-		}
-	);
-
 	return (
 		<BlockWrapper>
 			{url && (
 				<animated.article ref={ref} style={springs}>
-					<a href={url} target="_blank" className="group relative flex justify-between items-center gap-4 bg-gray-100 lg:pr-24 transition hover:shadow-md hover:scale-[1.02]">
+					<a href={url} target="_blank" className="group relative flex justify-between items-center gap-4 bg-gray-100 rounded-2xl overflow-hidden lg:pr-24 transition hover:shadow-md hover:scale-[1.02]">
 						<div className="flex flex-row items-center gap-4 p-3">
 							<div className="bg-white rounded p-3">
 								<Image

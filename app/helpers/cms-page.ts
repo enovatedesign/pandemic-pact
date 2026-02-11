@@ -79,7 +79,7 @@ export async function getPageContent(
 
     const data = await entryQuery(uri, entryType, sectionHandle, previewToken)
 
-    return data
+    return { ...data, sectionHandle, uri }
 }
 
 

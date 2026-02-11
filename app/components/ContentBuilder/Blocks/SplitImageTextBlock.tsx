@@ -16,7 +16,7 @@ interface Props {
         button: {
             text: string,
             url: string,
-        },
+        }[],
         reverse: boolean,
     }
 }
@@ -25,7 +25,7 @@ const SplitImageTextBlock = ({block}: Props) => {
 
     const image = block.image[0] ?? null
     const text = block.text ?? null
-    const button = block.button ?? null
+    const button = block.button?.[0] ?? null
     const reverse = block.reverse ?? false
 
     const gridClasses = [
@@ -34,7 +34,7 @@ const SplitImageTextBlock = ({block}: Props) => {
 
     const textWrapperClasses = [
         'mx-auto h-full',
-        'flex flex-col justify-evenly items-start',
+        'flex flex-col justify-center gap-10 items-start',
         reverse ? 'md:col-start-2 md:row-start-1' : '',
     ].join(' ');
 
@@ -85,8 +85,8 @@ const SplitImageTextBlock = ({block}: Props) => {
                         <RichText text={text} invert={false} typeScale={""} customClasses={""} />
                     )}
 
-                    {button.url && (
-                        <Button href={button.url}> 
+                    {button?.url && (
+                        <Button href={button.url}>
                             {button.text}
                         </Button>
                     )}
