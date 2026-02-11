@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
             entries(
                 status: "enabled", 
                 section: "${sectionHandle}", 
-                orderBy: "dateCreated",
+                orderBy: "dateCreated DESC",
                 limit: ${queryLimit}, 
                 offset: ${queryOffset}
                 ${relationQuery ? `, relatedToEntries: [{uri: "${relationQuery}"}]` : ''}
