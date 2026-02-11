@@ -157,6 +157,8 @@ export const contentBuilderQuery = `
         id
         typeHandle
         heading
+        limit
+        paginate
         customEntries (orderBy: "postDate DESC") {
           ... on externalPublication_Entry {
             id
@@ -246,6 +248,7 @@ export const contentBuilderQuery = `
         }
         width
         caption
+        popUpBox
         typeHandle
       }
       ... on imagePair_Entry {

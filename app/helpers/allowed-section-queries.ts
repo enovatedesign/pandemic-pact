@@ -2,5 +2,6 @@
 export const allowedSectionQueries = [
     'news',
     'pages',
-    'announcement'
+    'announcement',
+    'publications'
 ]

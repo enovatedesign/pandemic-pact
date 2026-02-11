@@ -2,11 +2,10 @@ import Image from "next/image"
 import RichText from "../Common/RichText"
 import Button from '../../Button'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, EffectFade } from "swiper/modules"
+import { Pagination } from "swiper/modules"
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
-import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 
 type Props = {
@@ -46,11 +45,10 @@ const HeroImageSliderBlock = ({block}: Props) => {
         <section >
             {slides && (
                 <Swiper className={`${mastheadClasses}`}
-                    modules={[EffectFade, Autoplay, Pagination]}
+                    modules={[Pagination]}
                     slidesPerView={1}
-                    effect="fade"
-                    pagination={slides.length > 1 ? true : false}
-                    autoplay={{ delay: 5000 }}
+                    pagination={slides.length > 1 ? { clickable: true } : false}
+                    id="hero-image-slider-swiper"
                 >
                     
                     {slides.map((slide, index) => {
@@ -61,67 +59,53 @@ const HeroImageSliderBlock = ({block}: Props) => {
                         const button = slide.slideButton?.[0] ?? null
                         const textLink = slide.slideTextLink?.[0] ?? null
 
-                        const buttonContainerClasses = [
-                            button?.url || textLink?.url ? "mt-6 md:mt-8 flex flex-row items-center gap-4" : ""
-                        ].join(' ')
+                        const Heading = index === 0 ? 'h1' : 'h2'
 
                         return(
-                            <>
                                 <SwiperSlide key={index} className="relative w-full h-full bg-gray-100 overflow-hidden">
-                                    
-                                    <div className="absolute">
-                                        <Image
-                                            src={image.url}
-                                            width={image.width}
-                                            height={image.height}
-                                            alt={image.alt}
-                                            className=""
-                                        />  
-                                    </div>
+
+                                    <Image
+                                        src={image.url}
+                                        width={image.width}
+                                        height={image.height}
+                                        alt={image.alt}
+                                        className="absolute inset-0 w-full h-full object-cover"
+                                    />
 
                                     <div className="relative bg-black bg-opacity-60 w-full h-full lg:bg-transparent z-10">
-                                        <div className="container h-full">
-                                            <div className="flex h-full items-center lg:w-1/2">
-                                                <div className="lg:rounded lg:bg-black lg:bg-opacity-60 lg:p-10">
-                                                    <div className="flex flex-col">
-                                                        {heading && (
-                                                            <>
-                                                                {index === 0 ? (
-                                                                    <h1 className="text-2xl lg:text-3xl xl:text-5xl text-primary" id="page-title">
-                                                                        {heading}
-                                                                    </h1>
-                                                                ) : (
+                                        <div className="container flex h-full items-center">
+                                            <div className="flex flex-col lg:w-1/2 lg:rounded-2xl lg:bg-black lg:bg-opacity-60 lg:p-10">
+                                                {heading && (
+                                                    <Heading className="text-2xl lg:text-3xl xl:text-5xl text-primary" id="page-title">
+                                                        {heading}
+                                                    </Heading>
+                                                )}
 
-                                                                    <h2 className="text-2xl lg:text-3xl xl:text-5xl text-primary" id="page-title">
-                                                                        { heading }
-                                                                    </h2>
-                                                                )}
-                                                            </>
-                                                        )}
-
-                                                        {text && (
-                                                            <div className="pt-4 lg:pt-8">
-                                                                <RichText text={text} customClasses='text-white' invert={false} typeScale={""} />
-                                                            </div>
-                                                        )}
-
-
-                                                        <div className={buttonContainerClasses}>
-                                                            {button?.url && (
-                                                                <Button href={button.url}>{button.text}</Button>
-                                                            )}
-
-                                                            {textLink?.url && (
-                                                                <li><a href={textLink.url} className="text-white underline text-sm sm:text-base">{ textLink.text }</a></li>
-                                                            )}
-                                                        </div>
+                                                {text && (
+                                                    <div className="pt-4 lg:pt-8">
+                                                        <RichText text={text} invert={true} />
                                                     </div>
-                                                </div>
+                                                )}
+
+                                                {(button?.url || textLink?.url) && (
+                                                    <ul className="mt-6 md:mt-8 flex flex-row items-center gap-4 lg:gap-6 list-none p-0">
+                                                        {button?.url && (
+                                                            <li>
+                                                                <Button href={button.url} size="small">{button.text}</Button>
+                                                            </li>
+                                                        )}
+
+                                                        {textLink?.url && (
+                                                            <li>
+                                                                <a href={textLink.url} className="text-white underline text-sm sm:text-base">{textLink.text}</a>
+                                                            </li>
+                                                        )}
+                                                    </ul>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
                                 </SwiperSlide>
-                            </>
                         )
                     })}
                 </Swiper>
