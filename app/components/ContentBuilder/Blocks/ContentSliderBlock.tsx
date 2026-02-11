@@ -12,7 +12,7 @@ type Props = {
             button: {
                 text: string,
                 url: string,
-            }
+            }[]
             image: {
                 url: string,
                 altText: string,
@@ -44,12 +44,12 @@ const ContentSliderBlock = ({block}: Props ) => {
                             },
                         }}
                         navigation
-                        pagination
+                        pagination={{ clickable: true }}
                         id="content-slider-swiper"
                     >
                         {slides.map((slide, index: number) => {
                             
-                            const button = slide.button ?? null
+                            const button = slide.button?.[0] ?? null
 
                             return (
                                 <SwiperSlide key={index}>

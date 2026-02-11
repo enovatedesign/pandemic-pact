@@ -29,7 +29,7 @@ export default function Header({ className, showMobileNav }: Props ) {
         const outbreaks = link.label.toLowerCase() === 'outbreaks' ? true : false
         
         const linkClasses = [
-            'border border-primary/25 inner-glow rounded-full py-3 px-6 my-3 flex uppercase font-medium tracking-wider transition-colors duration-150 lg:rounded-none lg:p-0 lg:border-0 lg:my-0 lg:shadow-none',
+            'border border-primary/25 inner-glow rounded-full py-3 px-6 flex uppercase font-medium tracking-wider transition-colors duration-150 lg:rounded-none lg:p-0 lg:border-0 lg:shadow-none',
             pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white',
             'lg:text-sm xl:text-base'
         ].filter(Boolean).join(' ')
@@ -67,7 +67,7 @@ export default function Header({ className, showMobileNav }: Props ) {
     ].join(' ')
 
     const navUnorderedListClasses = [
-        "pb-24 px-6 w-full max-h-screen overflow-y-auto mt-auto",
+        "pb-24 px-6 w-full max-h-screen overflow-y-auto mt-auto space-y-3 lg:space-y-0",
         "lg:px-10 lg:relative lg:flex lg:gap-x-6 2xl:gap-x-10 lg:py-3 lg:overflow-y-visible",
     ].join(' ')
 
@@ -126,7 +126,7 @@ export default function Header({ className, showMobileNav }: Props ) {
                                         <li key={index} className={`${mobileAnimationClasses} lg:-translate-x-0 lg:translate-y-0 lg:duration-0`}>
 
                                             {link.subPages ? (
-                                                <button onClick={handleClick} className='border border-primary/25 inner-glow rounded-full py-3 px-6 my-3 flex justify-between w-full lg:rounded-none lg:p-0 lg:border-0 lg:my-0 lg:shadow-none lg:py-0'>
+                                                <button onClick={handleClick} className='border border-primary/25 inner-glow rounded-full py-3 px-6 flex justify-between w-full lg:rounded-none lg:p-0 lg:border-0 lg:shadow-none lg:py-0'>
                                                     <span className={`uppercase font-medium tracking-wider transition-colors duration-150 ${pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white'} lg:text-sm xl:text-base`}>
                                                         {link.label}
                                                     </span>

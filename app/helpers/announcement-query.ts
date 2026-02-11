@@ -5,15 +5,14 @@ export async function queryAnnouncementEntry() {
     const announcement = await GraphQL(`
         query {    
             entry(section: "announcement") {
-                ... on announcement_announcement_Entry {
+                ... on announcement_Entry {
                     dateUpdated @formatDateTime(format: "U")
                     announcementShow
                     announcementPersistent
                     announcementText
                     announcementTarget {
-                        customText
+                        newWindow
                         text
-                        type
                         url
                     }
                 }

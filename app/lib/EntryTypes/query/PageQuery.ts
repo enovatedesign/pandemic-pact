@@ -12,7 +12,7 @@ export default async function PageQuery(uri: string, entryType: string = 'page',
                     typeHandle
                     postDate
                     slug
-                    ... on ${sectionHandle}_${entryType}_Entry {
+                    ... on ${entryType}_Entry {
                         summary
                         showSummary
                         outbreak

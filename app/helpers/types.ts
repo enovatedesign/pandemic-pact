@@ -19,11 +19,10 @@ export interface AnnouncementProps {
     announcementShow: boolean
     announcementText?: string
     announcementTarget?: {
-        customText?: string,
-        text?: string,
+        text?: string
         url?: string
-        type?: string
-    }
+        newWindow: boolean
+    }[]
 }
 
 export type DiseaseLabel = 'mpox' | 'H5N1' | 'Marburg virus disease' | 'Ebola' | 'default'
