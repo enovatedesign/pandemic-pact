@@ -1,3 +1,17 @@
+# Pandemic PACT
+
+## About
+
+Pandemic PACT tracks and analyses global funding and evidence for research on diseases with pandemic potential and broader preparedness efforts, ready to pivot in response to outbreaks.
+
+http://www.pandemicpact.org/
+
+## DOI
+
+[![DOI](https://zenodo.org/badge/773715626.svg)](https://doi.org/10.5281/zenodo.18622167)
+
+# Technical Notes
+
 This project uses the following technologies and packages:
 
 -   [Next.js](https://nextjs.org)
