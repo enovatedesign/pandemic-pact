@@ -183,7 +183,7 @@ Unlike the TypeScript compiler, the linter will print a success message if there
 
 ## DOI
 
-[![DOI](https://zenodo.org/badge/773715626.svg)](https://doi.org/10.5281/zenodo.18622167)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18622168.svg)](https://doi.org/10.5281/zenodo.18622168)
 
 ## License
 
