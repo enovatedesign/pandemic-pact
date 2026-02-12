@@ -6,11 +6,7 @@ Pandemic PACT tracks and analyses global funding and evidence for research on di
 
 http://www.pandemicpact.org/
 
-## DOI
-
-[![DOI](https://zenodo.org/badge/773715626.svg)](https://doi.org/10.5281/zenodo.18622167)
-
-# Technical Notes
+## Technologies & Packages
 
 This project uses the following technologies and packages:
 
@@ -18,10 +14,12 @@ This project uses the following technologies and packages:
 -   [Vercel](https://vercel.com)
 -   [Typescript](https://www.typescriptlang.org)
 -   [OpenSearch](https://opensearch.org)
+-   [Tailwind CSS](https://tailwindcss.com)
 -   [Headless UI](https://headlessui.com)
 -   [Recharts](https://recharts.org)
--   [React Simple Maps](https://www.react-simple-maps.io)
+-   [deck.gl](https://deck.gl)
 -   [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
+-   [GSAP](https://gsap.com)
 
 ## Vercel Blob Storage Caching
 
@@ -48,6 +46,20 @@ FORCE_BLOB_UPLOAD=true
 
 **Note:** Blob uploads require the `BLOB_READ_WRITE_TOKEN` and `BLOB_BASE_URL` environment variables to be set (see Vercel project settings).
 
+## Environment Variables
+
+This project uses several environment variables. See `.env.local.example` for a template. Here is a summary:
+
+| Variable | Purpose | Where to find |
+| --- | --- | --- |
+| `SEARCH_HOST` | OpenSearch host URL | GitLab CI/CD settings |
+| `SEARCH_USERNAME` | OpenSearch username | GitLab CI/CD settings |
+| `SEARCH_PASSWORD` | OpenSearch password | GitLab CI/CD settings |
+| `SEARCH_INDEX_PREFIX` | Unique prefix for your indexes | Choose your own |
+| `FORCE_BLOB_UPLOAD` | Control blob upload behaviour | Set in `.env.local` |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob auth | Vercel project settings |
+| `BLOB_BASE_URL` | Vercel Blob base URL | Vercel project settings |
+
 ## Getting Started
 
 Start by ensuring that you are on the correct version of NodeJS by using NVM:
@@ -56,13 +68,11 @@ Start by ensuring that you are on the correct version of NodeJS by using NVM:
 nvm use
 ```
 
-Next, install dependencies via NPM. You will need to get the GSAP Token from [Environment Variables](https://vercel.com/enovatedesign/pandemic-pact/settings/environment-variables) settings in Vercel - ask someone if you don't have access.
+Next, install dependencies:
 
 ```bash
-GSAP_TOKEN="..." npm ci
+npm ci
 ```
-
-Replace `...` in the command above with the GSAP Token.
 
 ### OpenSearch
 
@@ -123,13 +133,13 @@ One benefit of running OpenSearch in this way is that [OpenSearch Dashboard](htt
 
 ### Generate Data
 
-Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `/dist/data` directory and sends it to OpenSearch:
+Next you will need to run our `generate` script which prepares the source data into a more suitable format, outputs it to the `data/dist` directory and sends it to OpenSearch:
 
 ```bash
 npm run generate
 ```
 
-If you want to upload the generated data to Vercel Blob Storage for your branch, set `FORCE_BLOB_UPLOAD=true` in `.env.local` before running the `npm generate` command.
+If you want to upload the generated data to Vercel Blob Storage for your branch, set `FORCE_BLOB_UPLOAD=true` in `.env.local` before running the `npm run generate` command.
 
 ### Run the Development server
 
@@ -170,3 +180,11 @@ Unlike the TypeScript compiler, the linter will print a success message if there
 ```
 ✔ No ESLint warnings or errors
 ```
+
+## DOI
+
+[![DOI](https://zenodo.org/badge/773715626.svg)](https://doi.org/10.5281/zenodo.18622167)
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
