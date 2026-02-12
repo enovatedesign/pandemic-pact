@@ -35,6 +35,9 @@ export async function generateStaticParamsForCmsPages() {
         .filter(
             ({ typeHandle }) => EntryTypes.queries[typeHandle] !== undefined
         )
+        .filter(
+            ({ typeHandle }) => !(typeHandle === 'testPage' && process.env.VERCEL_ENV === 'production')
+        )
         .map(({ slug, ancestors }) => {
             let slugs = [slug]
 
@@ -70,6 +73,10 @@ export async function getPageContent(
 
     const entryType = entryTypeData.entry.typeHandle
     const sectionHandle = entryTypeData.entry.sectionHandle
+
+    if (entryType === 'testPage' && process.env.VERCEL_ENV === 'production') {
+        return null
+    }
 
     const entryQuery = EntryTypes.queries[entryType]
 
