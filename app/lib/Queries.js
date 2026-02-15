@@ -373,7 +373,7 @@ export const contentBuilderQuery = `
             heading
             width
           }
-          table
+          rows
         }
         caption
       }
