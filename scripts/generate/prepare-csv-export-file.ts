@@ -3,20 +3,38 @@ import zlib from 'zlib'
 import { utils } from 'xlsx'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { keyMapping } from '../helpers/key-mapping'
-import { fullDataFilename } from '../../app/helpers/export'
 import { Grant } from '../types/generate'
 
 interface SelectOptions {
     [key: string]: { value: string; label: string }[]
 }
 
-export default function prepareXsvExportFile() {
-    title('Preparing CSV export file')
+export default function prepareCsvExportFile({
+    logTitle,
+    dataFilePath,
+    workbookTitle,
+    exportPath,
+    dataFileName,
+}: {
+    logTitle: string
+    dataFilePath: string
+    workbookTitle: string
+    exportPath: string
+    dataFileName: string
+}) {
+    title(logTitle)
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const grants: Grant[] = JSON.parse(jsonBuffer.toString())
+    const isZipped = dataFilePath.endsWith('.gz')
+
+    let grants: Grant[] = []
+
+    if (isZipped) {
+        const gzipBuffer = fs.readFileSync(dataFilePath)
+        const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
+        grants = JSON.parse(jsonBuffer.toString())
+    } else {
+        grants = fs.readJsonSync(dataFilePath)
+    }
 
     const selectOptions: SelectOptions = fs.readJsonSync(
         './data/dist/select-options.json'
@@ -41,7 +59,7 @@ export default function prepareXsvExportFile() {
     // It has been requested that these fields are visible in the export and are in a defined order after the existing "Families" field.
 
     // Get the defined values from keyMapping
-    const fieldsForExport = Object.values(keyMapping)
+    const fieldsForExport = Object.keys(grants[0])
     
     // Find the index of "Families"
     const familiesIndex = fieldsForExport.indexOf("Families")
@@ -96,17 +114,14 @@ export default function prepareXsvExportFile() {
 
     // Create a workbook with the worksheet
     const workbook = utils.book_new()
-    utils.book_append_sheet(workbook, worksheet, 'Pandemic PACT Grants')
+    utils.book_append_sheet(workbook, worksheet, workbookTitle)
 
     // Convert the workbook to a CSV file
     const csvData = utils.sheet_to_csv(worksheet)
 
-    // Write the CSV data to a file
-    const path = './public/export'
+    fs.emptyDirSync(exportPath)
 
-    fs.emptyDirSync(path)
-
-    const pathname = `${path}/${fullDataFilename}`
+    const pathname = `${exportPath}/${dataFileName}`
 
     fs.writeFileSync(pathname, csvData, 'utf-8')
 

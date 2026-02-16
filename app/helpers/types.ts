@@ -108,3 +108,4 @@ export interface CMSStrainFilter {
         }
     }
 }
+export type PolicyRoadmapEntryTypeHandle = 'hundredDaysMission' | 'pandemicIntelligence'

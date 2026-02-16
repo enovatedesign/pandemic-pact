@@ -55,8 +55,9 @@ export const keyMapping: { [key: string]: string } = {
     hundred_dm_flag: 'HundredDaysMissionFlag',
     'onehundreddm_research_area': 'HundredDaysMissionResearchArea',
     'onehundreddm_implementation': 'HundredDaysMissionImplementation',
-    research_location_country: 'HundredDaysMissionResearchLocationCountry',
-    capacity_strengthening_list: 'HundredDaysMissionCapacityStrengthening'
+    research_location_country: 'PolicyRoadmapResearchLocationCountry',
+    capacity_strengthening_list: 'HundredDaysMissionCapacityStrengthening',
+    pandint_themes: 'PandemicIntelligenceThemes'
 }
 
 export const mpoxResearchPriorityAndSubPriorityMapping: {
@@ -211,12 +212,13 @@ export const grantPolicyRoadmaps =(rawGrant: any) => {
     // When a user selects a roadmap from the dropdown, we filter the dataset to include only grants tagged with that roadmap.
     
     const policyRoadmapFields = {
-        'hundred_dm_flag': 'HundredDaysMissionFlag'
+        'hundred_dm_flag': 'HundredDaysMissionFlag',
+        'pandint_themes_flag': 'PandemicIntelligenceFlag'
     }
         
     let policyRoadmapValues: string[] = []
 
-    Object.entries(policyRoadmapFields).forEach(([ key, value]) => {
+    Object.entries(policyRoadmapFields).forEach(([ key, value ]) => {
         if (rawGrant[key] === '1') {
             policyRoadmapValues.push(value)
         }

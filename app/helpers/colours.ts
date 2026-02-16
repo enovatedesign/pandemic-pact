@@ -591,6 +591,30 @@ export const hundredDaysMissionClinicalTrialDimColours: Colours = {
     "-99": brandColours.grey['300'],
 }
 
+export const pandemicIntelligenceThemeColours: Colours = {
+    '1': brandColours.blue['400'],
+    '2': brandColours.teal['500'],
+    '3': brandColours.green['500'],
+    '4': brandColours.orange['500'],
+    '5': brandColours.grey['400'],
+    '6': brandColours.red['500'],
+    '7': brandColours.yellow['600'],
+    '8': brandColours.blue['700'],
+    '9': brandColours.teal['700'],  
+}
+
+export const pandemicIntelligenceThemeDimColours: Colours = {
+    '1': brandColours.blue['300'],
+    '2': brandColours.teal['400'],
+    '3': brandColours.green['400'],
+    '4': brandColours.orange['400'],
+    '5': brandColours.grey['300'],
+    '6': brandColours.red['400'],
+    '7': brandColours.yellow['400'],
+    '8': brandColours.blue['600'],
+    '9': brandColours.teal['600'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,

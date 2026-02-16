@@ -108,6 +108,19 @@ export default function ExportImageMenuItem({
                 imageLegendSvgWrappers[i].classList.add('translate-y-[12px]')
                 imageLegendSvgWrappers[i].classList.remove('mt-[5px]')
             }
+            
+            const tableWrapper = vizWrapper.getElementsByClassName('table-visualisation-wrapper')[0]
+
+            if (tableWrapper) {
+                tableWrapper.classList.remove('overflow-x-auto')
+                tableWrapper.classList.add('!overflow-visible')
+                
+                const table = tableWrapper?.querySelector('table')
+                if (table) {
+                    table.style.transformOrigin = 'top left'
+                    table.style.transform = 'scale(0.6)'
+                }
+            }
         }
 
         // We have to manually redraw the DeckGL canvas before taking the

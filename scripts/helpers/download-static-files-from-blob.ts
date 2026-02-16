@@ -27,6 +27,7 @@ export async function downloadStaticFilesFromBlob(): Promise<boolean> {
         { url: `${baseUrl}/${branchName}/cache/who-regions.json`, path: './public/data/geojson/who-regions.json' },
         { url: `${baseUrl}/${branchName}/cache/dictionary.json`, path: './public/data/dictionary.json' },
         { url: `${baseUrl}/${branchName}/cache/research-category-mapping.json`, path: './public/data/research-category-mapping.json' },
+        { url: `${baseUrl}/${branchName}/cache/pandemic-intelligence.json`, path: './public/data/pandemic-intelligence/grants.json' },
     ]
 
     for (const file of filesToDownload) {

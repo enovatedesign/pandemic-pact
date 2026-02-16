@@ -12,6 +12,7 @@ import RichText from "../Common/RichText"
 
 type Props = {
     block: {
+        heading?: string,
         accordions: {
             id: number,
             accordionHeading: string,
@@ -21,8 +22,9 @@ type Props = {
     }
 }
 
-const AccordionBlock = ( {block}: Props ) => {
+const AccordionBlock = ( { block }: Props ) => {
     
+    const title = block.heading ?? null // Named as heading in cms due to title being a reserved word
     const accordions = block.accordions ?? null
     const headingLevel = block.headingLevel ?? 2
 
@@ -51,6 +53,14 @@ const AccordionBlock = ( {block}: Props ) => {
 
     return (
         <BlockWrapper>
+            <div className={defaultProseClasses({ customClasses: 'mb-8 lg:mb-12' })}>
+                {title &&(
+                    <h2>
+                        {title}
+                    </h2>
+                )}
+            </div>
+            
             {accordions && (
                 <animated.ul className="space-y-4" ref={ref} style={springs}>
                     {accordions.map((accordion, index: number) => {

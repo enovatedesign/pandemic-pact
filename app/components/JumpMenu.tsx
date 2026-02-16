@@ -3,11 +3,11 @@ import {ChevronDownIcon} from '@heroicons/react/solid'
 import Image from "next/image"
 import AnimateHeight from 'react-animate-height';
 import { DiseaseLabel } from '../helpers/types';
-import { VisualisationCardDataProps, HundredDaysMissionCardDataProps } from '../visualise/components/visualisationCardData';
+import { VisualisationCardDataProps } from '../visualise/components/types';
 
 interface Props {
     disease?: DiseaseLabel
-    cardData: VisualisationCardDataProps[] | HundredDaysMissionCardDataProps[]
+    cardData: VisualisationCardDataProps[]
 }
 
 export default function JumpMenu({cardData, disease}: Props) {

@@ -1,33 +1,26 @@
 import AnimateHeight from "react-animate-height"
 
-import { visualisationCardData, hundredDaysMissionVisualisationCardData } from './visualisationCardData'
-import { DiseaseLabel } from "@/app/helpers/types"
+import { DiseaseLabel, PolicyRoadmapEntryTypeHandle } from "@/app/helpers/types"
+import { getVisualisationCards } from "./helpers"
 
 import JumpMenu from "@/app/components/JumpMenu"
 
 interface Props {
-    isHundredDaysMission?: boolean
+    policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle | null
     dropdownVisible: boolean
     outbreak: boolean
     disease?: DiseaseLabel
 }
 
 const VisualisationJumpMenu = ({ 
-    isHundredDaysMission = false, 
+    policyRoadmapEntryType = null, 
     dropdownVisible, 
-    outbreak, 
+    outbreak = false, 
     disease 
 }: Props) => {
-    const cardSwitch: DiseaseLabel = disease ?? 'default'
+    const cardData = getVisualisationCards({ policyRoadmapEntryType, outbreak, disease });
 
-    const cardData = isHundredDaysMission ? 
-        hundredDaysMissionVisualisationCardData : 
-        visualisationCardData(outbreak, disease).filter(card => 
-            card.showCard[cardSwitch as keyof typeof card.showCard] && 
-            card.showChevron[cardSwitch as keyof typeof card.showChevron]
-        )
-
-    return (
+    return cardData.length > 0 && (
         <AnimateHeight
             duration={300}
             height={dropdownVisible ? 'auto' : 0}

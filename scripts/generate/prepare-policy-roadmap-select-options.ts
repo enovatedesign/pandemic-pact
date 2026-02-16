@@ -19,6 +19,10 @@ export default async function preparePolicyRoadmapSelectOptions() {
         {
             label: '100 Days Mission',
             value: 'HundredDaysMissionFlag'
+        },
+        {
+            label: 'Pandemic Intelligence',
+            value: 'PandemicIntelligenceFlag'
         }
     ]
 

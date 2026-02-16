@@ -4,16 +4,16 @@ import MultiSelect from './MultiSelect'
 import Switch from './Switch'
 import Button from './Button'
 import {
-    available100DaysMissionFilters,
-    availableFilters,
     emptyFilters,
     Filters,
     FilterSchema,
     FixedSelectOptionContext,
+    getAvailableFilters,
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import CMSFilterBlock from './CMS/HierarchicalFiltersBlock'
+import { PolicyRoadmapEntryTypeHandle } from '../helpers/types'
 
 interface FilterSidebarProps {
     selectedFilters: Filters
@@ -24,7 +24,7 @@ interface FilterSidebarProps {
     sharedFiltersId?: string | null
     outbreak?: boolean
     showHierarchicalFilters?: boolean
-    is100DaysMission?: boolean
+    policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
     customFilters?: ReactNode
     bottomContent?: ReactNode
 }
@@ -49,7 +49,7 @@ export default function FilterSidebar({
     sharedFiltersId,
     outbreak = false,
     showHierarchicalFilters = true,
-    is100DaysMission = false,
+    policyRoadmapEntryType,
     customFilters,
     bottomContent
 }: FilterSidebarProps) {
@@ -57,7 +57,7 @@ export default function FilterSidebar({
     
     const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
 
-    const filters = is100DaysMission ? available100DaysMissionFilters() : availableFilters()
+    let filters = getAvailableFilters({ policyRoadmapEntryType })
     
     const standardFilters = filters.filter(f => !f.advanced)
 
@@ -208,7 +208,7 @@ export default function FilterSidebar({
             </div>
 
             {bottomContent && (
-                <div className="mt-4 pb-12 lg:pb-0">
+                <div className="w-full mt-4 pb-12 lg:pb-0">
                     {bottomContent}
                 </div>
             )}

@@ -10,7 +10,13 @@ import {
 } from '../../helpers/export'
 import Button from './Button'
 
-export default function ExportDataMenuItem() {
+export default function ExportDataMenuItem({ 
+    filenameToFetch = fullDataFilename, 
+    filteredFileName = filteredDataFilename 
+}: { 
+    filenameToFetch?: string, 
+    filteredFileName?: string 
+}) {
     const { filters, grants } = useContext(GlobalFilterContext)
 
     const [exportingCsv, setExportingCsv] = useState(false)
@@ -22,7 +28,7 @@ export default function ExportDataMenuItem() {
 
         setExportingCsv(true)
 
-        fetchCsv()
+        fetchCsv(filenameToFetch)
             .then(csv => {
                 let filteredCsv = csv
 
@@ -37,7 +43,7 @@ export default function ExportDataMenuItem() {
 
                 downloadCsv(
                     filteredCsv,
-                    filtersAreActive ? filteredDataFilename : fullDataFilename
+                    filtersAreActive ? filteredFileName : filenameToFetch
                 )
 
                 setExportingCsv(false)
