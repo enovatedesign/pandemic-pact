@@ -26,6 +26,7 @@ export async function uploadStaticFilesToBlob() {
         { path: './public/data/geojson/who-regions.json', key: `${branchName}/cache/who-regions.json` },
         { path: './data/download/dictionary.json', key: `${branchName}/cache/dictionary.json` },
         { path: './data/download/research-category-mapping.json', key: `${branchName}/cache/research-category-mapping.json` },
+        { path: './data/dist/pandemic-intelligence.json', key: `${branchName}/cache/pandemic-intelligence.json` },
     ]
 
     for (const file of filesToUpload) {

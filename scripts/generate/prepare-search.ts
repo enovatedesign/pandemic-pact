@@ -11,7 +11,6 @@ import { execSync } from 'child_process'
 import { Grant } from '../types/generate'
 
 export default async function prepareSearch() {
-
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
         warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
         return

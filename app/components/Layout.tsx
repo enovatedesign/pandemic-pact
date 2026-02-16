@@ -3,7 +3,7 @@
 import mastheadStyles from '../css/components/masthead.module.css'
 import '../css/components/sidebar.css'
 
-import { isValidElement, useState, useEffect, ReactNode } from 'react'
+import { isValidElement, useState, useEffect, ReactNode, Fragment } from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { AdjustmentsIcon, ShieldExclamationIcon } from '@heroicons/react/outline'
 
@@ -35,7 +35,7 @@ type Props = {
 const Layout = ({
     title,
     summary,
-    showSummary,
+    showSummary = true,
     sidebar,
     mastheadContent,
     children,
@@ -201,10 +201,14 @@ const Layout = ({
                                                         )}
                                                     </div>
 
-                                                    {isValidElement(summary) ? summary : (
-                                                        <p className="mt-2 text-white opacity-50 lg:text-xl">
-                                                            {summary}
-                                                        </p>
+                                                    {showSummary && (
+                                                        <Fragment>
+                                                            {isValidElement(summary) ? summary : (
+                                                                <p className="mt-2 text-white opacity-50 lg:text-xl">
+                                                                    {summary}
+                                                                </p>
+                                                            )}
+                                                        </Fragment>
                                                     )}
 
                                                     {mastheadContent}

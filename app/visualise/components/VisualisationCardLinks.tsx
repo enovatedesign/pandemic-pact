@@ -1,28 +1,24 @@
-import Card from "../../components/ContentBuilder/Common/Card"
 import {ChevronDownIcon} from "@heroicons/react/solid"
-import { visualisationCardData, hundredDaysMissionVisualisationCardData } from './visualisationCardData'
-import { DiseaseLabel } from "@/app/helpers/types"
+
+import { DiseaseLabel, PolicyRoadmapEntryTypeHandle } from "@/app/helpers/types"
+import { getVisualisationCards } from "./helpers"
+
+import Card from "../../components/ContentBuilder/Common/Card"
 
 interface VisualisationCardLinksProps {
-    isHundredDaysMission?: boolean
+    policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle | null
     outbreak?: boolean
     disease?: DiseaseLabel
 }
 
-const VisualisationCardLinks = ({ isHundredDaysMission = false, outbreak = false, disease }: VisualisationCardLinksProps) => {
+const VisualisationCardLinks = ({ policyRoadmapEntryType = null, outbreak = false, disease }: VisualisationCardLinksProps) => {
+    const cardData = getVisualisationCards({ policyRoadmapEntryType, outbreak, disease });
+
     
-    const cardSwitch: DiseaseLabel = disease ?? 'default'
-
-    const cards = isHundredDaysMission ?
-        hundredDaysMissionVisualisationCardData :
-        visualisationCardData(outbreak ,disease).filter(
-            card => card.showCard[cardSwitch]
-        )
-
-    return (
+    return cardData.length > 0 && (
         <section className="hidden lg:block container mx-auto my-6 lg:my-12">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-                {cards.map((card, index) => {
+                {cardData.map((card, index) => {
                     const cardSwitch = disease ?? "default";
                     
                     const showChevron = card.showChevron[cardSwitch as keyof typeof card.showChevron]

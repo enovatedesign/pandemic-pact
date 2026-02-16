@@ -1,6 +1,6 @@
 import { scaleLog } from 'd3-scale'
 import { ColorTranslator } from 'colortranslator'
-import { groupBy, sumBy } from 'lodash'
+import { sumBy } from 'lodash'
 
 import countryGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'

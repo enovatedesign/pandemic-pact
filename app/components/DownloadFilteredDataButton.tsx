@@ -9,17 +9,19 @@ import {
     fetchCsv,
     filterCsv,
     downloadCsv,
-    filteredDataFilename,
+    filteredDataFilename as defaultFilteredDataFilename,
 } from '../helpers/export'
 import { CloudDownloadIcon } from '@heroicons/react/outline'
 import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
     searchRequestBody: SearchRequestBody
+    filteredDataFilename?: string
 }
 
 export default function DownloadFilteredDataButton({
     searchRequestBody,
+    filteredDataFilename = defaultFilteredDataFilename,
 }: Props) {
     const [exportingCsv, setExportingCsv] = useState(false)
 

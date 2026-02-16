@@ -1,6 +1,6 @@
 "use client"
 
-import { AnnouncementProps } from '@/app/helpers/types'
+import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Matrix from '../../../components/ContentBuilder'
 import HundredDaysMissionVisualisePageClient from '@/app/visualise/policy-roadmaps/100-days-mission/HundredDaysMissionVisualisePageClient'
@@ -12,6 +12,7 @@ interface Props {
             richTextSummary: string
             showSummary: boolean
             bodyContent: any[]
+            typeHandle: PolicyRoadmapEntryTypeHandle
         },
     }
     announcement: AnnouncementProps
@@ -36,7 +37,8 @@ export default function  HundredDaysMissionTemplate ({ data, announcement }: Pro
             title={entry.title}
             announcement={announcement}
             summary={summary}
-            showSummary={entry.showSummary}
+            showSummary={entry.showSummary} 
+            typeHandle={entry.typeHandle}
         >
             <Matrix blocks={entry.bodyContent} />
         </HundredDaysMissionVisualisePageClient>
