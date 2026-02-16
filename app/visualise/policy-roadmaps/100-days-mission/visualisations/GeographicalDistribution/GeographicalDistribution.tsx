@@ -12,6 +12,8 @@ const GeographicalDistribution = () => {
             title="Geographical Distribution Of Research Grants And Capacity Strengthening Grants"
             subtitle="The information on the research location was collected where available from the grant application, and can be different to the location of research institution. Click on a country to see country-specific grant information (including co-funded grants)."
             footnote="Please note: Locations of grants indicating capacity strengthening as an objective or involving research on research capacity strengthening also shown."
+            filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+            filteredFileName='100-days-mission-filtered-grants.csv'
         >
             <Switch
                 checked={showCapacityStrengthening}

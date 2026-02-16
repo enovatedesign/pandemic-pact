@@ -33,6 +33,8 @@ const ClinicalResearchGrants = () => {
             id="distribution-of-clinical-research-grants-by-research-area"
             title="Distribution Of Research Grants By Research Area"
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder. Grants on data management and data sharing explore processes on collecting, organising, storing, and maintaining data on DTV research."
+            filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+            filteredFileName='100-days-mission-filtered-grants.csv'
         >
             <Switch
                 checked={showDataManagement}

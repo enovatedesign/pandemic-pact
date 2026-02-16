@@ -54,6 +54,8 @@ const ImplementationAndAccess = () => {
             id="distribution-of-grants-on-implementation-and-access-of-diagnostic-therapeutic-and-vaccines-products"
             title="Distribution Of Grants On Implementation of Clinical Research And Access Of Diagnostic, Therapeutic And Vaccines Products"
             infoModalContents="Hover on each bar to see a break down and description of each area"
+            filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+            filteredFileName='100-days-mission-filtered-grants.csv'
         >
             <ResponsiveContainer width="100%" height={500}>
                 <BarChart

@@ -29,6 +29,8 @@ const ClinicalTrials = () => {
             id="distribution-of-clinical-research-grants-by-clinical-trial-phases"
             title="Distribution of Clinical Research Grants by Clinical Trial Phases"
             footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
+            filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+            filteredFileName='100-days-mission-filtered-grants.csv'
         >
 
             <div className="w-full">

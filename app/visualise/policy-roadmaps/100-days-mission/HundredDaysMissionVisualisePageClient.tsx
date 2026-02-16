@@ -239,11 +239,13 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                         <div className={`${gridClasses} mt-6`}>
                             <ClinicalResearchGrants/>
 
-                            <TableVisualisation 
+                            <TableVisualisation
                                 id="distribution-of-clinical-research-grants-by-pathogen-families-and-pathogen"
                                 title="Distribution of research grants by pathogen families and pathogen"
                                 subtitle="Grants may fall under more than one family or pathogen"
                                 columnHeadField="HundredDaysMissionResearchArea"
+                                filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+                                filteredFileName='100-days-mission-filtered-grants.csv'
                             />
                         
                             <ClinicalTrials/>

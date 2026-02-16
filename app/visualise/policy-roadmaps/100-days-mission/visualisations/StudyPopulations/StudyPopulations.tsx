@@ -101,6 +101,8 @@ const StudyPopulations = () => {
             id="distribution-of-clinical-research-grants-by-study-populations"
             title="Distribution of Research Grants by Study Populations"
             footnote="Please note: Grants may include more than one study population. Study populations involved in research are as mentioned in grant information."
+            filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+            filteredFileName='100-days-mission-filtered-grants.csv'
         >
             <Switch
                 checked={hideUnspecified}

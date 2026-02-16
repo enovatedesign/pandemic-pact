@@ -31,67 +31,76 @@ async function main() {
 
     const { useCachedFiles } = await downloadAndParseDataSheets()
     
-    // If we're using cached files, skip all processing
-    // OpenSearch will be skipped if SKIP_OPENSEARCH_INDEXING is set
+    // If we're using cached files, skip all processing.
+    // The source JSON data is already downloaded from blob storage.
     if (useCachedFiles) {
         info('Using cached static files - skipping grant processing and file generation')
-        info('Build complete using cached files')
-        return
+    } else {
+        await prepareGrants()
+
+        prepareSelectOptions()
+
+        prepareHomepageTotals()
+
+        await fetchPubMedData()
+
+        const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
+
+        // Verify blob upload if it was performed
+        if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
+            const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
+            await verifyBlobGrants(stringGrantIds)
+        }
+
+        prepareVisualisePageGrantsFile()
+
+        prepareMap()
+
+        await prepare100DaysMission()
+
+        await prepare100DaysMissionSelectOptions()
+
+        await preparePandemicIntelligence()
+
+        await preparePandemicIntelligenceSelectOptions()
+
+        // Select options for the policy road maps dropdown on the explore page
+        await preparePolicyRoadmapSelectOptions()
+
+        await prepareSearch()
+
+        await prepareGrantIdsForSitemap()
+
+        // Upload static files to blob for caching if grants were processed
+        if (shouldUploadConditionsMet) {
+            await uploadStaticFilesToBlob()
+        }
     }
-    
-    await prepareGrants()
-    
-    prepareSelectOptions()
 
-    prepareHomepageTotals()
+    // CSV exports — always run, paths are the same regardless of cached/non-cached
+    const csvExports = [
+        {
+            logTitle: 'Preparing CSV export file',
+            dataFilePath: './data/dist/grants.json.gz',
+            workbookTitle: 'Pandemic PACT Grants',
+            exportPath: './public/export/grants',
+            dataFileName: 'pandemic-pact-grants.csv',
+        },
+        {
+            logTitle: 'Preparing 100 Days Mission CSV export file',
+            dataFilePath: './public/data/100-days-mission/grants.json',
+            workbookTitle: '100 Days Mission Grants',
+            exportPath: './public/export/100-days-mission',
+            dataFileName: '100-days-mission-grants.csv',
+        },
+        {
+            logTitle: 'Preparing Pandemic Intelligence CSV export file',
+            dataFilePath: './public/data/pandemic-intelligence/grants.json',
+            workbookTitle: 'Pandemic Intelligence Grants',
+            exportPath: './public/export/pandemic-intelligence',
+            dataFileName: 'pandemic-intelligence-grants.csv',
+        },
+    ]
 
-    await fetchPubMedData()
-
-    const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
-
-    // Verify blob upload if it was performed
-    if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
-        const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
-        await verifyBlobGrants(stringGrantIds)
-    }
-
-    prepareVisualisePageGrantsFile()
-
-    prepareCsvExportFile({
-        logTitle: 'Preparing CSV export file',
-        dataFilePath: './data/dist/grants.json.gz',
-        workbookTitle: 'Pandemic PACT Grants',
-        exportPath: './public/export/grants',
-        dataFileName: 'pandemic-pact-grants.csv'
-    })
-
-    prepareMap()
-    
-    await prepare100DaysMission()
-    
-    await prepare100DaysMissionSelectOptions()
-    
-    await preparePandemicIntelligence()
-
-    await preparePandemicIntelligenceSelectOptions()
-
-    prepareCsvExportFile({
-        logTitle: 'Preparing Pandemic Intelligence CSV export file',
-        dataFilePath: './data/dist/pandemic-intelligence.json',
-        workbookTitle: 'Pandemic Intelligence Grants',
-        exportPath: './public/export/pandemic-intelligence',
-        dataFileName: 'pandemic-intelligence-grants.csv'
-    })
-    
-    // // Select options for the policy road maps dropdown on the explore page
-    await preparePolicyRoadmapSelectOptions() 
-
-    await prepareSearch()
-
-    await prepareGrantIdsForSitemap()
-    
-    // Upload static files to blob for caching if grants were processed
-    if (shouldUploadConditionsMet) {
-        await uploadStaticFilesToBlob()
-    }
+    csvExports.forEach(prepareCsvExportFile)
 }

@@ -20,7 +20,7 @@ export async function downloadStaticFilesFromBlob(): Promise<boolean> {
         { url: `${baseUrl}/${branchName}/cache/select-options.json`, path: './data/dist/select-options.json' },
         { url: `${baseUrl}/${branchName}/cache/homepage-totals.json`, path: './data/dist/homepage-totals.json' },
         { url: `${baseUrl}/${branchName}/cache/grants.json`, path: './public/data/grants.json' },
-        { url: `${baseUrl}/${branchName}/cache/pandemic-pact-grants.csv`, path: './public/export/pandemic-pact-grants.csv' },
+        { url: `${baseUrl}/${branchName}/cache/pandemic-pact-grants.csv`, path: './public/export/grants/pandemic-pact-grants.csv' },
         { url: `${baseUrl}/${branchName}/cache/grant-ids.json`, path: './public/data/grant-ids.json' },
         { url: `${baseUrl}/${branchName}/cache/100-days-mission-grants.json`, path: './public/data/100-days-mission/grants.json' },
         { url: `${baseUrl}/${branchName}/cache/countries.json`, path: './public/data/geojson/countries.json' },

@@ -19,7 +19,7 @@ export async function uploadStaticFilesToBlob() {
         { path: './data/dist/select-options.json', key: `${branchName}/cache/select-options.json` },
         { path: './data/dist/homepage-totals.json', key: `${branchName}/cache/homepage-totals.json` },
         { path: './public/data/grants.json', key: `${branchName}/cache/grants.json` },
-        { path: './public/export/pandemic-pact-grants.csv', key: `${branchName}/cache/pandemic-pact-grants.csv` },
+        { path: './public/export/grants/pandemic-pact-grants.csv', key: `${branchName}/cache/pandemic-pact-grants.csv` },
         { path: './public/data/grant-ids.json', key: `${branchName}/cache/grant-ids.json` },
         { path: './public/data/100-days-mission/grants.json', key: `${branchName}/cache/100-days-mission-grants.json` },
         { path: './public/data/geojson/countries.json', key: `${branchName}/cache/countries.json` },

@@ -60,18 +60,16 @@ export default function prepareCsvExportFile({
 
     // Get the defined values from keyMapping
     const fieldsForExport = Object.keys(grants[0])
-    
-    // Find the index of "Families"
-    const familiesIndex = fieldsForExport.indexOf("Families")
 
-    // Add the new fields after the "Families" field
-    fieldsForExport.splice(
-        familiesIndex + 1,
-        0,
-        "Pathogens",
-        "Diseases",
-        "Strains"
-    )
+    // Only insert fields that aren't already present in the data
+    // (e.g. Pandemic Intelligence grants already include Pathogens and Diseases)
+    const fieldsToInsert = ["Pathogens", "Diseases", "Strains"]
+        .filter(field => !fieldsForExport.includes(field))
+
+    if (fieldsToInsert.length > 0) {
+        const familiesIndex = fieldsForExport.indexOf("Families")
+        fieldsForExport.splice(familiesIndex + 1, 0, ...fieldsToInsert)
+    }
 
     // Prepare a export row for each grant
     const rows = grants.map((grant: any, index: number, array: any[]) => {
