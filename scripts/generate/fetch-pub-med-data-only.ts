@@ -12,5 +12,12 @@ import fetchPubMedData from './fetch-pub-med-data'
         await prepareGrants()
     }
 
-    await fetchPubMedData()
+    // CI environment has no meaningful timeout, so use aggressive retry
+    // with exponential backoff and no circuit breaker
+    await fetchPubMedData({
+        maxRetries: 3,
+        baseDelayMs: 1000,
+        maxDelayMs: 30000,
+        maxFailures: 0,
+    })
 })()

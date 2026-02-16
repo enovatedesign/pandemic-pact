@@ -13,7 +13,7 @@ fetch_pubmed_data:
         - npm run fetch-pubmed-data
     rules:
         - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master" && $FETCH_PUBMED_DATA == "true"
-    retry: 1
+    retry: 2
 
 deploy_review:
     stage: deploy

@@ -5,8 +5,41 @@ import { put } from '@vercel/blob'
 import { Grant } from '../types/generate'
 import { title, info, printWrittenFileStats, warn } from '../helpers/log'
 import { createJsonArrayWriteStream, streamLargeJson } from '../helpers/stream-io'
+import { fetchWithRetry, RetryOptions } from '../helpers/pubmed-retry'
 
-export default async function fetchPubMedData() {
+interface PubMedFetchMetadata {
+    grants: {
+        [grantId: string]: {
+            lastChecked: string
+            publicationCount: number
+        }
+    }
+    lastRunStarted?: string
+    lastRunCompleted?: string
+}
+
+interface PubMedLinkResult {
+    publications: any[]
+    success: boolean
+}
+
+export interface GetPublicationsOptions {
+    maxRetries?: number
+    baseDelayMs?: number
+    maxDelayMs?: number
+    maxFailures?: number
+}
+
+const FRESHNESS_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7   // 7 days
+const GRACE_PERIOD_MS = 1000 * 60 * 60 * 24 * 45          // 45 days
+const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24 * 45          // 45 days (matches grace period)
+const CHECKPOINT_INTERVAL = 100
+
+const BLOB_BASE_URL = process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'
+const CACHE_FILENAME = 'cached-pub-med-publications.json'
+const METADATA_FILENAME = 'pubmed-fetch-metadata.json'
+
+export default async function fetchPubMedData(options?: GetPublicationsOptions) {
     title('Fetching publication data from PubMed')
 
     const timeLogLabel = 'Fetched publication data from PubMed'
@@ -30,7 +63,7 @@ export default async function fetchPubMedData() {
         }
     });
 
-    const publications = await getPublications(Array.from(pubMedIds));
+    const publications = await getPublications(Array.from(pubMedIds), options);
 
     info('Adding PubMed publications to grants and writing to disk...');
     const writer = createJsonArrayWriteStream(grantsDistPathname);
@@ -47,91 +80,268 @@ export default async function fetchPubMedData() {
     const jsonBuffer = fs.readFileSync(grantsDistPathname);
     const gzipBuffer = zlib.gzipSync(jsonBuffer as any);
     fs.writeFileSync(zippedGrantsPath, new Uint8Array(gzipBuffer));
-    
+
     // Remove uncompressed file to save space
     fs.unlinkSync(grantsDistPathname);
-    
+
     printWrittenFileStats(zippedGrantsPath);
 
     console.timeEnd(timeLogLabel)
 }
 
-async function getPublications(pubMedGrantIds: string[]) {
-    // Filter out invalid PubMed Grant IDs (such as null, '', 'unknown', 'not applicable')
-    // and remove duplicates
+async function getPublications(pubMedGrantIds: string[], options?: GetPublicationsOptions) {
+    const maxRetries = options?.maxRetries ?? 1
+    const baseDelayMs = options?.baseDelayMs ?? 2000
+    const maxDelayMs = options?.maxDelayMs ?? 2000
+    const maxFailures = options?.maxFailures ?? 20
+
+    const retryOptions: RetryOptions = { maxRetries, baseDelayMs, maxDelayMs }
+
+    // Filter out invalid PubMed Grant IDs and remove duplicates
     const grantIds = _.uniq(pubMedGrantIds.filter(idIsValidPubMedGrantId))
 
-    // Try to get the publications from the cache first
-    const cacheFilename = 'cached-pub-med-publications.json'
+    // Load existing publications cache
+    let publications: { [key: string]: any[] } = {}
 
-    const cacheUrl = `${process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'}/${cacheFilename}`
+    try {
+        const cacheResponse = await fetch(`${BLOB_BASE_URL}/${CACHE_FILENAME}`)
 
-    const cacheResponse = await fetch(cacheUrl)
-
-    if (!cacheResponse.ok && cacheResponse.status !== 404) {
-        throw new Error(
-            `Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`,
-        )
+        if (cacheResponse.ok) {
+            const cache = await cacheResponse.json()
+            if (cache.publications) {
+                publications = cache.publications
+            }
+        } else if (cacheResponse.status !== 404) {
+            warn(`Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`)
+        }
+    } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
+        warn(`Failed to load PubMed publications cache: ${msg}`)
     }
 
-    // If there is cached data and it has not expired, use that
-    if (cacheResponse.ok && !process.env.FETCH_PUBMED_DATA) {
-        const cache = await cacheResponse.json()
+    // Load per-grant metadata
+    let metadata: PubMedFetchMetadata = { grants: {} }
 
-        // Note that if the source dataset has changed, it might have new PubMed Grant IDs
-        // that are not in the cache, so we check that in addition to the expiration date
-        if (cache.expiresAt && cache.publications) {
-            const cachedGrantIds = Object.keys(cache.publications)
+    try {
+        const metadataResponse = await fetch(`${BLOB_BASE_URL}/${METADATA_FILENAME}`)
 
-            // check if all grant IDs are in the cache
-            const allIdsInCache = grantIds.every(id =>
-                cachedGrantIds.includes(id),
-            )
+        if (metadataResponse.ok) {
+            metadata = await metadataResponse.json()
+        }
+    } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
+        warn(`Failed to load PubMed fetch metadata: ${msg}`)
+    }
 
-            // check expired date has not passed
-            const cacheHasNotExpired = cache.expiresAt > Date.now()
+    const now = Date.now()
 
-            if (allIdsInCache && cacheHasNotExpired) {
-                info('Using cached PubMed data')
-                return cache.publications
+    // Categorise grants by freshness
+    const grantsToFetch: string[] = []
+    let freshCount = 0
+
+    for (const id of grantIds) {
+        const meta = metadata.grants[id]
+        const lastCheckedMs = meta?.lastChecked ? new Date(meta.lastChecked).getTime() : 0
+        const age = now - lastCheckedMs
+        const isFresh = age < FRESHNESS_THRESHOLD_MS
+        const hasData = id in publications
+
+        if (hasData && isFresh && !process.env.FETCH_PUBMED_DATA) {
+            freshCount++
+        } else {
+            grantsToFetch.push(id)
+        }
+    }
+
+    // Quick exit if all grants are fresh
+    if (grantsToFetch.length === 0) {
+        info(`All ${freshCount} grants have fresh PubMed data, using cache`)
+        return filterToCurrentGrants(publications, grantIds, metadata, now)
+    }
+
+    info(`PubMed data: ${freshCount} fresh, ${grantsToFetch.length} to fetch`)
+
+    // Fetch loop with checkpoints and circuit breaker
+    let failureCount = 0
+    let refreshedCount = 0
+    let cachedFallbackCount = 0
+    let unavailableCount = 0
+    let circuitBroken = false
+
+    metadata.lastRunStarted = new Date().toISOString()
+
+    for (let i = 0; i < grantsToFetch.length; i++) {
+        // Circuit breaker check
+        if (maxFailures > 0 && failureCount >= maxFailures) {
+            warn(`PubMed API: ${failureCount} failures reached, skipping remaining ${grantsToFetch.length - i} grants to avoid blocking deployment`)
+            circuitBroken = true
+            break
+        }
+
+        if (i > 0 && (i % 500 === 0 || i === grantsToFetch.length - 1)) {
+            info(`Fetched ${i}/${grantsToFetch.length} PubMed publications`)
+        }
+
+        const id = grantsToFetch[i]
+        const result = await getPubMedLinks(id, retryOptions)
+
+        if (result.success) {
+            publications[id] = result.publications
+            metadata.grants[id] = {
+                lastChecked: new Date().toISOString(),
+                publicationCount: result.publications.length,
+            }
+            refreshedCount++
+        } else {
+            failureCount++
+            // Keep existing cached data if within grace period
+            const meta = metadata.grants[id]
+            const lastCheckedMs = meta?.lastChecked ? new Date(meta.lastChecked).getTime() : 0
+            const withinGrace = (now - lastCheckedMs) < GRACE_PERIOD_MS && id in publications
+
+            if (withinGrace) {
+                cachedFallbackCount++
+            } else {
+                publications[id] = []
+                unavailableCount++
+            }
+        }
+
+        // Save checkpoint periodically
+        if ((i + 1) % CHECKPOINT_INTERVAL === 0) {
+            await saveCheckpoint(publications, metadata)
+        }
+    }
+
+    // Count remaining grants that weren't fetched due to circuit breaker
+    if (circuitBroken) {
+        const skippedStartIndex = refreshedCount + failureCount
+        for (let i = skippedStartIndex; i < grantsToFetch.length; i++) {
+            const id = grantsToFetch[i]
+            const meta = metadata.grants[id]
+            const lastCheckedMs = meta?.lastChecked ? new Date(meta.lastChecked).getTime() : 0
+            const withinGrace = (now - lastCheckedMs) < GRACE_PERIOD_MS && id in publications
+
+            if (withinGrace) {
+                cachedFallbackCount++
+            } else {
+                publications[id] = []
+                unavailableCount++
             }
         }
     }
 
-    info(
-        'Cached PubMed data is not available or has expired, fetching new data via API',
-    )
-
-    // Fetch new PubMed data for each Grant ID
-    const publications: { [key: string]: string } = {}
-
-    for (let i = 0; i < grantIds.length; i++) {
-        // Print the progress every 500 grants or at the end
-        if (i > 0 && (i % 500 === 0 || i === grantIds.length - 1)) {
-            info(`Fetched ${i}/${grantIds.length} PubMed publications`)
-        }
-
-        const id = grantIds[i]
-
-        publications[id] = await getPubMedLinks(id)
+    // Log summary
+    const oldestFallbackAge = getOldestFallbackAge(grantsToFetch, metadata, publications, now)
+    const summaryParts = [
+        `${freshCount} fresh`,
+        `${refreshedCount} refreshed`,
+    ]
+    if (cachedFallbackCount > 0) {
+        summaryParts.push(`${cachedFallbackCount} served from cache (up to ${oldestFallbackAge} days old)`)
     }
+    if (unavailableCount > 0) {
+        summaryParts.push(`${unavailableCount} unavailable`)
+    }
+    info(`PubMed data summary: ${summaryParts.join(', ')}`)
 
-    // Cache the data for 1 week
-    const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7 // 1 week
+    // Final write
+    const expiresAt = now + CACHE_EXPIRY_MS
 
-    // Store it at Vercel Blob
-    await put(cacheFilename, JSON.stringify({ publications, expiresAt }), {
+    await put(CACHE_FILENAME, JSON.stringify({ publications, expiresAt }), {
         access: 'public',
         addRandomSuffix: false,
     })
 
-    info(
-        `Stored PubMed data in cache file ${cacheFilename} until ${new Date(
-            expiresAt,
-        ).toLocaleString()}`,
-    )
+    metadata.lastRunCompleted = new Date().toISOString()
 
-    return publications
+    await put(METADATA_FILENAME, JSON.stringify(metadata), {
+        access: 'public',
+        addRandomSuffix: false,
+    })
+
+    info(`Stored PubMed data in cache until ${new Date(expiresAt).toLocaleString()}`)
+
+    return filterToCurrentGrants(publications, grantIds, metadata, now)
+}
+
+/**
+ * Filter publications to only include current grant IDs, and drop any
+ * entries that have exceeded the grace period.
+ */
+function filterToCurrentGrants(
+    publications: { [key: string]: any[] },
+    grantIds: string[],
+    metadata: PubMedFetchMetadata,
+    now: number,
+): { [key: string]: any[] } {
+    const filtered: { [key: string]: any[] } = {}
+
+    for (const id of grantIds) {
+        if (!(id in publications)) {
+            filtered[id] = []
+            continue
+        }
+
+        const meta = metadata.grants[id]
+        const lastCheckedMs = meta?.lastChecked ? new Date(meta.lastChecked).getTime() : 0
+        const withinGrace = (now - lastCheckedMs) < GRACE_PERIOD_MS
+
+        if (withinGrace) {
+            filtered[id] = publications[id]
+        } else {
+            filtered[id] = []
+        }
+    }
+
+    return filtered
+}
+
+function getOldestFallbackAge(
+    grantIds: string[],
+    metadata: PubMedFetchMetadata,
+    publications: { [key: string]: any[] },
+    now: number,
+): number {
+    let oldest = 0
+
+    for (const id of grantIds) {
+        const meta = metadata.grants[id]
+        if (!meta?.lastChecked || !(id in publications)) continue
+
+        const age = now - new Date(meta.lastChecked).getTime()
+        if (age > FRESHNESS_THRESHOLD_MS && age < GRACE_PERIOD_MS) {
+            oldest = Math.max(oldest, age)
+        }
+    }
+
+    return Math.ceil(oldest / (1000 * 60 * 60 * 24))
+}
+
+async function saveCheckpoint(
+    publications: { [key: string]: any[] },
+    metadata: PubMedFetchMetadata,
+): Promise<void> {
+    try {
+        const expiresAt = Date.now() + CACHE_EXPIRY_MS
+
+        await put(
+            CACHE_FILENAME,
+            JSON.stringify({ publications, expiresAt }),
+            { access: 'public', addRandomSuffix: false },
+        )
+
+        await put(
+            METADATA_FILENAME,
+            JSON.stringify(metadata),
+            { access: 'public', addRandomSuffix: false },
+        )
+
+        info(`Checkpoint saved: ${Object.keys(publications).length} grants cached`)
+    } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
+        warn(`Failed to save checkpoint: ${msg}`)
+    }
 }
 
 function idIsValidPubMedGrantId(id?: string): boolean {
@@ -142,32 +352,40 @@ function idIsValidPubMedGrantId(id?: string): boolean {
     return !['', 'unknown', 'not applicable'].includes(id.trim())
 }
 
-async function getPubMedLinks(pubMedGrantId: string) {
+async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryOptions): Promise<PubMedLinkResult> {
     const query = encodeURIComponent(`GRANT_ID:"${pubMedGrantId}"`)
-
     const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
 
-    const data = await fetch(url).then(response => response.json())
+    try {
+        const response = await fetchWithRetry(url, retryOptions)
+        const data = await response.json()
 
-    if (!data.resultList) {
-        info(`No PubMed resultList found in response from ${url}`)
-        return []
+        if (!data.resultList) {
+            info(`No PubMed resultList found in response from ${url}`)
+            return { publications: [], success: true }
+        }
+
+        const publications = data.resultList.result
+            .map((result: any) =>
+                _.pick(result, [
+                    'title',
+                    'source',
+                    'pmid',
+                    'authorString',
+                    'doi',
+                    'pubYear',
+                    'journalInfo.journal.title',
+                ]),
+            )
+            .map((result: any) => ({
+                ...result,
+                updated_at: new Date().toISOString(),
+            }))
+
+        return { publications, success: true }
+    } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
+        warn(`Failed to fetch PubMed links for grant ${pubMedGrantId}: ${msg}`)
+        return { publications: [], success: false }
     }
-
-    return data.resultList.result
-        .map((result: any) =>
-            _.pick(result, [
-                'title',
-                'source',
-                'pmid',
-                'authorString',
-                'doi',
-                'pubYear',
-                'journalInfo.journal.title',
-            ]),
-        )
-        .map((result: any) => ({
-            ...result,
-            updated_at: new Date().toISOString(),
-        }))
 }
