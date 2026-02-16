@@ -25,7 +25,18 @@ import TooltipContent from '../TooltipContent'
 import NoDataText from '../NoData/NoDataText'
 import { grantsPerResearchCategoryByRegionBarsFallback } from '../NoData/visualisationFallbackData'
 
-export default function BarChart() {
+type DataPoint = {
+    country: string
+    'Known Financial Commitments': number
+}
+
+export default function BarChart({
+    countryField = 'FunderRegion',
+    regionField = 'ResearchInstitutionRegion'
+}: {
+    countryField?: string,
+    regionField?: string
+}) {
     const { grants: dataset } = useContext(GlobalFilterContext)
 
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
@@ -42,7 +53,7 @@ export default function BarChart() {
             ]
 
         dataset.forEach((grant: any) => {
-            grant.ResearchInstitutionCountry.forEach((country: string) => {
+            grant[countryField].forEach((country: string) => {
                 if (!countriesInSelectedRegion.includes(country)) {
                     return
                 }
@@ -61,7 +72,7 @@ export default function BarChart() {
 
         const grantsGroupedByRegion = groupBy(
             dataset,
-            usingFunderLocation ? 'FunderRegion' : 'ResearchInstitutionRegion'
+            usingFunderLocation ? countryField : regionField
         )
 
         data = whoRegions.map(region => [
@@ -73,17 +84,15 @@ export default function BarChart() {
     data = data.map(([country, grants]: [string, any]) => {
         return {
             country,
-            'Known Financial Commitments': grants.reduce(
+            'Known Financial Commitments': grants.map((grant: any) => ({
+                ...grant,
+                GrantAmountConverted: Number(grant['GrantAmountConverted'])
+            })).reduce(
                 ...sumNumericGrantAmounts
             ),
             'Number of Grants': grants.length
         }
     })
-
-    type DataPoint = {
-        country: string
-        'Known Financial Commitments': number
-    }
 
     data = data.sort(
         (a: DataPoint, b: DataPoint) =>
@@ -102,7 +111,7 @@ export default function BarChart() {
         }
 
         const totalGrantsInClickedRegion = dataset.filter((grant: any) =>
-            grant.ResearchInstitutionRegion.includes(event.activeLabel)
+            grant[regionField].includes(event.activeLabel)
         ).length
 
         if (totalGrantsInClickedRegion > 0) {
@@ -111,19 +120,13 @@ export default function BarChart() {
     }
 
     const countryOrRegionFormatter = (label: string) => {
-        return selectOptions[
-            selectedRegion
-                ? 'ResearchInstitutionCountry'
-                : 'ResearchInstitutionRegion'
-        ].find(option => option.value === label)?.label as string
+        const key = selectedRegion ? countryField : regionField
+        return selectOptions[key as keyof typeof selectOptions]
+            .find(option => option.value === label)?.label as string
     }
 
     const tooltipContent = (props: any) => {
-        const title = selectOptions[
-            selectedRegion
-                ? 'ResearchInstitutionCountry'
-                : 'ResearchInstitutionRegion'
-        ].find(option => option.value === props.label)?.label as string
+        const title = countryOrRegionFormatter(props.label)
 
         const items = [
             {
@@ -233,10 +236,10 @@ export default function BarChart() {
                         <DoubleLabelSwitch
                             checked={usingFunderLocation}
                             onChange={setUsingFunderLocation}
-                            leftLabel="Research Institution"
+                            leftLabel="Research Location"
                             rightLabel="Funder"
                             screenReaderLabel="Using Funder Location"
-                            />
+                        />
                     </div>
                 </div>
                 

@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect, useRef, Suspense, ReactNode } from 'react
 import { useSearchParams } from 'next/navigation'
 import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
+import Image from 'next/image'
 
 import { 
     emptyFilters,
@@ -20,14 +21,11 @@ import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
 import VisualisationJumpMenu from '../../components/VisualisationJumpMenu'
 import VisualisationCardLinks from '../../components/VisualisationCardLinks'
-import ClinicalResearchGrants from './visualisations/ClinicalResearchGrants'
-import StudyPopulations from './visualisations/StudyPopulations/StudyPopulations'
-import GeographicalDistribution from './visualisations/GeographicalDistribution/GeographicalDistribution'
-import ImplementationAndAccess from './visualisations/ImplementationAndAccess/ImplementationAndAccess'
-import ClinicalTrials from './visualisations/ClinicalTrials/ClinicalTrials'
-import CustomFilters from './CustomFilters'
+import PandemicIntelligenceThemes from './visualisations/PandemicIntelligenceThemes'
+import PandemicEpidemicIntelligenceFunders from './visualisations/PandemicEpidemicIntelligenceFunders'
+import AnnualTrendsByTheme from './visualisations/AnnualTendsByTheme/Card'
 import TableVisualisation from '../shared-visualisations/TableVisualisation'
-import Image from 'next/image'
+import GeographicalDistribution from './visualisations/GeographicalDistribution/Card'
 
 interface VisualisationPageProps {
     title: string
@@ -38,7 +36,7 @@ interface VisualisationPageProps {
     typeHandle: PolicyRoadmapEntryTypeHandle
 }
 
-const HundredDaysMissionVisualisePageClientComponent = ({
+const PandemicIntelligenceVisualisePageClientComponent = ({
     title,
     summary,
     showSummary = true,
@@ -47,13 +45,15 @@ const HundredDaysMissionVisualisePageClientComponent = ({
     typeHandle
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
-
     const [completeDataset, setCompleteDataset] = useState([])
-
     const [loadingDataset, setLoadingDataset] = useState(true)
+    const [dropdownVisible, setDropdownVisible] = useState(false)
+    
+    const params = useSearchParams()
+    const sharedFiltersId = params.get('share')
 
     useEffect(() => {
-        fetch('/data/100-days-mission/grants.json' )
+        fetch('/data/pandemic-intelligence/grants.json' )
             .then(response => response.json())
             .then(data => {
                 setCompleteDataset(data)
@@ -61,18 +61,6 @@ const HundredDaysMissionVisualisePageClientComponent = ({
             })
             .catch(error => console.error(error))
     }, [])
-
-    const params = useSearchParams()
-    const sharedFiltersId = params.get('share')
-    
-    // Define filters using useMemo to pass in the fixedSelectOptions
-    // This ensures calculations are completed before rendering 
-    const filters = useMemo(() => 
-        emptyFilters(undefined, typeHandle), 
-        [typeHandle]
-    ) 
-    
-    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
     
     useEffect(() => {
         const getSharedFilters = async () => {
@@ -87,6 +75,15 @@ const HundredDaysMissionVisualisePageClientComponent = ({
 
         getSharedFilters()
     }, [sharedFiltersId])
+    
+    // Define filters using useMemo to pass in the fixedSelectOptions
+    // This ensures calculations are completed before rendering 
+    const filters = useMemo(() => 
+        emptyFilters(undefined, typeHandle), 
+        [typeHandle]
+    ) 
+    
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
 
     const globallyFilteredDataset = useMemo(() => 
         filterGrants(completeDataset, selectedFilters),
@@ -95,10 +92,10 @@ const HundredDaysMissionVisualisePageClientComponent = ({
 
     const BottomContent = () => (
         <Image
-            src="/images/interface/hundred-days-mission-logo.jpg"
+            src="/images/interface/policy-roadmaps-logo.jpg"
             width={350}
-            height={230}
-            alt="Hundred days mission logo"
+            height={200}
+            alt="Pandemic intelligence logo"
             className="w-full rounded-xl"
         />
     )
@@ -114,13 +111,8 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     sharedFiltersId={sharedFiltersId}
-                    showHierarchicalFilters={false}
+                    showHierarchicalFilters={true}
                     policyRoadmapEntryType={typeHandle}
-                    customFilters={<CustomFilters 
-                            selectedFilters={selectedFilters} 
-                            setSelectedFilters={setSelectedFilters}
-                        />
-                    }
                     bottomContent={<BottomContent/>}
                 />
             ),
@@ -132,8 +124,8 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                                 Filtered Grants Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length.toLocaleString()} /{' '}
-                                {completeDataset.length.toLocaleString()}
+                                {globallyFilteredDataset.length} /{' '}
+                                {completeDataset.length}
                             </dd>
                         </>
                     ) : (
@@ -142,7 +134,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                                 Total grants
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length.toLocaleString()}
+                                {globallyFilteredDataset.length}
                             </dd>
                         </>
                     )}
@@ -168,10 +160,6 @@ const HundredDaysMissionVisualisePageClientComponent = ({
         sharedFiltersId, 
         typeHandle
     ])
-
-    const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
-
-    const [dropdownVisible, setDropdownVisible] = useState(false)
 
     useEffect(() => {
         const handleResize = () => {
@@ -236,23 +224,23 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                         className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
                         id="visualisations-wrapper"
                     >
-                        <div className={`${gridClasses} mt-6`}>
-                            <ClinicalResearchGrants/>
+                        <div className="grid grid-cols-1 gap-6 lg:gap-12">
+                            <PandemicIntelligenceThemes/>
 
                             <TableVisualisation 
-                                id="distribution-of-clinical-research-grants-by-pathogen-families-and-pathogen"
-                                title="Distribution of research grants by pathogen families and pathogen"
-                                subtitle="Grants may fall under more than one family or pathogen"
-                                columnHeadField="HundredDaysMissionResearchArea"
+                                id="research-priority-themes-by-pathogen" 
+                                title="Charts Showing Distribution Of Research Priority themes By Pathogen Families And Pathogen"
+                                subtitle="Grants may fall under more than one family or pathogen or pandemic and epidemic intelligence priority theme"
+                                columnHeadField="PandemicIntelligenceThemes"
+                                filenameToFetch='pandemic-intelligence/pandemic-intelligence-grants.csv'
+                                filteredFileName='pandemic-intelligence-filtered-grants.csv'
                             />
-                        
-                            <ClinicalTrials/>
-                        
-                            <StudyPopulations />
-                        
-                            <GeographicalDistribution />
 
-                            <ImplementationAndAccess />
+                            <GeographicalDistribution/>
+
+                            <PandemicEpidemicIntelligenceFunders/>
+
+                            <AnnualTrendsByTheme/>
                         </div>
 
                         <Tooltip
@@ -272,10 +260,10 @@ const HundredDaysMissionVisualisePageClientComponent = ({
     )
 }
 
-const HundredDaysMissionVisualisePageClient = (props: VisualisationPageProps) => (
+const PandemicIntelligenceVisualisePageClient = (props: VisualisationPageProps) => (
     <Suspense fallback={<div>Loading...</div>}>
-        <HundredDaysMissionVisualisePageClientComponent {...props} />
+        <PandemicIntelligenceVisualisePageClientComponent {...props} />
     </Suspense>
 )
 
-export default HundredDaysMissionVisualisePageClient
+export default PandemicIntelligenceVisualisePageClient

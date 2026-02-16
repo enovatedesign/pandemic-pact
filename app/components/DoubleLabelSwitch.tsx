@@ -7,12 +7,43 @@ interface Props {
     rightLabel: string
     screenReaderLabel: string
     className?: string
+    checkedClasses?: string,
+    unCheckedClasses?: string
 }
 
-export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLabel, screenReaderLabel, className}: Props) {
+export default function DoubleLabelSwitch({
+    checked, 
+    onChange, 
+    leftLabel, 
+    rightLabel, 
+    screenReaderLabel, 
+    className,
+    checkedClasses,
+    unCheckedClasses
+}: Props) {
+    let labelCheckedClasses = 'text-brand-grey-500'
+    if (checkedClasses) {
+        labelCheckedClasses = checkedClasses
+    }
+
+    let labelUncheckedClasses = 'text-black'
+    if (unCheckedClasses) {
+        labelUncheckedClasses = unCheckedClasses
+    }
+
+    const leftLabelClasses = [
+        'text-sm whitespace-nowrap',
+        checked ? labelCheckedClasses : labelUncheckedClasses
+    ].filter(Boolean).join(' ')
+    
+    const rightLabelClasses = [
+        'text-sm whitespace-nowrap',
+        !checked ? labelCheckedClasses : labelUncheckedClasses
+    ].filter(Boolean).join(' ')
+    
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
-            <p className={`${checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap `}>{leftLabel}</p>
+            <p className={leftLabelClasses}>{leftLabel}</p>
 
             <HeadlessUISwitch
                 checked={checked}
@@ -26,7 +57,7 @@ export default function DoubleLabelSwitch({checked, onChange, leftLabel, rightLa
                 />
             </HeadlessUISwitch>
 
-            <p className={`${!checked ? 'text-brand-grey-500' : 'text-black'} text-sm whitespace-nowrap `}>{rightLabel}</p>
+            <p className={rightLabelClasses}>{rightLabel}</p>
         </div>
     )
 }

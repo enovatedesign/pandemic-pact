@@ -2,10 +2,10 @@
 
 import { Fragment, useState, useContext, useMemo, useCallback } from "react"
 import { scaleLog } from 'd3-scale'
-import { uniq } from "lodash"
+import { sumBy, uniq } from "lodash"
 
-import hierarchyFilters from "../../../../../public/manual-hierarchy-filters.json"
-import selectOptions from "../../../../../data/dist/select-options.json"
+import hierarchyFilters from "../../../../public/manual-hierarchy-filters.json"
+import selectOptions from "../../../../data/dist/select-options.json"
 
 import { ChevronDownIcon } from "@heroicons/react/outline"
 import { GlobalFilterContext } from "@/app/helpers/filters"
@@ -13,34 +13,49 @@ import { brandColours } from "@/app/helpers/colours"
 
 import VisualisationCard from "@/app/components/VisualisationCard"
 
-const Pathogen = () => {
-    const [activeFamily, setActiveFamily] = useState<string | null>(null)
-    
+interface Props {
+    id: string
+    title: string
+    subtitle: string
+    columnHeadField: 'HundredDaysMissionResearchArea' | 'PandemicIntelligenceThemes'
+    filenameToFetch?: string
+    filteredFileName?: string
+    footnote?: string
+}
+
+const TableVisualisation = ({
+    id,
+    title,
+    subtitle,
+    columnHeadField,
+    filenameToFetch,
+    filteredFileName,
+    footnote
+}: Props) => {
     const { grants } = useContext(GlobalFilterContext)
-    
-    const researchAreaField = "HundredDaysMissionResearchArea"
-    const researchAreaOptions = selectOptions[researchAreaField]
+    const [activeFamily, setActiveFamily] = useState<string | null>(null)
+    const columnOptions = selectOptions[columnHeadField as keyof typeof selectOptions]
 
     const handleFamilyRowClick = (label: string) => {
         setActiveFamily(activeFamily === label ? null : label)
     }
-
+    
     const calculateRelatedData = useCallback((
         field: string, 
         value: string
     ) => {
-        return researchAreaOptions.map(({ label: researchAreaLabel, value: optionValue }) => {
+        return columnOptions.map(({ label: optionLabel, value: optionValue }) => {
             const relatedGrants = uniq(grants.filter(grant =>
                 grant[field].includes(value) &&
-                grant[researchAreaField].includes(optionValue)
+                grant[columnHeadField].includes(optionValue)
             )).length
 
             return { 
-                researchAreaLabel, 
+                optionLabel, 
                 count: relatedGrants 
             }
         })
-    }, [grants, researchAreaOptions, researchAreaField])
+    }, [grants, columnOptions, columnHeadField])
 
     const maxCount = useMemo(() => {
         return Math.max(
@@ -60,13 +75,7 @@ const Pathogen = () => {
         .domain([1, maxCount])
         .range([brandColours['teal']['300'], brandColours['teal']['700']])
 
-    const CountCell = ({
-        count,
-        colourScale
-    }: {
-        count: number
-        colourScale: (n: number) => unknown | string
-    }) => {
+    const CountCell = ({ count, colourScale}: {count: number, colourScale: (n: number) => unknown | string}) => {
         const bgColour = count === 0 ? colourScale(1) : colourScale(count)
         
         return (
@@ -79,34 +88,41 @@ const Pathogen = () => {
         )
     }
 
+    const tableHeadBaseClasses = 'w-80 px-4 py-2 bg-secondary text-white border-white'
+
     return (
         <VisualisationCard
-            id="distribution-of-clinical-research-grants-by-pathogen-families-and-pathogen"
-            title="Distribution of research grants by pathogen families and pathogen"
-            subtitle="Grants may fall under more than one family or pathogen"
+            id={id}
+            title={title}
+            subtitle={subtitle}
+            filenameToFetch={filenameToFetch}
+            filteredFileName={filteredFileName}
+            footnote={footnote}
         >
-            <div className="w-full overflow-x-auto">
+            <div className="table-visualisation-wrapper w-full overflow-x-auto">
 
                 <table>
                     <thead>
                         <tr>
                             <th className="bg-secondary w-80"></th>
 
-                            {researchAreaOptions.map(({ label }, index) => {
-                                const thClasses = [
-                                    'w-80 px-4 py-2 bg-secondary text-white border-white',
-                                    index < researchAreaOptions.length ? 'border-l' : ''
+                            {columnOptions.map(({ label }, index) => {
+                                const tableHeadClasses = [
+                                    tableHeadBaseClasses,
+                                    index < columnOptions.length ? 'border-l' : ''
                                 ].filter(Boolean).join(' ')
 
                                 return (
                                     <th 
                                         key={label} 
-                                        className={thClasses}
+                                        className={tableHeadClasses}
                                     >
                                         {label}
                                     </th>
                                 )
                             })}
+
+                            <th className={`${tableHeadBaseClasses} border-l`}>Total</th>
                         </tr>
                     </thead>
 
@@ -118,6 +134,7 @@ const Pathogen = () => {
                         }) => {
                             const knownPathogens = pathogens.filter(p => !["Unspecified", "Other"].includes(p.label))
                             const familyCounts = calculateRelatedData("Families", familyValue)
+                            const totalFamilyCounts = sumBy(familyCounts, 'count')
 
                             return (
                                 <Fragment key={familyLabel}>
@@ -131,13 +148,19 @@ const Pathogen = () => {
                                             <ChevronDownIcon className="size-6 text-white" />
                                         </td>
 
-                                        {familyCounts.map(({ researchAreaLabel, count }) => (
+                                        {familyCounts.map(({ optionLabel, count }) => (
                                             <CountCell
-                                                key={researchAreaLabel}
+                                                key={optionLabel}
                                                 count={count}
                                                 colourScale={colourScale}
                                             />
                                         ))}
+
+                                        <CountCell
+                                            key={'total-' + familyLabel}
+                                            count={totalFamilyCounts}
+                                            colourScale={colourScale}
+                                        />
                                     </tr>
 
                                     {(activeFamily === familyLabel) && knownPathogens.map(({ 
@@ -150,18 +173,25 @@ const Pathogen = () => {
                                         ].join(' ')
 
                                         const pathogenCounts = calculateRelatedData("Pathogens", pathogenValue)
-                                        
+                                        const totalPathogenCounts = sumBy(pathogenCounts, 'count')
+
                                         return (
                                             <tr key={pathogenLabel}>
                                                 <td className={diseaseTdClasses}>{pathogenLabel}</td>
 
-                                                {pathogenCounts.map(({ researchAreaLabel, count }) => (
+                                                {pathogenCounts.map(({ optionLabel, count }) => (
                                                     <CountCell
-                                                        key={researchAreaLabel}
+                                                        key={optionLabel}
                                                         count={count}
                                                         colourScale={colourScale}
                                                     />
                                                 ))}
+
+                                                <CountCell
+                                                    key={'total-' + pathogenLabel}
+                                                    count={totalPathogenCounts}
+                                                    colourScale={colourScale}
+                                                />
                                             </tr>
                                         )
                                     })}
@@ -175,4 +205,4 @@ const Pathogen = () => {
     )
 }
 
-export default Pathogen
+export default TableVisualisation

@@ -7,8 +7,9 @@ import NewsArticleQuery from './query/NewsArticleQuery';
 import NewsArticleTemplate from './template/NewsArticleTemplate';
 import RedirectQuery from './query/RedirectQuery';
 import { AnnouncementProps } from '@/app/helpers/types';
-import HundredDaysMissionTemplate from './template/PolicyRoadMapTemplate';
-import HundredDaysMissionQuery from './query/PolicyRoadmapQuery';
+import HundredDaysMissionTemplate from './template/HundredDaysMissionTemplate';
+import PolicyRoadmapsQuery from './query/PolicyRoadmapsQuery'
+import PandemicIntelligenceTemplate from './template/PandemicIntelligenceTemplate';
 
 interface EntryTemplateAndQuery {
     templates: {
@@ -27,6 +28,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         outbreak: OutbreakTemplate,
         pastOutbreak: OutbreakTemplate,
         newsArticle: NewsArticleTemplate,
+        pandemicIntelligence: PandemicIntelligenceTemplate,
         hundredDaysMission: HundredDaysMissionTemplate
     },
     queries: {
@@ -37,7 +39,8 @@ const EntryTypes: EntryTemplateAndQuery = {
         pastOutbreak: OutbreakQuery,
         newsArticle: NewsArticleQuery,
         redirect: RedirectQuery,
-        hundredDaysMission: HundredDaysMissionQuery
+        hundredDaysMission: PolicyRoadmapsQuery,
+        pandemicIntelligence: PolicyRoadmapsQuery,
     }
 }
 

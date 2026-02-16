@@ -7,9 +7,11 @@ import ExportDataMenuItem from './ExportDataMenuItem'
 interface Props {
     chartSelector: string
     imageFilename: string
+    filenameToFetch?: string
+    filteredFileName?: string
 }
 
-export default function ExportMenu({ chartSelector, imageFilename }: Props) {
+export default function ExportMenu({ chartSelector, imageFilename, filenameToFetch, filteredFileName }: Props) {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -37,7 +39,7 @@ export default function ExportMenu({ chartSelector, imageFilename }: Props) {
                         imageFilename={imageFilename}
                     />
 
-                    <ExportDataMenuItem />
+                    <ExportDataMenuItem filenameToFetch={filenameToFetch} filteredFileName={filteredFileName}/>
                 </Menu.Items>
             </Transition>
         </Menu>

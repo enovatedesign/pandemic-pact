@@ -29,7 +29,7 @@ type SubPriority = {
 
 const EbolaCorcPrioritiesCard = () => {
     const { grants } = useContext(GlobalFilterContext)
-    console.log(grants)
+    
     const { 
         corcGrants, 
         grantsGroupedByPriority ,

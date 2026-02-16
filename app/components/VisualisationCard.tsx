@@ -25,6 +25,8 @@ interface Props {
         content: ReactNode
     }>
     tabPrefixLabel?: string
+    filenameToFetch?: string
+    filteredFileName?: string
 }
 
 export default function VisualisationCard({
@@ -37,6 +39,8 @@ export default function VisualisationCard({
     children,
     tabs,
     tabPrefixLabel,
+    filenameToFetch,
+    filteredFileName
 }: Props) {
     const { filters } = useContext(GlobalFilterContext)
 
@@ -149,6 +153,8 @@ export default function VisualisationCard({
                         <ExportMenu
                             chartSelector={`#${id}`}
                             imageFilename={id}
+                            filenameToFetch={filenameToFetch}
+                            filteredFileName={filteredFileName}
                         />
 
                         {tabs && (

@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { every } from 'lodash'
-import { FixedSelectOptions } from './types'
+import { FixedSelectOptions, PolicyRoadmapEntryTypeHandle } from './types'
 
 export interface Filter {
     values: string[]
@@ -153,11 +153,73 @@ export function available100DaysMissionFilters(): FilterSchema[] {
     return filters
 }
 
+export function availablePandemicIntelligenceFilters(): FilterSchema[] {
+    const filters = [
+        {
+            label: 'Family',
+            field: 'Families',
+            loadOnClick: false,
+            isHidden: true
+        },
+        {
+            label: 'Pathogen',
+            field: 'Pathogens',
+            excludeGrantsWithMultipleItems: { 
+                label: 'Exclude Grants with Multiple Pathogens' 
+            },
+            isHidden: true
+        },
+        {
+            label: 'Disease',
+            field: 'Diseases',
+            loadOnClick: false,
+            isHidden: true
+        },
+        {
+            label: 'Funder',
+            field: 'FundingOrgName',
+        },
+        {
+            label: 'Theme',
+            field: 'PandemicIntelligenceThemes',
+            loadOnClick: false
+        },
+    ]
+
+    return filters
+}
+
+export const getAvailableFilters = ({ 
+    policyRoadmapEntryType 
+}: {
+    policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
+}) => {
+    let filters = availableFilters()
+
+    if (policyRoadmapEntryType) {
+        switch (policyRoadmapEntryType) {
+            case 'hundredDaysMission':
+                filters = available100DaysMissionFilters()
+                break;
+            
+            case 'pandemicIntelligence':
+                filters = availablePandemicIntelligenceFilters()
+                break;
+
+            default:
+                filters = availableFilters()
+                break;
+        }
+    }
+
+    return filters
+}
+
 export function emptyFilters(
     fixedSelectOptions?: FixedSelectOptions,
-    is100DaysMission: boolean = false
+    policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
 ) {
-    const filters = is100DaysMission ? available100DaysMissionFilters() : availableFilters()
+    const filters = getAvailableFilters({ policyRoadmapEntryType })
     
     const filtersObject = Object.fromEntries(filters.map(({ field }) => {
         let values: string[] = []
@@ -292,4 +354,3 @@ export const FixedSelectOptionContext = createContext<{
     },
     outbreakLevel: 3
 })
-

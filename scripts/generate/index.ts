@@ -12,6 +12,8 @@ import prepareSearch from './prepare-search'
 import prepare100DaysMission from './prepare-100-days-mission'
 import prepare100DaysMissionSelectOptions from './prepare-100-days-mission-select-options'
 import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-options'
+import preparePandemicIntelligence from './prepare-pandemic-inteligence'
+import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 import { verifyBlobGrants } from '../helpers/verify-blob-grants'
 import { uploadStaticFilesToBlob } from '../helpers/upload-static-files-to-blob'
@@ -55,7 +57,13 @@ async function main() {
 
     prepareVisualisePageGrantsFile()
 
-    prepareCsvExportFile()
+    prepareCsvExportFile({
+        logTitle: 'Preparing CSV export file',
+        dataFilePath: './data/dist/grants.json.gz',
+        workbookTitle: 'Pandemic PACT Grants',
+        exportPath: './public/export/grants',
+        dataFileName: 'pandemic-pact-grants.csv'
+    })
 
     prepareMap()
     
@@ -63,7 +71,20 @@ async function main() {
     
     await prepare100DaysMissionSelectOptions()
     
-    await preparePolicyRoadmapSelectOptions()
+    await preparePandemicIntelligence()
+
+    await preparePandemicIntelligenceSelectOptions()
+
+    prepareCsvExportFile({
+        logTitle: 'Preparing Pandemic Intelligence CSV export file',
+        dataFilePath: './data/dist/pandemic-intelligence.json',
+        workbookTitle: 'Pandemic Intelligence Grants',
+        exportPath: './public/export/pandemic-intelligence',
+        dataFileName: 'pandemic-intelligence-grants.csv'
+    })
+    
+    // // Select options for the policy road maps dropdown on the explore page
+    await preparePolicyRoadmapSelectOptions() 
 
     await prepareSearch()
 

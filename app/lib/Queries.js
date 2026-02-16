@@ -302,6 +302,7 @@ export const contentBuilderQuery = `
       ... on accordion_Entry {
         id
         typeHandle
+        heading
         accordions {
           ... on accordionsBlock_Entry {
             id
