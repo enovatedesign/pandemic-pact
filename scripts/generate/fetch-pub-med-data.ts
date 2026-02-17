@@ -364,7 +364,7 @@ async function saveCheckpoint(
 }
 
 function pubmedFileName(id: string): string {
-    return id.replaceAll('/', '__')
+    return id.replace(/\//g, '__')
 }
 
 function idIsValidPubMedGrantId(id?: string): boolean {
