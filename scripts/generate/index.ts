@@ -3,7 +3,7 @@ import downloadAndParseDataSheets from './download-and-parse-data-sheets'
 import prepareGrants from './prepare-grants'
 import prepareSelectOptions from './prepare-select-options'
 import prepareHomepageTotals from './prepare-homepage-totals'
-import fetchPubMedData from './fetch-pub-med-data'
+import fetchPubMedData, { CACHED_BUILD_TIMEOUT_MS } from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
 import prepareVisualisePageGrantsFile from './prepare-visualise-page-grants-file'
 import prepareCsvExportFile from './prepare-csv-export-file'
@@ -16,7 +16,7 @@ import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 import { verifyBlobGrants } from '../helpers/verify-blob-grants'
-import { uploadStaticFilesToBlob } from '../helpers/upload-static-files-to-blob'
+import { uploadStaticFilesToBlob, uploadGrantsDistToBlob } from '../helpers/upload-static-files-to-blob'
 import { info } from '../helpers/log'
 
 main()
@@ -35,6 +35,17 @@ async function main() {
     // The source JSON data is already downloaded from blob storage.
     if (useCachedFiles) {
         info('Using cached static files - skipping grant processing and file generation')
+
+        // PubMed data is independent of FigShare — always fetch it.
+        // grants.json.gz is already downloaded from blob storage.
+        // PubMed has its own 7-day caching and will skip API calls when fresh.
+        await fetchPubMedData({ timeoutMs: CACHED_BUILD_TIMEOUT_MS })
+
+        // Re-upload updated grants.json.gz so future cached builds
+        // include fresh PubMed data
+        if (shouldUploadConditionsMet) {
+            await uploadGrantsDistToBlob()
+        }
     } else {
         await prepareGrants()
 

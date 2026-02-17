@@ -28,12 +28,14 @@ export interface GetPublicationsOptions {
     baseDelayMs?: number
     maxDelayMs?: number
     maxFailures?: number
+    timeoutMs?: number
 }
 
 const FRESHNESS_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7   // 7 days
 const GRACE_PERIOD_MS = 1000 * 60 * 60 * 24 * 45          // 45 days
 const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24 * 45          // 45 days (matches grace period)
 const CHECKPOINT_INTERVAL = 100
+export const CACHED_BUILD_TIMEOUT_MS = 1000 * 60 * 8       // 8 minutes
 
 const BLOB_BASE_URL = process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'
 const CACHE_FILENAME = 'cached-pub-med-publications.json'
@@ -94,6 +96,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     const baseDelayMs = options?.baseDelayMs ?? 2000
     const maxDelayMs = options?.maxDelayMs ?? 2000
     const maxFailures = options?.maxFailures ?? 20
+    const timeoutMs = options?.timeoutMs ?? 0
 
     const retryOptions: RetryOptions = { maxRetries, baseDelayMs, maxDelayMs }
 
@@ -161,12 +164,13 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
 
     info(`PubMed data: ${freshCount} fresh, ${grantsToFetch.length} to fetch`)
 
-    // Fetch loop with checkpoints and circuit breaker
+    // Fetch loop with checkpoints, circuit breaker, and timeout
     let failureCount = 0
     let refreshedCount = 0
     let cachedFallbackCount = 0
     let unavailableCount = 0
     let circuitBroken = false
+    const fetchStartTime = Date.now()
 
     metadata.lastRunStarted = new Date().toISOString()
 
@@ -174,6 +178,13 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
         // Circuit breaker check
         if (maxFailures > 0 && failureCount >= maxFailures) {
             warn(`PubMed API: ${failureCount} failures reached, skipping remaining ${grantsToFetch.length - i} grants to avoid blocking deployment`)
+            circuitBroken = true
+            break
+        }
+
+        // Timeout check
+        if (timeoutMs > 0 && (Date.now() - fetchStartTime) >= timeoutMs) {
+            warn(`PubMed fetch timeout (${Math.round(timeoutMs / 60000)} minutes) reached, skipping remaining ${grantsToFetch.length - i} grants`)
             circuitBroken = true
             break
         }
