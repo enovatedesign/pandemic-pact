@@ -40,7 +40,7 @@ const getBranchNameForRuntime = (): string => {
 
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
-    const encoded = pubMedGrantId.replace(/\//g, '__')
+    const encoded = pubMedGrantId.replace(/\//g, '__').replace(/ /g, '_')
 
     if (useBlobStorage) {
         const baseUrl = process.env.BLOB_BASE_URL

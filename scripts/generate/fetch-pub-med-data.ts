@@ -58,8 +58,11 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
 
     const pubMedIds = new Set<string>();
     await streamLargeJson(zippedGrantsPath, (grant: Grant) => {
-        if (idIsValidPubMedGrantId(String(grant.PubMedGrantId))) {
-            pubMedIds.add(String(grant.PubMedGrantId));
+        const rawId = String(grant.PubMedGrantId)
+        for (const part of splitGrantIds(rawId)) {
+            if (idIsValidPubMedGrantId(part)) {
+                pubMedIds.add(part)
+            }
         }
     });
 
@@ -366,16 +369,25 @@ async function saveCheckpoint(
 }
 
 function pubmedFileName(id: string): string {
-    return id.replace(/\//g, '__')
+    return id.replace(/\//g, '__').replace(/ /g, '_')
+}
+
+function splitGrantIds(id: string): string[] {
+    return id.split(/[,;]|\s{2,}/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
 }
 
 function idIsValidPubMedGrantId(id?: string): boolean {
-    if (typeof id !== 'string') {
-        return false
-    }
+    if (typeof id !== 'string') return false
 
     const normalised = id.trim().toLowerCase()
-    return !['', 'unknown', 'not applicable', 'n/a'].includes(normalised)
+
+    if (['', 'unknown', 'not applicable', 'n/a'].includes(normalised)) return false
+    if (id.trim().length > 45) return false
+    if (/\s{2,}/.test(id.trim())) return false
+
+    return true
 }
 
 async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryOptions): Promise<PubMedLinkResult> {
