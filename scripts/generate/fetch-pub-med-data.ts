@@ -65,15 +65,17 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
 
     const publications = await getPublications(Array.from(pubMedIds), options);
 
-    // Write individual PubMed files locally for dev
-    const pubmedOutputPath = './public/pubmed'
-    fs.ensureDirSync(pubmedOutputPath)
+    // Write individual PubMed files locally for dev (not needed on Vercel — production reads from blob storage)
+    if (!process.env.VERCEL) {
+        const pubmedOutputPath = './public/pubmed'
+        fs.ensureDirSync(pubmedOutputPath)
 
-    for (const [id, pubs] of Object.entries(publications)) {
-        fs.writeJsonSync(`${pubmedOutputPath}/${pubmedFileName(id)}.json`, pubs)
+        for (const [id, pubs] of Object.entries(publications)) {
+            fs.writeJsonSync(`${pubmedOutputPath}/${pubmedFileName(id)}.json`, pubs)
+        }
+
+        info(`Wrote ${Object.keys(publications).length} individual PubMed files to ${pubmedOutputPath}`)
     }
-
-    info(`Wrote ${Object.keys(publications).length} individual PubMed files to ${pubmedOutputPath}`)
 
     // Build publication counts for search indexing
     const counts: Record<string, number> = {}
