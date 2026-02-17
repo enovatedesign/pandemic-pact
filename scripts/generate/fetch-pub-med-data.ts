@@ -226,7 +226,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
 
         // Save checkpoint periodically
         if ((i + 1) % CHECKPOINT_INTERVAL === 0) {
-            await saveCheckpoint(publications, metadata)
+            await saveCheckpoint(publications, metadata, i + 1, grantsToFetch.length)
         }
     }
 
@@ -338,6 +338,8 @@ function getOldestFallbackAge(
 async function saveCheckpoint(
     publications: { [key: string]: any[] },
     metadata: PubMedFetchMetadata,
+    fetchProgress: number,
+    fetchTotal: number,
 ): Promise<void> {
     try {
         const expiresAt = Date.now() + CACHE_EXPIRY_MS
@@ -354,7 +356,7 @@ async function saveCheckpoint(
             { access: 'public', addRandomSuffix: false },
         )
 
-        info(`Checkpoint saved: ${Object.keys(publications).length} grants cached`)
+        info(`Checkpoint saved (${fetchProgress}/${fetchTotal} fetched)`)
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error)
         warn(`Failed to save checkpoint: ${msg}`)
