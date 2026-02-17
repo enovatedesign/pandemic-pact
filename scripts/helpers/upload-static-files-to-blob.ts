@@ -54,39 +54,3 @@ export async function uploadStaticFilesToBlob() {
 
     info('Finished uploading static files to Blob Storage')
 }
-
-/**
- * Uploads only the grants dist file (grants.json.gz) to Vercel Blob Storage.
- * Used when cached files are active but PubMed data has been refreshed,
- * so future cached builds include the updated PubMed data.
- */
-export async function uploadGrantsDistToBlob() {
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        info('BLOB_READ_WRITE_TOKEN not set, skipping grants dist upload')
-        return
-    }
-
-    const branchName = getBranchName()
-    const filePath = './data/dist/grants.json.gz'
-    const blobKey = `${branchName}/cache/grants-dist.json.gz`
-
-    if (!fs.existsSync(filePath)) {
-        info(`Skipping ${filePath} - file does not exist`)
-        return
-    }
-
-    try {
-        const content = fs.readFileSync(filePath)
-
-        await put(blobKey, content, {
-            access: 'public',
-            addRandomSuffix: false,
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-        })
-
-        info(`✓ Uploaded updated ${filePath} to blob storage (PubMed refresh)`)
-    } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        info(`✗ Failed to upload ${filePath}: ${errorMessage}`)
-    }
-}

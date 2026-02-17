@@ -10,18 +10,18 @@ import Button from '../../components/Button'
 
 dayjs.extend(relativeTime)
 
-export default function Publications({ grant }: { grant: any }) {
+export default function Publications({ grant, publications }: { grant: any, publications: any[] }) {
     const limit = 10
 
     const [firstItemIndex, setFirstItemIndex] = useState(0)
     const [lastItemIndex, setLastItemIndex] = useState(limit - 1)
     const [activeIndex, setActiveIndex] = useState(-1)
 
-    if (!(grant.PubMedLinks?.length > 0)) {
+    if (!(publications?.length > 0)) {
         return null
     }
 
-    const publicationList = grant.PubMedLinks?.slice(
+    const publicationList = publications.slice(
         firstItemIndex,
         lastItemIndex
     )
@@ -159,10 +159,10 @@ export default function Publications({ grant }: { grant: any }) {
                     })}
                 </div>
 
-                {grant.PubMedLinks?.length > 10 && (
+                {publications.length > 10 && (
                     <Suspense fallback={null}>
                         <Pagination
-                            totalPosts={grant.PubMedLinks?.length}
+                            totalPosts={publications.length}
                             postsPerPage={limit}
                             setLastItemIndex={setLastItemIndex}
                             setFirstItemIndex={setFirstItemIndex}

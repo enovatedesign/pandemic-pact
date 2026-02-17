@@ -16,7 +16,7 @@ import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 import { verifyBlobGrants } from '../helpers/verify-blob-grants'
-import { uploadStaticFilesToBlob, uploadGrantsDistToBlob } from '../helpers/upload-static-files-to-blob'
+import { uploadStaticFilesToBlob } from '../helpers/upload-static-files-to-blob'
 import { info } from '../helpers/log'
 
 main()
@@ -39,13 +39,10 @@ async function main() {
         // PubMed data is independent of FigShare — always fetch it.
         // grants.json.gz is already downloaded from blob storage.
         // PubMed has its own 7-day caching and will skip API calls when fresh.
-        await fetchPubMedData({ timeoutMs: CACHED_BUILD_TIMEOUT_MS })
+        // Individual PubMed files are uploaded to blob during the fetch.
+        const publicationCounts = await fetchPubMedData({ timeoutMs: CACHED_BUILD_TIMEOUT_MS })
 
-        // Re-upload updated grants.json.gz so future cached builds
-        // include fresh PubMed data
-        if (shouldUploadConditionsMet) {
-            await uploadGrantsDistToBlob()
-        }
+        await prepareSearch(publicationCounts)
     } else {
         await prepareGrants()
 
@@ -53,7 +50,7 @@ async function main() {
 
         prepareHomepageTotals()
 
-        await fetchPubMedData()
+        const publicationCounts = await fetchPubMedData()
 
         const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
 
@@ -78,7 +75,7 @@ async function main() {
         // Select options for the policy road maps dropdown on the explore page
         await preparePolicyRoadmapSelectOptions()
 
-        await prepareSearch()
+        await prepareSearch(publicationCounts)
 
         await prepareGrantIdsForSitemap()
 

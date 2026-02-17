@@ -38,6 +38,34 @@ const getBranchNameForRuntime = (): string => {
     return normaliseBranchName(ciBranch)
 }
 
+const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
+    const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
+
+    if (useBlobStorage) {
+        const baseUrl = process.env.BLOB_BASE_URL
+
+        if (!baseUrl) return []
+
+        try {
+            const url = `${baseUrl}/pubmed/${pubMedGrantId}.json`
+            const response = await fetch(url)
+
+            if (!response.ok) return []
+
+            return await response.json()
+        } catch {
+            return []
+        }
+    } else {
+        const filePath = path.join(process.cwd(), 'public/pubmed', `${pubMedGrantId}.json`)
+
+        if (!fs.existsSync(filePath)) return []
+
+        const json = fs.readFileSync(filePath, 'utf8')
+        return JSON.parse(json)
+    }
+}
+
 const loadGrant = async (id: string) => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
     
@@ -150,11 +178,15 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (!grant) {
         notFound()
     }
-    
+
+    const publications = grant.PubMedGrantId
+        ? await loadPubMedData(grant.PubMedGrantId)
+        : []
+
     return (
         <Layout
             title={<PageTitle grant={grant} />}
-            mastheadContent={<Masthead grant={grant} />}
+            mastheadContent={<Masthead grant={grant} publications={publications} />}
         >
             <div className="container mx-auto my-12 relative">
                 <BackToGrantSearchLink />
@@ -165,7 +197,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                         <AbstractAndLaySummary grant={grant} />
 
-                        <Publications grant={grant} />
+                        <Publications grant={grant} publications={publications} />
                     </div>
                 </div>
             </div>

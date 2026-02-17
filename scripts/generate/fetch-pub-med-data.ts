@@ -1,10 +1,9 @@
 import fs from 'fs-extra'
-import zlib from 'zlib'
 import _ from 'lodash'
 import { put } from '@vercel/blob'
 import { Grant } from '../types/generate'
-import { title, info, printWrittenFileStats, warn } from '../helpers/log'
-import { createJsonArrayWriteStream, streamLargeJson } from '../helpers/stream-io'
+import { title, info, warn } from '../helpers/log'
+import { streamLargeJson } from '../helpers/stream-io'
 import { fetchWithRetry, RetryOptions } from '../helpers/pubmed-retry'
 
 interface PubMedFetchMetadata {
@@ -41,7 +40,7 @@ const BLOB_BASE_URL = process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.pub
 const CACHE_FILENAME = 'cached-pub-med-publications.json'
 const METADATA_FILENAME = 'pubmed-fetch-metadata.json'
 
-export default async function fetchPubMedData(options?: GetPublicationsOptions) {
+export default async function fetchPubMedData(options?: GetPublicationsOptions): Promise<Record<string, number>> {
     title('Fetching publication data from PubMed')
 
     const timeLogLabel = 'Fetched publication data from PubMed'
@@ -52,10 +51,9 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions) 
         warn(
             'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present',
         )
-        return
+        return {}
     }
 
-    const grantsDistPathname = './data/dist/grants.json'
     const zippedGrantsPath = './data/dist/grants.json.gz'
 
     const pubMedIds = new Set<string>();
@@ -67,28 +65,25 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions) 
 
     const publications = await getPublications(Array.from(pubMedIds), options);
 
-    info('Adding PubMed publications to grants and writing to disk...');
-    const writer = createJsonArrayWriteStream(grantsDistPathname);
+    // Write individual PubMed files locally for dev
+    const pubmedOutputPath = './public/pubmed'
+    fs.ensureDirSync(pubmedOutputPath)
 
-    await streamLargeJson(zippedGrantsPath, (grant: Grant) => {
-        const PubMedLinks = publications[grant.PubMedGrantId as string] ?? [];
-        writer.writeItem({ ...grant, PubMedLinks });
-    });
+    for (const [id, pubs] of Object.entries(publications)) {
+        fs.writeJsonSync(`${pubmedOutputPath}/${id}.json`, pubs)
+    }
 
-    await writer.end();
+    info(`Wrote ${Object.keys(publications).length} individual PubMed files to ${pubmedOutputPath}`)
 
-    // Gzip the output file
-    info('Creating gzipped version...');
-    const jsonBuffer = fs.readFileSync(grantsDistPathname);
-    const gzipBuffer = zlib.gzipSync(jsonBuffer as any);
-    fs.writeFileSync(zippedGrantsPath, new Uint8Array(gzipBuffer));
-
-    // Remove uncompressed file to save space
-    fs.unlinkSync(grantsDistPathname);
-
-    printWrittenFileStats(zippedGrantsPath);
+    // Build publication counts for search indexing
+    const counts: Record<string, number> = {}
+    for (const [id, pubs] of Object.entries(publications)) {
+        counts[id] = pubs.length
+    }
 
     console.timeEnd(timeLogLabel)
+
+    return counts
 }
 
 async function getPublications(pubMedGrantIds: string[], options?: GetPublicationsOptions) {
@@ -203,6 +198,17 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
                 publicationCount: result.publications.length,
             }
             refreshedCount++
+
+            // Upload individual PubMed file to blob immediately
+            // so partial results are live even if the build times out
+            try {
+                await put(`pubmed/${id}.json`, JSON.stringify(result.publications), {
+                    access: 'public',
+                    addRandomSuffix: false,
+                })
+            } catch {
+                // Non-fatal — consolidated cache is the fallback
+            }
         } else {
             failureCount++
             // Keep existing cached data if within grace period

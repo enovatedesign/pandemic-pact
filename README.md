@@ -48,7 +48,7 @@ FORCE_BLOB_UPLOAD=true
 
 ## PubMed Data Fetching
 
-The generate script fetches publication data from PubMed (via the Europe PMC API) and links it to grants. PubMed fetching runs independently of the FigShare data cache — even when the source grant data hasn't changed, PubMed data is still refreshed to keep publication links up to date.
+The generate script fetches publication data from PubMed (via the Europe PMC API). PubMed data is stored as **standalone files** (`pubmed/{PubMedGrantId}.json`) in Vercel Blob Storage, separate from the main grant data. This means PubMed data can be refreshed independently without re-generating all ~28k individual grant files.
 
 ### How it works
 
@@ -56,9 +56,10 @@ The generate script fetches publication data from PubMed (via the Europe PMC API
 - Grants checked within the last **7 days** are considered fresh and skip API calls.
 - If all grants are fresh, the fetch completes almost instantly using cached data.
 - Stale grants are fetched from the PubMed API individually, with checkpoints saved every 100 grants.
+- Each freshly-fetched grant's publications are **uploaded to blob immediately** (`pubmed/{PubMedGrantId}.json`), so partial results are live even if the build times out.
 - A **circuit breaker** stops fetching after 20 consecutive API failures to avoid blocking deployments.
 - When running during a cached build (FigShare data unchanged), a **timeout of 8 minutes** is enforced. Any grants not fetched within this window fall back to cached data (if available within a 45-day grace period) or are marked as unavailable.
-- After PubMed data is refreshed, the updated `grants.json.gz` is re-uploaded to Blob Storage so future cached builds include the latest publication links.
+- Grant detail pages load PubMed data on-demand from the standalone files, not from the main grant JSON.
 
 ### Controlling PubMed fetching
 

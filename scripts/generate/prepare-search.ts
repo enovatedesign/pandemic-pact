@@ -10,7 +10,7 @@ import {
 import { execSync } from 'child_process'
 import { Grant } from '../types/generate'
 
-export default async function prepareSearch() {
+export default async function prepareSearch(publicationCounts?: Record<string, number>) {
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
         warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
         return
@@ -122,7 +122,7 @@ export default async function prepareSearch() {
                             JointFunding: doc.FunderCountry.length > 1,
                             // Retrieve the number of publications the grant has
                             // This is to display in the search result 
-                            PublicationCount: grant.PubMedLinks?.length ?? 0,
+                            PublicationCount: publicationCounts?.[grant.PubMedGrantId as string] ?? 0,
                         },
                         doc_as_upsert: true,
                     },
