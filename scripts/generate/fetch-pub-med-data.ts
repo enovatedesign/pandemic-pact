@@ -366,7 +366,8 @@ function idIsValidPubMedGrantId(id?: string): boolean {
         return false
     }
 
-    return !['', 'unknown', 'not applicable'].includes(id.trim())
+    const normalised = id.trim().toLowerCase()
+    return !['', 'unknown', 'not applicable', 'n/a'].includes(normalised)
 }
 
 async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryOptions): Promise<PubMedLinkResult> {
