@@ -70,7 +70,7 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
     fs.ensureDirSync(pubmedOutputPath)
 
     for (const [id, pubs] of Object.entries(publications)) {
-        fs.writeJsonSync(`${pubmedOutputPath}/${id}.json`, pubs)
+        fs.writeJsonSync(`${pubmedOutputPath}/${pubmedFileName(id)}.json`, pubs)
     }
 
     info(`Wrote ${Object.keys(publications).length} individual PubMed files to ${pubmedOutputPath}`)
@@ -202,7 +202,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
             // Upload individual PubMed file to blob immediately
             // so partial results are live even if the build times out
             try {
-                await put(`pubmed/${id}.json`, JSON.stringify(result.publications), {
+                await put(`pubmed/${pubmedFileName(id)}.json`, JSON.stringify(result.publications), {
                     access: 'public',
                     addRandomSuffix: false,
                 })
@@ -361,6 +361,10 @@ async function saveCheckpoint(
         const msg = error instanceof Error ? error.message : String(error)
         warn(`Failed to save checkpoint: ${msg}`)
     }
+}
+
+function pubmedFileName(id: string): string {
+    return id.replaceAll('/', '__')
 }
 
 function idIsValidPubMedGrantId(id?: string): boolean {

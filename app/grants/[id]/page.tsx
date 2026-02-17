@@ -40,6 +40,7 @@ const getBranchNameForRuntime = (): string => {
 
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
+    const encoded = pubMedGrantId.replaceAll('/', '__')
 
     if (useBlobStorage) {
         const baseUrl = process.env.BLOB_BASE_URL
@@ -47,7 +48,7 @@ const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
         if (!baseUrl) return []
 
         try {
-            const url = `${baseUrl}/pubmed/${pubMedGrantId}.json`
+            const url = `${baseUrl}/pubmed/${encoded}.json`
             const response = await fetch(url)
 
             if (!response.ok) return []
@@ -57,7 +58,7 @@ const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
             return []
         }
     } else {
-        const filePath = path.join(process.cwd(), 'public/pubmed', `${pubMedGrantId}.json`)
+        const filePath = path.join(process.cwd(), 'public/pubmed', `${encoded}.json`)
 
         if (!fs.existsSync(filePath)) return []
 
