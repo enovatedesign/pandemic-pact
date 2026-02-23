@@ -122,7 +122,7 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
                             JointFunding: doc.FunderCountry.length > 1,
                             // Retrieve the number of publications the grant has
                             // This is to display in the search result 
-                            PublicationCount: publicationCounts?.[grant.PubMedGrantId as string] ?? 0,
+                            PublicationCount: getPublicationCount(publicationCounts, grant.PubMedGrantId as string),
                         },
                         doc_as_upsert: true,
                     },
@@ -216,4 +216,22 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
 
         info(`Wrote SEARCH_INDEX_PREFIX ${searchIndexPrefix} to .env`)
     }
+}
+
+/**
+ * Look up publication count for a grant, handling multi-ID PubMedGrantIds
+ * (comma/semicolon/double-space separated) by splitting and summing.
+ */
+function getPublicationCount(
+    counts: Record<string, number> | undefined,
+    pubMedGrantId: string,
+): number {
+    if (!counts || !pubMedGrantId) return 0
+
+    // Fast path: direct lookup for single-ID grants
+    if (counts[pubMedGrantId] !== undefined) return counts[pubMedGrantId]
+
+    // Split and sum for multi-ID grants
+    const parts = pubMedGrantId.split(/[,;]|\s{2,}/).map(s => s.trim()).filter(s => s.length > 0)
+    return parts.reduce((sum, part) => sum + (counts[part] ?? 0), 0)
 }

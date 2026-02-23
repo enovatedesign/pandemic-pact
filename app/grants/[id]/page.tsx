@@ -38,29 +38,65 @@ const getBranchNameForRuntime = (): string => {
     return normaliseBranchName(ciBranch)
 }
 
+/**
+ * Split a raw PubMedGrantId on commas, semicolons, or multiple spaces.
+ * Mirrors the logic in scripts/generate/fetch-pub-med-data.ts
+ */
+const splitGrantIds = (id: string): string[] => {
+    return id.split(/[,;]|\s{2,}/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+}
+
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
+    const parts = splitGrantIds(pubMedGrantId)
+
+    if (parts.length === 0) return []
+
+    // Fetch all parts in parallel and merge results
+    const results = await Promise.all(
+        parts.map(part => loadPubMedDataForSingleId(part))
+    )
+
+    return results.flat()
+}
+
+const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
     const encoded = pubMedGrantId.replace(/\//g, '__').replace(/ /g, '_')
 
     if (useBlobStorage) {
         const baseUrl = process.env.BLOB_BASE_URL
 
-        if (!baseUrl) return []
+        if (!baseUrl) {
+            console.error('BLOB_BASE_URL not set but USE_BLOB_STORAGE is true (loadPubMedData)')
+            return []
+        }
 
         try {
             const url = `${baseUrl}/pubmed/${encoded}.json`
-            const response = await fetch(url)
+            const response = await fetch(url, { cache: 'no-store' })
 
-            if (!response.ok) return []
+            if (!response.ok) {
+                console.warn(
+                    `Failed to fetch PubMed data for "${pubMedGrantId}" ` +
+                    `from ${url}: ${response.status} ${response.statusText}`
+                )
+                return []
+            }
 
             return await response.json()
-        } catch {
+        } catch (error) {
+            console.error(`Error fetching PubMed data for "${pubMedGrantId}":`, error)
             return []
         }
     } else {
         const filePath = path.join(process.cwd(), 'public/pubmed', `${encoded}.json`)
 
-        if (!fs.existsSync(filePath)) return []
+        if (!fs.existsSync(filePath)) {
+            console.warn(`PubMed file not found locally: ${filePath}`)
+            return []
+        }
 
         const json = fs.readFileSync(filePath, 'utf8')
         return JSON.parse(json)
@@ -82,7 +118,7 @@ const loadGrant = async (id: string) => {
         try {
             const branchName = getBranchNameForRuntime()
             const url = `${baseUrl}/${branchName}/grants/${id}.json`
-            const response = await fetch(url)
+            const response = await fetch(url, { cache: 'no-store' })
             
             if (!response.ok) {
                 console.error(`Failed to fetch grant ${id} from blob storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
@@ -165,7 +201,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export const dynamicParams = true;
-export const revalidate = false; // Pages cached indefinitely until next deployment
+export const revalidate = 3600; // Re-render pages at most once per hour
 
 export async function generateStaticParams() {
     // Return empty array to pre-render zero pages at build time
