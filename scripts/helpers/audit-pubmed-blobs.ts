@@ -107,7 +107,7 @@ export async function auditPubmedBlobs(): Promise<void> {
         }
 
         if ((i + 1) % 100 === 0) {
-            info(`Repaired ${repairedCount}/${i + 1} of ${missingIds.length} missing files`)
+            info(`Repaired ${repairedCount} of ${missingIds.length} missing files`)
         }
     }
 
