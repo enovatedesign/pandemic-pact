@@ -75,7 +75,7 @@ const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> 
 
         try {
             const url = `${baseUrl}/pubmed/${encoded}.json`
-            const response = await fetch(url, { cache: 'no-store' })
+            const response = await fetch(url, { next: { revalidate: 3600 } })
 
             if (!response.ok) {
                 console.warn(
@@ -118,8 +118,8 @@ const loadGrant = async (id: string) => {
         try {
             const branchName = getBranchNameForRuntime()
             const url = `${baseUrl}/${branchName}/grants/${id}.json`
-            const response = await fetch(url, { cache: 'no-store' })
-            
+            const response = await fetch(url, { next: { revalidate: 3600 } })
+
             if (!response.ok) {
                 console.error(`Failed to fetch grant ${id} from blob storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
                 return null
