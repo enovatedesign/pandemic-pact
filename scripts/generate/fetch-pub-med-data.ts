@@ -5,6 +5,7 @@ import { Grant } from '../types/generate'
 import { title, info, warn } from '../helpers/log'
 import { streamLargeJson } from '../helpers/stream-io'
 import { fetchWithRetry, RetryOptions } from '../helpers/pubmed-retry'
+import { pubmedFileName, splitGrantIds, idIsValidPubMedGrantId } from '../../app/helpers/pubmed-ids'
 
 interface PubMedFetchMetadata {
     grants: {
@@ -17,7 +18,7 @@ interface PubMedFetchMetadata {
     lastRunCompleted?: string
 }
 
-interface PubMedLinkResult {
+export interface PubMedLinkResult {
     publications: any[]
     success: boolean
 }
@@ -84,6 +85,12 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
     const counts: Record<string, number> = {}
     for (const [id, pubs] of Object.entries(publications)) {
         counts[id] = pubs.length
+    }
+
+    // Optionally audit individual blob files to find and repair any that are missing
+    if (process.env.PUBMED_BLOB_JSON_AUDIT) {
+        const { auditPubmedBlobs } = await import('../helpers/audit-pubmed-blobs')
+        await auditPubmedBlobs()
     }
 
     console.timeEnd(timeLogLabel)
@@ -368,29 +375,7 @@ async function saveCheckpoint(
     }
 }
 
-function pubmedFileName(id: string): string {
-    return id.replace(/\//g, '__').replace(/ /g, '_')
-}
-
-function splitGrantIds(id: string): string[] {
-    return id.split(/[,;]|\s{2,}/)
-        .map(s => s.trim())
-        .filter(s => s.length > 0)
-}
-
-function idIsValidPubMedGrantId(id?: string): boolean {
-    if (typeof id !== 'string') return false
-
-    const normalised = id.trim().toLowerCase()
-
-    if (['', 'unknown', 'not applicable', 'n/a'].includes(normalised)) return false
-    if (id.trim().length > 45) return false
-    if (/\s{2,}/.test(id.trim())) return false
-
-    return true
-}
-
-async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryOptions): Promise<PubMedLinkResult> {
+export async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryOptions): Promise<PubMedLinkResult> {
     const query = encodeURIComponent(`GRANT_ID:"${pubMedGrantId}"`)
     const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=1000&query=${query}`
 

@@ -9,6 +9,7 @@ import {
 } from '../../app/api/helpers/search'
 import { execSync } from 'child_process'
 import { Grant } from '../types/generate'
+import { splitGrantIds } from '../../app/helpers/pubmed-ids'
 
 export default async function prepareSearch(publicationCounts?: Record<string, number>) {
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
@@ -232,6 +233,6 @@ function getPublicationCount(
     if (counts[pubMedGrantId] !== undefined) return counts[pubMedGrantId]
 
     // Split and sum for multi-ID grants
-    const parts = pubMedGrantId.split(/[,;]|\s{2,}/).map(s => s.trim()).filter(s => s.length > 0)
+    const parts = splitGrantIds(pubMedGrantId)
     return parts.reduce((sum, part) => sum + (counts[part] ?? 0), 0)
 }

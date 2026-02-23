@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
 import numDigits from '@/app/api/helpers/metadata-functions';
 import { normaliseBranchName } from '@/app/helpers/normalise-branch-name';
+import { pubmedFileName, splitGrantIds } from '@/app/helpers/pubmed-ids';
 
 import Layout from '@/app/components/Layout';
 import AbstractAndLaySummary from './AbstractAndLaySummary';
@@ -38,16 +39,6 @@ const getBranchNameForRuntime = (): string => {
     return normaliseBranchName(ciBranch)
 }
 
-/**
- * Split a raw PubMedGrantId on commas, semicolons, or multiple spaces.
- * Mirrors the logic in scripts/generate/fetch-pub-med-data.ts
- */
-const splitGrantIds = (id: string): string[] => {
-    return id.split(/[,;]|\s{2,}/)
-        .map(s => s.trim())
-        .filter(s => s.length > 0)
-}
-
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
     const parts = splitGrantIds(pubMedGrantId)
 
@@ -63,7 +54,7 @@ const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
 
 const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
-    const encoded = pubMedGrantId.replace(/\//g, '__').replace(/ /g, '_')
+    const encoded = pubmedFileName(pubMedGrantId)
 
     if (useBlobStorage) {
         const baseUrl = process.env.BLOB_BASE_URL
