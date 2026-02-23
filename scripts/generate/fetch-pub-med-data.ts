@@ -391,6 +391,7 @@ export async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryO
         const publications = data.resultList.result
             .map((result: any) =>
                 _.pick(result, [
+                    'id',
                     'title',
                     'source',
                     'pmid',
@@ -405,7 +406,16 @@ export async function getPubMedLinks(pubMedGrantId: string, retryOptions: RetryO
                 updated_at: new Date().toISOString(),
             }))
 
-        return { publications, success: true }
+        // Deduplicate: prefer published version over preprint when both share a DOI
+        const seen = new Set<string>()
+        const unique = publications.filter((pub: any) => {
+            const key = pub.doi || `${pub.id}:${pub.source}`
+            if (seen.has(key)) return false
+            seen.add(key)
+            return true
+        })
+
+        return { publications: unique, success: true }
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error)
         warn(`Failed to fetch PubMed links for grant ${pubMedGrantId}: ${msg}`)

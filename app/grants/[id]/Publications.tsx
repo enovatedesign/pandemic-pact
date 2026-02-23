@@ -144,7 +144,7 @@ export default function Publications({ grant, publications }: { grant: any, publ
                                         <Button
                                             size="small"
                                             colour="secondary"
-                                            href={`https://europepmc.org/article/${link.source}/${link.pmid}`}
+                                            href={`https://europepmc.org/article/${link.source}/${link.pmid || link.id}`}
                                             rel="nofollow noopener noreferrer"
                                             target="_blank"
                                             customClasses="flex items-center justify-center self-start gap-2"

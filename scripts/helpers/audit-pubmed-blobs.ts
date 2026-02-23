@@ -11,15 +11,16 @@ const BATCH_SIZE = 50
 /**
  * Audit individual PubMed blob files against the consolidated cache.
  *
- * For each grant ID in the cache that has publications, checks whether
- * the individual blob file exists. Missing files are re-fetched fresh
- * from the Europe PMC API and uploaded to blob storage.
+ * 1. Checks whether each individual blob file exists. Missing files are
+ *    re-fetched fresh from the Europe PMC API and uploaded to blob storage.
+ * 2. Checks for publications with broken identifiers (e.g. PPR preprints
+ *    missing their `id` field) and re-fetches those grants too.
  */
 export async function auditPubmedBlobs(): Promise<void> {
     title('Auditing individual PubMed blob files')
 
     // 1. Load consolidated cache to get the full list of grant IDs
-    let grantIds: string[]
+    let cache: { publications: { [key: string]: any[] } }
 
     try {
         const cacheResponse = await fetch(`${BLOB_BASE_URL}/${CACHE_FILENAME}`)
@@ -29,22 +30,22 @@ export async function auditPubmedBlobs(): Promise<void> {
             return
         }
 
-        const cache = await cacheResponse.json()
+        cache = await cacheResponse.json()
 
         if (!cache.publications) {
             warn('Consolidated cache has no publications key')
             return
         }
-
-        // Only check grants that actually have publications
-        grantIds = Object.entries(cache.publications)
-            .filter(([_, pubs]) => Array.isArray(pubs) && (pubs as any[]).length > 0)
-            .map(([id]) => id)
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error)
         warn(`Failed to load consolidated PubMed cache: ${msg}`)
         return
     }
+
+    // Only check grants that actually have publications
+    const grantIds = Object.entries(cache.publications)
+        .filter(([_, pubs]) => Array.isArray(pubs) && (pubs as any[]).length > 0)
+        .map(([id]) => id)
 
     info(`Checking ${grantIds.length} grant IDs for individual blob files`)
 
@@ -75,20 +76,45 @@ export async function auditPubmedBlobs(): Promise<void> {
         }
     }
 
-    if (missingIds.length === 0) {
-        info(`All ${grantIds.length} individual PubMed files exist`)
+    info(`Found ${missingIds.length} missing files`)
+
+    // 3. Find grants with broken publication identifiers (e.g. PPR preprints missing `id`)
+    const missingIdSet = new Set(missingIds)
+    const brokenIds: string[] = []
+
+    for (const [grantId, pubs] of Object.entries(cache.publications)) {
+        if (missingIdSet.has(grantId)) continue // already queued for re-fetch
+        if (!Array.isArray(pubs)) continue
+
+        const hasBrokenLink = pubs.some(
+            (pub: any) => pub.source === 'PPR' && !pub.id
+        )
+
+        if (hasBrokenLink) {
+            brokenIds.push(grantId)
+        }
+    }
+
+    if (brokenIds.length > 0) {
+        info(`Found ${brokenIds.length} grants with broken publication links`)
+    }
+
+    const idsToRepair = [...missingIds, ...brokenIds]
+
+    if (idsToRepair.length === 0) {
+        info(`All ${grantIds.length} individual PubMed files are present and valid`)
         return
     }
 
-    info(`Found ${missingIds.length} missing files — re-fetching from PubMed`)
+    info(`Re-fetching ${idsToRepair.length} grants from PubMed (${missingIds.length} missing, ${brokenIds.length} broken)`)
 
-    // 3. Re-fetch missing files from Europe PMC and upload to blob
+    // 4. Re-fetch and upload
     const retryOptions: RetryOptions = { maxRetries: 2, baseDelayMs: 1000, maxDelayMs: 5000 }
     let repairedCount = 0
     let failedCount = 0
 
-    for (let i = 0; i < missingIds.length; i++) {
-        const id = missingIds[i]
+    for (let i = 0; i < idsToRepair.length; i++) {
+        const id = idsToRepair[i]
         const result: PubMedLinkResult = await getPubMedLinks(id, retryOptions)
 
         if (result.success) {
@@ -107,9 +133,9 @@ export async function auditPubmedBlobs(): Promise<void> {
         }
 
         if ((i + 1) % 100 === 0) {
-            info(`Repaired ${repairedCount} of ${missingIds.length} missing files`)
+            info(`Repaired ${repairedCount} of ${idsToRepair.length} grants`)
         }
     }
 
-    info(`Audit complete: ${repairedCount} repaired, ${failedCount} failed out of ${missingIds.length} missing`)
+    info(`Audit complete: ${repairedCount} repaired, ${failedCount} failed out of ${idsToRepair.length} total`)
 }
