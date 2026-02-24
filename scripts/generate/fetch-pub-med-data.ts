@@ -81,16 +81,18 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
         info(`Wrote ${Object.keys(publications).length} individual PubMed files to ${pubmedOutputPath}`)
     }
 
+    // Optionally audit individual blob files to find and repair any that are missing.
+    // Must run BEFORE building counts so that any corrections are reflected in the
+    // publication counts passed to OpenSearch indexing.
+    if (process.env.PUBMED_BLOB_JSON_AUDIT) {
+        const { auditPubmedBlobs } = await import('../helpers/audit-pubmed-blobs')
+        await auditPubmedBlobs(publications)
+    }
+
     // Build publication counts for search indexing
     const counts: Record<string, number> = {}
     for (const [id, pubs] of Object.entries(publications)) {
         counts[id] = pubs.length
-    }
-
-    // Optionally audit individual blob files to find and repair any that are missing
-    if (process.env.PUBMED_BLOB_JSON_AUDIT) {
-        const { auditPubmedBlobs } = await import('../helpers/audit-pubmed-blobs')
-        await auditPubmedBlobs()
     }
 
     console.timeEnd(timeLogLabel)

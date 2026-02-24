@@ -19,7 +19,7 @@ const BATCH_SIZE = 50
  *    and updates the consolidated cache to match.
  * 4. Writes all changes back to the consolidated cache.
  */
-export async function auditPubmedBlobs(): Promise<void> {
+export async function auditPubmedBlobs(localPublications?: { [key: string]: any[] }): Promise<void> {
     title('Auditing individual PubMed blob files')
 
     // 1. Load consolidated cache to get the full list of grant IDs
@@ -123,6 +123,9 @@ export async function auditPubmedBlobs(): Promise<void> {
     if (outOfSyncGrants.length > 0) {
         for (const { id, publications } of outOfSyncGrants) {
             cache.publications[id] = publications
+            if (localPublications && id in localPublications) {
+                localPublications[id] = publications
+            }
         }
         cacheUpdated = true
         info(`Synced ${outOfSyncGrants.length} out-of-sync cache entries from individual blob files`)
@@ -154,6 +157,9 @@ export async function auditPubmedBlobs(): Promise<void> {
                         addRandomSuffix: false,
                     })
                     cache.publications[id] = result.publications
+                    if (localPublications && id in localPublications) {
+                        localPublications[id] = result.publications
+                    }
                     cacheUpdated = true
                     repairedCount++
                 } catch {
