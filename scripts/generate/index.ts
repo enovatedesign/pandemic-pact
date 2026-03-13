@@ -24,7 +24,7 @@ main()
 async function main() {
     dotenv.config({ path: './.env.local' })
 
-    // Determine if we should upload to blob storage
+    // Determine if we should upload to blob storage.
     const isVercelBuild = process.env.VERCEL === '1'
     const forceUpload = process.env.FORCE_BLOB_UPLOAD === 'true'
     const shouldUploadConditionsMet = isVercelBuild || forceUpload
