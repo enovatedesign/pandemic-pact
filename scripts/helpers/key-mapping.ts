@@ -11,9 +11,11 @@ import { RawGrant } from "../types/generate"
 export const keyMapping: { [key: string]: string } = {
     pactid: 'GrantID',
     grant_number: 'PubMedGrantId',
+    grant_title_original: 'GrantTitleOriginal',
     grant_title_eng: 'GrantTitleEng',
-    award_amount_converted: 'GrantAmountConverted',
+    abstract_original: 'AbstractOriginal',
     abstract: 'Abstract',
+    award_amount_converted: 'GrantAmountConverted',
     grant_start_year: 'GrantStartYear',
     grant_end_year: 'GrantEndYear',
     publication_year_of_award: 'PublicationYearOfAward',
