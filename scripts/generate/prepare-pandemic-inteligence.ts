@@ -36,6 +36,10 @@ export default async function preparePandemicIntelligence() {
         
         const convertedKeysGrantData = convertSourceKeysToOurKeys({
                 pactid: grant['pactid'],
+                grant_title_original: grant['grant_title_original'],
+                grant_title_eng: grant['grant_title_eng'],
+                abstract: grant['abstract'],
+                abstract_original: grant['abstract_original'],
                 award_amount_converted: grant['award_amount_converted'],
                 research_location_country: grant['research_location_country'],
 
@@ -43,7 +47,7 @@ export default async function preparePandemicIntelligence() {
                 Diseases: Diseases,
 
                 ...checkBoxFieldValues,
-            }, 
+            },
             true
         )
         
@@ -70,6 +74,10 @@ export default async function preparePandemicIntelligence() {
         const baseKeysToInclude = [
             // Use the converted keys from the convertSourceKeysToOurKeys function
             'GrantID',
+            'GrantTitleOriginal',
+            'GrantTitleEng',
+            'AbstractOriginal',
+            'Abstract',
             'GrantAmountConverted',
             'FundingOrgName',
             'PolicyRoadmapResearchLocationCountry',
