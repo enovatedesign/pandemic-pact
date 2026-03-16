@@ -42,6 +42,8 @@ export default function BarChart({
     const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
     const [usingFunderLocation, setUsingFunderLocation] = useState<boolean>(false)
 
+    const activeCountryField = usingFunderLocation ? 'FunderCountry' : 'ResearchLocationCountry'
+
     let data: any[] = []
 
     if (selectedRegion) {
@@ -53,7 +55,7 @@ export default function BarChart({
             ]
 
         dataset.forEach((grant: any) => {
-            grant[countryField].forEach((country: string) => {
+            grant[activeCountryField].forEach((country: string) => {
                 if (!countriesInSelectedRegion.includes(country)) {
                     return
                 }
@@ -110,8 +112,9 @@ export default function BarChart({
             return
         }
 
+        const activeRegionField = usingFunderLocation ? countryField : regionField
         const totalGrantsInClickedRegion = dataset.filter((grant: any) =>
-            grant[regionField].includes(event.activeLabel)
+            grant[activeRegionField].includes(event.activeLabel)
         ).length
 
         if (totalGrantsInClickedRegion > 0) {
@@ -120,7 +123,7 @@ export default function BarChart({
     }
 
     const countryOrRegionFormatter = (label: string) => {
-        const key = selectedRegion ? countryField : regionField
+        const key = selectedRegion ? activeCountryField : (usingFunderLocation ? countryField : regionField)
         return selectOptions[key as keyof typeof selectOptions]
             .find(option => option.value === label)?.label as string
     }
