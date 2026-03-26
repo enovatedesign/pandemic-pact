@@ -23,7 +23,19 @@ deploy_review:
     script:
         - npm install --global vercel
         - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-        - vercel deploy --build-env "SEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" --build-env "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME" --token=$VERCEL_TOKEN | sed -e 's/^/DYNAMIC_ENVIRONMENT_URL=/' > deploy.env
+        - |
+            DEPLOYMENT_URL=$(vercel deploy \
+              --build-env "SEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" \
+              --build-env "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME" \
+              --token=$VERCEL_TOKEN 2>&1 | tail -1)
+
+            echo "Deployed to: $DEPLOYMENT_URL"
+
+            ALIAS="${CI_COMMIT_REF_SLUG}.${CI_PROJECT_NAME}.vercel.app"
+
+            vercel alias set "$DEPLOYMENT_URL" "$ALIAS" --token=$VERCEL_TOKEN
+
+            echo "DYNAMIC_ENVIRONMENT_URL=https://${ALIAS}" > deploy.env
     artifacts:
         reports:
             dotenv: deploy.env
@@ -38,6 +50,10 @@ stop_review:
         - develop
         - master
     script:
+        - npm install --global vercel
+        - |
+            vercel alias rm "${CI_COMMIT_REF_SLUG}.${CI_PROJECT_NAME}.vercel.app" \
+              --token=$VERCEL_TOKEN --yes
         - |
             curl -X DELETE \
                  -u "${SEARCH_USERNAME}:${SEARCH_PASSWORD}" \
