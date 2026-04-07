@@ -27,8 +27,11 @@ export async function uploadGrantsToBlob(
     let uploaded = 0
     const errors: Array<{ id: string; error: string }> = []
 
-    // Track uploaded grant paths for cleanup
-    const uploadedPaths = new Set<string>()
+    // All expected grant paths — used for orphan cleanup so that failed uploads
+    // don't cause deletion of previously working files
+    const expectedPaths = new Set(
+        grants.map(g => `${branchName}/grants/${g.id}.json`)
+    )
 
 
     // Process in smaller batches with delays to respect rate limits
@@ -42,7 +45,6 @@ export async function uploadGrantsToBlob(
                         access: 'public',
                         addRandomSuffix: false,
                     })
-                    uploadedPaths.add(pathname)
                     uploaded++
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : String(error)
@@ -69,7 +71,7 @@ export async function uploadGrantsToBlob(
         do {
             const result: { blobs: { pathname: string }[]; cursor?: string } = await list({ prefix: `${branchName}/grants/`, limit: 1000, cursor })
             const found: string[] = result.blobs.map((blob: { pathname: string }) => blob.pathname)
-            const batchOrphans: string[] = found.filter((path: string) => !uploadedPaths.has(path))
+            const batchOrphans: string[] = found.filter((path: string) => !expectedPaths.has(path))
             orphaned.push(...batchOrphans)
             cursor = result.cursor
         } while (cursor)
@@ -99,6 +101,13 @@ export async function uploadGrantsToBlob(
         })
         if (errors.length > 10) {
             warn(`  ... and ${errors.length - 10} more errors`)
+        }
+
+        const failureRate = errors.length / grants.length
+        if (failureRate > 0.01) {
+            throw new Error(
+                `Too many grant uploads failed: ${errors.length}/${grants.length} (${(failureRate * 100).toFixed(1)}%). Aborting to prevent data loss.`
+            )
         }
     }
 
