@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
                 if (path === '/homepage') {
                     console.log(`Revalidating Path: ${path} -> /`);
-                    revalidatePath('/');
+                    revalidatePath('/', 'page');
                 } else {
                     console.log(`Revalidating Path: ${path}`);
                     revalidatePath(path);
