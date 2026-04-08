@@ -16,7 +16,8 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     const {
         FIGSHARE_ARTICLE_ID: ARTICLE_ID,
         FIGSHARE_GRANTS_FILE_ID: GRANTS_FILE_ID,
-        FIGSHARE_DATA_DICTIONARY_FILE_ID: DICTIONARY_FILE_ID
+        FIGSHARE_DATA_DICTIONARY_FILE_ID: DICTIONARY_FILE_ID,
+        FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID
     } = dataSources
 
     const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
@@ -66,6 +67,13 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         await downloadCsvAndConvertToJson(dataDictionaryFile.download_url, 'dictionary')
 
         await downloadCsvAndConvertToJson(grantsFile.download_url, 'grants', true)
+
+        const outbreaksFile = figShareFiles.find((f: any) => f.id === OUTBREAKS_FILE_ID)
+        if (!outbreaksFile) {
+            throw new Error(`FigShare file with ID "${OUTBREAKS_FILE_ID}" not found.`)
+        }
+
+        await downloadCsvAndConvertToJson(outbreaksFile.download_url, 'outbreaks')
     } catch (err: any) {
         error(`Error: ${err.message}`)
     }

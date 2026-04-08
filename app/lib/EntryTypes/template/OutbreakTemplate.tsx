@@ -18,21 +18,23 @@ export default function OutbreakTemplate({data, announcement}: Props) {
     const { entry } = data
 
     const outbreakLabel = entry.outbreakDisease
-    
+    const outbreakId = entry.outbreakId
+
     const outbreakSelectOptions = useMemo(() => (
         buildOutbreakHierarchyStructure(outbreakLabel, setOutbreakLevel)
     ), [outbreakLabel])
-    
+
     const outbreakContext = {
         outbreakSelectOptions,
         outbreakLevel
     }
-    
+
     return (
         <FixedSelectOptionContext.Provider value={outbreakContext}>
             <VisualisePageClient
                 outbreak={true}
                 diseaseLabel={outbreakLabel}
+                outbreakId={outbreakId}
                 title={`OUTBREAK: ${entry.title}`}
                 summary={entry.summary}
                 showSummary={entry.showSummary}

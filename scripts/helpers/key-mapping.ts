@@ -59,7 +59,8 @@ export const keyMapping: { [key: string]: string } = {
     'onehundreddm_implementation': 'HundredDaysMissionImplementation',
     research_location_country: 'PolicyRoadmapResearchLocationCountry',
     capacity_strengthening_list: 'HundredDaysMissionCapacityStrengthening',
-    pandint_themes: 'PandemicIntelligenceThemes'
+    pandint_themes: 'PandemicIntelligenceThemes',
+    outbreak_id: 'OutbreakIds'
 }
 
 export const mpoxResearchPriorityAndSubPriorityMapping: {
