@@ -198,14 +198,14 @@ export default async function prepareGrants() {
     return Promise.resolve()
 }
 
-function normaliseGrantYear(raw: unknown): number | 'N/A' {
+function normaliseGrantYear(raw: unknown): string {
     const year = Number(raw)
 
     if (!Number.isFinite(year) || year < 2020) {
         return 'N/A'
     }
 
-    return year
+    return String(year)
 }
 
 function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
