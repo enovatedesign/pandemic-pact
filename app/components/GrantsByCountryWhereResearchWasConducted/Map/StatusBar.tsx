@@ -45,7 +45,7 @@ export default function StatusBar({
         highlightJointFundedCountries &&
         typeof jointGrantsTotalNumber === 'number'
     ) {
-        totalGrants = `${jointGrantsTotalNumber} / ${grantsTotalNumber}`
+        totalGrants = `${jointGrantsTotalNumber}\u00A0/ ${grantsTotalNumber}`
     } else {
         totalGrants = `${grantsTotalNumber}`
     }
@@ -58,7 +58,7 @@ export default function StatusBar({
     ) {
         totalAmountCommitted = `${dollarValueFormatter(
             selectedFeatureProperties.totalJointAmountCommitted,
-        )} / ${dollarValueFormatter(
+        )}\u00A0/ ${dollarValueFormatter(
             selectedFeatureProperties.totalAmountCommitted,
         )}`
     } else {

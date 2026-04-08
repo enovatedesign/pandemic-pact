@@ -119,7 +119,7 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
             "H5N1": `Charts showing the location of funding organisations and where funding flows to support H5N1 research activities.`,
             "Marburg virus disease": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
             "Ebola": `Charts showing the location of funding organisations and where funding flows to support ${disease} research activities.`,
-            "default": 'Charts showing the location of funding organisations and where the funding flows to support research activities. charts can be visualised at the level of the WHO regions or individual countries.'
+            "default": 'Charts showing the location of funding organisations and where the funding flows to support research activities. Charts can be visualised at the level of the WHO regions or individual countries.'
         },
         url: {
             "mpox": '#geographical-distribution',

@@ -187,8 +187,8 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
             </ResponsiveContainer>
                     
             <ImageExportLegend
-                categories={selectOptions.Diseases.map(({ label }) => label)}
-                colours={selectOptions.Diseases.map(
+                categories={diseaseLines.map(({ label }) => label)}
+                colours={diseaseLines.map(
                     ({ value }) => diseaseColours[value]
                 )}
             />
