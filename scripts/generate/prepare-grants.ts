@@ -119,6 +119,13 @@ export default async function prepareGrants() {
             ...commaSeparatedFieldValues,
         })
 
+        // Normalise grant start/end year sentinel values (e.g. -99) to 'N/A'
+        // so they don't leak through to the UI. The < 2020 lower bound mirrors
+        // the rule used for TrendStartYear below and the select-options filter
+        // in prepare-select-options.ts.
+        convertedKeysGrantData.GrantStartYear = normaliseGrantYear(convertedKeysGrantData.GrantStartYear)
+        convertedKeysGrantData.GrantEndYear = normaliseGrantYear(convertedKeysGrantData.GrantEndYear)
+
         // Add custom data fields of our own
         let customFields = {
             // Add 'TrendStartYear' default value if 'grant_start_year' is missing
@@ -183,6 +190,16 @@ export default async function prepareGrants() {
     info(`Processed ${processedCount} grants total`)
     
     return Promise.resolve()
+}
+
+function normaliseGrantYear(raw: unknown): number | 'N/A' {
+    const year = Number(raw)
+
+    if (!Number.isFinite(year) || year < 2020) {
+        return 'N/A'
+    }
+
+    return year
 }
 
 function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
