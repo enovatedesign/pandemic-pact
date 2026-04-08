@@ -34,25 +34,41 @@ export async function uploadGrantsToBlob(
     )
 
 
+    const maxRetries = 3
+    const rateLimitDelay = 60_000 // 60 seconds, as suggested by Vercel Blob API
+
+    // Upload a single grant with retry on rate limiting
+    const uploadGrant = async (grant: { id: string; data: any }): Promise<void> => {
+        const pathname = `${branchName}/grants/${grant.id}.json`
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                await put(pathname, JSON.stringify(grant.data), {
+                    access: 'public',
+                    addRandomSuffix: false,
+                })
+                uploaded++
+                return
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error)
+                const isRateLimited = errorMessage.toLowerCase().includes('too many requests')
+
+                if (isRateLimited && attempt < maxRetries) {
+                    warn(`Rate limited uploading grant ${grant.id}, waiting ${rateLimitDelay / 1000}s before retry (attempt ${attempt}/${maxRetries})`)
+                    await new Promise(resolve => setTimeout(resolve, rateLimitDelay))
+                    continue
+                }
+
+                errors.push({ id: grant.id, error: errorMessage })
+                warn(`Failed to upload grant ${grant.id}: ${errorMessage}`)
+                return
+            }
+        }
+    }
+
     // Process in smaller batches with delays to respect rate limits
     for (let i = 0; i < grants.length; i += batchSize) {
         const batch = grants.slice(i, i + batchSize)
-        await Promise.all(
-            batch.map(async (grant) => {
-                try {
-                    const pathname = `${branchName}/grants/${grant.id}.json`
-                    await put(pathname, JSON.stringify(grant.data), {
-                        access: 'public',
-                        addRandomSuffix: false,
-                    })
-                    uploaded++
-                } catch (error) {
-                    const errorMessage = error instanceof Error ? error.message : String(error)
-                    errors.push({ id: grant.id, error: errorMessage })
-                    warn(`Failed to upload grant ${grant.id}: ${errorMessage}`)
-                }
-            })
-        )
+        await Promise.all(batch.map(uploadGrant))
         // Log progress
         if (uploaded > 0 && (uploaded % 500 === 0 || i + batchSize >= grants.length)) {
             info(`Uploaded ${uploaded}/${grants.length} grants to Blob Storage`)
