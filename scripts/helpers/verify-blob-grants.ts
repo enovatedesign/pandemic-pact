@@ -7,7 +7,7 @@ import { getBranchName } from './get-branch-name'
  */
 export async function verifyBlobGrants(
     grantIds: string[],
-    sampleSize: number = 5
+    sampleSize: number = 50
 ): Promise<boolean> {
     if (!process.env.BLOB_BASE_URL) {
         warn('BLOB_BASE_URL not set, skipping blob verification')
@@ -51,7 +51,10 @@ export async function verifyBlobGrants(
     if (allSuccessful) {
         info(`✓ Successfully verified all ${sample.length} sample grants from Blob Storage`)
     } else {
-        warn(`✗ Verification failed: ${successCount}/${sample.length} grants accessible`)
+        throw new Error(
+            `Blob verification failed: only ${successCount}/${sample.length} sample grants accessible. ` +
+            `Some grant files may be missing from Blob Storage.`
+        )
     }
 
     return allSuccessful
