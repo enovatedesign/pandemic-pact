@@ -1,5 +1,5 @@
 "use client"
-import { useContext } from 'react'
+import { useContext, useId } from 'react'
 
 import Select from 'react-select'
 
@@ -37,6 +37,7 @@ const HierarchicalFilter = ({
     selectRefs
 }: HierarchicalFilterProps) => {
     const { outbreakLevel } = useContext(FixedSelectOptionContext)
+    const id = useId()
 
     const fieldMapping = {
         "Family": "Families",
@@ -97,7 +98,8 @@ const HierarchicalFilter = ({
                             )}
 
                             <Select
-                                ref={(el: any) => (selectRefs.current[key] = el)} 
+                                instanceId={`${id}-${key}`}
+                                ref={(el: any) => (selectRefs.current[key] = el)}
                                 options={filters}
                                 onChange={(option) => {
                                     // If option.value is present, set the filter, if it does not exist, option === null

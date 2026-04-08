@@ -146,7 +146,13 @@ export default async function prepareGrants() {
 
             // Prepare the Corc Priorities
             CorcPriorities: prepareEbolaCorcPriorities(rawGrant),
-            
+
+            // Parse semicolon-separated outbreak IDs into an array
+            OutbreakIds: (rawGrant.outbreak_id || '')
+                .split(';')
+                .map((id: string) => id.trim())
+                .filter((id: string) => id !== ''),
+
             ...grantPolicyRoadmaps(rawGrant)
         }
 

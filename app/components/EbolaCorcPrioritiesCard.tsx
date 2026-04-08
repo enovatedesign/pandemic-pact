@@ -57,9 +57,9 @@ const EbolaCorcPrioritiesCard = () => {
     }, [grants])
 
     const subtitle = (
-        <p>
+        <>
             Research priorities as outlined in Filoviridae CORC  Scientific Consultation Report - <Link href="https://cdn.who.int/media/docs/default-source/consultation-rdb/ebola-outbreak-10-priorities_filovirus-corc_final.pdf?sfvrsn=5fc0e62d_4" target="_blank" rel="noopener noreferrer">10 Research Priorities in Response to the Ebola Outbreak in DR Congo and Future Filovirus Preparedness</Link>
-        </p>
+        </>
     )
 
     return (

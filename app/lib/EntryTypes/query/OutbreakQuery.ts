@@ -21,6 +21,7 @@ export default async function PageQuery(
                         summary
                         showSummary
                         outbreakDisease
+                        outbreakId
                         ${contentBuilderQuery}
                     }
                     ${seomaticQuery}
