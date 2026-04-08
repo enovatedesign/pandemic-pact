@@ -188,40 +188,64 @@ function prepareMustClause(q: string) {
 }
 
 function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
-    const boolClause: any = {
-        must: [],
-        should: [],
-    }
+    const outerMust: any[] = []
 
-    if (filters) {
-        const outerBoolOperator = filters.logicalAnd ? 'must' : 'should'
+    if (filters?.filters?.length > 0) {
+        // Build one inner bool per row, honouring the per-row AND/OR operator
+        // for combining the values within that row.
+        const rowClauses = filters.filters.map(({ field, values, logicalAnd }) => {
+            const formattedField = field === 'PolicyRoadmaps' ? `${field}.keyword` : field
 
-        boolClause[outerBoolOperator] = filters.filters.map(
-            ({ field, values, logicalAnd }) => {
-                const innerBoolOperator = logicalAnd ? 'must' : 'should'
-                const formattedField = field === 'PolicyRoadmaps' ? `${field}.keyword` : field
-                
+            const terms = values.map(value => ({
+                term: {
+                    [formattedField]: value,
+                },
+            }))
+
+            if (logicalAnd) {
                 return {
                     bool: {
-                        [innerBoolOperator]: values.map(value => ({
-                            term: {
-                                [formattedField]: value,
-                            },
-                        })) 
+                        must: terms,
                     },
                 }
-            },
-        )
+            }
+
+            return {
+                bool: {
+                    should: terms,
+                    minimum_should_match: 1,
+                },
+            }
+        })
+
+        // Combine the rows using the global AND/OR operator. Wrapping this in
+        // its own bool keeps the user-defined combinator independent of the
+        // joint-funding constraint below — otherwise an outer `must` clause
+        // would silently make the `should` rows optional in OpenSearch.
+        if (filters.logicalAnd) {
+            outerMust.push({
+                bool: {
+                    must: rowClauses,
+                },
+            })
+        } else {
+            outerMust.push({
+                bool: {
+                    should: rowClauses,
+                    minimum_should_match: 1,
+                },
+            })
+        }
     }
 
     if (jointFunding === 'only-joint-funded-grants') {
-        boolClause.must.push({
+        outerMust.push({
             term: {
                 JointFunding: true,
             },
         })
     } else if (jointFunding === 'exclude-joint-funded-grants') {
-        boolClause.must.push({
+        outerMust.push({
             term: {
                 JointFunding: false,
             },
@@ -230,7 +254,9 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
 
     return {
         filter: {
-            bool: boolClause,
+            bool: {
+                must: outerMust,
+            },
         },
     }
 }
