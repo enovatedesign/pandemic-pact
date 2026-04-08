@@ -42,6 +42,7 @@ interface VisualisationPageProps {
     outbreak?: boolean
     children?: ReactNode
     diseaseLabel?: DiseaseLabel
+    outbreakId?: string
     announcement: AnnouncementProps
     slug?: string
 }
@@ -53,6 +54,7 @@ const VisualisePageClientComponent = ({
     outbreak = false,
     children,
     diseaseLabel,
+    outbreakId,
     announcement,
     slug
 }: VisualisationPageProps) => {
@@ -74,9 +76,19 @@ const VisualisePageClientComponent = ({
             .catch(error => console.error(error))
     }, [])
 
+    // Apply any page-level constraints before user filters.
+    // On outbreak pages with an outbreakId, only include grants tagged
+    // with that outbreak. On all other pages, this is a no-op.
+    const pageDataset = useMemo(() => {
+        if (!outbreakId || completeDataset.length === 0) return completeDataset
+        return completeDataset.filter((grant: any) =>
+            grant.OutbreakIds?.includes(outbreakId)
+        )
+    }, [completeDataset, outbreakId])
+
     const params = useSearchParams()
     const sharedFiltersId = params.get('share')
-    
+
     // Define filters using useMemo to pass in the fixedSelectOptions
     // This ensures calculations are completed before rendering 
     const filters = useMemo(() => 
@@ -100,9 +112,9 @@ const VisualisePageClientComponent = ({
         getSharedFilters()
     }, [sharedFiltersId])
 
-    const globallyFilteredDataset = useMemo(() => 
-        filterGrants(completeDataset, selectedFilters, outbreakSelectOptions),
-        [completeDataset, selectedFilters, outbreakSelectOptions],
+    const globallyFilteredDataset = useMemo(() =>
+        filterGrants(pageDataset, selectedFilters, outbreakSelectOptions),
+        [pageDataset, selectedFilters, outbreakSelectOptions],
     )
     
     const sidebar = useMemo(() => {
@@ -112,7 +124,7 @@ const VisualisePageClientComponent = ({
                 <FilterSidebar
                     selectedFilters={selectedFilters}
                     setSelectedFilters={setSelectedFilters}
-                    completeDataset={completeDataset}
+                    completeDataset={pageDataset}
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     sharedFiltersId={sharedFiltersId}
@@ -121,14 +133,14 @@ const VisualisePageClientComponent = ({
             ),
             closedContent: (
                 <dl className="flex items-center justify-center self-center tracking-widest whitespace-nowrap gap-2 [writing-mode:vertical-lr]">
-                    {globallyFilteredDataset.length < completeDataset.length ? (
+                    {globallyFilteredDataset.length < pageDataset.length ? (
                         <>
                             <dt className="text-white uppercase">
                                 Filtered Grants Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()} /{' '}
-                                {completeDataset.length.toLocaleString()}
+                                {pageDataset.length.toLocaleString()}
                             </dd>
                         </>
                     ) : (
@@ -157,7 +169,7 @@ const VisualisePageClientComponent = ({
         }
     }, [
         selectedFilters,
-        completeDataset,
+        pageDataset,
         globallyFilteredDataset,
         loadingDataset,
         sharedFiltersId,
@@ -207,7 +219,7 @@ const VisualisePageClientComponent = ({
             value={{
                 filters: selectedFilters,
                 grants: globallyFilteredDataset,
-                completeDataset,
+                completeDataset: pageDataset,
             }}
         >
             <TooltipContext.Provider value={{ tooltipRef }}>

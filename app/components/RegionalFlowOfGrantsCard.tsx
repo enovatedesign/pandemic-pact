@@ -61,11 +61,19 @@ export default function RegionalFlowOfGrantsCard() {
             grant.ResearchLocationRegion.length === 1
     )
 
+    const grantsForVisualisation = displayTotalMoneyCommitted
+        ? grantsWithRegions.filter(
+              grant =>
+                  Number.isFinite(grant.GrantAmountConverted) &&
+                  grant.GrantAmountConverted > 0
+          )
+        : grantsWithRegions
+
     let nodes = nodeGroups
         .map(({ field, options }, group) =>
             options
                 .filter((option: any) =>
-                    grantsWithRegions.some(grant =>
+                    grantsForVisualisation.some(grant =>
                         grant[field].includes(option.value)
                     )
                 )
@@ -83,7 +91,7 @@ export default function RegionalFlowOfGrantsCard() {
         const { field: targetField } = nodeGroups[targetGroup]
 
         links = links.concat(
-            Object.entries(groupBy(grantsWithRegions, sourceField))
+            Object.entries(groupBy(grantsForVisualisation, sourceField))
                 .map(([sourceFieldValue, grantsWithRegions]) =>
                     Object.entries(groupBy(grantsWithRegions, targetField)).map(
                         ([targetFieldValue, grantsWithRegions]) => ({

@@ -385,11 +385,16 @@ function AdvancedInputRow({
         if (selectedOption?.label) {
             // Dynamically retrieve the related data from the select options (due to the data structure)
             // Filter out options that are not wanted
+            const influenzaKey = `Influenza${selectedOption.label}` as Extract<
+                keyof typeof selectOptions,
+                `Influenza${string}`
+            >
+
             setPandemicProneChildOptions(
-                selectOptions[`Influenza${selectedOption?.label}` as keyof typeof selectOptions]
+                (selectOptions[influenzaKey] as Option[])
                 .filter(option => !['Other', 'Not applicable', 'Unspecified']
                 .includes(option.label))
-            ) 
+            )
         } else {
             // If no option is selected, clear the child options. This ensures the parent option can be cleared
             setPandemicProneChildOptions([])

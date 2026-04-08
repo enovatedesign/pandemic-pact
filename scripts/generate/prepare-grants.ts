@@ -146,7 +146,13 @@ export default async function prepareGrants() {
 
             // Prepare the Corc Priorities
             CorcPriorities: prepareEbolaCorcPriorities(rawGrant),
-            
+
+            // Parse semicolon-separated outbreak IDs into an array
+            OutbreakIds: (rawGrant.outbreak_id || '')
+                .split(';')
+                .map((id: string) => id.trim())
+                .filter((id: string) => id !== ''),
+
             ...grantPolicyRoadmaps(rawGrant)
         }
 
@@ -192,14 +198,14 @@ export default async function prepareGrants() {
     return Promise.resolve()
 }
 
-function normaliseGrantYear(raw: unknown): number | 'N/A' {
+function normaliseGrantYear(raw: unknown): string {
     const year = Number(raw)
 
     if (!Number.isFinite(year) || year < 2020) {
         return 'N/A'
     }
 
-    return year
+    return String(year)
 }
 
 function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
