@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
 import numDigits from '@/app/api/helpers/metadata-functions';
 import { normaliseBranchName } from '@/app/helpers/normalise-branch-name';
-import { pubmedFileName, splitGrantIds } from '@/app/helpers/pubmed-ids';
+import { pubmedFileName, splitGrantIds, idIsValidPubMedGrantId } from '@/app/helpers/pubmed-ids';
 
 import Layout from '@/app/components/Layout';
 import AbstractAndLaySummary from './AbstractAndLaySummary';
@@ -40,7 +40,7 @@ const getBranchNameForRuntime = (): string => {
 }
 
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
-    const parts = splitGrantIds(pubMedGrantId)
+    const parts = splitGrantIds(pubMedGrantId).filter(idIsValidPubMedGrantId)
 
     if (parts.length === 0) return []
 

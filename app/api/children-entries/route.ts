@@ -1,6 +1,6 @@
 import { API_URL, API_TOKEN } from "../../lib/GraphQl";
 import { NextRequest, NextResponse } from 'next/server'
-import { allowedSectionQueries } from "@/app/helpers/allowed-section-queries";
+import { validateSectionHandle, validateTypeHandle, validateUri } from "@/app/helpers/allowed-section-queries";
 
 export async function POST(request: NextRequest) {
     const requestBody = await request.json();
@@ -10,9 +10,14 @@ export async function POST(request: NextRequest) {
     const queryLimit = limit < 12 ? limit : 12
     const queryOffset = pageNumber ? queryLimit * (pageNumber - 1) : 0
 
-    if (!allowedSectionQueries.includes(sectionHandle)) {
-        throw new Error(`Unauthorized access to section: ${sectionHandle}`)
-    }
+    const sectionError = validateSectionHandle(sectionHandle)
+    if (sectionError) return sectionError
+
+    const typeError = validateTypeHandle(typeHandle)
+    if (typeError) return typeError
+
+    const uriError = validateUri(uri)
+    if (uriError) return uriError
 
     const query = `
         query {

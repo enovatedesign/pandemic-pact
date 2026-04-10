@@ -1,32 +1,38 @@
 import { API_URL, API_TOKEN } from "../../lib/GraphQl";
 import { NextRequest, NextResponse } from 'next/server'
-import { allowedSectionQueries } from "@/app/helpers/allowed-section-queries";
+import { validateSectionHandle, validateTypeHandle, validateUri } from "@/app/helpers/allowed-section-queries";
 
 export async function POST(request: NextRequest) {
 
     const requestBody = await request.json();
-    
+
     const { sectionHandle, entryTypeHandle, limit, pageNumber, relation } = requestBody;
     const queryLimit = limit && limit < 12 ? limit : 12
     const queryOffset = pageNumber ? queryLimit * (pageNumber - 1) : 0
-    
-    // To Do: Handle error accordingly
-    if (!allowedSectionQueries.includes(sectionHandle)) {
-        throw new Error(`Unauthorized access to section: ${sectionHandle}`)
+
+    const sectionError = validateSectionHandle(sectionHandle)
+    if (sectionError) return sectionError
+
+    const typeError = validateTypeHandle(entryTypeHandle)
+    if (typeError) return typeError
+
+    if (relation) {
+        const relationError = validateUri(relation)
+        if (relationError) return relationError
     }
 
     let relationQuery = relation ? relation : null
 
     const query = `
-        query {    
+        query {
             entries(
-                status: "enabled", 
-                section: "${sectionHandle}", 
+                status: "enabled",
+                section: "${sectionHandle}",
                 orderBy: "dateCreated DESC",
-                limit: ${queryLimit}, 
+                limit: ${queryLimit},
                 offset: ${queryOffset}
                 ${relationQuery ? `, relatedToEntries: [{uri: "${relationQuery}"}]` : ''}
-            ) {    
+            ) {
                 ... on ${entryTypeHandle}_Entry {
                     title
                     summary

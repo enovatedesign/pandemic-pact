@@ -153,6 +153,31 @@ export async function validateRequest(
     return { values }
 }
 
+const allowedFilterFields = new Set([
+    'FundingOrgName',
+    'Families',
+    'Pathogens',
+    'Diseases',
+    'Strains',
+    'ResearchCat',
+    'FunderRegion',
+    'FunderCountry',
+    'ResearchInstitutionName',
+    'ResearchLocationCountry',
+    'GrantStartYear',
+    'StudySubject',
+    'StudyType',
+    'AgeGroups',
+    'VulnerablePopulations',
+    'OccupationalGroups',
+    'HundredDaysMissionResearchArea',
+    'HundredDaysMissionImplementation',
+    'ClinicalTrial',
+    'PandemicIntelligenceThemes',
+    'PolicyRoadmaps',
+    'GrantID',
+])
+
 export function getBooleanQuery(
     q: string,
     filters: SearchFilters,
@@ -190,10 +215,17 @@ function prepareMustClause(q: string) {
 function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
     const outerMust: any[] = []
 
-    if (filters?.filters?.length > 0) {
+    const validFilters = filters?.filters?.filter(
+        ({ field, values }) =>
+            allowedFilterFields.has(field) &&
+            Array.isArray(values) &&
+            values.length > 0
+    ) ?? []
+
+    if (validFilters.length > 0) {
         // Build one inner bool per row, honouring the per-row AND/OR operator
         // for combining the values within that row.
-        const rowClauses = filters.filters.map(({ field, values, logicalAnd }) => {
+        const rowClauses = validFilters.map(({ field, values, logicalAnd }) => {
             const formattedField = field === 'PolicyRoadmaps' ? `${field}.keyword` : field
 
             const terms = values.map(value => ({
