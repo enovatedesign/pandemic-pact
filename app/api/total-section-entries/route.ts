@@ -1,17 +1,15 @@
 import { API_URL, API_TOKEN } from "../../lib/GraphQl";
 import { NextRequest, NextResponse } from 'next/server'
-import { allowedSectionQueries } from "../../helpers/allowed-section-queries";
+import { validateSectionHandle } from "../../helpers/allowed-section-queries";
 
 export async function POST(request: NextRequest) {
-    
+
     const requestBody = await request.json();
-    
+
     const { sectionHandle } = requestBody;
-    
-    // To Do: Handle error accordingly
-    if (!allowedSectionQueries.includes(sectionHandle)) {
-        throw new Error(`Unauthorized access to total entries of section: ${sectionHandle}`)
-    }
+
+    const sectionError = validateSectionHandle(sectionHandle)
+    if (sectionError) return sectionError
 
     const query = `
         query {    
