@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
     LineChart,
     Line,
@@ -28,6 +28,16 @@ interface TemporalChartProps {
 
 export default function TemporalChart({outbreak}: TemporalChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
+
+    const [isMediumUp, setIsMediumUp] = useState(true)
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(min-width: 768px)')
+        const update = () => setIsMediumUp(mediaQueryList.matches)
+        update()
+        mediaQueryList.addEventListener('change', update)
+        return () => mediaQueryList.removeEventListener('change', update)
+    }, [])
     
     const { temporalFallback } = grantsByDiseaseFallbackData
 
@@ -162,7 +172,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                         className="text-lg"
                     />
 
-                    {chartData !== temporalFallback && (
+                    {chartData !== temporalFallback && isMediumUp && (
                         <Tooltip
                             content={props => (
                                 <RechartTrendsTooltipContent
