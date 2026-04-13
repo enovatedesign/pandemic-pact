@@ -74,13 +74,15 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         }
 
         await downloadCsvAndConvertToJson(outbreaksFile.download_url, 'outbreaks')
+
+        // Only persist the marker after every fetch in this run has succeeded,
+        // so a swallowed error can't lock future builds into the cached path
+        // with a file ID that was never actually downloaded.
+        const configPath = path.join(__dirname, '../../../scripts/config/grants-last-used-file-id.json')
+        fs.writeJsonSync(configPath, { id: dataSources.FIGSHARE_GRANTS_FILE_ID })
     } catch (err: any) {
         error(`Error: ${err.message}`)
     }
 
-    // Store the URL for future comparison
-    const configPath = path.join(__dirname, '../../../scripts/config/grants-last-used-file-id.json')
-    fs.writeJsonSync(configPath, { id: dataSources.FIGSHARE_GRANTS_FILE_ID })
-    
     return { useCachedFiles: false }
 }

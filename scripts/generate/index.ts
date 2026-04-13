@@ -50,16 +50,6 @@ async function main() {
 
         prepareHomepageTotals()
 
-        const publicationCounts = await fetchPubMedData()
-
-        const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
-
-        // Verify blob upload if it was performed
-        if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
-            const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
-            await verifyBlobGrants(stringGrantIds)
-        }
-
         prepareVisualisePageGrantsFile()
 
         prepareMap()
@@ -75,11 +65,31 @@ async function main() {
         // Select options for the policy road maps dropdown on the explore page
         await preparePolicyRoadmapSelectOptions()
 
+        // Upload Figshare-derived artefacts to blob BEFORE PubMed runs.
+        // PubMed can be slow and has previously timed out the build; uploading
+        // here ensures the new homepage totals, grants, and select options
+        // reach the blob cache even if PubMed later stalls. The search index
+        // (which depends on PubMed publication counts) is uploaded in a
+        // second pass after PubMed completes.
+        if (shouldUploadConditionsMet) {
+            await uploadStaticFilesToBlob()
+        }
+
+        const publicationCounts = await fetchPubMedData()
+
+        const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
+
+        // Verify blob upload if it was performed
+        if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
+            const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
+            await verifyBlobGrants(stringGrantIds)
+        }
+
         await prepareSearch(publicationCounts)
 
         await prepareGrantIdsForSitemap()
 
-        // Upload static files to blob for caching if grants were processed
+        // Second upload pass for PubMed-dependent artefacts (search index).
         if (shouldUploadConditionsMet) {
             await uploadStaticFilesToBlob()
         }
