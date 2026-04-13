@@ -13,4 +13,5 @@ export const rechartBaseTooltipProps = {
             ? { x: 0 }
             : undefined,
     isAnimationActive: false,
+    wrapperStyle: { zIndex: 9999 },
 }

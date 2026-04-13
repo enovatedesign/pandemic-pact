@@ -74,7 +74,7 @@ export default function VisualisationCard({
 
     return (
         <>
-            <animated.div id={id} ref={ref} style={springs}>
+            <animated.div id={id} ref={ref} style={springs} className="relative z-0 hover:z-50">
                 <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative">
                     <div className="flex flex-col items-start gap-y-6">
                         <div className="mr-16 z-10">
@@ -144,7 +144,7 @@ export default function VisualisationCard({
                     {tabs && tabs[selectedTabIndex].content}
 
                     <div
-                        className={`ignore-in-image-export w-full flex relative z-30 ${
+                        className={`ignore-in-image-export w-full flex ${
                             !tabs
                                 ? 'flex-col items-center md:flex-row-reverse md:justify-between'
                                 : 'flex-row-reverse justify-between'
