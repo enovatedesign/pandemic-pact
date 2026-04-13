@@ -94,7 +94,7 @@ export default function SearchResult({ result, href }: SearchMatchesProps) {
     return (
         <div className="bg-primary/40 p-4 rounded-2xl">
             <div className="grid gap-2 lg:grid-rows-1 lg:grid-cols-12 lg:gap-8">
-                <div className="w-full flex flex-col lg:flex-row lg:items-center gap-2 justify-between lg:col-span-9">
+                <div className="w-full min-w-0 flex flex-col lg:flex-row lg:items-center gap-2 justify-between lg:col-span-9">
                     {funderNames && (
                         <p className="truncate">
                             <span className="font-bold">Funders:</span>{' '}
