@@ -15,6 +15,7 @@ import {
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
 import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
+import { resolveTrendStartYear } from '../helpers/trend-start-year'
 
 export default async function prepareGrants() {
     title('Preparing grants')
@@ -128,11 +129,8 @@ export default async function prepareGrants() {
 
         // Add custom data fields of our own
         let customFields = {
-            // Add 'TrendStartYear' default value if 'grant_start_year' is missing
-            TrendStartYear: Number(
-                rawGrant.grant_start_year ?? rawGrant.publication_year_of_award,
-            ),
-            
+            TrendStartYear: resolveTrendStartYear(rawGrant),
+
             Pathogens: convertRawGrantKeyToValuesArray(rawGrant, '_pathogen__') ,
             Diseases: convertRawGrantKeyToValuesArray(rawGrant, '_diseases__'),
             Strains: convertRawGrantKeyToValuesArray(rawGrant, '_diseases_strains_') , 
@@ -156,19 +154,6 @@ export default async function prepareGrants() {
             ...grantPolicyRoadmaps(rawGrant)
         }
 
-        // If we have a 'grant_start_year' and it's a valid year, but before 2020
-        // use 'publication_year_of_award' instead. Also, if it's a NaN year
-        // use 'publication_year_of_award' instead too.
-        if (rawGrant?.grant_start_year) {
-            const year = Number(rawGrant.grant_start_year)
-
-            if ((!isNaN(year) && year < 2020) || isNaN(year)) {
-                customFields.TrendStartYear = Number(
-                    rawGrant.publication_year_of_award,
-                )
-            }
-        }
-        
         // Create the final grant object using the converted data combined with
         // the custom fields
         const grant = {

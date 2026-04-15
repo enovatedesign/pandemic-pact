@@ -5,6 +5,7 @@ import { printWrittenFileStats, title } from "../helpers/log"
 import readLargeJson from "../helpers/read-large-json"
 import { RawGrant } from "../types/generate"
 import { convertCheckBoxFieldToArray, convertRawGrantKeyToValuesArray, convertSourceKeysToOurKeys } from '../helpers/key-mapping'
+import { resolveTrendStartYear } from '../helpers/trend-start-year'
 
 export default async function preparePandemicIntelligence() {
     title('Preparing Pandemic Intelligence')
@@ -52,23 +53,7 @@ export default async function preparePandemicIntelligence() {
         )
         
         let customFields = {
-            // Add 'TrendStartYear' default value if 'grant_start_year' is missing
-            TrendStartYear: Number(
-                grant.grant_start_year ?? grant.publication_year_of_award,
-            ),
-        }
-
-        // If we have a 'grant_start_year' and it's a valid year, but before 2020
-        // use 'publication_year_of_award' instead. Also, if it's a NaN year
-        // use 'publication_year_of_award' instead too.
-        if (grant?.grant_start_year) {
-            const year = Number(grant.grant_start_year)
-
-            if ((!isNaN(year) && year < 2020) || isNaN(year)) {
-                customFields.TrendStartYear = Number(
-                    grant.publication_year_of_award,
-                )
-            }
+            TrendStartYear: resolveTrendStartYear(grant),
         }
 
         const baseKeysToInclude = [
