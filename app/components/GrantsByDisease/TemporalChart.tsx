@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
     LineChart,
     Line,
@@ -11,6 +11,7 @@ import {
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
 import { filter, groupBy } from 'lodash'
 import ImageExportLegend from '../ImageExportLegend'
+import Legend from '../Legend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
 import { GlobalFilterContext } from '../../helpers/filters'
@@ -28,6 +29,16 @@ interface TemporalChartProps {
 
 export default function TemporalChart({outbreak}: TemporalChartProps) {
     const [hideCovid, setHideCovid] = useState(false)
+
+    const [isMediumUp, setIsMediumUp] = useState(true)
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(min-width: 768px)')
+        const update = () => setIsMediumUp(mediaQueryList.matches)
+        update()
+        mediaQueryList.addEventListener('change', update)
+        return () => mediaQueryList.removeEventListener('change', update)
+    }, [])
     
     const { temporalFallback } = grantsByDiseaseFallbackData
 
@@ -93,11 +104,32 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
          chartData === temporalFallback && 'blur-md'
     ].filter(Boolean).join(' ')
     
-    const diseaseLines = selectOptions['Diseases']
-        .filter(({ label }) => 
-            label !== 'Other' && 
+    const MOBILE_LINE_LIMIT = 12
+
+    const allDiseaseLines = selectOptions['Diseases']
+        .filter(({ label }) =>
+            label !== 'Other' &&
             label !== 'Unspecified'
         )
+
+    const diseaseTotals = allDiseaseLines.reduce<Record<string, number>>(
+        (totals, { label }) => {
+            totals[label] = chartData.reduce(
+                (sum, dataPoint) => sum + (Number(dataPoint[label]) || 0),
+                0
+            )
+            return totals
+        },
+        {}
+    )
+
+    const rankedDiseaseLines = allDiseaseLines
+        .filter(({ label }) => diseaseTotals[label] > 0)
+        .sort((a, b) => diseaseTotals[b.label] - diseaseTotals[a.label])
+
+    const diseaseLines = isMediumUp
+        ? allDiseaseLines
+        : rankedDiseaseLines.slice(0, MOBILE_LINE_LIMIT)
     
     return (
         <>
@@ -162,7 +194,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                         className="text-lg"
                     />
 
-                    {chartData !== temporalFallback && (
+                    {chartData !== temporalFallback && isMediumUp && (
                         <Tooltip
                             content={props => (
                                 <RechartTrendsTooltipContent
@@ -186,12 +218,27 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                 </LineChart>
             </ResponsiveContainer>
                     
-            <ImageExportLegend
-                categories={diseaseLines.map(({ label }) => label)}
-                colours={diseaseLines.map(
-                    ({ value }) => diseaseColours[value]
-                )}
-            />
+            {!isMediumUp && chartData !== temporalFallback && (
+                <div className="mt-4 md:hidden">
+                    <Legend
+                        categories={diseaseLines.map(({ label }) => label)}
+                        colours={diseaseLines.map(
+                            ({ value }) => diseaseColours[value]
+                        )}
+                        customWrapperClasses="grid grid-cols-2 gap-x-2 gap-y-1"
+                        customTextClasses="whitespace-normal"
+                    />
+                </div>
+            )}
+
+            {isMediumUp && (
+                <ImageExportLegend
+                    categories={allDiseaseLines.map(({ label }) => label)}
+                    colours={allDiseaseLines.map(
+                        ({ value }) => diseaseColours[value]
+                    )}
+                />
+            )}
 
             {chartData === temporalFallback && <NoDataText/>}
         </>
