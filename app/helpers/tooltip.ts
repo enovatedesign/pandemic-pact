@@ -15,3 +15,5 @@ export const rechartBaseTooltipProps = {
     isAnimationActive: false,
     wrapperStyle: { zIndex: 9999 },
 }
+
+export const sharedTooltipStyle = { zIndex: 60 }

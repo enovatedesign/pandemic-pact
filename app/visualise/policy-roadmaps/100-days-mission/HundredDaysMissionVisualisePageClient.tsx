@@ -12,7 +12,7 @@ import {
     countActiveFilters,
     Filters,
  } from '@/app/helpers/filters'
-import { TooltipContext } from '@/app/helpers/tooltip'
+import { TooltipContext, sharedTooltipStyle } from '@/app/helpers/tooltip'
 import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { getKvDatabase } from '@/app/helpers/kv'
 
@@ -266,6 +266,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                             variant="light"
                             opacity={1}
                             disableStyleInjection
+                            style={sharedTooltipStyle}
                         />
                     </div>
                 </Layout>
