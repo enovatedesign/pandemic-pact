@@ -28,7 +28,11 @@ export function getIndexName() {
         ? `${process.env.SEARCH_INDEX_PREFIX}-`
         : ''
 
-    return `${prefix}grants`
+    const version = process.env.SEARCH_INDEX_VERSION
+        ? `-${process.env.SEARCH_INDEX_VERSION}`
+        : ''
+
+    return `${prefix}grants${version}`
 }
 
 export function searchUnavailableResponse() {
@@ -205,7 +209,7 @@ function prepareMustClause(q: string) {
         must: {
             simple_query_string: {
                 query,
-                fields: ['GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+                fields: ['GrantID^4', 'GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
                 flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
             },
         },
@@ -226,11 +230,9 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
         // Build one inner bool per row, honouring the per-row AND/OR operator
         // for combining the values within that row.
         const rowClauses = validFilters.map(({ field, values, logicalAnd }) => {
-            const formattedField = field === 'PolicyRoadmaps' ? `${field}.keyword` : field
-
             const terms = values.map(value => ({
                 term: {
-                    [formattedField]: value,
+                    [field]: value,
                 },
             }))
 
