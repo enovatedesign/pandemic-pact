@@ -12,7 +12,7 @@ import {
     countActiveFilters,
     Filters,
  } from '@/app/helpers/filters'
-import { TooltipContext } from '@/app/helpers/tooltip'
+import { TooltipContext, sharedTooltipStyle } from '@/app/helpers/tooltip'
 import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { getKvDatabase } from '@/app/helpers/kv'
 
@@ -240,7 +240,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                             <ClinicalResearchGrants/>
 
                             <TableVisualisation
-                                id="distribution-of-clinical-research-grants-by-pathogen-families-and-pathogen"
+                                id="pathogen"
                                 title="Distribution of research grants by pathogen families and pathogen"
                                 subtitle="Grants may fall under more than one family or pathogen"
                                 columnHeadField="HundredDaysMissionResearchArea"
@@ -266,6 +266,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                             variant="light"
                             opacity={1}
                             disableStyleInjection
+                            style={sharedTooltipStyle}
                         />
                     </div>
                 </Layout>

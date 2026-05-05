@@ -22,7 +22,7 @@ import {
     Filters,
     FixedSelectOptionContext,
 } from '../helpers/filters'
-import { TooltipContext } from '../helpers/tooltip'
+import { TooltipContext, sharedTooltipStyle } from '../helpers/tooltip'
 import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
 import { getKvDatabase } from '../helpers/kv'
 
@@ -407,6 +407,7 @@ const VisualisePageClientComponent = ({
                             variant="light"
                             opacity={1}
                             disableStyleInjection
+                            style={sharedTooltipStyle}
                         />
                     </div>
                 </Layout>
