@@ -44,8 +44,13 @@ export default function prepareSelectOptions() {
     // Get the options relating to diseases
     const diseaseOptionsWithConvertedKeys = prepareSpecificSelectOptions(rawOptions, '_diseases')
     
-    const pathogenOptions = Object.values(pathogenFamilyOptionsWithConvertedKeys).flat()
-        .sort((a, b) => a.label.localeCompare(b.label))
+    // Each pathogen family carries its own "Unspecified" (-99) and "Other"
+    // (-88) entries; flattening across families would otherwise produce one
+    // duplicate per family in the combined dropdown. Dedupe by value.
+    const pathogenOptions = _.uniqBy(
+        Object.values(pathogenFamilyOptionsWithConvertedKeys).flat(),
+        'value',
+    ).sort((a, b) => a.label.localeCompare(b.label))
 
     // Create a new object with all the select options keyed by field name,
     // including the MPOX Research Priorities and Sub-Priorities
@@ -59,8 +64,14 @@ export default function prepareSelectOptions() {
         ...optionsWithConvertedKeys,
 
         Pathogens: pathogenOptions,
-        Diseases: Object.values(diseaseOptionsWithConvertedKeys).flat(),
-        Strains: Object.values(strainOptionsWithConvertedKeys).flat(),
+        Diseases: _.uniqBy(
+            Object.values(diseaseOptionsWithConvertedKeys).flat(),
+            'value',
+        ),
+        Strains: _.uniqBy(
+            Object.values(strainOptionsWithConvertedKeys).flat(),
+            'value',
+        ),
         // ResearchInstitutionCountry, ResearchLocationCountry and ResearchLocationRegion
         // don't have options in the dictionary, so we re-use the FunderCountry and
         // FunderRegion options for these fields
