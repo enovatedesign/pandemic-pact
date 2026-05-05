@@ -17,6 +17,8 @@ import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelli
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 import { verifyBlobGrants } from '../helpers/verify-blob-grants'
 import { uploadStaticFilesToBlob } from '../helpers/upload-static-files-to-blob'
+import { writeGrantsLastUsedFileId } from '../helpers/grants-marker'
+import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
 
 main()
@@ -73,6 +75,7 @@ async function main() {
         // second pass after PubMed completes.
         if (shouldUploadConditionsMet) {
             await uploadStaticFilesToBlob()
+            await writeGrantsLastUsedFileId(dataSources.FIGSHARE_GRANTS_FILE_ID)
         }
 
         const publicationCounts = await fetchPubMedData()

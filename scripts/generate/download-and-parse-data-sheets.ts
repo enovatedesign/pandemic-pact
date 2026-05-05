@@ -1,8 +1,7 @@
 import fs from 'fs-extra'
-import path from 'path'
 import { title, info, error } from '../helpers/log'
 import dataSources from '../config/data-sources'
-import { id as grantsPreviousFileId } from '../config/grants-last-used-file-id.json'
+import { readGrantsLastUsedFileId } from '../helpers/grants-marker'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
 import { downloadStaticFilesFromBlob } from '../helpers/download-static-files-from-blob'
 
@@ -20,6 +19,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID
     } = dataSources
 
+    const grantsPreviousFileId = await readGrantsLastUsedFileId()
     const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
     
     // If source hasn't changed, download cached static files from blob
@@ -74,12 +74,6 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         }
 
         await downloadCsvAndConvertToJson(outbreaksFile.download_url, 'outbreaks')
-
-        // Only persist the marker after every fetch in this run has succeeded,
-        // so a swallowed error can't lock future builds into the cached path
-        // with a file ID that was never actually downloaded.
-        const configPath = path.join(__dirname, '../../../scripts/config/grants-last-used-file-id.json')
-        fs.writeJsonSync(configPath, { id: dataSources.FIGSHARE_GRANTS_FILE_ID })
     } catch (err: any) {
         error(`Error: ${err.message}`)
     }
