@@ -233,7 +233,7 @@ export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
             "default": 'Explore how funding is allocated across Clinical and Preclinical Research grants'
         },
         url: {
-            "default": '#clinical-research-grants'
+            "default": '#research-grants'
         },
         image: {
             url: `/images/visualisation-cards/vis-pie-chart.svg`,

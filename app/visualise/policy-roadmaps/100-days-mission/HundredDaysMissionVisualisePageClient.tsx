@@ -240,7 +240,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                             <ClinicalResearchGrants/>
 
                             <TableVisualisation
-                                id="distribution-of-clinical-research-grants-by-pathogen-families-and-pathogen"
+                                id="pathogen"
                                 title="Distribution of research grants by pathogen families and pathogen"
                                 subtitle="Grants may fall under more than one family or pathogen"
                                 columnHeadField="HundredDaysMissionResearchArea"

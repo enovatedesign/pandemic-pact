@@ -98,7 +98,7 @@ const StudyPopulations = () => {
     
     return (
         <VisualisationCard
-            id="distribution-of-clinical-research-grants-by-study-populations"
+            id="study-populations"
             title="Distribution of Research Grants by Study Populations"
             footnote="Please note: Grants may include more than one study population. Study populations involved in research are as mentioned in grant information."
             filenameToFetch='100-days-mission/100-days-mission-grants.csv'
