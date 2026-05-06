@@ -2,7 +2,7 @@
 
 import VisualisePageClient from "../../../visualise/VisualisePageClient"
 import Matrix from "../../../components/ContentBuilder"
-import { AnnouncementProps, CMSDiseaseFilter, CMSStrainFilter } from "@/app/helpers/types"
+import { AnnouncementProps, CMSDiseaseFilter, CMSFamilyFilter, CMSStrainFilter } from "@/app/helpers/types"
 import { FixedSelectOptionContext } from '@/app/helpers/filters'
 import { useMemo, useState } from "react"
 import hierarchyFilters from '../../../../public/manual-hierarchy-filters.json'
@@ -64,7 +64,7 @@ const buildOutbreakHierarchyStructure = (outbreakLabel: string, setOutbreakLevel
 
     let level = 3 // Default disease level
     // Attempt to find the disease at the standard disease level
-    let outbreak: CMSDiseaseFilter | CMSStrainFilter | undefined = diseases.find(disease => disease.label === outbreakLabel) 
+    let outbreak: CMSDiseaseFilter | CMSStrainFilter | CMSFamilyFilter | undefined = diseases.find(disease => disease.label === outbreakLabel)
 
     // If the disease doesnt exist, look at the strain level
     if (typeof outbreak === 'undefined') {
@@ -76,10 +76,33 @@ const buildOutbreakHierarchyStructure = (outbreakLabel: string, setOutbreakLevel
         }
     }
 
+    // If still not matched, fall back to the family level so a CMS editor can
+    // pin an outbreak page to a whole family (e.g. "Hantaviridae") and let the
+    // user drill into pathogen/disease/strain themselves.
+    if (typeof outbreak === 'undefined') {
+        outbreak = (hierarchyFilters as CMSFamilyFilter[]).find(family => family.label === outbreakLabel)
+
+        if (outbreak) {
+            level = 1
+        }
+    }
+
     setOutbreakLevel(level)
-    // Build the structure to handle selected outbreaks from either disease or strain levels
+    // Build the structure to handle selected outbreaks from family, disease or strain levels
     if (outbreak) {
         switch (level) {
+            // Family
+            case 1:
+                const familyOutbreak = outbreak as CMSFamilyFilter
+                structure = {
+                    ...structure,
+                    "Families": {
+                        label: familyOutbreak.label,
+                        value: familyOutbreak.value
+                    }
+                }
+                break;
+
             // Disease
             case 3:
                 // Assign the correct types for this use case
