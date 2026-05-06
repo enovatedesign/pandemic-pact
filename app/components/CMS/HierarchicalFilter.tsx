@@ -75,7 +75,11 @@ const HierarchicalFilter = ({
                     level = outbreakLevel
                 }
 
-                const disabled = outbreak && fixedOption && ((level === 3 && field !== "Strains") || level === 4)
+                const disabled = outbreak && fixedOption && (
+                    (level === 1 && field === "Families") ||
+                    (level === 3 && field !== "Strains") ||
+                    level === 4
+                )
                 
                 return (
                     <ConditionalWrapper
