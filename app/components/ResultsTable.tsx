@@ -3,7 +3,6 @@
 import ItemsPerPageSelect from './ItemsPerPageSelect'
 import SearchResult from './SearchResult'
 import { SearchParameters, SearchResponse } from '../helpers/search'
-import { links } from '../helpers/nav'
 
 import '../css/components/highlighted-search-results.css'
 
@@ -43,7 +42,7 @@ export default function ResultsTable({
                     const query = searchResponse.query
 
                     const href =
-                        `${links.explore.href}/${result._id}` +
+                        `/grants/${result._id}` +
                         (query ? `?q=${query}` : '')
 
                     const linkClasses =

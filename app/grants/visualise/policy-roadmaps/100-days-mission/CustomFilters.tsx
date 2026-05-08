@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-import selectOptions from '../../../../data/dist/select-options.json'
+import selectOptions from '@/data/dist/select-options.json'
 
 import Select from "@/app/components/Select"
 import { Filters } from "@/app/helpers/filters"

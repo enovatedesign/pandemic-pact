@@ -10,7 +10,7 @@ import {
   Cell, 
   Tooltip
 } from "recharts"
-import selectOptions from '../../../../../../data/dist/select-options.json'
+import selectOptions from '@/data/dist/select-options.json'
 import { GlobalFilterContext } from "@/app/helpers/filters"
 import { prepareBarChartData } from "@/app/helpers/bar-list"
 import { rechartBaseTooltipProps } from "@/app/helpers/tooltip"

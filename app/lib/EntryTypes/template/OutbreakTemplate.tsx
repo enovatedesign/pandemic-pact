@@ -1,6 +1,6 @@
 'use client'
 
-import VisualisePageClient from "../../../visualise/VisualisePageClient"
+import VisualisePageClient from "../../../grants/visualise/VisualisePageClient"
 import Matrix from "../../../components/ContentBuilder"
 import { AnnouncementProps, CMSDiseaseFilter, CMSFamilyFilter, CMSStrainFilter } from "@/app/helpers/types"
 import { FixedSelectOptionContext } from '@/app/helpers/filters'

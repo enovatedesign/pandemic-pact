@@ -1,5 +1,5 @@
 import { BarListDatum, prepareBarChartData } from '@/app/helpers/bar-list'
-import selectOptions from '../../../../../../data/dist/select-options.json' 
+import selectOptions from '@/data/dist/select-options.json'
 import { sumBy } from 'lodash'
 import { a } from '@react-spring/web'
 

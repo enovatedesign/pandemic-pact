@@ -4,7 +4,6 @@ import { useMemo, useState, useEffect, useRef, Suspense, ReactNode } from 'react
 import { useSearchParams } from 'next/navigation'
 import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
-import Image from 'next/image'
 
 import { 
     emptyFilters,
@@ -19,13 +18,16 @@ import { getKvDatabase } from '@/app/helpers/kv'
 
 import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
-import VisualisationJumpMenu from '../../components/VisualisationJumpMenu'
-import VisualisationCardLinks from '../../components/VisualisationCardLinks'
-import PandemicIntelligenceThemes from './visualisations/PandemicIntelligenceThemes'
-import PandemicEpidemicIntelligenceFunders from './visualisations/PandemicEpidemicIntelligenceFunders'
-import AnnualTrendsByTheme from './visualisations/AnnualTendsByTheme/Card'
+import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
+import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
+import ClinicalResearchGrants from './visualisations/ClinicalResearchGrants'
+import StudyPopulations from './visualisations/StudyPopulations/StudyPopulations'
+import GeographicalDistribution from './visualisations/GeographicalDistribution/GeographicalDistribution'
+import ImplementationAndAccess from './visualisations/ImplementationAndAccess/ImplementationAndAccess'
+import ClinicalTrials from './visualisations/ClinicalTrials/ClinicalTrials'
+import CustomFilters from './CustomFilters'
 import TableVisualisation from '../shared-visualisations/TableVisualisation'
-import GeographicalDistribution from './visualisations/GeographicalDistribution/Card'
+import Image from 'next/image'
 
 interface VisualisationPageProps {
     title: string
@@ -36,7 +38,7 @@ interface VisualisationPageProps {
     typeHandle: PolicyRoadmapEntryTypeHandle
 }
 
-const PandemicIntelligenceVisualisePageClientComponent = ({
+const HundredDaysMissionVisualisePageClientComponent = ({
     title,
     summary,
     showSummary = true,
@@ -45,15 +47,13 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
     typeHandle
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
+
     const [completeDataset, setCompleteDataset] = useState([])
+
     const [loadingDataset, setLoadingDataset] = useState(true)
-    const [dropdownVisible, setDropdownVisible] = useState(false)
-    
-    const params = useSearchParams()
-    const sharedFiltersId = params.get('share')
 
     useEffect(() => {
-        fetch('/data/pandemic-intelligence/grants.json' )
+        fetch('/data/100-days-mission/grants.json' )
             .then(response => response.json())
             .then(data => {
                 setCompleteDataset(data)
@@ -61,6 +61,18 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
             })
             .catch(error => console.error(error))
     }, [])
+
+    const params = useSearchParams()
+    const sharedFiltersId = params.get('share')
+    
+    // Define filters using useMemo to pass in the fixedSelectOptions
+    // This ensures calculations are completed before rendering 
+    const filters = useMemo(() => 
+        emptyFilters(undefined, typeHandle), 
+        [typeHandle]
+    ) 
+    
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
     
     useEffect(() => {
         const getSharedFilters = async () => {
@@ -75,15 +87,6 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
 
         getSharedFilters()
     }, [sharedFiltersId])
-    
-    // Define filters using useMemo to pass in the fixedSelectOptions
-    // This ensures calculations are completed before rendering 
-    const filters = useMemo(() => 
-        emptyFilters(undefined, typeHandle), 
-        [typeHandle]
-    ) 
-    
-    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
 
     const globallyFilteredDataset = useMemo(() => 
         filterGrants(completeDataset, selectedFilters),
@@ -92,10 +95,10 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
 
     const BottomContent = () => (
         <Image
-            src="/images/interface/policy-roadmaps-logo.jpg"
+            src="/images/interface/hundred-days-mission-logo.jpg"
             width={350}
-            height={200}
-            alt="Pandemic intelligence logo"
+            height={230}
+            alt="Hundred days mission logo"
             className="w-full rounded-xl"
         />
     )
@@ -111,8 +114,13 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                     globallyFilteredDataset={globallyFilteredDataset}
                     loadingDataset={loadingDataset}
                     sharedFiltersId={sharedFiltersId}
-                    showHierarchicalFilters={true}
+                    showHierarchicalFilters={false}
                     policyRoadmapEntryType={typeHandle}
+                    customFilters={<CustomFilters 
+                            selectedFilters={selectedFilters} 
+                            setSelectedFilters={setSelectedFilters}
+                        />
+                    }
                     bottomContent={<BottomContent/>}
                 />
             ),
@@ -124,8 +132,8 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                                 Filtered Grants Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length} /{' '}
-                                {completeDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()} /{' '}
+                                {completeDataset.length.toLocaleString()}
                             </dd>
                         </>
                     ) : (
@@ -134,7 +142,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                                 Total grants
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()}
                             </dd>
                         </>
                     )}
@@ -160,6 +168,10 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
         sharedFiltersId, 
         typeHandle
     ])
+
+    const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
+
+    const [dropdownVisible, setDropdownVisible] = useState(false)
 
     useEffect(() => {
         const handleResize = () => {
@@ -224,23 +236,25 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                         className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
                         id="visualisations-wrapper"
                     >
-                        <div className="grid grid-cols-1 gap-6 lg:gap-12">
-                            <PandemicIntelligenceThemes/>
+                        <div className={`${gridClasses} mt-6`}>
+                            <ClinicalResearchGrants/>
 
-                            <TableVisualisation 
-                                id="research-priority-themes-by-pathogen" 
-                                title="Charts Showing Distribution Of Research Priority themes By Pathogen Families And Pathogen"
-                                subtitle="Grants may fall under more than one family or pathogen or pandemic and epidemic intelligence priority theme"
-                                columnHeadField="PandemicIntelligenceThemes"
-                                filenameToFetch='pandemic-intelligence/pandemic-intelligence-grants.csv'
-                                filteredFileName='pandemic-intelligence-filtered-grants.csv'
+                            <TableVisualisation
+                                id="pathogen"
+                                title="Distribution of research grants by pathogen families and pathogen"
+                                subtitle="Grants may fall under more than one family or pathogen"
+                                columnHeadField="HundredDaysMissionResearchArea"
+                                filenameToFetch='100-days-mission/100-days-mission-grants.csv'
+                                filteredFileName='100-days-mission-filtered-grants.csv'
                             />
+                        
+                            <ClinicalTrials/>
+                        
+                            <StudyPopulations />
+                        
+                            <GeographicalDistribution />
 
-                            <GeographicalDistribution/>
-
-                            <PandemicEpidemicIntelligenceFunders/>
-
-                            <AnnualTrendsByTheme/>
+                            <ImplementationAndAccess />
                         </div>
 
                         <Tooltip
@@ -261,10 +275,10 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
     )
 }
 
-const PandemicIntelligenceVisualisePageClient = (props: VisualisationPageProps) => (
+const HundredDaysMissionVisualisePageClient = (props: VisualisationPageProps) => (
     <Suspense fallback={<div>Loading...</div>}>
-        <PandemicIntelligenceVisualisePageClientComponent {...props} />
+        <HundredDaysMissionVisualisePageClientComponent {...props} />
     </Suspense>
 )
 
-export default PandemicIntelligenceVisualisePageClient
+export default HundredDaysMissionVisualisePageClient

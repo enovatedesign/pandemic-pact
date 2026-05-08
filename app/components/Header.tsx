@@ -8,6 +8,7 @@ import {ChevronDownIcon} from '@heroicons/react/solid'
 import {useState, useEffect, useRef} from 'react'
 import NavSubPages from './NavSubPages'
 import AnimateHeight from 'react-animate-height'
+import DatasetPickerPanel from './DatasetPickerPanel'
 
 type Props = {
     className?: string,
@@ -24,7 +25,8 @@ export default function Header({ className, showMobileNav }: Props ) {
         bodyEl?.classList.remove('overflow-y-hidden')
     }
     
-    const NavItem = (link: {label: string, href: string, subPages: any}) => {
+    const NavItem = (link: {label: string, href: string | null, subPages: any}) => {
+        if (!link.href) return null
 
         const outbreaks = link.label.toLowerCase() === 'outbreaks' ? true : false
         
@@ -132,6 +134,40 @@ export default function Header({ className, showMobileNav }: Props ) {
                                                     </span>
                                                     <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300 lg:hidden`} />
                                                 </button>
+                                            ) : (link as any).picker ? (
+                                                <>
+                                                    <button
+                                                        onClick={handleClick}
+                                                        aria-expanded={activeIndex === index}
+                                                        aria-controls={`dataset-picker-${(link as any).picker}`}
+                                                        className='border border-primary/25 inner-glow rounded-full py-3 px-6 flex justify-between w-full lg:rounded-none lg:p-0 lg:border-0 lg:shadow-none lg:py-0'
+                                                    >
+                                                        <span className={`uppercase font-medium tracking-wider transition-colors duration-150 text-white lg:text-primary lg:focus:text-white lg:hover:text-white lg:text-sm xl:text-base`}>
+                                                            {link.label}
+                                                        </span>
+                                                        <ChevronDownIcon className={`${activeIndex === index && 'rotate-180'} w-6 h-6 text-primary transition duration-300 lg:hidden`} />
+                                                    </button>
+
+                                                    <AnimateHeight
+                                                        duration={300}
+                                                        height={activeIndex === index ? 'auto' : 0}
+                                                        className={activeIndex === index ? 'lg:block' : 'lg:hidden'}
+                                                    >
+                                                        <div
+                                                            id={`dataset-picker-${(link as any).picker}`}
+                                                            className={[
+                                                                'mt-3 p-6 bg-white/10 rounded-2xl',
+                                                                'lg:mt-0 lg:absolute lg:top-12 lg:w-[36rem] xl:w-[44rem] lg:max-w-[calc(100vw-3rem)] lg:bg-white lg:shadow-xl lg:p-4',
+                                                                (link as any).picker === 'visualise' ? 'lg:left-0' : 'lg:right-0',
+                                                            ].join(' ')}
+                                                        >
+                                                            <DatasetPickerPanel
+                                                                mode={(link as any).picker}
+                                                                onSelect={() => setActiveIndex(-1)}
+                                                            />
+                                                        </div>
+                                                    </AnimateHeight>
+                                                </>
                                             ) : (
                                                 <NavItem key={link.label} {...link} />
                                             )}
@@ -166,6 +202,6 @@ export default function Header({ className, showMobileNav }: Props ) {
                 </div>
             </div>
         </header>
-        
+
     )
 }

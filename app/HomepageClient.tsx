@@ -2,7 +2,6 @@
 import {useState} from "react"
 import styles from "./css/components/masthead.module.css"
 import Link from "next/link"
-import {links} from "./helpers/nav"
 import Image from "next/image"
 import Header from './components/Header'
 import AnimatedCounter from "./components/AnimatedCounter"
@@ -11,6 +10,7 @@ import RotatingGlobe from "./components/RotatingGlobe"
 import FooterMenu from "./components/FooterMenu"
 import FooterCopyrightStatement from "./components/FooterCopyrightStatement"
 import UtilityBar from "./components/UtilityBar"
+import DatasetPickerOverlay from "./components/DatasetPickerOverlay"
 import homepageTotals from "../data/dist/homepage-totals.json"
 import Announcement from "./components/ContentBuilder/Common/Announcement"
 import { AnnouncementProps } from "./helpers/types"
@@ -19,9 +19,12 @@ interface Props {
     announcement: AnnouncementProps
 }
 
+type PickerMode = 'visualise' | 'explore'
+
 export default function HomepageClient(announcement: Props) {
-    
+
     const [showMobileNav, setShowMobileNav] = useState(false)
+    const [pickerMode, setPickerMode] = useState<PickerMode | null>(null)
     const counterClasses = "text-primary font-bold"
 
     return (
@@ -60,25 +63,31 @@ export default function HomepageClient(announcement: Props) {
 
                             <div className="grid grid-cols-2 gap-x-4 sm:gap-x-8">
 
-                                <Link href={links.visualise.href} className={styles.button}>
-                                    <span>{links.visualise.label}</span>
+                                <button type="button" onClick={() => setPickerMode('visualise')} className={`${styles.button} appearance-none border-0`}>
+                                    <span>Visualise</span>
 
                                     <svg className={styles['chart-icon']} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                         <path d="M0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272z" />
                                         <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z" />
                                         <path d="M368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z" />
                                     </svg>
-                                </Link>
+                                </button>
 
-                                <Link href={links.explore.href} className={styles.button}>
-                                    <span>{links.explore.label}</span>
+                                <button type="button" onClick={() => setPickerMode('explore')} className={`${styles.button} appearance-none border-0`}>
+                                    <span>Explore</span>
 
                                     <svg className={styles['magnify-icon']} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
                                     </svg>
-                                </Link>
+                                </button>
 
                             </div>
+
+                            <DatasetPickerOverlay
+                                isOpen={pickerMode !== null}
+                                mode={pickerMode ?? 'visualise'}
+                                onClose={() => setPickerMode(null)}
+                            />
 
                             <div className="max-w-3xl mx-auto flex flex-col gap-4">
                                 <p className="text-center text-white/80 text-pretty">
