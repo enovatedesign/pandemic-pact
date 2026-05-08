@@ -50,6 +50,21 @@ const nextConfig = {
                 destination: '/outputs/publications/:slug',
                 permanent: true,
             },
+            {
+                source: '/visualise',
+                destination: '/grants/visualise',
+                permanent: true,
+            },
+            {
+                source: '/visualise/policy-roadmaps/:path*',
+                destination: '/grants/visualise/policy-roadmaps/:path*',
+                permanent: true,
+            },
+            {
+                source: '/grants',
+                destination: '/grants/explore',
+                permanent: true,
+            },
         ];
     },
 };

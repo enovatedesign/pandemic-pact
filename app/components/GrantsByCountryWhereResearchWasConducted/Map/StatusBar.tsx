@@ -5,7 +5,7 @@ import type { FeatureProperties } from './types'
 import JointFeaturesModal from './JointFeaturesModal'
 import { XIcon } from '@heroicons/react/solid'
 import StandardFeatureProperties from './StandardFeatureProperties'
-import JointFeatureProperties from '@/app/visualise/policy-roadmaps/100-days-mission/visualisations/GeographicalDistribution/JointFeatureProperties'
+import JointFeatureProperties from '@/app/grants/visualise/policy-roadmaps/100-days-mission/visualisations/GeographicalDistribution/JointFeatureProperties'
 
 interface Props {
     selectedFeatureProperties: FeatureProperties
@@ -32,7 +32,7 @@ export default function StatusBar({
 
     const allowHighlightingJointFundedCountries = grantField === 'FunderCountry'
 
-    let viewButtonHref = '/grants?filters=' + JSON.stringify(viewButtonQueryFilters)
+    let viewButtonHref = '/grants/explore?filters=' + JSON.stringify(viewButtonQueryFilters)
 
     if (highlightJointFundedCountries) { viewButtonHref += '&jointFunding=only-joint-funded-grants' }
 

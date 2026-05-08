@@ -10,13 +10,13 @@ import {
     searchRequest,
     SearchParameters,
     SearchResponse,
-} from '../helpers/search'
-import { AnnouncementProps } from '../helpers/types'
+} from '../../helpers/search'
+import { AnnouncementProps } from '../../helpers/types'
 
-import Layout from '../components/Layout'
-import SearchInput from '../components/SearchInput'
-import ResultsTable from '../components/ResultsTable'
-import SearchPagination from '../components/SearchPagination'
+import Layout from '../../components/Layout'
+import SearchInput from '../../components/SearchInput'
+import ResultsTable from '../../components/ResultsTable'
+import SearchPagination from '../../components/SearchPagination'
 
 interface Props {
     announcement: AnnouncementProps

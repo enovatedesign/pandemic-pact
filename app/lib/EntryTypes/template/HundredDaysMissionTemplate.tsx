@@ -3,7 +3,7 @@
 import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Matrix from '../../../components/ContentBuilder'
-import HundredDaysMissionVisualisePageClient from '@/app/visualise/policy-roadmaps/100-days-mission/HundredDaysMissionVisualisePageClient'
+import HundredDaysMissionVisualisePageClient from '@/app/grants/visualise/policy-roadmaps/100-days-mission/HundredDaysMissionVisualisePageClient'
 
 interface Props {
     data: {

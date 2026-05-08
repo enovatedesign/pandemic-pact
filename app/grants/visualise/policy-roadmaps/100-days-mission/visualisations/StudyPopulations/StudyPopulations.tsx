@@ -1,7 +1,7 @@
 import { useContext, useMemo, MouseEvent, useState } from "react"
 import { sumBy, uniq } from "lodash"
 
-import selectOptions from "../../../../../../data/dist/select-options.json"
+import selectOptions from "@/data/dist/select-options.json"
 
 import { GlobalFilterContext } from "@/app/helpers/filters"
 import { TooltipContext } from "@/app/helpers/tooltip"

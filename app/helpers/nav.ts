@@ -1,21 +1,23 @@
 export const links = {
-    home: { 
-        label: 'Home', 
+    home: {
+        label: 'Home',
         href: '/' ,
         subPages: null,
     },
-    visualise: { 
-        label: 'Visualise', 
-        href: '/visualise' ,
+    visualise: {
+        label: 'Visualise',
+        href: null,
         subPages: null,
+        picker: 'visualise' as const,
     },
-    explore: { 
-        label: 'Explore', 
-        href: '/grants', 
+    explore: {
+        label: 'Explore',
+        href: null,
         subPages: null,
+        picker: 'explore' as const,
     },
-    outbreaks: { 
-        label: 'Outbreaks', 
+    outbreaks: {
+        label: 'Outbreaks',
         href: '/outbreaks',
         subPages: null,
     },
