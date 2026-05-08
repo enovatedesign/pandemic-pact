@@ -5,15 +5,15 @@ import { useSearchParams } from 'next/navigation'
 import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 
-import Layout from '../components/Layout'
-import FilterSidebar from '../components/FilterSidebar'
-import GrantsByMpoxResearchPriorityCard from '../components/GrantsByMpoxResearchPriority'
-import GrantsByResearchCategoryCard from '../components/GrantsByResearchCategory/Card'
-import GrantsByCountryWhereResearchWasConductedCard from '../components/GrantsByCountryWhereResearchWasConducted/Card'
-import GrantsPerResearchCategoryByRegion from '../components/GrantsPerResearchCategoryByRegion'
-import RegionalFlowOfGrantsCard from '../components/RegionalFlowOfGrantsCard'
-import FundingAmountsForEachResearchCategoryOverTime from '../components/FundingAmountsForEachResearchCategoryOverTime/FundingAmountsForEachResearchCategoryOverTime'
-import GrantsByDiseaseCard from '../components/GrantsByDisease/Card'
+import Layout from '../../components/Layout'
+import FilterSidebar from '../../components/FilterSidebar'
+import GrantsByMpoxResearchPriorityCard from '../../components/GrantsByMpoxResearchPriority'
+import GrantsByResearchCategoryCard from '../../components/GrantsByResearchCategory/Card'
+import GrantsByCountryWhereResearchWasConductedCard from '../../components/GrantsByCountryWhereResearchWasConducted/Card'
+import GrantsPerResearchCategoryByRegion from '../../components/GrantsPerResearchCategoryByRegion'
+import RegionalFlowOfGrantsCard from '../../components/RegionalFlowOfGrantsCard'
+import FundingAmountsForEachResearchCategoryOverTime from '../../components/FundingAmountsForEachResearchCategoryOverTime/FundingAmountsForEachResearchCategoryOverTime'
+import GrantsByDiseaseCard from '../../components/GrantsByDisease/Card'
 import {
     emptyFilters,
     filterGrants,
@@ -21,19 +21,19 @@ import {
     countActiveFilters,
     Filters,
     FixedSelectOptionContext,
-} from '../helpers/filters'
-import { TooltipContext, sharedTooltipStyle } from '../helpers/tooltip'
-import { AnnouncementProps, DiseaseLabel } from '../helpers/types'
-import { getKvDatabase } from '../helpers/kv'
+} from '../../helpers/filters'
+import { TooltipContext, sharedTooltipStyle } from '../../helpers/tooltip'
+import { AnnouncementProps, DiseaseLabel } from '../../helpers/types'
+import { getKvDatabase } from '../../helpers/kv'
 
-import VisualisationCardLinks from './components/VisualisationCardLinks'
-import VisualisationJumpMenu from './components/VisualisationJumpMenu'
-import Button from '../components/Button'
-import InfoModal from '../components/InfoModal'
-import ClinicalTrialsTherapeuticsAndVaccines from '../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
-import MarburgResearchAndPolicyRoadmaps from '../components/MarburgResearchAndPolicyRoadmaps'
-import GrantsByWHOMpoxRoadmap from '../components/GrantsByWHOMpoxRoadmap'
-import EbolaCorcPrioritiesCard from '../components/EbolaCorcPrioritiesCard'
+import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
+import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
+import Button from '../../components/Button'
+import InfoModal from '../../components/InfoModal'
+import ClinicalTrialsTherapeuticsAndVaccines from '../../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
+import MarburgResearchAndPolicyRoadmaps from '../../components/MarburgResearchAndPolicyRoadmaps'
+import GrantsByWHOMpoxRoadmap from '../../components/GrantsByWHOMpoxRoadmap'
+import EbolaCorcPrioritiesCard from '../../components/EbolaCorcPrioritiesCard'
 
 interface VisualisationPageProps {
     title: string

@@ -4,8 +4,8 @@ import { Fragment, useState, useContext, useMemo, useCallback } from "react"
 import { scaleLog } from 'd3-scale'
 import { sumBy, uniq } from "lodash"
 
-import hierarchyFilters from "../../../../public/manual-hierarchy-filters.json"
-import selectOptions from "../../../../data/dist/select-options.json"
+import hierarchyFilters from "@/public/manual-hierarchy-filters.json"
+import selectOptions from "@/data/dist/select-options.json"
 
 import { ChevronDownIcon } from "@heroicons/react/outline"
 import { GlobalFilterContext } from "@/app/helpers/filters"

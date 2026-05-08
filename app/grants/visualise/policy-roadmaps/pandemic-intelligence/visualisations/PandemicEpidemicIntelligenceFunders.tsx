@@ -4,7 +4,7 @@ import { useContext, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { groupBy, sumBy } from 'lodash'
 
-import selectOptions from '../../../../../data/dist/select-options.json'
+import selectOptions from '@/data/dist/select-options.json'
 import { dollarValueFormatter } from '@/app/helpers/value-formatters'
 import { GlobalFilterContext, SidebarStateContext } from '@/app/helpers/filters'
 

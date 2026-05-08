@@ -3,7 +3,7 @@
 import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { defaultProseClasses } from '@/app/helpers/prose-classes'
 import Matrix from '../../../components/ContentBuilder'
-import PandemicIntelligenceVisualisePageClient from '@/app/visualise/policy-roadmaps/pandemic-intelligence/PandemicIntelligenceVisualisePageClient'
+import PandemicIntelligenceVisualisePageClient from '@/app/grants/visualise/policy-roadmaps/pandemic-intelligence/PandemicIntelligenceVisualisePageClient'
 import InfoModal from '@/app/components/InfoModal'
 
 interface Props {

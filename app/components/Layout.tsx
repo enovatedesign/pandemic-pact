@@ -173,7 +173,7 @@ const Layout = ({
                         )}
                         
                         <Header
-                            className="absolute w-full left-0 z-50"
+                            className="absolute w-full left-0 z-50 lg:z-[70]"
                             showMobileNav={showMobileNav}
                         />
 

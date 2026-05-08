@@ -11,7 +11,7 @@ import { axisDollarFormatter } from "@/app/helpers/value-formatters"
 import { AnnualTrendsChartData, AnnualTrendsChartDatum, AxisLabel } from "./types"
 import { SelectOption } from "@/scripts/types/generate"
 
-import selectOptions from "../../../../../../data/dist/select-options.json"
+import selectOptions from "@/data/dist/select-options.json"
 import VisualisationCard from "@/app/components/VisualisationCard"
 import Lines from "./Lines"
 import Bars from "./Bars"

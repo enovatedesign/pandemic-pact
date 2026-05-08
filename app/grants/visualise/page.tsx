@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { fetchMetadataFromCraft } from "../helpers/cms-page"
-import { queryAnnouncementEntry } from "../helpers/announcement-query"
+import { fetchMetadataFromCraft } from "../../helpers/cms-page"
+import { queryAnnouncementEntry } from "../../helpers/announcement-query"
 import VisualisePageClient from "./VisualisePageClient"
 
 export async function generateMetadata(): Promise<Metadata> {
