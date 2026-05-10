@@ -16,6 +16,7 @@ import { SidebarStateContext } from "../helpers/filters"
 import ShareButton from './ShareButton'
 import { AnnouncementProps } from '../helpers/types'
 import Announcement from './ContentBuilder/Common/Announcement'
+import useScrollLock from '../hooks/useScrollLock'
 
 type Props = {
     sidebar?: {
@@ -49,6 +50,8 @@ const Layout = ({
 
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [showClosedContent, setShowClosedContent] = useState(false)
+
+    useScrollLock(showMobileNav)
 
     const baseAnimationConfig = {
         delay: 0,
@@ -175,6 +178,7 @@ const Layout = ({
                         <Header
                             className="absolute w-full left-0 z-50 lg:z-[70]"
                             showMobileNav={showMobileNav}
+                            closeMobileNav={() => setShowMobileNav(false)}
                         />
 
                         <main id="content">

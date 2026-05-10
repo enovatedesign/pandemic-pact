@@ -14,6 +14,7 @@ import DatasetPickerOverlay from "./components/DatasetPickerOverlay"
 import homepageTotals from "../data/dist/homepage-totals.json"
 import Announcement from "./components/ContentBuilder/Common/Announcement"
 import { AnnouncementProps } from "./helpers/types"
+import useScrollLock from "./hooks/useScrollLock"
 
 interface Props {
     announcement: AnnouncementProps
@@ -26,6 +27,8 @@ export default function HomepageClient(announcement: Props) {
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [pickerMode, setPickerMode] = useState<PickerMode | null>(null)
     const counterClasses = "text-primary font-bold"
+
+    useScrollLock(showMobileNav)
 
     return (
         <>
@@ -46,7 +49,7 @@ export default function HomepageClient(announcement: Props) {
 
                 <Announcement {...announcement}/>
 
-                <Header className="w-full relative z-20" showMobileNav={showMobileNav} />
+                <Header className="w-full relative z-20" showMobileNav={showMobileNav} closeMobileNav={() => setShowMobileNav(false)} />
 
                 <RotatingGlobe className="!absolute inset-x bottom-0 z-10" />
 
