@@ -12,36 +12,33 @@ import DatasetPickerPanel from './DatasetPickerPanel'
 
 type Props = {
     className?: string,
-    showMobileNav?: boolean
+    showMobileNav?: boolean,
+    closeMobileNav?: () => void,
 }
 
-export default function Header({ className, showMobileNav }: Props ) {
+export default function Header({ className, showMobileNav, closeMobileNav }: Props ) {
     const pathname = usePathname()
     const links = getLinksArray()
 
     const [activeIndex, setActiveIndex] = useState(-1)
-    const navItemClick = () => {
-        const bodyEl = document.querySelector('body')
-        bodyEl?.classList.remove('overflow-y-hidden')
-    }
-    
+
     const NavItem = (link: {label: string, href: string | null, subPages: any}) => {
         if (!link.href) return null
 
         const outbreaks = link.label.toLowerCase() === 'outbreaks' ? true : false
-        
+
         const linkClasses = [
             'border border-primary/25 inner-glow rounded-full py-3 px-6 flex uppercase font-medium tracking-wider transition-colors duration-150 lg:rounded-none lg:p-0 lg:border-0 lg:shadow-none',
             pathname === link.href ? 'text-white' : 'text-primary focus:text-white hover:text-white',
             'lg:text-sm xl:text-base'
         ].filter(Boolean).join(' ')
-        
+
         return (
             <Link
-                onClick={navItemClick}
+                onClick={closeMobileNav}
                 href={link.href}
                 className={linkClasses}
-            >   
+            >
                 {link.label}
                 {outbreaks && (
                     <span className='relative ml-1 px-2 flex items-center rounded-full overflow-hidden'>
@@ -163,7 +160,10 @@ export default function Header({ className, showMobileNav }: Props ) {
                                                         >
                                                             <DatasetPickerPanel
                                                                 mode={(link as any).picker}
-                                                                onSelect={() => setActiveIndex(-1)}
+                                                                onSelect={() => {
+                                                                    setActiveIndex(-1)
+                                                                    closeMobileNav?.()
+                                                                }}
                                                             />
                                                         </div>
                                                     </AnimateHeight>

@@ -58,19 +58,11 @@ const AnimatedIcons = ({ Icon, state }: AnimatedIconsProps) => {
 
 const UtilityBar = ({ sidebarOpen, setSidebarOpen, showMobileNav, setShowMobileNav, searchOpen, setSearchOpen }: Props) => {
     const toggleSlideOut = (
-        state: boolean, 
+        state: boolean,
         stateSetter: (state: boolean) => void,
         closeAlternativeStateSetter?: (state: boolean) => void,
     ) => {
-        const bodyEl = document.querySelector('body')
-
-        if (state) {
-            bodyEl?.classList.remove('overflow-y-hidden')
-        } else {
-            bodyEl?.classList.add('overflow-y-hidden')
-        }
-
-        if (closeAlternativeStateSetter) closeAlternativeStateSetter(false)
+        closeAlternativeStateSetter?.(false)
         stateSetter(!state)
     }
 
