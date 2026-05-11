@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import homepageTotals from '../../data/dist/homepage-totals.json';
 import {useReducedMotion} from "@react-spring/web"
+import { debounce } from 'lodash';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,7 +41,7 @@ export default function Footer() {
         if (!reducedMotion) {
             const logoCircles = document.querySelectorAll('#logo-circles path');
             const svgBlurFilter = document.querySelector('#gaussianBlur');
-    
+
             // Position the logo circles randomly
             gsap.set(logoCircles, {
                 x: () => gsap.utils.random(-100, 100),
@@ -48,7 +49,7 @@ export default function Footer() {
                 opacity: 0,
                 scale: 3,
             });
-    
+
             // Animate the logo circles back into position
             gsap.to(logoCircles, {
                 scrollTrigger: {
@@ -64,7 +65,7 @@ export default function Footer() {
                 stagger: 0.2,
                 scale: 1,
             });
-    
+
             // Animate the SVG blur filter to zero
             gsap.to(svgBlurFilter, {
                 scrollTrigger: {
@@ -76,16 +77,34 @@ export default function Footer() {
                 duration: 6,
                 attr: { stdDeviation: 0 },
             });
-    
+
             const timeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: '#logo-circles',
                 }
             })
-    
+
             timeline.scrollTrigger?.refresh()
         }
     });
+
+    // When document height changes (abstract / publications accordions,
+    // lazy images, font swaps), recompute ScrollTrigger endpoints so the
+    // footer logo animation reaches completion at the actual page bottom.
+    useEffect(() => {
+        if (reducedMotion) return;
+        if (typeof window === 'undefined') return;
+        if (typeof ResizeObserver === 'undefined') return;
+
+        const refresh = debounce(() => ScrollTrigger.refresh(), 150);
+        const observer = new ResizeObserver(refresh);
+        observer.observe(document.documentElement);
+
+        return () => {
+            observer.disconnect();
+            refresh.cancel();
+        };
+    }, [reducedMotion]);
 
     const Logo = () => (
         <svg
