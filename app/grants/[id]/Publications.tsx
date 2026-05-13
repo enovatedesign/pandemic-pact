@@ -36,10 +36,10 @@ export default function Publications({ grant, publications }: { grant: any, publ
                     className="text-secondary text-base lg:text-lg"
                     id="publications"
                 >
-                    <span className="uppercase tracking-widest text-lg lg:text-xl font-medium pr-2">
-                        Publications
+                    <span className="uppercase tracking-widest text-lg lg:text-xl font-medium">
+                        {publications.length} {publications.length === 1 ? 'Publication' : 'Publications'}
                     </span>
-                    linked via Europe PMC
+                    {' '}linked via Europe PMC
                 </h2>
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between xl:justify-normal gap-4">
                     <p className="text-gray-900 text-sm uppercase">
@@ -55,7 +55,7 @@ export default function Publications({ grant, publications }: { grant: any, publ
                         href={viewAllHref}
                         colour='grey'
                         customClasses="flex items-center justify-between gap-2 lg:-translate-y-1"
-                        size='small'
+                        size='xsmall'
                     >
                         <span className="text-xs md:text-sm lg:text-base xl:text-base">View all publications at Europe PMC</span>
                         <ExternalLinkIcon className="size-5" />
