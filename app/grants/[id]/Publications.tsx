@@ -7,6 +7,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/solid'
 import Pagination from '@/app/components/ContentBuilder/Common/Pagination'
 import Button from '../../components/Button'
+import { decodeHtmlEntities } from '@/app/helpers/decode-html-entities'
 
 dayjs.extend(relativeTime)
 
@@ -84,7 +85,7 @@ export default function Publications({ grant, publications }: { grant: any, publ
                                     <h3
                                         className="text-left font-bold tracking-wider text-md md:text-xl lg:text-2xl"
                                         dangerouslySetInnerHTML={{
-                                            __html: link.title,
+                                            __html: decodeHtmlEntities(link.title),
                                         }}
                                     ></h3>
                                     <button className="self-start">
