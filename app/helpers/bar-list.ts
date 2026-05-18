@@ -76,26 +76,52 @@ export function prepareBarListDataForCategory(
     }
 }
 
+// Merge BarListDatum rows that share the same (formatted) Category Label.
+// Used so that subcategories which collapse to the same phase label (e.g. 6b + 6c → "Phase 1")
+// are summed into a single row rather than rendered as duplicates.
+const mergeBarListRowsByLabel = (rows: BarListDatum[]): BarListDatum[] => {
+    const merged = new Map<string, BarListDatum>()
+
+    for (const row of rows) {
+        const key = row['Category Label']
+        const existing = merged.get(key)
+
+        if (!existing) {
+            merged.set(key, { ...row })
+        } else {
+            existing['Grants With Known Financial Commitments'] += row['Grants With Known Financial Commitments']
+            existing['Grants With Unspecified Financial Commitments'] += row['Grants With Unspecified Financial Commitments']
+            existing['Total Grants'] += row['Total Grants']
+            existing['Known Financial Commitments (USD)'] += row['Known Financial Commitments (USD)']
+            existing['Category Value'] = `${existing['Category Value']}, ${row['Category Value']}`
+        }
+    }
+
+    return Array.from(merged.values())
+}
+
 // Map over the subcategories, maintaining the parent category label, and return the related grants
 // using the standard prepareBarListForCategory function from the desired select options
 export const formatPhasesToPrepareForSubCategories = (
     grants: any[],
-    subCategories: { 
+    subCategories: {
         label: string
-        data: { 
-            value: string 
+        data: {
+            value: string
             label: string
-        }[] 
+        }[]
     }[],
     field: string
 ) => subCategories.map(subCategory => ({
         label: subCategory.label,
-        data: subCategory.data.map(category => prepareBarListDataForCategory(
-            grants, 
-            category,
-            field, 
-            true
-        ))
+        data: mergeBarListRowsByLabel(
+            subCategory.data.map(category => prepareBarListDataForCategory(
+                grants,
+                category,
+                field,
+                true
+            ))
+        )
     })
 )
 
@@ -165,7 +191,7 @@ export const convertSubCategoryDataToCategoryData = (data: DataItem[]) => {
 export const formatClinicalTrialCategoryLabel = (label: string): string => {
     const mappings: { regex: RegExp; formattedLabel: string }[] = [
         { regex: /Pre-clinical studies/i, formattedLabel: 'Pre-clinical studies' },
-        { regex: /Phase 0 clinical trial|Protocol/i, formattedLabel: 'Phase 0' },
+        { regex: /Phase 0 clinical trial|Protocol/i, formattedLabel: 'Phase 1' },
         { regex: /Phase 1 clinical trial|Clinical Trial, Phase I\b/i, formattedLabel: 'Phase 1' },
         { regex: /Phase 2 clinical trial|Clinical Trial, Phase II\b/i, formattedLabel: 'Phase 2' },
         { regex: /Phase 3 clinical trial|Clinical Trial, Phase III\b/i, formattedLabel: 'Phase 3' },
@@ -190,7 +216,6 @@ export const formatClinicalTrialCategoryLabel = (label: string): string => {
 export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLabel: string, grants: any[]) => {
     // Set the clinical trial sub category filters to ensure we only get the desired clinical trial subcategories
     const clinicalTrialSubCatFilters = {
-        "1": 'Protocol',
         "2": 'Clinical Trial, Phase I',
         "3": 'Clinical Trial, Phase II',
         "4": 'Clinical Trial, Phase III',
@@ -202,8 +227,6 @@ export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLa
 
     // Set the order of the phases (this is from the formatted titles)
     const phaseOrder = [
-        "Pre-clinical studies",
-        "Phase 0",
         "Phase 1",
         "Phase 2",
         "Phase 3",
