@@ -106,7 +106,7 @@ const ClinicalTrialsTherapeuticsAndVaccines = () => {
             title='Distribution of Clinical Research Grants by Clinical Trial Phase'
             subtitle="The chart shows the number of grants awarded and the total funding allocated for clinical research across all diseases, categorized by trial intervention focus. Hover over each stacked bar to see a detailed breakdown by focus. Use the ‘View Categories’ button to explore clinical trial phases in more detail by intervention focus."
             infoModalContents={infoModalContents}
-            footnote="Note that some clinical research may fall under multiple categories; although, these overlaps are not explicitly shown. For diagnostic trials, preclinical studies are not included in the data presented."
+            footnote="Note that some clinical research may fall under multiple categories; although, these overlaps are not explicitly shown. For example, phases are displayed with “clinical characterisation” awards where they co-occurred with other interventions. For diagnostic trials, preclinical studies are not included in the data presented. The diagnostics visualisation will soon be updated with a revised classification of diagnostic research awards to better reflect the scope of funded awards."
         >
             {!showSubCategories ? (
                 <>
