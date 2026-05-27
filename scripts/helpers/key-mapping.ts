@@ -153,24 +153,28 @@ export const prepareSpecificSelectOptions = (rawOptions: any, target: string) =>
     )
 }
 
+// Normalises the code segment extracted from a REDCap checkbox column name.
+// Two rules:
+//  - A leading '_' encodes a minus sign (REDCap export quirk for -88, -99, -9999).
+//  - REDCap forces column names to lowercase, but the dictionary's choices
+//    field stores ICTV codes uppercase (and select-options.json follows suit).
+//    Uppercase any extracted ICTV code so grant values match filter values.
+//    SNOMED codes (digits-only), np001, and -88/-99/-9999 are untouched.
+const normaliseExtractedCode = (raw: string) => {
+    const value = raw.replace(/^_/, '-')
+    return value.toLowerCase().startsWith('ictv') ? value.toUpperCase() : value
+}
+
 export const convertRawGrantKeyToValuesArray = (rawGrant: RawGrant, target: string) => {
     return Object.keys(rawGrant)
-        .filter(key => 
+        .filter(key =>
             key.includes(target) &&
             rawGrant[key] &&
             parseInt(rawGrant[key]) === 1
         )
         .map(key => {
-            // Now we have the values on the grant that are checked
-            // Split the key to get the disease strain and the value as separate indexes in an array
             const splitKey = key.split('___')
-            
-            // Some keys include 3x "_" and others include 4x "_"
-            // As we have already split the key by 3x "_", the second index may in some cases contain a trailing underscore, if this is the case, it relates to -88, and -99 values
-            // Replace the trailing underscore with "-"
-            const formattedValue = splitKey[1].includes('_') ? splitKey[1].replace('_', '-') : splitKey[1]
-            
-            // Return the structured object
+            const formattedValue = normaliseExtractedCode(splitKey[1])
             return formattedValue !== null && formattedValue
         })
 }
@@ -182,11 +186,7 @@ export const convertCheckBoxFieldToArray = (grant: RawGrant, field: string) => {
                 ([key, value]) =>
                     key.startsWith(`${field}___`) && value === '1',
             )
-            // In the source data, columns that represent checkbox values
-            // have '-' replaced with '_' - for instance '-99' is replaced
-            // with '_99'. Thus we have to replace '_' with '-' after
-            // splitting by '___'
-            .map(([key]) => key.split('___')[1].replace(/^_/, '-'))
+            .map(([key]) => normaliseExtractedCode(key.split('___')[1]))
     )
 }
 

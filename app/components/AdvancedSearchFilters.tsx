@@ -3,8 +3,33 @@ import Select, { MultiValue, SingleValue, SelectInstance } from 'react-select'
 import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
+import hierarchyFilters from '../../public/manual-hierarchy-filters.json'
 import { Filter, jointFundingFilterOptions, SearchFilters } from '../helpers/search'
 import { customSelectThemeColours } from '../helpers/select-colours'
+
+type StrainOption = { label: string; value: string }
+type DiseaseWithStrains = { label: string; value: string; strains: StrainOption[] }
+
+// Pre-compute the diseases that carry strain sub-options from the hierarchy file.
+// The advanced search shows a strain sub-filter whenever the user selects one of
+// these in the Diseases multi-select (e.g. influenza H-subtypes, Ebola).
+const diseasesWithStrains: DiseaseWithStrains[] = hierarchyFilters.flatMap(family =>
+    (family.pathogens ?? []).flatMap(pathogen =>
+        (pathogen.diseases ?? [])
+            .filter(d => (d.strains ?? []).length > 0)
+            .map(d => ({
+                label: d.label,
+                value: d.value,
+                strains: d.strains.filter(
+                    s => !['Other', 'Unspecified', 'Not applicable'].includes(s.label),
+                ),
+            })),
+    ),
+)
+
+const diseasesWithStrainsByValue: Record<string, DiseaseWithStrains> = Object.fromEntries(
+    diseasesWithStrains.map(d => [d.value, d]),
+)
 
 interface Props {
     setSearchFilters: (searchFilters: SearchFilters) => void
@@ -314,24 +339,24 @@ function AdvancedInputRow({
             values,
         }
 
-        // Clear values based on multi new row
-        if (!newRow.values.includes('6142004')) {
+        // If the previously-cascaded disease is no longer selected, clear the
+        // cascade. (Multi-select can leave other cascade-eligible diseases
+        // selected, but the specific parent value must still be in values.)
+        const parentStillSelected =
+            newRow.subCategoryParent.value !== null &&
+            values.includes(newRow.subCategoryParent.value)
+
+        if (!parentStillSelected) {
             clearParentValue()
             clearChildValue()
 
             newRow = {
                 ...newRow,
-                subCategoryParent: {
-                    field: null, 
-                    value: null,
-                },
-                subCategoryChild: {
-                    field: null, 
-                    value: null,
-                }
+                subCategoryParent: { field: null, value: null },
+                subCategoryChild: { field: null, value: null },
             }
         }
-        
+
         setLocalRow(newRow)
 
         setRows(
@@ -356,95 +381,57 @@ function AdvancedInputRow({
         )
     }
 
-    // Set a boolean based on whether or not pandemic prone influenza is selected by
-    // the presence of the value (614004) in localRow.values
-    // This is used to display the parent dropdown
-    const pandemicProneInfluenzaIsSelected = localRow.values.includes('6142004')
-    
-    // Set state for the parent option, this is used to show the child dropdown
-    const [pandemicProneInfluenzaParentIsSelected, setPandemicProneParentIsSelected] = useState(false)
+    // Surface a strain sub-filter cascade when the user selects a disease that
+    // carries strains in the manual hierarchy (e.g. influenza H-subtypes, Ebola).
+    // The parent dropdown lets the user pick which of their selected diseases
+    // to narrow when more than one is eligible; the child dropdown lists strains.
+    const cascadeEligibleDiseases = localRow.values
+        .map(value => diseasesWithStrainsByValue[value])
+        .filter((d): d is DiseaseWithStrains => Boolean(d))
 
-    // Set the parent dropdown options to 'InfluenzaA' and filter out unwanted options
-    const pandemicProneInfluenzaParentOptions = selectOptions['InfluenzaA']
-        .filter(option => !['Other', 'Not applicable', 'Unspecified'].includes(option.label))
+    const cascadeShouldShow = cascadeEligibleDiseases.length > 0
 
-    // Set default state to the child options of the parent to an empty array
-    const [pandemicProneChildOptions, setPandemicProneChildOptions] = useState<Option[]>([])
-    
-    // Handle the state of the child options using the value of the parent selected
-    // Handle the state to show that a parent filter has been selected
-    // Update the local row and rows
-    const onInfluenzaParentSelectChange = (value: string) => {
-        // Retrieve the selected option to gain access to the label via the value
-        // This is to dynamically get the related data from the select options (due to the data structure)
-        const selectedOption = pandemicProneInfluenzaParentOptions.find(
-            option => option.value === value
-        )
+    const cascadeParentOptions: Option[] = cascadeEligibleDiseases.map(d => ({
+        value: d.value,
+        label: d.label,
+    }))
 
-        // Selected option label is available, handle the state of the children options
-        if (selectedOption?.label) {
-            // Dynamically retrieve the related data from the select options (due to the data structure)
-            // Filter out options that are not wanted
-            const influenzaKey = `Influenza${selectedOption.label}` as Extract<
-                keyof typeof selectOptions,
-                `Influenza${string}`
-            >
+    const selectedDiseaseForCascade = cascadeEligibleDiseases.find(
+        d => d.value === localRow.subCategoryParent.value,
+    )
 
-            setPandemicProneChildOptions(
-                (selectOptions[influenzaKey] as Option[])
-                .filter(option => !['Other', 'Not applicable', 'Unspecified']
-                .includes(option.label))
-            )
-        } else {
-            // If no option is selected, clear the child options. This ensures the parent option can be cleared
-            setPandemicProneChildOptions([])
-        }        
+    const cascadeChildOptions: Option[] = selectedDiseaseForCascade?.strains ?? []
 
-        // Define the field manually as 'InfluenzaA' to ensure functioning logic (due to the data structure)
-        // add the value to the new filtered array of values
+    const [cascadeParentIsSelected, setCascadeParentIsSelected] = useState(false)
+
+    const onCascadeParentSelectChange = (value: string) => {
+        // The parent value tracks the user-selected disease but is not turned
+        // into a filter row (the disease is already in the Diseases multi-select).
         let updatedRow = {
             ...localRow,
-            subCategoryParent: {
-                field: 'InfluenzaA',
-                value: value
-            },
+            subCategoryParent: { field: null, value: value },
         }
-        
-        // Clear the child select value based on subCategoryChildOverride state
+
         if (localRow.subCategoryParent.value !== value) {
             clearChildValue()
-
             updatedRow = {
                 ...updatedRow,
-                subCategoryChild: {
-                    field: null,
-                    value: null
-                }
+                subCategoryChild: { field: null, value: null },
             }
         }
 
         setLocalRow(updatedRow)
-        
         setRows(rows.map(globalRow => globalRow.key === updatedRow.key ? updatedRow : globalRow))
-        
-        setPandemicProneParentIsSelected(true)  
+        setCascadeParentIsSelected(Boolean(value))
     }
-    
-    const onInfluenzaChildSelectChange = (value: string) => {
-        // Value options 'h1n1', 'h2n2', 'h3n2', 'h5n', 'h5n6', 'h7n9' 
-        // Define the field for the row eg: InfluenzaH5
-        const selectedField = `Influenza${value.charAt(0).toUpperCase() + value.charAt(1)}`
-        
+
+    const onCascadeChildSelectChange = (value: string) => {
         const updatedRow = {
             ...localRow,
-            subCategoryChild: {
-                field: selectedField,
-                value: value
-            },
+            subCategoryChild: { field: 'Strains', value: value },
         }
 
         setLocalRow(updatedRow)
-        
         setRows(rows.map(globalRow => globalRow.key === updatedRow.key ? updatedRow : globalRow))
     }
     
@@ -474,21 +461,21 @@ function AdvancedInputRow({
                         />
                     )}
 
-                    {pandemicProneInfluenzaIsSelected && (
+                    {cascadeShouldShow && (
                         <>
                             <SingleSelect
-                                options={pandemicProneInfluenzaParentOptions}
+                                options={cascadeParentOptions}
                                 value={localRow.subCategoryParent.value}
-                                onSelectChange={onInfluenzaParentSelectChange}
+                                onSelectChange={onCascadeParentSelectChange}
                                 ref={subCategoryParentSelectRef}
-                            /> 
-                            {pandemicProneInfluenzaParentIsSelected && (
+                            />
+                            {cascadeParentIsSelected && cascadeChildOptions.length > 0 && (
                                 <SingleSelect
-                                    options={pandemicProneChildOptions}
+                                    options={cascadeChildOptions}
                                     value={localRow.subCategoryChild.value}
-                                    onSelectChange={onInfluenzaChildSelectChange}
+                                    onSelectChange={onCascadeChildSelectChange}
                                     ref={subCategoryChildSelectRef}
-                                />  
+                                />
                             )}
                         </>
                     )}
