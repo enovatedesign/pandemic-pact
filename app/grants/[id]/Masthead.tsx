@@ -19,9 +19,12 @@ export default function Masthead({ grant, publications }: { grant: any, publicat
                 </li>
             </ul>
             {grant.PubMedGrantId && (
-                <p className="text-white/80">
+                <p className="text-white/80 md:text-right md:max-w-xs lg:max-w-sm">
                     Grant number:{' '}
-                    <span className="text-white/60 font-bold uppercase whitespace-nowrap">
+                    <span
+                        className="text-white/60 font-bold uppercase break-words [overflow-wrap:anywhere]"
+                        title={grant.PubMedGrantId}
+                    >
                         {grant.PubMedGrantId}
                     </span>
                 </p>
