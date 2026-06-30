@@ -21,15 +21,15 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     const grantsPreviousFileId = await readGrantsLastUsedFileId()
     const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
     
-    // If source hasn't changed, download cached static files from blob
+    // If source hasn't changed, download cached static files from remote storage
     if (!grantsFileIdHasChanged) {
         info('Grants data source has not changed since last fetch')
-        
+
         // This will throw an error if download fails, stopping the build
         const downloadedSuccessfully = await downloadStaticFiles()
-        
+
         if (downloadedSuccessfully) {
-            info('Using cached static files from Blob Storage')
+            info('Using cached static files from remote storage')
             return { shouldProcessGrants: false, useCachedFiles: true }
         } else {
             info('Cached static files download failed, proceeding to fetch fresh data.')
