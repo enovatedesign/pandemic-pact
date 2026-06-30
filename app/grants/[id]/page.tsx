@@ -98,11 +98,14 @@ const loadGrant = async (id: string) => {
     const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
     
     if (useBlobStorage) {
-        // Fetch from Vercel Blob Storage
-        const baseUrl = process.env.BLOB_BASE_URL
-        
+        // Fetch from remote storage (S3/CloudFront when STORAGE_BACKEND=s3,
+        // otherwise Vercel Blob).
+        const baseUrl = process.env.STORAGE_BACKEND === 's3'
+            ? process.env.ASSET_BASE_URL
+            : process.env.BLOB_BASE_URL
+
         if (!baseUrl) {
-            console.error('BLOB_BASE_URL not set but USE_BLOB_STORAGE is true')
+            console.error('No storage base URL set (ASSET_BASE_URL / BLOB_BASE_URL) but USE_BLOB_STORAGE is true')
             return null
         }
         

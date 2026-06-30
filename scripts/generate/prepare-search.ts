@@ -102,6 +102,26 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
                 // Get an object with only the fields we want to index
                 const doc = _.pick(grant, Object.keys(mappingProperties))
 
+                const docBody: any = {
+                    ...doc,
+                    // Add a flag to indicate if there is more than
+                    // one funder country for filtering purposes on the
+                    // frontend
+                    JointFunding: doc.FunderCountry.length > 1,
+                }
+
+                // Only set the publication count when counts were provided.
+                // Deploy builds no longer fetch PubMed and call prepareSearch()
+                // with no counts; omitting the field means doc_as_upsert leaves
+                // any existing PublicationCount untouched rather than zeroing it.
+                // The weekly PubMed job passes counts and refreshes the field.
+                if (publicationCounts !== undefined) {
+                    docBody.PublicationCount = getPublicationCount(
+                        publicationCounts,
+                        grant.PubMedGrantId as string,
+                    )
+                }
+
                 // Prepare a bulk operation for each grant, indicating that
                 // we want to update the document in the index if it already
                 // exists, or create it if it doesn't (using doc_as_upsert)
@@ -115,16 +135,7 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
                     },
                     // Specify the document to update or create
                     {
-                        doc: {
-                            ...doc,
-                            // Add a flag to indicate if there is more than 
-                            // one funder country for filtering purposes on the
-                            // frontend
-                            JointFunding: doc.FunderCountry.length > 1,
-                            // Retrieve the number of publications the grant has
-                            // This is to display in the search result 
-                            PublicationCount: getPublicationCount(publicationCounts, grant.PubMedGrantId as string),
-                        },
+                        doc: docBody,
                         doc_as_upsert: true,
                     },
                 ]

@@ -22,7 +22,13 @@ const nextConfig = {
         NEXT_PUBLIC_CI_COMMIT_REF_NAME: process.env.CI_COMMIT_REF_NAME,
     },
     async rewrites() {
-        if (process.env.USE_BLOB_STORAGE === 'true' && process.env.BLOB_BASE_URL) {
+        // Read base for the public /grants/:id.json API: S3/CloudFront when
+        // STORAGE_BACKEND=s3, otherwise Vercel Blob.
+        const assetBaseUrl = process.env.STORAGE_BACKEND === 's3'
+            ? process.env.ASSET_BASE_URL
+            : process.env.BLOB_BASE_URL
+
+        if (process.env.USE_BLOB_STORAGE === 'true' && assetBaseUrl) {
             const branch = process.env.VERCEL_GIT_COMMIT_REF || process.env.CI_COMMIT_REF_NAME || 'master'
             const branchName = branch
                 .replace(/^refs\/heads\//, '')
@@ -32,7 +38,7 @@ const nextConfig = {
             return [
                 {
                     source: '/grants/:id.json',
-                    destination: `${process.env.BLOB_BASE_URL}/${branchName}/grants/:id.json`,
+                    destination: `${assetBaseUrl}/${branchName}/grants/:id.json`,
                 },
             ]
         }

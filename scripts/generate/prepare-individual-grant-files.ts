@@ -3,7 +3,7 @@ import _ from 'lodash'
 import zlib from 'zlib'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info } from '../helpers/log'
-import { uploadGrantsToBlob } from '../helpers/upload-grants-to-blob'
+import { uploadGrants } from '../helpers/storage'
 
 export default async function prepareIndividualGrantFiles(shouldUploadToBlob: boolean = false) {
     title('Writing full grant data to individual files')
@@ -89,7 +89,7 @@ export default async function prepareIndividualGrantFiles(shouldUploadToBlob: bo
 
     // Upload to Vercel Blob if requested
     if (shouldUploadToBlob && grantsForBlob.length > 0) {
-        await uploadGrantsToBlob({ grants: grantsForBlob })
+        await uploadGrants({ grants: grantsForBlob })
     }
 
     return grantIds

@@ -3,7 +3,6 @@ import downloadAndParseDataSheets from './download-and-parse-data-sheets'
 import prepareGrants from './prepare-grants'
 import prepareSelectOptions from './prepare-select-options'
 import prepareHomepageTotals from './prepare-homepage-totals'
-import fetchPubMedData, { CACHED_BUILD_TIMEOUT_MS } from './fetch-pub-med-data'
 import prepareIndividualGrantFiles from './prepare-individual-grant-files'
 import prepareVisualisePageGrantsFile from './prepare-visualise-page-grants-file'
 import prepareCsvExportFile from './prepare-csv-export-file'
@@ -15,9 +14,7 @@ import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-o
 import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
-import { verifyBlobGrants } from '../helpers/verify-blob-grants'
-import { uploadStaticFilesToBlob } from '../helpers/upload-static-files-to-blob'
-import { writeGrantsLastUsedFileId } from '../helpers/grants-marker'
+import { uploadStaticFiles, writeGrantsLastUsedFileId, verifyGrants } from '../helpers/storage'
 import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
 
@@ -28,7 +25,7 @@ async function main() {
 
     // Determine if we should upload to blob storage.
     const isVercelBuild = process.env.VERCEL === '1'
-    const forceUpload = process.env.FORCE_BLOB_UPLOAD === 'true'
+    const forceUpload = process.env.FORCE_BLOB_UPLOAD === 'true' || process.env.FORCE_S3_UPLOAD === 'true'
     const shouldUploadConditionsMet = isVercelBuild || forceUpload
 
     const { useCachedFiles } = await downloadAndParseDataSheets()
@@ -38,13 +35,11 @@ async function main() {
     if (useCachedFiles) {
         info('Using cached static files - skipping grant processing and file generation')
 
-        // PubMed data is independent of FigShare — always fetch it.
-        // grants.json.gz is already downloaded from blob storage.
-        // PubMed has its own 7-day caching and will skip API calls when fresh.
-        // Individual PubMed files are uploaded to blob during the fetch.
-        const publicationCounts = await fetchPubMedData({ timeoutMs: CACHED_BUILD_TIMEOUT_MS })
-
-        await prepareSearch(publicationCounts)
+        // PubMed is no longer fetched during deploy builds — a weekly GitLab CI
+        // job refreshes the per-grant publication blobs and the OpenSearch
+        // PublicationCount. Re-index without counts; prepareSearch preserves any
+        // existing PublicationCount values when none are passed.
+        await prepareSearch()
     } else {
         await prepareGrants()
 
@@ -67,34 +62,31 @@ async function main() {
         // Select options for the policy road maps dropdown on the explore page
         await preparePolicyRoadmapSelectOptions()
 
-        // Upload Figshare-derived artefacts to blob BEFORE PubMed runs.
-        // PubMed can be slow and has previously timed out the build; uploading
-        // here ensures the new homepage totals, grants, and select options
-        // reach the blob cache even if PubMed later stalls. The search index
-        // (which depends on PubMed publication counts) is uploaded in a
-        // second pass after PubMed completes.
+        // Upload Figshare-derived artefacts (homepage totals, grants, select
+        // options) to the blob cache and mark this grants file ID as processed.
         if (shouldUploadConditionsMet) {
-            await uploadStaticFilesToBlob()
+            await uploadStaticFiles()
             await writeGrantsLastUsedFileId(dataSources.FIGSHARE_GRANTS_FILE_ID)
         }
 
-        const publicationCounts = await fetchPubMedData()
-
         const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
 
-        // Verify blob upload if it was performed
+        // Verify the grant upload if it was performed
         if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
             const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
-            await verifyBlobGrants(stringGrantIds)
+            await verifyGrants(stringGrantIds)
         }
 
-        await prepareSearch(publicationCounts)
+        // Re-index OpenSearch. PubMed publication counts are refreshed by the
+        // weekly GitLab job, so prepareSearch runs without counts here and
+        // preserves any existing PublicationCount values.
+        await prepareSearch()
 
         await prepareGrantIdsForSitemap()
 
-        // Second upload pass for PubMed-dependent artefacts (search index).
+        // Second upload pass to capture grant-ids.json (generated above).
         if (shouldUploadConditionsMet) {
-            await uploadStaticFilesToBlob()
+            await uploadStaticFiles()
         }
     }
 

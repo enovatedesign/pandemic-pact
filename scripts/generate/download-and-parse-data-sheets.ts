@@ -1,9 +1,8 @@
 import fs from 'fs-extra'
 import { title, info, error } from '../helpers/log'
 import dataSources from '../config/data-sources'
-import { readGrantsLastUsedFileId } from '../helpers/grants-marker'
+import { readGrantsLastUsedFileId, downloadStaticFiles } from '../helpers/storage'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
-import { downloadStaticFilesFromBlob } from '../helpers/download-static-files-from-blob'
 
 export default async function downloadAndParseDataSheet (grantsOnly: boolean = false) {
     if (!process.env.FIGSHARE_PA_TOKEN) {
@@ -27,7 +26,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         info('Grants data source has not changed since last fetch')
         
         // This will throw an error if download fails, stopping the build
-        const downloadedSuccessfully = await downloadStaticFilesFromBlob()
+        const downloadedSuccessfully = await downloadStaticFiles()
         
         if (downloadedSuccessfully) {
             info('Using cached static files from Blob Storage')
