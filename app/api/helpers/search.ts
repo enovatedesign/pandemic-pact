@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Client } from '@opensearch-project/opensearch'
 import { jointFundingFilterOptions, SearchFilters } from '../../helpers/search'
+import { normaliseBranchName } from '../../helpers/normalise-branch-name'
 
 export function getSearchClient() {
     if (
@@ -24,8 +25,12 @@ export function getSearchClient() {
 }
 
 export function getIndexName() {
+    // Normalise the prefix the same way branch names are normalised for storage
+    // paths, so branch-derived prefixes containing characters OpenSearch rejects
+    // (e.g. "/" in "feature/x") produce a valid index name. Clean prefixes are
+    // unchanged. Indexing and querying both call this, so they stay consistent.
     const prefix = process.env.SEARCH_INDEX_PREFIX
-        ? `${process.env.SEARCH_INDEX_PREFIX}-`
+        ? `${normaliseBranchName(process.env.SEARCH_INDEX_PREFIX)}-`
         : ''
 
     const version = process.env.SEARCH_INDEX_VERSION

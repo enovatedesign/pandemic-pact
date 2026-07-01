@@ -11,7 +11,10 @@ import { execSync } from 'child_process'
 import { Grant } from '../types/generate'
 import { splitGrantIds } from '../../app/helpers/pubmed-ids'
 
-export default async function prepareSearch(publicationCounts?: Record<string, number>) {
+export default async function prepareSearch(
+    publicationCounts?: Record<string, number>,
+    changedIds?: string[],
+) {
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
         warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
         return
@@ -84,14 +87,31 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
     const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
     const allGrants: Grant[] = JSON.parse(jsonBuffer.toString())
 
+    // When a changed-id set is provided, only (re)upsert those grants. Removed
+    // grants are handled by the prune step below, which always works against the
+    // full data set. An undefined set means reindex everything (full reindex).
+    const grantsToIndex =
+        changedIds === undefined
+            ? allGrants
+            : (() => {
+                  const changedSet = new Set(changedIds)
+                  return allGrants.filter((grant: any) =>
+                      changedSet.has(grant.GrantID),
+                  )
+              })()
+
+    if (changedIds !== undefined) {
+        info(`Incremental index: upserting ${grantsToIndex.length} changed grant(s)`)
+    }
+
     const chunkSize = 500
 
-    const chunkedGrants = _.chunk(allGrants, chunkSize)
+    const chunkedGrants = _.chunk(grantsToIndex, chunkSize)
 
     for (let i = 0; i < chunkedGrants.length; i++) {
         // Output progress every 500 documents
         if (i > 0) {
-            info(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
+            info(`Indexed ${i * chunkSize}/${grantsToIndex.length} documents`)
         }
 
         const grants = chunkedGrants[i]
@@ -101,6 +121,26 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
             .map((grant: any) => {
                 // Get an object with only the fields we want to index
                 const doc = _.pick(grant, Object.keys(mappingProperties))
+
+                const docBody: any = {
+                    ...doc,
+                    // Add a flag to indicate if there is more than
+                    // one funder country for filtering purposes on the
+                    // frontend
+                    JointFunding: doc.FunderCountry.length > 1,
+                }
+
+                // Only set the publication count when counts were provided.
+                // Deploy builds no longer fetch PubMed and call prepareSearch()
+                // with no counts; omitting the field means doc_as_upsert leaves
+                // any existing PublicationCount untouched rather than zeroing it.
+                // The weekly PubMed job passes counts and refreshes the field.
+                if (publicationCounts !== undefined) {
+                    docBody.PublicationCount = getPublicationCount(
+                        publicationCounts,
+                        grant.PubMedGrantId as string,
+                    )
+                }
 
                 // Prepare a bulk operation for each grant, indicating that
                 // we want to update the document in the index if it already
@@ -115,16 +155,7 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
                     },
                     // Specify the document to update or create
                     {
-                        doc: {
-                            ...doc,
-                            // Add a flag to indicate if there is more than 
-                            // one funder country for filtering purposes on the
-                            // frontend
-                            JointFunding: doc.FunderCountry.length > 1,
-                            // Retrieve the number of publications the grant has
-                            // This is to display in the search result 
-                            PublicationCount: getPublicationCount(publicationCounts, grant.PubMedGrantId as string),
-                        },
+                        doc: docBody,
                         doc_as_upsert: true,
                     },
                 ]

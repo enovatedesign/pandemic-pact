@@ -19,10 +19,7 @@ import { streamLargeJson } from './helpers/stream-io'
 import { title, info, warn } from './helpers/log'
 import { Grant } from './types/generate'
 import { splitGrantIds, idIsValidPubMedGrantId } from '../app/helpers/pubmed-ids'
-
-const BLOB_BASE_URL =
-    process.env.BLOB_BASE_URL ||
-    'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'
+import { readPubMedObjectString } from './helpers/storage'
 
 const CACHE_FILENAME = 'cached-pub-med-publications.json'
 const GRANTS_PATH = './data/dist/grants.json.gz'
@@ -116,17 +113,15 @@ function rowToPublication(grantId: string, pubMedGrantId: string, pub: Publicati
         ?.split('=')[1]
     const format: 'csv' | 'json' = formatArg === 'json' ? 'json' : 'csv'
 
-    info(`Loading consolidated PubMed cache from ${BLOB_BASE_URL}/${CACHE_FILENAME}`)
+    info(`Loading consolidated PubMed cache (${CACHE_FILENAME})`)
 
-    const cacheResponse = await fetch(`${BLOB_BASE_URL}/${CACHE_FILENAME}`)
+    const cacheBody = await readPubMedObjectString(CACHE_FILENAME)
 
-    if (!cacheResponse.ok) {
-        throw new Error(
-            `Failed to load PubMed cache: ${cacheResponse.status} ${cacheResponse.statusText}`,
-        )
+    if (!cacheBody) {
+        throw new Error(`Failed to load PubMed cache: ${CACHE_FILENAME} not found`)
     }
 
-    const cache = (await cacheResponse.json()) as {
+    const cache = JSON.parse(cacheBody) as {
         publications?: { [pubMedGrantId: string]: Publication[] }
     }
 

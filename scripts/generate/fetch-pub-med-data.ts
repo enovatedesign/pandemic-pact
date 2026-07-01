@@ -1,11 +1,11 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import { put } from '@vercel/blob'
 import { Grant } from '../types/generate'
 import { title, info, warn } from '../helpers/log'
 import { streamLargeJson } from '../helpers/stream-io'
 import { fetchWithRetry, RetryOptions } from '../helpers/pubmed-retry'
 import { pubmedFileName, splitGrantIds, idIsValidPubMedGrantId } from '../../app/helpers/pubmed-ids'
+import { putPubMedObject, readPubMedObjectString } from '../helpers/storage'
 
 interface PubMedFetchMetadata {
     grants: {
@@ -37,7 +37,6 @@ const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24 * 45          // 45 days (matches gr
 const CHECKPOINT_INTERVAL = 100
 export const CACHED_BUILD_TIMEOUT_MS = 1000 * 60 * 8       // 8 minutes
 
-const BLOB_BASE_URL = process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'
 const CACHE_FILENAME = 'cached-pub-med-publications.json'
 const METADATA_FILENAME = 'pubmed-fetch-metadata.json'
 
@@ -116,15 +115,13 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     let publications: { [key: string]: any[] } = {}
 
     try {
-        const cacheResponse = await fetch(`${BLOB_BASE_URL}/${CACHE_FILENAME}`)
+        const cacheBody = await readPubMedObjectString(CACHE_FILENAME)
 
-        if (cacheResponse.ok) {
-            const cache = await cacheResponse.json()
+        if (cacheBody) {
+            const cache = JSON.parse(cacheBody)
             if (cache.publications) {
                 publications = cache.publications
             }
-        } else if (cacheResponse.status !== 404) {
-            warn(`Error fetching cached PubMed data: ${cacheResponse.status} ${cacheResponse.statusText}`)
         }
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error)
@@ -135,10 +132,10 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     let metadata: PubMedFetchMetadata = { grants: {} }
 
     try {
-        const metadataResponse = await fetch(`${BLOB_BASE_URL}/${METADATA_FILENAME}`)
+        const metadataBody = await readPubMedObjectString(METADATA_FILENAME)
 
-        if (metadataResponse.ok) {
-            metadata = await metadataResponse.json()
+        if (metadataBody) {
+            metadata = JSON.parse(metadataBody)
         }
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error)
@@ -216,10 +213,10 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
             // Upload individual PubMed file to blob immediately
             // so partial results are live even if the build times out
             try {
-                await put(`pubmed/${pubmedFileName(id)}.json`, JSON.stringify(result.publications), {
-                    access: 'public',
-                    addRandomSuffix: false,
-                })
+                await putPubMedObject(
+                    `pubmed/${pubmedFileName(id)}.json`,
+                    JSON.stringify(result.publications),
+                )
             } catch {
                 // Non-fatal — consolidated cache is the fallback
             }
@@ -279,17 +276,11 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     // Final write
     const expiresAt = now + CACHE_EXPIRY_MS
 
-    await put(CACHE_FILENAME, JSON.stringify({ publications, expiresAt }), {
-        access: 'public',
-        addRandomSuffix: false,
-    })
+    await putPubMedObject(CACHE_FILENAME, JSON.stringify({ publications, expiresAt }), 'no-store')
 
     metadata.lastRunCompleted = new Date().toISOString()
 
-    await put(METADATA_FILENAME, JSON.stringify(metadata), {
-        access: 'public',
-        addRandomSuffix: false,
-    })
+    await putPubMedObject(METADATA_FILENAME, JSON.stringify(metadata), 'no-store')
 
     info(`Stored PubMed data in cache until ${new Date(expiresAt).toLocaleString()}`)
 
@@ -358,17 +349,13 @@ async function saveCheckpoint(
     try {
         const expiresAt = Date.now() + CACHE_EXPIRY_MS
 
-        await put(
+        await putPubMedObject(
             CACHE_FILENAME,
             JSON.stringify({ publications, expiresAt }),
-            { access: 'public', addRandomSuffix: false },
+            'no-store',
         )
 
-        await put(
-            METADATA_FILENAME,
-            JSON.stringify(metadata),
-            { access: 'public', addRandomSuffix: false },
-        )
+        await putPubMedObject(METADATA_FILENAME, JSON.stringify(metadata), 'no-store')
 
         info(`Checkpoint saved (${fetchProgress}/${fetchTotal} fetched)`)
     } catch (error) {
