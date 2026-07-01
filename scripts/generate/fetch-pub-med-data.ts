@@ -31,7 +31,7 @@ export interface GetPublicationsOptions {
     timeoutMs?: number
 }
 
-const FRESHNESS_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7   // 7 days
+const FRESHNESS_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 5   // 5 days (< the weekly schedule, so scheduled runs still refresh everything but a failed run can resume)
 const GRACE_PERIOD_MS = 1000 * 60 * 60 * 24 * 45          // 45 days
 const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24 * 45          // 45 days (matches grace period)
 const CHECKPOINT_INTERVAL = 100
@@ -144,14 +144,36 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
 
     const now = Date.now()
 
-    // Always fetch every grant. Freshness-based skipping made sense when this
-    // ran on every deploy build; as a dedicated weekly job it should refresh all
-    // publications on each run. The existing cache is still loaded above so the
-    // grace-period fallback can retain publications for any grant whose fetch
-    // fails this run (see the failure branch below and filterToCurrentGrants).
-    const grantsToFetch = grantIds
+    // Skip grants already fetched within FRESHNESS_THRESHOLD_MS. This is a resume
+    // mechanism, not build-time freshness: the threshold is shorter than the
+    // weekly schedule, so a scheduled run (~7 days on) re-fetches every grant, but
+    // a re-run after a failed/interrupted run skips the grants already done this
+    // cycle and catches up on the rest instead of starting over. Set
+    // FETCH_PUBMED_DATA to force a full refetch regardless.
+    const grantsToFetch: string[] = []
+    let freshCount = 0
 
-    info(`PubMed data: fetching all ${grantsToFetch.length} grants`)
+    for (const id of grantIds) {
+        const meta = metadata.grants[id]
+        const lastCheckedMs = meta?.lastChecked ? new Date(meta.lastChecked).getTime() : 0
+        const age = now - lastCheckedMs
+        const isFresh = age < FRESHNESS_THRESHOLD_MS
+        const hasData = id in publications
+
+        if (hasData && isFresh && !process.env.FETCH_PUBMED_DATA) {
+            freshCount++
+        } else {
+            grantsToFetch.push(id)
+        }
+    }
+
+    // Nothing outstanding (e.g. a re-run right after a completed run)
+    if (grantsToFetch.length === 0) {
+        info(`All ${freshCount} grants already fetched recently, using cache`)
+        return filterToCurrentGrants(publications, grantIds, metadata, now)
+    }
+
+    info(`PubMed data: ${freshCount} recently fetched, ${grantsToFetch.length} to fetch`)
 
     // Fetch loop with checkpoints, circuit breaker, and timeout
     let failureCount = 0
@@ -245,6 +267,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     // Log summary
     const oldestFallbackAge = getOldestFallbackAge(grantsToFetch, metadata, publications, now)
     const summaryParts = [
+        `${freshCount} recently fetched`,
         `${refreshedCount} refreshed`,
     ]
     if (cachedFallbackCount > 0) {
