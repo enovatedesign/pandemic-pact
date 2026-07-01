@@ -103,18 +103,19 @@ async function main() {
             await writeGrantsLastUsedFileId(dataSources.FIGSHARE_GRANTS_FILE_ID)
         }
 
-        const grantIds = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
+        const { grantIds, changedIds } = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
 
         // Verify the grant upload if it was performed
         if (shouldUploadConditionsMet && grantIds && grantIds.length > 0) {
-            const stringGrantIds = grantIds.flat().map(id => String(id)).filter(id => typeof id === 'string');
+            const stringGrantIds = grantIds.map(id => String(id)).filter(id => typeof id === 'string');
             await verifyGrants(stringGrantIds)
         }
 
         // Re-index OpenSearch. PubMed publication counts are refreshed by the
         // weekly GitLab job, so prepareSearch runs without counts here and
-        // preserves any existing PublicationCount values.
-        await prepareSearch()
+        // preserves any existing PublicationCount values. changedIds (when set)
+        // limits the upsert to changed grants; removed grants are pruned anyway.
+        await prepareSearch(undefined, changedIds)
 
         await prepareGrantIdsForSitemap()
 

@@ -10,8 +10,8 @@
  * lives on Vercel Blob and is refreshed by the weekly job. Grant + cache data
  * is what this module migrates.
  */
-import { uploadGrantsToBlob } from './upload-grants-to-blob'
-import { uploadGrantsToS3 } from './upload-grants-to-s3'
+import { uploadGrantsToBlob, uploadGrantsIncrementalToBlob } from './upload-grants-to-blob'
+import { uploadGrantsToS3, uploadGrantsIncrementalToS3 } from './upload-grants-to-s3'
 import { uploadStaticFilesToBlob } from './upload-static-files-to-blob'
 import { uploadStaticFilesToS3 } from './upload-static-files-to-s3'
 import { downloadStaticFilesFromBlob } from './download-static-files-from-blob'
@@ -40,6 +40,20 @@ export async function uploadGrants(options: {
     grants: Array<{ id: string; data: any }>
 }): Promise<void> {
     return useS3() ? uploadGrantsToS3(options) : uploadGrantsToBlob(options)
+}
+
+/**
+ * Incremental upload: PUT only changed grants, DELETE only removed ones, and
+ * (unlike uploadGrants) do NOT orphan-sweep. Use only when a previous manifest
+ * exists; first runs must use uploadGrants so the orphan sweep reconciles state.
+ */
+export async function uploadGrantsIncremental(options: {
+    changed: Array<{ id: string; data: any }>
+    removedIds: string[]
+}): Promise<void> {
+    return useS3()
+        ? uploadGrantsIncrementalToS3(options)
+        : uploadGrantsIncrementalToBlob(options)
 }
 
 export async function uploadStaticFiles(): Promise<void> {

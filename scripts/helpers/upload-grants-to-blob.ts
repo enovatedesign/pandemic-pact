@@ -129,3 +129,93 @@ export async function uploadGrantsToBlob(
 
     info(`Successfully uploaded ${uploaded} grants to Vercel Blob Storage`)
 }
+
+export interface UploadGrantsIncrementalToBlobOptions {
+    changed: Array<{ id: string; data: any }>
+    removedIds: string[]
+    batchSize?: number
+}
+
+/**
+ * Incremental upload: PUT only the changed/new grants and DELETE only the
+ * removed ones. Does NOT run the orphan sweep (that would delete every unchanged
+ * grant, since only the changed subset is passed). Blob equivalent of
+ * uploadGrantsIncrementalToS3.
+ */
+export async function uploadGrantsIncrementalToBlob(
+    options: UploadGrantsIncrementalToBlobOptions,
+): Promise<void> {
+    const { changed, removedIds, batchSize = 10 } = options
+
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        warn('BLOB_READ_WRITE_TOKEN not found, skipping blob upload')
+        return
+    }
+
+    const branchName = getBranchName()
+    info(
+        `Incremental Blob upload for branch "${branchName}": ${changed.length} changed, ${removedIds.length} removed`,
+    )
+
+    let uploaded = 0
+    const errors: Array<{ id: string; error: string }> = []
+    const maxRetries = 3
+    const rateLimitDelay = 60_000
+
+    const uploadGrant = async (grant: { id: string; data: any }): Promise<void> => {
+        const pathname = `${branchName}/grants/${grant.id}.json`
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                await put(pathname, JSON.stringify(grant.data), {
+                    access: 'public',
+                    addRandomSuffix: false,
+                })
+                uploaded++
+                return
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error)
+                const isRateLimited = errorMessage.toLowerCase().includes('too many requests')
+                if (isRateLimited && attempt < maxRetries) {
+                    warn(`Rate limited uploading grant ${grant.id}, waiting ${rateLimitDelay / 1000}s before retry (attempt ${attempt}/${maxRetries})`)
+                    await new Promise(resolve => setTimeout(resolve, rateLimitDelay))
+                    continue
+                }
+                errors.push({ id: grant.id, error: errorMessage })
+                warn(`Failed to upload grant ${grant.id}: ${errorMessage}`)
+                return
+            }
+        }
+    }
+
+    for (let i = 0; i < changed.length; i += batchSize) {
+        const batch = changed.slice(i, i + batchSize)
+        await Promise.all(batch.map(uploadGrant))
+        if (i + batchSize < changed.length) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+        }
+    }
+
+    if (removedIds.length > 0) {
+        info(`Deleting ${removedIds.length} removed grant files from Blob...`)
+        const paths = removedIds.map(id => `${branchName}/grants/${id}.json`)
+        const deleteBatchSize = 100
+        for (let i = 0; i < paths.length; i += deleteBatchSize) {
+            try {
+                await del(paths.slice(i, i + deleteBatchSize))
+            } catch (e) {
+                warn('Failed to delete some removed grant files: ' + (e instanceof Error ? e.message : String(e)))
+            }
+        }
+    }
+
+    if (errors.length > 0) {
+        const failureRate = changed.length > 0 ? errors.length / changed.length : 0
+        if (failureRate > 0.01) {
+            throw new Error(
+                `Too many grant uploads failed: ${errors.length}/${changed.length} (${(failureRate * 100).toFixed(1)}%). Aborting to prevent data loss.`,
+            )
+        }
+    }
+
+    info(`Incremental Blob upload complete: ${uploaded} uploaded, ${removedIds.length} deleted`)
+}

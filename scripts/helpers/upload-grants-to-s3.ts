@@ -78,9 +78,84 @@ export async function uploadGrantsToS3(
         }
     }
 
-    // Full rebuild: invalidate the whole grants prefix. Phase 3 will invalidate
-    // only the changed keys.
+    // Full rebuild: invalidate the whole grants prefix. The incremental path
+    // below invalidates only the changed keys.
     await invalidateCloudFront([`/${branchName}/grants/*`])
 
     info(`Successfully uploaded ${uploaded} grants to S3`)
+}
+
+export interface UploadGrantsIncrementalToS3Options {
+    changed: Array<{ id: string; data: any }>
+    removedIds: string[]
+    concurrency?: number
+}
+
+/**
+ * Incremental upload: PUT only the changed/new grants and DELETE only the
+ * removed ones. Does NOT run the orphan sweep (that would delete every unchanged
+ * grant, since only the changed subset is passed). CloudFront invalidation is
+ * scoped to exactly the touched keys, falling back to a prefix wildcard when the
+ * change set is large.
+ */
+export async function uploadGrantsIncrementalToS3(
+    options: UploadGrantsIncrementalToS3Options,
+): Promise<void> {
+    const { changed, removedIds, concurrency = 64 } = options
+
+    const branchName = getBranchName()
+    info(
+        `Incremental S3 upload for branch "${branchName}": ${changed.length} changed, ${removedIds.length} removed`,
+    )
+
+    const errors: Array<{ id: string; error: string }> = []
+    let uploaded = 0
+
+    await mapWithConcurrency(changed, concurrency, async grant => {
+        const key = `${branchName}/grants/${grant.id}.json`
+        try {
+            await s3PutObject(key, JSON.stringify(grant.data))
+            uploaded++
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error)
+            errors.push({ id: grant.id, error: message })
+            warn(`Failed to upload grant ${grant.id}: ${message}`)
+        }
+    })
+
+    if (removedIds.length > 0) {
+        info(`Deleting ${removedIds.length} removed grant files from S3...`)
+        await s3DeleteObjects(
+            removedIds.map(id => `${branchName}/grants/${id}.json`),
+        )
+    }
+
+    if (errors.length > 0) {
+        warn(`Failed to upload ${errors.length} of ${changed.length} changed grants:`)
+        errors.slice(0, 10).forEach(({ id, error }) => warn(`  ${id}: ${error}`))
+        const failureRate = changed.length > 0 ? errors.length / changed.length : 0
+        if (failureRate > 0.01) {
+            throw new Error(
+                `Too many grant uploads failed: ${errors.length}/${changed.length} (${(failureRate * 100).toFixed(1)}%). Aborting to prevent data loss.`,
+            )
+        }
+    }
+
+    // Invalidate only the touched keys. CloudFront limits paths per request and
+    // bills per path, so for large change sets fall back to a single wildcard.
+    const touched = changed.length + removedIds.length
+    if (touched > 0) {
+        if (touched > 1000) {
+            await invalidateCloudFront([`/${branchName}/grants/*`])
+        } else {
+            await invalidateCloudFront([
+                ...changed.map(g => `/${branchName}/grants/${g.id}.json`),
+                ...removedIds.map(id => `/${branchName}/grants/${id}.json`),
+            ])
+        }
+    }
+
+    info(
+        `Incremental S3 upload complete: ${uploaded} uploaded, ${removedIds.length} deleted`,
+    )
 }

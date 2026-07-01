@@ -11,7 +11,10 @@ import { execSync } from 'child_process'
 import { Grant } from '../types/generate'
 import { splitGrantIds } from '../../app/helpers/pubmed-ids'
 
-export default async function prepareSearch(publicationCounts?: Record<string, number>) {
+export default async function prepareSearch(
+    publicationCounts?: Record<string, number>,
+    changedIds?: string[],
+) {
     if (process.env.SKIP_OPENSEARCH_INDEXING) {
         warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
         return
@@ -84,14 +87,31 @@ export default async function prepareSearch(publicationCounts?: Record<string, n
     const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
     const allGrants: Grant[] = JSON.parse(jsonBuffer.toString())
 
+    // When a changed-id set is provided, only (re)upsert those grants. Removed
+    // grants are handled by the prune step below, which always works against the
+    // full data set. An undefined set means reindex everything (full reindex).
+    const grantsToIndex =
+        changedIds === undefined
+            ? allGrants
+            : (() => {
+                  const changedSet = new Set(changedIds)
+                  return allGrants.filter((grant: any) =>
+                      changedSet.has(grant.GrantID),
+                  )
+              })()
+
+    if (changedIds !== undefined) {
+        info(`Incremental index: upserting ${grantsToIndex.length} changed grant(s)`)
+    }
+
     const chunkSize = 500
 
-    const chunkedGrants = _.chunk(allGrants, chunkSize)
+    const chunkedGrants = _.chunk(grantsToIndex, chunkSize)
 
     for (let i = 0; i < chunkedGrants.length; i++) {
         // Output progress every 500 documents
         if (i > 0) {
-            info(`Indexed ${i * chunkSize}/${allGrants.length} documents`)
+            info(`Indexed ${i * chunkSize}/${grantsToIndex.length} documents`)
         }
 
         const grants = chunkedGrants[i]
