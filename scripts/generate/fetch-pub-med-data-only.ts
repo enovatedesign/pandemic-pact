@@ -10,8 +10,13 @@ import prepareSearch from './prepare-search'
 
     const { useCachedFiles } = await downloadAndParseDataSheet(true)
 
+    // On the fresh path, regenerate grants + select-options (which prepareSearch
+    // reads). On the cached path both are restored from S3, and the raw
+    // data/download/dictionary.json that prepareSelectOptions needs is NOT
+    // downloaded — so only run these when we actually fetched fresh data.
     if (!useCachedFiles) {
         await prepareGrants()
+        await prepareSelectOptions()
     }
 
     // CI environment has no meaningful timeout, so use aggressive retry
@@ -24,9 +29,6 @@ import prepareSearch from './prepare-search'
     })
 
     // Deploy builds no longer fetch PubMed, so this weekly job is now the only
-    // place the OpenSearch PublicationCount is refreshed. prepareSearch reads
-    // ./data/dist/select-options.json, so make sure it exists before indexing.
-    await prepareSelectOptions()
-
+    // place the OpenSearch PublicationCount is refreshed.
     await prepareSearch(publicationCounts)
 })()
