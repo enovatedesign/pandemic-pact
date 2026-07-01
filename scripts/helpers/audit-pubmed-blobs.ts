@@ -1,10 +1,9 @@
-import { put } from '@vercel/blob'
 import { title, info, warn } from './log'
 import { pubmedFileName } from '../../app/helpers/pubmed-ids'
 import { getPubMedLinks, PubMedLinkResult } from '../generate/fetch-pub-med-data'
 import { RetryOptions } from './pubmed-retry'
+import { putPubMedObject, readPubMedObjectString } from './storage'
 
-const BLOB_BASE_URL = process.env.BLOB_BASE_URL || 'https://b8xcmr4pduujyuoo.public.blob.vercel-storage.com'
 const CACHE_FILENAME = 'cached-pub-med-publications.json'
 const BATCH_SIZE = 50
 
@@ -26,14 +25,14 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
     let cache: { publications: { [key: string]: any[] }; expiresAt?: number }
 
     try {
-        const cacheResponse = await fetch(`${BLOB_BASE_URL}/${CACHE_FILENAME}`)
+        const cacheBody = await readPubMedObjectString(CACHE_FILENAME)
 
-        if (!cacheResponse.ok) {
-            warn(`Cannot load consolidated PubMed cache: ${cacheResponse.status} ${cacheResponse.statusText}`)
+        if (!cacheBody) {
+            warn('Cannot load consolidated PubMed cache')
             return
         }
 
-        cache = await cacheResponse.json()
+        cache = JSON.parse(cacheBody)
 
         if (!cache.publications) {
             warn('Consolidated cache has no publications key')
@@ -61,12 +60,11 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
 
         const results = await Promise.all(
             batch.map(async (id) => {
-                const url = `${BLOB_BASE_URL}/pubmed/${pubmedFileName(id)}.json`
                 try {
-                    const response = await fetch(url)
-                    if (!response.ok) return { id, status: 'missing' as const }
+                    const body = await readPubMedObjectString(`pubmed/${pubmedFileName(id)}.json`)
+                    if (!body) return { id, status: 'missing' as const }
 
-                    const blobPubs: any[] = await response.json()
+                    const blobPubs: any[] = JSON.parse(body)
                     const cachePubs = cache.publications[id]
                     const cacheCount = Array.isArray(cachePubs) ? cachePubs.length : 0
 
@@ -152,10 +150,10 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
 
             if (result.success) {
                 try {
-                    await put(`pubmed/${pubmedFileName(id)}.json`, JSON.stringify(result.publications), {
-                        access: 'public',
-                        addRandomSuffix: false,
-                    })
+                    await putPubMedObject(
+                        `pubmed/${pubmedFileName(id)}.json`,
+                        JSON.stringify(result.publications),
+                    )
                     cache.publications[id] = result.publications
                     if (localPublications && id in localPublications) {
                         localPublications[id] = result.publications
@@ -181,10 +179,7 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
     // 6. Write updated consolidated cache
     if (cacheUpdated) {
         try {
-            await put(CACHE_FILENAME, JSON.stringify(cache), {
-                access: 'public',
-                addRandomSuffix: false,
-            })
+            await putPubMedObject(CACHE_FILENAME, JSON.stringify(cache), 'no-store')
             info('Updated consolidated cache')
         } catch {
             warn('Failed to update consolidated cache')

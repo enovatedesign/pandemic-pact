@@ -6,10 +6,13 @@
  * unified functions below so the migration can be flipped per-environment and
  * rolled back instantly.
  *
- * NOTE: PubMed data (pubmed/* keys) is not yet routed through here — it still
- * lives on Vercel Blob and is refreshed by the weekly job. Grant + cache data
- * is what this module migrates.
+ * Covers grant files, the cache artefacts, the freshness marker/manifest, and
+ * the PubMed objects (pubmed/* + the consolidated cache/metadata), which the
+ * weekly job writes and the grant pages read.
  */
+import { put } from '@vercel/blob'
+import { s3PutObject, s3GetObjectString } from './s3-client'
+import { warn } from './log'
 import { uploadGrantsToBlob, uploadGrantsIncrementalToBlob } from './upload-grants-to-blob'
 import { uploadGrantsToS3, uploadGrantsIncrementalToS3 } from './upload-grants-to-s3'
 import { uploadStaticFilesToBlob } from './upload-static-files-to-blob'
@@ -74,4 +77,50 @@ export async function readGrantsLastUsedFileId(): Promise<number | null> {
 
 export async function writeGrantsLastUsedFileId(id: number): Promise<void> {
     return useS3() ? writeGrantsLastUsedFileIdS3(id) : writeBlobMarker(id)
+}
+
+/**
+ * Write a PubMed object. Keys are root-level (NOT branch-scoped), matching the
+ * runtime read paths. Pass cacheControl 'no-store' for the consolidated cache /
+ * metadata (read fresh by the weekly job); leave it default for per-grant files
+ * (served at runtime with their own revalidate window).
+ */
+export async function putPubMedObject(
+    key: string,
+    body: string,
+    cacheControl?: string,
+): Promise<void> {
+    if (useS3()) {
+        await s3PutObject(key, body, 'application/json', cacheControl)
+        return
+    }
+
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        warn('BLOB_READ_WRITE_TOKEN not set, skipping PubMed blob write')
+        return
+    }
+
+    await put(key, body, {
+        access: 'public',
+        addRandomSuffix: false,
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+    })
+}
+
+/**
+ * Read a PubMed object as a string, or null if absent. On S3 this uses GetObject
+ * (never CDN-stale), which matters for the consolidated cache/metadata that the
+ * weekly job's freshness logic depends on.
+ */
+export async function readPubMedObjectString(key: string): Promise<string | null> {
+    if (useS3()) {
+        return s3GetObjectString(key)
+    }
+
+    const baseUrl = process.env.BLOB_BASE_URL
+    if (!baseUrl) return null
+
+    const res = await fetch(`${baseUrl}/${key}`)
+    if (!res.ok) return null
+    return res.text()
 }
