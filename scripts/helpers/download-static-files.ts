@@ -6,12 +6,12 @@ import { assetBaseUrl } from './s3-client'
 
 /**
  * Downloads cached static files from S3 (via the CloudFront read URL) for the
- * cached build path. Mirrors downloadStaticFilesFromBlob, including the
- * re-explode of select-options.json into per-key files.
+ * cached build path, including the re-explode of select-options.json into
+ * per-key files.
  * Returns false (rather than throwing) if any file is missing, so the caller
  * can fall back to a fresh fetch.
  */
-export async function downloadStaticFilesFromS3(): Promise<boolean> {
+export async function downloadStaticFiles(): Promise<boolean> {
     const baseUrl = assetBaseUrl()
 
     const branchName = getBranchName()

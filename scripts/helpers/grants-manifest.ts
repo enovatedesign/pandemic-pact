@@ -1,7 +1,5 @@
 import crypto from 'crypto'
-import { put } from '@vercel/blob'
 import { getBranchName } from './get-branch-name'
-import { useS3 } from './storage'
 import { s3GetObjectString, s3PutObject } from './s3-client'
 import { warn } from './log'
 
@@ -19,23 +17,13 @@ export function hashGrant(jsonString: string): string {
 }
 
 /**
- * Reads the previous manifest. From S3 (GetObject — never CDN-stale) when on the
- * S3 backend, otherwise from Blob over HTTP. Returns {} when absent or invalid,
- * which the caller treats as "no previous state — do a full upload".
+ * Reads the previous manifest from S3 (GetObject — never CDN-stale). Returns {}
+ * when absent or invalid, which the caller treats as "no previous state — do a
+ * full upload".
  */
 export async function readManifest(): Promise<GrantsManifest> {
     try {
-        let body: string | null = null
-
-        if (useS3()) {
-            body = await s3GetObjectString(manifestKey())
-        } else {
-            const baseUrl = process.env.BLOB_BASE_URL
-            if (!baseUrl) return {}
-            const res = await fetch(`${baseUrl}/${manifestKey()}`)
-            if (!res.ok) return {}
-            body = await res.text()
-        }
+        const body = await s3GetObjectString(manifestKey())
 
         if (!body) return {}
         const data = JSON.parse(body)
@@ -54,20 +42,6 @@ export async function readManifest(): Promise<GrantsManifest> {
 export async function writeManifest(manifest: GrantsManifest): Promise<void> {
     const body = JSON.stringify(manifest)
 
-    if (useS3()) {
-        // no-store so the gate never reads a CDN-cached manifest between builds
-        await s3PutObject(manifestKey(), body, 'application/json', 'no-store')
-        return
-    }
-
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        warn('BLOB_READ_WRITE_TOKEN not set, skipping manifest write')
-        return
-    }
-
-    await put(manifestKey(), body, {
-        access: 'public',
-        addRandomSuffix: false,
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-    })
+    // no-store so the gate never reads a CDN-cached manifest between builds
+    await s3PutObject(manifestKey(), body, 'application/json', 'no-store')
 }

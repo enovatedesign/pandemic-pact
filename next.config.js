@@ -17,18 +17,15 @@ const nextConfig = {
         ignoreBuildErrors: false,
     },
     env: {
-        // Expose branch name at runtime for blob storage paths
+        // Expose branch name at runtime for remote storage paths
         NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
         NEXT_PUBLIC_CI_COMMIT_REF_NAME: process.env.CI_COMMIT_REF_NAME,
     },
     async rewrites() {
-        // Read base for the public /grants/:id.json API: S3/CloudFront when
-        // STORAGE_BACKEND=s3, otherwise Vercel Blob.
-        const assetBaseUrl = process.env.STORAGE_BACKEND === 's3'
-            ? process.env.ASSET_BASE_URL
-            : process.env.BLOB_BASE_URL
+        // Read base for the public /grants/:id.json API: S3/CloudFront.
+        const assetBaseUrl = process.env.ASSET_BASE_URL
 
-        if (process.env.USE_BLOB_STORAGE === 'true' && assetBaseUrl) {
+        if (process.env.USE_REMOTE_STORAGE === 'true' && assetBaseUrl) {
             const branch = process.env.VERCEL_GIT_COMMIT_REF || process.env.CI_COMMIT_REF_NAME || 'master'
             const branchName = branch
                 .replace(/^refs\/heads\//, '')

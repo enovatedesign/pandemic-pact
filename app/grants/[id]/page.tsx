@@ -23,7 +23,7 @@ type Props = {
 };
 
 /**
- * Get branch name for runtime blob storage paths
+ * Get branch name for runtime remote storage paths
  */
 const getBranchNameForRuntime = (): string => {
     const ciBranch =
@@ -53,18 +53,16 @@ const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
 }
 
 const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> => {
-    const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
+    const useRemoteStorage = process.env.USE_REMOTE_STORAGE === 'true'
     const encoded = pubmedFileName(pubMedGrantId)
 
-    if (useBlobStorage) {
-        // Fetch from remote storage (S3/CloudFront when STORAGE_BACKEND=s3,
-        // otherwise Vercel Blob). PubMed keys are not branch-scoped.
-        const baseUrl = process.env.STORAGE_BACKEND === 's3'
-            ? process.env.ASSET_BASE_URL
-            : process.env.BLOB_BASE_URL
+    if (useRemoteStorage) {
+        // Fetch from remote storage (S3/CloudFront). PubMed keys are not
+        // branch-scoped.
+        const baseUrl = process.env.ASSET_BASE_URL
 
         if (!baseUrl) {
-            console.error('No storage base URL set (ASSET_BASE_URL / BLOB_BASE_URL) but USE_BLOB_STORAGE is true (loadPubMedData)')
+            console.error('No storage base URL set (ASSET_BASE_URL) but USE_REMOTE_STORAGE is true (loadPubMedData)')
             return []
         }
 
@@ -99,17 +97,14 @@ const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> 
 }
 
 const loadGrant = async (id: string) => {
-    const useBlobStorage = process.env.USE_BLOB_STORAGE === 'true'
-    
-    if (useBlobStorage) {
-        // Fetch from remote storage (S3/CloudFront when STORAGE_BACKEND=s3,
-        // otherwise Vercel Blob).
-        const baseUrl = process.env.STORAGE_BACKEND === 's3'
-            ? process.env.ASSET_BASE_URL
-            : process.env.BLOB_BASE_URL
+    const useRemoteStorage = process.env.USE_REMOTE_STORAGE === 'true'
+
+    if (useRemoteStorage) {
+        // Fetch from remote storage (S3/CloudFront).
+        const baseUrl = process.env.ASSET_BASE_URL
 
         if (!baseUrl) {
-            console.error('No storage base URL set (ASSET_BASE_URL / BLOB_BASE_URL) but USE_BLOB_STORAGE is true')
+            console.error('No storage base URL set (ASSET_BASE_URL) but USE_REMOTE_STORAGE is true')
             return null
         }
         
@@ -119,13 +114,13 @@ const loadGrant = async (id: string) => {
             const response = await fetch(url, { next: { revalidate: 3600 } })
 
             if (!response.ok) {
-                console.error(`Failed to fetch grant ${id} from blob storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
+                console.error(`Failed to fetch grant ${id} from remote storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
                 return null
             }
-            
+
             return await response.json()
         } catch (error) {
-            console.error(`Error fetching grant ${id} from blob storage:`, error)
+            console.error(`Error fetching grant ${id} from remote storage:`, error)
             return null
         }
     } else {

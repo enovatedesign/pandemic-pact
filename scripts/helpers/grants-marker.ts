@@ -1,5 +1,5 @@
-import { put } from '@vercel/blob'
 import { getBranchName } from './get-branch-name'
+import { s3PutObject, s3GetObjectString } from './s3-client'
 import { warn } from './log'
 
 const MARKER_FILENAME = 'grants-last-used-file-id.json'
@@ -8,30 +8,24 @@ function markerKey(): string {
     return `${getBranchName()}/cache/${MARKER_FILENAME}`
 }
 
+/**
+ * Reads the marker directly from S3 (GetObject) rather than via CloudFront, so
+ * the cache-gate decision is never made against a stale CDN-cached value.
+ */
 export async function readGrantsLastUsedFileId(): Promise<number | null> {
-    const baseUrl = process.env.BLOB_BASE_URL
-
-    if (!baseUrl) return null
-
     try {
-        const response = await fetch(`${baseUrl}/${markerKey()}`)
-        if (!response.ok) return null
-
-        const data = await response.json()
+        const body = await s3GetObjectString(markerKey())
+        if (!body) return null
+        const data = JSON.parse(body)
         return typeof data?.id === 'number' ? data.id : null
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
-        warn(`Failed to read grants marker from blob: ${msg}`)
+        warn(`Failed to read grants marker from S3: ${msg}`)
         return null
     }
 }
 
 export async function writeGrantsLastUsedFileId(id: number): Promise<void> {
-    if (!process.env.BLOB_READ_WRITE_TOKEN) return
-
-    await put(markerKey(), JSON.stringify({ id }), {
-        access: 'public',
-        addRandomSuffix: false,
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-    })
+    // no-store so a stale marker is never served/read between builds
+    await s3PutObject(markerKey(), JSON.stringify({ id }), 'application/json', 'no-store')
 }

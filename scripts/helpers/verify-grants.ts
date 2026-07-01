@@ -4,9 +4,9 @@ import { assetBaseUrl } from './s3-client'
 
 /**
  * Verifies that a sample of grant files are accessible from S3 (via CloudFront).
- * Mirrors verifyBlobGrants. Throws if not all sampled grants are accessible.
+ * Throws if not all sampled grants are accessible.
  */
-export async function verifyGrantsS3(
+export async function verifyGrants(
     grantIds: string[],
     sampleSize: number = 50,
 ): Promise<boolean> {
