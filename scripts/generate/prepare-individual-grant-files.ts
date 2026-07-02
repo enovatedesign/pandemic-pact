@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
-import zlib from 'zlib'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info } from '../helpers/log'
+import readGrantsDist from '../helpers/read-grants-dist'
 import { uploadGrants, uploadGrantsIncremental } from '../helpers/storage'
 import {
     readManifest,
@@ -27,10 +27,7 @@ export default async function prepareIndividualGrantFiles(
         './data/dist/select-options.json',
     )
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const sourceGrants: ProcessedGrant[] = JSON.parse(jsonBuffer.toString())
+    const sourceGrants: ProcessedGrant[] = readGrantsDist()
 
     const outputPath = `./public/grants/`
     fs.emptyDirSync(outputPath)

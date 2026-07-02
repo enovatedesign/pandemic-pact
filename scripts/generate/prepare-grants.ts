@@ -16,6 +16,8 @@ import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
 import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
 import { resolveTrendStartYear } from '../helpers/trend-start-year'
+import { is100DaysMissionGrant } from './prepare-100-days-mission'
+import { isPandemicIntelligenceGrant } from './prepare-pandemic-inteligence'
 
 export default async function prepareGrants() {
     title('Preparing grants')
@@ -63,13 +65,27 @@ export default async function prepareGrants() {
     const pathname = './data/dist/grants.json'
     const writer = createJsonArrayWriteStream(pathname)
 
+    // Collect the 100 Days Mission and Pandemic Intelligence subsets during this
+    // single stream pass, so those steps don't each re-read the full 1.1 GB raw
+    // file. Clones are captured below BEFORE the grant_title_eng normalisation so
+    // those steps see the same raw values as when they read the file themselves.
+    const hundredDaysMissionGrants: RawGrant[] = []
+    const pandemicIntelligenceGrants: RawGrant[] = []
+
     let processedCount = 0
 
     await streamLargeJson('./data/download/grants.json', (rawGrant: RawGrant) => {
         processedCount++
-        
+
         if (processedCount % 1000 === 0) {
             info(`Processed ${processedCount} grants`)
+        }
+
+        if (is100DaysMissionGrant(rawGrant)) {
+            hundredDaysMissionGrants.push({ ...rawGrant })
+        }
+        if (isPandemicIntelligenceGrant(rawGrant)) {
+            pandemicIntelligenceGrants.push({ ...rawGrant })
         }
 
         // If the grant_title_eng field is empty or undefined, copy the grant_title_original field into it
@@ -177,10 +193,10 @@ export default async function prepareGrants() {
     fs.unlinkSync(pathname)
     
     printWrittenFileStats(gzippedPath)
-    
+
     info(`Processed ${processedCount} grants total`)
-    
-    return Promise.resolve()
+
+    return { hundredDaysMissionGrants, pandemicIntelligenceGrants }
 }
 
 function normaliseGrantYear(raw: unknown): string {

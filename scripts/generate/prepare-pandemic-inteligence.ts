@@ -7,24 +7,32 @@ import { RawGrant } from "../types/generate"
 import { convertCheckBoxFieldToArray, convertRawGrantKeyToValuesArray, convertSourceKeysToOurKeys } from '../helpers/key-mapping'
 import { resolveTrendStartYear } from '../helpers/trend-start-year'
 
-export default async function preparePandemicIntelligence() {
+/**
+ * Predicate for the Pandemic Intelligence subset. Exported so prepareGrants can
+ * collect the same grants during its single stream pass, avoiding a second full
+ * read of the 1.1 GB raw file here.
+ */
+export const isPandemicIntelligenceGrant = (grant: RawGrant): boolean =>
+    parseInt(grant['pandint_themes_flag']) === 1
+
+export default async function preparePandemicIntelligence(rawGrants?: RawGrant[]) {
     title('Preparing Pandemic Intelligence')
 
-    const rawGrants = await readLargeJson('./data/download/grants.json') as RawGrant[]
-    
+    // Reuse the subset collected during prepareGrants' stream pass when provided;
+    // otherwise fall back to reading the full raw file (standalone invocation).
+    const grants = rawGrants ?? (await readLargeJson('./data/download/grants.json') as RawGrant[])
+
     const headings: string[] = fs.readJsonSync(
         './data/download/grants-headings.json',
     )
-    
+
     const checkBoxFields = uniq(headings
         .filter(heading => heading.includes('___'))
         .map(heading => heading.split('___')[0]),
     )
 
     // Filter the grants down to only those where the pandint_themes_flag variable is set to '1'
-    const pandemicIntelligenceGrants = rawGrants.filter(grant => 
-        parseInt(grant['pandint_themes_flag']) === 1
-    ).map(grant => {
+    const pandemicIntelligenceGrants = grants.filter(isPandemicIntelligenceGrant).map(grant => {
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(field => [
                 field,

@@ -71,7 +71,9 @@ async function main() {
         // existing PublicationCount values when none are passed.
         await prepareSearch()
     } else {
-        await prepareGrants()
+        // prepareGrants collects the 100DM/PI subsets during its single stream
+        // pass so those steps don't each re-read the full 1.1 GB raw file.
+        const { hundredDaysMissionGrants, pandemicIntelligenceGrants } = await prepareGrants()
 
         prepareSelectOptions()
 
@@ -81,11 +83,11 @@ async function main() {
 
         prepareMap()
 
-        await prepare100DaysMission()
+        await prepare100DaysMission(hundredDaysMissionGrants)
 
         await prepare100DaysMissionSelectOptions()
 
-        await preparePandemicIntelligence()
+        await preparePandemicIntelligence(pandemicIntelligenceGrants)
 
         await preparePandemicIntelligenceSelectOptions()
 

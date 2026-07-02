@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import zlib from 'zlib'
 import { title, printWrittenFileStats } from '../helpers/log'
+import readGrantsDist from '../helpers/read-grants-dist'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
@@ -20,10 +20,7 @@ export default function prepareSelectOptions() {
         './data/download/research-category-mapping.json',
     )
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const grants: any[] = JSON.parse(jsonBuffer.toString())
+    const grants: any[] = readGrantsDist()
 
     // Merge options from the dictionary checkbox fields and the research category mapping
     // fields into an array of key-value pairs of the same format
