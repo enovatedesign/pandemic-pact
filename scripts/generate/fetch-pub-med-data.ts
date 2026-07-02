@@ -83,7 +83,7 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
     // Optionally audit individual object files to find and repair any that are missing.
     // Must run BEFORE building counts so that any corrections are reflected in the
     // publication counts passed to OpenSearch indexing.
-    if (process.env.PUBMED_BLOB_JSON_AUDIT) {
+    if (process.env.PUBMED_JSON_AUDIT) {
         const { auditPubmedObjects } = await import('../helpers/audit-pubmed-objects')
         await auditPubmedObjects(publications)
     }
