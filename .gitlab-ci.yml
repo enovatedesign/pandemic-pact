@@ -24,18 +24,35 @@ deploy_review:
         - npm install --global vercel
         - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
         - |
+            # vercel prints ONLY the deployment URL to stdout; progress and the
+            # trailing "To deploy to production…" hint go to stderr. Capture stdout
+            # only — the old `2>&1 | tail -1` grabbed that hint instead of the URL,
+            # which then made `vercel alias set` fail and marked the whole job failed
+            # even though the deploy itself succeeded.
             DEPLOYMENT_URL=$(vercel deploy \
               --build-env "SEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" \
               --build-env "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME" \
-              --token=$VERCEL_TOKEN 2>&1 | tail -1)
+              --token=$VERCEL_TOKEN)
 
             echo "Deployed to: $DEPLOYMENT_URL"
 
+            # A genuine deploy failure (no URL) should still fail the job.
+            case "$DEPLOYMENT_URL" in
+                https://*) ;;
+                *) echo "Deploy did not return a URL — failing."; exit 1 ;;
+            esac
+
+            # The friendly per-branch alias is a convenience only; never let it fail
+            # the job. Fall back to the unique deployment URL for the environment link.
             ALIAS="${CI_COMMIT_REF_SLUG}.${CI_PROJECT_NAME}.vercel.app"
+            if vercel alias set "$DEPLOYMENT_URL" "$ALIAS" --scope=enovatedesign --token=$VERCEL_TOKEN; then
+                ENVIRONMENT_URL="https://${ALIAS}"
+            else
+                echo "Alias step failed; using the deployment URL for the environment link."
+                ENVIRONMENT_URL="$DEPLOYMENT_URL"
+            fi
 
-            vercel alias set "$DEPLOYMENT_URL" "$ALIAS" --token=$VERCEL_TOKEN
-
-            echo "DYNAMIC_ENVIRONMENT_URL=https://${ALIAS}" > deploy.env
+            echo "DYNAMIC_ENVIRONMENT_URL=${ENVIRONMENT_URL}" > deploy.env
     artifacts:
         reports:
             dotenv: deploy.env
