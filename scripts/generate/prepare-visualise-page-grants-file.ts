@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import zlib from 'zlib'
 import { ProcessedGrant } from '../types/generate'
 import { title, printWrittenFileStats } from '../helpers/log'
+import readGrantsDist from '../helpers/read-grants-dist'
 
 // Filtering and visualisation of grants data for the visualise page
 // doesn't require all the fields in the grants data file, such as
@@ -13,10 +13,7 @@ export default function prepareVisualisePageGrantsFile() {
     title('Preparing optimised visualise-page grants data file')
 
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const sourceGrants: ProcessedGrant[] = JSON.parse(jsonBuffer.toString())
+    const sourceGrants: ProcessedGrant[] = readGrantsDist()
     
     const optimisedGrants: ProcessedGrant[] = sourceGrants.map(grant => {
         return _.pick(grant, [

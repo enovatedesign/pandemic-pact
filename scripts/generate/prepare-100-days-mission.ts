@@ -6,25 +6,33 @@ import readLargeJson from "../helpers/read-large-json"
 import { RawGrant } from "../types/generate"
 import { convertCheckBoxFieldToArray, convertRawGrantKeyToValuesArray, convertSourceKeysToOurKeys } from '../helpers/key-mapping'
 
-export default async function prepare100DaysMission() {
+/**
+ * Predicate for the 100 Days Mission subset. Exported so prepareGrants can
+ * collect the same grants during its single stream pass, avoiding a second full
+ * read of the 1.1 GB raw file here.
+ */
+export const is100DaysMissionGrant = (grant: RawGrant): boolean =>
+    parseInt(grant['hundred_dm_flag']) === 1 ||
+    grant['pactid'] === 'P43011' // Allow missed grant to pass through, updated data to follow
+
+export default async function prepare100DaysMission(rawGrants?: RawGrant[]) {
     title('Preparing 100 Days Mission data')
 
-    const rawGrants = await readLargeJson('./data/download/grants.json') as RawGrant[]
-    
+    // Reuse the subset collected during prepareGrants' stream pass when provided;
+    // otherwise fall back to reading the full raw file (standalone invocation).
+    const grants = rawGrants ?? (await readLargeJson('./data/download/grants.json') as RawGrant[])
+
     const headings: string[] = fs.readJsonSync(
         './data/download/grants-headings.json',
     )
-    
+
     const checkBoxFields = uniq(headings
         .filter(heading => heading.includes('___'))
         .map(heading => heading.split('___')[0]),
     )
-    
+
     // Filter the grants down to only those where the hundred_dm_flag variable is set to '1'
-    const oneHundredDaysMissionGrants = rawGrants.filter(grant => 
-        parseInt(grant['hundred_dm_flag']) === 1 ||
-        grant['pactid'] === 'P43011' // Allow missed grant to pass through, updated data to follow
-    ).map(grant => {
+    const oneHundredDaysMissionGrants = grants.filter(is100DaysMissionGrant).map(grant => {
         const checkBoxFieldValues = Object.fromEntries(
             checkBoxFields.map(field => [
                 field,

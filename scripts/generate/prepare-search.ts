@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import zlib from 'zlib'
 import { title, info, error, warn } from '../helpers/log'
+import readGrantsDist from '../helpers/read-grants-dist'
 import {
     getIndexName,
     getSearchClient,
@@ -82,10 +82,7 @@ export default async function prepareSearch(
 
     info(`Bulk indexing ${indexName} with upserts...`)
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const allGrants: Grant[] = JSON.parse(jsonBuffer.toString())
+    const allGrants: Grant[] = readGrantsDist()
 
     // When a changed-id set is provided, only (re)upsert those grants. Removed
     // grants are handled by the prune step below, which always works against the

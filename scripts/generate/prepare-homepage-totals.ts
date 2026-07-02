@@ -1,17 +1,14 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import zlib from 'zlib'
 import { Grant } from '../types/generate'
 import { title, info, printWrittenFileStats } from '../helpers/log'
+import readGrantsDist from '../helpers/read-grants-dist'
 import { millify } from 'millify'
 
 export default function prepareHomepageTotals() {
     title('Preparing homepage totals')
 
-    const zippedGrantsPath = './data/dist/grants.json.gz'
-    const gzipBuffer = fs.readFileSync(zippedGrantsPath)
-    const jsonBuffer = zlib.gunzipSync(gzipBuffer as any)
-    const grants: Grant[] = JSON.parse(jsonBuffer.toString())
+    const grants: Grant[] = readGrantsDist()
 
     // Calculate and format the total amount of funding in USD
     const rawTotalCommittedUsd = _.sumBy(grants, 'GrantAmountConverted')
