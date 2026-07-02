@@ -10,15 +10,18 @@ interface ParseOptions {
 }
 
 export default async function downloadCsvAndConvertToJson(
-    url: string,
+    source: string,
     outputFileName: string,
     dumpHeadingRow: boolean = false,
     delimiter?: string
 ) {
     const outputPath = `data/download`
-    const csv = await fetch(url).then(res => res.text())
-    
-    info(`Fetched file from ${url}`)
+    const isRemote = /^https?:\/\//.test(source)
+    const csv = isRemote
+        ? await fetch(source).then(res => res.text())
+        : await fs.readFile(source, 'utf8')
+
+    info(`${isRemote ? 'Fetched' : 'Read'} file from ${source}`)
     
     async function streamToJson(
         filePath: string, 

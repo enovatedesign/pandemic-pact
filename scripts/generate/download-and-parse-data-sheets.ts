@@ -57,7 +57,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         }
 
         await downloadCsvAndConvertToJson(
-            dataSources.RESEARCH_CATEGORIES_URL,
+            dataSources.RESEARCH_CATEGORIES_FILE,
             'research-category-mapping',
             false,
             ';'

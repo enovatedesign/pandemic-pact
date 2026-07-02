@@ -23,9 +23,9 @@ main()
 async function main() {
     dotenv.config({ path: './.env.local' })
 
-    // Determine if we should upload to blob storage.
+    // Determine if we should upload to remote storage.
     const isVercelBuild = process.env.VERCEL === '1'
-    const forceUpload = process.env.FORCE_BLOB_UPLOAD === 'true' || process.env.FORCE_S3_UPLOAD === 'true'
+    const forceUpload = process.env.FORCE_UPLOAD === 'true'
     const shouldUploadConditionsMet = isVercelBuild || forceUpload
 
     // The full grants CSV is part of the cached artefact set (uploadStaticFiles),

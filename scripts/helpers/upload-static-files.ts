@@ -1,19 +1,15 @@
-import { put } from '@vercel/blob'
 import fs from 'fs-extra'
 import { info } from './log'
 import { getBranchName } from './get-branch-name'
+import { s3PutObject, invalidateCloudFront } from './s3-client'
 
 /**
- * Uploads generated static files to Vercel Blob Storage for caching
+ * Uploads generated static files to S3 (the build cache restored on cached
+ * builds).
  */
-export async function uploadStaticFilesToBlob() {
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        info('BLOB_READ_WRITE_TOKEN not set, skipping static files upload')
-        return
-    }
-
+export async function uploadStaticFiles() {
     const branchName = getBranchName()
-    info(`Uploading static files to Blob Storage for branch "${branchName}"...`)
+    info(`Uploading static files to S3 for branch "${branchName}"...`)
 
     const filesToUpload = [
         { path: './data/dist/select-options.json', key: `${branchName}/cache/select-options.json` },
@@ -38,19 +34,15 @@ export async function uploadStaticFilesToBlob() {
 
         try {
             const content = fs.readFileSync(file.path)
-            
-            await put(file.key, content, {
-                access: 'public',
-                addRandomSuffix: false,
-                token: process.env.BLOB_READ_WRITE_TOKEN,
-            })
-
-            info(`✓ Uploaded ${file.path} to blob storage`)
+            await s3PutObject(file.key, content)
+            info(`✓ Uploaded ${file.path} to S3`)
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : String(error)
-            info(`✗ Failed to upload ${file.path}: ${errorMessage}`)
+            const message = error instanceof Error ? error.message : String(error)
+            info(`✗ Failed to upload ${file.path}: ${message}`)
         }
     }
 
-    info('Finished uploading static files to Blob Storage')
+    await invalidateCloudFront([`/${branchName}/cache/*`])
+
+    info('Finished uploading static files to S3')
 }

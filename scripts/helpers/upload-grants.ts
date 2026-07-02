@@ -8,7 +8,7 @@ import {
     invalidateCloudFront,
 } from './s3-client'
 
-export interface UploadGrantsToS3Options {
+export interface UploadGrantsOptions {
     grants: Array<{ id: string; data: any }>
     concurrency?: number
 }
@@ -16,10 +16,10 @@ export interface UploadGrantsToS3Options {
 /**
  * Uploads grant files to S3 with high concurrency.
  * Uses predictable keys with format: {branch}/grants/{grantId}.json
- * Mirrors uploadGrantsToBlob (orphan cleanup + >1% failure-rate abort).
+ * Includes orphan cleanup + a >1% failure-rate abort.
  */
-export async function uploadGrantsToS3(
-    options: UploadGrantsToS3Options,
+export async function uploadGrants(
+    options: UploadGrantsOptions,
 ): Promise<void> {
     const { grants, concurrency = 64 } = options
 
@@ -85,7 +85,7 @@ export async function uploadGrantsToS3(
     info(`Successfully uploaded ${uploaded} grants to S3`)
 }
 
-export interface UploadGrantsIncrementalToS3Options {
+export interface UploadGrantsIncrementalOptions {
     changed: Array<{ id: string; data: any }>
     removedIds: string[]
     concurrency?: number
@@ -98,8 +98,8 @@ export interface UploadGrantsIncrementalToS3Options {
  * scoped to exactly the touched keys, falling back to a prefix wildcard when the
  * change set is large.
  */
-export async function uploadGrantsIncrementalToS3(
-    options: UploadGrantsIncrementalToS3Options,
+export async function uploadGrantsIncremental(
+    options: UploadGrantsIncrementalOptions,
 ): Promise<void> {
     const { changed, removedIds, concurrency = 64 } = options
 

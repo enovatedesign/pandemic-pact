@@ -8,18 +8,18 @@ const CACHE_FILENAME = 'cached-pub-med-publications.json'
 const BATCH_SIZE = 50
 
 /**
- * Audit individual PubMed blob files against the consolidated cache.
+ * Audit individual PubMed object files against the consolidated cache.
  *
- * 1. Checks whether each individual blob file exists and is in sync with
+ * 1. Checks whether each individual object file exists and is in sync with
  *    the consolidated cache. Missing files are re-fetched from Europe PMC.
  * 2. Checks for publications with broken identifiers (e.g. PPR preprints
  *    missing their `id` field) and re-fetches those grants too.
- * 3. Detects cache entries that are out of sync with individual blob files
+ * 3. Detects cache entries that are out of sync with individual object files
  *    and updates the consolidated cache to match.
  * 4. Writes all changes back to the consolidated cache.
  */
-export async function auditPubmedBlobs(localPublications?: { [key: string]: any[] }): Promise<void> {
-    title('Auditing individual PubMed blob files')
+export async function auditPubmedObjects(localPublications?: { [key: string]: any[] }): Promise<void> {
+    title('Auditing individual PubMed object files')
 
     // 1. Load consolidated cache to get the full list of grant IDs
     let cache: { publications: { [key: string]: any[] }; expiresAt?: number }
@@ -51,7 +51,7 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
 
     info(`Checking ${grantIds.length} grant IDs with publications`)
 
-    // 2. Fetch individual blob files and compare with cache (batched GET requests)
+    // 2. Fetch individual object files and compare with cache (batched GET requests)
     const missingIds: string[] = []
     const outOfSyncGrants: { id: string; publications: any[] }[] = []
 
@@ -64,12 +64,12 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
                     const body = await readPubMedObjectString(`pubmed/${pubmedFileName(id)}.json`)
                     if (!body) return { id, status: 'missing' as const }
 
-                    const blobPubs: any[] = JSON.parse(body)
+                    const filePubs: any[] = JSON.parse(body)
                     const cachePubs = cache.publications[id]
                     const cacheCount = Array.isArray(cachePubs) ? cachePubs.length : 0
 
-                    if (blobPubs.length !== cacheCount) {
-                        return { id, status: 'out_of_sync' as const, publications: blobPubs }
+                    if (filePubs.length !== cacheCount) {
+                        return { id, status: 'out_of_sync' as const, publications: filePubs }
                     }
 
                     return { id, status: 'ok' as const }
@@ -115,7 +115,7 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
         info(`Found ${brokenIds.length} grants with broken publication links`)
     }
 
-    // 4. Sync out-of-sync cache entries (no PubMed re-fetch needed, blob file is correct)
+    // 4. Sync out-of-sync cache entries (no PubMed re-fetch needed, object file is correct)
     let cacheUpdated = false
 
     if (outOfSyncGrants.length > 0) {
@@ -126,7 +126,7 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
             }
         }
         cacheUpdated = true
-        info(`Synced ${outOfSyncGrants.length} out-of-sync cache entries from individual blob files`)
+        info(`Synced ${outOfSyncGrants.length} out-of-sync cache entries from individual object files`)
     }
 
     // 5. Re-fetch missing and broken files from Europe PMC
@@ -161,7 +161,7 @@ export async function auditPubmedBlobs(localPublications?: { [key: string]: any[
                     cacheUpdated = true
                     repairedCount++
                 } catch {
-                    warn(`Failed to upload blob for "${id}"`)
+                    warn(`Failed to upload object for "${id}"`)
                     failedCount++
                 }
             } else {

@@ -1,0 +1,71 @@
+Broad categories Codes;Broad categories Description;Sub categories Codes;Sub categories Description;Coded
+1;Pathogen: natural history, transmission and diagnostics;a;Diagnostics;1a
+1;Pathogen: natural history, transmission and diagnostics;b;Pathogen morphology, shedding & natural history;1b
+1;Pathogen: natural history, transmission and diagnostics;c;Pathogen genomics, mutations and adaptations;1c
+1;Pathogen: natural history, transmission and diagnostics;d;Immunity;1d
+1;Pathogen: natural history, transmission and diagnostics;e;Disease models;1e
+1;Pathogen: natural history, transmission and diagnostics;f;Environmental stability of pathogen;1f
+2;Animal and environmental research and research on diseases vectors;a;Animal source and routes of transmission;2a
+2;Animal and environmental research and research on diseases vectors;b;Vector biology;2b
+2;Animal and environmental research and research on diseases vectors;c;Vector control strategies;2c
+3;Epidemiological studies;a;Disease transmission dynamics;3a
+3;Epidemiological studies;b;Disease susceptibility;3b
+3;Epidemiological studies;c;Impact/ effectiveness of control measures;3c
+3;Epidemiological studies;d;Disease surveillance & mapping;3d
+4;Clinical characterisation and management;a;Prognostic factors for disease severity;4a
+4;Clinical characterisation and management;b;Disease pathogenesis;4b
+4;Clinical characterisation and management;c;Supportive care, processes of care and management;4c
+4;Clinical characterisation and management;d;Post acute and long term health consequences;4d
+4;Clinical characterisation and management;e;Clinical trials for disease management;4e
+5;Infection prevention and control;a;Restriction measures to prevent secondary transmission in communities;5a
+5;Infection prevention and control;b;Barriers, PPE, environmental, animal and vector control measures;5b
+5;Infection prevention and control;c;IPC in health care settings;5c
+5;Infection prevention and control;d;IPC at the human-animal interface;5d
+6;Therapeutics research, development and implementation;a;Pre-clinical studies;6a
+6;Therapeutics research, development and implementation;b;Phase 0 clinical trial;6b
+6;Therapeutics research, development and implementation;c;Phase 1 clinical trial;6c
+6;Therapeutics research, development and implementation;d;Phase 2 clinical trial;6d
+6;Therapeutics research, development and implementation;e;Phase 3 clinical trial;6e
+6;Therapeutics research, development and implementation;f;Phase 4 clinical trial;6f
+6;Therapeutics research, development and implementation;g;Prophylactic use of treatments;6g
+6;Therapeutics research, development and implementation;h;Clinical trial (unspecified trial phase);6h
+6;Therapeutics research, development and implementation;i;Therapeutics logistics and supply chains and distribution strategies;6i
+6;Therapeutics research, development and implementation;j;Therapeutic trial design;6j
+6;Therapeutics research, development and implementation;k;Adverse events associated with therapeutic administration;6k
+7;Vaccines research, development and implementation;a;Pre-clinical studies;7a
+7;Vaccines research, development and implementation;b;Phase 0 clinical trial;7b
+7;Vaccines research, development and implementation;c;Phase 1 clinical trial;7c
+7;Vaccines research, development and implementation;d;Phase 2 clinical trial;7d
+7;Vaccines research, development and implementation;e;Phase 3 clinical trial;7e
+7;Vaccines research, development and implementation;f;Phase 4 clinical trial;7f
+7;Vaccines research, development and implementation;g;Clinical trial (unspecified trial phase);7g
+7;Vaccines research, development and implementation;h;Vaccine logistics and supply chains and distribution strategies;7h
+7;Vaccines research, development and implementation;i;Vaccine design and administration;7i
+7;Vaccines research, development and implementation;j;Vaccine trial design and infrastructure;7j
+7;Vaccines research, development and implementation;k;Adverse events associated with immunization;7k
+7;Vaccines research, development and implementation;l;Characterisation of vaccine-induced immunity;7l
+8;Research to inform ethical issues;a;Research to inform ethical issues in Research;8a
+8;Research to inform ethical issues;b;Research to inform ethical issues related to Public Health Measures;8b
+8;Research to inform ethical issues;c;Research to inform ethical issues in Clinical and Health System Decision-Making;8c
+8;Research to inform ethical issues;d;Research to inform ethical issues in the Allocation of Resources;8d
+8;Research to inform ethical issues;e;Research to inform ethical issues in Governance;8e
+8;Research to inform ethical issues;f;Research to inform ethical issues related to Social Determinants of Health, Trust, and Inequities;8f
+9;Policies for public health, disease control & community resilience;a;Approaches to public health interventions;9a
+9;Policies for public health, disease control & community resilience;b;Community engagement;9b
+9;Policies for public health, disease control & community resilience;c;Communication;9c
+9;Policies for public health, disease control & community resilience;d;Vaccine/Therapeutic/ treatment hesitancy;9d
+9;Policies for public health, disease control & community resilience;e;Policy research and interventions;9e
+10;Secondary impacts of disease, response & control measures;a;Indirect health impacts;10a
+10;Secondary impacts of disease, response & control measures;b;Social impacts;10b
+10;Secondary impacts of disease, response & control measures;c;Economic impacts;10c
+10;Secondary impacts of disease, response & control measures;d;Other secondary impacts;10d
+11;Health Systems Research;a;Health service delivery;11a
+11;Health Systems Research;b;Health financing;11b
+11;Health Systems Research;c;Medicines, vaccines & other technologies;11c
+11;Health Systems Research;d;Health information systems;11d
+11;Health Systems Research;e;Health leadership and governance;11e
+11;Health Systems Research;f;Health workforce;11f
+12;Research on Capacity Strengthening;a;Individual level capacity strengthening;12a
+12;Research on Capacity Strengthening;b;Institutional level capacity strengthening;12b
+12;Research on Capacity Strengthening;c;Systemic/environmental components of capacity strengthening;12c
+12;Research on Capacity Strengthening;d;Cross-cutting;12d

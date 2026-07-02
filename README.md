@@ -21,42 +21,42 @@ This project uses the following technologies and packages:
 -   [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 -   [GSAP](https://gsap.com)
 
-## Vercel Blob Storage Caching
+## S3 Data Storage & Caching
 
-This project uses [Vercel Blob Storage](https://vercel.com/docs/storage/vercel-blob) to cache and serve generated data assets (such as grants, select options, and research category mappings) for each branch. This enables faster builds and consistent data access across environments.
+This project uses Amazon S3 (served via CloudFront) to cache and serve generated data assets (such as grants, select options, and research category mappings) for each branch. This enables faster builds and consistent data access across environments. See [`docs/aws-s3-setup.md`](docs/aws-s3-setup.md) for the AWS infrastructure details.
 
 ### How it works
 - When you run the data generation script (`npm run generate`), the build will check if the source data has changed.
-- If the data has changed, the generated assets are uploaded to Vercel Blob Storage under a path for your current branch.
-- If the data has not changed, the build will fetch and use the cached assets from Blob Storage for your branch.
+- If the data has changed, the generated assets are uploaded to S3 under a path for your current branch.
+- If the data has not changed, the build will fetch and use the cached assets from S3 for your branch.
 
-### Controlling Blob Uploads
-- The environment variable `FORCE_BLOB_UPLOAD` controls whether assets are uploaded to Blob Storage.
-	- **For local development:** Set `FORCE_BLOB_UPLOAD=false` (default). This prevents unnecessary uploads and uses local files.
-	- **For deployment or sharing assets:** Set `FORCE_BLOB_UPLOAD=true` to force the upload of generated assets for your current branch. This is useful if you want your branch's data to be available to others or to Vercel deployments.
+### Controlling uploads
+- The environment variable `FORCE_UPLOAD` controls whether assets are uploaded to S3.
+	- **For local development:** Set `FORCE_UPLOAD=false` (default). This prevents unnecessary uploads and uses local files.
+	- **For deployment or sharing assets:** Set `FORCE_UPLOAD=true` to force the upload of generated assets for your current branch. This is useful if you want your branch's data to be available to others or to Vercel deployments.
 
 You can set this in your `.env.local`:
 ```
-FORCE_BLOB_UPLOAD=false
+FORCE_UPLOAD=false
 ```
 or
 ```
-FORCE_BLOB_UPLOAD=true
+FORCE_UPLOAD=true
 ```
 
-**Note:** Blob uploads require the `BLOB_READ_WRITE_TOKEN` and `BLOB_BASE_URL` environment variables to be set (see Vercel project settings).
+**Note:** uploads require the AWS credentials plus `S3_BUCKET`, `ASSET_BASE_URL`, and `CLOUDFRONT_DISTRIBUTION_ID` (see `docs/aws-s3-setup.md` and Vercel project settings).
 
 ## PubMed Data Fetching
 
-The generate script fetches publication data from PubMed (via the Europe PMC API). PubMed data is stored as **standalone files** (`pubmed/{PubMedGrantId}.json`) in Vercel Blob Storage, separate from the main grant data. This means PubMed data can be refreshed independently without re-generating all ~28k individual grant files.
+The generate script fetches publication data from PubMed (via the Europe PMC API). PubMed data is stored as **standalone files** (`pubmed/{PubMedGrantId}.json`) in S3, separate from the main grant data. This means PubMed data can be refreshed independently without re-generating all ~28k individual grant files.
 
 ### How it works
 
-- Each grant's PubMed data is tracked with a per-grant `lastChecked` timestamp stored in Vercel Blob Storage.
+- Each grant's PubMed data is tracked with a per-grant `lastChecked` timestamp stored in S3.
 - Grants checked within the last **7 days** are considered fresh and skip API calls.
 - If all grants are fresh, the fetch completes almost instantly using cached data.
 - Stale grants are fetched from the PubMed API individually, with checkpoints saved every 100 grants.
-- Each freshly-fetched grant's publications are **uploaded to blob immediately** (`pubmed/{PubMedGrantId}.json`), so partial results are live even if the build times out.
+- Each freshly-fetched grant's publications are **uploaded to S3 immediately** (`pubmed/{PubMedGrantId}.json`), so partial results are live even if the build times out.
 - A **circuit breaker** stops fetching after 20 consecutive API failures to avoid blocking deployments.
 - When running during a cached build (FigShare data unchanged), a **timeout of 8 minutes** is enforced. Any grants not fetched within this window fall back to cached data (if available within a 45-day grace period) or are marked as unavailable.
 - Grant detail pages load PubMed data on-demand from the standalone files, not from the main grant JSON.
@@ -78,9 +78,10 @@ This project uses several environment variables. See `.env.local.example` for a 
 | `SEARCH_USERNAME` | OpenSearch username | GitLab CI/CD settings |
 | `SEARCH_PASSWORD` | OpenSearch password | GitLab CI/CD settings |
 | `SEARCH_INDEX_PREFIX` | Unique prefix for your indexes | Choose your own |
-| `FORCE_BLOB_UPLOAD` | Control blob upload behaviour | Set in `.env.local` |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob auth | Vercel project settings |
-| `BLOB_BASE_URL` | Vercel Blob base URL | Vercel project settings |
+| `FORCE_UPLOAD` | Force upload of generated assets to S3 | Set in `.env.local` |
+| `USE_REMOTE_STORAGE` | Read data from the CDN vs local `public/` files | Set in `.env.local` |
+| `S3_BUCKET` / `ASSET_BASE_URL` / `CLOUDFRONT_DISTRIBUTION_ID` | S3 + CloudFront config | Vercel project settings (see `docs/aws-s3-setup.md`) |
+| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | S3 write credentials | Vercel / GitLab CI/CD settings |
 
 ## Getting Started
 
@@ -161,7 +162,7 @@ Next you will need to run our `generate` script which prepares the source data i
 npm run generate
 ```
 
-If you want to upload the generated data to Vercel Blob Storage for your branch, set `FORCE_BLOB_UPLOAD=true` in `.env.local` before running the `npm run generate` command.
+If you want to upload the generated data to S3 for your branch, set `FORCE_UPLOAD=true` in `.env.local` before running the `npm run generate` command.
 
 ### Run the Development server
 
