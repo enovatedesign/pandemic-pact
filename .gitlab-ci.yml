@@ -35,7 +35,7 @@ benchmark_generate:
         - |
             echo "Benchmarking full generate on branch '${CI_COMMIT_REF_NAME}' (S3 + search prefix isolated to this branch)"
             START=$SECONDS
-            FORCE_UPLOAD=true SEARCH_INDEX_PREFIX="$CI_COMMIT_REF_NAME" npm run generate
+            FORCE_FULL_GENERATE=true FORCE_UPLOAD=true SEARCH_INDEX_PREFIX="$CI_COMMIT_REF_NAME" npm run generate
             echo "=== generate wall-clock: $((SECONDS - START))s ==="
     rules:
         - if: $CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "develop"

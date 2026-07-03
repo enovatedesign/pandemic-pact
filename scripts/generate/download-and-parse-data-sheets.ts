@@ -18,9 +18,21 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID
     } = dataSources
 
+    // FORCE_FULL_GENERATE bypasses the freshness marker and forces the full
+    // generate path even when the grants file ID is unchanged. Used by the
+    // decouple-heavy-build-trial benchmark (docs/decouple-heavy-build-trial.md)
+    // to measure a real full build on the GitLab runner regardless of any marker
+    // a prior deploy may have written.
+    const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
+
     const grantsPreviousFileId = await readGrantsLastUsedFileId()
-    const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
-    
+    const grantsFileIdHasChanged =
+        forceFullGenerate || GRANTS_FILE_ID !== grantsPreviousFileId
+
+    if (forceFullGenerate) {
+        info('FORCE_FULL_GENERATE set — forcing the full generate path')
+    }
+
     // If source hasn't changed, download cached static files from remote storage
     if (!grantsFileIdHasChanged) {
         info('Grants data source has not changed since last fetch')
