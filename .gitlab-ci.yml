@@ -15,6 +15,33 @@ fetch_pubmed_data:
         - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"
     retry: 2
 
+# One-off benchmark for the "decouple heavy build to CI" trial
+# (docs/decouple-heavy-build-trial.md). Runs a FULL `npm run generate` on the
+# GitLab runner and reports the wall-clock time, so we can compare GitLab's
+# generate speed against the known Vercel numbers (full ~19 min, cached ~3 min)
+# before committing to building the orchestration.
+#
+# Safety: this uploads to S3 + reindexes OpenSearch, both scoped to the current
+# branch (S3 prefix = normalised CI_COMMIT_REF_NAME, index =
+# normalised SEARCH_INDEX_PREFIX + "-grants"), so it stays isolated from
+# develop/master/production. It is `manual` and HARD-EXCLUDED from develop and
+# master — running FORCE_UPLOAD generate there would overwrite production S3 and
+# the unprefixed `grants` index.
+benchmark_generate:
+    stage: build
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+    script:
+        - echo "Benchmarking full generate on branch '${CI_COMMIT_REF_NAME}' (S3 + search prefix isolated to this branch)"
+        - START=$SECONDS
+        - FORCE_UPLOAD=true SEARCH_INDEX_PREFIX="$CI_COMMIT_REF_NAME" npm run generate
+        - echo "=== generate wall-clock: $((SECONDS - START))s ==="
+    rules:
+        - if: $CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "develop"
+          when: never
+        - when: manual
+    allow_failure: true
+
 deploy_review:
     stage: deploy
     except:
