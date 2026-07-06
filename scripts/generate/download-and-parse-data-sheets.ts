@@ -19,10 +19,9 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     } = dataSources
 
     // FORCE_FULL_GENERATE bypasses the freshness marker and forces the full
-    // generate path even when the grants file ID is unchanged. Used by the
-    // decouple-heavy-build-trial benchmark (docs/decouple-heavy-build-trial.md)
-    // to measure a real full build on the GitLab runner regardless of any marker
-    // a prior deploy may have written.
+    // generate path even when the grants file ID is unchanged. Escape hatch for
+    // forcing a rebuild (e.g. after changing generate logic without bumping
+    // FIGSHARE_GRANTS_FILE_ID). No CI job sets it by default.
     const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
 
     const grantsPreviousFileId = await readGrantsLastUsedFileId()
