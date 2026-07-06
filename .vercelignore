@@ -1,2 +1,15 @@
-# Exclude grant files from deployment - stored in Vercel Blob Storage
+# Runner-generated build artefacts — excluded from the `vercel deploy` upload.
+#
+# The decoupled pipeline runs `npm run generate` on the GitLab runner BEFORE
+# `vercel deploy` (to populate S3 + the freshness marker), which fills these
+# dirs. Vercel's own build regenerates/restores them on its cached path, so
+# shipping them as deployment source is pointless — and it blows Vercel's 1 GB
+# upload limit (data/download/grants.json alone is ~1.1 GB). Excluding them
+# restores the upload to just the repo source, as it was before generate moved
+# onto the runner. (These are all gitignored build output; data/source/ is
+# committed source and intentionally NOT listed here.)
+data/download/
+data/dist/
+public/data/
+public/export/
 public/grants/
