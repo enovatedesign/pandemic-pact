@@ -190,6 +190,92 @@ export const convertCheckBoxFieldToArray = (grant: RawGrant, field: string) => {
     )
 }
 
+/**
+ * Single-pass equivalent of calling `convertCheckBoxFieldToArray` once per
+ * checkbox field PLUS `convertRawGrantKeyToValuesArray` once per prefix target.
+ *
+ * The originals each re-scan every key of the grant, so together they cost
+ * O((numCheckboxFields + numPrefixTargets) × numKeys) per grant — the dominant
+ * cost in prepareGrants on the full dataset. This walks the grant's keys ONCE and
+ * buckets the checked codes, turning it into O(numKeys).
+ *
+ * Output is kept BYTE-IDENTICAL to the originals (proven by
+ * scripts/verify-prepare-grants-parity.ts), so `grants.json.gz` and the Phase-3
+ * content hashes are unchanged. The two predicates are preserved exactly:
+ *   - checkbox fields: `value === '1'`, matched by the exact field name (the
+ *     segment before the first `___`; checkbox field names never contain `___`).
+ *   - prefix targets:  `value && parseInt(value) === 1`, matched by
+ *     `key.includes(target)`.
+ * Both normalise the code via `normaliseExtractedCode(key.split('___')[1])` and
+ * push in key-iteration order.
+ */
+export const extractCheckboxAndPrefixFields = (
+    grant: RawGrant,
+    checkBoxFields: string[],
+    prefixTargets: string[],
+): {
+    checkBoxFieldValues: { [field: string]: string[] }
+    prefixValues: { [target: string]: string[] }
+} => {
+    const checkedByField: { [field: string]: string[] } = {}
+    const prefixValues: { [target: string]: string[] } = {}
+
+    for (const target of prefixTargets) {
+        prefixValues[target] = []
+    }
+
+    for (const key in grant) {
+        const value = grant[key]
+
+        // Only checked cells can match either predicate; skip everything else
+        // before the more expensive split/normalise below.
+        const isCheckbox = value === '1'
+        const isPrefix = !!value && parseInt(value) === 1
+
+        if (!isCheckbox && !isPrefix) {
+            continue
+        }
+
+        const separatorIndex = key.indexOf('___')
+
+        if (separatorIndex === -1) {
+            continue
+        }
+
+        const code = normaliseExtractedCode(key.split('___')[1])
+
+        if (isCheckbox) {
+            const field = key.slice(0, separatorIndex)
+            let bucket = checkedByField[field]
+
+            if (!bucket) {
+                bucket = []
+                checkedByField[field] = bucket
+            }
+
+            bucket.push(code)
+        }
+
+        if (isPrefix) {
+            for (const target of prefixTargets) {
+                if (key.includes(target)) {
+                    prefixValues[target].push(code)
+                }
+            }
+        }
+    }
+
+    // Every requested checkbox field gets an entry (empty when unchecked),
+    // matching `checkBoxFields.map(f => convertCheckBoxFieldToArray(grant, f))`.
+    const checkBoxFieldValues: { [field: string]: string[] } = {}
+
+    for (const field of checkBoxFields) {
+        checkBoxFieldValues[field] = checkedByField[field] ?? []
+    }
+
+    return { checkBoxFieldValues, prefixValues }
+}
+
 export const convertCommaSeparatedValueFieldToArray = (
     grant: RawGrant,
     field: string,

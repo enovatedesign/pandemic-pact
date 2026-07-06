@@ -7,8 +7,7 @@ import { streamLargeJson, createJsonArrayWriteStream } from '../helpers/stream-i
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
-    convertRawGrantKeyToValuesArray,
-    convertCheckBoxFieldToArray,
+    extractCheckboxAndPrefixFields,
     convertCommaSeparatedValueFieldToArray,
     grantPolicyRoadmaps,
 } from '../helpers/key-mapping'
@@ -103,13 +102,14 @@ export default async function prepareGrants() {
             parseFloat,
         )
 
-        // Get an object containing only the checkbox fields with values as
-        // arrays of the checked values
-        const checkBoxFieldValues = Object.fromEntries(
-            checkBoxFields.map(field => [
-                field,
-                convertCheckBoxFieldToArray(rawGrant, field),
-            ]),
+        // Derive the checkbox-field value arrays AND the pathogen/disease/strain
+        // prefix arrays in a SINGLE pass over the grant's keys, instead of
+        // re-scanning every key once per checkbox field (+ 3 prefix scans). This
+        // is the dominant cost in prepareGrants — see extractCheckboxAndPrefixFields.
+        const { checkBoxFieldValues, prefixValues } = extractCheckboxAndPrefixFields(
+            rawGrant,
+            checkBoxFields,
+            ['_pathogen__', '_diseases__', '_diseases_strains_'],
         )
 
         // Get an object containing only the comma-separated fields with values as
@@ -147,9 +147,9 @@ export default async function prepareGrants() {
         let customFields = {
             TrendStartYear: resolveTrendStartYear(rawGrant),
 
-            Pathogens: convertRawGrantKeyToValuesArray(rawGrant, '_pathogen__') ,
-            Diseases: convertRawGrantKeyToValuesArray(rawGrant, '_diseases__'),
-            Strains: convertRawGrantKeyToValuesArray(rawGrant, '_diseases_strains_') , 
+            Pathogens: prefixValues['_pathogen__'],
+            Diseases: prefixValues['_diseases__'],
+            Strains: prefixValues['_diseases_strains_'],
             
             // Add the formatted investigator names for use on the frontend
             InvestigatorNames: formatInvestigatorNames(
