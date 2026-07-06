@@ -18,9 +18,20 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID
     } = dataSources
 
+    // FORCE_FULL_GENERATE bypasses the freshness marker and forces the full
+    // generate path even when the grants file ID is unchanged. Escape hatch for
+    // forcing a rebuild (e.g. after changing generate logic without bumping
+    // FIGSHARE_GRANTS_FILE_ID). No CI job sets it by default.
+    const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
+
     const grantsPreviousFileId = await readGrantsLastUsedFileId()
-    const grantsFileIdHasChanged = GRANTS_FILE_ID !== grantsPreviousFileId
-    
+    const grantsFileIdHasChanged =
+        forceFullGenerate || GRANTS_FILE_ID !== grantsPreviousFileId
+
+    if (forceFullGenerate) {
+        info('FORCE_FULL_GENERATE set — forcing the full generate path')
+    }
+
     // If source hasn't changed, download cached static files from remote storage
     if (!grantsFileIdHasChanged) {
         info('Grants data source has not changed since last fetch')

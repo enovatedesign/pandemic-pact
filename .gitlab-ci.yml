@@ -20,22 +20,57 @@ deploy_review:
     except:
         - develop
         - master
-    script:
+    variables:
+        # Feature branches index into their own <branch>-grants-v2 (getIndexName
+        # normalises this); the S3 prefix derives from CI_COMMIT_REF_NAME the same way.
+        SEARCH_INDEX_PREFIX_OVERRIDE: $CI_COMMIT_REF_NAME
+    before_script:
+        - npm ci --cache .npm --prefer-offline
         - npm install --global vercel
+    script:
         - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
         - |
+            set -e
+            # Run the heavy generate on the GitLab runner (only when the grants data
+            # changed) so the `vercel deploy` below takes the fast cached path instead
+            # of regenerating on Vercel. Mirrors .deploy_decoupled's generate gate.
+            npx tsc --project tsconfig-scripts.json
+            if node ./compiled-scripts/scripts/check-grants-freshness.js; then
+                echo "Grants data changed — running full generate on GitLab for $CI_COMMIT_REF_NAME"
+                SEARCH_INDEX_PREFIX="$SEARCH_INDEX_PREFIX_OVERRIDE" FORCE_UPLOAD=true npm run generate
+            else
+                echo "Grants data unchanged — skipping generate; Vercel deploy takes the cached path"
+            fi
+        - |
+            # vercel prints ONLY the deployment URL to stdout; progress and the
+            # trailing "To deploy to production…" hint go to stderr. Capture stdout
+            # only — the old `2>&1 | tail -1` grabbed that hint instead of the URL,
+            # which then made `vercel alias set` fail and marked the whole job failed
+            # even though the deploy itself succeeded.
             DEPLOYMENT_URL=$(vercel deploy \
               --build-env "SEARCH_INDEX_PREFIX=$CI_COMMIT_REF_NAME" \
               --build-env "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME" \
-              --token=$VERCEL_TOKEN 2>&1 | tail -1)
+              --token=$VERCEL_TOKEN)
 
             echo "Deployed to: $DEPLOYMENT_URL"
 
+            # A genuine deploy failure (no URL) should still fail the job.
+            case "$DEPLOYMENT_URL" in
+                https://*) ;;
+                *) echo "Deploy did not return a URL — failing."; exit 1 ;;
+            esac
+
+            # The friendly per-branch alias is a convenience only; never let it fail
+            # the job. Fall back to the unique deployment URL for the environment link.
             ALIAS="${CI_COMMIT_REF_SLUG}.${CI_PROJECT_NAME}.vercel.app"
+            if vercel alias set "$DEPLOYMENT_URL" "$ALIAS" --scope=enovatedesign --token=$VERCEL_TOKEN; then
+                ENVIRONMENT_URL="https://${ALIAS}"
+            else
+                echo "Alias step failed; using the deployment URL for the environment link."
+                ENVIRONMENT_URL="$DEPLOYMENT_URL"
+            fi
 
-            vercel alias set "$DEPLOYMENT_URL" "$ALIAS" --token=$VERCEL_TOKEN
-
-            echo "DYNAMIC_ENVIRONMENT_URL=https://${ALIAS}" > deploy.env
+            echo "DYNAMIC_ENVIRONMENT_URL=${ENVIRONMENT_URL}" > deploy.env
     artifacts:
         reports:
             dotenv: deploy.env
@@ -64,3 +99,66 @@ stop_review:
     when: manual
     variables:
         GIT_STRATEGY: none
+
+# --- Decoupled deploys for develop + master (docs/decouple-heavy-build-phase-2-plan.md) ---
+# Vercel's automatic Git deploys for develop/master are disabled in vercel.json
+# (git.deploymentEnabled). Instead these jobs run the heavy generate on the GitLab
+# runner ONLY when the grants data changed, then fire the branch's Vercel Deploy
+# Hook — by which point the S3 freshness marker matches, so Vercel takes its fast
+# cached build path.
+.deploy_decoupled:
+    stage: deploy
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+    script:
+        - |
+            set -e
+            # Compile scripts once, then decide full-vs-cached the same way the build
+            # does (committed FIGSHARE_GRANTS_FILE_ID vs the S3 marker for this branch).
+            npx tsc --project tsconfig-scripts.json
+            if node ./compiled-scripts/scripts/check-grants-freshness.js; then
+                echo "Grants data changed — running full generate on GitLab ($ENV_LABEL)"
+                # SEARCH_INDEX_PREFIX is set inline so it always wins, targeting the same
+                # OpenSearch index this environment reads: master -> grants-v2 (empty
+                # prefix), develop -> staging-grants-v2 (prefix "staging").
+                SEARCH_INDEX_PREFIX="$SEARCH_INDEX_PREFIX_OVERRIDE" FORCE_UPLOAD=true npm run generate
+            else
+                echo "Grants data unchanged — skipping generate; Vercel will take the cached path"
+            fi
+        - |
+            set -e
+            # Trigger the Vercel deploy. -f makes curl fail the job on an HTTP error so
+            # a broken/missing hook URL is surfaced rather than silently swallowed.
+            echo "Triggering Vercel deploy hook for $ENV_LABEL"
+            curl -fsS -X POST "$DEPLOY_HOOK_URL" > /dev/null
+            echo "Deploy hook fired"
+
+deploy_develop:
+    extends: .deploy_decoupled
+    variables:
+        ENV_LABEL: develop
+        SEARCH_INDEX_PREFIX_OVERRIDE: staging
+        DEPLOY_HOOK_URL: $VERCEL_DEVELOP_DEPLOY_HOOK
+    environment:
+        name: develop
+        url: https://pandemic-pact.vercel.app
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule"
+          when: never
+        - if: $CI_COMMIT_BRANCH == "develop"
+          when: on_success
+
+deploy_production:
+    extends: .deploy_decoupled
+    variables:
+        ENV_LABEL: production
+        SEARCH_INDEX_PREFIX_OVERRIDE: ""
+        DEPLOY_HOOK_URL: $VERCEL_PRODUCTION_DEPLOY_HOOK
+    environment:
+        name: production
+        url: https://www.pandemicpact.org
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule"
+          when: never
+        - if: $CI_COMMIT_BRANCH == "master"
+          when: on_success
