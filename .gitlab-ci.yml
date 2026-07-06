@@ -141,6 +141,7 @@ deploy_develop:
         DEPLOY_HOOK_URL: $VERCEL_DEVELOP_DEPLOY_HOOK
     environment:
         name: develop
+        url: https://pandemic-pact.vercel.app
     rules:
         - if: $CI_PIPELINE_SOURCE == "schedule"
           when: never

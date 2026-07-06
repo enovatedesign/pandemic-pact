@@ -26,13 +26,21 @@ main()
 async function main() {
     dotenv.config({ path: './.env.local' })
 
+    // FORCE_FULL_GENERATE must be honoured HERE too, not just inside
+    // download-and-parse-data-sheets.ts: this gate decides whether `npm run
+    // generate` runs at all, so if it ignored the flag the forced full path
+    // would never be reached when the file ID is unchanged.
+    const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
+
     const configuredId = dataSources.FIGSHARE_GRANTS_FILE_ID
     const markerId = await readGrantsLastUsedFileId()
 
-    const dataChanged = configuredId !== markerId
+    const dataChanged = forceFullGenerate || configuredId !== markerId
 
     info(
-        `Grants freshness: configured=${configuredId} marker=${markerId ?? '(none)'} → ` +
+        `Grants freshness: configured=${configuredId} marker=${markerId ?? '(none)'}` +
+            (forceFullGenerate ? ' FORCE_FULL_GENERATE=true' : '') +
+            ' → ' +
             (dataChanged ? 'CHANGED (full generate needed)' : 'unchanged (skip generate)'),
     )
 
