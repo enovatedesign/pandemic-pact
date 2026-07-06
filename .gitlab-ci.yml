@@ -62,7 +62,7 @@ deploy_review:
             # Run the heavy generate on the GitLab runner (only when the grants data
             # changed) so the `vercel deploy` below takes the fast cached path instead
             # of regenerating on Vercel. Mirrors .deploy_decoupled's generate gate.
-            tsc --project tsconfig-scripts.json
+            npx tsc --project tsconfig-scripts.json
             if node ./compiled-scripts/scripts/check-grants-freshness.js; then
                 echo "Grants data changed — running full generate on GitLab for $CI_COMMIT_REF_NAME"
                 SEARCH_INDEX_PREFIX="$SEARCH_INDEX_PREFIX_OVERRIDE" FORCE_UPLOAD=true npm run generate
@@ -143,7 +143,7 @@ stop_review:
             set -e
             # Compile scripts once, then decide full-vs-cached the same way the build
             # does (committed FIGSHARE_GRANTS_FILE_ID vs the S3 marker for this branch).
-            tsc --project tsconfig-scripts.json
+            npx tsc --project tsconfig-scripts.json
             if node ./compiled-scripts/scripts/check-grants-freshness.js; then
                 echo "Grants data changed — running full generate on GitLab ($ENV_LABEL)"
                 # SEARCH_INDEX_PREFIX is set inline so it always wins, targeting the same
