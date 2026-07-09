@@ -107,11 +107,11 @@ export default function FilterSidebar({
                                     </span>
                                     <span className="flex flex-row items-end gap-1">
                                         <span className="text-4xl font-bold text-primary">
-                                            {globallyFilteredDataset.length}
+                                            {globallyFilteredDataset.length.toLocaleString()}
                                         </span>
                                         <span className="text-lg font-bold text-primary">
                                             {' '}
-                                            / {completeDataset.length}
+                                            / {completeDataset.length.toLocaleString()}
                                         </span>
                                     </span>
                                 </>
