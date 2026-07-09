@@ -26,7 +26,6 @@ deploy_review:
         SEARCH_INDEX_PREFIX_OVERRIDE: $CI_COMMIT_REF_NAME
     before_script:
         - npm ci --cache .npm --prefer-offline
-        - npm install --global vercel
     script:
         - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
         - |
@@ -85,7 +84,6 @@ stop_review:
         - develop
         - master
     script:
-        - npm install --global vercel
         - |
             vercel alias rm "${CI_COMMIT_REF_SLUG}.${CI_PROJECT_NAME}.vercel.app" \
               --token=$VERCEL_TOKEN --yes
