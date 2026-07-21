@@ -1,8 +1,9 @@
 import fs from 'fs-extra'
 import { title, info, error } from '../helpers/log'
 import dataSources from '../config/data-sources'
-import { readGrantsLastUsedFileId, downloadStaticFiles } from '../helpers/storage'
+import { readLastUsedFileIds, downloadStaticFiles } from '../helpers/storage'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
+import fetchFigshareFileDownloadUrl from '../helpers/fetch-figshare-file-download-url'
 
 export default async function downloadAndParseDataSheet (grantsOnly: boolean = false) {
     if (!process.env.FIGSHARE_PA_TOKEN) {
@@ -15,26 +16,38 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         FIGSHARE_ARTICLE_ID: ARTICLE_ID,
         FIGSHARE_GRANTS_FILE_ID: GRANTS_FILE_ID,
         FIGSHARE_DATA_DICTIONARY_FILE_ID: DICTIONARY_FILE_ID,
-        FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID
+        FIGSHARE_OUTBREAKS_FILE_ID: OUTBREAKS_FILE_ID,
+        FIGSHARE_RRNA_ARTICLE_ID: RRNA_ARTICLE_ID,
+        FIGSHARE_RRNA_FILE_ID: RRNA_FILE_ID,
+        FIGSHARE_RRNA_DATA_DICTIONARY_FILE_ID: RRNA_DICTIONARY_FILE_ID,
     } = dataSources
 
     // FORCE_FULL_GENERATE bypasses the freshness marker and forces the full
-    // generate path even when the grants file ID is unchanged. Escape hatch for
-    // forcing a rebuild (e.g. after changing generate logic without bumping
-    // FIGSHARE_GRANTS_FILE_ID). No CI job sets it by default.
+    // generate path even when the source file IDs are unchanged. Escape hatch for
+    // forcing a rebuild (e.g. after changing generate logic without bumping a
+    // Figshare file ID). No CI job sets it by default.
     const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
 
-    const grantsPreviousFileId = await readGrantsLastUsedFileId()
-    const grantsFileIdHasChanged =
-        forceFullGenerate || GRANTS_FILE_ID !== grantsPreviousFileId
+    const {
+        grantsId: grantsPreviousFileId,
+        rrnaId: rrnaPreviousFileId,
+        dictionaryId: dictionaryPreviousFileId,
+        rrnaDictionaryId: rrnaDictionaryPreviousFileId,
+    } = await readLastUsedFileIds()
+    const sourceFilesHaveChanged =
+        forceFullGenerate ||
+        GRANTS_FILE_ID !== grantsPreviousFileId ||
+        RRNA_FILE_ID !== rrnaPreviousFileId ||
+        DICTIONARY_FILE_ID !== dictionaryPreviousFileId ||
+        RRNA_DICTIONARY_FILE_ID !== rrnaDictionaryPreviousFileId
 
     if (forceFullGenerate) {
         info('FORCE_FULL_GENERATE set — forcing the full generate path')
     }
 
-    // If source hasn't changed, download cached static files from remote storage
-    if (!grantsFileIdHasChanged) {
-        info('Grants data source has not changed since last fetch')
+    // If sources haven't changed, download cached static files from remote storage
+    if (!sourceFilesHaveChanged) {
+        info('Data sources have not changed since last fetch')
 
         // This will throw an error if download fails, stopping the build
         const downloadedSuccessfully = await downloadStaticFiles()
@@ -77,6 +90,16 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         await downloadCsvAndConvertToJson(dataDictionaryFile.download_url, 'dictionary')
 
         await downloadCsvAndConvertToJson(grantsFile.download_url, 'grants', true)
+
+        // The RRNA dataset lives in a separate Figshare article; fetch its two
+        // files (data + data dictionary) via the same authenticated account API.
+        const rrnaFilesDownloadUrls = await fetchFigshareFileDownloadUrl(
+            RRNA_ARTICLE_ID,
+            [RRNA_FILE_ID, RRNA_DICTIONARY_FILE_ID]
+        )
+
+        await downloadCsvAndConvertToJson(rrnaFilesDownloadUrls[RRNA_FILE_ID], 'rrna-data')
+        await downloadCsvAndConvertToJson(rrnaFilesDownloadUrls[RRNA_DICTIONARY_FILE_ID], 'rrna-data-dictionary')
 
         const outbreaksFile = figShareFiles.find((f: any) => f.id === OUTBREAKS_FILE_ID)
         if (!outbreaksFile) {

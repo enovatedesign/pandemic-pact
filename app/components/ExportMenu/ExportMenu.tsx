@@ -9,9 +9,12 @@ interface Props {
     imageFilename: string
     filenameToFetch?: string
     filteredFileName?: string
+    filterContext?: React.Context<any>
+    dataKey?: string
+    filterIdKey?: string
 }
 
-export default function ExportMenu({ chartSelector, imageFilename, filenameToFetch, filteredFileName }: Props) {
+export default function ExportMenu({ chartSelector, imageFilename, filenameToFetch, filteredFileName, filterContext, dataKey, filterIdKey }: Props) {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -39,7 +42,13 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
                         imageFilename={imageFilename}
                     />
 
-                    <ExportDataMenuItem filenameToFetch={filenameToFetch} filteredFileName={filteredFileName}/>
+                    <ExportDataMenuItem
+                        filenameToFetch={filenameToFetch}
+                        filteredFileName={filteredFileName}
+                        filterContext={filterContext}
+                        dataKey={dataKey}
+                        filterIdKey={filterIdKey}
+                    />
                 </Menu.Items>
             </Transition>
         </Menu>

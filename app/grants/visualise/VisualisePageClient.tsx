@@ -27,7 +27,7 @@ import { AnnouncementProps, DiseaseLabel } from '../../helpers/types'
 import { getKvDatabase } from '../../helpers/kv'
 
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
-import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
+import VisualisationJumpMenu from '@/app/components/VisualisationJumpMenu'
 import ClinicalTrialsTherapeuticsAndVaccines from '../../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 import MarburgResearchAndPolicyRoadmaps from '../../components/MarburgResearchAndPolicyRoadmaps'
 import GrantsByWHOMpoxRoadmap from '../../components/GrantsByWHOMpoxRoadmap'

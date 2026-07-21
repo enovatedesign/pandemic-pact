@@ -31,7 +31,7 @@ export default async function prepareMap() {
     // Replace all the ISO_N3_EH properties with a corresponding Country value from 
     // our dataset, and a WHO Region value from the region-to-country mapping
     countriesGeojson.features = countriesGeojson.features.map(
-        (feature: { type: string; properties: { ISO_N3_EH: string } }) => {
+        (feature: { type: string; properties: { ISO_N3_EH: string, NAME_LONG: string } }) => {
             // Remove leading zeroes from the ISO_N3_EH property because in our 
             // data set it is a number, not a string
             const id = feature.properties.ISO_N3_EH.replace(/^0+/, '')
@@ -47,8 +47,9 @@ export default async function prepareMap() {
                 ...feature,
                 properties: {
                     id,
+                    name: feature.properties.NAME_LONG,
                     who_region_id,
-                },
+                }
             }
         },
     )

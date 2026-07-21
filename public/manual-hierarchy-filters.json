@@ -1,2763 +1,2763 @@
 [
-  {
-    "label": "Arenaviridae",
-    "value": "ICTV19750003",
-    "pathogens": [
-      {
-        "label": "Mammarenavirus lassaense",
-        "value": "ICTV19790162",
-        "family": {
-          "label": "Arenaviridae",
-          "value": "ICTV19750003"
-        },
-        "diseases": [
-          {
-            "label": "Lassa Haemorrhagic Fever",
-            "value": "19065005",
-            "pathogen": {
-              "label": "Mammarenavirus lassaense",
-              "value": "ICTV19790162",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Mammarenavirus lassaense",
-              "value": "ICTV19790162",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Mammarenavirus lassaense",
-              "value": "ICTV19790162",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Mammarenavirus juninense",
-        "value": "ICTV19710128",
-        "family": {
-          "label": "Arenaviridae",
-          "value": "ICTV19750003"
-        },
-        "diseases": [
-          {
-            "label": "Argentine Haemorrhagic Fever",
-            "value": "58868000",
-            "pathogen": {
-              "label": "Mammarenavirus juninense",
-              "value": "ICTV19710128",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Mammarenavirus juninense",
-              "value": "ICTV19710128",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Mammarenavirus juninense",
-              "value": "ICTV19710128",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Mammarenavirus lujoense",
-        "value": "ICTV20115680",
-        "family": {
-          "label": "Arenaviridae",
-          "value": "ICTV19750003"
-        },
-        "diseases": [
-          {
-            "label": "Lujo Haemorrhagic Fever",
-            "value": "716585008",
-            "pathogen": {
-              "label": "Mammarenavirus lujoense",
-              "value": "ICTV20115680",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Mammarenavirus lujoense",
-              "value": "ICTV20115680",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Mammarenavirus lujoense",
-              "value": "ICTV20115680",
-              "family": {
-                "label": "Arenaviridae",
-                "value": "ICTV19750003"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Arenaviridae",
-          "value": "ICTV19750003"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Arenaviridae",
-          "value": "ICTV19750003"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Coronaviridae",
-    "value": "ICTV19750006",
-    "pathogens": [
-      {
-        "label": "SARS-CoV-2",
-        "value": "ICTV20040588_1",
-        "family": {
-          "label": "Coronaviridae",
-          "value": "ICTV19750006"
-        },
-        "diseases": [
-          {
-            "label": "COVID-19",
-            "value": "840539006",
-            "pathogen": {
-              "label": "SARS-CoV-2",
-              "value": "ICTV20040588_1",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "SARS-CoV-2",
-              "value": "ICTV20040588_1",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "SARS-CoV-2",
-              "value": "ICTV20040588_1",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "SARS-CoV-1",
-        "value": "ICTV20040588_2",
-        "family": {
-          "label": "Coronaviridae",
-          "value": "ICTV19750006"
-        },
-        "diseases": [
-          {
-            "label": "Severe Acute Respiratory Syndrome (SARS)",
-            "value": "398447004",
-            "pathogen": {
-              "label": "SARS-CoV-1",
-              "value": "ICTV20040588_2",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "SARS-CoV-1",
-              "value": "ICTV20040588_2",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "SARS-CoV-1",
-              "value": "ICTV20040588_2",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "MERS-CoV",
-        "value": "ICTV20151223",
-        "family": {
-          "label": "Coronaviridae",
-          "value": "ICTV19750006"
-        },
-        "diseases": [
-          {
-            "label": "Middle East respiratory syndrome coronavirus (MERS)",
-            "value": "868192004",
-            "pathogen": {
-              "label": "MERS-CoV",
-              "value": "ICTV20151223",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "MERS-CoV",
-              "value": "ICTV20151223",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "MERS-CoV",
-              "value": "ICTV20151223",
-              "family": {
-                "label": "Coronaviridae",
-                "value": "ICTV19750006"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Coronaviridae",
-          "value": "ICTV19750006"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Coronaviridae",
-          "value": "ICTV19750006"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Enterobacteriaceae",
-    "value": "106544002",
-    "pathogens": [
-      {
-        "label": "Shigella dysenteriae serotype 1",
-        "value": "43612004",
-        "family": {
-          "label": "Enterobacteriaceae",
-          "value": "106544002"
-        },
-        "diseases": [
-          {
-            "label": "Shigellosis",
-            "value": "36188001",
-            "pathogen": {
-              "label": "Shigella dysenteriae serotype 1",
-              "value": "43612004",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Shigella dysenteriae serotype 1",
-              "value": "43612004",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Shigella dysenteriae serotype 1",
-              "value": "43612004",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Salmonella enterica non typhoidal serovars",
-        "value": "110378009",
-        "family": {
-          "label": "Enterobacteriaceae",
-          "value": "106544002"
-        },
-        "diseases": [
-          {
-            "label": "Salmonella infection",
-            "value": "302231008",
-            "pathogen": {
-              "label": "Salmonella enterica non typhoidal serovars",
-              "value": "110378009",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Salmonella enterica non typhoidal serovars",
-              "value": "110378009",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Salmonella enterica non typhoidal serovars",
-              "value": "110378009",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Klebsiella pneumoniae",
-        "value": "56415008",
-        "family": {
-          "label": "Enterobacteriaceae",
-          "value": "106544002"
-        },
-        "diseases": [
-          {
-            "label": "Bacterial infection caused by Klebsiella pneumonia",
-            "value": "186435004",
-            "pathogen": {
-              "label": "Klebsiella pneumoniae",
-              "value": "56415008",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Klebsiella pneumoniae",
-              "value": "56415008",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Klebsiella pneumoniae",
-              "value": "56415008",
-              "family": {
-                "label": "Enterobacteriaceae",
-                "value": "106544002"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Enterobacteriaceae",
-          "value": "106544002"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Enterobacteriaceae",
-          "value": "106544002"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Filoviridae",
-    "value": "ICTV19870011",
-    "pathogens": [
-      {
-        "label": "Ebola virus",
-        "value": "ICTV19980158",
-        "family": {
-          "label": "Filoviridae",
-          "value": "ICTV19870011"
-        },
-        "diseases": [
-          {
-            "label": "Ebola",
-            "value": "37109004",
-            "pathogen": {
-              "label": "Ebola virus",
-              "value": "ICTV19980158",
-              "family": {
-                "label": "Filoviridae",
-                "value": "ICTV19870011"
-              }
-            },
-            "strains": [
-              {
-                "label": "Zaire Ebola virus disease",
-                "value": "45901000087102",
-                "disease": {
-                  "label": "Ebola",
-                  "value": "37109004",
-                  "pathogen": {
-                    "label": "Ebola virus",
-                    "value": "ICTV19980158",
-                    "family": {
-                      "label": "Filoviridae",
-                      "value": "ICTV19870011"
+    {
+        "label": "Arenaviridae",
+        "value": "ICTV19750003",
+        "pathogens": [
+            {
+                "label": "Mammarenavirus lassaense",
+                "value": "ICTV19790162",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "ICTV19750003"
+                },
+                "diseases": [
+                    {
+                        "label": "Lassa Haemorrhagic Fever",
+                        "value": "19065005",
+                        "pathogen": {
+                            "label": "Mammarenavirus lassaense",
+                            "value": "ICTV19790162",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Mammarenavirus lassaense",
+                            "value": "ICTV19790162",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Mammarenavirus lassaense",
+                            "value": "ICTV19790162",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "Ebola Sudan virus disease",
-                "value": "788903009",
-                "disease": {
-                  "label": "Ebola",
-                  "value": "37109004",
-                  "pathogen": {
-                    "label": "Ebola virus",
-                    "value": "ICTV19980158",
-                    "family": {
-                      "label": "Filoviridae",
-                      "value": "ICTV19870011"
+                ]
+            },
+            {
+                "label": "Mammarenavirus juninense",
+                "value": "ICTV19710128",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "ICTV19750003"
+                },
+                "diseases": [
+                    {
+                        "label": "Argentine Haemorrhagic Fever",
+                        "value": "58868000",
+                        "pathogen": {
+                            "label": "Mammarenavirus juninense",
+                            "value": "ICTV19710128",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Mammarenavirus juninense",
+                            "value": "ICTV19710128",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Mammarenavirus juninense",
+                            "value": "ICTV19710128",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "Mammarenavirus lujoense",
+                "value": "ICTV20115680",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "ICTV19750003"
+                },
+                "diseases": [
+                    {
+                        "label": "Lujo Haemorrhagic Fever",
+                        "value": "716585008",
+                        "pathogen": {
+                            "label": "Mammarenavirus lujoense",
+                            "value": "ICTV20115680",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Mammarenavirus lujoense",
+                            "value": "ICTV20115680",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Mammarenavirus lujoense",
+                            "value": "ICTV20115680",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "ICTV19750003"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Ebola",
-                  "value": "37109004",
-                  "pathogen": {
-                    "label": "Ebola virus",
-                    "value": "ICTV19980158",
-                    "family": {
-                      "label": "Filoviridae",
-                      "value": "ICTV19870011"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "ICTV19750003"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Ebola",
-                  "value": "37109004",
-                  "pathogen": {
-                    "label": "Ebola virus",
-                    "value": "ICTV19980158",
-                    "family": {
-                      "label": "Filoviridae",
-                      "value": "ICTV19870011"
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "ICTV19750003"
+                },
+                "diseases": []
+            }
+        ]
+    },
+    {
+        "label": "Coronaviridae",
+        "value": "ICTV19750006",
+        "pathogens": [
+            {
+                "label": "SARS-CoV-2",
+                "value": "ICTV20040588_1",
+                "family": {
+                    "label": "Coronaviridae",
+                    "value": "ICTV19750006"
+                },
+                "diseases": [
+                    {
+                        "label": "COVID-19",
+                        "value": "840539006",
+                        "pathogen": {
+                            "label": "SARS-CoV-2",
+                            "value": "ICTV20040588_1",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "SARS-CoV-2",
+                            "value": "ICTV20040588_1",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "SARS-CoV-2",
+                            "value": "ICTV20040588_1",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Ebola virus",
-              "value": "ICTV19980158",
-              "family": {
-                "label": "Filoviridae",
-                "value": "ICTV19870011"
-              }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Ebola virus",
-              "value": "ICTV19980158",
-              "family": {
-                "label": "Filoviridae",
-                "value": "ICTV19870011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthomarburgvirus marburgense",
-        "value": "ICTV19870485",
-        "family": {
-          "label": "Filoviridae",
-          "value": "ICTV19870011"
-        },
-        "diseases": [
-          {
-            "label": "Marburg virus disease",
-            "value": "77503002",
-            "pathogen": {
-              "label": "Orthomarburgvirus marburgense",
-              "value": "ICTV19870485",
-              "family": {
-                "label": "Filoviridae",
-                "value": "ICTV19870011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Filoviridae",
-          "value": "ICTV19870011"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Filoviridae",
-          "value": "ICTV19870011"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Flaviviridae",
-    "value": "ICTV19840011",
-    "pathogens": [
-      {
-        "label": "Orthoflavivirus zikaense",
-        "value": "ICTV19990862",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": [
-          {
-            "label": "Zika virus disease",
-            "value": "3928002",
-            "pathogen": {
-              "label": "Orthoflavivirus zikaense",
-              "value": "ICTV19990862",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Congenital infection caused by Zika virus",
-            "value": "762725007",
-            "pathogen": {
-              "label": "Orthoflavivirus zikaense",
-              "value": "ICTV19990862",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthoflavivirus zikaense",
-              "value": "ICTV19990862",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthoflavivirus zikaense",
-              "value": "ICTV19990862",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthoflavivirus encephalitidis",
-        "value": "ICTV19790934",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": [
-          {
-            "label": "Tick-Borne Encephalitis",
-            "value": "414093008",
-            "pathogen": {
-              "label": "Orthoflavivirus encephalitidis",
-              "value": "ICTV19790934",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthoflavivirus encephalitidis",
-              "value": "ICTV19790934",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthoflavivirus encephalitidis",
-              "value": "ICTV19790934",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthoflavivirus nilense",
-        "value": "ICTV19990858",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": [
-          {
-            "label": "West Nile Virus Infection",
-            "value": "417093003",
-            "pathogen": {
-              "label": "Orthoflavivirus nilense",
-              "value": "ICTV19990858",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthoflavivirus nilense",
-              "value": "ICTV19990858",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthoflavivirus nilense",
-              "value": "ICTV19990858",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthoflavivirus denguei",
-        "value": "ICTV19990820",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": [
-          {
-            "label": "Dengue",
-            "value": "38362002",
-            "pathogen": {
-              "label": "Orthoflavivirus denguei",
-              "value": "ICTV19990820",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthoflavivirus denguei",
-              "value": "ICTV19990820",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthoflavivirus denguei",
-              "value": "ICTV19990820",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthoflavivirus flavi",
-        "value": "ICTV19710125",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": [
-          {
-            "label": "Yellow Fever",
-            "value": "16541001",
-            "pathogen": {
-              "label": "Orthoflavivirus flavi",
-              "value": "ICTV19710125",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthoflavivirus flavi",
-              "value": "ICTV19710125",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthoflavivirus flavi",
-              "value": "ICTV19710125",
-              "family": {
-                "label": "Flaviviridae",
-                "value": "ICTV19840011"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Flaviviridae",
-          "value": "ICTV19840011"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Hantaviridae",
-    "value": "ICTV20164606",
-    "pathogens": [
-      {
-        "label": "Orthohantavirus sinnombreense",
-        "value": "ICTV19990675",
-        "family": {
-          "label": "Hantaviridae",
-          "value": "ICTV20164606"
-        },
-        "diseases": [
-          {
-            "label": "Disease caused by Hantavirus (HPS)",
-            "value": "359761005-120639003",
-            "pathogen": {
-              "label": "Orthohantavirus sinnombreense",
-              "value": "ICTV19990675",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthohantavirus sinnombreense",
-              "value": "ICTV19990675",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthohantavirus sinnombreense",
-              "value": "ICTV19990675",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthohantavirus hantanense",
-        "value": "ICTV19870409",
-        "family": {
-          "label": "Hantaviridae",
-          "value": "ICTV20164606"
-        },
-        "diseases": [
-          {
-            "label": "Disease caused by Hantavirus (HFRS)",
-            "value": "359761005-716864001",
-            "pathogen": {
-              "label": "Orthohantavirus hantanense",
-              "value": "ICTV19870409",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthohantavirus hantanense",
-              "value": "ICTV19870409",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthohantavirus hantanense",
-              "value": "ICTV19870409",
-              "family": {
-                "label": "Hantaviridae",
-                "value": "ICTV20164606"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Hantaviridae",
-          "value": "ICTV20164606"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Hantaviridae",
-          "value": "ICTV20164606"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Nairoviridae",
-    "value": "ICTV20164609",
-    "pathogens": [
-      {
-        "label": "Orthonairovirus haemorrhagiae",
-        "value": "ICTV19990680",
-        "family": {
-          "label": "Nairoviridae",
-          "value": "ICTV20164609"
-        },
-        "diseases": [
-          {
-            "label": "Crimean-Congo haemorrhagic fever",
-            "value": "43489008",
-            "pathogen": {
-              "label": "Orthonairovirus haemorrhagiae",
-              "value": "ICTV19990680",
-              "family": {
-                "label": "Nairoviridae",
-                "value": "ICTV20164609"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthonairovirus haemorrhagiae",
-              "value": "ICTV19990680",
-              "family": {
-                "label": "Nairoviridae",
-                "value": "ICTV20164609"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthonairovirus haemorrhagiae",
-              "value": "ICTV19990680",
-              "family": {
-                "label": "Nairoviridae",
-                "value": "ICTV20164609"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Nairoviridae",
-          "value": "ICTV20164609"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Nairoviridae",
-          "value": "ICTV20164609"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Orthomyxoviridae",
-    "value": "ICTV19750009",
-    "pathogens": [
-      {
-        "label": "Alphainfluenzavirus Influenzae H1",
-        "value": "ICTV19710226_H1",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H1",
-            "value": "442438000-01",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H1",
-              "value": "ICTV19710226_H1",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": [
-              {
-                "label": "H1N1",
-                "value": "H1N1",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H1",
-                  "value": "442438000-01",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H1",
-                    "value": "ICTV19710226_H1",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+            {
+                "label": "SARS-CoV-1",
+                "value": "ICTV20040588_2",
+                "family": {
+                    "label": "Coronaviridae",
+                    "value": "ICTV19750006"
+                },
+                "diseases": [
+                    {
+                        "label": "Severe Acute Respiratory Syndrome (SARS)",
+                        "value": "398447004",
+                        "pathogen": {
+                            "label": "SARS-CoV-1",
+                            "value": "ICTV20040588_2",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "SARS-CoV-1",
+                            "value": "ICTV20040588_2",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "SARS-CoV-1",
+                            "value": "ICTV20040588_2",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "MERS-CoV",
+                "value": "ICTV20151223",
+                "family": {
+                    "label": "Coronaviridae",
+                    "value": "ICTV19750006"
+                },
+                "diseases": [
+                    {
+                        "label": "Middle East respiratory syndrome coronavirus (MERS)",
+                        "value": "868192004",
+                        "pathogen": {
+                            "label": "MERS-CoV",
+                            "value": "ICTV20151223",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "MERS-CoV",
+                            "value": "ICTV20151223",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "MERS-CoV",
+                            "value": "ICTV20151223",
+                            "family": {
+                                "label": "Coronaviridae",
+                                "value": "ICTV19750006"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H1",
-                  "value": "442438000-01",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H1",
-                    "value": "ICTV19710226_H1",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Coronaviridae",
+                    "value": "ICTV19750006"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H1",
-                  "value": "442438000-01",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H1",
-                    "value": "ICTV19710226_H1",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H1",
-              "value": "ICTV19710226_H1",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H1",
-              "value": "ICTV19710226_H1",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Coronaviridae",
+                    "value": "ICTV19750006"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenzavirus Influenzae H2",
-        "value": "ICTV19710226_H2",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H2",
-            "value": "1149091008",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H2",
-              "value": "ICTV19710226_H2",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": [
-              {
-                "label": "H2N2",
-                "value": "H2N2",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H2",
-                  "value": "1149091008",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H2",
-                    "value": "ICTV19710226_H2",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+    },
+    {
+        "label": "Enterobacteriaceae",
+        "value": "106544002",
+        "pathogens": [
+            {
+                "label": "Shigella dysenteriae serotype 1",
+                "value": "43612004",
+                "family": {
+                    "label": "Enterobacteriaceae",
+                    "value": "106544002"
+                },
+                "diseases": [
+                    {
+                        "label": "Shigellosis",
+                        "value": "36188001",
+                        "pathogen": {
+                            "label": "Shigella dysenteriae serotype 1",
+                            "value": "43612004",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Shigella dysenteriae serotype 1",
+                            "value": "43612004",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Shigella dysenteriae serotype 1",
+                            "value": "43612004",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "Salmonella enterica non typhoidal serovars",
+                "value": "110378009",
+                "family": {
+                    "label": "Enterobacteriaceae",
+                    "value": "106544002"
+                },
+                "diseases": [
+                    {
+                        "label": "Salmonella infection",
+                        "value": "302231008",
+                        "pathogen": {
+                            "label": "Salmonella enterica non typhoidal serovars",
+                            "value": "110378009",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Salmonella enterica non typhoidal serovars",
+                            "value": "110378009",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Salmonella enterica non typhoidal serovars",
+                            "value": "110378009",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Klebsiella pneumoniae",
+                "value": "56415008",
+                "family": {
+                    "label": "Enterobacteriaceae",
+                    "value": "106544002"
+                },
+                "diseases": [
+                    {
+                        "label": "Bacterial infection caused by Klebsiella pneumonia",
+                        "value": "186435004",
+                        "pathogen": {
+                            "label": "Klebsiella pneumoniae",
+                            "value": "56415008",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Klebsiella pneumoniae",
+                            "value": "56415008",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Klebsiella pneumoniae",
+                            "value": "56415008",
+                            "family": {
+                                "label": "Enterobacteriaceae",
+                                "value": "106544002"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H2",
-                  "value": "1149091008",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H2",
-                    "value": "ICTV19710226_H2",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Enterobacteriaceae",
+                    "value": "106544002"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H2",
-                  "value": "1149091008",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H2",
-                    "value": "ICTV19710226_H2",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H2",
-              "value": "ICTV19710226_H2",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H2",
-              "value": "ICTV19710226_H2",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Enterobacteriaceae",
+                    "value": "106544002"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenza virus influenzae H3",
-        "value": "ICTV19710226_H3",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H3",
-            "value": "442438000-02",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H3",
-              "value": "ICTV19710226_H3",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+    },
+    {
+        "label": "Filoviridae",
+        "value": "ICTV19870011",
+        "pathogens": [
+            {
+                "label": "Ebola virus",
+                "value": "ICTV19980158",
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "ICTV19870011"
+                },
+                "diseases": [
+                    {
+                        "label": "Ebola",
+                        "value": "37109004",
+                        "pathogen": {
+                            "label": "Ebola virus",
+                            "value": "ICTV19980158",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "ICTV19870011"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "Zaire Ebola virus disease",
+                                "value": "45901000087102",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "ICTV19980158",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "ICTV19870011"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Ebola Sudan virus disease",
+                                "value": "788903009",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "ICTV19980158",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "ICTV19870011"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "ICTV19980158",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "ICTV19870011"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "ICTV19980158",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "ICTV19870011"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Ebola virus",
+                            "value": "ICTV19980158",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "ICTV19870011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Ebola virus",
+                            "value": "ICTV19980158",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "ICTV19870011"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": [
-              {
-                "label": "H3N2",
-                "value": "H3N2",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H3",
-                  "value": "442438000-02",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H3",
-                    "value": "ICTV19710226_H3",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+            {
+                "label": "Orthomarburgvirus marburgense",
+                "value": "ICTV19870485",
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "ICTV19870011"
+                },
+                "diseases": [
+                    {
+                        "label": "Marburg virus disease",
+                        "value": "77503002",
+                        "pathogen": {
+                            "label": "Orthomarburgvirus marburgense",
+                            "value": "ICTV19870485",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "ICTV19870011"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H3N8",
-                "value": "H3N8",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H3",
-                  "value": "442438000-02",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H3",
-                    "value": "ICTV19710226_H3",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H3",
-                  "value": "442438000-02",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H3",
-                    "value": "ICTV19710226_H3",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "ICTV19870011"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H3",
-                  "value": "442438000-02",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H3",
-                    "value": "ICTV19710226_H3",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H3",
-              "value": "ICTV19710226_H3",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H3",
-              "value": "ICTV19710226_H3",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "ICTV19870011"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenzavirus Influenzae H5",
-        "value": "ICTV19710226_H5",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H5",
-            "value": "713083002",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H5",
-              "value": "ICTV19710226_H5",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+    },
+    {
+        "label": "Flaviviridae",
+        "value": "ICTV19840011",
+        "pathogens": [
+            {
+                "label": "Orthoflavivirus zikaense",
+                "value": "ICTV19990862",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": [
+                    {
+                        "label": "Zika virus disease",
+                        "value": "3928002",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "ICTV19990862",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Congenital infection caused by Zika virus",
+                        "value": "762725007",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "ICTV19990862",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "ICTV19990862",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "ICTV19990862",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": [
-              {
-                "label": "H5N8",
-                "value": "H5N8",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H5",
-                  "value": "713083002",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H5",
-                    "value": "ICTV19710226_H5",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+            {
+                "label": "Orthoflavivirus encephalitidis",
+                "value": "ICTV19790934",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": [
+                    {
+                        "label": "Tick-Borne Encephalitis",
+                        "value": "414093008",
+                        "pathogen": {
+                            "label": "Orthoflavivirus encephalitidis",
+                            "value": "ICTV19790934",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthoflavivirus encephalitidis",
+                            "value": "ICTV19790934",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthoflavivirus encephalitidis",
+                            "value": "ICTV19790934",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H5N1",
-                "value": "H5N1",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H5",
-                  "value": "713083002",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H5",
-                    "value": "ICTV19710226_H5",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                ]
+            },
+            {
+                "label": "Orthoflavivirus nilense",
+                "value": "ICTV19990858",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": [
+                    {
+                        "label": "West Nile Virus Infection",
+                        "value": "417093003",
+                        "pathogen": {
+                            "label": "Orthoflavivirus nilense",
+                            "value": "ICTV19990858",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthoflavivirus nilense",
+                            "value": "ICTV19990858",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthoflavivirus nilense",
+                            "value": "ICTV19990858",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H5N6",
-                "value": "H5N6",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H5",
-                  "value": "713083002",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H5",
-                    "value": "ICTV19710226_H5",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                ]
+            },
+            {
+                "label": "Orthoflavivirus denguei",
+                "value": "ICTV19990820",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": [
+                    {
+                        "label": "Dengue",
+                        "value": "38362002",
+                        "pathogen": {
+                            "label": "Orthoflavivirus denguei",
+                            "value": "ICTV19990820",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthoflavivirus denguei",
+                            "value": "ICTV19990820",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthoflavivirus denguei",
+                            "value": "ICTV19990820",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "Orthoflavivirus flavi",
+                "value": "ICTV19710125",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": [
+                    {
+                        "label": "Yellow Fever",
+                        "value": "16541001",
+                        "pathogen": {
+                            "label": "Orthoflavivirus flavi",
+                            "value": "ICTV19710125",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthoflavivirus flavi",
+                            "value": "ICTV19710125",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthoflavivirus flavi",
+                            "value": "ICTV19710125",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "ICTV19840011"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H5",
-                  "value": "713083002",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H5",
-                    "value": "ICTV19710226_H5",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H5",
-                  "value": "713083002",
-                  "pathogen": {
-                    "label": "Alphainfluenzavirus Influenzae H5",
-                    "value": "ICTV19710226_H5",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H5",
-              "value": "ICTV19710226_H5",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenzavirus Influenzae H5",
-              "value": "ICTV19710226_H5",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "ICTV19840011"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenza virus influenzae H6",
-        "value": "ICTV19710226_H6",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H6",
-            "value": "H6",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H6",
-              "value": "ICTV19710226_H6",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": [
-              {
-                "label": "H6N6",
-                "value": "H6N6",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H6",
-                  "value": "H6",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H6",
-                    "value": "ICTV19710226_H6",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+    },
+    {
+        "label": "Hantaviridae",
+        "value": "ICTV20164606",
+        "pathogens": [
+            {
+                "label": "Orthohantavirus sinnombreense",
+                "value": "ICTV19990675",
+                "family": {
+                    "label": "Hantaviridae",
+                    "value": "ICTV20164606"
+                },
+                "diseases": [
+                    {
+                        "label": "Disease caused by Hantavirus (HPS)",
+                        "value": "359761005-120639003",
+                        "pathogen": {
+                            "label": "Orthohantavirus sinnombreense",
+                            "value": "ICTV19990675",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthohantavirus sinnombreense",
+                            "value": "ICTV19990675",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthohantavirus sinnombreense",
+                            "value": "ICTV19990675",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "Orthohantavirus hantanense",
+                "value": "ICTV19870409",
+                "family": {
+                    "label": "Hantaviridae",
+                    "value": "ICTV20164606"
+                },
+                "diseases": [
+                    {
+                        "label": "Disease caused by Hantavirus (HFRS)",
+                        "value": "359761005-716864001",
+                        "pathogen": {
+                            "label": "Orthohantavirus hantanense",
+                            "value": "ICTV19870409",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthohantavirus hantanense",
+                            "value": "ICTV19870409",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthohantavirus hantanense",
+                            "value": "ICTV19870409",
+                            "family": {
+                                "label": "Hantaviridae",
+                                "value": "ICTV20164606"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H6",
-                  "value": "H6",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H6",
-                    "value": "ICTV19710226_H6",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Hantaviridae",
+                    "value": "ICTV20164606"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H6",
-                  "value": "H6",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H6",
-                    "value": "ICTV19710226_H6",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H6",
-              "value": "ICTV19710226_H6",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H6",
-              "value": "ICTV19710226_H6",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Hantaviridae",
+                    "value": "ICTV20164606"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenza virus influenzae H7",
-        "value": "ICTV19710226_H7",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H7",
-            "value": "450715004",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H7",
-              "value": "ICTV19710226_H7",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+    },
+    {
+        "label": "Nairoviridae",
+        "value": "ICTV20164609",
+        "pathogens": [
+            {
+                "label": "Orthonairovirus haemorrhagiae",
+                "value": "ICTV19990680",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "ICTV20164609"
+                },
+                "diseases": [
+                    {
+                        "label": "Crimean-Congo haemorrhagic fever",
+                        "value": "43489008",
+                        "pathogen": {
+                            "label": "Orthonairovirus haemorrhagiae",
+                            "value": "ICTV19990680",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "ICTV20164609"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthonairovirus haemorrhagiae",
+                            "value": "ICTV19990680",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "ICTV20164609"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthonairovirus haemorrhagiae",
+                            "value": "ICTV19990680",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "ICTV20164609"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": [
-              {
-                "label": "H7N7",
-                "value": "H7N7",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
-                "label": "H7N3",
-                "value": "H7N3",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
-                "label": "H7N2",
-                "value": "H7N2",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
-                "label": "H7N9",
-                "value": "H7N9",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "ICTV20164609"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H7",
-                  "value": "450715004",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H7",
-                    "value": "ICTV19710226_H7",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H7",
-              "value": "ICTV19710226_H7",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H7",
-              "value": "ICTV19710226_H7",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
-            },
-            "strains": []
-          }
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "ICTV20164609"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Alphainfluenza virus influenzae H10",
-        "value": "ICTV19710226_H10",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": [
-          {
-            "label": "Influenza caused by Influenza A virus subtype H10",
-            "value": "H10",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H10",
-              "value": "ICTV19710226_H10",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+    },
+    {
+        "label": "Orthomyxoviridae",
+        "value": "ICTV19750009",
+        "pathogens": [
+            {
+                "label": "Alphainfluenzavirus Influenzae H1",
+                "value": "ICTV19710226_H1",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H1",
+                        "value": "442438000-01",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H1",
+                            "value": "ICTV19710226_H1",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H1N1",
+                                "value": "H1N1",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H1",
+                                    "value": "442438000-01",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H1",
+                                        "value": "ICTV19710226_H1",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H1",
+                                    "value": "442438000-01",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H1",
+                                        "value": "ICTV19710226_H1",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H1",
+                                    "value": "442438000-01",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H1",
+                                        "value": "ICTV19710226_H1",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H1",
+                            "value": "ICTV19710226_H1",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H1",
+                            "value": "ICTV19710226_H1",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": [
-              {
-                "label": "H10N3",
-                "value": "H10N3",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+            {
+                "label": "Alphainfluenzavirus Influenzae H2",
+                "value": "ICTV19710226_H2",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H2",
+                        "value": "1149091008",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H2",
+                            "value": "ICTV19710226_H2",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H2N2",
+                                "value": "H2N2",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H2",
+                                    "value": "1149091008",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H2",
+                                        "value": "ICTV19710226_H2",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H2",
+                                    "value": "1149091008",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H2",
+                                        "value": "ICTV19710226_H2",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H2",
+                                    "value": "1149091008",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H2",
+                                        "value": "ICTV19710226_H2",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H2",
+                            "value": "ICTV19710226_H2",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H2",
+                            "value": "ICTV19710226_H2",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H10N7",
-                "value": "H10N7",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                ]
+            },
+            {
+                "label": "Alphainfluenza virus influenzae H3",
+                "value": "ICTV19710226_H3",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H3",
+                        "value": "442438000-02",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H3",
+                            "value": "ICTV19710226_H3",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H3N2",
+                                "value": "H3N2",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H3",
+                                    "value": "442438000-02",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H3",
+                                        "value": "ICTV19710226_H3",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H3N8",
+                                "value": "H3N8",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H3",
+                                    "value": "442438000-02",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H3",
+                                        "value": "ICTV19710226_H3",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H3",
+                                    "value": "442438000-02",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H3",
+                                        "value": "ICTV19710226_H3",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H3",
+                                    "value": "442438000-02",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H3",
+                                        "value": "ICTV19710226_H3",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H3",
+                            "value": "ICTV19710226_H3",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H3",
+                            "value": "ICTV19710226_H3",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H10N8",
-                "value": "H10N8",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                ]
+            },
+            {
+                "label": "Alphainfluenzavirus Influenzae H5",
+                "value": "ICTV19710226_H5",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H5",
+                        "value": "713083002",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H5",
+                            "value": "ICTV19710226_H5",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H5N8",
+                                "value": "H5N8",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H5",
+                                    "value": "713083002",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H5",
+                                        "value": "ICTV19710226_H5",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H5N1",
+                                "value": "H5N1",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H5",
+                                    "value": "713083002",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H5",
+                                        "value": "ICTV19710226_H5",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H5N6",
+                                "value": "H5N6",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H5",
+                                    "value": "713083002",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H5",
+                                        "value": "ICTV19710226_H5",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H5",
+                                    "value": "713083002",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H5",
+                                        "value": "ICTV19710226_H5",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H5",
+                                    "value": "713083002",
+                                    "pathogen": {
+                                        "label": "Alphainfluenzavirus Influenzae H5",
+                                        "value": "ICTV19710226_H5",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H5",
+                            "value": "ICTV19710226_H5",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenzavirus Influenzae H5",
+                            "value": "ICTV19710226_H5",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
-                "label": "H10N5",
-                "value": "H10N5",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                ]
+            },
+            {
+                "label": "Alphainfluenza virus influenzae H6",
+                "value": "ICTV19710226_H6",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H6",
+                        "value": "H6",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H6",
+                            "value": "ICTV19710226_H6",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H6N6",
+                                "value": "H6N6",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H6",
+                                    "value": "H6",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H6",
+                                        "value": "ICTV19710226_H6",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H6",
+                                    "value": "H6",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H6",
+                                        "value": "ICTV19710226_H6",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H6",
+                                    "value": "H6",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H6",
+                                        "value": "ICTV19710226_H6",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H6",
+                            "value": "ICTV19710226_H6",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H6",
+                            "value": "ICTV19710226_H6",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              },
-              {
+                ]
+            },
+            {
+                "label": "Alphainfluenza virus influenzae H7",
+                "value": "ICTV19710226_H7",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H7",
+                        "value": "450715004",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H7",
+                            "value": "ICTV19710226_H7",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H7N7",
+                                "value": "H7N7",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H7N3",
+                                "value": "H7N3",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H7N2",
+                                "value": "H7N2",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H7N9",
+                                "value": "H7N9",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H7",
+                                    "value": "450715004",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H7",
+                                        "value": "ICTV19710226_H7",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H7",
+                            "value": "ICTV19710226_H7",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H7",
+                            "value": "ICTV19710226_H7",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Alphainfluenza virus influenzae H10",
+                "value": "ICTV19710226_H10",
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": [
+                    {
+                        "label": "Influenza caused by Influenza A virus subtype H10",
+                        "value": "H10",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H10",
+                            "value": "ICTV19710226_H10",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "H10N3",
+                                "value": "H10N3",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H10N7",
+                                "value": "H10N7",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H10N8",
+                                "value": "H10N8",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "H10N5",
+                                "value": "H10N5",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Other",
+                                "value": "-88",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Unspecified",
+                                "value": "-99",
+                                "disease": {
+                                    "label": "Influenza caused by Influenza A virus subtype H10",
+                                    "value": "H10",
+                                    "pathogen": {
+                                        "label": "Alphainfluenza virus influenzae H10",
+                                        "value": "ICTV19710226_H10",
+                                        "family": {
+                                            "label": "Orthomyxoviridae",
+                                            "value": "ICTV19750009"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H10",
+                            "value": "ICTV19710226_H10",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphainfluenza virus influenzae H10",
+                            "value": "ICTV19710226_H10",
+                            "family": {
+                                "label": "Orthomyxoviridae",
+                                "value": "ICTV19750009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
                 "label": "Other",
                 "value": "-88",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
-                    }
-                  }
-                }
-              },
-              {
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": []
+            },
+            {
                 "label": "Unspecified",
                 "value": "-99",
-                "disease": {
-                  "label": "Influenza caused by Influenza A virus subtype H10",
-                  "value": "H10",
-                  "pathogen": {
-                    "label": "Alphainfluenza virus influenzae H10",
-                    "value": "ICTV19710226_H10",
-                    "family": {
-                      "label": "Orthomyxoviridae",
-                      "value": "ICTV19750009"
+                "family": {
+                    "label": "Orthomyxoviridae",
+                    "value": "ICTV19750009"
+                },
+                "diseases": []
+            }
+        ]
+    },
+    {
+        "label": "Paramyxoviridae",
+        "value": "ICTV19750011",
+        "pathogens": [
+            {
+                "label": "Henipavirus nipahense",
+                "value": "ICTV20020449",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "ICTV19750011"
+                },
+                "diseases": [
+                    {
+                        "label": "Infection caused by Nipah virus",
+                        "value": "406597005",
+                        "pathogen": {
+                            "label": "Henipavirus nipahense",
+                            "value": "ICTV20020449",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Henipavirus nipahense",
+                            "value": "ICTV20020449",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Henipavirus nipahense",
+                            "value": "ICTV20020449",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
                     }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H10",
-              "value": "ICTV19710226_H10",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphainfluenza virus influenzae H10",
-              "value": "ICTV19710226_H10",
-              "family": {
-                "label": "Orthomyxoviridae",
-                "value": "ICTV19750009"
-              }
+            {
+                "label": "Henipavirus Hendraense",
+                "value": "ICTV20020448",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "ICTV19750011"
+                },
+                "diseases": [
+                    {
+                        "label": "Infection caused by Hendra virus",
+                        "value": "773582002",
+                        "pathogen": {
+                            "label": "Henipavirus Hendraense",
+                            "value": "ICTV20020448",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Henipavirus Hendraense",
+                            "value": "ICTV20020448",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Henipavirus Hendraense",
+                            "value": "ICTV20020448",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "ICTV19750011"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "ICTV19750011"
+                },
+                "diseases": []
+            },
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "ICTV19750011"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Orthomyxoviridae",
-          "value": "ICTV19750009"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Paramyxoviridae",
-    "value": "ICTV19750011",
-    "pathogens": [
-      {
-        "label": "Henipavirus nipahense",
-        "value": "ICTV20020449",
-        "family": {
-          "label": "Paramyxoviridae",
-          "value": "ICTV19750011"
-        },
-        "diseases": [
-          {
-            "label": "Infection caused by Nipah virus",
-            "value": "406597005",
-            "pathogen": {
-              "label": "Henipavirus nipahense",
-              "value": "ICTV20020449",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+    },
+    {
+        "label": "Phenuiviridae",
+        "value": "ICTV20164611",
+        "pathogens": [
+            {
+                "label": "Phlebovirus riftense",
+                "value": "ICTV19990693",
+                "family": {
+                    "label": "Phenuiviridae",
+                    "value": "ICTV20164611"
+                },
+                "diseases": [
+                    {
+                        "label": "Rift Valley fever",
+                        "value": "402917003",
+                        "pathogen": {
+                            "label": "Phlebovirus riftense",
+                            "value": "ICTV19990693",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Phlebovirus riftense",
+                            "value": "ICTV19990693",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Phlebovirus riftense",
+                            "value": "ICTV19990693",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Henipavirus nipahense",
-              "value": "ICTV20020449",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+            {
+                "label": "Bandavirus dabieense",
+                "value": "ICTV20141803",
+                "family": {
+                    "label": "Phenuiviridae",
+                    "value": "ICTV20164611"
+                },
+                "diseases": [
+                    {
+                        "label": "Severe Fever with Thrombocytopenia Syndrome",
+                        "value": "722401001",
+                        "pathogen": {
+                            "label": "Bandavirus dabieense",
+                            "value": "ICTV20141803",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Bandavirus dabieense",
+                            "value": "ICTV20141803",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Bandavirus dabieense",
+                            "value": "ICTV20141803",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "ICTV20164611"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Henipavirus nipahense",
-              "value": "ICTV20020449",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Phenuiviridae",
+                    "value": "ICTV20164611"
+                },
+                "diseases": []
             },
-            "strains": []
-          }
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Phenuiviridae",
+                    "value": "ICTV20164611"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Henipavirus Hendraense",
-        "value": "ICTV20020448",
-        "family": {
-          "label": "Paramyxoviridae",
-          "value": "ICTV19750011"
-        },
-        "diseases": [
-          {
-            "label": "Infection caused by Hendra virus",
-            "value": "773582002",
-            "pathogen": {
-              "label": "Henipavirus Hendraense",
-              "value": "ICTV20020448",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+    },
+    {
+        "label": "Poxviridae",
+        "value": "ICTV19740004",
+        "pathogens": [
+            {
+                "label": "Orthopoxvirus vaccinia",
+                "value": "ICTV19911346",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "ICTV19740004"
+                },
+                "diseases": [
+                    {
+                        "label": "Vaccinia virus infection",
+                        "value": "111852003",
+                        "pathogen": {
+                            "label": "Orthopoxvirus vaccinia",
+                            "value": "ICTV19911346",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthopoxvirus vaccinia",
+                            "value": "ICTV19911346",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthopoxvirus vaccinia",
+                            "value": "ICTV19911346",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Henipavirus Hendraense",
-              "value": "ICTV20020448",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+            {
+                "label": "Orthopoxvirus variola",
+                "value": "ICTV19710294",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "ICTV19740004"
+                },
+                "diseases": [
+                    {
+                        "label": "Smallpox",
+                        "value": "67924001",
+                        "pathogen": {
+                            "label": "Orthopoxvirus variola",
+                            "value": "ICTV19710294",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthopoxvirus variola",
+                            "value": "ICTV19710294",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthopoxvirus variola",
+                            "value": "ICTV19710294",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Henipavirus Hendraense",
-              "value": "ICTV20020448",
-              "family": {
-                "label": "Paramyxoviridae",
-                "value": "ICTV19750011"
-              }
+            {
+                "label": "Orthopoxvirus monkeypox",
+                "value": "ICTV19710279",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "ICTV19740004"
+                },
+                "diseases": [
+                    {
+                        "label": "mpox",
+                        "value": "359814004",
+                        "pathogen": {
+                            "label": "Orthopoxvirus monkeypox",
+                            "value": "ICTV19710279",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Orthopoxvirus monkeypox",
+                            "value": "ICTV19710279",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Orthopoxvirus monkeypox",
+                            "value": "ICTV19710279",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "ICTV19740004"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "ICTV19740004"
+                },
+                "diseases": []
+            },
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "ICTV19740004"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Paramyxoviridae",
-          "value": "ICTV19750011"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Paramyxoviridae",
-          "value": "ICTV19750011"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Phenuiviridae",
-    "value": "ICTV20164611",
-    "pathogens": [
-      {
-        "label": "Phlebovirus riftense",
-        "value": "ICTV19990693",
-        "family": {
-          "label": "Phenuiviridae",
-          "value": "ICTV20164611"
-        },
-        "diseases": [
-          {
-            "label": "Rift Valley fever",
-            "value": "402917003",
-            "pathogen": {
-              "label": "Phlebovirus riftense",
-              "value": "ICTV19990693",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
+    },
+    {
+        "label": "Togaviridae",
+        "value": "ICTV19740006",
+        "pathogens": [
+            {
+                "label": "Alphavirus chikungunya",
+                "value": "ICTV19710074",
+                "family": {
+                    "label": "Togaviridae",
+                    "value": "ICTV19740006"
+                },
+                "diseases": [
+                    {
+                        "label": "Chikungunya haemorrhagic fever",
+                        "value": "111864006",
+                        "pathogen": {
+                            "label": "Alphavirus chikungunya",
+                            "value": "ICTV19710074",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphavirus chikungunya",
+                            "value": "ICTV19710074",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphavirus chikungunya",
+                            "value": "ICTV19710074",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Phlebovirus riftense",
-              "value": "ICTV19990693",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
+            {
+                "label": "Alphavirus venezuelan",
+                "value": "ICTV19710086",
+                "family": {
+                    "label": "Togaviridae",
+                    "value": "ICTV19740006"
+                },
+                "diseases": [
+                    {
+                        "label": "Disorder caused by Venezuelan equine encephalitis virus",
+                        "value": "417702007",
+                        "pathogen": {
+                            "label": "Alphavirus venezuelan",
+                            "value": "ICTV19710086",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Alphavirus venezuelan",
+                            "value": "ICTV19710086",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Alphavirus venezuelan",
+                            "value": "ICTV19710086",
+                            "family": {
+                                "label": "Togaviridae",
+                                "value": "ICTV19740006"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Phlebovirus riftense",
-              "value": "ICTV19990693",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Togaviridae",
+                    "value": "ICTV19740006"
+                },
+                "diseases": []
             },
-            "strains": []
-          }
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Togaviridae",
+                    "value": "ICTV19740006"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Bandavirus dabieense",
-        "value": "ICTV20141803",
-        "family": {
-          "label": "Phenuiviridae",
-          "value": "ICTV20164611"
-        },
-        "diseases": [
-          {
-            "label": "Severe Fever with Thrombocytopenia Syndrome",
-            "value": "722401001",
-            "pathogen": {
-              "label": "Bandavirus dabieense",
-              "value": "ICTV20141803",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Bandavirus dabieense",
-              "value": "ICTV20141803",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Bandavirus dabieense",
-              "value": "ICTV20141803",
-              "family": {
-                "label": "Phenuiviridae",
-                "value": "ICTV20164611"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Phenuiviridae",
-          "value": "ICTV20164611"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Phenuiviridae",
-          "value": "ICTV20164611"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Poxviridae",
-    "value": "ICTV19740004",
-    "pathogens": [
-      {
-        "label": "Orthopoxvirus vaccinia",
-        "value": "ICTV19911346",
-        "family": {
-          "label": "Poxviridae",
-          "value": "ICTV19740004"
-        },
-        "diseases": [
-          {
-            "label": "Vaccinia virus infection",
-            "value": "111852003",
-            "pathogen": {
-              "label": "Orthopoxvirus vaccinia",
-              "value": "ICTV19911346",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthopoxvirus vaccinia",
-              "value": "ICTV19911346",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthopoxvirus vaccinia",
-              "value": "ICTV19911346",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthopoxvirus variola",
-        "value": "ICTV19710294",
-        "family": {
-          "label": "Poxviridae",
-          "value": "ICTV19740004"
-        },
-        "diseases": [
-          {
-            "label": "Smallpox",
-            "value": "67924001",
-            "pathogen": {
-              "label": "Orthopoxvirus variola",
-              "value": "ICTV19710294",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthopoxvirus variola",
-              "value": "ICTV19710294",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthopoxvirus variola",
-              "value": "ICTV19710294",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Orthopoxvirus monkeypox",
-        "value": "ICTV19710279",
-        "family": {
-          "label": "Poxviridae",
-          "value": "ICTV19740004"
-        },
-        "diseases": [
-          {
-            "label": "mpox",
-            "value": "359814004",
-            "pathogen": {
-              "label": "Orthopoxvirus monkeypox",
-              "value": "ICTV19710279",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Orthopoxvirus monkeypox",
-              "value": "ICTV19710279",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Orthopoxvirus monkeypox",
-              "value": "ICTV19710279",
-              "family": {
-                "label": "Poxviridae",
-                "value": "ICTV19740004"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Poxviridae",
-          "value": "ICTV19740004"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Poxviridae",
-          "value": "ICTV19740004"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Togaviridae",
-    "value": "ICTV19740006",
-    "pathogens": [
-      {
-        "label": "Alphavirus chikungunya",
-        "value": "ICTV19710074",
-        "family": {
-          "label": "Togaviridae",
-          "value": "ICTV19740006"
-        },
-        "diseases": [
-          {
-            "label": "Chikungunya haemorrhagic fever",
-            "value": "111864006",
-            "pathogen": {
-              "label": "Alphavirus chikungunya",
-              "value": "ICTV19710074",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphavirus chikungunya",
-              "value": "ICTV19710074",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphavirus chikungunya",
-              "value": "ICTV19710074",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Alphavirus venezuelan",
-        "value": "ICTV19710086",
-        "family": {
-          "label": "Togaviridae",
-          "value": "ICTV19740006"
-        },
-        "diseases": [
-          {
-            "label": "Disorder caused by Venezuelan equine encephalitis virus",
-            "value": "417702007",
-            "pathogen": {
-              "label": "Alphavirus venezuelan",
-              "value": "ICTV19710086",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Alphavirus venezuelan",
-              "value": "ICTV19710086",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Alphavirus venezuelan",
-              "value": "ICTV19710086",
-              "family": {
-                "label": "Togaviridae",
-                "value": "ICTV19740006"
-              }
-            },
-            "strains": []
-          }
-        ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Togaviridae",
-          "value": "ICTV19740006"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Togaviridae",
-          "value": "ICTV19740006"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Unknown",
-    "value": "np001",
-    "pathogens": [
-      {
-        "label": "Pathogen X",
+    },
+    {
+        "label": "Unknown",
         "value": "np001",
-        "family": {
-          "label": "Unknown",
-          "value": "np001"
-        },
-        "diseases": [
-          {
-            "label": "Disease X",
-            "value": "np001",
-            "pathogen": {
-              "label": "Pathogen X",
-              "value": "np001",
-              "family": {
-                "label": "Unknown",
-                "value": "np001"
-              }
+        "pathogens": [
+            {
+                "label": "Pathogen X",
+                "value": "np001",
+                "family": {
+                    "label": "Unknown",
+                    "value": "np001"
+                },
+                "diseases": [
+                    {
+                        "label": "Disease X",
+                        "value": "np001",
+                        "pathogen": {
+                            "label": "Pathogen X",
+                            "value": "np001",
+                            "family": {
+                                "label": "Unknown",
+                                "value": "np001"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Pathogen X",
+                            "value": "np001",
+                            "family": {
+                                "label": "Unknown",
+                                "value": "np001"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Pathogen X",
+                            "value": "np001",
+                            "family": {
+                                "label": "Unknown",
+                                "value": "np001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Pathogen X",
-              "value": "np001",
-              "family": {
-                "label": "Unknown",
-                "value": "np001"
-              }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Unknown",
+                    "value": "np001"
+                },
+                "diseases": []
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Pathogen X",
-              "value": "np001",
-              "family": {
-                "label": "Unknown",
-                "value": "np001"
-              }
-            },
-            "strains": []
-          }
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Unknown",
+                    "value": "np001"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Unknown",
-          "value": "np001"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Unknown",
-          "value": "np001"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Vibrionaceae",
-    "value": "115077009",
-    "pathogens": [
-      {
-        "label": "Vibrio cholerae serogroup 0139",
-        "value": "125048009",
-        "family": {
-          "label": "Vibrionaceae",
-          "value": "115077009"
-        },
-        "diseases": [
-          {
-            "label": "Cholera",
-            "value": "63650001",
-            "pathogen": {
-              "label": "Vibrio cholerae serogroup 0139",
-              "value": "125048009",
-              "family": {
-                "label": "Vibrionaceae",
-                "value": "115077009"
-              }
+    },
+    {
+        "label": "Vibrionaceae",
+        "value": "115077009",
+        "pathogens": [
+            {
+                "label": "Vibrio cholerae serogroup 0139",
+                "value": "125048009",
+                "family": {
+                    "label": "Vibrionaceae",
+                    "value": "115077009"
+                },
+                "diseases": [
+                    {
+                        "label": "Cholera",
+                        "value": "63650001",
+                        "pathogen": {
+                            "label": "Vibrio cholerae serogroup 0139",
+                            "value": "125048009",
+                            "family": {
+                                "label": "Vibrionaceae",
+                                "value": "115077009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Vibrio cholerae serogroup 0139",
+                            "value": "125048009",
+                            "family": {
+                                "label": "Vibrionaceae",
+                                "value": "115077009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Vibrio cholerae serogroup 0139",
+                            "value": "125048009",
+                            "family": {
+                                "label": "Vibrionaceae",
+                                "value": "115077009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Vibrio cholerae serogroup 0139",
-              "value": "125048009",
-              "family": {
-                "label": "Vibrionaceae",
-                "value": "115077009"
-              }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Vibrionaceae",
+                    "value": "115077009"
+                },
+                "diseases": []
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Vibrio cholerae serogroup 0139",
-              "value": "125048009",
-              "family": {
-                "label": "Vibrionaceae",
-                "value": "115077009"
-              }
-            },
-            "strains": []
-          }
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Vibrionaceae",
+                    "value": "115077009"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Vibrionaceae",
-          "value": "115077009"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Vibrionaceae",
-          "value": "115077009"
-        },
-        "diseases": []
-      }
-    ]
-  },
-  {
-    "label": "Yersiniaceae",
-    "value": "1269429001",
-    "pathogens": [
-      {
-        "label": "Yersinia Pestis",
-        "value": "54365000",
-        "family": {
-          "label": "Yersiniaceae",
-          "value": "1269429001"
-        },
-        "diseases": [
-          {
-            "label": "Plague",
-            "value": "58750007",
-            "pathogen": {
-              "label": "Yersinia Pestis",
-              "value": "54365000",
-              "family": {
-                "label": "Yersiniaceae",
-                "value": "1269429001"
-              }
+    },
+    {
+        "label": "Yersiniaceae",
+        "value": "1269429001",
+        "pathogens": [
+            {
+                "label": "Yersinia Pestis",
+                "value": "54365000",
+                "family": {
+                    "label": "Yersiniaceae",
+                    "value": "1269429001"
+                },
+                "diseases": [
+                    {
+                        "label": "Plague",
+                        "value": "58750007",
+                        "pathogen": {
+                            "label": "Yersinia Pestis",
+                            "value": "54365000",
+                            "family": {
+                                "label": "Yersiniaceae",
+                                "value": "1269429001"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Other",
+                        "value": "-88",
+                        "pathogen": {
+                            "label": "Yersinia Pestis",
+                            "value": "54365000",
+                            "family": {
+                                "label": "Yersiniaceae",
+                                "value": "1269429001"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Unspecified",
+                        "value": "-99",
+                        "pathogen": {
+                            "label": "Yersinia Pestis",
+                            "value": "54365000",
+                            "family": {
+                                "label": "Yersiniaceae",
+                                "value": "1269429001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
             },
-            "strains": []
-          },
-          {
-            "label": "Other",
-            "value": "-88",
-            "pathogen": {
-              "label": "Yersinia Pestis",
-              "value": "54365000",
-              "family": {
-                "label": "Yersiniaceae",
-                "value": "1269429001"
-              }
+            {
+                "label": "Other",
+                "value": "-88",
+                "family": {
+                    "label": "Yersiniaceae",
+                    "value": "1269429001"
+                },
+                "diseases": []
             },
-            "strains": []
-          },
-          {
-            "label": "Unspecified",
-            "value": "-99",
-            "pathogen": {
-              "label": "Yersinia Pestis",
-              "value": "54365000",
-              "family": {
-                "label": "Yersiniaceae",
-                "value": "1269429001"
-              }
-            },
-            "strains": []
-          }
+            {
+                "label": "Unspecified",
+                "value": "-99",
+                "family": {
+                    "label": "Yersiniaceae",
+                    "value": "1269429001"
+                },
+                "diseases": []
+            }
         ]
-      },
-      {
-        "label": "Other",
-        "value": "-88",
-        "family": {
-          "label": "Yersiniaceae",
-          "value": "1269429001"
-        },
-        "diseases": []
-      },
-      {
-        "label": "Unspecified",
-        "value": "-99",
-        "family": {
-          "label": "Yersiniaceae",
-          "value": "1269429001"
-        },
-        "diseases": []
-      }
-    ]
-  }
+    }
 ]

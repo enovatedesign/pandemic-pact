@@ -1,18 +1,16 @@
 import { ReactNode, useContext, useState } from 'react'
 import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
-import MultiSelect from './MultiSelect'
-import Switch from './Switch'
 import Button from './Button'
 import {
     emptyFilters,
     Filters,
-    FilterSchema,
     FixedSelectOptionContext,
     getAvailableFilters,
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import CMSFilterBlock from './CMS/HierarchicalFiltersBlock'
+import FilterBlock from './FilterBlock'
 import { PolicyRoadmapEntryTypeHandle } from '../helpers/types'
 
 interface FilterSidebarProps {
@@ -107,11 +105,11 @@ export default function FilterSidebar({
                                     </span>
                                     <span className="flex flex-row items-end gap-1">
                                         <span className="text-4xl font-bold text-primary">
-                                            {globallyFilteredDataset.length}
+                                            {globallyFilteredDataset.length.toLocaleString()}
                                         </span>
                                         <span className="text-lg font-bold text-primary">
                                             {' '}
-                                            / {completeDataset.length}
+                                            / {completeDataset.length.toLocaleString()}
                                         </span>
                                     </span>
                                 </>
@@ -215,56 +213,3 @@ export default function FilterSidebar({
         </div>
     )
 }
-
-interface filterBlockProps {
-    filters: FilterSchema[]
-    selectedFilters: Filters
-    setSelectedOptions: (field: keyof Filters, options: string[]) => void
-    setExcludeGrantsWithMultipleItemsInField: (
-        field: keyof Filters,
-        value: boolean,
-    ) => void
-    sharedFiltersId?: string | null
-}
-
-const FilterBlock = ({
-    filters,
-    selectedFilters,
-    setExcludeGrantsWithMultipleItemsInField,
-    setSelectedOptions,
-    sharedFiltersId
-}: filterBlockProps) => filters.map(({ field, label, excludeGrantsWithMultipleItems, loadOnClick, isHidden }) => !isHidden &&  (
-    <div className="flex flex-col space-y-2 w-full" key={field}>
-        <p className="text-white">Filter by {label}</p>
-
-        <MultiSelect
-            field={field}
-            selectedOptions={selectedFilters[field] ? selectedFilters[field].values : []}
-            setSelectedOptions={options =>
-                setSelectedOptions(field, options)
-            }
-            loadOnClick={sharedFiltersId ? 
-                false : 
-                loadOnClick ?? true
-            }
-            label={label}
-        />
-
-        {excludeGrantsWithMultipleItems && (
-            <Switch
-                checked={
-                    selectedFilters[field]
-                    .excludeGrantsWithMultipleItems
-                }
-                onChange={value =>
-                    setExcludeGrantsWithMultipleItemsInField(
-                        field,
-                        value,
-                    )
-                }
-                label={excludeGrantsWithMultipleItems.label}
-                textClassName="text-white"
-            />
-        )}
-    </div>
-))

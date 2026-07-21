@@ -1,0 +1,947 @@
+[
+    {
+        "label": "Arenaviridae",
+        "value": "243624009",
+        "pathogens": [
+            {
+                "label": "Mammarenavirus lassaense",
+                "value": "85944001",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "243624009"
+                },
+                "diseases": [
+                    {
+                        "label": "Lassa Haemorrhagic Fever",
+                        "value": "19065005",
+                        "pathogen": {
+                            "label": "Mammarenavirus lassaense",
+                            "value": "85944001",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "243624009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Mammarenavirus juninense",
+                "value": "26352009",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "243624009"
+                },
+                "diseases": [
+                    {
+                        "label": "Argentine Haemorrhagic Fever",
+                        "value": "58868000",
+                        "pathogen": {
+                            "label": "Mammarenavirus juninense",
+                            "value": "26352009",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "243624009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Mammarenavirus lujoense",
+                "value": "450622000",
+                "family": {
+                    "label": "Arenaviridae",
+                    "value": "243624009"
+                },
+                "diseases": [
+                    {
+                        "label": "Lujo Haemorrhagic Fever",
+                        "value": "716585008",
+                        "pathogen": {
+                            "label": "Mammarenavirus lujoense",
+                            "value": "450622000",
+                            "family": {
+                                "label": "Arenaviridae",
+                                "value": "243624009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Filoviridae",
+        "value": "407325004",
+        "pathogens": [
+            {
+                "label": "Ebola virus",
+                "value": "424206003",
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "407325004"
+                },
+                "diseases": [
+                    {
+                        "label": "Ebola",
+                        "value": "37109004",
+                        "pathogen": {
+                            "label": "Ebola virus",
+                            "value": "424206003",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "407325004"
+                            }
+                        },
+                        "strains": [
+                            {
+                                "label": "Zaire Ebola virus disease",
+                                "value": "45901000087102",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "424206003",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "407325004"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Ebola Sudan virus disease",
+                                "value": "788903009",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "424206003",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "407325004"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "label": "Bundibugyo virus disease",
+                                "value": "788903009_03",
+                                "disease": {
+                                    "label": "Ebola",
+                                    "value": "37109004",
+                                    "pathogen": {
+                                        "label": "Ebola virus",
+                                        "value": "424206003",
+                                        "family": {
+                                            "label": "Filoviridae",
+                                            "value": "407325004"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Orthomarburgvirus marburgense",
+                "value": "424421007",
+                "family": {
+                    "label": "Filoviridae",
+                    "value": "407325004"
+                },
+                "diseases": [
+                    {
+                        "label": "Marburg virus disease",
+                        "value": "77503002",
+                        "pathogen": {
+                            "label": "Orthomarburgvirus marburgense",
+                            "value": "424421007",
+                            "family": {
+                                "label": "Filoviridae",
+                                "value": "407325004"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Flaviviridae",
+        "value": "243602009",
+        "pathogens": [
+            {
+                "label": "Orthoflavivirus zikaense",
+                "value": "50471002",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Zika virus disease",
+                        "value": "3928002",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "50471002",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Congenital infection caused by Zika virus",
+                        "value": "762725007",
+                        "pathogen": {
+                            "label": "Orthoflavivirus zikaense",
+                            "value": "50471002",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus encephalitidis",
+                "value": "32323003",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Tick-Borne Encephalitis",
+                        "value": "414093008",
+                        "pathogen": {
+                            "label": "Orthoflavivirus encephalitidis",
+                            "value": "32323003",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus nilense",
+                "value": "57311007",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "West Nile Virus Infection",
+                        "value": "417093003",
+                        "pathogen": {
+                            "label": "Orthoflavivirus nilense",
+                            "value": "57311007",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus denguei",
+                "value": "34348001",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Dengue",
+                        "value": "38362002",
+                        "pathogen": {
+                            "label": "Orthoflavivirus denguei",
+                            "value": "34348001",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus flavi",
+                "value": "26630006",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Yellow Fever",
+                        "value": "16541001",
+                        "pathogen": {
+                            "label": "Orthoflavivirus flavi",
+                            "value": "26630006",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus alkhumraense",
+                "value": "57311008",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Alkhurma haemorrhagic fever",
+                        "value": "762725008",
+                        "pathogen": {
+                            "label": "Orthoflavivirus alkhumraense",
+                            "value": "57311008",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus ilheusense",
+                "value": "57311009",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Ilheus fever",
+                        "value": "762725009",
+                        "pathogen": {
+                            "label": "Orthoflavivirus ilheusense",
+                            "value": "57311009",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    },
+                    {
+                        "label": "Rocio virus encephalitis",
+                        "value": "762725016",
+                        "pathogen": {
+                            "label": "Orthoflavivirus ilheusense",
+                            "value": "57311009",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Jingmenvirus rhipicephali",
+                "value": "57311010",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Jingmen tick virus disease",
+                        "value": "762725010",
+                        "pathogen": {
+                            "label": "Jingmenvirus rhipicephali",
+                            "value": "57311010",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus kyasanurense",
+                "value": "57311011",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Kyasanur forest disease",
+                        "value": "762725011",
+                        "pathogen": {
+                            "label": "Orthoflavivirus kyasanurense",
+                            "value": "57311011",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus loupingi",
+                "value": "57311012",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Louping ill",
+                        "value": "762725012",
+                        "pathogen": {
+                            "label": "Orthoflavivirus loupingi",
+                            "value": "57311012",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus murrayense",
+                "value": "57311013",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Murray Valley encephalitis",
+                        "value": "762725013",
+                        "pathogen": {
+                            "label": "Orthoflavivirus murrayense",
+                            "value": "57311013",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus omskense",
+                "value": "57311014",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Omsk haemorrhagic fever",
+                        "value": "762725014",
+                        "pathogen": {
+                            "label": "Orthoflavivirus omskense",
+                            "value": "57311014",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus powassanense",
+                "value": "57311015",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Powassan encephalitis",
+                        "value": "762725015",
+                        "pathogen": {
+                            "label": "Orthoflavivirus powassanense",
+                            "value": "57311015",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Spondweni virus",
+                "value": "57311016",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Spondweni fever",
+                        "value": "762725017",
+                        "pathogen": {
+                            "label": "Spondweni virus",
+                            "value": "57311016",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus louisense",
+                "value": "57311017",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "St. Louis encephalitis",
+                        "value": "762725018",
+                        "pathogen": {
+                            "label": "Orthoflavivirus louisense",
+                            "value": "57311017",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus usutuense",
+                "value": "57311018",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Usutu virus disease",
+                        "value": "762725019",
+                        "pathogen": {
+                            "label": "Orthoflavivirus usutuense",
+                            "value": "57311018",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthoflavivirus wesselsbronense",
+                "value": "57311019",
+                "family": {
+                    "label": "Flaviviridae",
+                    "value": "243602009"
+                },
+                "diseases": [
+                    {
+                        "label": "Wesselsbron disease",
+                        "value": "762725020",
+                        "pathogen": {
+                            "label": "Orthoflavivirus wesselsbronense",
+                            "value": "57311019",
+                            "family": {
+                                "label": "Flaviviridae",
+                                "value": "243602009"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Nairoviridae",
+        "value": "243621001",
+        "pathogens": [
+            {
+                "label": "Orthonairovirus haemorrhagiae",
+                "value": "79875007",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Crimean-Congo haemorrhagic fever",
+                        "value": "43489008",
+                        "pathogen": {
+                            "label": "Orthonairovirus haemorrhagiae",
+                            "value": "79875007",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Norwavirus beijiense",
+                "value": "79875008",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Beiji nairovirus disease",
+                        "value": "43489009",
+                        "pathogen": {
+                            "label": "Norwavirus beijiense",
+                            "value": "79875008",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus erveense",
+                "value": "79875009",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Erve virus disease",
+                        "value": "43489010",
+                        "pathogen": {
+                            "label": "Orthonairovirus erveense",
+                            "value": "79875009",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus kasokeroense",
+                "value": "79875010",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Kasokero virus disease",
+                        "value": "43489011",
+                        "pathogen": {
+                            "label": "Orthonairovirus kasokeroense",
+                            "value": "79875010",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus songlingense",
+                "value": "79875011",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Songling virus disease",
+                        "value": "43489012",
+                        "pathogen": {
+                            "label": "Orthonairovirus songlingense",
+                            "value": "79875011",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus tachengense",
+                "value": "79875012",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Tacheng tick virus disease",
+                        "value": "43489013",
+                        "pathogen": {
+                            "label": "Orthonairovirus tachengense",
+                            "value": "79875012",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus tomdiense",
+                "value": "79875013",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Tamdy virus disease",
+                        "value": "43489014",
+                        "pathogen": {
+                            "label": "Orthonairovirus tomdiense",
+                            "value": "79875013",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Wetland virus",
+                "value": "79875014",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Wetland virus disease",
+                        "value": "43489015",
+                        "pathogen": {
+                            "label": "Wetland virus",
+                            "value": "79875014",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Orthonairovirus yezoense",
+                "value": "79875015",
+                "family": {
+                    "label": "Nairoviridae",
+                    "value": "243621001"
+                },
+                "diseases": [
+                    {
+                        "label": "Yezo virus disease",
+                        "value": "43489016",
+                        "pathogen": {
+                            "label": "Orthonairovirus yezoense",
+                            "value": "79875015",
+                            "family": {
+                                "label": "Nairoviridae",
+                                "value": "243621001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Paramyxoviridae",
+        "value": "128354001",
+        "pathogens": [
+            {
+                "label": "Henipavirus hendraense",
+                "value": "115510008",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "128354001"
+                },
+                "diseases": [
+                    {
+                        "label": "Hendra virus infection",
+                        "value": "773582002",
+                        "pathogen": {
+                            "label": "Henipavirus hendraense",
+                            "value": "115510008",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "128354001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Henipavirus nipahense",
+                "value": "115511007",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "128354001"
+                },
+                "diseases": [
+                    {
+                        "label": "Nipah virus infection",
+                        "value": "406597005",
+                        "pathogen": {
+                            "label": "Henipavirus nipahense",
+                            "value": "115511007",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "128354001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            },
+            {
+                "label": "Parahenipavirus langyaense",
+                "value": "115510009",
+                "family": {
+                    "label": "Paramyxoviridae",
+                    "value": "128354001"
+                },
+                "diseases": [
+                    {
+                        "label": "Langya henipavirus infection",
+                        "value": "00041",
+                        "pathogen": {
+                            "label": "Parahenipavirus langyaense",
+                            "value": "115510009",
+                            "family": {
+                                "label": "Paramyxoviridae",
+                                "value": "128354001"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Phenuiviridae",
+        "value": "1288038008",
+        "pathogens": [
+            {
+                "label": "Phlebovirus riftense",
+                "value": "28335002",
+                "family": {
+                    "label": "Phenuiviridae",
+                    "value": "1288038008"
+                },
+                "diseases": [
+                    {
+                        "label": "Rift Valley Fever",
+                        "value": "402917003",
+                        "pathogen": {
+                            "label": "Phlebovirus riftense",
+                            "value": "28335002",
+                            "family": {
+                                "label": "Phenuiviridae",
+                                "value": "1288038008"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Poxviridae",
+        "value": "424976006",
+        "pathogens": [
+            {
+                "label": "Orthopoxvirus monkeypox",
+                "value": "59774002",
+                "family": {
+                    "label": "Poxviridae",
+                    "value": "424976006"
+                },
+                "diseases": [
+                    {
+                        "label": "Mpox Clade I",
+                        "value": "359814004",
+                        "pathogen": {
+                            "label": "Orthopoxvirus monkeypox",
+                            "value": "59774002",
+                            "family": {
+                                "label": "Poxviridae",
+                                "value": "424976006"
+                            }
+                        },
+                        "strains": []
+                    }
+                ]
+            }
+        ]
+    }
+]

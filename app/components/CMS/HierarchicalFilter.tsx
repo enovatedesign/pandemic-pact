@@ -111,7 +111,10 @@ const HierarchicalFilter = ({
                                     // We need access to this information in CMSFilterBlock to handle this logic
                                     handleFilterSelection(field, option?.value ? option.value : option)
                                 }}
-                                value={fixedOption}
+                                // Coalesce to null (not undefined) so the select stays
+                                // controlled and clears when its value is no longer a
+                                // valid option — e.g. after the parent family changes.
+                                value={fixedOption ?? null}
                                 placeholder={fullLabel}
                                 aria-label={fullLabel}
                                 className="text-black w-full"

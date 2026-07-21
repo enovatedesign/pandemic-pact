@@ -1,4 +1,4 @@
-import type { FeatureProperties } from './types'
+import type { FeatureProperties } from '@/app/helpers/types'
 import InfoModal from '../../InfoModal'
 import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import { XIcon } from '@heroicons/react/solid'

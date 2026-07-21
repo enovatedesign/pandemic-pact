@@ -13,8 +13,8 @@ export { uploadStaticFiles } from './upload-static-files'
 export { downloadStaticFiles } from './download-static-files'
 export { verifyGrants } from './verify-grants'
 export {
-    readGrantsLastUsedFileId,
-    writeGrantsLastUsedFileId,
+    readLastUsedFileIds,
+    writeLastUsedFileIds,
 } from './grants-marker'
 
 /** Public read base for grant/cache objects (CloudFront). */

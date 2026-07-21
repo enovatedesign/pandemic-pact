@@ -1,22 +1,25 @@
 import AnimateHeight from "react-animate-height"
 
 import { DiseaseLabel, PolicyRoadmapEntryTypeHandle } from "@/app/helpers/types"
-import { getVisualisationCards } from "./helpers"
+import { getVisualisationCards } from "../visualise/components/helpers"
 
 import JumpMenu from "@/app/components/JumpMenu"
 
 interface Props {
     policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle | null
     dropdownVisible: boolean
-    outbreak: boolean
+    cardData?: any[]
+    outbreak?: boolean
     disease?: DiseaseLabel
+    useCardSwitch?: boolean
 }
 
 const VisualisationJumpMenu = ({ 
     policyRoadmapEntryType = null, 
     dropdownVisible, 
     outbreak = false, 
-    disease 
+    disease,
+    useCardSwitch = true
 }: Props) => {
     const cardData = getVisualisationCards({ policyRoadmapEntryType, outbreak, disease });
 
@@ -26,7 +29,7 @@ const VisualisationJumpMenu = ({
             height={dropdownVisible ? 'auto' : 0}
             className="sticky w-full z-20 top-0 backdrop-blur-sm bg-primary-lighter/75"
         >
-            <JumpMenu cardData={cardData} disease={disease}/>
+            <JumpMenu cardData={cardData} disease={disease} useCardSwitch={useCardSwitch}/>
         </AnimateHeight>
     )
 }

@@ -19,7 +19,7 @@ import { getKvDatabase } from '@/app/helpers/kv'
 
 import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
-import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
+import VisualisationJumpMenu from '@/app/components/VisualisationJumpMenu'
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
 import PandemicIntelligenceThemes from './visualisations/PandemicIntelligenceThemes'
 import PandemicEpidemicIntelligenceFunders from './visualisations/PandemicEpidemicIntelligenceFunders'
@@ -124,8 +124,8 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                                 Filtered Grants Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length} /{' '}
-                                {completeDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()} /{' '}
+                                {completeDataset.length.toLocaleString()}
                             </dd>
                         </>
                     ) : (
@@ -134,7 +134,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                                 Total grants
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
-                                {globallyFilteredDataset.length}
+                                {globallyFilteredDataset.length.toLocaleString()}
                             </dd>
                         </>
                     )}

@@ -76,7 +76,7 @@ export default function BarChart({
             dataset,
             usingFunderLocation ? countryField : regionField
         )
-
+        
         data = whoRegions.map(region => [
             region,
             grantsGroupedByRegion[region] ?? [],

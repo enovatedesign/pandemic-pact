@@ -22,6 +22,9 @@ export async function uploadStaticFiles() {
         { path: './public/data/geojson/who-regions.json', key: `${branchName}/cache/who-regions.json` },
         { path: './data/download/dictionary.json', key: `${branchName}/cache/dictionary.json` },
         { path: './data/download/research-category-mapping.json', key: `${branchName}/cache/research-category-mapping.json` },
+        { path: './data/download/rrna-data.json', key: `${branchName}/cache/rrna-data.json` },
+        { path: './data/dist/rrna/select-options.json', key: `${branchName}/cache/rrna-select-options.json` },
+        { path: './public/data/rrna/studies.json', key: `${branchName}/cache/rrna/studies.json` },
         { path: './data/dist/pandemic-intelligence.json', key: `${branchName}/cache/pandemic-intelligence.json` },
         { path: './data/dist/grants.json.gz', key: `${branchName}/cache/grants-dist.json.gz` },
     ]

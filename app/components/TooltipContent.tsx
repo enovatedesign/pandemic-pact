@@ -5,7 +5,7 @@ import {
     MinusIcon,
 } from '@heroicons/react/solid'
 
-interface TooltipContentItem {
+export interface TooltipContentItem {
     colour?: string
     label: string
     value: string
