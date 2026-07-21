@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 
-import hierarchyFilters from '../../../public/manual-hierarchy-filters.json'
+import defaultHierarchyFilters from '@/public/manual-hierarchy-filters.json'
 
 import { Filters } from '@/app/helpers/filters'
 import { 
@@ -26,6 +26,7 @@ interface HierarchicalFiltersBlockProps {
     fixedSelectOptions?: FixedSelectOptions
     isVisualisePage?: boolean
     outbreak?: boolean
+    hierarchyFilters?: CMSFamilyFilter[]
 }
 
 const HierarchicalFiltersBlock = ({
@@ -35,6 +36,7 @@ const HierarchicalFiltersBlock = ({
     fixedSelectOptions,
     isVisualisePage = true,
     outbreak = false,
+    hierarchyFilters = defaultHierarchyFilters
 }: HierarchicalFiltersBlockProps) => {
     const [localSelectedOptions, setLocalSelectedOptions] = useState<FixedSelectOptions | undefined>(fixedSelectOptions)
 
@@ -139,16 +141,31 @@ const HierarchicalFiltersBlock = ({
         value: string | null
     ) => { 
         if (value === null) {
-            setLocalSelectedOptions((prev: any) => ({
-                ...prev,
-                [field]: { label: '', value: null }
-            }))
-            
-            
             if (isVisualisePage) {
-                clearSelectValue(field)
-                setSelectedOptions(field, [])
+                // Clearing a filter must also clear the filters nested below it,
+                // so stale child selections don't persist (e.g. clearing the
+                // family must clear the pathogen and disease).
+                const descendantFields: Record<string, string[]> = {
+                    'Families': ['Pathogens', 'Diseases', 'Strains'],
+                    'Pathogens': ['Diseases', 'Strains'],
+                    'Diseases': ['Strains'],
+                    'Strains': [],
+                }
+                const fieldsToClear = [field, ...(descendantFields[field] ?? [])]
+
+                setLocalSelectedOptions((prev: any) => {
+                    const next = { ...prev }
+                    fieldsToClear.forEach(key => { next[key] = { label: '', value: null } })
+                    return next
+                })
+
+                fieldsToClear.forEach(key => setSelectedOptions(key, []))
             } else {
+                setLocalSelectedOptions((prev: any) => ({
+                    ...prev,
+                    [field]: { label: '', value: null }
+                }))
+
                 let nullOptions 
                 switch (field) {
                     case "Families":

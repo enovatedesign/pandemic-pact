@@ -27,6 +27,31 @@ export interface AnnouncementProps {
 
 export type DiseaseLabel = 'mpox' | 'H5N1' | 'Marburg virus disease' | 'Ebola' | 'default'
 
+export type LocationType = 'Funder' | 'ResearchInstitution' | 'ResearchLocation'
+export type rrnaLocationType = 'countries' | 'regions'
+
+export interface MapControlState {
+    displayKnownFinancialCommitments: boolean
+    displayWhoRegions: boolean
+    locationType: LocationType
+}
+
+export interface rrnaMapControlState {
+    locationType: rrnaLocationType
+    filteredResearchDomains: string[]
+}
+
+export interface FeatureProperties {
+    id: string
+    name: string
+    colour: string
+    totalGrants: number
+    totalAmountCommitted: number
+    totalJointGrants?: number
+    totalJointAmountCommitted?: number
+    jointFeatureProperties?: FeatureProperties[]
+}
+
 export interface ClinicalTrialCategoryPhase { 
     title: string
     value: string

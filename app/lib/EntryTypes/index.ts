@@ -10,6 +10,8 @@ import { AnnouncementProps } from '@/app/helpers/types';
 import HundredDaysMissionTemplate from './template/HundredDaysMissionTemplate';
 import PolicyRoadmapsQuery from './query/PolicyRoadmapsQuery'
 import PandemicIntelligenceTemplate from './template/PandemicIntelligenceTemplate';
+import RRNAVisualiseQuery from './query/RRNAVisualiseQuery';
+import RRNAVisualiseTemplate from './template/RRNAVisualiseTemplate';
 
 interface EntryTemplateAndQuery {
     templates: {
@@ -28,6 +30,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         outbreak: OutbreakTemplate,
         pastOutbreak: OutbreakTemplate,
         newsArticle: NewsArticleTemplate,
+        rrnaVisualise: RRNAVisualiseTemplate,
         pandemicIntelligence: PandemicIntelligenceTemplate,
         hundredDaysMission: HundredDaysMissionTemplate
     },
@@ -39,6 +42,7 @@ const EntryTypes: EntryTemplateAndQuery = {
         pastOutbreak: OutbreakQuery,
         newsArticle: NewsArticleQuery,
         redirect: RedirectQuery,
+        rrnaVisualise: RRNAVisualiseQuery,
         hundredDaysMission: PolicyRoadmapsQuery,
         pandemicIntelligence: PolicyRoadmapsQuery,
     }

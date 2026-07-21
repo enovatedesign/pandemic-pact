@@ -19,7 +19,7 @@ import { getKvDatabase } from '@/app/helpers/kv'
 
 import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
-import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
+import VisualisationJumpMenu from '@/app/components/VisualisationJumpMenu'
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
 import PandemicIntelligenceThemes from './visualisations/PandemicIntelligenceThemes'
 import PandemicEpidemicIntelligenceFunders from './visualisations/PandemicEpidemicIntelligenceFunders'

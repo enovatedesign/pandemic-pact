@@ -169,7 +169,20 @@ export default async function prepareGrants() {
 
             ...grantPolicyRoadmaps(rawGrant)
         }
+        
+        // If we have a 'grant_start_year' and it's a valid year, but before 2020
+        // use 'publication_year_of_award' instead. Also, if it's a NaN year
+        // use 'publication_year_of_award' instead too.
+        if (rawGrant?.grant_start_year) {
+            const year = Number(rawGrant.grant_start_year)
 
+            if ((!isNaN(year) && year < 2020) || isNaN(year)) {
+                customFields.TrendStartYear = Number(
+                    rawGrant.publication_year_of_award,
+                )
+            }
+        }
+        
         // Create the final grant object using the converted data combined with
         // the custom fields
         const grant = {

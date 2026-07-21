@@ -12,12 +12,20 @@ import Button from './Button'
 
 export default function ExportDataMenuItem({ 
     filenameToFetch = fullDataFilename, 
-    filteredFileName = filteredDataFilename 
+    filteredFileName = filteredDataFilename,
+    filterContext = GlobalFilterContext,
+    dataKey = 'grants',
+    filterIdKey = 'GrantID'
 }: { 
-    filenameToFetch?: string, 
-    filteredFileName?: string 
+    filenameToFetch?: string,
+    filteredFileName?: string,
+    filterContext?: React.Context<any>,
+    dataKey?: string,
+    filterIdKey?: string,
 }) {
-    const { filters, grants } = useContext(GlobalFilterContext)
+    const context = useContext(filterContext)
+    const { filters } = context
+    const items = context[dataKey]
 
     const [exportingCsv, setExportingCsv] = useState(false)
 
@@ -37,7 +45,7 @@ export default function ExportDataMenuItem({
                 if (filtersAreActive) {
                     filteredCsv = filterCsv(
                         filteredCsv,
-                        grants.map(grant => grant.GrantID)
+                        items.map((item: any) => item[filterIdKey])
                     )
                 }
 

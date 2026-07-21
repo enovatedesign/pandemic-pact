@@ -1,5 +1,8 @@
 export const fullDataFilename = 'grants/pandemic-pact-grants.csv'
-export const filteredDataFilename = 'pandemic-pact-filtered-grants.csv'
+export const filteredDataFilename = 'grants/pandemic-pact-filtered-grants.csv'
+
+export const fullRrnaDataFilename = 'rrna/pandemic-pact-rrna-studies.csv'
+export const rrnaFilteredDataFilename = 'rrna/pandemic-pact-filtered-rrna-studies.csv'
 
 export function fetchCsv(filename = fullDataFilename) {
     return fetch(`/export/${filename}`).then(response =>
@@ -7,7 +10,7 @@ export function fetchCsv(filename = fullDataFilename) {
     )
 }
 
-export function filterCsv(csv: string, grantIDs: string[]) {
+export function filterCsv(csv: string, IDs: string[]) {
     // Rather than attempting to parse the CSV, we can take advantage of
     // the fact that the first column is the Grant ID, and filter based on that,
     // thereby improving performance.
@@ -20,7 +23,7 @@ export function filterCsv(csv: string, grantIDs: string[]) {
             }
 
             // Check if the first column contains one of our filtered Grant IDs
-            return grantIDs.some(id => line.startsWith(`${id},`))
+            return IDs.some(id => line.startsWith(`${id},`))
         })
         .join('\n')
 }

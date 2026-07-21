@@ -23,8 +23,7 @@ export default function Switch({
         'text-sm',
         textClassName || (checked ? 'text-black' : 'text-brand-grey-500')
     ].filter(Boolean).join(' ');
-      
-
+    
     return (
         <div className={`flex items-center gap-x-2 ${className}`}>
             <HeadlessUISwitch
@@ -34,7 +33,7 @@ export default function Switch({
                     checked ? 'bg-primary' : offBgColour
                 }`}
             >
-                <span className="sr-only">label</span>
+                <span className="sr-only">{label}</span>
 
                 <span
                     className={`${

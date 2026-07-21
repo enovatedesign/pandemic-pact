@@ -28,6 +28,9 @@ export async function downloadStaticFiles(): Promise<boolean> {
         { url: `${baseUrl}/${branchName}/cache/who-regions.json`, path: './public/data/geojson/who-regions.json' },
         { url: `${baseUrl}/${branchName}/cache/dictionary.json`, path: './public/data/dictionary.json' },
         { url: `${baseUrl}/${branchName}/cache/research-category-mapping.json`, path: './public/data/research-category-mapping.json' },
+        { url: `${baseUrl}/${branchName}/cache/rrna-data.json`, path: './public/data/rrna-data.json' },
+        { url: `${baseUrl}/${branchName}/cache/rrna-select-options.json`, path: './data/dist/rrna/select-options.json' },
+        { url: `${baseUrl}/${branchName}/cache/rrna/studies.json`, path: './public/data/rrna/studies.json' },
         { url: `${baseUrl}/${branchName}/cache/pandemic-intelligence.json`, path: './public/data/pandemic-intelligence/grants.json' },
         { url: `${baseUrl}/${branchName}/cache/grants-dist.json.gz`, path: './data/dist/grants.json.gz' },
     ]

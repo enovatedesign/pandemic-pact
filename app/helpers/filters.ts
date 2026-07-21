@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import { every } from 'lodash'
 import { FixedSelectOptions, PolicyRoadmapEntryTypeHandle } from './types'
+import rrnaSelectOptions from '@/data/dist/rrna/select-options.json'
 
 export interface Filter {
     values: string[]
@@ -15,6 +16,7 @@ export interface FilterSchema {
     label: string
     field: string
     excludeGrantsWithMultipleItems?: { label: string }
+    parent?: { filter: string; value: string }
     advanced?: boolean
     loadOnClick?: boolean
     isHidden?: boolean
@@ -269,7 +271,7 @@ export function filterGrants(grants: any, filters: any, fixedSelectOptions?: Fix
                 }
 
                 // if no filter values are selected, all grants match
-                if (values.length === 0) {
+                if (values?.length === 0) {
                     return true
                 }
 
@@ -291,8 +293,66 @@ export function filterGrants(grants: any, filters: any, fixedSelectOptions?: Fix
     )
 }
 
+export function emptyRrnaFilters() {
+    return Object.keys(rrnaSelectOptions).map(key => ({
+        [key]: []
+    })).reduce((acc, obj) => ({...acc, ...obj}), {})
+}
+
+export function filterRrnaStudies(
+    studies: any[], 
+    selectedFilters: Record<string, string[]>,
+) {
+    // Create a filter key map where the key is the label of the select options
+    // and the value is the corresponding data point on the study
+    const rrnaFilterKeyMap = {
+        "Pathogen Family": 'Families',
+        "Pathogen": 'Pathogen',
+        "Disease": 'Diseases',
+        "Research Domain": 'Domains',
+        "Study Country": 'StudyCountry',
+        "Study Type": 'StudyTypeRrna',
+        "Study Design": 'StudyDesign',
+        "Study Population": 'AgeGroupsRrna',
+        "Strains": 'Strains',
+    }
+    
+    return studies.filter(study =>
+        every(selectedFilters, (filterValues, filterKey) => {
+            // If the filter has no values selected, include the study
+            if (filterValues.length === 0) {
+                return true
+            }
+
+            // Map the filter key to the corresponding study key
+            const studyKey = rrnaFilterKeyMap[filterKey as keyof typeof rrnaFilterKeyMap] || filterKey;
+
+            // If the study doesn't have the mapped key and filters ARE selected, exclude it
+            if (!(studyKey in study)) {
+                return false
+            }
+
+            const studyValue = study[studyKey]
+
+            // If the study value is a string, check if it matches one of the filter values
+            if (typeof studyValue === 'string') {
+                return filterValues.includes(studyValue)
+            }
+
+            // If the study value is an array, check if any element matches one of the filter values
+            if (Array.isArray(studyValue)) {
+                return studyValue.some(value => filterValues.includes(value))
+            }
+
+            // Default to false if the study value doesn't match any condition
+            return false
+        })
+    )
+}
+
 export function countActiveFilters(filters: Filters) {
-    return Object.values(filters).filter(filter => filter.values.length > 0)
+    return Object.values(filters)
+        .filter(filter => filter.values.length > 0)
         .length
 }
 
@@ -303,6 +363,16 @@ export const GlobalFilterContext = createContext<{
 }>({
     filters: emptyFilters(),
     grants: [],
+    completeDataset: [],
+})
+
+export const RrnaFilterContext = createContext<{
+    filters: Record<string, string[]>
+    studies: any[]
+    completeDataset: any[]
+}>({
+    filters: {},
+    studies: [],
     completeDataset: [],
 })
 

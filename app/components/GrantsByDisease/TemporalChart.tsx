@@ -9,7 +9,7 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 import RechartTrendsTooltipContent from '../RechartTrendsTooltipContent'
-import { filter, groupBy } from 'lodash'
+import { groupBy } from 'lodash'
 import ImageExportLegend from '../ImageExportLegend'
 import Legend from '../Legend'
 import { axisDollarFormatter } from '../../helpers/value-formatters'

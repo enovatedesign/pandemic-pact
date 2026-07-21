@@ -17,9 +17,20 @@ export default async function downloadCsvAndConvertToJson(
 ) {
     const outputPath = `data/download`
     const isRemote = /^https?:\/\//.test(source)
-    const csv = isRemote
-        ? await fetch(source).then(res => res.text())
-        : await fs.readFile(source, 'utf8')
+
+    let csv: string
+
+    if (isRemote) {
+        const res = await fetch(source)
+
+        if (!res.ok) {
+            throw new Error(`Failed to download file from ${source}: ${res.status} ${res.statusText}`)
+        }
+
+        csv = await res.text()
+    } else {
+        csv = await fs.readFile(source, 'utf8')
+    }
 
     info(`${isRemote ? 'Fetched' : 'Read'} file from ${source}`)
     
