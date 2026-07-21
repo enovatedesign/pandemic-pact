@@ -4,8 +4,8 @@ import InteractiveMap from './InteractiveMap'
 import MapControls from './MapControls'
 import StatusBar from './StatusBar'
 import prepareGeoJsonAndColourScale from './prepareGeoJsonAndColourScale'
-import type { MapControlState } from './types'
 import NoDataText from '../../NoData/NoDataText'
+import type { MapControlState } from '../../../helpers/types'
 
 export default function Map({
     showColourScaleOnly = false, 

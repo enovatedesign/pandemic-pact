@@ -477,6 +477,93 @@ export const priorityStatementsWhoImmediateDimColours: Colours = {
     '10': brandColours.blue['300'],
 }
 
+export const rrnaDiseaseColours = {
+    "Rift Valley fever": brandColours.teal['700'],
+    "Mpox": brandColours.grey['700'],
+    "Nipah virus": brandColours.blue['700'],
+    "Hendra virus": brandColours.green['700'],
+    "Langya virus": brandColours.orange['700'],
+    // Legacy mappings
+    "Rift Valley Fever": brandColours.teal['700'],
+    "Mpox Clade I": brandColours.grey['700']
+}
+
+export const rrnaDiseaseTotalCaseColours = {
+    "Rift Valley fever": {
+        "totalParticipantsAndCases": brandColours.teal['500'],
+        "confirmedProbableCases": brandColours.teal['700']
+    },
+    "Mpox": {
+        "totalParticipantsAndCases": brandColours.grey['500'],
+        "confirmedProbableCases": brandColours.grey['700']
+    },
+    "Nipah virus": {
+        "totalParticipantsAndCases": brandColours.blue['500'],
+        "confirmedProbableCases": brandColours.blue['700']
+    },
+    "Hendra virus": {
+        "totalParticipantsAndCases": brandColours.green['500'],
+        "confirmedProbableCases": brandColours.green['700']
+    },
+    "Langya virus": {
+        "totalParticipantsAndCases": brandColours.orange['500'],
+        "confirmedProbableCases": brandColours.orange['700']
+    },
+    // Legacy mappings
+    "Rift Valley Fever": {
+        "totalParticipantsAndCases": brandColours.teal['500'],
+        "confirmedProbableCases": brandColours.teal['700']
+    },
+    "Mpox Clade I": {
+        "totalParticipantsAndCases": brandColours.grey['500'],
+        "confirmedProbableCases": brandColours.grey['700']
+    }
+}
+
+export const rrnaResearchDomainColours = {
+    "Clinical characteristics, epidemiology": brandColours.blue['400'],
+    "Immune response, seroprevalence": brandColours.teal['500'],
+    "Transmission (human-to-human)": brandColours.green['500'],
+    "Risk Factors for infection, severe disease": brandColours.orange['500'],
+    "Vaccine and therapeutic prophylaxis": brandColours.grey['400'],
+    "Diagnostic methods": brandColours.red['500'],
+    "Therapeutics": brandColours.yellow['600'],
+    "Supportive care": brandColours.blue['700'],
+    "Social and behavioural factors": brandColours.teal['700'],
+}
+
+/*
+   Study designs, keyed by the exact REDCap choice labels. Order is defined by
+   RRNA_STUDY_DESIGN_ORDER in app/helpers/rrnaConstants.ts.
+*/
+export const rrnaStudyDesignColours = {
+    "Randomized controlled trial": brandColours.blue['400'],
+    "Non-randomized interventional studies": brandColours.teal['500'],
+    "Uncontrolled interventional studies": brandColours.green['500'],
+    "Cohort": brandColours.orange['500'],
+    "Case-control": brandColours.grey['400'],
+    "Cross-sectional": brandColours.red['500'],
+    "Opinion pieces with primary data": brandColours.yellow['600'],
+    "Case report/Case series": brandColours.blue['700'],
+    "Other": brandColours.grey['300'],
+}
+
+export const rrnaAgeGroupColours = {
+    "Adults": brandColours.blue['400'],
+    "Children": brandColours.green['500'],
+    "Pregnant women": brandColours.teal['500'],
+    "Not reported": brandColours.grey['500'],
+}
+
+export const rrnaRegionColours: Colours = {
+    'Africa': brandColours.blue['400'],
+    'Eastern Mediterranean': brandColours.teal['400'],
+    'Americas': brandColours.orange['400'],
+    'Europe': brandColours.red['400'],
+    'South-East Asia': brandColours.green['400'],
+    'Western Pacific': brandColours.yellow['500'],
+}
+
 export const hundredDaysMissionResearchAreaDimColours: Colours = {
     '1': brandColours.blue['200'],
     '2': brandColours.teal['200'],
@@ -636,4 +723,16 @@ export const coloursByField = {
         bright: hundredDaysMissionClinicalTrialColours,
         dim: hundredDaysMissionClinicalTrialDimColours
     }
+}
+
+export const generateRandomColor = () => {
+    const parts = '0123456789ABCDEF'
+    
+    let color = '#'
+
+    for (let i = 0; i < 6; i++) {
+      color += parts[Math.floor(Math.random() * 16)]
+    }
+
+    return color
 }

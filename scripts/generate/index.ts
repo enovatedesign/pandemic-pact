@@ -8,13 +8,18 @@ import prepareVisualisePageGrantsFile from './prepare-visualise-page-grants-file
 import prepareCsvExportFile from './prepare-csv-export-file'
 import prepareMap from './prepare-map'
 import prepareSearch from './prepare-search'
+import prepareRrna from './prepare-rrna-data'
+import prepareRrnaSelectOptions from './prepare-rrna-select-options'
+// Disabled — hierarchy is now hand-maintained (see prepareRrnaHierarchy() call below)
+// import prepareRrnaHierarchy from './prepare-rrna-hierarchy'
+import prepareRrnaCsvExportFile from './prepare-rrna-csv-export-file'
 import prepare100DaysMission from './prepare-100-days-mission'
 import prepare100DaysMissionSelectOptions from './prepare-100-days-mission-select-options'
 import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-options'
 import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
-import { uploadStaticFiles, writeGrantsLastUsedFileId, verifyGrants } from '../helpers/storage'
+import { uploadStaticFiles, writeLastUsedFileIds, verifyGrants } from '../helpers/storage'
 import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
 
@@ -91,6 +96,18 @@ async function main() {
 
         await preparePandemicIntelligenceSelectOptions()
 
+        await prepareRrna()
+
+        await prepareRrnaSelectOptions()
+
+        // Disabled: the RRNA filter hierarchy (public/manual-rrna-hierarchy-filters.json)
+        // is now maintained by hand so its curated (non-alphabetical) ordering is
+        // preserved. Re-enable prepareRrnaHierarchy() only if you want the file
+        // regenerated from the RRNA data (note: it will revert to alphabetical order).
+        // prepareRrnaHierarchy()
+
+        await prepareRrnaCsvExportFile()
+
         // Select options for the policy road maps dropdown on the explore page
         await preparePolicyRoadmapSelectOptions()
 
@@ -99,10 +116,15 @@ async function main() {
         prepareCsvExportFile(grantsCsvExport)
 
         // Upload Figshare-derived artefacts (homepage totals, grants, select
-        // options) to the blob cache and mark this grants file ID as processed.
+        // options) to the blob cache and mark these source file IDs as processed.
         if (shouldUploadConditionsMet) {
             await uploadStaticFiles()
-            await writeGrantsLastUsedFileId(dataSources.FIGSHARE_GRANTS_FILE_ID)
+            await writeLastUsedFileIds({
+                grantsId: dataSources.FIGSHARE_GRANTS_FILE_ID,
+                rrnaId: dataSources.FIGSHARE_RRNA_FILE_ID,
+                dictionaryId: dataSources.FIGSHARE_DATA_DICTIONARY_FILE_ID,
+                rrnaDictionaryId: dataSources.FIGSHARE_RRNA_DATA_DICTIONARY_FILE_ID,
+            })
         }
 
         const { grantIds, changedIds } = await prepareIndividualGrantFiles(shouldUploadConditionsMet)

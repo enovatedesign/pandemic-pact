@@ -5,9 +5,8 @@ import { sumBy } from 'lodash'
 import countryGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionGeojson from '../../../../public/data/geojson/who-regions.json'
 import { brandColours } from '../../../helpers/colours'
-import type { MapControlState } from './types'
-
 import selectOptions from '../../../../data/dist/select-options.json'
+import type { MapControlState } from '../../../helpers/types'
 
 export default function prepareGeoJsonAndColourScale(
     dataset: any[],

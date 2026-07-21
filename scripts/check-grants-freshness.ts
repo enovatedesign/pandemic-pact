@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 import dataSources from './config/data-sources'
-import { readGrantsLastUsedFileId } from './helpers/storage'
+import { readLastUsedFileIds } from './helpers/storage'
 import { info } from './helpers/log'
 
 /**
- * Decides whether the grants data has changed for the current branch, by
- * comparing the committed FIGSHARE_GRANTS_FILE_ID against the S3 freshness
- * marker — the SAME comparison download-and-parse-data-sheets.ts makes to choose
- * the full vs cached path.
+ * Decides whether the source data has changed for the current branch, by
+ * comparing the committed Figshare file IDs (grants + RRNA data and their data
+ * dictionaries) against the S3 freshness marker — the SAME comparison
+ * download-and-parse-data-sheets.ts makes to choose the full vs cached path.
  *
  * Used by the decouple-heavy-build orchestration (deploy_develop /
  * deploy_production in .gitlab-ci.yml) to decide whether to run a full generate
@@ -32,13 +32,29 @@ async function main() {
     // would never be reached when the file ID is unchanged.
     const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
 
-    const configuredId = dataSources.FIGSHARE_GRANTS_FILE_ID
-    const markerId = await readGrantsLastUsedFileId()
+    const configuredGrantsId = dataSources.FIGSHARE_GRANTS_FILE_ID
+    const configuredRrnaId = dataSources.FIGSHARE_RRNA_FILE_ID
+    const configuredDictionaryId = dataSources.FIGSHARE_DATA_DICTIONARY_FILE_ID
+    const configuredRrnaDictionaryId = dataSources.FIGSHARE_RRNA_DATA_DICTIONARY_FILE_ID
+    const {
+        grantsId: markerGrantsId,
+        rrnaId: markerRrnaId,
+        dictionaryId: markerDictionaryId,
+        rrnaDictionaryId: markerRrnaDictionaryId,
+    } = await readLastUsedFileIds()
 
-    const dataChanged = forceFullGenerate || configuredId !== markerId
+    const dataChanged = forceFullGenerate ||
+        configuredGrantsId !== markerGrantsId ||
+        configuredRrnaId !== markerRrnaId ||
+        configuredDictionaryId !== markerDictionaryId ||
+        configuredRrnaDictionaryId !== markerRrnaDictionaryId
 
     info(
-        `Grants freshness: configured=${configuredId} marker=${markerId ?? '(none)'}` +
+        `Data source freshness: ` +
+            `grants configured=${configuredGrantsId} marker=${markerGrantsId ?? '(none)'}, ` +
+            `rrna configured=${configuredRrnaId} marker=${markerRrnaId ?? '(none)'}, ` +
+            `dictionary configured=${configuredDictionaryId} marker=${markerDictionaryId ?? '(none)'}, ` +
+            `rrnaDictionary configured=${configuredRrnaDictionaryId} marker=${markerRrnaDictionaryId ?? '(none)'}` +
             (forceFullGenerate ? ' FORCE_FULL_GENERATE=true' : '') +
             ' → ' +
             (dataChanged ? 'CHANGED (full generate needed)' : 'unchanged (skip generate)'),

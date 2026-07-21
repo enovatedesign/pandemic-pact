@@ -1,3 +1,5 @@
+'use client'
+
 import {useState, useEffect, useRef} from 'react'
 import {ChevronDownIcon} from '@heroicons/react/solid'
 import Image from "next/image"
@@ -8,9 +10,10 @@ import { VisualisationCardDataProps } from '../visualise/components/types';
 interface Props {
     disease?: DiseaseLabel
     cardData: VisualisationCardDataProps[]
+    useCardSwitch?: boolean
 }
 
-export default function JumpMenu({cardData, disease}: Props) {
+export default function JumpMenu({ cardData, disease, useCardSwitch = true }: Props) {
 
     const [isOpen, setIsOpen] = useState<Boolean>(false)
 
@@ -33,10 +36,14 @@ export default function JumpMenu({cardData, disease}: Props) {
         <div className="container py-2">
             <span className="sr-only">Jump to a visualisation on this page</span>
             <div className="relative w-full text-center sm:text-right">
-                <button onClick={() => setIsOpen(true)} className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none">
+                <button 
+                    onClick={() => setIsOpen(true)}
+                    className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none"
+                >
                     <span className="text-xs sm:text-sm font-medium">
                         Jump to a visualisation collection
                     </span>
+
                     <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
 
@@ -50,7 +57,7 @@ export default function JumpMenu({cardData, disease}: Props) {
                                 {cardData.filter(card => card.url).map((card: any, index: number) => {
                                     const { title, image } = card
                                     const cardSwitch: DiseaseLabel = disease ?? 'default'
-                                    const url = card.url[cardSwitch]
+                                    const url = useCardSwitch ? card.url[cardSwitch] : card.url
                                     
                                     return card.showCard[cardSwitch as keyof typeof card.showCard] && (
                                         <li ref={dropdown}
@@ -69,6 +76,7 @@ export default function JumpMenu({cardData, disease}: Props) {
                                                             loading="lazy"
                                                         />
                                                     )}
+
                                                     {title && (
                                                         <div className="h-full flex items-center py-2">
                                                             <span className="block text-sm xl:text-base text-center w-full">

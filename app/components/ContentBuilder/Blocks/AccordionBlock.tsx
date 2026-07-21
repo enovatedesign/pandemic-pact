@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { useInView, animated } from '@react-spring/web'
+import { isValidElement, ReactNode, useState } from "react"
+import AnimateHeight from 'react-animate-height';
+import { useInView, animated } from '@react-spring/web';
 import { PlusIcon, MinusIcon } from "@heroicons/react/solid"
-import AnimateHeight from 'react-animate-height'
 
-import { defaultProseClasses } from '@/app/helpers/prose-classes'
-
+import { defaultProseClasses } from '@/app/helpers/prose-classes';
 import BlockWrapper from "../BlockWrapper"
 import RichText from "../Common/RichText"
 
@@ -14,11 +13,12 @@ type Props = {
     block: {
         heading?: string,
         accordions: {
-            id: number,
+            id?: number,
             accordionHeading: string,
-            accordionContent: string,
+            accordionContent: string | ReactNode,
         }[],
         headingLevel: number,
+        padded?: boolean
     }
 }
 
@@ -28,8 +28,13 @@ const AccordionBlock = ( { block }: Props ) => {
     const accordions = block.accordions ?? null
     const headingLevel = block.headingLevel ?? 2
 
+    // Added "padded" for accordion block usage on rrna visualise page client
+    // This may be changed to a content managed page
+    // For speed, this has been added manually while discussions around CMS integration are had
+    const padded = block.padded ?? true
+
     const textClasses = [
-        'mx-auto w-full border-2 border-gray-200 rounded-2xl bg-white max-w-prose',
+        'mx-auto w-full border-2 border-gray-200 rounded-2xl bg-white max-w-[80ch]',
         defaultProseClasses({ })
     ].join(' ')
     
@@ -49,10 +54,10 @@ const AccordionBlock = ( { block }: Props ) => {
         {
             once: true,
         }
-    )
-
+    );
+    
     return (
-        <BlockWrapper>
+        <BlockWrapper options={{ padded: padded }}>
             <div className={defaultProseClasses({ customClasses: 'mb-8 lg:mb-12' })}>
                 {title &&(
                     <h2>
@@ -80,33 +85,43 @@ const AccordionBlock = ( { block }: Props ) => {
                                 {accordionData && (
                                     <div role="region" className={textClasses}>
                                         
-                                            <button
-                                                className="flex items-center justify-between w-full px-6 py-4"
-                                                onClick={handleClick}
-                                            >
-                                                {headingLevel === 2 ? (
-                                                    <h2 className="!my-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
-                                                            { accordionHeading }
-                                                    </h2>
-                                                ) : (
-                                                    <h3 className="!my-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
+                                        <button
+                                            className="flex items-center justify-between w-full px-6 py-4"
+                                            onClick={handleClick}
+                                        >
+                                            {headingLevel === 2 ? (
+                                                <h2 className="!my-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
                                                         { accordionHeading }
-                                                    </h3>
-                                                )}
-                                                    
-                                                {/* sort icons */}
-                                                {activeIndex === index ? (
-                                                    <MinusIcon className={iconClasses}/>
-                                                ) : (
-                                                    <PlusIcon className={iconClasses}/>
-                                                )}
-                                            </button>
+                                                </h2>
+                                            ) : (
+                                                <h3 className="!my-0 text-left text-primary text-xl md:text-3xl lg:text-3xl">
+                                                    { accordionHeading }
+                                                </h3>
+                                            )}
+                                            
+                                            {/* sort icons */}
+                                            {activeIndex === index ? (
+                                                <MinusIcon className={iconClasses}/>
+                                            ) : (
+                                                <PlusIcon className={iconClasses}/>
+                                            )}
+                                        </button>
 
                                         <AnimateHeight
                                             duration={300}
                                             height={activeIndex === index ? 'auto' : 0}
                                         >   
-                                                <RichText customClasses="p-6 pt-3" text={accordionContent} noMaxWidth={true} />
+                                            {isValidElement(accordionContent) ? (
+                                                <div className="p-6 pt-3">
+                                                    {accordionContent}
+                                                </div>
+                                            ) : (
+                                                <RichText 
+                                                    customClasses="p-6 pt-3" 
+                                                    text={accordionContent as string} 
+                                                    noMaxWidth={true} 
+                                                />
+                                            )}
                                         </AnimateHeight>
                                     </div>
                                 )}

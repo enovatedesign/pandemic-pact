@@ -1,7 +1,7 @@
 import { dollarValueFormatter } from '../../../helpers/value-formatters'
 import Button from '../../../components/Button'
 import Switch from '../../../components/Switch'
-import type { FeatureProperties } from './types'
+import type { FeatureProperties } from '@/app/helpers/types'
 import JointFeaturesModal from './JointFeaturesModal'
 import { XIcon } from '@heroicons/react/solid'
 import StandardFeatureProperties from './StandardFeatureProperties'

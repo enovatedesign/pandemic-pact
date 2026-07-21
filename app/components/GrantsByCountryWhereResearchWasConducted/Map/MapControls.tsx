@@ -3,7 +3,7 @@ import type { ScaleLogarithmic } from 'd3-scale'
 import DoubleLabelSwitch from '../../DoubleLabelSwitch'
 import RadioGroup from '../../RadioGroup'
 import { SidebarStateContext } from '../../../helpers/filters'
-import type { LocationType, MapControlState } from './types'
+import type { LocationType, MapControlState } from '../../../helpers/types'
 import ColourScale from './ColourScale'
 
 interface Props {
