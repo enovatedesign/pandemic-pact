@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { DownloadIcon } from '@heroicons/react/solid'
-import { countActiveFilters, GlobalFilterContext } from '../../helpers/filters'
+import { GlobalFilterContext } from '../../helpers/filters'
 import {
     fetchCsv,
     filterCsv,
@@ -40,7 +40,15 @@ export default function ExportDataMenuItem({
             .then(csv => {
                 let filteredCsv = csv
 
-                const filtersAreActive = countActiveFilters(filters) > 0
+                // Support both filter shapes used across the app: the grants
+                // `Filters` object ({ [key]: { values: string[] } }) and the RRNA
+                // filter map ({ [key]: string[] }). A filter is active when it has
+                // any selected values.
+                const filtersAreActive = Object.values(filters).some((filter: any) =>
+                    Array.isArray(filter)
+                        ? filter.length > 0
+                        : (filter?.values?.length ?? 0) > 0
+                )
 
                 if (filtersAreActive) {
                     filteredCsv = filterCsv(
