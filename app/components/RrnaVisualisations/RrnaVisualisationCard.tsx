@@ -113,7 +113,7 @@ export default function RrnaVisualisationCard({
                             filteredFileName={rrnaFilteredDataFilename}
                             filterContext={RrnaFilterContext}
                             dataKey="studies"
-                            filterIdKey="RRNAID"
+                            filterIdKey="Rrnaid"
                         />
 
                         {tabs && (
