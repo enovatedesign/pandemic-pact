@@ -31,6 +31,7 @@ export async function downloadStaticFiles(): Promise<boolean> {
         { url: `${baseUrl}/${branchName}/cache/rrna-data.json`, path: './public/data/rrna-data.json' },
         { url: `${baseUrl}/${branchName}/cache/rrna-select-options.json`, path: './data/dist/rrna/select-options.json' },
         { url: `${baseUrl}/${branchName}/cache/rrna/studies.json`, path: './public/data/rrna/studies.json' },
+        { url: `${baseUrl}/${branchName}/cache/pandemic-pact-rrna-studies.csv`, path: './public/export/rrna/pandemic-pact-rrna-studies.csv' },
         { url: `${baseUrl}/${branchName}/cache/pandemic-intelligence.json`, path: './public/data/pandemic-intelligence/grants.json' },
         { url: `${baseUrl}/${branchName}/cache/grants-dist.json.gz`, path: './data/dist/grants.json.gz' },
     ]

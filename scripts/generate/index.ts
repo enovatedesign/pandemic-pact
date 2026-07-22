@@ -106,6 +106,11 @@ async function main() {
         // regenerated from the RRNA data (note: it will revert to alphabetical order).
         // prepareRrnaHierarchy()
 
+        // Like the grants CSV, the RRNA export CSV is part of the cached artefact
+        // set (uploadStaticFiles), so it must be generated here — before the upload
+        // below — otherwise the cached-path build can neither regenerate nor restore
+        // it and /export/rrna/…csv 404s. It is generated only on this non-cached
+        // path and restored from the cache otherwise.
         await prepareRrnaCsvExportFile()
 
         // Select options for the policy road maps dropdown on the explore page

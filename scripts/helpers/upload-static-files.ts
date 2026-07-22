@@ -25,6 +25,7 @@ export async function uploadStaticFiles() {
         { path: './data/download/rrna-data.json', key: `${branchName}/cache/rrna-data.json` },
         { path: './data/dist/rrna/select-options.json', key: `${branchName}/cache/rrna-select-options.json` },
         { path: './public/data/rrna/studies.json', key: `${branchName}/cache/rrna/studies.json` },
+        { path: './public/export/rrna/pandemic-pact-rrna-studies.csv', key: `${branchName}/cache/pandemic-pact-rrna-studies.csv` },
         { path: './data/dist/pandemic-intelligence.json', key: `${branchName}/cache/pandemic-intelligence.json` },
         { path: './data/dist/grants.json.gz', key: `${branchName}/cache/grants-dist.json.gz` },
     ]
