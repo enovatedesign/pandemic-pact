@@ -42,6 +42,25 @@ export default function prepareRrnaCsvExportFile() {
         selectOptionsMap.set(field, map)
     })
 
+    // Strains have no select-option list, but the hand-maintained RRNA filter
+    // hierarchy carries their code -> label mapping (nested under
+    // family > pathogen > disease > strains). Build a Strains lookup from it so
+    // strain SNOMED codes export as readable labels instead of raw numbers.
+    const hierarchy = fs.readJsonSync('./public/manual-rrna-hierarchy-filters.json')
+    const strainMap = new Map<string, string>()
+
+    hierarchy.forEach((family: any) => {
+        family.pathogens?.forEach((pathogen: any) => {
+            pathogen.diseases?.forEach((disease: any) => {
+                disease.strains?.forEach((strain: any) => {
+                    strainMap.set(strain.value, strain.label)
+                })
+            })
+        })
+    })
+
+    selectOptionsMap.set('Strains', strainMap)
+
     // Prepare a export row for each study
     const rows = studies.map((study: any, index: number, array: any[]) => {
         if (index > 0 && index % 500 === 0) {
