@@ -22,6 +22,7 @@ export default async function PageQuery(
                         showSummary
                         outbreakDisease
                         outbreakId
+                        totalsInfoIconText
                         ${contentBuilderQuery}
                     }
                     ${seomaticQuery}

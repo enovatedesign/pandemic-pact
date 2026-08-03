@@ -43,6 +43,7 @@ interface VisualisationPageProps {
     outbreakId?: string
     announcement: AnnouncementProps
     slug?: string
+    totalsInfoIconText?: string
 }
 
 const VisualisePageClientComponent = ({
@@ -54,7 +55,8 @@ const VisualisePageClientComponent = ({
     diseaseLabel,
     outbreakId,
     announcement,
-    slug
+    slug,
+    totalsInfoIconText
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
 
@@ -127,6 +129,7 @@ const VisualisePageClientComponent = ({
                     loadingDataset={loadingDataset}
                     sharedFiltersId={sharedFiltersId}
                     outbreak={outbreak}
+                    totalsInfoIconText={totalsInfoIconText}
                 />
             ),
             closedContent: (
@@ -171,7 +174,8 @@ const VisualisePageClientComponent = ({
         globallyFilteredDataset,
         loadingDataset,
         sharedFiltersId,
-        outbreak
+        outbreak,
+        totalsInfoIconText
     ])
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'

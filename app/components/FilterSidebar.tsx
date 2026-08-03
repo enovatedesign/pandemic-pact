@@ -11,6 +11,7 @@ import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'
 import CMSFilterBlock from './CMS/HierarchicalFiltersBlock'
 import FilterBlock from './FilterBlock'
+import InfoModal from './InfoModal'
 import { PolicyRoadmapEntryTypeHandle } from '../helpers/types'
 
 interface FilterSidebarProps {
@@ -25,6 +26,7 @@ interface FilterSidebarProps {
     policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
     customFilters?: ReactNode
     bottomContent?: ReactNode
+    totalsInfoIconText?: string
 }
 
 export function IndentMultiSelect({children}: {children: React.ReactNode}) {
@@ -49,7 +51,8 @@ export default function FilterSidebar({
     showHierarchicalFilters = true,
     policyRoadmapEntryType,
     customFilters,
-    bottomContent
+    bottomContent,
+    totalsInfoIconText
 }: FilterSidebarProps) {
     const { outbreakSelectOptions } = useContext(FixedSelectOptionContext)
     
@@ -86,7 +89,7 @@ export default function FilterSidebar({
 
     return (
         <div className="flex flex-col items-start justify-start gap-y-4">
-            <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)] flex">
+            <div className="text-white w-full p-4 rounded-xl bg-gradient-to-l from-primary/20 shadow-[inset_0_0_10px_rgba(98,213,209,0.25)] flex justify-between items-start gap-2">
                 <p className="flex flex-col gap-1">
                     {loadingDataset ? (
                         <>
@@ -126,8 +129,17 @@ export default function FilterSidebar({
                         </>
                     )}
                 </p>
+
+                {totalsInfoIconText && (
+                    <InfoModal
+                        customButtonClasses="shrink-0"
+                        iconColour="text-brand-red-500"
+                    >
+                        <div dangerouslySetInnerHTML={{ __html: totalsInfoIconText }} />
+                    </InfoModal>
+                )}
             </div>
-            
+
             {showHierarchicalFilters && (
                 <CMSFilterBlock 
                     selectedFilters={selectedFilters}
