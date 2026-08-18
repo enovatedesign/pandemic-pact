@@ -26,7 +26,14 @@ type Props = {
  * Get branch name for runtime remote storage paths
  */
 const getBranchNameForRuntime = (): string => {
+    // Prefer the non-public system vars: these are available at runtime in this
+    // server component and mirror the build-time upload helper (getBranchName()).
+    // The NEXT_PUBLIC_* copies are only inlined when VERCEL_GIT_COMMIT_REF is set
+    // at build time, so they're unreliable for redeploys (which leave them empty
+    // and cause a fall back to "master" → 404).
     const ciBranch =
+        process.env.CI_COMMIT_REF_NAME ||
+        process.env.VERCEL_GIT_COMMIT_REF ||
         process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
         process.env.NEXT_PUBLIC_CI_COMMIT_REF_NAME ||
         null;

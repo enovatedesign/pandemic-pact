@@ -11,7 +11,7 @@ import FooterMenu from "./components/FooterMenu"
 import FooterCopyrightStatement from "./components/FooterCopyrightStatement"
 import UtilityBar from "./components/UtilityBar"
 import DatasetPickerOverlay from "./components/DatasetPickerOverlay"
-import homepageTotals from "../data/dist/homepage-totals.json"
+import homepageTotals from "./helpers/homepage-totals"
 import Announcement from "./components/ContentBuilder/Common/Announcement"
 import { AnnouncementProps } from "./helpers/types"
 import useScrollLock from "./hooks/useScrollLock"
@@ -60,8 +60,10 @@ export default function HomepageClient(announcement: Props) {
                         {/* Top content section */}
                         <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-8 lg:gap-12 w-full z-20 container">
 
-                            <h1 id="page-title" className="inline-block max-w-4xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
-                                Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants, from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> global funders
+                            <h1 id="page-title" className="inline-block max-w-6xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
+                                Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> funders{homepageTotals.totalClinicalTrials && (
+                                    <> and <AnimatedCounter className={counterClasses} {...homepageTotals.totalClinicalTrials} /> clinical research registrations</>
+                                )}
                             </h1>
 
                             <div className="grid grid-cols-2 gap-x-4 sm:gap-x-8">
@@ -94,7 +96,7 @@ export default function HomepageClient(announcement: Props) {
 
                             <div className="max-w-3xl mx-auto flex flex-col gap-4">
                                 <p className="text-center text-white/80 text-pretty">
-                                   Pandemic PACT tracks and analyses global funding and evidence for research on diseases with pandemic potential and broader preparedness efforts, ready to pivot in response to outbreaks.
+                                   Pandemic PACT tracks and analyses global funding, clinical research registrations and evidence for research on diseases with pandemic potential and broader preparedness efforts, ready to pivot in response to outbreaks.
                                 </p>
 
                                 <small>

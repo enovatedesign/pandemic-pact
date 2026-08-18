@@ -10,7 +10,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect } from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
-import homepageTotals from '../../data/dist/homepage-totals.json';
+import homepageTotals from '../helpers/homepage-totals';
 import {useReducedMotion} from "@react-spring/web"
 import { debounce } from 'lodash';
 
@@ -231,7 +231,7 @@ export default function Footer() {
                             <Logo />
                         </div>
                         <p className="text-gray-700 text-balance text-base text-center md:text-left max-w-lg mx-auto md:mx-0">
-                            {`Delivering insights from over: \$${homepageTotals.totalCommittedUsd.finalCount} ${homepageTotals.totalCommittedUsd.suffix} in research funding across ${Number(homepageTotals.totalGrants.finalCount).toLocaleString()} grants, from ${homepageTotals.totalFunders.finalCount} global funders`}
+                            {`Delivering insights from over: \$${homepageTotals.totalCommittedUsd.finalCount}${homepageTotals.totalCommittedUsd.suffix} in research funding across ${homepageTotals.totalGrants.finalCount.toLocaleString()} grants from ${homepageTotals.totalFunders.finalCount} funders${homepageTotals.totalClinicalTrials ? ` and ${homepageTotals.totalClinicalTrials.finalCount.toLocaleString()} clinical research registrations` : ''}`}
                         </p>
                     </div>
 

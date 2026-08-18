@@ -16,6 +16,7 @@ import {
     convertRawGrantKeyToValuesArray,
     extractCheckboxAndPrefixFields,
 } from './helpers/key-mapping'
+import { registerCanonicalCodes } from './helpers/redcap-codes'
 
 const PREFIX_TARGETS = ['_pathogen__', '_diseases__', '_diseases_strains_']
 
@@ -30,8 +31,48 @@ const CHECKBOX_FIELDS = [
     'weird', // multi-`___` code segment case
 ]
 
-// Codes chosen to exercise normaliseExtractedCode (leading `_` → `-`, ICTV → upper).
-const CODES = ['ICTV1', 'ictv2', '_88', '_99', '_9999', 'np001', '12345', 'SNOMED9']
+// Codes chosen to exercise normaliseExtractedCode: dictionary-backed canonical
+// lookups (hyphenated composites, uppercase strain/diagnostic codes) alongside
+// segments with no dictionary entry, which fall back to the legacy rules
+// (leading `_` → `-`, ICTV → upper).
+const CODES = [
+    'ICTV1',
+    'ictv2',
+    '_88',
+    '_99',
+    '_9999',
+    'np001',
+    '12345',
+    'SNOMED9',
+    '442438000_01',
+    '359761005_716864001',
+    'h1n1',
+    'h10',
+    'd1',
+]
+
+// Minimal stand-in for the REDCap dictionary, in the same shape as
+// data/download/dictionary.json, covering the canonical forms of the codes above.
+const DICTIONARY = [
+    {
+        'Variable / Field Name': 'host_diseases',
+        'Field Type': 'checkbox',
+        'Choices, Calculations, OR Slider Labels':
+            '442438000-01, Influenza A H1 | 359761005-716864001, Hantavirus (HFRS) | ' +
+            '-88, Other | -99, Unspecified | np001, Disease X',
+    },
+    {
+        'Variable / Field Name': 'host_diseases_strains',
+        'Field Type': 'checkbox',
+        'Choices, Calculations, OR Slider Labels': 'H1N1, H1N1 | H10, H10 | D1, D1',
+    },
+    {
+        // Non-checkbox rows must be ignored, even when they declare choices.
+        'Variable / Field Name': 'a_text_field',
+        'Field Type': 'text',
+        'Choices, Calculations, OR Slider Labels': '12345, Should not be indexed',
+    },
+]
 
 // Values chosen to exercise the predicate split:
 //   checkbox uses `=== '1'`; prefix uses `value && parseInt(value) === 1`.
@@ -101,6 +142,11 @@ const EDGE_GRANTS: RawGrant[] = [
 
 // ---- run ------------------------------------------------------------------
 function main() {
+    // Both paths share normaliseExtractedCode, so parity holds either way — but
+    // registering a dictionary exercises the canonical-lookup branch rather than
+    // only the legacy fallback.
+    registerCanonicalCodes(DICTIONARY, 'Parity check')
+
     const rand = mulberry32(1234567)
     const grants: RawGrant[] = [...EDGE_GRANTS]
     for (let i = 0; i < 5000; i++) grants.push(makeFuzzGrant(rand))

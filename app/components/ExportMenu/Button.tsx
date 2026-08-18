@@ -22,7 +22,7 @@ export default function Button({Icon, label, onClick, className, loading}: Props
                     className={`
                         ${(active && !disabled) ? 'bg-brand-teal-700 text-white' : 'text-gray-900'}
                         ${disabled ? 'cursor-progress' : ''}
-                        group flex w-full items-center  px-2 py-2 text-sm
+                        group flex w-full items-center text-left px-2 py-2 text-sm
                         ${className}
                     `}
                     onClick={

@@ -4,7 +4,11 @@ import { useContext, useId } from 'react'
 import Select from 'react-select'
 
 import { customSelectThemeColours } from '@/app/helpers/select-colours'
-import { Filters, FixedSelectOptionContext } from '@/app/helpers/filters'
+import {
+    Filters,
+    FixedSelectOptionContext,
+    pluralizeFilterLabel,
+} from '@/app/helpers/filters'
 import { FixedSelectOptions } from '@/app/helpers/types'
 
 import Switch from '../Switch'
@@ -54,7 +58,8 @@ const HierarchicalFilter = ({
     return (
         <>
             {Object.entries(filterObject).map(([key, filters]) => {
-                const fullLabel = `All ${key}`
+                const pluralLabel = pluralizeFilterLabel(key)
+                const fullLabel = `All ${pluralLabel}`
                 // The key is the singular form, while the field in the data is plural.  
                 // Use the mapping to retrieve the correct field name.
                 let field = fieldMapping[key as keyof typeof fieldMapping]
@@ -89,7 +94,7 @@ const HierarchicalFilter = ({
                     > 
                         <div className={selectWrapperClasses}>
                             {isVisualisePage && (
-                                <p className="text-white">Filter by {key}</p>
+                                <p className="text-white">Filter by {pluralLabel}</p>
                             )}
 
                             {(!isVisualisePage && (field !== "Families")) && (

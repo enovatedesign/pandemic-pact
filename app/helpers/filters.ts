@@ -20,6 +20,23 @@ export interface FilterSchema {
     advanced?: boolean
     loadOnClick?: boolean
     isHidden?: boolean
+    // Set when the label is already plural (e.g. "Vulnerable Populations") so
+    // it is displayed as-is rather than being pluralised a second time.
+    isPlural?: boolean
+}
+
+// Pluralises a filter label for display in the explore/visualise UIs, e.g.
+// "Register" -> "Registers", "Recruitment Status" -> "Recruitment Statuses",
+// "Funder Country" -> "Funder Countries". Only handles the regular English
+// cases the filter labels actually use; the schema labels themselves are left
+// singular so other consumers (API payloads, column headers) are unaffected.
+// Labels that are already plural (isPlural) are returned unchanged so they are
+// not pluralised a second time (e.g. "Vulnerable Populations").
+export function pluralizeFilterLabel(label: string, isPlural = false): string {
+    if (isPlural) return label
+    if (/(s|x|z|ch|sh)$/i.test(label)) return `${label}es`
+    if (/[^aeiou]y$/i.test(label)) return label.replace(/y$/i, 'ies')
+    return `${label}s`
 }
 
 export function availableFilters(): FilterSchema[] {
@@ -114,12 +131,14 @@ export function availableFilters(): FilterSchema[] {
             label: 'Vulnerable Populations',
             field: 'VulnerablePopulations',
             advanced: true,
+            isPlural: true,
         },
 
         {
             label: 'Occupations of Interest',
             field: 'OccupationalGroups',
             advanced: true,
+            isPlural: true,
         },
     ]
 
@@ -191,30 +210,74 @@ export function availablePandemicIntelligenceFilters(): FilterSchema[] {
     return filters
 }
 
-export const getAvailableFilters = ({ 
-    policyRoadmapEntryType 
+// Clinical Research Registrations (ICTRP) filters. Field names match the CT
+// select-option keys. See the Technical Specification §3 (Global Filters -
+// Clinical Trials).
+export function availableClinicalTrialsFilters(): FilterSchema[] {
+    // Family / Pathogen / Disease / Strain are rendered by the shared cascading
+    // HierarchicalFiltersBlock (driven by public/manual-hierarchy-filters.json),
+    // not as flat multi-selects. Now that the CT dataset is ICTV-coded its codes
+    // match the grants taxonomy, so the same component is reused on both the
+    // explore and visualise pages. They are kept here (isHidden) so they are
+    // included in filter state, API payloads and client-side filtering, but
+    // skipped by the flat multi-select loops.
+    return [
+        { label: 'Family', field: 'Families', loadOnClick: false, isHidden: true },
+        {
+            label: 'Pathogen',
+            field: 'Pathogens',
+            isHidden: true,
+        },
+        { label: 'Disease', field: 'Diseases', loadOnClick: false, isHidden: true },
+        { label: 'Strain', field: 'Strains', loadOnClick: false, isHidden: true },
+
+        { label: 'Register', field: 'Register' },
+        { label: 'Intervention', field: 'Interventions' },
+        { label: 'Research Institution Region', field: 'ResearchInstitutionRegion' },
+        { label: 'Research Institution Country', field: 'ResearchInstitutionCountry' },
+        { label: 'Research Institution', field: 'ResearchInstitutionName' },
+        { label: 'Research Location Region', field: 'ResearchLocationRegion' },
+        { label: 'Research Location Country', field: 'ResearchLocationCountry' },
+        { label: 'Ethics Status', field: 'EthicsStatus' },
+        { label: 'Outcome', field: 'Outcomes' },
+        { label: 'Recruitment Status', field: 'RecruitmentStatus' },
+        { label: 'Year', field: 'RegistrationYear' },
+
+        // Advanced (mirrors the grants advanced set)
+        { label: 'Study Subject', field: 'StudySubject', advanced: true },
+        { label: 'Study Type', field: 'StudyType', advanced: true },
+        { label: 'Age Group', field: 'AgeGroups', advanced: true },
+        { label: 'Vulnerable Populations', field: 'VulnerablePopulations', advanced: true, isPlural: true },
+        { label: 'Occupations of Interest', field: 'OccupationalGroups', advanced: true, isPlural: true },
+        { label: 'Gender', field: 'Gender', advanced: true },
+    ]
+}
+
+// Each dataset / policy-roadmap variant supplies its own filter schema. Keeping
+// these in a registry (rather than a switch) means "which filters exist" lives in
+// data: adding a dataset is a new entry here, not another branch below.
+const filterSchemaRegistry: Record<string, () => FilterSchema[]> = {
+    grants: availableFilters,
+    'clinical-trials': availableClinicalTrialsFilters,
+    hundredDaysMission: available100DaysMissionFilters,
+    pandemicIntelligence: availablePandemicIntelligenceFilters,
+}
+
+export const getAvailableFilters = ({
+    policyRoadmapEntryType,
+    dataset,
 }: {
     policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
-}) => {
-    let filters = availableFilters()
+    dataset?: 'grants' | 'clinical-trials'
+}): FilterSchema[] => {
+    // A policy-roadmap entry type is a grants sub-variant, so it only applies when
+    // the dataset isn't clinical-trials.
+    const schemaKey =
+        dataset === 'clinical-trials'
+            ? 'clinical-trials'
+            : policyRoadmapEntryType ?? 'grants'
 
-    if (policyRoadmapEntryType) {
-        switch (policyRoadmapEntryType) {
-            case 'hundredDaysMission':
-                filters = available100DaysMissionFilters()
-                break;
-            
-            case 'pandemicIntelligence':
-                filters = availablePandemicIntelligenceFilters()
-                break;
-
-            default:
-                filters = availableFilters()
-                break;
-        }
-    }
-
-    return filters
+    return (filterSchemaRegistry[schemaKey] ?? availableFilters)()
 }
 
 export function emptyFilters(
@@ -249,43 +312,59 @@ export function emptyFilters(
     return filtersObject
 }
 
-export function filterGrants(grants: any, filters: any, fixedSelectOptions?: FixedSelectOptions) {
-    return grants.filter((grant: any) =>
+export function emptyClinicalTrialsFilters(): Filters {
+    return Object.fromEntries(
+        availableClinicalTrialsFilters().map(({ field }) => [
+            field,
+            { values: [], excludeGrantsWithMultipleItems: false },
+        ]),
+    )
+}
+
+/**
+ * Filters a dataset (grants or clinical trials) against a set of selected
+ * filters. Dataset-agnostic: it only reads the fields named by `filters`, so the
+ * caller must pass filters whose keys exist on the records — a filter on a field
+ * absent from the records excludes everything (see the `undefined` guard below).
+ */
+export function filterRecords(records: any, filters: any, fixedSelectOptions?: FixedSelectOptions) {
+    return records.filter((record: any) =>
         every(
             filters,
             ({ values, excludeGrantsWithMultipleItems }, key) => {
-                let formattedKey = key                
-                
+                let formattedKey = key
+
                 // If fixed select options are set, the pathogen key is defined as '{someSpecificPathogen}Pathogen'
                 // This is to ensure the hierarchy will only show the relevant pathogens related to the family selected
-                // To ensure excludeGrantsWithMultipleItems works as expected, we need to switch the key to 'Pathogens' 
+                // To ensure excludeGrantsWithMultipleItems works as expected, we need to switch the key to 'Pathogens'
                 // which is a full array of all pathogens on the grant
-                if ((fixedSelectOptions && fixedSelectOptions.Families?.label) && 
+                if ((fixedSelectOptions && fixedSelectOptions.Families?.label) &&
                     (key === `${fixedSelectOptions.Families?.label}Pathogen`)) {
                     formattedKey = 'Pathogens'
                 }
 
-                // if the grant has multiple items in the field and the switch is on, exclude it
-                if (excludeGrantsWithMultipleItems && grant[formattedKey].length > 1) {
+                // if the record has multiple items in the field and the switch is on, exclude it.
+                // Guard the field access: a record missing this field can't have "multiple items".
+                if (excludeGrantsWithMultipleItems && (record[formattedKey]?.length ?? 0) > 1) {
                     return false
                 }
 
-                // if no filter values are selected, all grants match
+                // if no filter values are selected, all records match
                 if (values?.length === 0) {
                     return true
                 }
 
-                if (typeof grant[formattedKey] === 'undefined') {
+                if (typeof record[formattedKey] === 'undefined') {
                     return false
                 }
 
-                // if the grant has a single value in the field, check if it matches any of the filter values
-                if (typeof grant[formattedKey] === 'string') {
-                    return values.includes(grant[formattedKey])
+                // if the record has a single value in the field, check if it matches any of the filter values
+                if (typeof record[formattedKey] === 'string') {
+                    return values.includes(record[formattedKey])
                 }
 
-                // if the grant has multiple values in the field, check if any of them match any of the filter values
-                return grant[formattedKey].some((element: any) =>
+                // if the record has multiple values in the field, check if any of them match any of the filter values
+                return record[formattedKey].some((element: any) =>
                     values.includes(element),
                 )
             },

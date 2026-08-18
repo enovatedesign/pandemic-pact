@@ -1,12 +1,19 @@
 'use client'
 
-import { SearchParameters } from '../helpers/search'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { range } from 'lodash'
 
+// Structurally typed so both the grants and clinical-trials explore pages (which
+// have different SearchParameters shapes) can reuse this presentational component.
+interface PaginatedSearchParameters {
+    page: number
+    limit: number
+    [key: string]: any
+}
+
 interface Props {
-    searchParameters: SearchParameters
-    setSearchParameters: (searchParameters: SearchParameters) => void
+    searchParameters: PaginatedSearchParameters
+    setSearchParameters: (searchParameters: any) => void
     totalHits: number
 }
 
