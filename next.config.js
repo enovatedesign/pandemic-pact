@@ -37,6 +37,10 @@ const nextConfig = {
                     source: '/grants/:id.json',
                     destination: `${assetBaseUrl}/${branchName}/grants/:id.json`,
                 },
+                {
+                    source: '/clinical-trials/:id.json',
+                    destination: `${assetBaseUrl}/${branchName}/clinical-trials/:id.json`,
+                },
             ]
         }
         return []

@@ -10,18 +10,29 @@ import {
 } from '../../helpers/export'
 import Button from './Button'
 
-export default function ExportDataMenuItem({ 
-    filenameToFetch = fullDataFilename, 
+export default function ExportDataMenuItem({
+    filenameToFetch = fullDataFilename,
     filteredFileName = filteredDataFilename,
     filterContext = GlobalFilterContext,
     dataKey = 'grants',
-    filterIdKey = 'GrantID'
-}: { 
+    filterIdKey = 'GrantID',
+    label = 'Export Chart Data (CSV)',
+    ids,
+    className = 'rounded-b-md',
+}: {
     filenameToFetch?: string,
     filteredFileName?: string,
     filterContext?: React.Context<any>,
     dataKey?: string,
     filterIdKey?: string,
+    label?: string,
+    /**
+     * Restricts the export to these record ids, regardless of whether any global
+     * filter is active — used by charts whose own controls (e.g. a tab) narrow
+     * the data further than the sidebar does.
+     */
+    ids?: string[],
+    className?: string,
 }) {
     const context = useContext(filterContext)
     const { filters } = context
@@ -50,16 +61,22 @@ export default function ExportDataMenuItem({
                         : (filter?.values?.length ?? 0) > 0
                 )
 
-                if (filtersAreActive) {
-                    filteredCsv = filterCsv(
-                        filteredCsv,
-                        items.map((item: any) => item[filterIdKey])
-                    )
+                // An explicit id list is already the narrowed selection, so it
+                // always applies — the chart's own controls narrow the data even
+                // when the sidebar is untouched.
+                const restrictToIds =
+                    ids ??
+                    (filtersAreActive
+                        ? items.map((item: any) => item[filterIdKey])
+                        : undefined)
+
+                if (restrictToIds) {
+                    filteredCsv = filterCsv(filteredCsv, restrictToIds)
                 }
 
                 downloadCsv(
                     filteredCsv,
-                    filtersAreActive ? filteredFileName : filenameToFetch
+                    restrictToIds ? filteredFileName : filenameToFetch
                 )
 
                 setExportingCsv(false)
@@ -74,10 +91,10 @@ export default function ExportDataMenuItem({
     return (
         <Button
             Icon={DownloadIcon}
-            label="Export Chart Data (CSV)"
+            label={label}
             onClick={exportCsv}
             loading={exportingCsv}
-            className="rounded-b-md"
+            className={className}
         />
     )
 }

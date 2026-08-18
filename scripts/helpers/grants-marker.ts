@@ -12,12 +12,22 @@ function markerKey(): string {
  * The Figshare source file IDs baked into the cached artefacts on the last
  * successful generate. Bumping any of these in data-sources.ts must invalidate
  * the cache, so the freshness gate compares all of them against this marker.
+ *
+ * The clinical-trials ids are tracked here purely so check-grants-freshness.ts
+ * knows a CT-only bump still warrants running `npm run generate` — without them
+ * CI reported "unchanged", skipped generate entirely and the CT dataset silently
+ * stayed on the previous Figshare file. Which CT artefacts are then rebuilt is
+ * still decided by the CT pipeline's own marker (helpers/trials-marker.ts), and
+ * the grants/RRNA download gate deliberately ignores them (a CT bump must not
+ * force a grants re-download).
  */
 export interface LastUsedFileIds {
     grantsId: number | null
     rrnaId: number | null
     dictionaryId: number | null
     rrnaDictionaryId: number | null
+    clinicalTrialsId: number | null
+    clinicalTrialsDictionaryId: number | null
 }
 
 /**
@@ -35,6 +45,8 @@ export async function readLastUsedFileIds(): Promise<LastUsedFileIds> {
         rrnaId: null,
         dictionaryId: null,
         rrnaDictionaryId: null,
+        clinicalTrialsId: null,
+        clinicalTrialsDictionaryId: null,
     }
     try {
         const body = await s3GetObjectString(markerKey())
@@ -47,6 +59,8 @@ export async function readLastUsedFileIds(): Promise<LastUsedFileIds> {
             rrnaId: num(data?.rrnaId),
             dictionaryId: num(data?.dictionaryId),
             rrnaDictionaryId: num(data?.rrnaDictionaryId),
+            clinicalTrialsId: num(data?.clinicalTrialsId),
+            clinicalTrialsDictionaryId: num(data?.clinicalTrialsDictionaryId),
         }
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
@@ -64,6 +78,8 @@ export async function writeLastUsedFileIds(ids: LastUsedFileIds): Promise<void> 
         rrnaId: ids.rrnaId,
         dictionaryId: ids.dictionaryId,
         rrnaDictionaryId: ids.rrnaDictionaryId,
+        clinicalTrialsId: ids.clinicalTrialsId,
+        clinicalTrialsDictionaryId: ids.clinicalTrialsDictionaryId,
     })
     await s3PutObject(markerKey(), body, 'application/json', 'no-store')
 }

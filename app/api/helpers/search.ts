@@ -1,7 +1,148 @@
 import { NextResponse } from 'next/server'
 import { Client } from '@opensearch-project/opensearch'
 import { jointFundingFilterOptions, SearchFilters } from '../../helpers/search'
+import { coLocatedFilterOptions } from '../../clinical-trials/explore/search'
 import { normaliseBranchName } from '../../helpers/normalise-branch-name'
+
+/**
+ * Per-dataset search configuration. Both datasets share one OpenSearch cluster but
+ * live in separate indices, search different text fields, allow different filter
+ * fields and surface different `_source` fields. Keeping these differences in a
+ * declarative config (rather than `if (dataset === 'grants')` branches scattered
+ * through the routes) mirrors the pipeline-side DatasetConfig approach.
+ */
+export interface SearchDatasetConfig {
+    /** Stable dataset key (also the route segment, e.g. /api/search/<key>/list). */
+    key: 'grants' | 'clinical-trials'
+    /** Base name for the OpenSearch index (prefix/version are applied at runtime). */
+    indexBaseName: string
+    /** The document's unique id field (used as the OpenSearch _id and sort key). */
+    idField: string
+    /** Full-text fields (with `^boost`) searched by the free-text query. */
+    fullTextFields: string[]
+    /** Fields a user is permitted to filter on. */
+    allowedFilterFields: Set<string>
+    /** Fields highlighted in search hits. */
+    highlightFields: string[]
+    /** `_source` fields returned for the results list. */
+    listSourceFields: string[]
+    /** `_source` fields returned for the single-hit (highlight) lookup. */
+    showSourceFields: string[]
+    /** Whether the grants-only joint-funding constraint applies. */
+    supportsJointFunding: boolean
+    /** Whether the clinical-trials-only co-located constraint applies. */
+    supportsCoLocated: boolean
+}
+
+const grantsSearchDataset: SearchDatasetConfig = {
+    key: 'grants',
+    indexBaseName: 'grants',
+    idField: 'GrantID',
+    fullTextFields: ['GrantID^4', 'GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+    allowedFilterFields: new Set([
+        'FundingOrgName',
+        'Families',
+        'Pathogens',
+        'Diseases',
+        'Strains',
+        'ResearchCat',
+        'FunderRegion',
+        'FunderCountry',
+        'ResearchInstitutionName',
+        'ResearchLocationCountry',
+        'GrantStartYear',
+        'StudySubject',
+        'StudyType',
+        'AgeGroups',
+        'VulnerablePopulations',
+        'OccupationalGroups',
+        'HundredDaysMissionResearchArea',
+        'HundredDaysMissionImplementation',
+        'ClinicalTrial',
+        'PandemicIntelligenceThemes',
+        'PolicyRoadmaps',
+        'GrantID',
+    ]),
+    highlightFields: ['GrantTitleEng', 'Abstract', 'LaySummary'],
+    listSourceFields: [
+        'GrantTitleEng',
+        'Abstract',
+        'LaySummary',
+        'GrantAmountConverted',
+        'GrantStartYear',
+        'FundingOrgName',
+        'PublicationCount',
+        'JointFundedGrants',
+        'PolicyRoadmaps',
+    ],
+    showSourceFields: ['GrantTitleEng', 'Abstract', 'LaySummary'],
+    supportsJointFunding: true,
+    supportsCoLocated: false,
+}
+
+const clinicalTrialsSearchDataset: SearchDatasetConfig = {
+    key: 'clinical-trials',
+    indexBaseName: 'clinical-trials',
+    idField: 'TrialID',
+    fullTextFields: [
+        'TrialID^4',
+        'TrialNumber^4',
+        'TrialTitle^4',
+        'TrialTitleScientific^2',
+        'TrialTitlePublic^2',
+    ],
+    allowedFilterFields: new Set([
+        'Families',
+        'Pathogens',
+        'Diseases',
+        'Strains',
+        'Register',
+        'Interventions',
+        'MainIntervention',
+        'SecondaryIntervention',
+        'ResearchInstitutionRegion',
+        'ResearchInstitutionCountry',
+        'ResearchInstitutionName',
+        'ResearchLocationRegion',
+        'ResearchLocationCountry',
+        'EthicsStatus',
+        'Outcomes',
+        'RecruitmentStatus',
+        'RegistrationYear',
+        'StudySubject',
+        'StudyType',
+        'AgeGroups',
+        'VulnerablePopulations',
+        'OccupationalGroups',
+        'Gender',
+        'Phase',
+        'TrialID',
+    ]),
+    highlightFields: ['TrialTitle', 'TrialTitleScientific', 'TrialTitlePublic'],
+    listSourceFields: [
+        'TrialTitle',
+        'TrialNumber',
+        'Register',
+        'RegistrationYear',
+        'Diseases',
+        'SourceLink',
+        'RecruitmentStatus',
+        'StudyType',
+    ],
+    showSourceFields: ['TrialTitle', 'TrialTitleScientific', 'TrialTitlePublic'],
+    supportsJointFunding: false,
+    supportsCoLocated: true,
+}
+
+export const searchDatasets: Record<string, SearchDatasetConfig> = {
+    grants: grantsSearchDataset,
+    'clinical-trials': clinicalTrialsSearchDataset,
+}
+
+/** Resolve a dataset config by key, defaulting to grants. */
+export function getSearchDataset(key: string = 'grants'): SearchDatasetConfig {
+    return searchDatasets[key] ?? grantsSearchDataset
+}
 
 export function getSearchClient() {
     if (
@@ -24,11 +165,7 @@ export function getSearchClient() {
     })
 }
 
-export function getIndexName() {
-    // Normalise the prefix the same way branch names are normalised for storage
-    // paths, so branch-derived prefixes containing characters OpenSearch rejects
-    // (e.g. "/" in "feature/x") produce a valid index name. Clean prefixes are
-    // unchanged. Indexing and querying both call this, so they stay consistent.
+export function getIndexName(baseName: string = 'grants') {
     const prefix = process.env.SEARCH_INDEX_PREFIX
         ? `${normaliseBranchName(process.env.SEARCH_INDEX_PREFIX)}-`
         : ''
@@ -37,7 +174,15 @@ export function getIndexName() {
         ? `-${process.env.SEARCH_INDEX_VERSION}`
         : ''
 
-    return `${prefix}grants${version}`
+    // The prefix is often a Git branch name (e.g. on preview deploys), which can
+    // contain characters OpenSearch forbids in index names — most notably the "/"
+    // in branch names like "feature/clinical-trials". Lowercase and replace any
+    // disallowed character with a hyphen so the resulting index name is valid.
+    // Both the build-time indexer and the runtime API routes call this function,
+    // so they stay in sync.
+    return `${prefix}${baseName}${version}`
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
 }
 
 export function searchUnavailableResponse() {
@@ -50,6 +195,27 @@ export function searchUnavailableResponse() {
             statusText: 'Service Unavailable',
         },
     )
+}
+
+/** Shared validation for the two independent co-located parameters. */
+function validateCoLocatedValue(
+    parameterName: string,
+    value: unknown,
+    addError: (message: string) => void,
+) {
+    if (typeof value !== 'string') {
+        addError(`The ${parameterName} parameter must be a string`)
+        return
+    }
+
+    const isValid = coLocatedFilterOptions.some(option => option.value === value)
+
+    if (!isValid) {
+        addError(
+            `The ${parameterName} parameter must be one of the following values: ` +
+                coLocatedFilterOptions.map(option => option.value).join(', '),
+        )
+    }
 }
 
 export async function validateRequest(
@@ -86,6 +252,14 @@ export async function validateRequest(
                             .join(', '),
                 )
             }
+        },
+
+        coLocatedLocation: (addError: (message: string) => void) => {
+            validateCoLocatedValue('coLocatedLocation', parameters.coLocatedLocation, addError)
+        },
+
+        coLocatedInstitution: (addError: (message: string) => void) => {
+            validateCoLocatedValue('coLocatedInstitution', parameters.coLocatedInstitution, addError)
         },
 
         page: (addError: (message: string) => void) => {
@@ -162,45 +336,28 @@ export async function validateRequest(
     return { values }
 }
 
-const allowedFilterFields = new Set([
-    'FundingOrgName',
-    'Families',
-    'Pathogens',
-    'Diseases',
-    'Strains',
-    'ResearchCat',
-    'FunderRegion',
-    'FunderCountry',
-    'ResearchInstitutionName',
-    'ResearchLocationCountry',
-    'GrantStartYear',
-    'StudySubject',
-    'StudyType',
-    'AgeGroups',
-    'VulnerablePopulations',
-    'OccupationalGroups',
-    'HundredDaysMissionResearchArea',
-    'HundredDaysMissionImplementation',
-    'ClinicalTrial',
-    'PandemicIntelligenceThemes',
-    'PolicyRoadmaps',
-    'GrantID',
-])
+/** Independent co-located selections, one per geography field (Technical Spec §6.1). */
+export interface CoLocatedSelection {
+    location?: string
+    institution?: string
+}
 
 export function getBooleanQuery(
     q: string,
     filters: SearchFilters,
+    dataset: SearchDatasetConfig = grantsSearchDataset,
     jointFunding: string = 'all-grants',
+    coLocated: CoLocatedSelection = {},
 ) {
     return {
         bool: {
-            ...prepareMustClause(q),
-            ...prepareFilterClause(filters, jointFunding),
+            ...prepareMustClause(q, dataset),
+            ...prepareFilterClause(filters, dataset, jointFunding, coLocated),
         },
     }
 }
 
-function prepareMustClause(q: string) {
+function prepareMustClause(q: string, dataset: SearchDatasetConfig) {
     if (!q) {
         return {}
     }
@@ -214,19 +371,24 @@ function prepareMustClause(q: string) {
         must: {
             simple_query_string: {
                 query,
-                fields: ['GrantID^4', 'GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
+                fields: dataset.fullTextFields,
                 flags: 'AND|OR|NOT|PHRASE|PRECEDENCE|WHITESPACE|ESCAPE',
             },
         },
     }
 }
 
-function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
+function prepareFilterClause(
+    filters: SearchFilters,
+    dataset: SearchDatasetConfig,
+    jointFunding: string,
+    coLocated: CoLocatedSelection,
+) {
     const outerMust: any[] = []
 
     const validFilters = filters?.filters?.filter(
         ({ field, values }) =>
-            allowedFilterFields.has(field) &&
+            dataset.allowedFilterFields.has(field) &&
             Array.isArray(values) &&
             values.length > 0
     ) ?? []
@@ -277,17 +439,37 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
         }
     }
 
-    if (jointFunding === 'only-joint-funded-grants') {
-        outerMust.push({
-            term: {
-                JointFunding: true,
-            },
-        })
-    } else if (jointFunding === 'exclude-joint-funded-grants') {
-        outerMust.push({
-            term: {
-                JointFunding: false,
-            },
+    if (dataset.supportsJointFunding) {
+        if (jointFunding === 'only-joint-funded-grants') {
+            outerMust.push({
+                term: {
+                    JointFunding: true,
+                },
+            })
+        } else if (jointFunding === 'exclude-joint-funded-grants') {
+            outerMust.push({
+                term: {
+                    JointFunding: false,
+                },
+            })
+        }
+    }
+
+    if (dataset.supportsCoLocated) {
+        // Location and institution co-location are filtered independently against
+        // their own precomputed flags (Technical Spec §6.1 — no fallback between
+        // the two). Each selection adds its own term clause to the outer `must`.
+        const coLocatedClauses: { field: string; value: string | undefined }[] = [
+            { field: 'CoLocatedByLocation', value: coLocated.location },
+            { field: 'CoLocatedByInstitution', value: coLocated.institution },
+        ]
+
+        coLocatedClauses.forEach(({ field, value }) => {
+            if (value === 'only-co-located-trials') {
+                outerMust.push({ term: { [field]: true } })
+            } else if (value === 'exclude-co-located-trials') {
+                outerMust.push({ term: { [field]: false } })
+            }
         })
     }
 
@@ -300,24 +482,29 @@ function prepareFilterClause(filters: SearchFilters, jointFunding: string) {
     }
 }
 
-export async function fetchAllGrantIDsInIndex(client: Client) {
-    return fetchAllGrantIDsMatchingBooleanQuery(client, '', {
+export async function fetchAllIdsInIndex(
+    client: Client,
+    dataset: SearchDatasetConfig = grantsSearchDataset,
+) {
+    return fetchAllIdsMatchingBooleanQuery(client, '', {
         filters: [],
         logicalAnd: false,
-    })
+    }, dataset)
 }
 
-export async function fetchAllGrantIDsMatchingBooleanQuery(
+export async function fetchAllIdsMatchingBooleanQuery(
     client: Client,
     q: string,
     filters: SearchFilters,
+    dataset: SearchDatasetConfig = grantsSearchDataset,
     jointFunding: string = 'all-grants',
+    coLocated: CoLocatedSelection = {},
 ) {
-    const index = getIndexName()
+    const index = getIndexName(dataset.indexBaseName)
 
-    const query = getBooleanQuery(q, filters, jointFunding)
+    const query = getBooleanQuery(q, filters, dataset, jointFunding, coLocated)
 
-    const grantIDs = []
+    const ids = []
 
     const size = 1000
 
@@ -339,7 +526,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
 
                 sort: [
                     {
-                        GrantID: { order: 'asc' },
+                        [dataset.idField]: { order: 'asc' },
                     },
                 ],
 
@@ -350,7 +537,7 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
         hits = results.body.hits.hits
 
         for (const hit of hits) {
-            grantIDs.push(hit._id)
+            ids.push(hit._id)
         }
 
         if (hits.length > 0) {
@@ -360,5 +547,5 @@ export async function fetchAllGrantIDsMatchingBooleanQuery(
         }
     } while (hits.length === size)
 
-    return grantIDs
+    return ids
 }

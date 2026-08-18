@@ -8,7 +8,7 @@ import VisualisationCard from '../VisualisationCard'
 import MultiSelect from '../MultiSelect'
 import ImageExportLegend from '../ImageExportLegend'
 import { sumNumericGrantAmounts } from '../../helpers/reducers'
-import { filterGrants, GlobalFilterContext } from '../../helpers/filters'
+import { filterRecords, GlobalFilterContext } from '../../helpers/filters'
 import { groupBy } from 'lodash'
 import researchCategoryOptions from '../../../public/data/select-options/ResearchCat.json'
 import {
@@ -29,7 +29,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     const [selectedResearchCategories, setSelectedResearchCategories] =
         useState<string[]>(researchCategoryOptions.map(({ value }) => value))
 
-    const filteredDataset = filterGrants(dataset, {
+    const filteredDataset = filterRecords(dataset, {
         ...selectedFilters,
         ResearchCat: selectedResearchCategories,
     })

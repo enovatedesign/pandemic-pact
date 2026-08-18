@@ -101,9 +101,9 @@ export default function SearchResult({ result, href }: SearchMatchesProps) {
                             {funderNames.join(', ')}
                         </p>
                     )}
-                    <div className="flex justify-between gap-x-2">
+                    <div className="flex flex-col items-start gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-x-2">
                         {totalMatchText > 0 && (
-                            <div className="flex items-center gap-x-2">
+                            <div className="flex flex-wrap items-center gap-2 min-w-0">
                                 <p className="inline-flex gap-1">
                                     <span className="hidden md:block">Search</span>
                                     Matches:
@@ -111,7 +111,7 @@ export default function SearchResult({ result, href }: SearchMatchesProps) {
                                 <span className="px-2 lg:px-4 py-1 bg-searchResult rounded-lg font-bold text-secondary text-sm md:text-base">
                                     {totalMatchText}
                                 </span>
-                                <p className="bg-white/60 p-2 rounded-lg whitespace-nowrap text-xs lg:text-md">
+                                <p className="bg-white/60 p-2 rounded-lg text-xs lg:text-md">
                                     {matchText.map((text, index: number) => {
                                         const formattedText =
                                             index !== matchText.length - 1 &&

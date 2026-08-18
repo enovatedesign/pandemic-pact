@@ -68,7 +68,7 @@ export default function StandardSearchFilters({
             <div className="divide-y-2 divide-gray-100">
                 <div className="pb-4">
                     <p className="text-secondary pb-4">
-                        Family and Pathogen filters
+                        Family, Pathogen and Disease filters
                     </p>
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
                         <CMSFilterBlock 

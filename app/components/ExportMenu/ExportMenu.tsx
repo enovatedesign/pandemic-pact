@@ -4,6 +4,14 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import ExportImageMenuItem from './ExportImageMenuItem'
 import ExportDataMenuItem from './ExportDataMenuItem'
 
+export interface SubsetExport {
+    /** Menu item label, e.g. "Export Diagnostics Data (CSV)". */
+    label: string
+    /** Ids of the records the chart is currently showing. */
+    ids: string[]
+    filename: string
+}
+
 interface Props {
     chartSelector: string
     imageFilename: string
@@ -12,9 +20,14 @@ interface Props {
     filterContext?: React.Context<any>
     dataKey?: string
     filterIdKey?: string
+    /**
+     * An extra CSV item for the narrower selection a chart's own controls make
+     * (e.g. the intervention tab), offered alongside the full filtered export.
+     */
+    subsetExport?: SubsetExport
 }
 
-export default function ExportMenu({ chartSelector, imageFilename, filenameToFetch, filteredFileName, filterContext, dataKey, filterIdKey }: Props) {
+export default function ExportMenu({ chartSelector, imageFilename, filenameToFetch, filteredFileName, filterContext, dataKey, filterIdKey, subsetExport }: Props) {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -36,7 +49,9 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                {/* Wider when a subset item is present — labels carry the tab
+                    name ("Export Therapeutics Data (CSV)") and wrap at w-56. */}
+                <Menu.Items className={`absolute right-0 mt-2 ${subsetExport ? 'w-72' : 'w-56'} origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50`}>
                     <ExportImageMenuItem
                         chartSelector={chartSelector}
                         imageFilename={imageFilename}
@@ -48,7 +63,21 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
                         filterContext={filterContext}
                         dataKey={dataKey}
                         filterIdKey={filterIdKey}
+                        className={subsetExport ? '' : 'rounded-b-md'}
                     />
+
+                    {subsetExport && (
+                        <ExportDataMenuItem
+                            filenameToFetch={filenameToFetch}
+                            filteredFileName={subsetExport.filename}
+                            filterContext={filterContext}
+                            dataKey={dataKey}
+                            filterIdKey={filterIdKey}
+                            label={subsetExport.label}
+                            ids={subsetExport.ids}
+                            className="rounded-b-md"
+                        />
+                    )}
                 </Menu.Items>
             </Transition>
         </Menu>

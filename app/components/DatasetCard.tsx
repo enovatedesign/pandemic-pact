@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Dataset, getHrefForDataset } from '../helpers/datasets'
+import { Dataset, getHrefForDataset, isDatasetModeComingSoon } from '../helpers/datasets'
 
 export type Mode = 'visualise' | 'explore'
 export type Variant = 'modal' | 'inline'
@@ -15,6 +15,7 @@ interface Props {
 
 export default function DatasetCard({ dataset, mode, onSelect, compact = false, variant = 'modal' }: Props) {
     const isInline = variant === 'inline'
+    const comingSoon = isDatasetModeComingSoon(dataset, mode)
 
     const sharedClasses = [
         'relative flex flex-col h-full rounded-xl border lg:border-2 text-left transition-colors duration-150',
@@ -57,7 +58,7 @@ export default function DatasetCard({ dataset, mode, onSelect, compact = false, 
                 </div>
             </div>
 
-            {dataset.comingSoon && (
+            {comingSoon && (
                 <span className="absolute right-4 top-0 -translate-y-1/2 inline-flex items-center overflow-hidden px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider text-white">
                     <span aria-hidden="true" className="absolute inset-0 bg-brand-red animate-pulse" />
                     <span className="relative z-10">Coming soon</span>
@@ -66,7 +67,7 @@ export default function DatasetCard({ dataset, mode, onSelect, compact = false, 
         </>
     )
 
-    if (dataset.comingSoon) {
+    if (comingSoon) {
         const disabledBgClasses = isInline ? 'bg-gray-100/20 lg:bg-gray-100' : 'bg-gray-100'
 
         return (
