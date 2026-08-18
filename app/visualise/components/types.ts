@@ -1,3 +1,21 @@
+/**
+ * A resolved jump-card/menu item — the dataset-agnostic shape consumed by the
+ * shared JumpCards grid and ScrollJumpBar. Dataset-specific data (e.g. the grants
+ * disease/outbreak switches) is resolved down to this before rendering.
+ */
+export interface JumpCardItem {
+    title: string
+    summary?: string
+    /** Anchor (or external) link; null renders a non-linking card. */
+    url: string | null
+    image?: {
+        url: string
+        altText: string
+        width: number
+        height: number
+    }
+}
+
 export interface VisualisationCardDataProps {
     title: string
     summary: {

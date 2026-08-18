@@ -4,6 +4,7 @@ import {
     getIndexName,
     getBooleanQuery,
     getSearchClient,
+    getSearchDataset,
     searchUnavailableResponse,
     validateRequest,
 } from '../../../helpers/search'
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
 
     const index = getIndexName()
 
-    const query = getBooleanQuery(q, filters, jointFunding)
+    const query = getBooleanQuery(q, filters, getSearchDataset('grants'), jointFunding)
 
     const from = page && limit ? limit * (page - 1) : 0
     

@@ -16,16 +16,25 @@ export interface TooltipContentItem {
 
 interface Props {
     title?: string
+    subtitle?: string
     items?: TooltipContentItem[]
     footer?: ReactNode
 }
 
-export default function TooltipContent({ title, items, footer = null }: Props) {
+export default function TooltipContent({ title, subtitle, items, footer = null }: Props) {
     return (
         <div className="bg-white max-w-full md:max-w-none rounded-lg text-sm border opacity-100 shadow border-gray-100">
             {title && (
                 <div className="border-gray-100 border-b px-4 py-2">
                     <p className="font-medium text-gray-700">{title}</p>
+                </div>
+            )}
+
+            {subtitle && (
+                <div className="px-4 pt-2">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        {subtitle}
+                    </p>
                 </div>
             )}
 

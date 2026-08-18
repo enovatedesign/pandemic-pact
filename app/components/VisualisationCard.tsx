@@ -3,9 +3,9 @@ import { Tab } from '@headlessui/react'
 import {
     GlobalFilterContext,
     countActiveFilters,
-    availableFilters,
+    getAvailableFilters,
 } from '../helpers/filters'
-import ExportMenu from './ExportMenu/ExportMenu'
+import ExportMenu, { SubsetExport } from './ExportMenu/ExportMenu'
 import InfoModal from './InfoModal'
 import { useInView, animated } from '@react-spring/web'
 import LogoInverted from './LogoInverted'
@@ -22,10 +22,18 @@ interface Props {
     tabs?: Array<{
         tab: { icon: ElementType; label: string }
         content: ReactNode
+        /**
+         * Adds a CSV item scoped to this tab's slice of the data. Without it the
+         * export offers only the globally-filtered set, which for a tabbed chart
+         * is wider than what's on screen.
+         */
+        subsetExport?: SubsetExport
     }>
     tabPrefixLabel?: string
     filenameToFetch?: string
     filteredFileName?: string
+    /** Which dataset's filter schema to use for the active-filter labels tooltip. */
+    dataset?: 'grants' | 'clinical-trials'
 }
 
 export default function VisualisationCard({
@@ -39,7 +47,8 @@ export default function VisualisationCard({
     tabs,
     tabPrefixLabel,
     filenameToFetch,
-    filteredFileName
+    filteredFileName,
+    dataset,
 }: Props) {
     const { filters } = useContext(GlobalFilterContext)
 
@@ -67,7 +76,7 @@ export default function VisualisationCard({
         .filter(([_, filter]) => filter.values.length > 0)
         .map(([key]) => key)
 
-    const appliedFilterLabels = availableFilters()
+    const appliedFilterLabels = getAvailableFilters({ dataset })
         .filter(filter => toolTipFilters.includes(filter.field))
         .map(filter => filter.label)
 
@@ -114,7 +123,7 @@ export default function VisualisationCard({
                         className={`ignore-in-image-export w-full flex ${
                             !tabs
                                 ? 'flex-col items-center md:flex-row-reverse md:justify-between'
-                                : 'flex-row-reverse justify-between'
+                                : 'flex-col-reverse md:flex-row-reverse md:justify-between'
                         } gap-y-4 justify-between items-center md:gap-y-0`}
                     >
                         <ExportMenu
@@ -122,6 +131,8 @@ export default function VisualisationCard({
                             imageFilename={id}
                             filenameToFetch={filenameToFetch}
                             filteredFileName={filteredFileName}
+                            filterIdKey={dataset === 'clinical-trials' ? 'TrialID' : 'GrantID'}
+                            subsetExport={tabs?.[selectedTabIndex]?.subsetExport}
                         />
 
                         {tabs && (

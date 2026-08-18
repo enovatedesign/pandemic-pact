@@ -1,17 +1,16 @@
 "use client"
 
-import { Fragment, useState, useContext, useMemo, useCallback } from "react"
+import { useState, useContext, useMemo, useCallback } from "react"
 import { scaleLog } from 'd3-scale'
 import { sumBy, uniq } from "lodash"
 
 import hierarchyFilters from "@/public/manual-hierarchy-filters.json"
 import selectOptions from "@/data/dist/select-options.json"
 
-import { ChevronDownIcon } from "@heroicons/react/outline"
 import { GlobalFilterContext } from "@/app/helpers/filters"
 import { brandColours } from "@/app/helpers/colours"
 
-import VisualisationCard from "@/app/components/VisualisationCard"
+import HeatmapTable, { HeatmapTableRow } from "@/app/components/HeatmapTable"
 
 interface Props {
     id: string
@@ -36,12 +35,8 @@ const TableVisualisation = ({
     const [activeFamily, setActiveFamily] = useState<string | null>(null)
     const columnOptions = selectOptions[columnHeadField as keyof typeof selectOptions]
 
-    const handleFamilyRowClick = (label: string) => {
-        setActiveFamily(activeFamily === label ? null : label)
-    }
-    
     const calculateRelatedData = useCallback((
-        field: string, 
+        field: string,
         value: string
     ) => {
         return columnOptions.map(({ label: optionLabel, value: optionValue }) => {
@@ -50,9 +45,9 @@ const TableVisualisation = ({
                 grant[columnHeadField].includes(optionValue)
             )).length
 
-            return { 
-                optionLabel, 
-                count: relatedGrants 
+            return {
+                optionLabel,
+                count: relatedGrants
             }
         })
     }, [grants, columnOptions, columnHeadField])
@@ -71,137 +66,63 @@ const TableVisualisation = ({
         )
     }, [calculateRelatedData])
 
-    const colourScale = scaleLog()
-        .domain([1, maxCount])
-        .range([brandColours['teal']['300'], brandColours['teal']['700']])
+    const colourScale = useMemo(
+        () =>
+            scaleLog<string>()
+                .domain([1, maxCount])
+                .range([brandColours['teal']['300'], brandColours['teal']['700']]),
+        [maxCount],
+    )
 
-    const CountCell = ({ count, colourScale}: {count: number, colourScale: (n: number) => unknown | string}) => {
-        const bgColour = count === 0 ? colourScale(1) : colourScale(count)
-        
-        return (
-            <td
-                className="text-secondary font-bold text-center px-4 py-2 border-l border-b border-white"
-                style={{ backgroundColor: bgColour as string }}
-            >
-                {count}
-            </td>
-        )
-    }
+    // Build the flat, already-expanded row list for the shared table.
+    const rows = useMemo<HeatmapTableRow[]>(() => {
+        const result: HeatmapTableRow[] = []
 
-    const tableHeadBaseClasses = 'w-80 px-4 py-2 bg-secondary text-white border-white'
+        hierarchyFilters.forEach(({ label: familyLabel, value: familyValue, pathogens }) => {
+            const familyCounts = calculateRelatedData("Families", familyValue)
+
+            result.push({
+                key: familyLabel,
+                label: familyLabel,
+                variant: 'parent',
+                counts: familyCounts.map(({ count }) => count),
+                total: sumBy(familyCounts, 'count'),
+                expanded: activeFamily === familyLabel,
+                onToggle: () =>
+                    setActiveFamily(activeFamily === familyLabel ? null : familyLabel),
+            })
+
+            if (activeFamily === familyLabel) {
+                pathogens
+                    .filter(p => !["Unspecified", "Other"].includes(p.label))
+                    .forEach(({ label: pathogenLabel, value: pathogenValue }) => {
+                        const pathogenCounts = calculateRelatedData("Pathogens", pathogenValue)
+                        result.push({
+                            key: pathogenLabel,
+                            label: pathogenLabel,
+                            variant: 'child',
+                            counts: pathogenCounts.map(({ count }) => count),
+                            total: sumBy(pathogenCounts, 'count'),
+                        })
+                    })
+            }
+        })
+
+        return result
+    }, [activeFamily, calculateRelatedData])
 
     return (
-        <VisualisationCard
+        <HeatmapTable
             id={id}
             title={title}
             subtitle={subtitle}
+            footnote={footnote}
             filenameToFetch={filenameToFetch}
             filteredFileName={filteredFileName}
-            footnote={footnote}
-        >
-            <div className="table-visualisation-wrapper w-full overflow-x-auto">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th className="bg-secondary w-80"></th>
-
-                            {columnOptions.map(({ label }, index) => {
-                                const tableHeadClasses = [
-                                    tableHeadBaseClasses,
-                                    index < columnOptions.length ? 'border-l' : ''
-                                ].filter(Boolean).join(' ')
-
-                                return (
-                                    <th 
-                                        key={label} 
-                                        className={tableHeadClasses}
-                                    >
-                                        {label}
-                                    </th>
-                                )
-                            })}
-
-                            <th className={`${tableHeadBaseClasses} border-l`}>Total</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {hierarchyFilters.map(({ 
-                            label: familyLabel, 
-                            value: familyValue, 
-                            pathogens 
-                        }) => {
-                            const knownPathogens = pathogens.filter(p => !["Unspecified", "Other"].includes(p.label))
-                            const familyCounts = calculateRelatedData("Families", familyValue)
-                            const totalFamilyCounts = sumBy(familyCounts, 'count')
-
-                            return (
-                                <Fragment key={familyLabel}>
-                                    <tr 
-                                        className="cursor-pointer border-t border-white"
-                                        onClick={() => handleFamilyRowClick(familyLabel)} 
-                                    >
-                                        <td className="px-4 py-2 text-white font-bold text-left text-lg bg-secondary flex items-center justify-between gap-x-2">
-                                            {familyLabel}
-
-                                            <ChevronDownIcon className="size-6 text-white" />
-                                        </td>
-
-                                        {familyCounts.map(({ optionLabel, count }) => (
-                                            <CountCell
-                                                key={optionLabel}
-                                                count={count}
-                                                colourScale={colourScale}
-                                            />
-                                        ))}
-
-                                        <CountCell
-                                            key={'total-' + familyLabel}
-                                            count={totalFamilyCounts}
-                                            colourScale={colourScale}
-                                        />
-                                    </tr>
-
-                                    {(activeFamily === familyLabel) && knownPathogens.map(({ 
-                                        label: pathogenLabel, 
-                                        value: pathogenValue 
-                                    }, index) => {
-                                        const diseaseTdClasses = [
-                                            'px-4 py-2 text-secondary font-bold text-left bg-primary-darker border-b',
-                                            index > 0 ? 'border-t border-white' : ''
-                                        ].join(' ')
-
-                                        const pathogenCounts = calculateRelatedData("Pathogens", pathogenValue)
-                                        const totalPathogenCounts = sumBy(pathogenCounts, 'count')
-
-                                        return (
-                                            <tr key={pathogenLabel}>
-                                                <td className={diseaseTdClasses}>{pathogenLabel}</td>
-
-                                                {pathogenCounts.map(({ optionLabel, count }) => (
-                                                    <CountCell
-                                                        key={optionLabel}
-                                                        count={count}
-                                                        colourScale={colourScale}
-                                                    />
-                                                ))}
-
-                                                <CountCell
-                                                    key={'total-' + pathogenLabel}
-                                                    count={totalPathogenCounts}
-                                                    colourScale={colourScale}
-                                                />
-                                            </tr>
-                                        )
-                                    })}
-                                </Fragment>
-                                )
-                            })}
-                        </tbody>
-                </table>
-            </div>
-        </VisualisationCard>
+            columnLabels={columnOptions.map(({ label }) => label)}
+            rows={rows}
+            colourScale={colourScale}
+        />
     )
 }
 

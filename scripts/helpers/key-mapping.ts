@@ -1,4 +1,5 @@
 import { RawGrant } from "../types/generate"
+import { resolveCanonicalCode } from "./redcap-codes"
 
 // Note that some of the columns in the source spreadsheets are not included
 // here because we don't need them.
@@ -87,10 +88,23 @@ export function convertSourceKeysToOurKeys(
     originalObject: { [key: string]: any },
     retainOriginalKeys: boolean = false
 ) {
+    return convertKeysUsingMapping(originalObject, keyMapping, retainOriginalKeys)
+}
+
+/**
+ * Generic version of convertSourceKeysToOurKeys that takes an explicit mapping,
+ * so datasets other than grants (e.g. clinical-trials) can reuse the same
+ * rename-and-drop behaviour with their own column -> field mapping.
+ */
+export function convertKeysUsingMapping(
+    originalObject: { [key: string]: any },
+    mapping: { [key: string]: string },
+    retainOriginalKeys: boolean = false
+) {
     const convertedObject: { [key: string]: any } = {}
 
     for (const [key, value] of Object.entries(originalObject)) {
-        const mappedKey = keyMapping[key]
+        const mappedKey = mapping[key]
 
         if (mappedKey) {
             convertedObject[mappedKey] = value
@@ -153,17 +167,15 @@ export const prepareSpecificSelectOptions = (rawOptions: any, target: string) =>
     )
 }
 
-// Normalises the code segment extracted from a REDCap checkbox column name.
-// Two rules:
-//  - A leading '_' encodes a minus sign (REDCap export quirk for -88, -99, -9999).
-//  - REDCap forces column names to lowercase, but the dictionary's choices
-//    field stores ICTV codes uppercase (and select-options.json follows suit).
-//    Uppercase any extracted ICTV code so grant values match filter values.
-//    SNOMED codes (digits-only), np001, and -88/-99/-9999 are untouched.
-const normaliseExtractedCode = (raw: string) => {
-    const value = raw.replace(/^_/, '-')
-    return value.toLowerCase().startsWith('ictv') ? value.toUpperCase() : value
-}
+// Normalises the code segment extracted from a REDCap checkbox column name back
+// to the canonical value the data dictionary declares, so record values match the
+// values used by select-options, the filter hierarchy and the search index.
+//
+// The mapping comes from the dictionary itself (see resolveCanonicalCode); the
+// caller must register it — prepareGrants and prepareTrials each do so before
+// streaming their records. Without a registered dictionary this falls back to the
+// legacy leading-'_' and ICTV rules.
+const normaliseExtractedCode = (raw: string) => resolveCanonicalCode(raw)
 
 export const convertRawGrantKeyToValuesArray = (rawGrant: RawGrant, target: string) => {
     return Object.keys(rawGrant)

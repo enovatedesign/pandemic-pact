@@ -225,7 +225,7 @@ function parseCheckboxOptionsFromDictionary(dictionary: Row[]) {
     ])
 }
 
-function parseSelectOptionsFromChoices(choices: string) {
+export function parseSelectOptionsFromChoices(choices: string) {
     // Split the string by ' | ' and map each choice to an object with a value and label
     return choices.split(' | ').map(choice => {
         // Each choice is stored in the source data as CSV,

@@ -2,7 +2,6 @@
 
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
-import { debounce, throttle } from 'lodash'
 
 import { emptyRrnaFilters, filterRrnaStudies, RrnaFilterContext } from '@/app/helpers/filters'
 import { AnnouncementProps } from '@/app/helpers/types'
@@ -14,7 +13,7 @@ import Layout from '@/app/components/Layout'
 import RrnaFilterSidebar from './RrnaFilterSidebar'
 import AccordionBlock from '../components/ContentBuilder/Blocks/AccordionBlock'
 import { rrnaVisualiseCardData } from './rrnaVisualiseCardData'
-import VisualisationJumpMenu from '../components/VisualisationJumpMenu'
+import ScrollJumpBar from '../visualise/components/ScrollJumpBar'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import Card from '../components/ContentBuilder/Common/Card'
 import VisualisationCardGrid from '../components/VisualisationCardGrid'
@@ -181,38 +180,6 @@ const RrnaVisualisePageClient = ({
         ]
     )
 
-    const [dropdownVisible, setDropdownVisible] = useState(false)
-    
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 1024) {
-                setDropdownVisible(true)
-            } else {
-                setDropdownVisible(false)
-            }
-        }
-
-        const debouncedHandleResize = debounce(handleResize, 200)
-        window.addEventListener('resize', debouncedHandleResize)
-
-        const handleDropdown = () => {
-            if (window.innerWidth > 1024) {
-                if (window.scrollY > 1000) {
-                    setDropdownVisible(true)
-                } else {
-                    setDropdownVisible(false)
-                }
-            }
-        }
-        const throttledHandleDropdown = throttle(handleDropdown, 200)
-        window.addEventListener('scroll', throttledHandleDropdown)
-
-        return () => {
-            window.removeEventListener('scroll', throttledHandleDropdown)
-            window.removeEventListener('resize', debouncedHandleResize)
-        }
-    }, [dropdownVisible])
-
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
 
     return (
@@ -231,11 +198,7 @@ const RrnaVisualisePageClient = ({
                     sidebar={sidebar}
                     announcement={announcement}
                 >
-                    <VisualisationJumpMenu
-                        dropdownVisible={dropdownVisible}
-                        cardData={rrnaVisualiseCardData}
-                        useCardSwitch={false}
-                    />
+                    <ScrollJumpBar items={rrnaVisualiseCardData} />
 
                     <VisualisationCardGrid>
                          {rrnaVisualiseCardData.map((card, index) => {

@@ -97,8 +97,13 @@ export default function InteractiveBackground({children, ...rest}: Props) {
     return (
         <section {...rest}>
             {children}
-            <div className="bg-dots bg-center bg-[length:75px_75px] bg-size bg-repeat absolute inset-0 w-full h-full z-0 md:hidden"></div>
-            <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0 hidden md:block"></canvas>
+            {/*
+                Both overlays sit above the statically positioned masthead content, so
+                they must not swallow clicks or text selection. The canvas animation is
+                driven by window-level mousemove listeners, not by events on the canvas.
+            */}
+            <div className="bg-dots bg-center bg-[length:75px_75px] bg-size bg-repeat absolute inset-0 w-full h-full z-0 pointer-events-none md:hidden"></div>
+            <canvas ref={canvas} className="absolute inset-0 w-full h-full z-0 pointer-events-none hidden md:block"></canvas>
         </section>
     )
 }

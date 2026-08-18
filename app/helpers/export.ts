@@ -4,16 +4,31 @@ export const filteredDataFilename = 'grants/pandemic-pact-filtered-grants.csv'
 export const fullRrnaDataFilename = 'rrna/pandemic-pact-rrna-studies.csv'
 export const rrnaFilteredDataFilename = 'rrna/pandemic-pact-filtered-rrna-studies.csv'
 
-export function fetchCsv(filename = fullDataFilename) {
-    return fetch(`/export/${filename}`).then(response =>
-        response.text()
-    )
+export const clinicalTrialsFullDataFilename =
+    'clinical-trials/pandemic-pact-clinical-trials.csv'
+export const clinicalTrialsFilteredDataFilename =
+    'pandemic-pact-filtered-clinical-trials.csv'
+
+export async function fetchCsv(filename = fullDataFilename) {
+    const response = await fetch(`/export/${filename}`)
+
+    // The export CSVs are generated at build time (public/export is gitignored).
+    // If the file is missing on a given deployment the server returns an error
+    // page, not the CSV — fail loudly rather than letting the caller download an
+    // HTML/fallback body saved as a .csv.
+    if (!response.ok) {
+        throw new Error(
+            `Failed to fetch export CSV "/export/${filename}": ${response.status} ${response.statusText}`,
+        )
+    }
+
+    return response.text()
 }
 
-export function filterCsv(csv: string, IDs: string[]) {
-    // Rather than attempting to parse the CSV, we can take advantage of
-    // the fact that the first column is the Grant ID, and filter based on that,
-    // thereby improving performance.
+export function filterCsv(csv: string, ids: string[]) {
+    // Rather than attempting to parse the CSV, we can take advantage of the fact
+    // that the first column is the record's id (Grant ID, Trial ID or RRNA ID)
+    // and filter on that, thereby improving performance.
     return csv
         .split('\n')
         .filter((line, index) => {
@@ -22,8 +37,8 @@ export function filterCsv(csv: string, IDs: string[]) {
                 return true
             }
 
-            // Check if the first column contains one of our filtered Grant IDs
-            return IDs.some(id => line.startsWith(`${id},`))
+            // Check if the first column matches one of our filtered ids
+            return ids.some(id => line.startsWith(`${id},`))
         })
         .join('\n')
 }

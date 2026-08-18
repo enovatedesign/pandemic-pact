@@ -6,6 +6,7 @@ import {
     Filters,
     FixedSelectOptionContext,
     getAvailableFilters,
+    pluralizeFilterLabel,
 } from '../helpers/filters'
 import AnimateHeight from 'react-animate-height'
 import LoadingSpinner from './LoadingSpinner'

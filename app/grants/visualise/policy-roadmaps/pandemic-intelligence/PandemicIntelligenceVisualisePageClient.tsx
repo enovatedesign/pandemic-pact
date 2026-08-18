@@ -2,13 +2,12 @@
 
 import { useMemo, useState, useEffect, useRef, Suspense, ReactNode } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 import Image from 'next/image'
 
 import { 
     emptyFilters,
-    filterGrants,
+    filterRecords,
     GlobalFilterContext,
     countActiveFilters,
     Filters,
@@ -19,7 +18,7 @@ import { getKvDatabase } from '@/app/helpers/kv'
 
 import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
-import VisualisationJumpMenu from '@/app/components/VisualisationJumpMenu'
+import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
 import PandemicIntelligenceThemes from './visualisations/PandemicIntelligenceThemes'
 import PandemicEpidemicIntelligenceFunders from './visualisations/PandemicEpidemicIntelligenceFunders'
@@ -47,8 +46,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
     const tooltipRef = useRef<TooltipRefProps>(null)
     const [completeDataset, setCompleteDataset] = useState([])
     const [loadingDataset, setLoadingDataset] = useState(true)
-    const [dropdownVisible, setDropdownVisible] = useState(false)
-    
+
     const params = useSearchParams()
     const sharedFiltersId = params.get('share')
 
@@ -86,7 +84,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
     const [selectedFilters, setSelectedFilters] = useState<Filters>(filters)
 
     const globallyFilteredDataset = useMemo(() => 
-        filterGrants(completeDataset, selectedFilters),
+        filterRecords(completeDataset, selectedFilters),
         [completeDataset, selectedFilters],
     )
 
@@ -161,36 +159,6 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
         typeHandle
     ])
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 1024) {
-                setDropdownVisible(true)
-            } else {
-                setDropdownVisible(false)
-            }
-        }
-
-        const debouncedHandleResize = debounce(handleResize, 200)
-        window.addEventListener('resize', debouncedHandleResize)
-
-        const handleDropdown = () => {
-            if (window.innerWidth > 1024) {
-                if (window.scrollY > 1000) {
-                    setDropdownVisible(true)
-                } else {
-                    setDropdownVisible(false)
-                }
-            }
-        }
-        const throttledHandleDropdown = throttle(handleDropdown, 200)
-        window.addEventListener('scroll', throttledHandleDropdown)
-
-        return () => {
-            window.removeEventListener('scroll', throttledHandleDropdown)
-            window.removeEventListener('resize', debouncedHandleResize)
-        }
-    }, [dropdownVisible])
-    
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -210,7 +178,6 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                 >
                     <VisualisationJumpMenu
                         policyRoadmapEntryType={typeHandle}
-                        dropdownVisible={dropdownVisible}
                         outbreak={false}
                     />
 

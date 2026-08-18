@@ -12,6 +12,15 @@ body {
     background: rgb(var(--background-rgb));
 }
 
+/*
+    Translucent brand highlight for selected text. Only the background is set so the
+    text keeps its own colour, which keeps it legible on both the light page body and
+    the dark mastheads.
+*/
+::selection {
+    @apply bg-primary/40;
+}
+
 @layer utilties {
     .inner-glow {
         box-shadow: inset 0 0 16px 8px rgba(255, 255, 255, 0.08);

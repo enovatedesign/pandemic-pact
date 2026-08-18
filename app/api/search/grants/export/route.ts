@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import {
     getSearchClient,
+    getSearchDataset,
     searchUnavailableResponse,
     validateRequest,
-    fetchAllGrantIDsMatchingBooleanQuery,
+    fetchAllIdsMatchingBooleanQuery,
 } from '../../../helpers/search'
 
 export async function POST(request: NextRequest) {
@@ -26,10 +27,11 @@ export async function POST(request: NextRequest) {
 
     const { q, filters, jointFunding } = values
 
-    const grantIDs = await fetchAllGrantIDsMatchingBooleanQuery(
+    const grantIDs = await fetchAllIdsMatchingBooleanQuery(
         client,
         q,
         filters,
+        getSearchDataset('grants'),
         jointFunding,
     )
 

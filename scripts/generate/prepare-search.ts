@@ -1,14 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import { title, info, error, warn } from '../helpers/log'
-import readGrantsDist from '../helpers/read-grants-dist'
-import {
-    getIndexName,
-    getSearchClient,
-    fetchAllGrantIDsInIndex,
-} from '../../app/api/helpers/search'
-import { execSync } from 'child_process'
-import { Grant } from '../types/generate'
+import { title, info, warn } from '../helpers/log'
+import { getSearchClient, getSearchDataset } from '../../app/api/helpers/search'
+import { indexDatasetInOpenSearch } from '../helpers/index-dataset-in-opensearch'
 import { splitGrantIds } from '../../app/helpers/pubmed-ids'
 
 export default async function prepareSearch(
@@ -29,10 +23,7 @@ export default async function prepareSearch(
 
     title('Indexing data in OpenSearch')
 
-    const indexName = getIndexName()
-
-    // Check if the index already exists
-    const { body: updatingExistingIndex } = await client.indices.exists({ index: indexName })
+    const dataset = getSearchDataset('grants')
 
     const selectOptions = fs.readJsonSync('./data/dist/select-options.json')
 
@@ -46,7 +37,7 @@ export default async function prepareSearch(
         LaySummary: { type: 'text' },
         GrantAmountConverted: { type: 'long' },
         JointFunding: { type: 'boolean' },
-        PublicationCount: { type: 'long'},
+        PublicationCount: { type: 'long' },
 
         // Prepare a keyword type field for each select option
         ...Object.fromEntries(
@@ -57,182 +48,42 @@ export default async function prepareSearch(
         ),
     }
 
-    if (updatingExistingIndex) {
-        info(`Index ${indexName} already exists, skipping creation`)
-    } else {
-        info(`Creating index ${indexName}...`)
+    await indexDatasetInOpenSearch({
+        client,
+        dataset,
+        gzippedRecordsPath: './data/dist/grants.json.gz',
+        // When a changed-id set is provided, only (re)upsert those grants.
+        // Removed grants are still pruned against the full data set inside the
+        // helper. An undefined set means reindex everything (full reindex).
+        changedIds,
+        mappingProperties,
+        buildDoc: (grant: any) => {
+            // Get an object with only the fields we want to index
+            const doc = _.pick(grant, Object.keys(mappingProperties))
 
-        // Create a new index with the defined mapping properties if
-        // it doesn't already exist
-        await client.indices
-            .create({
-                index: indexName,
-                body: {
-                    mappings: {
-                        properties: mappingProperties,
-                    },
-                },
-            })
-            .catch(e => {
-                error(`Error creating index ${indexName}: ${e}`)
-            })
-
-        info(`Created index ${indexName}`)
-    }
-
-    info(`Bulk indexing ${indexName} with upserts...`)
-
-    const allGrants: Grant[] = readGrantsDist()
-
-    // When a changed-id set is provided, only (re)upsert those grants. Removed
-    // grants are handled by the prune step below, which always works against the
-    // full data set. An undefined set means reindex everything (full reindex).
-    const grantsToIndex =
-        changedIds === undefined
-            ? allGrants
-            : (() => {
-                  const changedSet = new Set(changedIds)
-                  return allGrants.filter((grant: any) =>
-                      changedSet.has(grant.GrantID),
-                  )
-              })()
-
-    if (changedIds !== undefined) {
-        info(`Incremental index: upserting ${grantsToIndex.length} changed grant(s)`)
-    }
-
-    const chunkSize = 500
-
-    const chunkedGrants = _.chunk(grantsToIndex, chunkSize)
-
-    for (let i = 0; i < chunkedGrants.length; i++) {
-        // Output progress every 500 documents
-        if (i > 0) {
-            info(`Indexed ${i * chunkSize}/${grantsToIndex.length} documents`)
-        }
-
-        const grants = chunkedGrants[i]
-
-        // Prepare the bulk upsert operations for this chunk of grants
-        const bulkOperations: any[] = grants
-            .map((grant: any) => {
-                // Get an object with only the fields we want to index
-                const doc = _.pick(grant, Object.keys(mappingProperties))
-
-                const docBody: any = {
-                    ...doc,
-                    // Add a flag to indicate if there is more than
-                    // one funder country for filtering purposes on the
-                    // frontend
-                    JointFunding: doc.FunderCountry.length > 1,
-                }
-
-                // Only set the publication count when counts were provided.
-                // Deploy builds no longer fetch PubMed and call prepareSearch()
-                // with no counts; omitting the field means doc_as_upsert leaves
-                // any existing PublicationCount untouched rather than zeroing it.
-                // The weekly PubMed job passes counts and refreshes the field.
-                if (publicationCounts !== undefined) {
-                    docBody.PublicationCount = getPublicationCount(
-                        publicationCounts,
-                        grant.PubMedGrantId as string,
-                    )
-                }
-
-                // Prepare a bulk operation for each grant, indicating that
-                // we want to update the document in the index if it already
-                // exists, or create it if it doesn't (using doc_as_upsert)
-                return [
-                    // Specify the operation
-                    {
-                        update: {
-                            _index: indexName,
-                            _id: grant.GrantID,
-                        },
-                    },
-                    // Specify the document to update or create
-                    {
-                        doc: docBody,
-                        doc_as_upsert: true,
-                    },
-                ]
-            })
-            .flat()
-
-        // Send the bulk upsert operations to OpenSearch
-        await client
-            .bulk({
-                body: bulkOperations,
-            })
-            .catch(e => {
-                error(e)
-            })
-
-        // Sleep for a second to avoid rate limiting
-        execSync('sleep 1')
-    }
-
-    info(`Bulk Indexed ${indexName} with upserts`)
-
-    // If the index already existed, check if there are any documents in the
-    // index that are no longer in the source data, and remove them
-    if (updatingExistingIndex) {
-        const allGrantIDsInIndex = await fetchAllGrantIDsInIndex(client)
-
-        const grantIDsInData = allGrants.map((grant: any) => grant.GrantID)
-
-        const grantIDsToDelete = _.difference(
-            allGrantIDsInIndex,
-            grantIDsInData,
-        )
-
-        if (grantIDsToDelete.length > 0) {
-            info(`Removing documents that are no longer in the data...`)
-
-            const chunkedGrantIDsToDelete = _.chunk(grantIDsToDelete, chunkSize)
-
-            for (let i = 0; i < chunkedGrantIDsToDelete.length; i++) {
-                // Output progress every 500 documents
-                if (i > 0) {
-                    info(
-                        `Deleted ${i * chunkSize}/${
-                            grantIDsToDelete.length
-                        } documents`,
-                    )
-                }
-
-                const grantIDs = chunkedGrantIDsToDelete[i]
-
-                // Prepare the bulk delete operations for this chunk of grants
-                const bulkOperations: any[] = grantIDs.map(
-                    (grantID: string) => {
-                        return {
-                            delete: {
-                                _index: indexName,
-                                _id: grantID,
-                            },
-                        }
-                    },
-                )
-
-                // Send the bulk delete operations to OpenSearch
-                const response = await client
-                    .bulk({
-                        body: bulkOperations,
-                    })
-                    .catch(e => {
-                        error(e)
-                    })
-
-                // Sleep for a second to avoid rate limiting
-                execSync('sleep 1')
+            const docBody: any = {
+                ...doc,
+                // Add a flag to indicate if there is more than
+                // one funder country for filtering purposes on the
+                // frontend
+                JointFunding: doc.FunderCountry.length > 1,
             }
 
-            info(
-                `Removed ${grantIDsToDelete.length} documents that are no longer in the data`,
-            )
-        }
-    }
+            // Only set the publication count when counts were provided. Deploy
+            // builds no longer fetch PubMed and call prepareSearch() with no
+            // counts; omitting the field means doc_as_upsert leaves any existing
+            // PublicationCount untouched rather than zeroing it. The weekly
+            // PubMed job passes counts and refreshes the field.
+            if (publicationCounts !== undefined) {
+                docBody.PublicationCount = getPublicationCount(
+                    publicationCounts,
+                    grant.PubMedGrantId as string,
+                )
+            }
+
+            return docBody
+        },
+    })
 
     // Review deploys are triggered by Gitlab CI and are provided with a SEARCH_INDEX_PREFIX
     // that way, which means that they aren't stored at Vercel. Therefore we need to inject

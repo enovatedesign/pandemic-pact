@@ -1,19 +1,14 @@
-'use client'
-
-import {useState, useEffect, useRef} from 'react'
-import {ChevronDownIcon} from '@heroicons/react/solid'
+import { useState, useEffect, useRef } from 'react'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import Image from "next/image"
 import AnimateHeight from 'react-animate-height';
-import { DiseaseLabel } from '../helpers/types';
-import { VisualisationCardDataProps } from '../visualise/components/types';
+import { JumpCardItem } from '../visualise/components/types';
 
 interface Props {
-    disease?: DiseaseLabel
-    cardData: VisualisationCardDataProps[]
-    useCardSwitch?: boolean
+    items: JumpCardItem[]
 }
 
-export default function JumpMenu({ cardData, disease, useCardSwitch = true }: Props) {
+export default function JumpMenu({ items }: Props) {
 
     const [isOpen, setIsOpen] = useState<Boolean>(false)
 
@@ -31,40 +26,36 @@ export default function JumpMenu({ cardData, disease, useCardSwitch = true }: Pr
             document.removeEventListener('click', handleDocumentClick)
         }
     })
-    
+
+    const linkableItems = items.filter(item => item.url)
+
     return (
         <div className="container py-2">
             <span className="sr-only">Jump to a visualisation on this page</span>
             <div className="relative w-full text-center sm:text-right">
-                <button 
-                    onClick={() => setIsOpen(true)}
-                    className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none"
-                >
+                <button onClick={() => setIsOpen(true)} className="inline-flex items-center rounded-full bg-primary uppercase py-2 px-4 hover:bg-primary-darker focus:bg-primary-darker focus:outline-none">
                     <span className="text-xs sm:text-sm font-medium">
                         Jump to a visualisation collection
                     </span>
-
                     <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
 
-                {cardData && (
+                {linkableItems.length > 0 && (
                     <div className="absolute right-0 left-0 z-10 mt-2 lg:max-w-5xl lg:left-auto origin-top-right bg-white rounded-b-lg shadow-2xl">
                         <AnimateHeight
                             duration={300}
                             height={isOpen ? 'auto' : 0}
                         >
                             <ul className="grid grid-cols-3 md:grid-cols-4 gap-1 lg:gap-2 p-2 lg:p-4">
-                                {cardData.filter(card => card.url).map((card: any, index: number) => {
-                                    const { title, image } = card
-                                    const cardSwitch: DiseaseLabel = disease ?? 'default'
-                                    const url = useCardSwitch ? card.url[cardSwitch] : card.url
-                                    
-                                    return card.showCard[cardSwitch as keyof typeof card.showCard] && (
+                                {linkableItems.map((item, index: number) => {
+                                    const { title, image, url } = item
+
+                                    return (
                                         <li ref={dropdown}
                                             key={index}
                                             className="transition-colors duration-300 p-2 rounded-lg h-full hover:bg-primary-lightest"
                                         >
-                                            <a href={url}>
+                                            <a href={url as string}>
                                                 <button className="h-full flex flex-col" onClick={() => setIsOpen(false)}>
                                                     {image && (
                                                         <Image
@@ -76,7 +67,6 @@ export default function JumpMenu({ cardData, disease, useCardSwitch = true }: Pr
                                                             loading="lazy"
                                                         />
                                                     )}
-
                                                     {title && (
                                                         <div className="h-full flex items-center py-2">
                                                             <span className="block text-sm xl:text-base text-center w-full">

@@ -15,7 +15,7 @@ import MultiSelect from './MultiSelect'
 import ImageExportLegend from './ImageExportLegend'
 import researchLocationRegionOptions from '../../public/data/select-options/ResearchLocationRegion.json'
 import researchCatOptions from '../../public/data/select-options/ResearchCat.json'
-import { filterGrants, GlobalFilterContext } from '../helpers/filters'
+import { filterRecords, GlobalFilterContext } from '../helpers/filters'
 import {
     researchCategoryColours,
     allResearchCategoriesColour,
@@ -33,7 +33,7 @@ export default function GrantsPerResearchCategoryByRegion() {
 
     const [selectedResearchCategories, setSelectedResearchCategories] = useState<string[]>([])
 
-    const filteredDataset = filterGrants(dataset, {
+    const filteredDataset = filterRecords(dataset, {
         ...selectedFilters,
         ResearchCat: selectedResearchCategories,
     })

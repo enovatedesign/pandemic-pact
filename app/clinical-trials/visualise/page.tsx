@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 
 import { queryAnnouncementEntry } from '../../helpers/announcement-query'
-import ClinicalTrialsComingSoon from '../ClinicalTrialsComingSoon'
+import VisualisePageClient from './VisualisePageClient'
 
 export const metadata: Metadata = {
-    title: 'Clinical Trial Registrations — Visualise (Coming Soon)',
+    title: 'Clinical Research Registrations — Visualise',
 }
 
 export default async function ClinicalTrialsVisualise() {
     const announcement = await queryAnnouncementEntry()
 
     return (
-        <ClinicalTrialsComingSoon
-            title="Clinical Trial Registrations"
-            summary="Interactive charts for our clinical trial registrations dataset are on their way."
+        <VisualisePageClient
+            title="Clinical Research Registrations"
+            summary="Visualise registered clinical trials for infectious diseases with pandemic potential using filters and searches."
             announcement={announcement}
         />
     )

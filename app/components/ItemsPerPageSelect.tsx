@@ -11,19 +11,19 @@ interface Props {
 export default function ItemsPerPageSelect({ limit, setLimit }: Props) {
     const options = [
         {
-            label: 'Show 25 Grants per page',
+            label: 'Show 25 records per page',
             value: 25,
         },
         {
-            label: 'Show 50 Grants per page',
+            label: 'Show 50 records per page',
             value: 50,
         },
         {
-            label: 'Show 75 Grants per page',
+            label: 'Show 75 records per page',
             value: 75,
         },
         {
-            label: 'Show 100 Grants per page',
+            label: 'Show 100 records per page',
             value: 100,
         },
     ]

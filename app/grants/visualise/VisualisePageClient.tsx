@@ -2,7 +2,6 @@
 
 import { useMemo, useState, useEffect, useRef, Suspense, useContext, ReactNode } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { throttle, debounce } from 'lodash'
 import { Tooltip, TooltipRefProps } from 'react-tooltip'
 
 import Layout from '../../components/Layout'
@@ -16,7 +15,7 @@ import FundingAmountsForEachResearchCategoryOverTime from '../../components/Fund
 import GrantsByDiseaseCard from '../../components/GrantsByDisease/Card'
 import {
     emptyFilters,
-    filterGrants,
+    filterRecords,
     GlobalFilterContext,
     countActiveFilters,
     Filters,
@@ -27,7 +26,7 @@ import { AnnouncementProps, DiseaseLabel } from '../../helpers/types'
 import { getKvDatabase } from '../../helpers/kv'
 
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
-import VisualisationJumpMenu from '@/app/components/VisualisationJumpMenu'
+import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
 import ClinicalTrialsTherapeuticsAndVaccines from '../../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 import MarburgResearchAndPolicyRoadmaps from '../../components/MarburgResearchAndPolicyRoadmaps'
 import GrantsByWHOMpoxRoadmap from '../../components/GrantsByWHOMpoxRoadmap'
@@ -113,7 +112,7 @@ const VisualisePageClientComponent = ({
     }, [sharedFiltersId])
 
     const globallyFilteredDataset = useMemo(() =>
-        filterGrants(pageDataset, selectedFilters, outbreakSelectOptions),
+        filterRecords(pageDataset, selectedFilters, outbreakSelectOptions),
         [pageDataset, selectedFilters, outbreakSelectOptions],
     )
     
@@ -180,38 +179,6 @@ const VisualisePageClientComponent = ({
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12 scroll-mt-[50px]'
 
-    const [dropdownVisible, setDropdownVisible] = useState(false)
-
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 1024) {
-                setDropdownVisible(true)
-            } else {
-                setDropdownVisible(false)
-            }
-        }
-
-        const debouncedHandleResize = debounce(handleResize, 200)
-        window.addEventListener('resize', debouncedHandleResize)
-
-        const handleDropdown = () => {
-            if (window.innerWidth > 1024) {
-                if (window.scrollY > 1000) {
-                    setDropdownVisible(true)
-                } else {
-                    setDropdownVisible(false)
-                }
-            }
-        }
-        const throttledHandleDropdown = throttle(handleDropdown, 200)
-        window.addEventListener('scroll', throttledHandleDropdown)
-
-        return () => {
-            window.removeEventListener('scroll', throttledHandleDropdown)
-            window.removeEventListener('resize', debouncedHandleResize)
-        }
-    }, [dropdownVisible])
-
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -230,7 +197,6 @@ const VisualisePageClientComponent = ({
                     announcement={announcement}
                 >
                     <VisualisationJumpMenu
-                        dropdownVisible={dropdownVisible}
                         outbreak={outbreak}
                         disease={diseaseLabel}
                     />

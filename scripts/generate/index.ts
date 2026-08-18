@@ -19,6 +19,7 @@ import preparePolicyRoadmapSelectOptions from './prepare-policy-roadmap-select-o
 import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
+import { generateClinicalTrials } from './clinical-trials'
 import { uploadStaticFiles, writeLastUsedFileIds, verifyGrants } from '../helpers/storage'
 import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
@@ -121,15 +122,10 @@ async function main() {
         prepareCsvExportFile(grantsCsvExport)
 
         // Upload Figshare-derived artefacts (homepage totals, grants, select
-        // options) to the blob cache and mark these source file IDs as processed.
+        // options) to the blob cache. The freshness marker is written at the very
+        // end of this function, once the clinical-trials pipeline has run too.
         if (shouldUploadConditionsMet) {
             await uploadStaticFiles()
-            await writeLastUsedFileIds({
-                grantsId: dataSources.FIGSHARE_GRANTS_FILE_ID,
-                rrnaId: dataSources.FIGSHARE_RRNA_FILE_ID,
-                dictionaryId: dataSources.FIGSHARE_DATA_DICTIONARY_FILE_ID,
-                rrnaDictionaryId: dataSources.FIGSHARE_RRNA_DATA_DICTIONARY_FILE_ID,
-            })
         }
 
         const { grantIds, changedIds } = await prepareIndividualGrantFiles(shouldUploadConditionsMet)
@@ -159,4 +155,38 @@ async function main() {
     // grants CSV is handled above: generated before upload on the non-cached
     // path, or restored from the cache on the cached path.
     otherCsvExports.forEach(prepareCsvExportFile)
+
+    // Clinical Research Registrations (ICTRP) — self-contained, fast dataset. Runs
+    // its own ingest/transform/select-options/CSV/search pipeline. Skips itself if
+    // the interim source CSV is absent (see generateClinicalTrials), so it is safe
+    // to run on every build until the decoupled runner / Figshare ingestion lands.
+    const clinicalTrialsUpToDate = await generateClinicalTrials(shouldUploadConditionsMet)
+
+    // Mark every source file ID as processed — deliberately here, at the end, and
+    // on BOTH paths:
+    //  - After generateClinicalTrials, so a CT failure leaves the CT ids unmarked
+    //    and the next build retries rather than skipping generate for good.
+    //  - On the cached path too, so a CT-only bump (which takes the grants cached
+    //    path but still regenerates CT) records the new CT ids. Otherwise
+    //    check-grants-freshness would report "changed" on every subsequent build
+    //    and never converge. The grants/RRNA ids are unchanged by definition on
+    //    that path, so writing them back is a no-op.
+    //
+    // Null CT ids when the CT run bailed out: the marker treats null as "changed",
+    // so the next build re-runs generate instead of inheriting ids that were never
+    // actually processed.
+    if (shouldUploadConditionsMet) {
+        await writeLastUsedFileIds({
+            grantsId: dataSources.FIGSHARE_GRANTS_FILE_ID,
+            rrnaId: dataSources.FIGSHARE_RRNA_FILE_ID,
+            dictionaryId: dataSources.FIGSHARE_DATA_DICTIONARY_FILE_ID,
+            rrnaDictionaryId: dataSources.FIGSHARE_RRNA_DATA_DICTIONARY_FILE_ID,
+            clinicalTrialsId: clinicalTrialsUpToDate
+                ? dataSources.FIGSHARE_CLINICAL_TRIALS_FILE_ID
+                : null,
+            clinicalTrialsDictionaryId: clinicalTrialsUpToDate
+                ? dataSources.FIGSHARE_CLINICAL_TRIALS_DATA_DICTIONARY_FILE_ID
+                : null,
+        })
+    }
 }

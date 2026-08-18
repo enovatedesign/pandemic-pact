@@ -11,6 +11,7 @@ import {
     convertCommaSeparatedValueFieldToArray,
     grantPolicyRoadmaps,
 } from '../helpers/key-mapping'
+import { registerCanonicalCodes, reportUnresolvedCodes } from '../helpers/redcap-codes'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
 import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
@@ -23,6 +24,16 @@ export default async function prepareGrants() {
     
     const headings: string[] = fs.readJsonSync(
         './data/download/grants-headings.json',
+    )
+
+    // Checkbox column names are a lossy, lowercased rewrite of the dictionary's
+    // choice values, so the canonical codes have to be recovered from the
+    // dictionary before any record is transformed — otherwise codes like
+    // `442438000-01` and `H1N1` reach the data as `442438000_01` / `h1n1` and
+    // match nothing in select-options, the filter hierarchy or the search index.
+    registerCanonicalCodes(
+        fs.readJsonSync('./data/download/dictionary.json'),
+        'Grants',
     )
 
     // Get an array where the first value is the checkbox headings and the
@@ -208,6 +219,8 @@ export default async function prepareGrants() {
     printWrittenFileStats(gzippedPath)
 
     info(`Processed ${processedCount} grants total`)
+
+    reportUnresolvedCodes('Grants')
 
     return { hundredDaysMissionGrants, pandemicIntelligenceGrants }
 }
