@@ -48,6 +48,8 @@ const grantsSearchDataset: SearchDatasetConfig = {
         'ResearchCat',
         'FunderRegion',
         'FunderCountry',
+        'ResearchInstitutionRegion',
+        'ResearchInstitutionCountry',
         'ResearchInstitutionName',
         'ResearchLocationCountry',
         'GrantStartYear',
