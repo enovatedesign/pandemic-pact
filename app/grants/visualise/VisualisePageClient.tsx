@@ -24,6 +24,7 @@ import {
 import { TooltipContext, sharedTooltipStyle } from '../../helpers/tooltip'
 import { AnnouncementProps, DiseaseLabel } from '../../helpers/types'
 import { getKvDatabase } from '../../helpers/kv'
+import { unpackSharePayload } from '../../helpers/share'
 
 import VisualisationCardLinks from '@/app/visualise/components/VisualisationCardLinks'
 import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpMenu'
@@ -100,10 +101,10 @@ const VisualisePageClientComponent = ({
     useEffect(() => {
         const getSharedFilters = async () => {
             if (sharedFiltersId) {
-                const sharedFilterSet = await getKvDatabase(sharedFiltersId)
-                
-                if (sharedFilterSet) {
-                    setSelectedFilters(sharedFilterSet)
+                const sharedState = unpackSharePayload(await getKvDatabase(sharedFiltersId))
+
+                if (sharedState) {
+                    setSelectedFilters(sharedState.filters)
                 }
             }
         }

@@ -14,6 +14,7 @@ import {
 import { TooltipContext, sharedTooltipStyle } from '@/app/helpers/tooltip'
 import { AnnouncementProps, PolicyRoadmapEntryTypeHandle } from '@/app/helpers/types'
 import { getKvDatabase } from '@/app/helpers/kv'
+import { unpackSharePayload } from '@/app/helpers/share'
 
 import Layout from '@/app/components/Layout'
 import FilterSidebar from '@/app/components/FilterSidebar'
@@ -76,10 +77,10 @@ const HundredDaysMissionVisualisePageClientComponent = ({
     useEffect(() => {
         const getSharedFilters = async () => {
             if (sharedFiltersId) {
-                const sharedFilterSet = await getKvDatabase(sharedFiltersId)
-                
-                if (sharedFilterSet) {
-                    setSelectedFilters(sharedFilterSet)
+                const sharedState = unpackSharePayload(await getKvDatabase(sharedFiltersId))
+
+                if (sharedState) {
+                    setSelectedFilters(sharedState.filters)
                 }
             }
         }
