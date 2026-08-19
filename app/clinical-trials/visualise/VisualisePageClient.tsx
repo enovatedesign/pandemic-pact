@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 import Layout from '../../components/Layout'
 import {
@@ -11,6 +12,8 @@ import {
     countActiveFilters,
 } from '../../helpers/filters'
 import { AnnouncementProps } from '../../helpers/types'
+import { getKvDatabase } from '../../helpers/kv'
+import { ShareableStateContext, unpackSharePayload } from '../../helpers/share'
 
 import ClinicalTrialsFilterSidebar from './ClinicalTrialsFilterSidebar'
 import JumpCards from '../../visualise/components/JumpCards'
@@ -35,6 +38,28 @@ function VisualisePageClientComponent({ title, summary, announcement }: Props) {
         emptyClinicalTrialsFilters(),
     )
     const [excludeLinkedTrials, setExcludeLinkedTrials] = useState(false)
+
+    const params = useSearchParams()
+    const sharedFiltersId = params.get('share')
+
+    useEffect(() => {
+        const getSharedFilters = async () => {
+            if (!sharedFiltersId) {
+                return
+            }
+
+            const sharedState = unpackSharePayload(await getKvDatabase(sharedFiltersId))
+
+            if (!sharedState) {
+                return
+            }
+
+            setSelectedFilters(sharedState.filters)
+            setExcludeLinkedTrials(Boolean(sharedState.shareableState.excludeLinkedTrials))
+        }
+
+        getSharedFilters()
+    }, [sharedFiltersId])
 
     useEffect(() => {
         fetch('/data/clinical-trials/trials.json')
@@ -105,6 +130,13 @@ function VisualisePageClientComponent({ title, summary, announcement }: Props) {
 
     const gridClasses = 'grid grid-cols-1 gap-6 lg:gap-12'
 
+    // "Exclude linked trials" isn't part of the filter set, so it has to be
+    // handed to the share button separately to survive a share link.
+    const shareableState = useMemo(
+        () => ({ shareableState: { excludeLinkedTrials } }),
+        [excludeLinkedTrials],
+    )
+
     return (
         <GlobalFilterContext.Provider
             value={{
@@ -113,31 +145,33 @@ function VisualisePageClientComponent({ title, summary, announcement }: Props) {
                 completeDataset,
             }}
         >
-            <Layout
-                title={title}
-                summary={summary}
-                sidebar={sidebar}
-                announcement={announcement}
-            >
-                <ScrollJumpBar items={clinicalTrialsJumpCards} />
-
-                <JumpCards
-                    items={clinicalTrialsJumpCards}
-                    gridClassName="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
-                />
-
-                <div
-                    className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
-                    id="visualisations-wrapper"
+            <ShareableStateContext.Provider value={shareableState}>
+                <Layout
+                    title={title}
+                    summary={summary}
+                    sidebar={sidebar}
+                    announcement={announcement}
                 >
-                    <div className={`${gridClasses} mt-6`}>
-                        <GeographicDistribution />
-                        <AnnualRegistrationsByDisease />
-                        <PhaseDevelopmentStage />
-                        <InterventionByPathogenFamily />
+                    <ScrollJumpBar items={clinicalTrialsJumpCards} />
+
+                    <JumpCards
+                        items={clinicalTrialsJumpCards}
+                        gridClassName="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+                    />
+
+                    <div
+                        className="relative z-10 mx-auto my-6 lg:my-12 lg:container"
+                        id="visualisations-wrapper"
+                    >
+                        <div className={`${gridClasses} mt-6`}>
+                            <GeographicDistribution />
+                            <AnnualRegistrationsByDisease />
+                            <PhaseDevelopmentStage />
+                            <InterventionByPathogenFamily />
+                        </div>
                     </div>
-                </div>
-            </Layout>
+                </Layout>
+            </ShareableStateContext.Provider>
         </GlobalFilterContext.Provider>
     )
 }

@@ -107,10 +107,13 @@ export default function MultiSelect({
     }
 
     useEffect(() => {
-        if (!loadOnClick) {
-            loadOptions();
+        // Also load eagerly when values are already selected but nothing has been
+        // fetched yet — a deep link or shared filter set applies its values before
+        // the user ever focuses the select, and unresolved values render as blank.
+        if (!loadOnClick || (selectedOptions.length > 0 && options.length === 0)) {
+            loadOptions()
         }
-    }, [loadOnClick, loadOptions])
+    }, [loadOnClick, loadOptions, selectedOptions.length, options.length])
 
     const fullLabel = label ? `All ${label}` : 'All'
     

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import defaultHierarchyFilters from '@/public/manual-hierarchy-filters.json'
 
@@ -14,7 +14,9 @@ import {
 } from '@/app/helpers/types'
 
 import CMSFilterSelect from './HierarchicalFilter'
-import { uniqBy } from 'lodash'
+import { isEqual, uniqBy } from 'lodash'
+
+const CASCADE_FIELDS = ['Families', 'Pathogens', 'Diseases', 'Strains'] as const
 
 interface HierarchicalFiltersBlockProps {
     selectedFilters: any
@@ -43,6 +45,69 @@ const HierarchicalFiltersBlock = ({
     // Build a dynamic object of refs to be used within 
     // CMSFilter to access specific select options within this components
     const selectRefs = useRef<{ [key: string]: any }>({})
+
+    // value -> option, per level, so an incoming filter set can be turned back
+    // into the option objects the selects are driven by.
+    const optionsByField = useMemo(() => {
+        const index: Record<string, Record<string, { label: string; value: string }>> = {
+            Families: {}, Pathogens: {}, Diseases: {}, Strains: {},
+        }
+
+        hierarchyFilters.forEach((family: CMSFamilyFilter) => {
+            index.Families[family.value] = { label: family.label, value: family.value }
+
+            family.pathogens?.forEach(pathogen => {
+                index.Pathogens[pathogen.value] = { label: pathogen.label, value: pathogen.value }
+
+                pathogen.diseases?.forEach(disease => {
+                    index.Diseases[disease.value] = { label: disease.label, value: disease.value }
+
+                    disease.strains?.forEach(strain => {
+                        index.Strains[strain.value] = { label: strain.label, value: strain.value }
+                    })
+                })
+            })
+        })
+
+        return index
+    }, [hierarchyFilters])
+
+    // The selects render from local state, so a filter set applied from outside
+    // this component — a shared ?share= link, or Clear All — has to be mirrored
+    // back into it or they keep showing the previous selection.
+    useEffect(() => {
+        // Only the visualise pages pass the `Filters` shape. The explore and RRNA
+        // sidebars pass their own (field -> string[]) and drive these selects from
+        // local state alone, so there is nothing to mirror.
+        const usesFilterShape = CASCADE_FIELDS.some(field =>
+            Array.isArray(selectedFilters?.[field]?.values),
+        )
+
+        if (!usesFilterShape) {
+            return
+        }
+
+        const applied = CASCADE_FIELDS.map(field => selectedFilters?.[field]?.values?.[0] || null)
+        const local = CASCADE_FIELDS.map(field => (localSelectedOptions as any)?.[field]?.value || null)
+
+        if (isEqual(applied, local)) {
+            return
+        }
+
+        setLocalSelectedOptions(
+            Object.fromEntries(
+                CASCADE_FIELDS.map((field, index) => [
+                    field,
+                    applied[index]
+                        // An unknown value still narrows the cascade; only its label is lost.
+                        ? optionsByField[field][applied[index] as string] ?? { label: '', value: applied[index] }
+                        : { label: '', value: null },
+                ]),
+            ) as any,
+        )
+        // localSelectedOptions is only ever this sync's target, never its trigger.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedFilters, optionsByField])
 
     // Clear the value of the desired react select component using the key
     const clearSelectValue = (key: string) => {

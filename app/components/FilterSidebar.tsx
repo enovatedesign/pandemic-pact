@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { XIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import {
@@ -64,6 +64,19 @@ export default function FilterSidebar({
     const standardFilters = filters.filter(f => !f.advanced)
 
     const advancedFilters = filters.filter(f => f.advanced)
+
+    const hasActiveAdvancedFilters = advancedFilters.some(
+        ({ field }) => (selectedFilters[field]?.values?.length ?? 0) > 0,
+    )
+
+    // A shared link can arrive with advanced filters applied — open the panel so
+    // they are visible rather than silently narrowing the page. Only ever opens,
+    // so the user can still collapse it again.
+    useEffect(() => {
+        if (hasActiveAdvancedFilters) {
+            setShowAdvancedFilters(true)
+        }
+    }, [hasActiveAdvancedFilters])
 
     const setSelectedOptions = (field: keyof Filters, options: string[]) => {
         let selectedOptions: Filters = { ...selectedFilters }

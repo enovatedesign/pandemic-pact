@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { XIcon, InformationCircleIcon } from '@heroicons/react/solid'
 
@@ -47,6 +47,19 @@ export default function ClinicalTrialsFilterSidebar({
     // cascading HierarchicalFiltersBlock, not as flat multi-selects.
     const standardFilters = filters.filter(f => !f.advanced && !f.isHidden)
     const advancedFilters = filters.filter(f => f.advanced)
+
+    const hasActiveAdvancedFilters = advancedFilters.some(
+        ({ field }) => (selectedFilters[field]?.values?.length ?? 0) > 0,
+    )
+
+    // A shared link can arrive with advanced filters applied — open the panel so
+    // they are visible rather than silently narrowing the page. Only ever opens,
+    // so the user can still collapse it again.
+    useEffect(() => {
+        if (hasActiveAdvancedFilters) {
+            setShowAdvanced(true)
+        }
+    }, [hasActiveAdvancedFilters])
 
     // Mirrors the grants FilterSidebar: shallow-copy the filters object but keep
     // each field's nested object reference, then mutate its `values`. This is what

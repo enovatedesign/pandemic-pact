@@ -67,7 +67,28 @@ const CustomFilters = ({
         }
     }
 
+    // Both selects are local state, so a filter set applied from outside this
+    // component — a shared ?share= link, or Clear All — has to be mirrored back
+    // into them or they show nothing while the filter is still applied.
     useEffect(() => {
+        const appliedDemographic = demographicOptions.find(
+            (option: Option) => (selectedFilters[option.value]?.values?.length ?? 0) > 0
+        )
+
+        if (appliedDemographic) {
+            const appliedValue = selectedFilters[appliedDemographic.value].values[0]
+            const options = selectOptions[
+                appliedDemographic.value as keyof typeof selectOptions
+            ] as Option[] | undefined
+
+            setSelectedStudyPopulation(appliedDemographic)
+            setSelectedStudyPopulationFilter(
+                options?.find(option => option.value === appliedValue) ?? null
+            )
+
+            return
+        }
+
         const allFiltersHaveBeenCleared = Object.values(selectedFilters)
             .flatMap(selectedFilter => 
                 selectedFilter['values']
@@ -77,7 +98,7 @@ const CustomFilters = ({
             setSelectedStudyPopulation(null)
             setSelectedStudyPopulationFilter(null)
         }
-    }, [selectedFilters])
+    }, [selectedFilters, demographicOptions])
 
     const filterCondition = selectedStudyPopulationOptions && (selectedStudyPopulationOptions.length > 0)
 
