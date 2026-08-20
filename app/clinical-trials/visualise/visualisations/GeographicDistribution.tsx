@@ -45,11 +45,11 @@ import whoRegionsGeojson from '../../../../public/data/geojson/who-regions.json'
 
 /**
  * Visualisation 1 — Geographical distribution of clinical research locations /
- * institutions. The data-field toggle (Research Location vs Research Institution)
- * uses the shared DoubleLabelSwitch, while the card tabs switch between the Map
- * (deck.gl choropleth) and Bars (region -> country drill-down) views — matching
- * the grants reference visualisation. Location and institution are treated
- * independently (Technical Spec §6.1).
+ * institutions. The data-field toggle (Research Location vs Research
+ * Institution Location) uses the shared DoubleLabelSwitch, while the card tabs
+ * switch between the Map (deck.gl choropleth) and Bars (region -> country
+ * drill-down) views — matching the grants reference visualisation. Location and
+ * institution are treated independently (Technical Spec §6.1).
  */
 
 type Source = 'location' | 'institution'
@@ -521,8 +521,8 @@ export default function GeographicDistribution() {
                     checked={source === 'institution'}
                     onChange={checked => setSource(checked ? 'institution' : 'location')}
                     leftLabel="Research Location"
-                    rightLabel="Research Institution"
-                    screenReaderLabel="Toggle between research location and research institution"
+                    rightLabel="Research Institution Location"
+                    screenReaderLabel="Toggle between research location and research institution location"
                 />
             </div>
         </VisualisationCard>
