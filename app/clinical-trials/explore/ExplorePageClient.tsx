@@ -119,14 +119,17 @@ export default function ExplorePageClient({ announcement }: Props) {
             title="Clinical Research Registrations Search"
             showSummary={true}
             summary={
-                <p className="mt-2 text-white/50 lg:text-xl">
+                // A div, not a p: the info modal renders a Headless UI Dialog
+                // (a div) inline here, which the HTML parser would hoist out of a
+                // p, breaking hydration.
+                <div className="mt-2 text-white/50 lg:text-xl">
                     Find, filter and explore registered clinical trials for infectious
                     diseases with a pandemic potential.{' '}
                     <ClinicalTrialsCoverageInfoModal
                         customButtonClasses="inline-flex align-middle"
                         iconSize="size-5 lg:size-6"
                     />
-                </p>
+                </div>
             }
             announcement={announcement}
         >
