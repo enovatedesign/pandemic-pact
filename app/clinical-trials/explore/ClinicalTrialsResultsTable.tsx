@@ -13,7 +13,7 @@ import '../../css/components/highlighted-search-results.css'
 
 interface Props {
     searchParameters: CtSearchParameters
-    setSearchParameters: (searchParameters: CtSearchParameters) => void
+    setSearchParameters: (searchParameters: Partial<CtSearchParameters>) => void
     searchResponse: CtSearchResponse
 }
 
@@ -26,7 +26,7 @@ export default function ClinicalTrialsResultsTable({
     const registerLabels = useSelectOptions('Register')
 
     const setLimit = (limit: number) => {
-        setSearchParameters({ ...searchParameters, limit })
+        setSearchParameters({ limit })
     }
 
     return (

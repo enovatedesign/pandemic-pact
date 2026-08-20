@@ -29,6 +29,12 @@ interface HierarchicalFiltersBlockProps {
     isVisualisePage?: boolean
     outbreak?: boolean
     hierarchyFilters?: CMSFamilyFilter[]
+    /**
+     * Whether `selectedFilters` can be read back into the selects. False where
+     * the caller keys its filters by something other than the cascade fields
+     * (the RRNA sidebar remaps them), leaving local state the only source.
+     */
+    syncFromSelectedFilters?: boolean
 }
 
 const HierarchicalFiltersBlock = ({
@@ -38,7 +44,8 @@ const HierarchicalFiltersBlock = ({
     fixedSelectOptions,
     isVisualisePage = true,
     outbreak = false,
-    hierarchyFilters = defaultHierarchyFilters
+    hierarchyFilters = defaultHierarchyFilters,
+    syncFromSelectedFilters = true,
 }: HierarchicalFiltersBlockProps) => {
     const [localSelectedOptions, setLocalSelectedOptions] = useState<FixedSelectOptions | undefined>(fixedSelectOptions)
 
@@ -73,21 +80,23 @@ const HierarchicalFiltersBlock = ({
     }, [hierarchyFilters])
 
     // The selects render from local state, so a filter set applied from outside
-    // this component — a shared ?share= link, or Clear All — has to be mirrored
-    // back into it or they keep showing the previous selection.
+    // this component — a shared ?share= link, a restored explore state, or Clear
+    // All — has to be mirrored back into it or they keep showing the previous
+    // selection.
     useEffect(() => {
-        // Only the visualise pages pass the `Filters` shape. The explore and RRNA
-        // sidebars pass their own (field -> string[]) and drive these selects from
-        // local state alone, so there is nothing to mirror.
-        const usesFilterShape = CASCADE_FIELDS.some(field =>
-            Array.isArray(selectedFilters?.[field]?.values),
-        )
-
-        if (!usesFilterShape) {
+        if (!syncFromSelectedFilters) {
             return
         }
 
-        const applied = CASCADE_FIELDS.map(field => selectedFilters?.[field]?.values?.[0] || null)
+        // The visualise sidebars pass the `Filters` shape (field -> { values }),
+        // the explore pages their own (field -> string[]).
+        const appliedValue = (field: string) => {
+            const filter = selectedFilters?.[field]
+
+            return (Array.isArray(filter) ? filter[0] : filter?.values?.[0]) ?? null
+        }
+
+        const applied = CASCADE_FIELDS.map(appliedValue)
         const local = CASCADE_FIELDS.map(field => (localSelectedOptions as any)?.[field]?.value || null)
 
         if (isEqual(applied, local)) {
@@ -107,7 +116,7 @@ const HierarchicalFiltersBlock = ({
         )
         // localSelectedOptions is only ever this sync's target, never its trigger.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedFilters, optionsByField])
+    }, [selectedFilters, optionsByField, syncFromSelectedFilters])
 
     // Clear the value of the desired react select component using the key
     const clearSelectValue = (key: string) => {
@@ -275,8 +284,10 @@ const HierarchicalFiltersBlock = ({
             return
         }
 
-        // Using the local selected options, map over the keys and empty the values array on the corresponding key
-        if (localSelectedOptions) {
+        // Reset the cascade before applying the new selection. Only the visualise
+        // sidebars need this: they set one field at a time, whereas the explore
+        // pages take the whole set in a single update below.
+        if (isVisualisePage && localSelectedOptions) {
             Object.keys(localSelectedOptions)
                 .forEach(key => setSelectedOptions(key, [])
             )

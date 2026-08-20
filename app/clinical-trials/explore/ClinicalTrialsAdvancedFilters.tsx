@@ -7,7 +7,11 @@ import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import Button from '../../components/Button'
 import { customSelectThemeColours } from '../../helpers/select-colours'
 import { availableClinicalTrialsFilters } from '../../helpers/filters'
-import { CtFilter, CtSearchFilters } from './search'
+import {
+    CtAdvancedSearchRow,
+    CtAdvancedSearchState,
+    emptyCtAdvancedSearchRow,
+} from './search'
 
 const OPTIONS_BASE_PATH = '/data/clinical-trials/select-options'
 
@@ -59,58 +63,33 @@ function useFieldOptions(field: string): Option[] {
     return options
 }
 
-interface Row {
-    field: string
-    values: string[]
-    logicalAnd: boolean
-    key: string
-}
-
 interface Props {
-    setSearchFilters: (searchFilters: CtSearchFilters) => void
+    advancedSearch: CtAdvancedSearchState
+    setAdvancedSearch: (advancedSearch: CtAdvancedSearchState) => void
 }
 
-export default function ClinicalTrialsAdvancedFilters({ setSearchFilters }: Props) {
-    const [rows, setRowsState] = useState<Row[]>([
-        { field: 'Diseases', values: [], logicalAnd: false, key: 'row-0' },
-    ])
-    const [globalLogicalAnd, setGlobalLogicalAnd] = useState(true)
-    const [rowCounter, setRowCounter] = useState(1)
+export default function ClinicalTrialsAdvancedFilters({
+    advancedSearch,
+    setAdvancedSearch,
+}: Props) {
+    const { rows, logicalAnd: globalLogicalAnd } = advancedSearch
 
-    const pushFilters = (newRows: Row[], logicalAnd: boolean) => {
-        const filters: CtFilter[] = newRows
-            .filter(row => row.field && row.values.length > 0)
-            .map(row => ({
-                field: row.field,
-                values: row.values,
-                logicalAnd: row.logicalAnd,
-            }))
+    const setRows = (rows: CtAdvancedSearchRow[]) =>
+        setAdvancedSearch({ ...advancedSearch, rows })
 
-        setSearchFilters({ logicalAnd, filters })
-    }
+    const toggleGlobal = () =>
+        setAdvancedSearch({ ...advancedSearch, logicalAnd: !globalLogicalAnd })
 
-    const setRows = (newRows: Row[]) => {
-        setRowsState(newRows)
-        pushFilters(newRows, globalLogicalAnd)
-    }
-
-    const toggleGlobal = () => {
-        const value = !globalLogicalAnd
-        setGlobalLogicalAnd(value)
-        pushFilters(rows, value)
-    }
-
-    const updateRow = (index: number, patch: Partial<Row>) => {
+    const updateRow = (index: number, patch: Partial<CtAdvancedSearchRow>) => {
         setRows(rows.map((row, i) => (i === index ? { ...row, ...patch } : row)))
     }
 
-    const addRow = () => {
-        setRows([
-            ...rows,
-            { field: '', values: [], logicalAnd: false, key: `row-${rowCounter}` },
-        ])
-        setRowCounter(rowCounter + 1)
-    }
+    const addRow = () =>
+        setAdvancedSearch({
+            ...advancedSearch,
+            rows: [...rows, emptyCtAdvancedSearchRow('', advancedSearch.nextRowKey)],
+            nextRowKey: advancedSearch.nextRowKey + 1,
+        })
 
     const removeRow = (index: number) => {
         setRows(rows.filter((_, i) => i !== index))
@@ -183,7 +162,7 @@ export default function ClinicalTrialsAdvancedFilters({ setSearchFilters }: Prop
 }
 
 interface AdvancedRowProps {
-    row: Row
+    row: CtAdvancedSearchRow
     onFieldChange: (field: string) => void
     onValuesChange: (values: string[]) => void
     onLogicalAndChange: (logicalAnd: boolean) => void
@@ -207,6 +186,24 @@ function AdvancedRow({
     const selectedValueOptions = valueOptions.filter(o =>
         row.values.includes(o.value),
     )
+
+    // Rows are persisted, so a value retired by a data refresh can outlive its
+    // option. It can't be rendered, and left in state it would go on narrowing
+    // results from a select that looks empty. Filtering the row's own values
+    // keeps the user's ordering; mapping the options back would rewrite it.
+    useEffect(() => {
+        if (valueOptions.length === 0) {
+            return
+        }
+
+        const knownValues = row.values.filter(value =>
+            valueOptions.some(option => option.value === value),
+        )
+
+        if (knownValues.length !== row.values.length) {
+            onValuesChange(knownValues)
+        }
+    }, [valueOptions, row.values, onValuesChange])
 
     const themeColours = (theme: any) => ({
         ...theme,

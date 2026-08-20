@@ -30,6 +30,12 @@ interface Props {
     /** When provided, the options are fully controlled by the parent (no fetch).
      * Used for cascading filters where one select's options depend on another. */
     controlledOptions?: SelectOption[]
+    /**
+     * Drop selected values that are no longer offered as options. Enabled where
+     * the selection is persisted and the options are fetched at runtime, so a
+     * value retired by a data refresh can't be caught up front.
+     */
+    pruneUnknownValues?: boolean
 }
 
 export default function MultiSelect({
@@ -42,6 +48,7 @@ export default function MultiSelect({
     loadOnClick = true,
     optionsBasePath = '/data/select-options',
     controlledOptions,
+    pruneUnknownValues = false,
 }: Props) {
     const [options, setOptions] = useState<SelectOption[]>(
         controlledOptions ?? preloadedOptions,
@@ -59,14 +66,32 @@ export default function MultiSelect({
     const id = useId()
 
     const value: SelectOption[] = useMemo(() => {
-        // Drop any selected values that aren't in the current options (e.g. a
-        // stale or deep-linked filter value that no longer exists after a data
-        // refresh). Without this, `find` returns undefined and react-select
-        // receives undefined entries it can't render.
+        // Without the filter, `find` returns undefined for a value that is no
+        // longer an option and react-select receives entries it can't render.
         return selectedOptions
             .map(option => options.find(o => o.value === option))
             .filter((o): o is SelectOption => o !== undefined)
     }, [selectedOptions, options])
+
+    // Dropping the value from the display isn't enough on its own: left in
+    // state it would go on narrowing results from a select that looks empty.
+    // Only safe once options have actually loaded.
+    useEffect(() => {
+        if (!pruneUnknownValues || controlledOptions || options.length === 0) {
+            return
+        }
+
+        if (value.length !== selectedOptions.length) {
+            setSelectedOptions(value.map(option => option.value))
+        }
+    }, [
+        pruneUnknownValues,
+        controlledOptions,
+        options.length,
+        value,
+        selectedOptions,
+        setSelectedOptions,
+    ])
 
     const onChange = (option: MultiValue<SelectOption>) => {
         setSelectedOptions(option.map(o => o.value))

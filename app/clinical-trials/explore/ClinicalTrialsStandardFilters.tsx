@@ -122,6 +122,7 @@ export default function ClinicalTrialsStandardFilters({
                         label={pluralizeFilterLabel(label, isPlural)}
                         optionsBasePath={OPTIONS_BASE_PATH}
                         loadOnClick={!eagerFields.has(field)}
+                        pruneUnknownValues={true}
                         className="col-span-1"
                     />
                 ))}
