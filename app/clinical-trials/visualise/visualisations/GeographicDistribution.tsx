@@ -512,7 +512,7 @@ export default function GeographicDistribution() {
             filenameToFetch={clinicalTrialsFullDataFilename}
             filteredFileName={clinicalTrialsFilteredDataFilename}
             title="Global Map of Geographical Distribution of Clinical Research Institutions OR Clinical Research Locations"
-            subtitle="The information on the research location and research institution was collected where available from the clinical research registration. Click on a country (map) or region bar to drill into countries."
+            subtitle="The information on the research location and research institution was collected where available from the clinical research registration. Click on a country (map) or region bar to see country or region-specific information (including records with multiple locations)."
             footnote="Please note: some research activities are undertaken in multiple locations or research institutions. Research location refers to the country where study recruitment occurs whereas the research institution refers to the institution leading the research."
             tabs={tabs}
         >

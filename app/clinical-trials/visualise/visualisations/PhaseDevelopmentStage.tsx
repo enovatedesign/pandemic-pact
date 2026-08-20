@@ -281,7 +281,7 @@ export default function PhaseDevelopmentStage() {
             filteredFileName={clinicalTrialsFilteredDataFilename}
             title="Distribution of clinical research registrations by Clinical Trial Phase / Development Stage and Recruitment Status"
             subtitle="The chart shows the number of clinical research registrations across all diseases categorised by trial intervention and recruitment status."
-            footnote="Please note: some clinical research may fall under multiple categories; although, these overlaps are not explicitly shown."
+            footnote="Please note: some clinical research may fall under multiple categories; these overlaps are not explicitly shown."
             tabPrefixLabel="Intervention:"
             tabs={tabs}
         />

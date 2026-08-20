@@ -402,7 +402,7 @@ export default function AnnualRegistrationsByDisease() {
             filteredFileName={clinicalTrialsFilteredDataFilename}
             title="Global annual number of clinical research registrations for studies on diseases with a pandemic potential"
             subtitle="The chart shows the number of clinical research records by the year of registration in ICTRP."
-            footnote="Please note: records may fall under more than one disease, so the diseases shown for a year may sum to more than the number of records; records with no disease recorded are not shown."
+            footnote="Please note: records may fall under more than one disease, so the disease totals shown for a given year may sum to more than the total number of records. Records with no disease recorded are not shown."
             tabs={tabs}
         />
     )
