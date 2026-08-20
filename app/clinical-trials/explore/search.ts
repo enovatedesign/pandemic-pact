@@ -33,12 +33,14 @@ export const coLocatedFilterOptions = [
 
 /**
  * Field-specific co-located options for the Explore dropdowns. The values match
- * coLocatedFilterOptions; only the labels vary so a selected value reads clearly
- * out of context (e.g. "Only Co-located by Research Institution").
+ * coLocatedFilterOptions; only the labels vary. Every label names its geography,
+ * including the default: the two dropdowns sit side by side and Select only shows
+ * the selected option's label, so a bare "All Clinical Trials" makes them
+ * indistinguishable.
  */
 export function coLocatedFilterOptionsFor(geography: string) {
     return [
-        { label: 'All Clinical Trials', value: 'all-trials' },
+        { label: `All Clinical Trials (${geography})`, value: 'all-trials' },
         { label: `Only Co-located by ${geography}`, value: 'only-co-located-trials' },
         { label: `Exclude Co-located by ${geography}`, value: 'exclude-co-located-trials' },
     ]
