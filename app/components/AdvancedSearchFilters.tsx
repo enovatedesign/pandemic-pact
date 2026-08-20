@@ -1,10 +1,17 @@
-import { useId, useMemo, useState, useRef, forwardRef, Ref } from 'react'
-import Select, { MultiValue, SingleValue, SelectInstance } from 'react-select'
+import { useId, useMemo } from 'react'
+import Select, { MultiValue, SingleValue } from 'react-select'
 import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
 import hierarchyFilters from '../../public/manual-hierarchy-filters.json'
-import { Filter, jointFundingFilterOptions, SearchFilters } from '../helpers/search'
+import {
+    AdvancedSearchRow,
+    AdvancedSearchState,
+    emptyAdvancedSearchRow,
+    JOINT_FUNDING_FIELD,
+    jointFundingFilterOptions,
+} from '../helpers/search'
+import { advancedSearchFields } from '../helpers/grants-explore-filters'
 import { customSelectThemeColours } from '../helpers/select-colours'
 
 type StrainOption = { label: string; value: string }
@@ -31,157 +38,45 @@ const diseasesWithStrainsByValue: Record<string, DiseaseWithStrains> = Object.fr
     diseasesWithStrains.map(d => [d.value, d]),
 )
 
+const MAXIMUM_ROWS = 6
+
 interface Props {
-    setSearchFilters: (searchFilters: SearchFilters) => void
-    setJointFundingFilter: (jointFundingFilter: string) => void
+    advancedSearch: AdvancedSearchState
+    setAdvancedSearch: (advancedSearch: AdvancedSearchState) => void
 }
 
-interface Row {
-    field: string
-    jointFunding: string
-    values: string[]
-    logicalAnd: boolean
-    key: string
-    subCategoryParent: {
-        field: string | null
-        value: string | null
-    }
-    subCategoryChild: {
-        field: string | null
-        value: string | null
-    }
-}
+export default function AdvancedSearch({
+    advancedSearch,
+    setAdvancedSearch,
+}: Props) {
+    const { rows, logicalAnd } = advancedSearch
 
-interface SelectedFilters {
-    rows: Row[]
-    logicalAnd: boolean
-}
+    const setRows = (rows: AdvancedSearchRow[]) =>
+        setAdvancedSearch({ ...advancedSearch, rows })
 
-export default function AdvancedSearch({ setSearchFilters, setJointFundingFilter }: Props) {
-    const defaultRow: (field: string) => Row = field => ({
-        field: field,
-        jointFunding: '',
-        values: [],
-        logicalAnd: false,
-        key: `${field}-${new Date().getTime()}`,
-        subCategoryParent: {
-            field: null,
-            value: null
-        },
-        subCategoryChild: {
-            field: null,
-            value: null
-        }
-    })
+    const updateRow = (updatedRow: AdvancedSearchRow) =>
+        setRows(rows.map(row => (row.key === updatedRow.key ? updatedRow : row)))
 
-    const defaultRowsArray: (fields: string[]) => Row[] = fields => {
-        const rows: Row[] = []
-        for (let i = 0; i < fields.length; i++) {
-            rows.push(defaultRow(fields[i % fields.length]))
-        }
-        return rows
-    }
+    const toggleLogicalAnd = () =>
+        setAdvancedSearch({ ...advancedSearch, logicalAnd: !logicalAnd })
 
-    const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
-        rows: defaultRowsArray(['StudySubject', 'Ethnicity']),
-        logicalAnd: true,
-    })
-
-    const globalAndButtonTextClasses = [
-        selectedFilters.logicalAnd
-            ? 'order-first left-3'
-            : 'order-last right-4',
-    ].join(' ')
-
-    const globalAndButtonDivClasses = [
-        selectedFilters.logicalAnd
-            ? 'right-1 transition duration-300'
-            : 'right-1 -translate-x-[48px] transition duration-300',
-    ].join(' ')
-
-    // updateSearchFiltersFromSelectedFilters takes the selected filters and re formats the rows
-    // into the format expected by the search API
-    // Rows include subCategory(Parent/Child) which is used for the frontend, if these exist in the row
-    // we need to re format those into their own row for the search API.
-    const updateSearchFiltersFromSelectedFilters = (
-        newSelectedFilters: SelectedFilters
-    ) => {
-        // Build the new filters
-        const newFilters = newSelectedFilters.rows
-            .filter(row => row.values.length > 0)
-            .map(row => ({
-                field: row.field,
-                values: row.values,
-                logicalAnd: row.logicalAnd,
-            }))
-
-        // If a parent filter exists, build a new filter in the correct format
-        const parentFilters = newSelectedFilters.rows
-            .map(row => {
-                if (row.subCategoryParent.field && row.subCategoryParent.value) {
-                    return {
-                        field: row.subCategoryParent.field,
-                        values: [row.subCategoryParent.value],
-                        logicalAnd: true,
-                    }
-                }
-            }
-        )
-        
-        // If a child filter exists, build a new filter in the correct format
-        const childFilters = newSelectedFilters.rows
-            .map(row => {
-                if (row.subCategoryChild.field && row.subCategoryChild.value) {
-                    return {
-                        field: row.subCategoryChild.field,
-                        values: [row.subCategoryChild.value],
-                        logicalAnd: true,
-                    }
-                }
-            }
-        )
-        
-        // Push the additional filters to a new array and filter out any rows returning falsy values
-        const updatedFilters = [
-            ...newFilters, 
-            ...parentFilters, 
-            ...childFilters
-        ].filter(row => !!row) as Filter[];
-        
-        setSearchFilters({
-            logicalAnd: newSelectedFilters.logicalAnd,
-            filters: updatedFilters
+    const addRow = () =>
+        setAdvancedSearch({
+            ...advancedSearch,
+            rows: [...rows, emptyAdvancedSearchRow('', advancedSearch.nextRowKey)],
+            nextRowKey: advancedSearch.nextRowKey + 1,
         })
-    }
 
-    const toggleLogicalAnd = () => {
-        const newSelectedFilters = {
-            ...selectedFilters,
-            logicalAnd: !selectedFilters.logicalAnd,
-        }
+    const removeRow = (index: number) =>
+        setRows(rows.filter((_, i) => i !== index))
 
-        updateSearchFiltersFromSelectedFilters(newSelectedFilters)
+    const globalAndButtonTextClasses = logicalAnd
+        ? 'order-first left-3'
+        : 'order-last right-4'
 
-        setSelectedFilters(newSelectedFilters)
-    }
-
-    const setRows = (rows: Row[]) => {
-        const newSelectedFilters = {
-            ...selectedFilters,
-            rows,
-        }
-        updateSearchFiltersFromSelectedFilters(newSelectedFilters)
-
-        setSelectedFilters(newSelectedFilters)
-    }
-
-    const addRow = () => {
-        setRows([...selectedFilters.rows, defaultRow('')])
-    }
-
-    const removeRow = (index: number) => {
-        setRows(selectedFilters.rows.filter((_, i) => i !== index))
-    }
+    const globalAndButtonDivClasses = logicalAnd
+        ? 'right-1 transition duration-300'
+        : 'right-1 -translate-x-[48px] transition duration-300'
 
     const paddingClasses = 'md:pr-[100px]'
 
@@ -193,7 +88,7 @@ export default function AdvancedSearch({ setSearchFilters, setJointFundingFilter
                 </p>
 
                 <button
-                    onClick={() => toggleLogicalAnd()}
+                    onClick={toggleLogicalAnd}
                     className="h-8 relative flex items-center bg-secondary w-20 rounded-full"
                 >
                     <div
@@ -203,28 +98,26 @@ export default function AdvancedSearch({ setSearchFilters, setJointFundingFilter
                     <p
                         className={`${globalAndButtonTextClasses} text-primary absolute uppercase text-xs font-bold pr-2`}
                     >
-                        {selectedFilters.logicalAnd ? 'and' : 'or'}
+                        {logicalAnd ? 'and' : 'or'}
                     </p>
                 </button>
             </div>
             <div className="flex flex-col gap-2">
-                {selectedFilters.rows.map((row: Row, index: number) => {
+                {rows.map((row: AdvancedSearchRow, index: number) => {
                     return (
                         <div key={row.key} className="relative w-full">
                             {index > 0 && (
                                 <p
                                     className={`${paddingClasses} py-2 text-center text-secondary uppercase text-sm`}
                                 >
-                                    {selectedFilters.logicalAnd ? 'and' : 'or'}
+                                    {logicalAnd ? 'and' : 'or'}
                                 </p>
                             )}
 
                             <AdvancedInputRow
                                 row={row}
-                                rows={selectedFilters.rows}
-                                setRows={setRows}
+                                updateRow={updateRow}
                                 index={index}
-                                setJointFundingFilter={setJointFundingFilter}
                             >
                                 {index > 0 && (
                                     <button
@@ -239,7 +132,7 @@ export default function AdvancedSearch({ setSearchFilters, setJointFundingFilter
                     )
                 })}
 
-                {selectedFilters.rows.length < 6 && (
+                {rows.length < MAXIMUM_ROWS && (
                     <div className={`${paddingClasses} flex justify-center`}>
                         <Button
                             size="xsmall"
@@ -258,50 +151,28 @@ export default function AdvancedSearch({ setSearchFilters, setJointFundingFilter
 
 type AdvancedRowProps = {
     children: any
-    row: Row
-    rows: Row[]
-    setRows: (rows: Row[]) => void
+    row: AdvancedSearchRow
+    updateRow: (row: AdvancedSearchRow) => void
     index: number
-    setJointFundingFilter: (jointFundingFilter: string) => void
 }
 
 function AdvancedInputRow({
     children,
     row,
-    rows,
-    setRows,
+    updateRow,
     index,
-    setJointFundingFilter
 }: AdvancedRowProps) {
-    const [localRow, setLocalRow] = useState<Row>(row)
-    
-    // Define a ref for the subcategories, this is used to clearValue() on select change
-    const subCategoryChildSelectRef = useRef<SelectInstance>()
-    const subCategoryParentSelectRef = useRef<SelectInstance>()
-
-    const clearParentValue = () => {
-        if (subCategoryParentSelectRef.current) {
-            subCategoryParentSelectRef.current.clearValue()
-        }
-    }
-
-    const clearChildValue = () => {
-        if (subCategoryChildSelectRef.current) {
-            subCategoryChildSelectRef.current.clearValue()
-        }
-    }
-
     const andButtonTextClasses = [
-        localRow.logicalAnd ? 'order-first left-3' : 'order-last right-4',
+        row.logicalAnd ? 'order-first left-3' : 'order-last right-4',
     ].join(' ')
 
     const andButtonDivClasses = [
-        !localRow.logicalAnd &&
+        !row.logicalAnd &&
             '-translate-x-[48px] md:-translate-x-[37px] lg:-translate-x-[40px] xl:-translate-x-[42px]',
     ].join(' ')
 
     // Set the base options for single select options
-    const baseSingleSelectOptions = Object.keys(selectOptions).map(option => ({
+    const baseSingleSelectOptions = advancedSearchFields.map(option => ({
         label: camelToSentence(option),
         value: option,
     }))
@@ -309,83 +180,58 @@ function AdvancedInputRow({
     // Set the joint funding object for the single select
     const jointFunding = {
         label: 'Joint Funding',
-        value: 'JointFunding'
+        value: JOINT_FUNDING_FIELD
     }
 
     // Add Joint funding to the array of base select options
-    // This cannot be included in standard select options as the logic for 
+    // This cannot be included in standard select options as the logic for
     // handling joint funding is unique
     const singleSelectOptions = [
         ...baseSingleSelectOptions,
         jointFunding
     ]
 
-    const multiSelectOptions = selectOptions[localRow.field as keyof typeof selectOptions]
-    
-    const onSelectChange = (field: string) => {
-        const newRow = {
-            ...localRow,
-            field: field,
-            values: [],
-        }
-        setLocalRow(newRow)
+    const multiSelectOptions = selectOptions[row.field as keyof typeof selectOptions]
 
-        setRows(rows.map(globalRow => globalRow.key === newRow.key ? newRow : globalRow))
+    const onSelectChange = (field: string) => {
+        updateRow({
+            ...row,
+            field,
+            values: [],
+            subCategoryParent: { field: null, value: null },
+            subCategoryChild: { field: null, value: null },
+        })
     }
 
     const onMultiSelectChange = (values: string[]) => {
-        let newRow = {
-            ...row,
-            values,
-        }
-
         // If the previously-cascaded disease is no longer selected, clear the
         // cascade. (Multi-select can leave other cascade-eligible diseases
         // selected, but the specific parent value must still be in values.)
         const parentStillSelected =
-            newRow.subCategoryParent.value !== null &&
-            values.includes(newRow.subCategoryParent.value)
+            row.subCategoryParent.value !== null &&
+            values.includes(row.subCategoryParent.value)
 
-        if (!parentStillSelected) {
-            clearParentValue()
-            clearChildValue()
-
-            newRow = {
-                ...newRow,
-                subCategoryParent: { field: null, value: null },
-                subCategoryChild: { field: null, value: null },
-            }
-        }
-
-        setLocalRow(newRow)
-
-        setRows(
-            rows.map(globalRow =>
-                globalRow.key === newRow.key ? newRow : globalRow
-            )
-        )
+        updateRow({
+            ...row,
+            values,
+            ...(parentStillSelected
+                ? {}
+                : {
+                      subCategoryParent: { field: null, value: null },
+                      subCategoryChild: { field: null, value: null },
+                  }),
+        })
     }
 
     const onLightSwitchChange = () => {
-        const newRow = {
-            ...row,
-            logicalAnd: !localRow.logicalAnd,
-        }
-
-        setLocalRow(newRow)
-
-        setRows(
-            rows.map(globalRow =>
-                globalRow.key === newRow.key ? newRow : globalRow
-            )
-        )
+        updateRow({ ...row, logicalAnd: !row.logicalAnd })
     }
 
     // Surface a strain sub-filter cascade when the user selects a disease that
     // carries strains in the manual hierarchy (e.g. influenza H-subtypes, Ebola).
     // The parent dropdown lets the user pick which of their selected diseases
     // to narrow when more than one is eligible; the child dropdown lists strains.
-    const cascadeEligibleDiseases = localRow.values
+    const cascadeEligibleDiseases = row.values
         .map(value => diseasesWithStrainsByValue[value])
         .filter((d): d is DiseaseWithStrains => Boolean(d))
 
@@ -397,66 +243,64 @@ function AdvancedInputRow({
     }))
 
     const selectedDiseaseForCascade = cascadeEligibleDiseases.find(
-        d => d.value === localRow.subCategoryParent.value,
+        d => d.value === row.subCategoryParent.value,
     )
 
     const cascadeChildOptions: Option[] = selectedDiseaseForCascade?.strains ?? []
 
-    const [cascadeParentIsSelected, setCascadeParentIsSelected] = useState(false)
-
     const onCascadeParentSelectChange = (value: string) => {
+        const parentValue = value || null
+
         // The parent value tracks the user-selected disease but is not turned
         // into a filter row (the disease is already in the Diseases multi-select).
-        let updatedRow = {
-            ...localRow,
-            subCategoryParent: { field: null, value: value },
-        }
-
-        if (localRow.subCategoryParent.value !== value) {
-            clearChildValue()
-            updatedRow = {
-                ...updatedRow,
-                subCategoryChild: { field: null, value: null },
-            }
-        }
-
-        setLocalRow(updatedRow)
-        setRows(rows.map(globalRow => globalRow.key === updatedRow.key ? updatedRow : globalRow))
-        setCascadeParentIsSelected(Boolean(value))
+        updateRow({
+            ...row,
+            subCategoryParent: { field: null, value: parentValue },
+            ...(row.subCategoryParent.value === parentValue
+                ? {}
+                : { subCategoryChild: { field: null, value: null } }),
+        })
     }
 
     const onCascadeChildSelectChange = (value: string) => {
-        const updatedRow = {
-            ...localRow,
-            subCategoryChild: { field: 'Strains', value: value },
-        }
-
-        setLocalRow(updatedRow)
-        setRows(rows.map(globalRow => globalRow.key === updatedRow.key ? updatedRow : globalRow))
+        updateRow({
+            ...row,
+            subCategoryChild: {
+                field: value ? 'Strains' : null,
+                value: value || null,
+            },
+        })
     }
-    
+
     return (
         <div className="flex justify-start">
             <div className="w-full text-secondary flex flex-col md:flex-row md:items-start gap-2 bg-gray-100 shadow rounded-lg py-3 pl-3 pr-8">
                 <div className="w-full min-w-10">
                     <SingleSelect
                         options={singleSelectOptions}
-                        value={localRow.field}
+                        value={row.field}
                         onSelectChange={onSelectChange}
                     />
                 </div>
 
                 <div className="w-full min-w-10 flex flex-col gap-y-2">
-                    {localRow.field === jointFunding.value ? (
+                    {row.field === jointFunding.value ? (
+                        // Held on the row like any other selection, so removing
+                        // the row or changing its field drops the constraint.
                         <SingleSelect
                             options={jointFundingFilterOptions}
-                            value={jointFundingFilterOptions[0].value}
-                            onSelectChange={setJointFundingFilter}
+                            value={row.values[0] ?? null}
+                            onSelectChange={value =>
+                                updateRow({
+                                    ...row,
+                                    values: value ? [value] : [],
+                                })
+                            }
                         />
                     ) : (
                         <MultiSelect
                             options={multiSelectOptions}
-                            value={localRow.values}
+                            value={row.values}
                             onMultiSelectChange={onMultiSelectChange}
                         />
                     )}
@@ -465,18 +309,17 @@ function AdvancedInputRow({
                         <>
                             <SingleSelect
                                 options={cascadeParentOptions}
-                                value={localRow.subCategoryParent.value}
+                                value={row.subCategoryParent.value}
                                 onSelectChange={onCascadeParentSelectChange}
-                                ref={subCategoryParentSelectRef}
                             />
-                            {cascadeParentIsSelected && cascadeChildOptions.length > 0 && (
-                                <SingleSelect
-                                    options={cascadeChildOptions}
-                                    value={localRow.subCategoryChild.value}
-                                    onSelectChange={onCascadeChildSelectChange}
-                                    ref={subCategoryChildSelectRef}
-                                />
-                            )}
+                            {row.subCategoryParent.value &&
+                                cascadeChildOptions.length > 0 && (
+                                    <SingleSelect
+                                        options={cascadeChildOptions}
+                                        value={row.subCategoryChild.value}
+                                        onSelectChange={onCascadeChildSelectChange}
+                                    />
+                                )}
                         </>
                     )}
                 </div>
@@ -492,7 +335,7 @@ function AdvancedInputRow({
                     <p
                         className={`${andButtonTextClasses} text-primary absolute uppercase text-xs font-bold`}
                     >
-                        {localRow.logicalAnd ? 'and' : 'or'}
+                        {row.logicalAnd ? 'and' : 'or'}
                     </p>
                 </button>
             </div>
@@ -521,43 +364,38 @@ type SingleSelectProps = {
     onSelectChange: (value: string) => void
 }
 
-const SingleSelect = forwardRef<any, SingleSelectProps>(
-    ({ options, value, onSelectChange, ...rest }: SingleSelectProps, ref: Ref<any>) => {
-        const id = useId()
+// Controlled rather than defaultValue-driven: a restored, shared or cleared
+// state has to be reflected in a select that is already mounted.
+function SingleSelect({ options, value, onSelectChange }: SingleSelectProps) {
+    const id = useId()
 
-        const defaultValue: Option = useMemo(
-            () => options.find(o => o.value === value) as Option,
-            [value, options]
-        )
-        
-        const onChange = (option: SingleValue<Option> | null) => {
-            onSelectChange(option ? option.value : '')
-        }
-        
-        return (
-            <Select
-                {...rest}
-                defaultValue={defaultValue}
-                options={options}
-                onChange={onChange}
-                isClearable={true}
-                placeholder="Select..."
-                instanceId={id}
-                theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                        ...theme.colors,
-                        ...customSelectThemeColours,
-                    },
-                })}
-                ref={ref ?? null}
-            />
-        )
+    const selectedOption: Option | null = useMemo(
+        () => options.find(o => o.value === value) ?? null,
+        [value, options],
+    )
+
+    const onChange = (option: SingleValue<Option> | null) => {
+        onSelectChange(option ? option.value : '')
     }
-)
 
-// Add display name for updated SingleSelect using forwardRef
-SingleSelect.displayName = 'SingleSelect'
+    return (
+        <Select
+            value={selectedOption}
+            options={options}
+            onChange={onChange}
+            isClearable={true}
+            placeholder="Select..."
+            instanceId={id}
+            theme={(theme) => ({
+                ...theme,
+                colors: {
+                    ...theme.colors,
+                    ...customSelectThemeColours,
+                },
+            })}
+        />
+    )
+}
 
 type MultiSelectProps = {
     options: Option[]
@@ -572,22 +410,24 @@ function MultiSelect({
 }: MultiSelectProps) {
     const id = useId()
 
-    const defaultValue: Option[] = useMemo(() => {
-        return value.map(option => {
-            return options.find(o => o.value === option)
-        }) as Option[]
-    }, [value, options])
+    const selectedOptions: Option[] = useMemo(
+        () =>
+            value
+                .map(option => options?.find(o => o.value === option))
+                .filter((option): option is Option => option !== undefined),
+        [value, options],
+    )
 
     const onChange = (option: MultiValue<Option>) => {
         onMultiSelectChange(option.map(o => o.value))
     }
-    
+
     return (
         <Select
             isMulti
             options={options}
             onChange={onChange}
-            defaultValue={defaultValue}
+            value={selectedOptions}
             placeholder="Select..."
             instanceId={id}
             theme={(theme) => ({

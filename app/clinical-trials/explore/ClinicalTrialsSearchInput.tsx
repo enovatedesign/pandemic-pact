@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { debounce } from 'lodash'
-import { SearchIcon } from '@heroicons/react/solid'
+import { SearchIcon, XIcon } from '@heroicons/react/solid'
 
 import Button from '../../components/Button'
 import InfoModal from '../../components/InfoModal'
@@ -13,19 +13,19 @@ import {
     DownloadFullDataButton,
     DownloadFilteredDataButton,
 } from './ClinicalTrialsDownloadButtons'
+import ExploreShareButton from '../../components/ExploreShareButton'
 import {
-    CtSearchFilters,
+    CtAdvancedSearchState,
     CtSearchParameters,
     CtStandardFilters,
     CtSearchRequestBody,
+    defaultCtAdvancedSearchState,
     queryOrFiltersAreSet,
 } from './search'
 
 interface Props {
     searchParameters: CtSearchParameters
-    setSearchParameters: (searchParameters: CtSearchParameters) => void
-    showAdvancedSearch: boolean
-    setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
+    setSearchParameters: (searchParameters: Partial<CtSearchParameters>) => void
     isLoading: boolean
     totalHits: number
     searchRequestBody: CtSearchRequestBody
@@ -34,19 +34,34 @@ interface Props {
 export default function ClinicalTrialsSearchInput({
     searchParameters,
     setSearchParameters,
-    showAdvancedSearch,
-    setShowAdvancedSearch,
     isLoading,
     totalHits,
     searchRequestBody,
 }: Props) {
-    const [localSearchQuery, setLocalSearchQuery] = useState<string>('')
+    const showAdvancedSearch = searchParameters.showAdvancedSearch
+
+    const [localSearchQuery, setLocalSearchQuery] = useState<string>(
+        searchParameters.q,
+    )
+
+    // The query the debounce last sent upwards, so a change arriving from outside
+    // the input — a shared link loading, or Clear All — can be told apart from the
+    // user's own typing and mirrored back into the box.
+    const pushedSearchQuery = useRef<string>(searchParameters.q)
 
     const debouncedSetSearchQuery = useRef(
         debounce((query: string) => {
-            setSearchParameters({ ...searchParameters, q: query })
+            pushedSearchQuery.current = query
+            setSearchParameters({ q: query })
         }, 200),
     ).current
+
+    useEffect(() => {
+        if (searchParameters.q !== pushedSearchQuery.current) {
+            pushedSearchQuery.current = searchParameters.q
+            setLocalSearchQuery(searchParameters.q)
+        }
+    }, [searchParameters.q])
 
     useEffect(() => {
         debouncedSetSearchQuery(localSearchQuery)
@@ -56,20 +71,38 @@ export default function ClinicalTrialsSearchInput({
         }
     }, [localSearchQuery, debouncedSetSearchQuery])
 
+    const setShowAdvancedSearch = (showAdvancedSearch: boolean) => {
+        setSearchParameters({ showAdvancedSearch })
+    }
+
     const setStandardSearchFilters = (filters: CtStandardFilters) => {
-        setSearchParameters({ ...searchParameters, standardFilters: filters })
+        setSearchParameters({ standardFilters: filters })
     }
 
     const setCoLocatedLocationFilter = (coLocatedLocation: string) => {
-        setSearchParameters({ ...searchParameters, coLocatedLocation })
+        setSearchParameters({ coLocatedLocation })
     }
 
     const setCoLocatedInstitutionFilter = (coLocatedInstitution: string) => {
-        setSearchParameters({ ...searchParameters, coLocatedInstitution })
+        setSearchParameters({ coLocatedInstitution })
     }
 
-    const setAdvancedSearchFilters = (filters: CtSearchFilters) => {
-        setSearchParameters({ ...searchParameters, advancedFilters: filters })
+    const setAdvancedSearch = (advancedSearch: CtAdvancedSearchState) => {
+        setSearchParameters({ advancedSearch })
+    }
+
+    // Clears the tab on screen only — the two tabs hold independent filter sets,
+    // and the search query sits outside the panel this button lives in.
+    const clearActiveTabFilters = () => {
+        setSearchParameters(
+            showAdvancedSearch
+                ? { advancedSearch: defaultCtAdvancedSearchState() }
+                : {
+                      standardFilters: {},
+                      coLocatedLocation: 'all-trials',
+                      coLocatedInstitution: 'all-trials',
+                  },
+        )
     }
 
     return (
@@ -179,7 +212,8 @@ export default function ClinicalTrialsSearchInput({
                     <div className="rounded-lg col-span-2 bg-white p-3">
                         <div className={showAdvancedSearch ? 'block' : 'hidden'}>
                             <ClinicalTrialsAdvancedFilters
-                                setSearchFilters={setAdvancedSearchFilters}
+                                advancedSearch={searchParameters.advancedSearch}
+                                setAdvancedSearch={setAdvancedSearch}
                             />
                         </div>
 
@@ -192,6 +226,21 @@ export default function ClinicalTrialsSearchInput({
                                 coLocatedInstitutionFilter={searchParameters.coLocatedInstitution}
                                 setCoLocatedInstitutionFilter={setCoLocatedInstitutionFilter}
                             />
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-end gap-2 mt-3 pt-3 border-t-2 border-gray-100">
+                            <ExploreShareButton
+                                kind="clinical-trials-explore"
+                                state={searchParameters}
+                            />
+
+                            <Button
+                                size="xsmall"
+                                customClasses="flex items-center gap-1"
+                                onClick={clearActiveTabFilters}
+                            >
+                                Clear All <XIcon className="w-5 h-5" />
+                            </Button>
                         </div>
                     </div>
                 </section>

@@ -8,7 +8,7 @@ import '../css/components/highlighted-search-results.css'
 
 interface Props {
     searchParameters: SearchParameters
-    setSearchParameters: (searchParameters: SearchParameters) => void
+    setSearchParameters: (searchParameters: Partial<SearchParameters>) => void
     searchResponse: SearchResponse
 }
 
@@ -18,7 +18,7 @@ export default function ResultsTable({
     searchResponse,
 }: Props) {
     const setLimit = (limit: number) => {
-        setSearchParameters({ ...searchParameters, limit })
+        setSearchParameters({ limit })
     }
 
     return (
