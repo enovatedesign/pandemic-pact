@@ -17,32 +17,36 @@ export interface CtSearchFilters {
 export type CtStandardFilters = Record<string, string[]>
 
 /**
- * Co-located filter values. The CT analogue of the grants joint-funding filter:
- * a "co-located" trial is one conducted across more than one country. Co-location
- * is determined independently for research location and research institution
+ * Multi-country filter values. The CT analogue of the grants joint-funding
+ * filter: a multi-country trial is one conducted across more than one country.
+ * It is determined independently for research location and research institution
  * (Technical Spec §6.1), each backed by its own precomputed flag (see
- * scripts/generate/prepare-trials-search.ts). This array is the canonical value
- * set used for request validation; the UI labels come from
+ * scripts/generate/prepare-trials-search.ts). The values still read
+ * "co-located" — the term the UI used originally — because they are part of the
+ * shareable Explore URL and the Viz 1 map deep-links against them. This array is
+ * the canonical value set used for request validation; the UI labels come from
  * coLocatedFilterOptionsFor() so each dropdown names its geography.
  */
 export const coLocatedFilterOptions = [
-    { label: 'All Clinical Trials (including co-located)', value: 'all-trials' },
-    { label: 'Only Co-located Clinical Trials', value: 'only-co-located-trials' },
-    { label: 'Exclude Co-located Clinical Trials', value: 'exclude-co-located-trials' },
+    { label: 'All Clinical Trials', value: 'all-trials' },
+    { label: 'Only Multi-country Clinical Trials', value: 'only-co-located-trials' },
+    { label: 'Exclude Multi-country Clinical Trials', value: 'exclude-co-located-trials' },
 ]
 
 /**
  * Field-specific co-located options for the Explore dropdowns. The values match
- * coLocatedFilterOptions; only the labels vary. Every label names its geography,
- * including the default: the two dropdowns sit side by side and Select only shows
- * the selected option's label, so a bare "All Clinical Trials" makes them
- * indistinguishable.
+ * coLocatedFilterOptions; only the labels vary. Every label leads with its
+ * geography: the two dropdowns sit side by side and Select only ever shows the
+ * selected option's label, so anything they share up front makes them
+ * indistinguishable until the string is read to the end. Labels say
+ * "multi-country" rather than "co-located" because that is literally what the
+ * flag records — more than one country in that field.
  */
 export function coLocatedFilterOptionsFor(geography: string) {
     return [
-        { label: `All Clinical Trials (${geography})`, value: 'all-trials' },
-        { label: `Only Co-located by ${geography}`, value: 'only-co-located-trials' },
-        { label: `Exclude Co-located by ${geography}`, value: 'exclude-co-located-trials' },
+        { label: `${geography}: All Clinical Trials`, value: 'all-trials' },
+        { label: `${geography}: Only Multi-country Clinical Trials`, value: 'only-co-located-trials' },
+        { label: `${geography}: Exclude Multi-country Clinical Trials`, value: 'exclude-co-located-trials' },
     ]
 }
 

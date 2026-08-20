@@ -138,7 +138,7 @@ export default function ClinicalTrialsStandardFilters({
 
                         setCoLocatedLocationFilter(option.value)
                     }}
-                    label="Co-located by Research Location"
+                    label="Research Location multi-country filter"
                     className="col-span-1"
                 />
 
@@ -154,7 +154,7 @@ export default function ClinicalTrialsStandardFilters({
 
                         setCoLocatedInstitutionFilter(option.value)
                     }}
-                    label="Co-located by Research Institution"
+                    label="Research Institution Location multi-country filter"
                     className="col-span-1"
                 />
                 </div>

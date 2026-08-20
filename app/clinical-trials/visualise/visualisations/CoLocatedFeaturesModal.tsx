@@ -14,14 +14,16 @@ interface Props {
 }
 
 /**
- * Breakdown of the countries / regions that share multi-location clinical
- * studies with the selected feature. Mirrors the grants JointFeaturesModal, but
- * trials carry no financial figures so only the trial counts are shown.
+ * Breakdown of the countries that share multi-country clinical trials with the
+ * selected feature. The count per row is trials shared with the selection, not
+ * that country's own multi-country total — hence "Shared", not "Multi-country",
+ * in the column header. Mirrors the grants JointFeaturesModal, but trials carry
+ * no financial figures so only the trial counts are shown.
  */
 export default function CoLocatedFeaturesModal({ coLocatedFeatures }: Props) {
     return (
         <InfoModal
-            customButton={<Button size="xxsmall">Co-located breakdown</Button>}
+            customButton={<Button size="xxsmall">Multi-country breakdown</Button>}
             marginX={false}
             customCloseButton={
                 <XIcon
@@ -41,7 +43,7 @@ export default function CoLocatedFeaturesModal({ coLocatedFeatures }: Props) {
                         <th className="text-left pt-3 !pr-4 !font-bold !text-white whitespace-nowrap">
                             Clinical trials
                             <br />
-                            <span className="text-sm">(Co-located / Total per country)</span>
+                            <span className="text-sm">(Shared / Total per country)</span>
                         </th>
                     </tr>
                 </thead>

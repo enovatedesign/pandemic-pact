@@ -306,7 +306,7 @@ function MapStatusBar({
                 <div className="px-4 pt-2">
                     <p className="text-brand-grey-700">
                         {highlightCoLocated
-                            ? `${coLocatedTotal.toLocaleString()} / ${count.toLocaleString()} co-located clinical trial registration${count === 1 ? '' : 's'}`
+                            ? `${coLocatedTotal.toLocaleString()} / ${count.toLocaleString()} multi-country clinical trial registration${count === 1 ? '' : 's'}`
                             : `${count.toLocaleString()} clinical trial registration${count === 1 ? '' : 's'}`}
                     </p>
                 </div>
@@ -320,7 +320,7 @@ function MapStatusBar({
                         <Switch
                             checked={highlightCoLocated}
                             onChange={setHighlightCoLocated}
-                            label={`Show co-located ${geographyNoun}`}
+                            label={`Show other ${geographyNoun} in these trials`}
                             theme="light"
                             textClassName="text-brand-grey-700"
                         />
@@ -334,7 +334,7 @@ function MapStatusBar({
                         {highlightCoLocated
                             ? coLocatedTotal > 0 && (
                                   <Button size="xxsmall" href={href}>
-                                      Explore Co-located Clinical Trials
+                                      Explore Multi-country Clinical Trials
                                   </Button>
                               )
                             : count > 0 && (
