@@ -5,6 +5,7 @@ import Button from './Button'
 import selectOptions from '../../data/dist/select-options.json'
 import hierarchyFilters from '../../public/manual-hierarchy-filters.json'
 import { Filter, jointFundingFilterOptions, SearchFilters } from '../helpers/search'
+import { grantsFilterableFields } from '../helpers/filterable-fields'
 import { customSelectThemeColours } from '../helpers/select-colours'
 
 type StrainOption = { label: string; value: string }
@@ -300,11 +301,17 @@ function AdvancedInputRow({
             '-translate-x-[48px] md:-translate-x-[37px] lg:-translate-x-[40px] xl:-translate-x-[42px]',
     ].join(' ')
 
-    // Set the base options for single select options
-    const baseSingleSelectOptions = Object.keys(selectOptions).map(option => ({
-        label: camelToSentence(option),
-        value: option,
-    }))
+    // Offer only fields the search API will actually filter on. Listing every
+    // select-options key here instead let the dropdown drift ahead of the API
+    // allowlist, which silently ignores unknown fields — Rurality, Ethnicity and
+    // eleven others looked selectable but changed nothing. Fields with no
+    // generated options (e.g. GrantID) have nothing to pick, so they are skipped.
+    const baseSingleSelectOptions = grantsFilterableFields
+        .filter(field => field in selectOptions)
+        .map(field => ({
+            label: camelToSentence(field),
+            value: field,
+        }))
 
     // Set the joint funding object for the single select
     const jointFunding = {

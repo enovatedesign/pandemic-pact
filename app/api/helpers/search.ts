@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import { Client } from '@opensearch-project/opensearch'
 import { jointFundingFilterOptions, SearchFilters } from '../../helpers/search'
 import { coLocatedFilterOptions } from '../../clinical-trials/explore/search'
+import {
+    grantsFilterableFields,
+    clinicalTrialsFilterableFields,
+} from '../../helpers/filterable-fields'
 import { normaliseBranchName } from '../../helpers/normalise-branch-name'
 
 /**
@@ -20,7 +24,7 @@ export interface SearchDatasetConfig {
     idField: string
     /** Full-text fields (with `^boost`) searched by the free-text query. */
     fullTextFields: string[]
-    /** Fields a user is permitted to filter on. */
+    /** Fields a user is permitted to filter on (see app/helpers/filterable-fields.ts). */
     allowedFilterFields: Set<string>
     /** Fields highlighted in search hits. */
     highlightFields: string[]
@@ -39,32 +43,7 @@ const grantsSearchDataset: SearchDatasetConfig = {
     indexBaseName: 'grants',
     idField: 'GrantID',
     fullTextFields: ['GrantID^4', 'GrantTitleEng^4', 'Abstract^2', 'LaySummary'],
-    allowedFilterFields: new Set([
-        'FundingOrgName',
-        'Families',
-        'Pathogens',
-        'Diseases',
-        'Strains',
-        'ResearchCat',
-        'FunderRegion',
-        'FunderCountry',
-        'ResearchInstitutionRegion',
-        'ResearchInstitutionCountry',
-        'ResearchInstitutionName',
-        'ResearchLocationCountry',
-        'GrantStartYear',
-        'StudySubject',
-        'StudyType',
-        'AgeGroups',
-        'VulnerablePopulations',
-        'OccupationalGroups',
-        'HundredDaysMissionResearchArea',
-        'HundredDaysMissionImplementation',
-        'ClinicalTrial',
-        'PandemicIntelligenceThemes',
-        'PolicyRoadmaps',
-        'GrantID',
-    ]),
+    allowedFilterFields: new Set(grantsFilterableFields),
     highlightFields: ['GrantTitleEng', 'Abstract', 'LaySummary'],
     listSourceFields: [
         'GrantTitleEng',
@@ -93,33 +72,7 @@ const clinicalTrialsSearchDataset: SearchDatasetConfig = {
         'TrialTitleScientific^2',
         'TrialTitlePublic^2',
     ],
-    allowedFilterFields: new Set([
-        'Families',
-        'Pathogens',
-        'Diseases',
-        'Strains',
-        'Register',
-        'Interventions',
-        'MainIntervention',
-        'SecondaryIntervention',
-        'ResearchInstitutionRegion',
-        'ResearchInstitutionCountry',
-        'ResearchInstitutionName',
-        'ResearchLocationRegion',
-        'ResearchLocationCountry',
-        'EthicsStatus',
-        'Outcomes',
-        'RecruitmentStatus',
-        'RegistrationYear',
-        'StudySubject',
-        'StudyType',
-        'AgeGroups',
-        'VulnerablePopulations',
-        'OccupationalGroups',
-        'Gender',
-        'Phase',
-        'TrialID',
-    ]),
+    allowedFilterFields: new Set(clinicalTrialsFilterableFields),
     highlightFields: ['TrialTitle', 'TrialTitleScientific', 'TrialTitlePublic'],
     listSourceFields: [
         'TrialTitle',
