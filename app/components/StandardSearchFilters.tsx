@@ -2,6 +2,7 @@ import {
     SelectedStandardSearchFilters,
     jointFundingFilterOptions,
 } from '../helpers/search'
+import { standardSearchFields } from '../helpers/grants-explore-filters'
 import Select from './Select'
 import MultiSelect from './MultiSelect'
 import selectOptions from '../../data/dist/select-options.json'
@@ -45,16 +46,6 @@ export default function StandardSearchFilters({
         })
     }
 
-    const fields = {
-        ResearchInstitutionCountry: 'Research Institution Countries',
-        ResearchInstitutionRegion: 'Research Institution Regions',
-        FunderCountry: 'Funder Countries',
-        FunderRegion: 'Funder Regions',
-        FundingOrgName: 'Funders',
-        ResearchCat: 'Research Categories',
-        PolicyRoadmaps: 'Policy Roadmaps'
-    }
-
     const jointFundingValue = jointFundingFilterOptions.find(
         option => option.value === jointFundingFilter,
     ) as { value: string; label: string }
@@ -80,7 +71,7 @@ export default function StandardSearchFilters({
                 </div>
 
                 <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {Object.entries(fields).map(([field, label]) => (
+                    {Object.entries(standardSearchFields).map(([field, label]) => (
                         <MultiSelect
                             key={field}
                             field={field}

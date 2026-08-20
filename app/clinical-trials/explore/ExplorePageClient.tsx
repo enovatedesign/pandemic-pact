@@ -5,12 +5,30 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { isEqual } from 'lodash'
 
 import {
-    prepareInitialSearchParameters,
-    updateUrlQueryString,
+    buildCtAdvancedSearchFilters,
+    coLocatedFilterOptions,
+    DEEP_LINK_PARAMETERS,
+    defaultCtSearchParameters,
+    restoreCtSearchParameters,
+    searchParametersFromDeepLink,
     searchRequest,
     CtSearchParameters,
     CtSearchResponse,
 } from './search'
+import { pruneCtSearchParameters } from './filter-schema'
+import {
+    CLINICAL_TRIALS_EXPLORE_SCROLL_KEY,
+    CLINICAL_TRIALS_EXPLORE_STORAGE_KEY,
+    persistExploreState,
+    readPersistedExploreState,
+} from '../../helpers/explore-state'
+import useSearchScrollRestoration from '../../hooks/useSearchScrollRestoration'
+import {
+    afterCurrentTask,
+    isReturnNavigation,
+} from '../../helpers/return-navigation'
+import { getKvDatabase } from '../../helpers/kv'
+import { unpackExploreSharePayload } from '../../helpers/share'
 import { AnnouncementProps } from '../../helpers/types'
 
 import Layout from '../../components/Layout'
@@ -18,6 +36,11 @@ import ClinicalTrialsSearchInput from './ClinicalTrialsSearchInput'
 import ClinicalTrialsResultsTable from './ClinicalTrialsResultsTable'
 import SearchPagination from '../../components/SearchPagination'
 import ClinicalTrialsCoverageInfoModal from '../ClinicalTrialsCoverageInfoModal'
+
+// `share` is consumed like the deep links: the state it points at is copied into
+// storage on arrival, and leaving it in the URL would override the user's own
+// edits every time they came back to the page.
+const CONSUMED_PARAMETERS = [...DEEP_LINK_PARAMETERS, 'share']
 
 interface Props {
     announcement: AnnouncementProps
@@ -28,11 +51,136 @@ export default function ExplorePageClient({ announcement }: Props) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
+    // Read once: stripping it from the URL below must not look like a new link.
+    const [sharedStateId] = useState(() => searchParams.get('share'))
+
+    // A deep link — the geographic distribution `?filters=` links, a `?q=` back
+    // link — describes the whole search, so it takes precedence over storage.
+    const [deepLinkedParameters] = useState(() => {
+        const deepLinked = searchParametersFromDeepLink(searchParams)
+
+        return deepLinked ? pruneCtSearchParameters(deepLinked) : null
+    })
+
     const [searchParameters, setSearchParameters] = useState<CtSearchParameters>(
-        prepareInitialSearchParameters(searchParams),
+        () => deepLinkedParameters ?? defaultCtSearchParameters(),
     )
 
-    const updateSearchParameters = (newSearchParameters: CtSearchParameters) => {
+    const [isRestored, setIsRestored] = useState<boolean>(false)
+
+    // Both the page the reader was on and where they were scrolled to only come
+    // back on a back or forward, never on a fresh visit.
+    const [isReturnVisit, setIsReturnVisit] = useState<boolean>(false)
+
+    /**
+     * Filter state is remembered in localStorage, so it can only be read once
+     * mounted — the first search waits for it rather than running against the
+     * defaults and then again against the restored state.
+     */
+    useEffect(() => {
+        let cancelled = false
+
+        const restore = async () => {
+            await afterCurrentTask()
+
+            if (cancelled) {
+                return
+            }
+
+            const isReturn = isReturnNavigation()
+
+            setIsReturnVisit(isReturn)
+
+            let shared = null
+
+            if (sharedStateId) {
+                try {
+                    shared = unpackExploreSharePayload(
+                        await getKvDatabase(sharedStateId),
+                        'clinical-trials-explore',
+                    )
+                } catch (error) {
+                    // An expired or unreachable share link falls back to what
+                    // was stored, rather than leaving the page with no results.
+                    console.error(error)
+                }
+            }
+
+            if (cancelled) {
+                return
+            }
+
+            try {
+                const restored =
+                    shared ??
+                    (deepLinkedParameters
+                        ? null
+                        : readPersistedExploreState(
+                              CLINICAL_TRIALS_EXPLORE_STORAGE_KEY,
+                          ))
+
+                if (restored) {
+                    setSearchParameters(
+                        pruneCtSearchParameters(
+                            restoreCtSearchParameters(restored, isReturn),
+                        ),
+                    )
+                }
+            } catch (error) {
+                // State this malformed can't be repaired, and it would strand
+                // the page on a spinner no reload could clear. Fall through to
+                // the defaults, which are then persisted over the bad value.
+                console.error(error)
+            }
+
+            setIsRestored(true)
+        }
+
+        restore()
+
+        return () => {
+            cancelled = true
+        }
+    }, [sharedStateId, deepLinkedParameters])
+
+    useEffect(() => {
+        if (!isRestored) {
+            return
+        }
+
+        persistExploreState(
+            CLINICAL_TRIALS_EXPLORE_STORAGE_KEY,
+            searchParameters,
+        )
+    }, [isRestored, searchParameters])
+
+    // A consumed entry-point parameter is stripped from the URL: it no longer
+    // tracks the filters, so leaving it behind would point at state that has
+    // moved on.
+    useEffect(() => {
+        if (
+            !isRestored ||
+            !CONSUMED_PARAMETERS.some(parameter => searchParams.has(parameter))
+        ) {
+            return
+        }
+
+        const remainingParameters = new URLSearchParams(searchParams.toString())
+
+        CONSUMED_PARAMETERS.forEach(parameter =>
+            remainingParameters.delete(parameter),
+        )
+
+        const queryString = remainingParameters.toString()
+
+        router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+            scroll: false,
+        })
+    }, [isRestored, searchParams, pathname, router])
+
+    const updateSearchParameters = (
+        newSearchParameters: Partial<CtSearchParameters>,
+    ) => {
         setSearchParameters(oldSearchParameters => {
             // Page should be reset if any search parameter other than `page` has changed
             const pageShouldBeReset = Object.entries(newSearchParameters)
@@ -48,14 +196,14 @@ export default function ExplorePageClient({ announcement }: Props) {
             return {
                 ...oldSearchParameters,
                 ...newSearchParameters,
-                page: pageShouldBeReset ? 1 : newSearchParameters.page,
+                page: pageShouldBeReset
+                    ? 1
+                    : newSearchParameters.page ?? oldSearchParameters.page,
             }
         })
     }
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
     const [searchResponse, setSearchResponse] = useState<CtSearchResponse>({
         hits: [],
@@ -64,36 +212,48 @@ export default function ExplorePageClient({ announcement }: Props) {
     })
 
     const searchRequestBody = useMemo(() => {
-        let filters
+        const filters = searchParameters.showAdvancedSearch
+            ? // Advanced Search Filters are derived into the format expected by
+              // the API from the row model the UI is built on
+              buildCtAdvancedSearchFilters(searchParameters.advancedSearch)
+            : {
+                  // Convert the Standard Search Filters into the format expected by the API
+                  logicalAnd: true,
+                  filters: Object.entries(searchParameters.standardFilters)
+                      .filter(([, values]) => (values ?? []).length > 0)
+                      .map(([field, values]) => ({
+                          field,
+                          values,
+                          logicalAnd: false,
+                      })),
+              }
 
-        if (showAdvancedSearch) {
-            // Advanced Search Filters are already in the format expected by the API
-            filters = searchParameters.advancedFilters
-        } else {
-            // Convert the Standard Search Filters into the format expected by the API
-            filters = {
-                logicalAnd: true,
-                filters: Object.entries(searchParameters.standardFilters).map(
-                    ([field, values]) => ({
-                        field,
-                        values,
-                        logicalAnd: false,
-                    }),
-                ),
-            }
-        }
+        // The co-located dropdowns are standard-tab controls, so the advanced
+        // tab runs without them rather than applying a constraint it can't show.
+        const coLocated = searchParameters.showAdvancedSearch
+            ? {
+                  coLocatedLocation: coLocatedFilterOptions[0].value,
+                  coLocatedInstitution: coLocatedFilterOptions[0].value,
+              }
+            : {
+                  coLocatedLocation: searchParameters.coLocatedLocation,
+                  coLocatedInstitution: searchParameters.coLocatedInstitution,
+              }
 
         return {
             q: searchParameters.q,
             page: searchParameters.page,
             limit: searchParameters.limit,
-            coLocatedLocation: searchParameters.coLocatedLocation,
-            coLocatedInstitution: searchParameters.coLocatedInstitution,
+            ...coLocated,
             filters,
         }
-    }, [searchParameters, showAdvancedSearch])
+    }, [searchParameters])
 
     useEffect(() => {
+        if (!isRestored) {
+            return
+        }
+
         searchRequest('list', searchRequestBody)
             .then(data => {
                 setSearchResponse(data)
@@ -102,17 +262,15 @@ export default function ExplorePageClient({ announcement }: Props) {
             .catch(error => {
                 console.error(error)
             })
-    }, [searchRequestBody, setSearchResponse])
+    }, [isRestored, searchRequestBody, setSearchResponse])
 
-    useEffect(() => {
-        const url = new URL(pathname, window.location.origin)
-
-        url.search = searchParams.toString()
-
-        updateUrlQueryString(url, searchParameters)
-
-        router.replace(url.href)
-    }, [searchParams, pathname, router, searchParameters])
+    // Results only exist once the page has mounted and the search has run, so
+    // a returning user's scroll position can't be restored until then.
+    useSearchScrollRestoration(
+        CLINICAL_TRIALS_EXPLORE_SCROLL_KEY,
+        !isLoading && searchResponse.hits.length > 0,
+        isReturnVisit,
+    )
 
     return (
         <Layout
@@ -137,8 +295,6 @@ export default function ExplorePageClient({ announcement }: Props) {
                             <ClinicalTrialsSearchInput
                                 searchParameters={searchParameters}
                                 setSearchParameters={updateSearchParameters}
-                                showAdvancedSearch={showAdvancedSearch}
-                                setShowAdvancedSearch={setShowAdvancedSearch}
                                 isLoading={isLoading}
                                 searchRequestBody={searchRequestBody}
                                 totalHits={searchResponse.total.value}

@@ -149,6 +149,9 @@ const RrnaFilterSidebar = ({
                 selectedFilters={selectedFilters}
                 setSelectedOptions={setSelectedOptions}
                 fixedSelectOptions={defaultFixedSelectOptions as any}
+                // Filters here are keyed by the RRNA labels, not the cascade
+                // fields, so the block can't read its own selection back.
+                syncFromSelectedFilters={false}
             />
 
             <RrnaFilterBlock

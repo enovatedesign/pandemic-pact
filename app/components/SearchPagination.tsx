@@ -27,9 +27,14 @@ export default function SearchPagination({
     const totalPages = Math.ceil(totalHits / limit)
 
     const changePage = (newPage: number) => {
-        setSearchParameters({ ...searchParameters, page: newPage })
+        setSearchParameters({ page: newPage })
 
-        document.getElementById('searchResultsHeading')?.scrollIntoView()
+        // Instant, against the site's smooth default: the results re-render
+        // while a smooth scroll is still in flight and cancel it part way down
+        // the page, leaving the reader stranded mid-results.
+        document.getElementById('searchResultsHeading')?.scrollIntoView({
+            behavior: 'instant',
+        })
     }
 
     const maxButtonsToShow = 5

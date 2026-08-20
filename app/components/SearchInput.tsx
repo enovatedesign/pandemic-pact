@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { debounce } from 'lodash'
-import { SearchIcon } from '@heroicons/react/solid'
+import { SearchIcon, XIcon } from '@heroicons/react/solid'
 
 import {
+    AdvancedSearchState,
+    defaultAdvancedSearchState,
+    jointFundingFilterOptions,
     queryOrFiltersAreSet,
-    SearchFilters,
     SelectedStandardSearchFilters,
     SearchParameters,
 } from '../helpers/search'
+import ExploreShareButton from './ExploreShareButton'
 
 import DownloadFullDataButton from './DownloadFullDataButton'
 import DownloadFilteredDataButton from './DownloadFilteredDataButton'
@@ -19,33 +22,46 @@ import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
     searchParameters: SearchParameters
-    setSearchParameters: (searchParameters: SearchParameters) => void
-    showAdvancedSearch: boolean
+    setSearchParameters: (searchParameters: Partial<SearchParameters>) => void
     isLoading: boolean
     totalHits: number
-    setShowAdvancedSearch: (showAdvancedSearch: boolean) => void
     searchRequestBody: any
 }
 
 export default function SearchInput({
     searchParameters,
     setSearchParameters,
-    showAdvancedSearch,
     isLoading,
     totalHits,
-    setShowAdvancedSearch,
     searchRequestBody,
 }: Props) {
-    const [localSearchQuery, setLocalSearchQuery] = useState<string>("")
+    const showAdvancedSearch = searchParameters.showAdvancedSearch
+
+    const [localSearchQuery, setLocalSearchQuery] = useState<string>(
+        searchParameters.q,
+    )
+
+    // The query the debounce last sent upwards, so a change arriving from outside
+    // the input — a shared link loading, or Clear All — can be told apart from the
+    // user's own typing and mirrored back into the box.
+    const pushedSearchQuery = useRef<string>(searchParameters.q)
 
     // useRef is used here to store the debounced function so it is not re-created
     // on every render, preventing unnecessary re-creations of the function and 
     // avoiding an infinite loop of state updates caused by `useEffect`.
     const debouncedSetSearchQuery = useRef(
         debounce((query: string) => {
-            setSearchParameters(({ ...searchParameters, q: query }));
+            pushedSearchQuery.current = query
+            setSearchParameters({ q: query })
         }, 200)
     ).current
+
+    useEffect(() => {
+        if (searchParameters.q !== pushedSearchQuery.current) {
+            pushedSearchQuery.current = searchParameters.q
+            setLocalSearchQuery(searchParameters.q)
+        }
+    }, [searchParameters.q])
     
     // This useEffect calls the debounced function whenever `localSearchQuery` changes,
     // ensuring that `setSearchParameters` is only triggered after the debounce period.
@@ -57,31 +73,37 @@ export default function SearchInput({
         }
     }, [localSearchQuery, debouncedSetSearchQuery])
     
-    const handleSearchToggleButtons = (value: boolean) => {
-        setShowAdvancedSearch(value)
+    const handleSearchToggleButtons = (showAdvancedSearch: boolean) => {
+        setSearchParameters({ showAdvancedSearch })
     }
 
     const setStandardSearchFilters = (
         filters: SelectedStandardSearchFilters,
     ) => {
-        setSearchParameters({
-            ...searchParameters,
-            standardFilters: filters,
-        })
+        setSearchParameters({ standardFilters: filters })
     }
 
     const setJointFundingFilter = (jointFunding: string) => {
-        setSearchParameters({
-            ...searchParameters,
-            jointFunding,
-        })
+        setSearchParameters({ jointFunding })
     }
 
-    const setShowAdvancedSearchFilters = (filters: SearchFilters) => {
-        setSearchParameters({
-            ...searchParameters,
-            advancedFilters: filters,
-        })
+    const setAdvancedSearch = (advancedSearch: AdvancedSearchState) => {
+        setSearchParameters({ advancedSearch })
+    }
+
+    // Clears the tab on screen only — the two tabs hold independent filter sets,
+    // and the search query sits outside the panel this button lives in. Joint
+    // funding belongs to the standard tab; on the advanced tab it rides on its
+    // own row, which the default state has none of.
+    const clearActiveTabFilters = () => {
+        setSearchParameters(
+            showAdvancedSearch
+                ? { advancedSearch: defaultAdvancedSearchState() }
+                : {
+                      standardFilters: {},
+                      jointFunding: jointFundingFilterOptions[0].value,
+                  },
+        )
     }
     
     return (
@@ -193,8 +215,8 @@ export default function SearchInput({
                     <div className="rounded-lg col-span-2 bg-white p-3">
                         <div className={showAdvancedSearch ? 'block' : 'hidden'}>
                             <AdvancedSearchFilters
-                                setSearchFilters={setShowAdvancedSearchFilters}
-                                setJointFundingFilter={setJointFundingFilter}
+                                advancedSearch={searchParameters.advancedSearch}
+                                setAdvancedSearch={setAdvancedSearch}
                             />
                         </div>
 
@@ -209,6 +231,21 @@ export default function SearchInput({
                                 }
                                 setJointFundingFilter={setJointFundingFilter}
                             />
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-end gap-2 mt-3 pt-3 border-t-2 border-gray-100">
+                            <ExploreShareButton
+                                kind="grants-explore"
+                                state={searchParameters}
+                            />
+
+                            <Button
+                                size="xsmall"
+                                customClasses="flex items-center gap-1"
+                                onClick={clearActiveTabFilters}
+                            >
+                                Clear All <XIcon className="w-5 h-5" />
+                            </Button>
                         </div>
                     </div>
                 </section>

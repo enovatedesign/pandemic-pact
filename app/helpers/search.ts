@@ -1,25 +1,46 @@
-export interface SearchParameterSchema {
-    [key: string]: {
-        defaultValue: any
-        queryStringParameter?: string
-        excludeFromQueryString?: boolean
-    }
+import { isPlainObject } from 'lodash'
+
+/** Standard (simple) filters: a map of grant field -> selected option codes. */
+export type SelectedStandardSearchFilters = Record<string, string[]>
+
+/**
+ * The advanced search's joint funding row. It sets the joint funding parameter
+ * rather than adding a filter, so it has no option list of its own.
+ */
+export const JOINT_FUNDING_FIELD = 'JointFunding'
+
+export interface AdvancedSearchRow {
+    key: string
+    field: string
+    values: string[]
+    logicalAnd: boolean
+    /**
+     * Optional strain cascade. The parent tracks which of the row's selected
+     * diseases is being narrowed and is UI-only — that disease is already in the
+     * row's own values — so only the child ever becomes a filter.
+     */
+    subCategoryParent: { field: string | null; value: string | null }
+    subCategoryChild: { field: string | null; value: string | null }
 }
 
-export interface SelectedStandardSearchFilters {
-    Disease?: string[]
-    Pathogen?: string[]
-    ResearchInstitutionCountry?: string[]
-    ResearchInstitutionRegion?: string[]
-    FunderCountry?: string[]
-    FunderRegion?: string[]
+export interface AdvancedSearchState {
+    rows: AdvancedSearchRow[]
+    logicalAnd: boolean
+    /** Monotonic source of row keys, so they stay unique across a stored state. */
+    nextRowKey: number
 }
 
 export interface SearchParameters {
     q: string
     standardFilters: SelectedStandardSearchFilters
     jointFunding: string
-    advancedFilters: SearchFilters
+    /**
+     * The advanced search is held as its row model rather than the derived API
+     * filters: the filters are lossy (empty rows, the chosen field before its
+     * values, the global and/or) and can't rebuild the UI on restore.
+     */
+    advancedSearch: AdvancedSearchState
+    showAdvancedSearch: boolean
     page: number
     limit: number
 }
@@ -72,85 +93,158 @@ export interface SearchRequestBody {
     jointFunding: string
 }
 
-const searchParameterSchema: SearchParameterSchema = {
-    q: {
-        defaultValue: '',
-    },
-    standardFilters: {
-        defaultValue: {},
-        queryStringParameter: 'filters',
-    },
-    jointFunding: {
-        defaultValue: 'all-grants',
-    },
-    advancedFilters: {
-        defaultValue: { 
-            logicalAnd: true, 
-            filters: [], 
-        },
-        excludeFromQueryString: true,
-    },
-    page: {
-        defaultValue: 1,
-    },
-    limit: {
-        defaultValue: 25,
-    },
+const DEFAULT_ADVANCED_SEARCH_FIELDS = ['StudySubject', 'Ethnicity']
+
+export function emptyAdvancedSearchRow(field: string, key: number): AdvancedSearchRow {
+    return {
+        key: `row-${key}`,
+        field,
+        values: [],
+        logicalAnd: false,
+        subCategoryParent: { field: null, value: null },
+        subCategoryChild: { field: null, value: null },
+    }
 }
 
-export function prepareInitialSearchParameters(searchParams: URLSearchParams) {
-    const initialSearchParameters = Object.entries(searchParameterSchema).map(
-        ([key, schema]) => {
-            if (schema.excludeFromQueryString) {
-                return [key, schema.defaultValue]
-            }
+export function defaultAdvancedSearchState(): AdvancedSearchState {
+    return {
+        rows: DEFAULT_ADVANCED_SEARCH_FIELDS.map(emptyAdvancedSearchRow),
+        logicalAnd: true,
+        nextRowKey: DEFAULT_ADVANCED_SEARCH_FIELDS.length,
+    }
+}
 
-            const searchParamValue = searchParams.get(
-                schema.queryStringParameter ?? key,
-            )
+/** Derive the filter payload the API expects from the advanced search rows. */
+export function buildAdvancedSearchFilters(
+    state: AdvancedSearchState,
+): SearchFilters {
+    const rowFilters: Filter[] = state.rows
+        .filter(
+            row =>
+                row.field &&
+                row.field !== JOINT_FUNDING_FIELD &&
+                row.values.length > 0,
+        )
+        .map(({ field, values, logicalAnd }) => ({ field, values, logicalAnd }))
 
-            if (!searchParamValue) {
-                return [key, schema.defaultValue]
-            }
+    const strainFilters: Filter[] = state.rows
+        .filter(row => row.subCategoryChild.field && row.subCategoryChild.value)
+        .map(row => ({
+            field: row.subCategoryChild.field as string,
+            values: [row.subCategoryChild.value as string],
+            logicalAnd: true,
+        }))
 
-            if (typeof schema.defaultValue === 'number') {
-                return [key, parseInt(searchParamValue)]
-            }
+    return {
+        logicalAnd: state.logicalAnd,
+        filters: [...rowFilters, ...strainFilters],
+    }
+}
 
-            if (typeof schema.defaultValue === 'object') {
-                return [key, JSON.parse(searchParamValue)]
-            }
-
-            return [key, searchParamValue]
-        },
+/**
+ * The joint funding row sets a request parameter rather than adding a filter, so
+ * its value is read back off the row. Change that row's field or remove it and
+ * the constraint goes with it, the same as any other row.
+ */
+export function advancedJointFunding(state: AdvancedSearchState): string {
+    const jointFundingRow = state.rows.find(
+        ({ field, values }) =>
+            field === JOINT_FUNDING_FIELD && values.length > 0,
     )
 
-    return Object.fromEntries(initialSearchParameters)
+    return jointFundingRow?.values[0] ?? jointFundingFilterOptions[0].value
 }
 
-export function updateUrlQueryString(
-    url: URL,
-    searchParameters: SearchParameters,
-) {
-    Object.entries(searchParameterSchema).forEach(([key, schema]) => {
-        if (schema.excludeFromQueryString) {
-            return
+export function defaultSearchParameters(): SearchParameters {
+    return {
+        q: '',
+        standardFilters: {},
+        jointFunding: 'all-grants',
+        advancedSearch: defaultAdvancedSearchState(),
+        showAdvancedSearch: false,
+        page: 1,
+        limit: 25,
+    }
+}
+
+/** Query string parameters that seed the page and are then stripped from the URL. */
+export const DEEP_LINK_PARAMETERS = ['q', 'filters', 'jointFunding']
+
+/**
+ * State arriving from outside the page — the map's `?filters=` links and the
+ * grant page's `?q=` back link. A deep link replaces any stored state rather
+ * than merging with it, so the link lands on exactly what it describes.
+ */
+export function searchParametersFromDeepLink(
+    searchParams: URLSearchParams,
+): SearchParameters | null {
+    const query = searchParams.get('q')
+    const filters = searchParams.get('filters')
+    const jointFunding = searchParams.get('jointFunding')
+
+    if (!query && !filters && !jointFunding) {
+        return null
+    }
+
+    const parameters = defaultSearchParameters()
+
+    if (query) {
+        parameters.q = query
+    }
+
+    if (jointFundingFilterOptions.some(({ value }) => value === jointFunding)) {
+        parameters.jointFunding = jointFunding as string
+    }
+
+    if (filters) {
+        try {
+            parameters.standardFilters = JSON.parse(filters)
+        } catch {
+            // A malformed link shouldn't blank the page.
         }
+    }
 
-        const stateValue = searchParameters[key as keyof SearchParameters]
+    return parameters
+}
 
-        if (schema.defaultValue === stateValue) {
-            url.searchParams.delete(key)
-            return
-        }
+/**
+ * Rebuild search parameters from storage or a share link. Anything missing or
+ * malformed falls back to its default rather than reaching the selects. Whether
+ * the filters it names still exist is a separate question, answered by
+ * pruneGrantsSearchParameters.
+ */
+export function restoreSearchParameters(
+    restored: any,
+    isReturnVisit: boolean = false,
+): SearchParameters {
+    const defaults = defaultSearchParameters()
 
-        const value =
-            typeof stateValue === 'object'
-                ? JSON.stringify(stateValue)
-                : `${stateValue}`
+    if (!isPlainObject(restored)) {
+        return defaults
+    }
 
-        url.searchParams.set(schema.queryStringParameter ?? key, value)
-    })
+    return {
+        ...defaults,
+        ...restored,
+        standardFilters: isPlainObject(restored.standardFilters)
+            ? restored.standardFilters
+            : defaults.standardFilters,
+        advancedSearch: Array.isArray(restored.advancedSearch?.rows)
+            ? { ...defaults.advancedSearch, ...restored.advancedSearch }
+            : defaults.advancedSearch,
+        jointFunding: jointFundingFilterOptions.some(
+            ({ value }) => value === restored.jointFunding,
+        )
+            ? restored.jointFunding
+            : defaults.jointFunding,
+        // A fresh visit opens on the first page however deep the stored state,
+        // but a back or forward is a return to results already being read.
+        page: isReturnVisit ? restoredPage(restored.page) : 1,
+    }
+}
+
+function restoredPage(page: any) {
+    return Number.isInteger(page) && page > 0 ? page : 1
 }
 
 export async function highlightMatchesInGrant(grant: any, query: string) {
