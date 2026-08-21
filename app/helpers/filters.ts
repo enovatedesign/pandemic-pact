@@ -233,8 +233,8 @@ export function availableClinicalTrialsFilters(): FilterSchema[] {
 
         { label: 'Register', field: 'Register' },
         { label: 'Intervention', field: 'Interventions' },
-        { label: 'Research Institution Region', field: 'ResearchInstitutionRegion' },
-        { label: 'Research Institution Country', field: 'ResearchInstitutionCountry' },
+        { label: 'Research Institution Location Region', field: 'ResearchInstitutionRegion' },
+        { label: 'Research Institution Location Country', field: 'ResearchInstitutionCountry' },
         { label: 'Research Institution', field: 'ResearchInstitutionName' },
         { label: 'Research Location Region', field: 'ResearchLocationRegion' },
         { label: 'Research Location Country', field: 'ResearchLocationCountry' },

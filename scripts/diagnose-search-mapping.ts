@@ -6,34 +6,13 @@ import {
     getIndexName,
     getSearchClient,
 } from '../app/api/helpers/search'
+import {
+    grantsFilterableFields,
+    grantsNonFilterableSelectOptions,
+} from '../app/helpers/filterable-fields'
 import { title, info, warn, error } from './helpers/log'
 
-// Mirror of allowedFilterFields in app/api/helpers/search.ts. Kept in
-// sync manually because that file does not export the set.
-const FILTER_FIELDS = [
-    'FundingOrgName',
-    'Families',
-    'Pathogens',
-    'Diseases',
-    'Strains',
-    'ResearchCat',
-    'FunderRegion',
-    'FunderCountry',
-    'ResearchInstitutionName',
-    'ResearchLocationCountry',
-    'GrantStartYear',
-    'StudySubject',
-    'StudyType',
-    'AgeGroups',
-    'VulnerablePopulations',
-    'OccupationalGroups',
-    'HundredDaysMissionResearchArea',
-    'HundredDaysMissionImplementation',
-    'ClinicalTrial',
-    'PandemicIntelligenceThemes',
-    'PolicyRoadmaps',
-    'GrantID',
-]
+const FILTER_FIELDS = grantsFilterableFields
 
 main()
 
@@ -71,6 +50,8 @@ async function main() {
     const expectedFields = Array.from(
         new Set([...Object.keys(selectOptions), ...FILTER_FIELDS])
     ).sort()
+
+    reportFilterableFieldDrift(Object.keys(selectOptions))
 
     let okCount = 0
     let needsKeywordCount = 0
@@ -122,4 +103,35 @@ async function main() {
     }
 
     info(chalk.green('\nAll filter fields are pure keyword. Index mapping is clean.'))
+}
+
+// A coded field that is not filterable is almost always an oversight rather than
+// a decision: the indexer maps a keyword field for every select-option key, so
+// the data is there and only the allowlist is missing. Reported rather than
+// thrown so a new column in the source data cannot break a deploy.
+function reportFilterableFieldDrift(selectOptionKeys: string[]) {
+    const notFilterable = selectOptionKeys.filter(
+        key =>
+            !FILTER_FIELDS.includes(key) &&
+            !grantsNonFilterableSelectOptions.includes(key),
+    )
+
+    if (notFilterable.length > 0) {
+        warn(
+            `${notFilterable.length} select-option field(s) are indexed but not filterable. ` +
+            `Filters on them are silently ignored — add them to grantsFilterableFields ` +
+            `in app/helpers/filterable-fields.ts:\n  ${notFilterable.join('\n  ')}`,
+        )
+    }
+
+    const notIndexed = FILTER_FIELDS.filter(
+        field => field !== 'GrantID' && !selectOptionKeys.includes(field),
+    )
+
+    if (notIndexed.length > 0) {
+        warn(
+            `${notIndexed.length} filterable field(s) have no select options, so they ` +
+            `cannot be filtered on:\n  ${notIndexed.join('\n  ')}`,
+        )
+    }
 }
