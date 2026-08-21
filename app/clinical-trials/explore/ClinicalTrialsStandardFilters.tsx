@@ -14,7 +14,7 @@ import { CtStandardFilters, coLocatedFilterOptionsFor } from './search'
 const OPTIONS_BASE_PATH = '/data/clinical-trials/select-options'
 
 const COLOCATED_LOCATION_OPTIONS = coLocatedFilterOptionsFor('Research Location')
-const COLOCATED_INSTITUTION_OPTIONS = coLocatedFilterOptionsFor('Research Institution')
+const COLOCATED_INSTITUTION_OPTIONS = coLocatedFilterOptionsFor('Research Institution Location')
 
 interface Props {
     selectedFilters: CtStandardFilters
@@ -139,7 +139,7 @@ export default function ClinicalTrialsStandardFilters({
 
                         setCoLocatedLocationFilter(option.value)
                     }}
-                    label="Co-located by Research Location"
+                    label="Research Location multi-country filter"
                     className="col-span-1"
                 />
 
@@ -155,7 +155,7 @@ export default function ClinicalTrialsStandardFilters({
 
                         setCoLocatedInstitutionFilter(option.value)
                     }}
-                    label="Co-located by Research Institution"
+                    label="Research Institution Location multi-country filter"
                     className="col-span-1"
                 />
                 </div>

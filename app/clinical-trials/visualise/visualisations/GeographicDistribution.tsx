@@ -45,11 +45,11 @@ import whoRegionsGeojson from '../../../../public/data/geojson/who-regions.json'
 
 /**
  * Visualisation 1 — Geographical distribution of clinical research locations /
- * institutions. The data-field toggle (Research Location vs Research Institution)
- * uses the shared DoubleLabelSwitch, while the card tabs switch between the Map
- * (deck.gl choropleth) and Bars (region -> country drill-down) views — matching
- * the grants reference visualisation. Location and institution are treated
- * independently (Technical Spec §6.1).
+ * institutions. The data-field toggle (Research Location vs Research
+ * Institution Location) uses the shared DoubleLabelSwitch, while the card tabs
+ * switch between the Map (deck.gl choropleth) and Bars (region -> country
+ * drill-down) views — matching the grants reference visualisation. Location and
+ * institution are treated independently (Technical Spec §6.1).
  */
 
 type Source = 'location' | 'institution'
@@ -306,7 +306,7 @@ function MapStatusBar({
                 <div className="px-4 pt-2">
                     <p className="text-brand-grey-700">
                         {highlightCoLocated
-                            ? `${coLocatedTotal.toLocaleString()} / ${count.toLocaleString()} co-located clinical trial registration${count === 1 ? '' : 's'}`
+                            ? `${coLocatedTotal.toLocaleString()} / ${count.toLocaleString()} multi-country clinical trial registration${count === 1 ? '' : 's'}`
                             : `${count.toLocaleString()} clinical trial registration${count === 1 ? '' : 's'}`}
                     </p>
                 </div>
@@ -320,7 +320,7 @@ function MapStatusBar({
                         <Switch
                             checked={highlightCoLocated}
                             onChange={setHighlightCoLocated}
-                            label={`Show co-located ${geographyNoun}`}
+                            label={`Show other ${geographyNoun} in these trials`}
                             theme="light"
                             textClassName="text-brand-grey-700"
                         />
@@ -334,7 +334,7 @@ function MapStatusBar({
                         {highlightCoLocated
                             ? coLocatedTotal > 0 && (
                                   <Button size="xxsmall" href={href}>
-                                      Explore Co-located Clinical Trials
+                                      Explore Multi-country Clinical Trials
                                   </Button>
                               )
                             : count > 0 && (
@@ -521,8 +521,8 @@ export default function GeographicDistribution() {
                     checked={source === 'institution'}
                     onChange={checked => setSource(checked ? 'institution' : 'location')}
                     leftLabel="Research Location"
-                    rightLabel="Research Institution"
-                    screenReaderLabel="Toggle between research location and research institution"
+                    rightLabel="Research Institution Location"
+                    screenReaderLabel="Toggle between research location and research institution location"
                 />
             </div>
         </VisualisationCard>

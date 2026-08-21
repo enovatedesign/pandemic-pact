@@ -1,5 +1,7 @@
 import selectOptions from '../../data/dist/select-options.json'
 
+import { grantsFilterableFields } from './filterable-fields'
+
 import {
     AdvancedSearchRow,
     AdvancedSearchState,
@@ -31,8 +33,17 @@ export const standardSearchFields: Record<string, string> = {
     PolicyRoadmaps: 'Policy Roadmaps',
 }
 
-/** Every field the advanced search can build a row from. */
-export const advancedSearchFields = Object.keys(selectOptions)
+/**
+ * Every field the advanced search can build a row from.
+ *
+ * Driven by the API allowlist rather than by the select options: an unrecognised
+ * field is dropped by prepareFilterClause without erroring, so offering one here
+ * gives a filter that looks selectable and changes nothing. Fields with no
+ * generated options (e.g. GrantID) have nothing to pick, so they are skipped.
+ */
+export const advancedSearchFields = grantsFilterableFields.filter(
+    field => field in selectOptions,
+)
 
 const optionValuesByField: Record<string, Set<string>> = Object.fromEntries(
     Object.entries(selectOptions).map(([field, options]) => [
