@@ -2432,7 +2432,7 @@
                 },
                 "diseases": [
                     {
-                        "label": "Chikungunya haemorrhagic fever",
+                        "label": "Chikungunya",
                         "value": "111864006",
                         "pathogen": {
                             "label": "Alphavirus chikungunya",
