@@ -3,7 +3,7 @@ export default {
     // Small static lookup committed into the repo (read locally at build time).
     RESEARCH_CATEGORIES_FILE: 'scripts/config/data/research-categories.csv',
     FIGSHARE_ARTICLE_ID: 26937448,
-    FIGSHARE_GRANTS_FILE_ID: 68073646,
+    FIGSHARE_GRANTS_FILE_ID: 68139046,
     FIGSHARE_DATA_DICTIONARY_FILE_ID: 68073985,
     FIGSHARE_OUTBREAKS_FILE_ID: 66439073,
     FIGSHARE_CLINICAL_TRIALS_FILE_ID: 68074087,
