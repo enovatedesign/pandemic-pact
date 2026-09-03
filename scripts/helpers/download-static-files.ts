@@ -21,11 +21,7 @@ export async function downloadStaticFiles(): Promise<boolean> {
         { url: `${baseUrl}/${branchName}/cache/select-options.json`, path: './data/dist/select-options.json' },
         { url: `${baseUrl}/${branchName}/cache/homepage-totals.json`, path: './data/dist/homepage-totals.json' },
         { url: `${baseUrl}/${branchName}/cache/grants.json`, path: './public/data/grants.json' },
-        // NB: pandemic-pact-grants.csv is intentionally NOT cached here. It is
-        // regenerated from grants.json.gz on every build (see index.ts CSV exports),
-        // and was never successfully uploaded (it's generated after the upload pass),
-        // so requesting it here only ever 404'd — which demoted the whole build to the
-        // slow full-fetch path and timed out the PubMed step.
+        { url: `${baseUrl}/${branchName}/cache/pandemic-pact-grants.csv`, path: './public/export/grants/pandemic-pact-grants.csv' },
         { url: `${baseUrl}/${branchName}/cache/grant-ids.json`, path: './public/data/grant-ids.json' },
         { url: `${baseUrl}/${branchName}/cache/100-days-mission-grants.json`, path: './public/data/100-days-mission/grants.json' },
         { url: `${baseUrl}/${branchName}/cache/countries.json`, path: './public/data/geojson/countries.json' },

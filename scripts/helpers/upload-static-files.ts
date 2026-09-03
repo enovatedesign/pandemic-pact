@@ -15,10 +15,7 @@ export async function uploadStaticFiles() {
         { path: './data/dist/select-options.json', key: `${branchName}/cache/select-options.json` },
         { path: './data/dist/homepage-totals.json', key: `${branchName}/cache/homepage-totals.json` },
         { path: './public/data/grants.json', key: `${branchName}/cache/grants.json` },
-        // NB: pandemic-pact-grants.csv is intentionally NOT uploaded. CSV exports run
-        // at the end of index.ts, after this upload pass, so the file never exists yet
-        // here. It is regenerated from grants.json.gz on every build, so it does not
-        // need caching. (Matches the download list in download-static-files-from-blob.ts.)
+        { path: './public/export/grants/pandemic-pact-grants.csv', key: `${branchName}/cache/pandemic-pact-grants.csv` },
         { path: './public/data/grant-ids.json', key: `${branchName}/cache/grant-ids.json` },
         { path: './public/data/100-days-mission/grants.json', key: `${branchName}/cache/100-days-mission-grants.json` },
         { path: './public/data/geojson/countries.json', key: `${branchName}/cache/countries.json` },
