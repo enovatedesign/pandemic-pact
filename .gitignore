@@ -44,6 +44,12 @@ next-env.d.ts
 /scripts/dist/
 /compiled-scripts
 
+# playwright
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
 # sample data spreadsheets
 sample-real-data.csv
 sample-real-data.xlsx

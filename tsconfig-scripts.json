@@ -11,6 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["scripts/**/*.ts", "./app/api/helpers/search.ts"],
+  "include": [
+    "scripts/**/*.ts",
+    "./app/api/helpers/search.ts",
+    "./app/helpers/csv-filter.ts"
+  ],
   "exclude": ["node_modules"]
 }
