@@ -25,23 +25,7 @@ export async function fetchCsv(filename = fullDataFilename) {
     return response.text()
 }
 
-export function filterCsv(csv: string, ids: string[]) {
-    // Rather than attempting to parse the CSV, we can take advantage of the fact
-    // that the first column is the record's id (Grant ID, Trial ID or RRNA ID)
-    // and filter on that, thereby improving performance.
-    return csv
-        .split('\n')
-        .filter((line, index) => {
-            // Always include the header row
-            if (index === 0) {
-                return true
-            }
-
-            // Check if the first column matches one of our filtered ids
-            return ids.some(id => line.startsWith(`${id},`))
-        })
-        .join('\n')
-}
+export { filterCsv } from './csv-filter'
 
 export function downloadCsv(csv: string, filename: string) {
     const blob = new Blob([csv], { type: 'text/csv' })

@@ -9,6 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc && next lint",
+    "test": "tsc --project tsconfig-scripts.json && node --test \"compiled-scripts/scripts/tests/*.test.js\"",
+    "verify:artefacts": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/verify-build-artefacts.js",
     "generate": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate",
     "fetch-pubmed-data": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate/fetch-pub-med-data-only.js",
     "audit-pubmed-objects": "tsc --project tsconfig-scripts.json && node ./compiled-scripts/scripts/generate/audit-pubmed-objects.js",
@@ -75,6 +77,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
     "@types/fslightbox-react": "^2.0.0",
