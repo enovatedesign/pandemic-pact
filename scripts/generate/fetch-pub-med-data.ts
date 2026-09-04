@@ -47,9 +47,9 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
 
     console.time(timeLogLabel)
 
-    if (process.env.SKIP_FETCHING_PUBMED_DATA) {
+    if (process.env.SKIP_FETCHING_PUBMED_DATA === 'true') {
         warn(
-            'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA env var is present',
+            'Skipping PubMed data fetch because SKIP_FETCHING_PUBMED_DATA is true',
         )
         return {}
     }
@@ -83,7 +83,7 @@ export default async function fetchPubMedData(options?: GetPublicationsOptions):
     // Optionally audit individual object files to find and repair any that are missing.
     // Must run BEFORE building counts so that any corrections are reflected in the
     // publication counts passed to OpenSearch indexing.
-    if (process.env.PUBMED_JSON_AUDIT) {
+    if (process.env.PUBMED_JSON_AUDIT === 'true') {
         const { auditPubmedObjects } = await import('../helpers/audit-pubmed-objects')
         await auditPubmedObjects(publications)
     }
@@ -149,7 +149,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
     // weekly schedule, so a scheduled run (~7 days on) re-fetches every grant, but
     // a re-run after a failed/interrupted run skips the grants already done this
     // cycle and catches up on the rest instead of starting over. Set
-    // FETCH_PUBMED_DATA to force a full refetch regardless.
+    // FETCH_PUBMED_DATA=true to force a full refetch regardless.
     const grantsToFetch: string[] = []
     let freshCount = 0
 
@@ -160,7 +160,7 @@ async function getPublications(pubMedGrantIds: string[], options?: GetPublicatio
         const isFresh = age < FRESHNESS_THRESHOLD_MS
         const hasData = id in publications
 
-        if (hasData && isFresh && !process.env.FETCH_PUBMED_DATA) {
+        if (hasData && isFresh && process.env.FETCH_PUBMED_DATA !== 'true') {
             freshCount++
         } else {
             grantsToFetch.push(id)

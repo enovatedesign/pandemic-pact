@@ -20,6 +20,7 @@ import preparePandemicIntelligence from './prepare-pandemic-inteligence'
 import preparePandemicIntelligenceSelectOptions from './prepare-pandemic-intelligence-select-options'
 import prepareGrantIdsForSitemap from './prepare-grant-ids-for-sitemap'
 import { generateClinicalTrials } from './clinical-trials'
+import verifyBuildArtefacts from '../verify-build-artefacts'
 import { uploadStaticFiles, writeLastUsedFileIds, verifyGrants } from '../helpers/storage'
 import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
@@ -161,6 +162,12 @@ async function main() {
     // the interim source CSV is absent (see generateClinicalTrials), so it is safe
     // to run on every build until the decoupled runner / Figshare ingestion lands.
     const clinicalTrialsUpToDate = await generateClinicalTrials(shouldUploadConditionsMet)
+
+    // Assert the frontend's artefacts exist and hold a sane amount of data, on
+    // both build paths. Deliberately before the marker write below: a failure here
+    // must leave the source ids unmarked so the next build regenerates rather than
+    // taking the cached path straight past the problem.
+    await verifyBuildArtefacts(clinicalTrialsUpToDate)
 
     // Mark every source file ID as processed — deliberately here, at the end, and
     // on BOTH paths:

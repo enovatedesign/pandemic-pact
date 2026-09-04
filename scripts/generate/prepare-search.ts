@@ -9,8 +9,8 @@ export default async function prepareSearch(
     publicationCounts?: Record<string, number>,
     changedIds?: string[],
 ) {
-    if (process.env.SKIP_OPENSEARCH_INDEXING) {
-        warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
+    if (process.env.SKIP_OPENSEARCH_INDEXING === 'true') {
+        warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING is true')
         return
     }
 

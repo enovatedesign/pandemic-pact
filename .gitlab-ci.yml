@@ -2,8 +2,51 @@ default:
     image: gitlab.enovate.co.uk:5050/docker-images/php-ci:php8.2-node${NODE_VERSION}
 
 stages:
+    - test
     - build
     - deploy
+    - verify
+
+# Lint and unit tests. Gates every deploy job below: a failure here means the
+# deploy stage never runs and no Vercel hook is fired.
+#
+# Deliberately `next lint` rather than `npm run lint`: the latter also runs a
+# whole-app `tsc`, and the app statically imports generated JSON (data/dist,
+# public/data) that only exists after `npm run generate` — which this job does
+# not run, and should not. That typecheck is not skipped, just moved: Vercel's
+# `next build` runs it with the data present and ignoreBuildErrors set to false.
+# `npm test` compiles tsconfig-scripts, which needs no generated data.
+unit_tests:
+    stage: test
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+    script:
+        - npx next lint
+        - npm test
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule"
+          when: never
+        - when: on_success
+
+# Post-deploy checks against the live deployment. These cannot gate the deploy —
+# develop/master deploy via an async Vercel hook — but they fail the pipeline,
+# which is the alert. They cost the deployment itself nothing.
+.smoke:
+    stage: verify
+    # Must match @playwright/test exactly, which is pinned without a caret in
+    # package.json for that reason — the image ships only its own browser build.
+    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+    script:
+        - npm run test:smoke
+        - npm run test:e2e
+    artifacts:
+        when: always
+        paths:
+            - playwright-report/
+            - test-results/
+        expire_in: 1 week
 
 fetch_pubmed_data:
     stage: build
@@ -98,7 +141,7 @@ stop_review:
     variables:
         GIT_STRATEGY: none
 
-# --- Decoupled deploys for develop + master (docs/decouple-heavy-build-phase-2-plan.md) ---
+# --- Decoupled deploys for develop + master (docs/decoupled-build.md) ---
 # Vercel's automatic Git deploys for develop/master are disabled in vercel.json
 # (git.deploymentEnabled). Instead these jobs run the heavy generate on the GitLab
 # runner ONLY when the grants data changed, then fire the branch's Vercel Deploy
@@ -155,6 +198,48 @@ deploy_production:
     environment:
         name: production
         url: https://www.pandemicpact.org
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule"
+          when: never
+        - if: $CI_COMMIT_BRANCH == "master"
+          when: on_success
+
+# --- Post-deploy smoke checks ---
+
+smoke_review:
+    extends: .smoke
+    except:
+        - develop
+        - master
+    needs:
+        - deploy_review
+    variables:
+        # `vercel deploy` waits for the build, so the preview is already live and
+        # there is no new deployment to wait for.
+        SKIP_DEPLOYMENT_WAIT: "true"
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+        # DYNAMIC_ENVIRONMENT_URL arrives from deploy_review's dotenv artifact.
+        - export SMOKE_BASE_URL="$DYNAMIC_ENVIRONMENT_URL"
+
+smoke_develop:
+    extends: .smoke
+    needs:
+        - deploy_develop
+    variables:
+        SMOKE_BASE_URL: https://pandemic-pact.vercel.app
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule"
+          when: never
+        - if: $CI_COMMIT_BRANCH == "develop"
+          when: on_success
+
+smoke_production:
+    extends: .smoke
+    needs:
+        - deploy_production
+    variables:
+        SMOKE_BASE_URL: https://www.pandemicpact.org
     rules:
         - if: $CI_PIPELINE_SOURCE == "schedule"
           when: never
