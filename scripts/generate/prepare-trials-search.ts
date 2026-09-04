@@ -18,7 +18,7 @@ import { DatasetConfig } from '../config/datasets'
 export async function trialsSearchIndexNeedsPopulating(
     config: DatasetConfig,
 ): Promise<boolean> {
-    if (process.env.SKIP_OPENSEARCH_INDEXING) {
+    if (process.env.SKIP_OPENSEARCH_INDEXING === 'true') {
         return false
     }
 
@@ -50,8 +50,8 @@ export async function trialsSearchIndexNeedsPopulating(
  * indexed document shape.
  */
 export default async function prepareTrialsSearch(config: DatasetConfig) {
-    if (process.env.SKIP_OPENSEARCH_INDEXING) {
-        warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING env var is present')
+    if (process.env.SKIP_OPENSEARCH_INDEXING === 'true') {
+        warn('Skipping OpenSearch indexing because SKIP_OPENSEARCH_INDEXING is true')
         return
     }
 

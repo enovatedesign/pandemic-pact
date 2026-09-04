@@ -39,9 +39,8 @@ unit_tests:
     before_script:
         - npm ci --cache .npm --prefer-offline
     script:
-        - npx tsc --project tsconfig-scripts.json
-        - node ./compiled-scripts/scripts/smoke-test.js
-        - npx playwright test
+        - npm run test:smoke
+        - npm run test:e2e
     artifacts:
         when: always
         paths:
@@ -142,7 +141,7 @@ stop_review:
     variables:
         GIT_STRATEGY: none
 
-# --- Decoupled deploys for develop + master (docs/decouple-heavy-build-phase-2-plan.md) ---
+# --- Decoupled deploys for develop + master (docs/decoupled-build.md) ---
 # Vercel's automatic Git deploys for develop/master are disabled in vercel.json
 # (git.deploymentEnabled). Instead these jobs run the heavy generate on the GitLab
 # runner ONLY when the grants data changed, then fire the branch's Vercel Deploy
