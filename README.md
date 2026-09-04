@@ -20,10 +20,11 @@ This project uses the following technologies and packages:
 -   [deck.gl](https://deck.gl)
 -   [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 -   [GSAP](https://gsap.com)
+-   [Playwright](https://playwright.dev)
 
 ## S3 Data Storage & Caching
 
-This project uses Amazon S3 (served via CloudFront) to cache and serve generated data assets (such as grants, select options, and research category mappings) for each branch. This enables faster builds and consistent data access across environments. See [`docs/aws-s3-setup.md`](docs/aws-s3-setup.md) for the AWS infrastructure details.
+This project uses Amazon S3 (served via CloudFront) to cache and serve generated data assets (such as grants, select options, and research category mappings) for each branch. This enables faster builds and consistent data access across environments. See [`docs/decoupled-build.md`](docs/decoupled-build.md) for how the per-branch prefixes and the freshness marker fit into the deploy pipeline.
 
 ### How it works
 - When you run the data generation script (`npm run generate`), the build will check if the source data has changed.
@@ -44,7 +45,7 @@ or
 FORCE_UPLOAD=true
 ```
 
-**Note:** uploads require the AWS credentials plus `S3_BUCKET`, `ASSET_BASE_URL`, and `CLOUDFRONT_DISTRIBUTION_ID` (see `docs/aws-s3-setup.md` and Vercel project settings).
+**Note:** uploads require the AWS credentials plus `S3_BUCKET`, `ASSET_BASE_URL`, and `CLOUDFRONT_DISTRIBUTION_ID` — see the Vercel project settings and the GitLab CI/CD variables for the current values.
 
 ## PubMed Data Fetching
 
@@ -67,10 +68,11 @@ The generate script fetches publication data from PubMed (via the Europe PMC API
 | --- | --- |
 | `SKIP_FETCHING_PUBMED_DATA` | Skip PubMed fetch entirely (useful for local dev) |
 | `FETCH_PUBMED_DATA` | Force re-fetch all grants regardless of freshness |
+| `PUBMED_JSON_AUDIT` | Audit and repair the individual PubMed object files during the fetch |
 
 ## Environment Variables
 
-This project uses several environment variables. See `.env.local.example` for a template. Here is a summary:
+`.env.local.example` is the template and the fuller reference — copy it to `.env.local` and fill in the blanks. This table summarises what each variable is for and where its value comes from.
 
 | Variable | Purpose | Where to find |
 | --- | --- | --- |
@@ -78,10 +80,26 @@ This project uses several environment variables. See `.env.local.example` for a 
 | `SEARCH_USERNAME` | OpenSearch username | GitLab CI/CD settings |
 | `SEARCH_PASSWORD` | OpenSearch password | GitLab CI/CD settings |
 | `SEARCH_INDEX_PREFIX` | Unique prefix for your indexes | Choose your own |
+| `SEARCH_INDEX_VERSION` | Version suffix on the index name (`v2` → `grants-v2`), for building a parallel index before promoting it | GitLab CI/CD settings |
+| `SKIP_OPENSEARCH_INDEXING` | Skip indexing during `npm run generate` | Set in `.env.local` |
 | `FORCE_UPLOAD` | Force upload of generated assets to S3 | Set in `.env.local` |
+| `FORCE_FULL_GENERATE` | Force a full generate even when the source data is unchanged | Set in `.env.local`, or as an All-scoped GitLab CI/CD variable |
 | `USE_REMOTE_STORAGE` | Read data from the CDN vs local `public/` files | Set in `.env.local` |
-| `S3_BUCKET` / `ASSET_BASE_URL` / `CLOUDFRONT_DISTRIBUTION_ID` | S3 + CloudFront config | Vercel project settings (see `docs/aws-s3-setup.md`) |
+| `S3_BUCKET` / `ASSET_BASE_URL` / `CLOUDFRONT_DISTRIBUTION_ID` | S3 + CloudFront config | Vercel project settings |
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | S3 write credentials | Vercel / GitLab CI/CD settings |
+| `AWS_REGION` | Region for the S3 bucket and CloudFront calls | `.env.local.example` has the current value |
+| `FIGSHARE_PA_TOKEN` | Downloads the source datasets. **`npm run generate` throws without it**, and clinical-trials generation self-skips | GitLab CI/CD settings |
+| `CONTENT_API_URL` / `CONTENT_API_TOKEN` | Craft CMS GraphQL API, which supplies the page content | GitLab CI/CD settings |
+| `REVALIDATE_API_TOKEN` | Authenticates the CMS revalidation webhook | GitLab CI/CD settings |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | Vercel KV, which backs the "share these filters" links | Vercel project settings |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container | Vercel project settings |
+| `SMOKE_BASE_URL` | Deployment the smoke checks and browser tests run against | Set per job in `.gitlab-ci.yml` |
+| `SKIP_DEPLOYMENT_WAIT` | Skip waiting for a new build before smoke testing | Set for feature branches / local runs |
+| `SKIP_ARTEFACT_VERIFICATION` | Skip the post-generate artefact checks | Set in `.env.local` when a dataset was intentionally not built |
+
+The PubMed fetch has three switches of its own — `SKIP_FETCHING_PUBMED_DATA`, `FETCH_PUBMED_DATA` and `PUBMED_JSON_AUDIT`; see [PubMed Data Fetching](#pubmed-data-fetching) above.
+
+Every on/off variable above is compared strictly against the string `true`, so setting one to `false` disables it. No value other than `true` switches anything on.
 
 ## Getting Started
 
@@ -164,6 +182,32 @@ npm run generate
 
 If you want to upload the generated data to S3 for your branch, set `FORCE_UPLOAD=true` in `.env.local` before running the `npm run generate` command.
 
+#### Forcing a full generate
+
+Both the pipeline and the CI freshness gate decide between a full generate and the
+fast cached path by comparing the committed `FIGSHARE_GRANTS_FILE_ID` against the S3
+marker for the branch. A code-only change therefore takes the cached path, which is
+usually what you want — but not when you have changed the generate *logic* itself and
+need the output rebuilt from source.
+
+`FORCE_FULL_GENERATE=true` (the string must be exactly `true`) bypasses that gate.
+It is honoured in both places that make the decision — `scripts/check-grants-freshness.ts`
+and `scripts/generate/download-and-parse-data-sheets.ts` — so setting it once covers the
+whole run.
+
+```
+FORCE_FULL_GENERATE=true
+```
+
+In CI, set it as an **All-scoped** GitLab variable so it reaches the environment-scoped
+deploy jobs.
+
+> **There is no branch guard.** While it is `true`, *every* deploy does a full generate,
+> production included. Set it back to `false` once the run you wanted has finished.
+
+See [`docs/decoupled-build.md`](docs/decoupled-build.md) for how the freshness gate fits
+into the deploy pipeline.
+
 ### Run the Development server
 
 Now that you have generated the required data you can run the dev build:
@@ -203,6 +247,86 @@ Unlike the TypeScript compiler, the linter will print a success message if there
 ```
 ✔ No ESLint warnings or errors
 ```
+
+A husky pre-commit hook runs `npm run lint` before each commit. Its whole-app `tsc` needs the generated data to be present, since the app statically imports JSON from `data/dist` and `public/data` — which is why CI runs `next lint` on its own in the `test` stage and leaves that typecheck to Vercel's `next build`, where the data exists.
+
+## Testing
+
+The suite exists to catch the failures this project actually has: pages that return HTTP 200 while showing nothing real. A missing export CSV fails only on click, a dashboard whose dataset never loaded renders plausible-looking fallback charts, and a 503 from the search API is parsed as if it were results. None of that shows up in a build log, so it is checked in four layers.
+
+| Layer | Command | Runs |
+| --- | --- | --- |
+| Unit tests | `npm test` | GitLab `test` stage — gates every deploy |
+| Build artefact verification | `npm run verify:artefacts` | Automatically at the end of `npm run generate` |
+| HTTP smoke checks | `npm run test:smoke` | GitLab `verify` stage, after each deploy |
+| Browser tests | `npm run test:e2e` | GitLab `verify` stage, after each deploy |
+
+### Unit tests
+
+```bash
+npm test
+```
+
+Node's built-in test runner (`node --test`) over `scripts/tests/`, covering the pure logic where a silent wrong answer is most expensive:
+
+-   `search-query.test.ts` — the OpenSearch boolean query builder.
+-   `csv-filter.test.ts` — `filterCsv()`, which underpins every filtered export and matches on the raw first column.
+-   `helpers.test.ts` — `normaliseBranchName()` (shared by the indexer and the app; a mismatch reads as "no data") and `resolveTrendStartYear()`.
+
+Tests run against the compiled output, so anything under test must be reachable from `tsconfig-scripts.json`'s `include` — that is why a couple of `app/` helpers are listed there alongside `scripts/`.
+
+### Build artefact verification
+
+```bash
+npm run verify:artefacts
+```
+
+`scripts/verify-build-artefacts.ts` asserts that the files the frontend fetches at runtime actually exist, are the right shape and are not suspiciously small — row and record counts, byte ceilings, and the id-in-column-one invariant that `filterCsv()` depends on. It runs at the end of `npm run generate`, so it covers the cached and full build paths alike and aborts `next build` before a deployment can ship without them.
+
+It also writes `public/data/build-manifest.json` (commit SHA, branch, generation time, record counts), which the smoke checks use to identify the live build.
+
+Set `SKIP_ARTEFACT_VERIFICATION=true` locally if you deliberately generated without a dataset.
+
+### HTTP smoke checks
+
+```bash
+SMOKE_BASE_URL=https://pandemic-pact.vercel.app SKIP_DEPLOYMENT_WAIT=true npm run test:smoke
+```
+
+`scripts/smoke-test.ts` runs against a deployed URL and is deliberately HTTP-only and fast: export CSVs (fetched with a `Range` header, since the grants export is >100 MB), dataset volumes from the manifest, the search API, key pages and redirects, and a sample of detail pages.
+
+`develop` and `master` deploy asynchronously via a Vercel deploy hook, so by default the script first polls `build-manifest.json` until the build for this commit is live (`scripts/wait-for-deployment.ts`, 12-minute timeout). Set `SKIP_DEPLOYMENT_WAIT=true` when the URL is already known to be current — feature-branch previews, and any local run.
+
+### Browser tests
+
+```bash
+npx playwright install chromium   # first run only
+npm run test:e2e
+```
+
+`tests/e2e/` covers what only a browser can see. `visualise.spec.ts` is the highest-value spec: it asserts each dashboard resolves its dataset and renders real records rather than the fallback data in `app/components/NoData/`. `explore.spec.ts` covers the two OpenSearch-backed pages, and `export.spec.ts` drives a real export download through the UI.
+
+Uncaught page exceptions fail a test — the app has no `error.tsx`, so one leaves a broken page behind a 200. Console errors are collected into the report but not asserted on, as third-party tags make them too noisy to gate a deploy.
+
+Notes:
+
+-   `SMOKE_BASE_URL` defaults to `http://localhost:3000`, so a local `npm run dev` needs no env var.
+-   `@playwright/test` is pinned without a caret because the CI job uses the matching `mcr.microsoft.com/playwright` image, which ships only its own browser build.
+-   Chromium is launched with SwiftShader; the visualise pages, RRNA and the homepage render WebGL and fail in headless CI without a software rasteriser.
+
+### How CI wires this together
+
+`.gitlab-ci.yml` runs `next lint` and `npm test` in the `test` stage, which gates the deploy jobs. The `verify` stage then runs `npm run test:smoke` and `npm run test:e2e` against the deployment — the same commands documented above, so CI and a local run cannot drift apart. Those post-deploy checks cannot gate an async deploy hook, but a failure fails the pipeline, which is the alert.
+
+## Further Documentation
+
+| Doc | Covers |
+| --- | --- |
+| [`docs/decoupled-build.md`](docs/decoupled-build.md) | How deploys actually work: GitLab runs the heavy generate, Vercel only ever takes the cached path. Per-environment S3 prefixes and OpenSearch indexes, the freshness gate, and the safety properties that make it fail closed. |
+| [`docs/generate-performance.md`](docs/generate-performance.md) | Constraints to preserve when changing `npm run generate` — why `extractCheckboxAndPrefixFields` is single-pass, why its slower predecessors are deliberately kept, and the byte-parity check any generate change must pass. |
+| [`docs/clinical-trials-follow-ups.md`](docs/clinical-trials-follow-ups.md) | Deferred structural and efficiency items from the Clinical Trials review. None is a live bug. |
+
+Open follow-ups live next to the thing they concern, not in a central backlog: build-pipeline items under **Known follow-ups** in `decoupled-build.md` and **Remaining follow-up** in `generate-performance.md`, and the app-level ones in `clinical-trials-follow-ups.md`. Each is stated once, in the doc that explains the mechanism behind it.
 
 ## DOI
 
