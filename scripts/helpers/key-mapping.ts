@@ -28,6 +28,14 @@ export const keyMapping: { [key: string]: string } = {
     occupational_groups: 'OccupationalGroups',
     study_type_main: 'StudyType',
     clinical_trial: 'ClinicalTrial',
+
+    // Diagnostics research carries no clinical trial phase, so the clinical
+    // research visualisations place it on their axis by D1 development stage
+    // instead. Names match the clinical-trials (ICTRP) mapping so the two
+    // datasets stay symmetrical.
+    diagnostics_categorisation: 'DiagnosticsCategorisation',
+    diagnostics_theme_category: 'DiagnosticsThemeCategory', // ___d1 .. ___d4
+    diagnostics_d1_sub: 'DiagnosticsD1Sub', // ___a .. ___g
     families: 'Families',
     funder_name: 'FundingOrgName',
     funder_country: 'FunderCountry',

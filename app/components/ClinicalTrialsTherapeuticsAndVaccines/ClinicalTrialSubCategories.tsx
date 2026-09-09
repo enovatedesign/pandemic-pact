@@ -2,6 +2,8 @@ import { useContext } from "react"
 import { ResponsiveContainer, XAxis, YAxis, Bar, BarChart } from "recharts"
 
 import { getColoursByField, isChartDataUnavailable } from "@/app/helpers/bar-list"
+import { sharedAxisLabel } from "@/app/helpers/clinical-trial-phases"
+import { Colours } from "@/app/helpers/colours"
 import { dollarValueFormatter } from "@/app/helpers/value-formatters"
 import { TooltipContext } from "@/app/helpers/tooltip"
 import { clinicalTrialSubCategoriesFallbackData } from "../NoData/visualisationFallbackData"
@@ -20,6 +22,10 @@ export interface ClinicalTrialSubCategoriesProps {
 
 const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategoriesProps) => {
     const { brightColours, dimColours } = getColoursByField('ClinicalTrialPhase')
+
+    // Colours are keyed by shared axis label, so a stage keeps its colour whether
+    // the section renders it as a trial phase or as a development stage.
+    const rowColour = (colours: Colours, datum: any) => colours[sharedAxisLabel(datum['Category Label'])]
 
     const { tooltipRef } = useContext(TooltipContext)
 
@@ -112,14 +118,14 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
                             
                                                     <Bar
                                                         dataKey="Grants With Known Financial Commitments"
-                                                        fill={brightColours[datum['Category Label']]}
+                                                        fill={rowColour(brightColours, datum)}
                                                         stackId="a"
                                                         background={{ fill: '#eee' }}
                                                     />
                                                     
                                                     <Bar
                                                         dataKey="Grants With Unspecified Financial Commitments"
-                                                        fill={dimColours[datum['Category Label']]}
+                                                        fill={rowColour(dimColours, datum)}
                                                         stackId="a"
                                                     />
                                                 </BarChart>
@@ -204,7 +210,7 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
                             
                                                     <Bar
                                                         dataKey="Known Financial Commitments (USD)"
-                                                        fill={brightColours[datum['Category Label']]}
+                                                        fill={rowColour(brightColours, datum)}
                                                         stackId="a"
                                                         background={{ fill: '#eee' }}
                                                     />
