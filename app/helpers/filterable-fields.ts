@@ -64,6 +64,12 @@ export const grantsNonFilterableSelectOptions = [
     // Days Mission demographic picker, not codes stored on a grant. Nothing is
     // ever indexed under it, so a filter would match zero grants.
     'HundredDaysMissionStudyPopulation',
+
+    // Carried only so the clinical research visualisations can place diagnostics
+    // grants on their development-stage axis. Nobody has asked to filter on them,
+    // and offering them would add two dropdowns to the advanced search.
+    'DiagnosticsThemeCategory',
+    'DiagnosticsD1Sub',
 ]
 
 /** Ordered to match data/dist/clinical-trials/select-options.json. */

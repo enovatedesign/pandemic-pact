@@ -59,6 +59,10 @@ export default async function prepare100DaysMission(rawGrants?: RawGrant[]) {
                 main_research_sub_priority_number_new: researchSubCat,
                 study_type_main: grant['study_type_main'],
 
+                // A yesno field, so unlike the theme/sub checkboxes below it is
+                // not in checkBoxFieldValues and has to be carried by hand.
+                diagnostics_categorisation: grant['diagnostics_categorisation'],
+
                 rurality: grant['rurality'],
 
                 Pathogens: Pathogens,
@@ -84,6 +88,9 @@ export default async function prepare100DaysMission(rawGrants?: RawGrant[]) {
             ...baseKeysToInclude,
             'Tags',
             'ClinicalTrial',
+            'DiagnosticsCategorisation',
+            'DiagnosticsThemeCategory',
+            'DiagnosticsD1Sub',
             'ResearchCat',
             'ResearchSubcat',
             'AgeGroups',
