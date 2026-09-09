@@ -1,9 +1,17 @@
 import { createContext } from 'react'
 import { Colours, coloursByField, hundredDaysMissionResearchAreaBrightColours } from './colours'
-import { sumNumericGrantAmounts } from './reducers'
 import selectOptions from '../../data/dist/select-options.json'
-import { fromPairs, groupBy, indexOf, orderBy, sumBy } from 'lodash'
+import { groupBy, sumBy } from 'lodash'
 import { SelectOption } from '@/scripts/types/generate'
+import {
+    diagnosticsStageBuckets,
+    diagnosticsStageOrder,
+    isDiagnosticsD1Grant,
+    matchesDiagnosticsStage,
+    sharedAxisLabel,
+    trialPhaseLabels,
+    trialPhaseOrder,
+} from './clinical-trial-phases'
 
 
 export interface BarListDatum {
@@ -166,7 +174,12 @@ export const convertSubCategoryDataToCategoryData = (data: DataItem[]) => {
 
     // Process each data item
     data.forEach(({ label, data }) => {
-        data.forEach(({ "Category Label": categoryLabel, "Total Grants": totalGrants, "Known Financial Commitments (USD)": financialCommitments }) => {
+        data.forEach(({ "Category Label": rowLabel, "Total Grants": totalGrants, "Known Financial Commitments (USD)": financialCommitments }) => {
+            // Diagnostics words its rows as development stages and the other
+            // sections as trial phases, so pivot on the shared axis label to keep
+            // the two stacking into one row rather than doubling the rows.
+            const categoryLabel = sharedAxisLabel(rowLabel)
+
             // Initialize the category if it doesn't exist
             if (!totalGrantsCategoryData[categoryLabel]) {
                 totalGrantsCategoryData[categoryLabel] = { "Category Label": categoryLabel }
@@ -189,16 +202,18 @@ export const convertSubCategoryDataToCategoryData = (data: DataItem[]) => {
 
 // Return a formatted label to ensure consistency across non-clinical trial and clinical trial data
 export const formatClinicalTrialCategoryLabel = (label: string): string => {
+    // The regexes match raw select-option labels from the source data; only the
+    // formatted labels are ours to rename.
     const mappings: { regex: RegExp; formattedLabel: string }[] = [
-        { regex: /Pre-clinical studies/i, formattedLabel: 'Pre-clinical studies' },
-        { regex: /Phase 0 clinical trial|Protocol/i, formattedLabel: 'Phase 1' },
-        { regex: /Phase 1 clinical trial|Clinical Trial, Phase I\b/i, formattedLabel: 'Phase 1' },
-        { regex: /Phase 2 clinical trial|Clinical Trial, Phase II\b/i, formattedLabel: 'Phase 2' },
-        { regex: /Phase 3 clinical trial|Clinical Trial, Phase III\b/i, formattedLabel: 'Phase 3' },
-        { regex: /Phase 4 clinical trial|Clinical Trial, Phase IV\b/i, formattedLabel: 'Phase 4' },
+        { regex: /Pre-clinical studies/i, formattedLabel: trialPhaseLabels.preClinical },
+        { regex: /Phase 0 clinical trial|Protocol/i, formattedLabel: trialPhaseLabels.phase1 },
+        { regex: /Phase 1 clinical trial|Clinical Trial, Phase I\b/i, formattedLabel: trialPhaseLabels.phase1 },
+        { regex: /Phase 2 clinical trial|Clinical Trial, Phase II\b/i, formattedLabel: trialPhaseLabels.phase2 },
+        { regex: /Phase 3 clinical trial|Clinical Trial, Phase III\b/i, formattedLabel: trialPhaseLabels.phase3 },
+        { regex: /Phase 4 clinical trial|Clinical Trial, Phase IV\b/i, formattedLabel: trialPhaseLabels.phase4 },
         { 
             regex: /Controlled Clinical Trial\b|Randomized Controlled Trial|Unspecified/i, 
-            formattedLabel: 'Unspecified phase' 
+            formattedLabel: trialPhaseLabels.unspecified 
         }
     ];
 
@@ -213,6 +228,42 @@ export const formatClinicalTrialCategoryLabel = (label: string): string => {
     return label
 }
 
+/**
+ * Summarise grants already bucketed by row label into BarListDatum rows.
+ *
+ * Building straight off phaseOrder does the zero-filling and the ordering in one
+ * pass, so a phase with no grants still gets a row.
+ */
+const summarisePhaseRows = (
+    grantsByPhaseLabel: Record<string, any[]>,
+    phaseOrder: string[],
+): BarListDatum[] =>
+    phaseOrder.map(phase => {
+        const phaseGrants = (grantsByPhaseLabel[phase] ?? []).map(grant => ({
+            ...grant,
+            GrantAmountConverted: Number(grant['GrantAmountConverted']),
+        }))
+
+        // `> 0` rather than a typeof check: an unknown amount reaches the
+        // visualise payload as 0, not as a missing value, so a type test puts
+        // every grant in the "known" bucket and flatlines the dim bar.
+        const grantsWithKnownAmounts = phaseGrants.filter(
+            grant => grant['GrantAmountConverted'] > 0,
+        )
+        const grantsWithUnspecifiedAmounts = phaseGrants.filter(
+            grant => grant['GrantAmountConverted'] <= 0,
+        )
+
+        return {
+            'Category Label': phase,
+            'Category Value': phase,
+            'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
+            'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
+            'Total Grants': phaseGrants.length,
+            'Known Financial Commitments (USD)': sumBy(phaseGrants, 'GrantAmountConverted'),
+        }
+    })
+
 export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLabel: string, grants: any[]) => {
     // Set the clinical trial sub category filters to ensure we only get the desired clinical trial subcategories
     const clinicalTrialSubCatFilters = {
@@ -224,15 +275,6 @@ export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLa
         "8": 'Randomized Controlled Trial',
         "-99": 'Unspecified',
     }
-
-    // Set the order of the phases (this is from the formatted titles)
-    const phaseOrder = [
-        "Phase 1",
-        "Phase 2",
-        "Phase 3",
-        "Phase 4",
-        "Unspecified phase"
-    ]
 
     // Retrieve the value of 'Clinical' from the select options
     const clinicalStudyTypeValue = selectOptions['StudyType']
@@ -274,47 +316,37 @@ export const prepareClinicalTrialPhasesForResearchSubCategories = (subCategoryLa
         }) 
     }), 'Category Label')
 
-    // Check if the keys of the grouped data exists in the phase order, if it doesn't, return an empty array
-    // This allows the key to be set to the related key, and value of related grants to be set to 0 (empty array)
-    const groupedDataWithMissingDataDefaults = fromPairs(
-        phaseOrder.map(phase => [
-            phase,
-            clinicalTrialGrantsGroupedByCategoryLabel[phase] || []
-        ])
-    )
-    
-    // Map over the grouped object, and put include the formatted clinical trial phase in the data (BarListDatum type)
-    // This is necessary to ensure we can handle the colours of the visualisation based on their phase
-    const subCategoryChartData = Object.entries(groupedDataWithMissingDataDefaults).map(([phase, grants]) => {
-        const grantsWithKnownAmounts = grants.filter(grant => typeof grant['GrantAmountConverted'] === 'number')
-        const grantsWithUnspecifiedAmounts = grants.filter(grant => typeof grant['GrantAmountConverted'] !== 'number')
-
-        const moneyCommitted = grantsWithKnownAmounts.reduce(
-            ...sumNumericGrantAmounts
-        )
-        
-        return {
-            'Category Label': phase,
-            'Category Value': phase,
-            'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
-            'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
-            'Total Grants': grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
-            'Known Financial Commitments (USD)': moneyCommitted,
-        }
-    })
-    
-    const orderedSubCategoryChartData = orderBy(
-        subCategoryChartData, 
-        (item: BarListDatum) => indexOf(
-            phaseOrder, 
-            item["Category Label"]
-        ), 
-        ['asc']
-    )
-    
     return {
         label: subCategoryLabel,
-        data: orderedSubCategoryChartData
+        data: summarisePhaseRows(clinicalTrialGrantsGroupedByCategoryLabel, trialPhaseOrder)
+    }
+}
+
+/**
+ * The Diagnostics section of the clinical research visualisation.
+ *
+ * Diagnostics awards are not coded with a clinical trial phase, so they are
+ * placed on the shared axis by D1 development stage instead. That also means
+ * they are not gated on StudyType or ClinicalTrial the way the sibling sections
+ * are — those gates left all but ~50 of ~1,900 diagnostics awards off the chart.
+ *
+ * Returns the same shape as prepareClinicalTrialPhasesForResearchSubCategories
+ * but words its rows as development stages, so the collapsed chart pivots these
+ * rows through sharedAxisLabel to stack them with the trial-phase sections.
+ */
+export const prepareDiagnosticsDevelopmentStagesSubCategory = (grants: any[]) => {
+    const diagnosticsGrants = grants.filter(isDiagnosticsD1Grant)
+
+    const grantsByPhaseLabel = Object.fromEntries(
+        diagnosticsStageBuckets.map(({ label, codes }) => [
+            label,
+            diagnosticsGrants.filter(grant => matchesDiagnosticsStage(grant, codes)),
+        ]),
+    )
+
+    return {
+        label: 'Diagnostics',
+        data: summarisePhaseRows(grantsByPhaseLabel, diagnosticsStageOrder),
     }
 }
 

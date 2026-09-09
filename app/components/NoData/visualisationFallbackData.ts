@@ -982,43 +982,36 @@ export const clinicalTrialCategoriesFallbackData = {
         "Diagnostics": 0,
         "Clinical trials for disease management": 0
     },
-    "Phase 0": {
-        "Category Label": "Phase 0",
-        "Therapeutics research, development and implementation": 2,
-        "Vaccines research, development and implementation": 1,
+    "Phase 1 / Early Stage": {
+        "Category Label": "Phase 1 / Early Stage",
+        "Therapeutics research, development and implementation": 28,
+        "Vaccines research, development and implementation": 58,
         "Diagnostics": 1,
-        "Clinical trials for disease management": 1
+        "Clinical trials for disease management": 7
     },
-    "Phase 1": {
-        "Category Label": "Phase 1",
-        "Therapeutics research, development and implementation": 26,
-        "Vaccines research, development and implementation": 57,
-        "Diagnostics": 0,
-        "Clinical trials for disease management": 6
-    },
-    "Phase 2": {
-        "Category Label": "Phase 2",
+    "Phase 2 / Intermediate Phase": {
+        "Category Label": "Phase 2 / Intermediate Phase",
         "Therapeutics research, development and implementation": 68,
         "Vaccines research, development and implementation": 50,
         "Diagnostics": 1,
         "Clinical trials for disease management": 10
     },
-    "Phase 3": {
-        "Category Label": "Phase 3",
+    "Phase 3 / Late Stage": {
+        "Category Label": "Phase 3 / Late Stage",
         "Therapeutics research, development and implementation": 32,
         "Vaccines research, development and implementation": 35,
         "Diagnostics": 1,
         "Clinical trials for disease management": 9
     },
-    "Phase 4": {
-        "Category Label": "Phase 4",
+    "Phase 4 / Post-Market": {
+        "Category Label": "Phase 4 / Post-Market",
         "Therapeutics research, development and implementation": 3,
         "Vaccines research, development and implementation": 2,
         "Diagnostics": 0,
         "Clinical trials for disease management": 0
     },
-    "Unspecified phase": {
-        "Category Label": "Unspecified phase",
+    "Unspecified phase / Stage": {
+        "Category Label": "Unspecified phase / Stage",
         "Therapeutics research, development and implementation": 191,
         "Vaccines research, development and implementation": 63,
         "Diagnostics": 35,
@@ -1039,20 +1032,12 @@ export const clinicalTrialSubCategoriesFallbackData = [
                 "Known Financial Commitments (USD)": 830048519.8999994
             },
             {
-                "Category Value": "6b",
-                "Category Label": "Phase 0",
-                "Grants With Known Financial Commitments": 1,
-                "Grants With Unspecified Financial Commitments": 1,
-                "Total Grants": 2,
-                "Known Financial Commitments (USD)": 237676.5
-            },
-            {
                 "Category Value": "6c",
                 "Category Label": "Phase 1",
-                "Grants With Known Financial Commitments": 17,
-                "Grants With Unspecified Financial Commitments": 9,
-                "Total Grants": 26,
-                "Known Financial Commitments (USD)": 65400559.65
+                "Grants With Known Financial Commitments": 18,
+                "Grants With Unspecified Financial Commitments": 10,
+                "Total Grants": 28,
+                "Known Financial Commitments (USD)": 65638236.15
             },
             {
                 "Category Value": "6d",

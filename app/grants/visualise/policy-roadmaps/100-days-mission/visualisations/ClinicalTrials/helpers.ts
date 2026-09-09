@@ -1,12 +1,14 @@
-import { BarListDatum, prepareBarChartData } from '@/app/helpers/bar-list'
+import { BarListDatum } from '@/app/helpers/bar-list'
+import {
+    clinicalTrialPhaseLabels,
+    diagnosticsStageLabels,
+    isDiagnosticsD1Grant,
+    matchesDiagnosticsStage,
+    trialPhaseLabels,
+    type DevelopmentStageKey,
+} from '@/app/helpers/clinical-trial-phases'
 import selectOptions from '@/data/dist/select-options.json'
 import { sumBy } from 'lodash'
-import { a } from '@react-spring/web'
-
-interface Option {
-    label: string
-    value: string
-}
 
 export interface ClinicalTrialsBarList { 
     "Grants With Known Financial Commitments": number, 
@@ -26,215 +28,155 @@ const desiredResearchAreaOrder = [
     "Clinical characterisation and management"
 ]
 
-// IDs of clinical trial types to include in the Hundred Days Mission visualization.
-const clinicalTrialOptionsToInclude = [
-    '2', // Clinical Trial, Phase I
-    '3', // Clinical Trial, Phase II
-    '4', // Clinical Trial, Phase II
-    '5', // Clinical Trial, Phase IV
-    '7', // Controlled Clinical Trial
-    '8', // Randomized Controlled Trial
+const DIAGNOSTICS_RESEARCH_AREA = 'Diagnostics'
+
+/**
+ * The rows of both views, and how each intervention reaches them.
+ *
+ * Diagnostics awards carry no clinical trial phase, so they are placed by D1
+ * development stage instead; every other research area is placed by its
+ * ClinicalTrial codes. Codes 7 and 8 share the Unspecified row.
+ *
+ * `key` rather than a label because the two views word a row differently: the
+ * collapsed view stacks all four research areas into one row and has to name
+ * both, while the expanded view splits them and can use each area's own wording.
+ *
+ * `categoryValue` is what the expanded view colours and sorts on, so the
+ * diagnostics rows reuse the equivalent ClinicalTrial codes and inherit the same
+ * colour ramp as the other three sections.
+ */
+const phaseRows: {
+    key: DevelopmentStageKey
+    categoryValue: string
+    clinicalTrialCodes: string[]
+    diagnosticsCodes: string[]
+}[] = [
+    { key: 'phase1', categoryValue: '2', clinicalTrialCodes: ['2'], diagnosticsCodes: ['a'] },
+    { key: 'phase2', categoryValue: '3', clinicalTrialCodes: ['3'], diagnosticsCodes: ['b'] },
+    { key: 'phase3', categoryValue: '4', clinicalTrialCodes: ['4'], diagnosticsCodes: ['c'] },
+    { key: 'phase4', categoryValue: '5', clinicalTrialCodes: ['5'], diagnosticsCodes: ['d'] },
+    {
+        key: 'unspecified',
+        categoryValue: '-99',
+        clinicalTrialCodes: ['7', '8'],
+        diagnosticsCodes: ['e', '-99'],
+    },
 ]
 
-// The following labels are to be merged into one label named "Unspecified"
-const keysToMerge = ["Controlled Clinical Trial", "Randomized Controlled Trial"]
+const emptyMetrics = (): ClinicalTrialsBarList => ({
+    'Grants With Known Financial Commitments': 0,
+    'Grants With Unspecified Financial Commitments': 0,
+    'Total Grants': 0,
+    'Known Financial Commitments (USD)': 0,
+})
 
-// Formats clinical trial labels for display or data processing.
-// Convert "Phase I/II/III/IV" into "Phase 1/2/3/4" for consistency and strip prefixes like "Clinical Trial," if present.
-// Return the formatted label.
-const formatClinicalTrialsLabel = (label: string) => {
-    const labelMapping: Record<string, string> = {
-        "Phase I": "Phase 1",
-        "Phase II": "Phase 2",
-        "Phase III": "Phase 3",
-        "Phase IV": "Phase 4",
+/** GrantAmountConverted arrives here as a string, so coerce before comparing. */
+const summarise = (grants: any[]): ClinicalTrialsBarList => {
+    const withAmounts = grants.map(grant => ({
+        ...grant,
+        GrantAmountConverted: Number(grant['GrantAmountConverted']),
+    }))
+
+    return {
+        'Grants With Known Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] > 0).length,
+        'Grants With Unspecified Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] <= 0).length,
+        'Total Grants': withAmounts.length,
+        'Known Financial Commitments (USD)': sumBy(withAmounts, 'GrantAmountConverted'),
     }
-
-    // Get the part after a comma if present, otherwise use the full label
-    const baseLabel = label.includes(',') ? label.split(',')[1].trim() : label
-
-    // Return mapped label if it exists, otherwise return the base label
-    return labelMapping[baseLabel] ?? baseLabel
 }
 
-const prepareHundredDaysClinicalTrialData = (grants: any[]) => {
-    // Get all clinical trial options and keep only those that are relevant for the Hundred Days Mission visualization
-    const filteredClinicalTrialOptions: Option[] = selectOptions['ClinicalTrial']
-        .filter(({ value }) => 
-            clinicalTrialOptionsToInclude.includes(value)
+const addMetrics = (a: ClinicalTrialsBarList, b: ClinicalTrialsBarList): ClinicalTrialsBarList => ({
+    'Grants With Known Financial Commitments': a['Grants With Known Financial Commitments'] + b['Grants With Known Financial Commitments'],
+    'Grants With Unspecified Financial Commitments': a['Grants With Unspecified Financial Commitments'] + b['Grants With Unspecified Financial Commitments'],
+    'Total Grants': a['Total Grants'] + b['Total Grants'],
+    'Known Financial Commitments (USD)': a['Known Financial Commitments (USD)'] + b['Known Financial Commitments (USD)'],
+})
+
+/** The diagnostics awards on one row, independent of research-area tagging. */
+const diagnosticsGrantsForRow = (grants: any[], diagnosticsCodes: string[]) =>
+    grants.filter(grant =>
+        isDiagnosticsD1Grant(grant) && matchesDiagnosticsStage(grant, diagnosticsCodes),
+    )
+
+/**
+ * One row's metrics for one research area.
+ *
+ * The non-diagnostics branch sums its codes separately rather than intersecting
+ * them, so a grant tagged both 7 and 8 keeps being counted twice on the
+ * Unspecified row exactly as it was before.
+ */
+const metricsForRow = (
+    grants: any[],
+    researchAreaLabel: string,
+    researchAreaValue: string,
+    row: (typeof phaseRows)[number],
+): ClinicalTrialsBarList => {
+    if (researchAreaLabel === DIAGNOSTICS_RESEARCH_AREA) {
+        return summarise(diagnosticsGrantsForRow(grants, row.diagnosticsCodes))
+    }
+
+    return row.clinicalTrialCodes
+        .map(code =>
+            summarise(
+                grants.filter(grant =>
+                    grant['ClinicalTrial'].includes(code) &&
+                    grant['HundredDaysMissionResearchArea'].includes(researchAreaValue),
+                ),
+            ),
         )
-    
-    // Loop over each relevant clinical trial option and generate data for the bar chart
-    let clinicalTrialData = filteredClinicalTrialOptions.flatMap(({ label, value }) => {
-        // Filter grants to only those associated with the current clinical trial option
-        const clinicalTrialGrants = grants.filter(grant => grant['ClinicalTrial'].includes(value))
+        .reduce(addMetrics, emptyMetrics())
+}
+
+/**
+ * Research areas to render, keyed off the desired order rather than the select
+ * options: the diagnostics rows no longer depend on research-area tagging, so
+ * that column must survive code '1' dropping out of the filtered subset.
+ *
+ * Diagnostics is the only area that can be resolved without a code. Any other
+ * area whose option is missing is dropped rather than rendered as a column of
+ * zeros, which would read as "no funding" instead of "no data".
+ */
+const researchAreasToRender = (): { label: string; value: string }[] =>
+    desiredResearchAreaOrder.flatMap(label => {
+        const value = researchAreaOptions.find(option => option.label === label)?.value
+
+        if (value === undefined) {
+            return label === DIAGNOSTICS_RESEARCH_AREA ? [{ label, value: '' }] : []
+        }
+
+        return [{ label, value }]
+    })
+
+const prepareHundredDaysClinicalTrialData = (grants: any[]) =>
+    phaseRows.map(row => {
         const researchAreaData: Record<string, ClinicalTrialsBarList> = {}
 
-         // For each research area, process related grants and compute metrics
-        researchAreaOptions.forEach(({ 
-            label: researchAreaLabel, 
-            value: researchAreaValue 
-        }) => {
-            // Filter grants for this research area and convert the grant amount to a number
-            const researchAreaGrants = clinicalTrialGrants
-                .filter(grant => 
-                    grant['HundredDaysMissionResearchArea'].includes(researchAreaValue)
-                ).map(grant => ({
-                ...grant,
-                GrantAmountConverted: Number(grant['GrantAmountConverted']),
-            }))
-
-            // Separate grants into those with known amounts vs unspecified amounts
-            const grantsWithKnownAmounts = researchAreaGrants.filter(grant => grant['GrantAmountConverted'] > 0)
-            const grantsWithUnspecifiedAmounts = researchAreaGrants.filter(grant => grant['GrantAmountConverted'] <= 0)
-
-            // Sum the total committed amount for this research area
-            const moneyCommitted = sumBy(researchAreaGrants, 'GrantAmountConverted')
-            
-            // Store the calculated metrics for this research area
-            researchAreaData[researchAreaLabel] = {
-                'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
-                'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
-                'Total Grants':  researchAreaGrants.length,
-                'Known Financial Commitments (USD)': moneyCommitted,
-            }
+        researchAreasToRender().forEach(({ label, value }) => {
+            researchAreaData[label] = metricsForRow(grants, label, value, row)
         })
 
         return {
-            phase: formatClinicalTrialsLabel(label),
+            phase: clinicalTrialPhaseLabels[row.key],
             researchAreasByClinicalTrialPhase: researchAreaData,
-            totalGrants: Object.values(researchAreaData).reduce((sum, obj) => sum + obj['Total Grants'], 0),
-            totalAmountCommitted: Object.values(researchAreaData).reduce((sum, obj) => sum + obj['Known Financial Commitments (USD)'], 0)
+            totalGrants: sumBy(Object.values(researchAreaData), 'Total Grants'),
+            totalAmountCommitted: sumBy(Object.values(researchAreaData), 'Known Financial Commitments (USD)'),
         }
     })
-    
-    // Filter out any clinical trial phases that should be merged into "Unspecified"
-    const unspecifiedData = clinicalTrialData.filter(({ phase }) =>
-        keysToMerge.includes(phase)
+
+const prepareHundredDaysClinicalTrialSubCategoryData = (grants: any[]) =>
+    Object.fromEntries(
+        researchAreasToRender().map(({ label, value }): [string, BarListDatum[]] => {
+            const rows = phaseRows.map(row => ({
+                'Category Label': label === DIAGNOSTICS_RESEARCH_AREA
+                    ? diagnosticsStageLabels[row.key]
+                    : trialPhaseLabels[row.key],
+                'Category Value': row.categoryValue,
+                ...metricsForRow(grants, label, value, row),
+            }))
+
+            return [label, rows]
+        }),
     )
-
-    if (unspecifiedData.length > 0) {
-        // Initialize an object to accumulate research area metrics across the unspecified phases
-        const mergedResearchAreas: Record<string, ClinicalTrialsBarList> = {}
-
-        // Loop through each phase that needs to be merged
-        unspecifiedData.forEach(({ researchAreasByClinicalTrialPhase }) => {
-            // Loop through each research area in the current phase
-            Object.entries(researchAreasByClinicalTrialPhase).forEach(([key, value]) => {
-                if (!mergedResearchAreas[key]) {
-                    // If this research area hasn't been added yet, copy the current values
-                    mergedResearchAreas[key] = { ...value } 
-                } else {
-                    // Otherwise, sum the metrics into the existing entry
-                    mergedResearchAreas[key]['Grants With Known Financial Commitments'] += value['Grants With Known Financial Commitments']
-                    mergedResearchAreas[key]['Grants With Unspecified Financial Commitments'] += value['Grants With Unspecified Financial Commitments']
-                    mergedResearchAreas[key]['Total Grants'] += value['Total Grants']
-                    mergedResearchAreas[key]['Known Financial Commitments (USD)'] += value['Known Financial Commitments (USD)']
-                }
-            })
-        })
-
-        // Sum the total grants and total committed amounts across all research areas for "Unspecified"
-        const totalGrants = Object.values(mergedResearchAreas).reduce(
-            (sum, obj) => sum + obj['Total Grants'],
-            0
-        )
-
-        const totalAmountCommitted = Object.values(mergedResearchAreas).reduce(
-            (sum, obj) => sum + obj['Known Financial Commitments (USD)'],
-            0
-        )
-
-        // Create a new object representing the "Unspecified" category
-        const unspecified = {
-            phase: "Unspecified",
-            researchAreasByClinicalTrialPhase: mergedResearchAreas,
-            totalGrants,
-            totalAmountCommitted
-        }
-
-        // Add the "Unspecified" object to the clinical trial data
-        clinicalTrialData.push(unspecified)
-    }
-
-
-    // Return the final data, excluding the original phases that were merged
-    return clinicalTrialData.filter(clinicalTrial => !keysToMerge.includes(clinicalTrial['phase']))
-}
-
-const prepareHundredDaysClinicalTrialSubCategoryData = (grants: any[]) => {
-    // Map over each research area to generate clinical trial data for that area        
-    const clinicalTrialSubCategoryData = Object.fromEntries(researchAreaOptions.map(({ label: researchAreaLabel, value }) => {
-        // Filter grants to only those that belong to the current research area
-        const relatedGrants = grants
-            .filter(grant => 
-                grant['HundredDaysMissionResearchArea'].includes(value)
-            )
-        
-        // Initialize an object to accumulate metrics for "Unspecified" trials
-        let unspecifiedClinicalTrialsData: BarListDatum = {
-            "Category Label": "Unspecified",
-            "Category Value": "-99",
-            "Grants With Known Financial Commitments": 0,
-            "Grants With Unspecified Financial Commitments": 0,
-            "Total Grants": 0,
-            "Known Financial Commitments (USD)": 0,
-        }
-        
-         // Prepare the clinical trial data for this research area
-        // 1. Filter to include only the relevant clinical trial options
-        // 2. Format the label
-        // 3. Accumulate metrics for trials that should be merged into "Unspecified"
-        const formattedClinicalTrialData = prepareBarChartData(relatedGrants, 'ClinicalTrial')
-            .filter(clinicalTrial => 
-                clinicalTrialOptionsToInclude.includes(clinicalTrial['Category Value']
-            )).map(( clinicalTrial ) => {
-                const formattedLabel = formatClinicalTrialsLabel(clinicalTrial['Category Label'])
-
-                if (keysToMerge.includes(formattedLabel)) {
-                    // Add metrics to the "Unspecified" object
-                    unspecifiedClinicalTrialsData["Grants With Known Financial Commitments"] += clinicalTrial["Grants With Known Financial Commitments"]
-                    unspecifiedClinicalTrialsData["Grants With Unspecified Financial Commitments"] += clinicalTrial["Grants With Unspecified Financial Commitments"]
-                    unspecifiedClinicalTrialsData["Total Grants"] += clinicalTrial["Total Grants"]
-                    unspecifiedClinicalTrialsData["Known Financial Commitments (USD)"] += clinicalTrial["Known Financial Commitments (USD)"]
-
-                    // Return the original trial for now (will filter out later)
-                    return clinicalTrial
-                } else {
-                    // Return the trial with the formatted label
-                    return {
-                        ...clinicalTrial,
-                        "Category Label": formattedLabel
-                    }
-                }
-            })
-
-        // Remove the trials that were merged into "Unspecified"
-        const clinicalTrialData = formattedClinicalTrialData.filter(
-            (clinicalTrial) => !keysToMerge.includes(formatClinicalTrialsLabel(clinicalTrial["Category Label"]))
-        )
-        
-        clinicalTrialData.sort((a, b) =>
-            Number(a['Category Value']) - Number(b['Category Value'])
-        )
-
-        // Add the aggregated "Unspecified" trial as a single object
-        clinicalTrialData.push(unspecifiedClinicalTrialsData)
-        
-        // Return an entry for Object.fromEntries: [researchAreaLabel, clinicalTrialData]
-        return [
-            researchAreaLabel, 
-            clinicalTrialData
-        ]
-    }))
-    
-    // Re order the data based on the desired order specified by the client
-    const orderedClinicalTrialData = Object.fromEntries(
-        desiredResearchAreaOrder.map(key => [key, clinicalTrialSubCategoryData[key]])
-    )
-
-    return orderedClinicalTrialData
-}
 
 export {
     prepareHundredDaysClinicalTrialData,
