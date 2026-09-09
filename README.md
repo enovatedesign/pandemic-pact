@@ -93,6 +93,7 @@ The generate script fetches publication data from PubMed (via the Europe PMC API
 | `REVALIDATE_API_TOKEN` | Authenticates the CMS revalidation webhook | GitLab CI/CD settings |
 | `KV_REST_API_URL` / `KV_REST_API_TOKEN` | Vercel KV, which backs the "share these filters" links | Vercel project settings |
 | `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container | Vercel project settings |
+| `BUGHERD_API_KEY` | BugHerd feedback sidebar. Rendered only when `VERCEL_ENV` is not `production` | Vercel project settings (Preview + Development scopes) |
 | `SMOKE_BASE_URL` | Deployment the smoke checks and browser tests run against | Set per job in `.gitlab-ci.yml` |
 | `SKIP_DEPLOYMENT_WAIT` | Skip waiting for a new build before smoke testing | Set for feature branches / local runs |
 | `SKIP_ARTEFACT_VERIFICATION` | Skip the post-generate artefact checks | Set in `.env.local` when a dataset was intentionally not built |
