@@ -9,10 +9,10 @@ import hierarchyFilters from '../../../../public/manual-hierarchy-filters.json'
 
 interface Props {
     data: any
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function OutbreakTemplate({data, announcement}: Props) {
+export default function OutbreakTemplate({data, announcements}: Props) {
     const [outbreakLevel, setOutbreakLevel] = useState<number>(3)
     
     const { entry } = data
@@ -38,7 +38,7 @@ export default function OutbreakTemplate({data, announcement}: Props) {
                 title={`OUTBREAK: ${entry.title}`}
                 summary={entry.summary}
                 showSummary={entry.showSummary}
-                announcement={announcement}
+                announcements={announcements}
                 slug={entry.slug}
                 totalsInfoIconText={entry.totalsInfoIconText}
             >

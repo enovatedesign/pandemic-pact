@@ -15,7 +15,7 @@ import RRNAVisualiseTemplate from './template/RRNAVisualiseTemplate';
 
 interface EntryTemplateAndQuery {
     templates: {
-        [key: string]: ComponentType<{data: any, announcement: AnnouncementProps}>,
+        [key: string]: ComponentType<{data: any, announcements: AnnouncementProps[]}>,
     },
     queries: {
         [key: string]: (slug: string, entryType: string, sectionHandle: string, previewToken?: string) => any

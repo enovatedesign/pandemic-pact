@@ -18,10 +18,10 @@ interface Props {
             typeHandle: PolicyRoadmapEntryTypeHandle
         },
     }
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function PandemicIntelligenceTemplate ({ data, announcement }: Props) {
+export default function PandemicIntelligenceTemplate ({ data, announcements }: Props) {
     const { entry } = data
 
     const { richTextSummary, modalLinkText, modalText } = entry
@@ -51,7 +51,7 @@ export default function PandemicIntelligenceTemplate ({ data, announcement }: Pr
     return (
         <PandemicIntelligenceVisualisePageClient
             title={entry.title}
-            announcement={announcement}
+            announcements={announcements}
             summary={summary}
             showSummary={entry.showSummary}
             typeHandle={entry.typeHandle}

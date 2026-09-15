@@ -25,7 +25,7 @@ import StudiesByDomainAndStudyPopulationCard from '@/app/components/RrnaVisualis
 interface RrnaVisualisPageClientProps {
     title: string
     summary?: string | ReactNode
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
     children?: ReactNode
     bottomAccordion?: {
         accordionHeading: string
@@ -36,7 +36,7 @@ interface RrnaVisualisPageClientProps {
 const RrnaVisualisePageClient = ({
     title,
     summary,
-    announcement,
+    announcements,
     bottomAccordion,
     children
 }: RrnaVisualisPageClientProps) => {
@@ -196,7 +196,7 @@ const RrnaVisualisePageClient = ({
                     showSummary={true}
                     summary={summary}
                     sidebar={sidebar}
-                    announcement={announcement}
+                    announcements={announcements}
                 >
                     <ScrollJumpBar items={rrnaVisualiseCardData} />
 

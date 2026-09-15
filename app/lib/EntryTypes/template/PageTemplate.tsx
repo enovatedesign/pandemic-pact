@@ -6,10 +6,10 @@ import { AnnouncementProps } from "@/app/helpers/types"
 
 interface Props {
     data: any
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function PageTemplate({ data, announcement }: Props) {
+export default function PageTemplate({ data, announcements }: Props) {
     const { entry } = data
 
     return (
@@ -19,7 +19,7 @@ export default function PageTemplate({ data, announcement }: Props) {
                 summary={entry.summary}
                 showSummary={entry.showSummary}
                 outbreak={entry.outbreak}
-                announcement={announcement}
+                announcements={announcements}
             >
                 <Matrix blocks={entry.bodyContent} />
             </Layout>

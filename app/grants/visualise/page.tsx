@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { fetchMetadataFromCraft } from "../../helpers/cms-page"
-import { queryAnnouncementEntry } from "../../helpers/announcement-query"
+import { queryAnnouncements } from "../../helpers/announcement-query"
 import VisualisePageClient from "./VisualisePageClient"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,13 +9,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Visualise() {
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
 
     return (
         <VisualisePageClient 
             title="Interactive Charts"
             summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
-            announcement={announcement}
+            announcements={announcements}
         />
     ) 
 }

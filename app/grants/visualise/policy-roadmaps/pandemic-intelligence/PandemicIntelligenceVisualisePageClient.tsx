@@ -31,7 +31,7 @@ interface VisualisationPageProps {
     title: string
     summary?: string | ReactNode
     showSummary?: boolean
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
     children?: ReactNode
     typeHandle: PolicyRoadmapEntryTypeHandle
 }
@@ -40,7 +40,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
     title,
     summary,
     showSummary = true,
-    announcement,
+    announcements,
     children,
     typeHandle
 }: VisualisationPageProps) => {
@@ -174,7 +174,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                     showSummary={showSummary}
                     summary={summary}
                     sidebar={sidebar}
-                    announcement={announcement}
+                    announcements={announcements}
                     mastheadStyle='policy-roadmap'
                 >
                     <VisualisationJumpMenu

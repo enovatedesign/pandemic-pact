@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import type {Metadata, ResolvingMetadata} from 'next'
 
 import { fetchMetadataFromCraft, Parameters } from "../../helpers/cms-page"
-import { queryAnnouncementEntry } from "../../helpers/announcement-query"
+import { queryAnnouncements } from "../../helpers/announcement-query"
 
 import ExplorePageClient from "./ExplorePageClient"
 
@@ -20,11 +20,11 @@ export default async function Explore() {
     //  https://nextjs.org/docs/messages/deopted-into-client-rendering
     //  TODO work out what to do with the `Suspense` `fallback`
 
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <ExplorePageClient announcement={announcement}/>
+            <ExplorePageClient announcements={announcements}/>
         </Suspense>
     ) 
 }
