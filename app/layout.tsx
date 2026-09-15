@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import './css/globals.css'
 import font from './globals/font'
 import { GoogleTagManager } from '@next/third-parties/google'
@@ -18,7 +19,7 @@ export const viewport: Viewport = {
 export default function RootLayout({
     children,
 }: {
-    children: React.ReactNode
+    children: ReactNode
 }) {
     const classes: string = `overflow-x-hidden ${font.className}`
     const gtmId: string|undefined = process.env.NEXT_PUBLIC_GTM_ID
@@ -30,8 +31,12 @@ export default function RootLayout({
         ? process.env.BUGHERD_API_KEY
         : undefined
 
+    // `data-scroll-behavior` is what keeps route changes jumping to the top rather
+    // than smooth-scrolling. Next 16 stopped overriding a global
+    // `scroll-behavior: smooth` (here Tailwind's `scroll-smooth`) during navigation,
+    // and only restores the old behaviour when this attribute is present.
     return (
-        <html lang="en" className="scroll-smooth">
+        <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
             {gtmId && <GoogleTagManager gtmId={gtmId} />}
             <body className={classes}>
                 {children}

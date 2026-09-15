@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (token) {
-        draftMode().enable()
+        (await draftMode()).enable()
 
         return new Response(null, {
             status: 307,

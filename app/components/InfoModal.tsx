@@ -1,18 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
+import { useState, ReactNode } from 'react'
+import { Dialog, DialogPanel } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/solid'
 import Button from './Button'
 import { defaultProseClasses } from '../helpers/prose-classes'
 
 interface InfoModalProps {
-    children: React.ReactNode, 
-    customButton?: React.ReactNode, 
+    children: ReactNode, 
+    customButton?: ReactNode, 
     customButtonClasses?: string,
     marginX?: boolean,
     iconSize?: string,
-    customCloseButton?: React.ReactNode
+    customCloseButton?: ReactNode
     removeSpaceY?: boolean
     iconColour?: string
 }
@@ -59,7 +59,7 @@ export default function InfoModal({
                 className="relative z-[80]"
             >
                 <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6 overflow-scroll">
-                    <Dialog.Panel className={dialogPanelClasses}>
+                    <DialogPanel className={dialogPanelClasses}>
                         
                         <div className={defaultProseClasses({ marginX: marginX })}>
                             {children}
@@ -81,7 +81,7 @@ export default function InfoModal({
                                 </Button>
                             </div>
                         )}
-                    </Dialog.Panel>
+                    </DialogPanel>
                 </div>
             </Dialog>
         </>

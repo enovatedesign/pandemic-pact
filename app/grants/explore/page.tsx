@@ -1,16 +1,12 @@
 import { Suspense } from "react"
-import type {Metadata, ResolvingMetadata} from 'next'
+import type { Metadata } from 'next'
 
-import { fetchMetadataFromCraft, Parameters } from "../../helpers/cms-page"
+import { fetchMetadataFromCraft } from "../../helpers/cms-page"
 import { queryAnnouncements } from "../../helpers/announcement-query"
 
 import ExplorePageClient from "./ExplorePageClient"
 
-type generateMetadataProps = {
-    params: Parameters
-}
-
-export async function generateMetadata({ params }: generateMetadataProps, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     return fetchMetadataFromCraft('grants')
 }
 

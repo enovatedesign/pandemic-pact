@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, ChangeEvent } from 'react'
 import { debounce } from 'lodash'
 import { SearchIcon, XIcon } from '@heroicons/react/solid'
 
@@ -113,7 +113,7 @@ export default function ClinicalTrialsSearchInput({
                         <input
                             type="search"
                             placeholder="Search..."
-                            onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 setLocalSearchQuery(event.target.value)
                             }
                             value={localSearchQuery}

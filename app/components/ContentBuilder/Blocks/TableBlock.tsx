@@ -1,6 +1,6 @@
 import BlockWrapper from "../BlockWrapper"
 import { useInView, animated } from '@react-spring/web';
-import '/app/css/components/breakout.css'
+import '../../../css/components/breakout.css'
 
 type Props = {
     block: {

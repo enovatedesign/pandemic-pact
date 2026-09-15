@@ -36,36 +36,36 @@ export async function GET(request: NextRequest) {
   const grantCommitted = grant.GrantAmountConverted ?? null
   const amountCommitted = grantCommitted > 0 ? "$" + grantCommitted.toLocaleString() : null
 
-  const regularFontData = await fetch(
-    new URL("/public/fonts/regular-figtree.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  // Fonts are fetched over HTTP from the deployment itself, the same way the grant
+  // JSON above is. They were `new URL("/public/...", import.meta.url)`, which relied
+  // on webpack rewriting them into asset URLs; Turbopack — the default bundler from
+  // Next 16 — rejects server-relative imports outright. Note the paths lose the
+  // `public/` prefix, because that directory *is* the web root.
+  const asset = (path: string) => fetch(`${url}${path}`).then((res) => res.arrayBuffer());
 
-  const boldFontData = await fetch(
-    new URL("/public/fonts/bold-figtree.ttf", import.meta.url)
-    ).then((res) => res.arrayBuffer());
-
-  const mediumFontData = await fetch(
-    new URL("/public/fonts/medium-figtree.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
-
-  const backgroundImageData = await fetch(
-    new URL("/public/open-graph-background.jpg", import.meta.url)
-  ).then((res) => res.arrayBuffer());
-
-  const backgroundBase64ImageData = Buffer.from(backgroundImageData).toString("base64");
+  const [regularFontData, boldFontData, mediumFontData] = await Promise.all([
+    asset("/fonts/regular-figtree.ttf"),
+    asset("/fonts/bold-figtree.ttf"),
+    asset("/fonts/medium-figtree.ttf"),
+  ]);
 
   try {
     return new ImageResponse(
       (
-        <div tw="flex">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            width="1200"
-            height="630"
-            src={`data:image/jpeg;base64,${backgroundBase64ImageData}`}
-            alt="Open Graph Image"
-            tw="-z-1 absolute"
-          />
+        <div
+          tw="flex"
+          // The background is a `backgroundImage`, not an absolutely-positioned
+          // `<img>`. Satori silently drops that `<img>` — it rendered a blank white
+          // canvas with the (white) title invisible on it — whether the source was a
+          // data URI or a URL. A background on the root element is the shape Satori
+          // reliably paints.
+          style={{
+            width: 1200,
+            height: 630,
+            backgroundImage: `url(${url}/open-graph-background.jpg)`,
+            backgroundSize: "1200px 630px",
+          }}
+        >
           <div tw="flex flex-col items-start justify-start pt-[80px] pl-[288px] pr-[40px]">
             <h1
               tw={`text-white ${title.length < 100 ? "text-5xl" : "text-4xl"}`}

@@ -1,5 +1,6 @@
-import { ElementType, ReactNode, useState, useContext } from 'react'
-import { Tab } from '@headlessui/react'
+import { ReactNode, useState, useContext } from 'react'
+import type { IconComponent } from '../../helpers/types'
+import { Tab, TabGroup, TabList } from '@headlessui/react'
 import { RrnaFilterContext } from '../../helpers/filters'
 import ExportMenu from '../ExportMenu/ExportMenu'
 import InfoModal from '../InfoModal'
@@ -17,7 +18,7 @@ interface Props {
     infoModalContents?: ReactNode
     children?: ReactNode
     tabs?: Array<{
-        tab: { icon: ElementType; label: string }
+        tab: { icon: IconComponent; label: string }
         content: ReactNode
     }>
     tabPrefixLabel?: string
@@ -120,8 +121,8 @@ export default function RrnaVisualisationCard({
                             <div className="flex flex-col items-center md:flex-row gap-2">
                                 {tabPrefixLabel && <p>{tabPrefixLabel}</p>}
 
-                                <Tab.Group onChange={setSelectedTabIndex}>
-                                    <Tab.List className="flex text-center gap-x-1 rounded-lg bg-gray-100 p-1">
+                                <TabGroup onChange={setSelectedTabIndex}>
+                                    <TabList className="flex text-center gap-x-1 rounded-lg bg-gray-100 p-1">
                                         {tabs.map(({ tab }, index) => (
                                             <Tab
                                                 key={`${id}-tab-${index}`}
@@ -143,8 +144,8 @@ export default function RrnaVisualisationCard({
                                                 </div>
                                             </Tab>
                                         ))}
-                                    </Tab.List>
-                                </Tab.Group>
+                                    </TabList>
+                                </TabGroup>
                             </div>
                         )}
                     </div>

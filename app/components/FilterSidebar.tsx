@@ -30,7 +30,7 @@ interface FilterSidebarProps {
     totalsInfoIconText?: string
 }
 
-export function IndentMultiSelect({children}: {children: React.ReactNode}) {
+export function IndentMultiSelect({children}: {children: ReactNode}) {
     return (
         <div className="flex gap-2 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-6 fill-current text-primary">

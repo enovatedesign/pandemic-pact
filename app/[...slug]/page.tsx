@@ -10,19 +10,21 @@ import {
 import { queryAnnouncements } from '../helpers/announcement-query'
 
 type generateMetadataProps = {
-    params: Parameters
+    params: Promise<Parameters>
 }
 
 export async function generateMetadata({ params }: generateMetadataProps, parent: ResolvingMetadata): Promise<Metadata> {
-    return fetchMetadataFromCraft(params.slug.join('/'))
+    const { slug } = await params
+
+    return fetchMetadataFromCraft(slug.join('/'))
 }
 
 export async function generateStaticParams() {
     return generateStaticParamsForCmsPages()
 }
 
-export default async function Page({ params }: { params: Parameters }) {
-    const data = await getPageContent(params)
+export default async function Page({ params }: { params: Promise<Parameters> }) {
+    const data = await getPageContent(await params)
     
     const announcements = await queryAnnouncements()
 

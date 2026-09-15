@@ -10,7 +10,8 @@ http://www.pandemicpact.org/
 
 This project uses the following technologies and packages:
 
--   [Next.js](https://nextjs.org)
+-   [Next.js](https://nextjs.org) 16 (App Router, Turbopack)
+-   [React](https://react.dev) 19
 -   [Vercel](https://vercel.com)
 -   [Typescript](https://www.typescriptlang.org)
 -   [OpenSearch](https://opensearch.org)
@@ -229,7 +230,7 @@ You can run both of them at once:
 npm run lint
 ```
 
-If, for some reason, you need to run the TypeScript compiler _without_ running the NextJS linter:
+If, for some reason, you need to run the TypeScript compiler _without_ running ESLint:
 
 ```bash
 npx tsc
@@ -237,19 +238,15 @@ npx tsc
 
 The TypeScript compiler will print **no output** if there are no errors.
 
-To run the NextJS Linter _without_ running the TypeScript compiler:
+To run ESLint _without_ running the TypeScript compiler:
 
 ```bash
-npx next lint
+npx eslint .
 ```
 
-Unlike the TypeScript compiler, the linter will print a success message if there are no issues:
+Next 16 removed the `next lint` command, so linting goes through the ESLint CLI directly, configured by `eslint.config.mjs` (flat config). ESLint prints nothing when there are no problems.
 
-```
-✔ No ESLint warnings or errors
-```
-
-A husky pre-commit hook runs `npm run lint` before each commit. Its whole-app `tsc` needs the generated data to be present, since the app statically imports JSON from `data/dist` and `public/data` — which is why CI runs `next lint` on its own in the `test` stage and leaves that typecheck to Vercel's `next build`, where the data exists.
+A husky pre-commit hook runs `npm run lint` before each commit. Its whole-app `tsc` needs the generated data to be present, since the app statically imports JSON from `data/dist` and `public/data` — which is why CI runs `eslint` on its own in the `test` stage and leaves that typecheck to Vercel's `next build`, where the data exists.
 
 ## Testing
 
@@ -317,7 +314,7 @@ Notes:
 
 ### How CI wires this together
 
-`.gitlab-ci.yml` runs `next lint` and `npm test` in the `test` stage, which gates the deploy jobs. The `verify` stage then runs `npm run test:smoke` and `npm run test:e2e` against the deployment — the same commands documented above, so CI and a local run cannot drift apart. Those post-deploy checks cannot gate an async deploy hook, but a failure fails the pipeline, which is the alert.
+`.gitlab-ci.yml` runs `eslint` and `npm test` in the `test` stage, which gates the deploy jobs. The `verify` stage then runs `npm run test:smoke` and `npm run test:e2e` against the deployment — the same commands documented above, so CI and a local run cannot drift apart. Those post-deploy checks cannot gate an async deploy hook, but a failure fails the pipeline, which is the alert.
 
 ## Further Documentation
 
@@ -326,6 +323,7 @@ Notes:
 | [`docs/decoupled-build.md`](docs/decoupled-build.md) | How deploys actually work: GitLab runs the heavy generate, Vercel only ever takes the cached path. Per-environment S3 prefixes and OpenSearch indexes, the freshness gate, and the safety properties that make it fail closed. |
 | [`docs/generate-performance.md`](docs/generate-performance.md) | Constraints to preserve when changing `npm run generate` — why `extractCheckboxAndPrefixFields` is single-pass, why its slower predecessors are deliberately kept, and the byte-parity check any generate change must pass. |
 | [`docs/clinical-trials-follow-ups.md`](docs/clinical-trials-follow-ups.md) | Deferred structural and efficiency items from the Clinical Trials review. None is a live bug. |
+| [`docs/nextjs-16-upgrade.md`](docs/nextjs-16-upgrade.md) | Staged tracker for the `next@14` → `next@16` / React 19 migration: target versions, the test backstop that goes in first, and the Next 15/16 breaking changes this codebase does and does not hit. Delete once the upgrade lands. |
 
 Open follow-ups live next to the thing they concern, not in a central backlog: build-pipeline items under **Known follow-ups** in `decoupled-build.md` and **Remaining follow-up** in `generate-performance.md`, and the app-level ones in `clinical-trials-follow-ups.md`. Each is stated once, in the doc that explains the mechanism behind it.
 

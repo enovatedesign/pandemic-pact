@@ -4,7 +4,7 @@ import Image from 'next/image';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {FreeMode, Navigation, Pagination, Autoplay, EffectFade, Thumbs} from "swiper/modules"
 import {Swiper as SwiperType} from "swiper/types"
-import '/app/css/components/swiper.css'
+import '../../../css/components/swiper.css'
 
 // Import Swiper styles
 import 'swiper/css';
