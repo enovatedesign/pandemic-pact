@@ -2,6 +2,12 @@
 const nextConfig = {
     images: {
         dangerouslyAllowSVG: true,
+        // Next 16 raised the default from 60s to 4 hours. Pinned to the old value to
+        // keep the upgrade behaviour-neutral: CMS images are replaced at the same URL,
+        // so a 4-hour floor would leave a swapped image stale on the page for hours.
+        // Raising it is a cost/freshness trade worth making deliberately, not as a
+        // side effect of the framework bump.
+        minimumCacheTTL: 60,
         remotePatterns: [
             {
                 protocol: 'https',

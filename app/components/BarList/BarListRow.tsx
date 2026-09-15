@@ -31,7 +31,7 @@ export default function BarListRow({ dataIndex }: Props) {
     
     const onChartMouseEnterOrMove = (
         nextState: any,
-        event: MouseEvent<SVGPathElement>
+        event: MouseEvent<SVGGraphicsElement>
     ) => {
         if (nextState?.activePayload) {
             tooltipRef?.current?.open({

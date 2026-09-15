@@ -109,7 +109,11 @@ function countLines(pathname: string): Promise<number> {
         let lastByte = 0
 
         fs.createReadStream(pathname)
-            .on('data', (chunk: Buffer) => {
+            .on('data', data => {
+                // The `data` signature is `string | Buffer`, but the string arm only
+                // applies once setEncoding has been called, and this stream sets none.
+                const chunk = data as Buffer
+
                 for (let i = 0; i < chunk.length; i++) {
                     if (chunk[i] === 0x0a) count++
                 }

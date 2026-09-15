@@ -9,10 +9,12 @@ export default async function Page({
     params,
     searchParams,
 }: {
-    params: Parameters
-    searchParams: { token: string }
+    params: Promise<Parameters>
+    searchParams: Promise<{ token: string }>
 }) {
-    const data = await getPageContent(params, searchParams.token)
+    const { token } = await searchParams
+
+    const data = await getPageContent(await params, token)
     
     const announcements = await queryAnnouncements()
     

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import Image from "next/image"
 import NewsTags from "../News/NewsTags"
 import RichText from "./RichText"
@@ -9,8 +10,8 @@ import dayjs from 'dayjs'
 type Props = {
     entry: any,
     tags?: boolean, 
-    animatedIcon?: React.ReactNode,
-    cardBottomContent?: React.ReactNode
+    animatedIcon?: ReactNode,
+    cardBottomContent?: ReactNode
     image?: {
         altText: string,
         url: string, 
@@ -22,7 +23,7 @@ type Props = {
     fallbackImageAspectRatio?: string
 }
 
-const CardBottomContent = ({ cardBottomContent }: { cardBottomContent?: React.ReactNode }) => {
+const CardBottomContent = ({ cardBottomContent }: { cardBottomContent?: ReactNode }) => {
     return (
         <>  
             {cardBottomContent}

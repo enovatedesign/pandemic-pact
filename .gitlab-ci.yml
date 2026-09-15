@@ -10,18 +10,19 @@ stages:
 # Lint and unit tests. Gates every deploy job below: a failure here means the
 # deploy stage never runs and no Vercel hook is fired.
 #
-# Deliberately `next lint` rather than `npm run lint`: the latter also runs a
+# Deliberately bare `eslint` rather than `npm run lint`: the latter also runs a
 # whole-app `tsc`, and the app statically imports generated JSON (data/dist,
 # public/data) that only exists after `npm run generate` — which this job does
 # not run, and should not. That typecheck is not skipped, just moved: Vercel's
 # `next build` runs it with the data present and ignoreBuildErrors set to false.
+# (Was `next lint` until the Next 16 upgrade, which removed that command.)
 # `npm test` compiles tsconfig-scripts, which needs no generated data.
 unit_tests:
     stage: test
     before_script:
         - npm ci --cache .npm --prefer-offline
     script:
-        - npx next lint
+        - npx eslint .
         - npm test
     rules:
         - if: $CI_PIPELINE_SOURCE == "schedule"

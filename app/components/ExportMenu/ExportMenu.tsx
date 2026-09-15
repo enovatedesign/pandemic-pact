@@ -1,5 +1,5 @@
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Menu, Transition, MenuButton, MenuItems } from '@headlessui/react'
+import { Fragment, Context } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import ExportImageMenuItem from './ExportImageMenuItem'
 import ExportDataMenuItem from './ExportDataMenuItem'
@@ -17,7 +17,7 @@ interface Props {
     imageFilename: string
     filenameToFetch?: string
     filteredFileName?: string
-    filterContext?: React.Context<any>
+    filterContext?: Context<any>
     dataKey?: string
     filterIdKey?: string
     /**
@@ -31,13 +31,13 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <MenuButton className="inline-flex w-full justify-center rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                     Export
                     <ChevronDownIcon
                         className="ml-2 -mr-1 h-5 w-5 text-gray-600"
                         aria-hidden="true"
                     />
-                </Menu.Button>
+                </MenuButton>
             </div>
 
             <Transition
@@ -51,7 +51,7 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
             >
                 {/* Wider when a subset item is present — labels carry the tab
                     name ("Export Therapeutics Data (CSV)") and wrap at w-56. */}
-                <Menu.Items className={`absolute right-0 mt-2 ${subsetExport ? 'w-72' : 'w-56'} origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50`}>
+                <MenuItems className={`absolute right-0 mt-2 ${subsetExport ? 'w-72' : 'w-56'} origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50`}>
                     <ExportImageMenuItem
                         chartSelector={chartSelector}
                         imageFilename={imageFilename}
@@ -78,7 +78,7 @@ export default function ExportMenu({ chartSelector, imageFilename, filenameToFet
                             className="rounded-b-md"
                         />
                     )}
-                </Menu.Items>
+                </MenuItems>
             </Transition>
         </Menu>
     )

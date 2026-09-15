@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, Context } from 'react'
 import { DownloadIcon } from '@heroicons/react/solid'
 import { GlobalFilterContext } from '../../helpers/filters'
 import {
@@ -22,7 +22,7 @@ export default function ExportDataMenuItem({
 }: {
     filenameToFetch?: string,
     filteredFileName?: string,
-    filterContext?: React.Context<any>,
+    filterContext?: Context<any>,
     dataKey?: string,
     filterIdKey?: string,
     label?: string,

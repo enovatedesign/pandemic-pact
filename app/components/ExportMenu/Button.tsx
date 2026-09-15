@@ -1,11 +1,12 @@
-import {ElementType} from 'react'
-import {Menu} from '@headlessui/react'
+import { MouseEvent } from 'react'
+import type { IconComponent } from '../../helpers/types'
+import { MenuItem } from '@headlessui/react'
 import LoadingSpinner from '../LoadingSpinner'
 
 interface Props {
-    Icon: ElementType
+    Icon: IconComponent
     label: string
-    onClick: (event: React.MouseEvent<HTMLElement>) => void
+    onClick: (event: MouseEvent<HTMLElement>) => void
     loading?: boolean
     className?: string
 }
@@ -14,13 +15,14 @@ export default function Button({Icon, label, onClick, className, loading}: Props
     const iconClasses = "mr-2 h-5 w-5"
 
     return (
-        <Menu.Item
+        <MenuItem
             disabled={loading}
         >
-            {({active, disabled}) => (
+            {/* Headless UI 2 renamed the MenuItem render-prop `active` to `focus`. */}
+            {({focus, disabled}) => (
                 <button
                     className={`
-                        ${(active && !disabled) ? 'bg-brand-teal-700 text-white' : 'text-gray-900'}
+                        ${(focus && !disabled) ? 'bg-brand-teal-700 text-white' : 'text-gray-900'}
                         ${disabled ? 'cursor-progress' : ''}
                         group flex w-full items-center text-left px-2 py-2 text-sm
                         ${className}
@@ -38,6 +40,6 @@ export default function Button({Icon, label, onClick, className, loading}: Props
                     {label}
                 </button>
             )}
-        </Menu.Item >
+        </MenuItem >
     )
 }

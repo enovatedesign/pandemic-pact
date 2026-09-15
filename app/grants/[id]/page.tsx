@@ -19,7 +19,7 @@ import Publications from './Publications';
 import '../../css/components/highlighted-search-results.css';
 
 type Props = {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 };
 
 /**
@@ -142,7 +142,9 @@ const loadGrant = async (id: string) => {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const grant = await loadGrant(params.id)
+    const { id } = await params
+
+    const grant = await loadGrant(id)
 
     if (!grant) return { ...defaultMetaData }
 
@@ -154,7 +156,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
     }
 
-    let metaTitle = `${params.id} | Pandemic PACT Tracker`
+    let metaTitle = `${id} | Pandemic PACT Tracker`
     
     const startYear = grant.GrantStartYear
     const altStartYear = startYear > 0 && numDigits(startYear) !== null ? startYear : null
@@ -184,7 +186,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title: metaTitle,
             images: [
                 {
-                    url: `/api/og?grant=${params.id}`,
+                    url: `/api/og?grant=${id}`,
                     alt: altText.replace('..', '.'),
                     width: 1200,
                     height: 630,
@@ -209,8 +211,10 @@ export async function generateStaticParams() {
     return [];
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const grant = await loadGrant(params.id)
+export default async function Page({ params }: Props) {
+    const { id } = await params
+
+    const grant = await loadGrant(id)
 
     if (!grant) {
         notFound()
