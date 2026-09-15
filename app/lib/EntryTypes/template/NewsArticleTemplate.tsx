@@ -7,10 +7,10 @@ import Matrix from "../../../components/ContentBuilder"
 
 interface Props {
     data: any
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function NewsArticleTemplate({data, announcement}: Props) {
+export default function NewsArticleTemplate({data, announcements}: Props) {
     const {entry} = data
     
     return (
@@ -20,7 +20,7 @@ export default function NewsArticleTemplate({data, announcement}: Props) {
                 summary={entry.summary}
                 showSummary={true}
                 outbreak={entry.outbreak}
-                announcement={announcement}
+                announcements={announcements}
             >
                 <Matrix blocks={entry.bodyContent} />
             </Layout>

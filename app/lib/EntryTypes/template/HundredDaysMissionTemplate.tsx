@@ -15,10 +15,10 @@ interface Props {
             typeHandle: PolicyRoadmapEntryTypeHandle
         },
     }
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function  HundredDaysMissionTemplate ({ data, announcement }: Props) {
+export default function  HundredDaysMissionTemplate ({ data, announcements }: Props) {
     const { entry } = data
     
     const summary = (
@@ -35,7 +35,7 @@ export default function  HundredDaysMissionTemplate ({ data, announcement }: Pro
     return (
         <HundredDaysMissionVisualisePageClient 
             title={entry.title}
-            announcement={announcement}
+            announcements={announcements}
             summary={summary}
             showSummary={entry.showSummary} 
             typeHandle={entry.typeHandle}

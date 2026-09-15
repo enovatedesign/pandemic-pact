@@ -33,7 +33,7 @@ interface VisualisationPageProps {
     title: string
     summary?: string | ReactNode
     showSummary?: boolean
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
     children?: ReactNode
     typeHandle: PolicyRoadmapEntryTypeHandle
 }
@@ -42,7 +42,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
     title,
     summary,
     showSummary = true,
-    announcement,
+    announcements,
     children,
     typeHandle
 }: VisualisationPageProps) => {
@@ -185,7 +185,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                     showSummary={showSummary}
                     summary={summary}
                     sidebar={sidebar}
-                    announcement={announcement}
+                    announcements={announcements}
                     mastheadStyle='policy-roadmap'
                 >
                     <VisualisationJumpMenu

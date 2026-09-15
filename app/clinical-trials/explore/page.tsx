@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
 
-import { queryAnnouncementEntry } from '../../helpers/announcement-query'
+import { queryAnnouncements } from '../../helpers/announcement-query'
 import ExplorePageClient from './ExplorePageClient'
 
 export const metadata: Metadata = {
@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 export default async function ClinicalTrialsExplore() {
     //  Note that the `Suspense` here is to suppress the following error:
     //  https://nextjs.org/docs/messages/deopted-into-client-rendering
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <ExplorePageClient announcement={announcement} />
+            <ExplorePageClient announcements={announcements} />
         </Suspense>
     )
 }

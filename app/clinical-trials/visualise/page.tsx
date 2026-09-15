@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { queryAnnouncementEntry } from '../../helpers/announcement-query'
+import { queryAnnouncements } from '../../helpers/announcement-query'
 import VisualisePageClient from './VisualisePageClient'
 
 export const metadata: Metadata = {
@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 }
 
 export default async function ClinicalTrialsVisualise() {
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
 
     return (
         <VisualisePageClient
             title="Clinical Research Registrations"
             summary="Visualise registered clinical trials for infectious diseases with pandemic potential using filters and searches."
-            announcement={announcement}
+            announcements={announcements}
         />
     )
 }

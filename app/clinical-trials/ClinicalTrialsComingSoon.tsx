@@ -9,12 +9,12 @@ import { AnnouncementProps } from '../helpers/types'
 interface Props {
     title: string
     summary: string
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function ClinicalTrialsComingSoon({ title, summary, announcement }: Props) {
+export default function ClinicalTrialsComingSoon({ title, summary, announcements }: Props) {
     return (
-        <Layout title={title} summary={summary} announcement={announcement}>
+        <Layout title={title} summary={summary} announcements={announcements}>
             <div className="container my-12 lg:my-20">
                 <div className="mx-auto max-w-2xl bg-white rounded-2xl border-2 border-gray-200 p-8 lg:p-12 text-center space-y-6">
                     <span className="inline-flex items-center justify-center size-16 rounded-full bg-primary/10 text-primary">

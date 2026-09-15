@@ -1,5 +1,5 @@
 import HomepageClient from "./HomepageClient"
-import { queryAnnouncementEntry } from "./helpers/announcement-query"
+import { queryAnnouncements } from "./helpers/announcement-query"
 import { fetchMetadataFromCraft, Parameters } from "./helpers/cms-page"
 import type {Metadata, ResolvingMetadata} from 'next'
 
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: generateMetadataProps, parent
 
 export default async function Explore() {
 
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
 
-    return <HomepageClient announcement={announcement}/>
+    return <HomepageClient announcements={announcements}/>
 }
