@@ -27,10 +27,10 @@ import InterventionByPathogenFamily from './visualisations/InterventionByPathoge
 interface Props {
     title: string
     summary?: string
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-function VisualisePageClientComponent({ title, summary, announcement }: Props) {
+function VisualisePageClientComponent({ title, summary, announcements }: Props) {
     const [completeDataset, setCompleteDataset] = useState<any[]>([])
     const [loadingDataset, setLoadingDataset] = useState(true)
 
@@ -150,7 +150,7 @@ function VisualisePageClientComponent({ title, summary, announcement }: Props) {
                     title={title}
                     summary={summary}
                     sidebar={sidebar}
-                    announcement={announcement}
+                    announcements={announcements}
                 >
                     <ScrollJumpBar items={clinicalTrialsJumpCards} />
 

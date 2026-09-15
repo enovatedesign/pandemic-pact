@@ -41,7 +41,7 @@ interface VisualisationPageProps {
     children?: ReactNode
     diseaseLabel?: DiseaseLabel
     outbreakId?: string
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
     slug?: string
     totalsInfoIconText?: string
 }
@@ -54,7 +54,7 @@ const VisualisePageClientComponent = ({
     children,
     diseaseLabel,
     outbreakId,
-    announcement,
+    announcements,
     slug,
     totalsInfoIconText
 }: VisualisationPageProps) => {
@@ -195,7 +195,7 @@ const VisualisePageClientComponent = ({
                     summary={summary}
                     sidebar={sidebar}
                     outbreak={outbreak}
-                    announcement={announcement}
+                    announcements={announcements}
                 >
                     <VisualisationJumpMenu
                         outbreak={outbreak}

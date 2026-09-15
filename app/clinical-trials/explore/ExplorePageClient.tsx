@@ -43,10 +43,10 @@ import ClinicalTrialsCoverageInfoModal from '../ClinicalTrialsCoverageInfoModal'
 const CONSUMED_PARAMETERS = [...DEEP_LINK_PARAMETERS, 'share']
 
 interface Props {
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function ExplorePageClient({ announcement }: Props) {
+export default function ExplorePageClient({ announcements }: Props) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -289,7 +289,7 @@ export default function ExplorePageClient({ announcement }: Props) {
                     />
                 </div>
             }
-            announcement={announcement}
+            announcements={announcements}
         >
             <div className="container mx-auto my-6 lg:my-12">
                 <div className="flex flex-col space-y-6 lg:space-y-8 mt-6">

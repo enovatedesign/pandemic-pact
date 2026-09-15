@@ -8,10 +8,10 @@ import { defaultProseClasses } from "@/app/helpers/prose-classes"
 
 interface Props {
     data: any
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function RRNAVisualiseTemplate({data, announcement}: Props) {
+export default function RRNAVisualiseTemplate({data, announcements}: Props) {
     const { entry } = data
     const { title, bodyContent, bottomAccordion } = entry
     const summary = (
@@ -28,7 +28,7 @@ export default function RRNAVisualiseTemplate({data, announcement}: Props) {
             <RrnaVisualisePageClient
                 title={title}
                 summary={summary}
-                announcement={announcement}
+                announcements={announcements}
                 bottomAccordion={bottomAccordion}
             >
                 <Matrix blocks={bodyContent} />

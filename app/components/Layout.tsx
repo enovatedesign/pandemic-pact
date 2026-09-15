@@ -29,7 +29,7 @@ type Props = {
     summary?: string | ReactNode
     showSummary?: boolean
     outbreak?: boolean
-    announcement?: AnnouncementProps
+    announcements?: AnnouncementProps[]
     mastheadStyle?: string
 }
 
@@ -41,7 +41,7 @@ const Layout = ({
     mastheadContent,
     children,
     outbreak = false,
-    announcement,
+    announcements,
     mastheadStyle = 'visualise'
 }: Props) => {
     const [animateImmediately, setAnimateImmediately] = useState(true);
@@ -171,8 +171,8 @@ const Layout = ({
 
                     <div className="w-full relative">
 
-                        {announcement && (
-                            <Announcement announcement={announcement}/>
+                        {announcements && announcements.length > 0 && (
+                            <Announcement announcements={announcements}/>
                         )}
                         
                         <Header

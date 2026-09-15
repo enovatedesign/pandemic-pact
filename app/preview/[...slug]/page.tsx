@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getPageContent, Parameters } from '../../helpers/cms-page'
 
 import PageClient from '../../components/PageClient'
-import { queryAnnouncementEntry } from '@/app/helpers/announcement-query'
+import { queryAnnouncements } from '@/app/helpers/announcement-query'
 
 export default async function Page({
     params,
@@ -14,7 +14,7 @@ export default async function Page({
 }) {
     const data = await getPageContent(params, searchParams.token)
     
-    const announcement = await queryAnnouncementEntry()
+    const announcements = await queryAnnouncements()
     
     if (!data) {
         notFound()
@@ -36,5 +36,5 @@ export default async function Page({
         notFound()
     }
 
-    return <PageClient data={data} announcement={announcement} />
+    return <PageClient data={data} announcements={announcements} />
 }

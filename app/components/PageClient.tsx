@@ -6,10 +6,10 @@ import EntryTypes from '../lib/EntryTypes'
 
 interface Props {
     data: any
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
-export default function PageClient({ data, announcement }: Props) {
+export default function PageClient({ data, announcements }: Props) {
     const Template = EntryTypes.templates[data.entry.typeHandle]
 
     return (
@@ -18,7 +18,7 @@ export default function PageClient({ data, announcement }: Props) {
             uri: data.uri ?? '',
             typeHandle: data.entry.typeHandle ?? '',
         }}>
-            <Template data={data} announcement={announcement} />
+            <Template data={data} announcements={announcements} />
         </CurrentEntry.Provider>
     )
 }

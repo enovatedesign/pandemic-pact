@@ -14,11 +14,12 @@ export interface CardEntryProps {
 export type CardEntriesProps = Array<CardEntryProps>
 
 export interface AnnouncementProps {
+    /** Stable per-notice key for the dismissal cookie; comes from the matrix block. */
+    id: string
     dateUpdated: string
-    announcementPersistent: boolean
-    announcementShow: boolean
-    announcementText?: string
-    announcementTarget?: {
+    persistent: boolean
+    text?: string
+    target?: {
         text?: string
         url?: string
         newWindow: boolean

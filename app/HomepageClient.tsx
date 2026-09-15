@@ -17,12 +17,12 @@ import { AnnouncementProps } from "./helpers/types"
 import useScrollLock from "./hooks/useScrollLock"
 
 interface Props {
-    announcement: AnnouncementProps
+    announcements: AnnouncementProps[]
 }
 
 type PickerMode = 'visualise' | 'explore'
 
-export default function HomepageClient(announcement: Props) {
+export default function HomepageClient({ announcements }: Props) {
 
     const [showMobileNav, setShowMobileNav] = useState(false)
     const [pickerMode, setPickerMode] = useState<PickerMode | null>(null)
@@ -47,7 +47,7 @@ export default function HomepageClient(announcement: Props) {
 
             <div className={`masthead-background ${styles.background} flex flex-col h-full min-h-screen relative pb-24 md:pb-28 lg:pb-12`}>
 
-                <Announcement {...announcement}/>
+                <Announcement announcements={announcements}/>
 
                 <Header className="w-full relative z-20" showMobileNav={showMobileNav} closeMobileNav={() => setShowMobileNav(false)} />
 
