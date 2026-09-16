@@ -1,3 +1,16 @@
+import type { ComponentType, SVGProps } from 'react'
+
+/**
+ * A Heroicons-style icon component, passed around as a value and rendered by the
+ * receiver.
+ *
+ * Deliberately not `ElementType`: from @types/react 19 an unparameterised
+ * `ElementType` resolves its props to `never`, so every `<Icon className=... />`
+ * call site fails to compile. Naming the props the icons actually take fixes that
+ * and keeps the contract honest.
+ */
+export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
+
 export interface CardEntryProps {
     uri?: string,
     url?: string,

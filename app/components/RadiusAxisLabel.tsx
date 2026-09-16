@@ -1,18 +1,20 @@
 import { useRef, useEffect } from 'react'
 
-interface Payload {
-    value: number
-}
-
+/**
+ * Props as Recharts 3 actually supplies them to an axis `tick` renderer.
+ *
+ * Two things changed in Recharts 3 and both are load-bearing here: `cx`/`cy` are no
+ * longer passed at all — nothing used them, they were spread onto the `<text>` where
+ * they are not valid SVG attributes — and `x`/`y` widened to `string | number`, so
+ * they are coerced below rather than assumed numeric.
+ */
 interface RadiusAxisLabelProps {
-    cx: number
-    cy: number
-    x: number
-    y: number
-    payload: Payload
+    x: string | number
+    y: string | number
+    payload: { value?: unknown }
 }
 
-export default function RadiusAxisLabel({ cx, cy, x, y, payload }: RadiusAxisLabelProps) {
+export default function RadiusAxisLabel({ x, y, payload }: RadiusAxisLabelProps) {
     const textElementRef = useRef<SVGTextElement>(null)
 
     useEffect(() => {
@@ -26,12 +28,12 @@ export default function RadiusAxisLabel({ cx, cy, x, y, payload }: RadiusAxisLab
         }
     }, [x, y, payload])
 
-    return payload.value !== 0 && ( 
+    const value = Number(payload.value)
+
+    return value !== 0 && (
         <g className="recharts-layer recharts-polar-radius-axis-tick">
             <text
                 ref={textElementRef}
-                cx={cx}
-                cy={cy}
                 orientation="right"
                 stroke="none"
                 x={x}
@@ -41,10 +43,9 @@ export default function RadiusAxisLabel({ cx, cy, x, y, payload }: RadiusAxisLab
                 fill="#ccc"
             >
                 <tspan x={x} dy="0em">
-                    {payload.value}
+                    {value}
                 </tspan>
             </text>
         </g>
     )
 }
-

@@ -8,7 +8,7 @@ interface CategoryBarsProps {
     setActiveSubCategory: (category: string) => void
     onChartMouseEnterOrMove: (
         nextState: any,
-        event: MouseEvent<SVGPathElement>
+        event: MouseEvent<SVGGraphicsElement>
     ) => void
     onChartMouseLeave: () => void
 }

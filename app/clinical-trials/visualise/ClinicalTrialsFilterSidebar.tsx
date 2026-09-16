@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Dialog } from '@headlessui/react'
+import { Dialog, DialogDescription, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XIcon, InformationCircleIcon } from '@heroicons/react/solid'
 
 import MultiSelect from '../../components/MultiSelect'
@@ -217,11 +217,11 @@ function LinkedTrialsInfoModal({
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-[80]">
             <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-4 sm:p-6 overflow-y-auto">
-                <Dialog.Panel className="relative w-full max-w-2xl rounded-2xl bg-white p-6 sm:p-8 shadow-2xl">
-                    <Dialog.Title className="text-secondary text-xl sm:text-2xl pr-10">
+                <DialogPanel className="relative w-full max-w-2xl rounded-2xl bg-white p-6 sm:p-8 shadow-2xl">
+                    <DialogTitle className="text-secondary text-xl sm:text-2xl pr-10">
                         Linked trials
-                    </Dialog.Title>
-                    <Dialog.Description className="mt-4 text-secondary/80 leading-relaxed">
+                    </DialogTitle>
+                    <DialogDescription className="mt-4 text-secondary/80 leading-relaxed">
                         Linked trials are those that have a primary trial number as a
                         secondary identifier, or a primary trial number named in a
                         &lsquo;child&rsquo; or &lsquo;parent&rsquo; study. However, the
@@ -240,7 +240,7 @@ function LinkedTrialsInfoModal({
                             here
                         </a>
                         .
-                    </Dialog.Description>
+                    </DialogDescription>
 
                     <button
                         type="button"
@@ -250,7 +250,7 @@ function LinkedTrialsInfoModal({
                         <span className="sr-only">Close</span>
                         <XIcon className="size-6" aria-hidden="true" />
                     </button>
-                </Dialog.Panel>
+                </DialogPanel>
             </div>
         </Dialog>
     )

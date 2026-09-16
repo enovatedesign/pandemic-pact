@@ -21,6 +21,21 @@ export default defineConfig({
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
     },
+    /**
+     * Run against a local `next start` when no deployed URL is given.
+     *
+     * Deliberately `npm start` and not `npm run build && npm start`: `prebuild`
+     * chains into `npm run generate`, which downloads a 1.1 GB dataset and reindexes
+     * OpenSearch. Build first, then run the suite.
+     */
+    webServer: process.env.SMOKE_BASE_URL ? undefined : {
+        command: 'npm start',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+        stdout: 'pipe',
+        stderr: 'pipe',
+    },
     projects: [
         {
             name: 'chromium',

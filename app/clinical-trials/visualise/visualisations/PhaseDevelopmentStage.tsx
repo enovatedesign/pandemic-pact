@@ -1,6 +1,7 @@
 'use client'
 
-import { ElementType, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
+import type { IconComponent } from '../../../helpers/types'
 import { BeakerIcon, ClipboardListIcon, SearchIcon } from '@heroicons/react/solid'
 import {
     ResponsiveContainer,
@@ -248,7 +249,7 @@ function PathwayChart({ pathway }: { pathway: Pathway }) {
     )
 }
 
-const PATHWAY_TABS: { pathway: Pathway; icon: ElementType; label: string }[] = [
+const PATHWAY_TABS: { pathway: Pathway; icon: IconComponent; label: string }[] = [
     { pathway: 'vaccines', icon: BeakerIcon, label: 'Vaccines' },
     { pathway: 'therapeutics', icon: ClipboardListIcon, label: 'Therapeutics' },
     { pathway: 'diagnostics', icon: SearchIcon, label: 'Diagnostics' },

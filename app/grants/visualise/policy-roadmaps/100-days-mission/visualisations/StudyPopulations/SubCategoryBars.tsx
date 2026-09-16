@@ -17,7 +17,7 @@ interface SubCategoryBarsProps {
     subCategoryData: SubCategoryData
     onChartMouseEnterOrMove: (
         nextState: any,
-        event: MouseEvent<SVGPathElement>
+        event: MouseEvent<SVGGraphicsElement>
     ) => void
     onChartMouseLeave: () => void
     activeSubCategory: string | null

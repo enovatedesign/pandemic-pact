@@ -28,7 +28,7 @@ const ClinicalTrialsStackedBars = ({
     const { tooltipRef } = useContext(TooltipContext)
     const onChartMouseEnterOrMove = (
         nextState: any,
-        event: MouseEvent<SVGPathElement>,
+        event: MouseEvent<SVGGraphicsElement>,
         formatToDollar: boolean = false
     ) => {
         if (nextState?.activePayload) {

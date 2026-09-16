@@ -14,7 +14,7 @@ import Masthead from './Masthead'
 import PageTitle from './PageTitle'
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 /**
@@ -83,7 +83,9 @@ const getTrialTitle = (trial: any): string =>
     trial.TrialTitle || trial.TrialTitlePublic || trial.TrialTitleScientific || trial.TrialID
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const trial = await loadTrial(params.id)
+    const { id } = await params
+
+    const trial = await loadTrial(id)
 
     if (!trial) return { ...defaultMetaData }
 
@@ -97,7 +99,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const trialTitle = getTrialTitle(trial)
 
-    let metaTitle = `${params.id} | Pandemic PACT Tracker`
+    let metaTitle = `${id} | Pandemic PACT Tracker`
 
     if (trialTitle) {
         metaTitle = `${truncateString(trialTitle, 200)} | Pandemic PACT Tracker`
@@ -137,8 +139,10 @@ export async function generateStaticParams() {
     return []
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const trial = await loadTrial(params.id)
+export default async function Page({ params }: Props) {
+    const { id } = await params
+
+    const trial = await loadTrial(id)
 
     if (!trial) {
         notFound()

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const headersList = headers();
+        const headersList = await headers();
 
         const uri = headersList.get('sender') ?? null;
         const slug = headersList.get('slug') ?? null;
@@ -33,7 +33,9 @@ export async function POST(req: NextRequest) {
             // Because the announcement is used across the site, 
             // we need to revalidate all pages
             console.log('Revalidating all CMS routes via Tag');
-            revalidateTag('cms');
+            // Next 16 requires a cacheLife profile; the single-argument form is a
+            // type error. 'max' keeps the previous stale-while-revalidate behaviour.
+            revalidateTag('cms', 'max');
         }
 
         // Revalidate based on the supplied URI

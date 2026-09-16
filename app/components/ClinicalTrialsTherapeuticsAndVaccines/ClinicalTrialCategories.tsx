@@ -30,7 +30,7 @@ const ClinicalTrialCategories = ({
     
     const onChartMouseEnterOrMove = (
         nextState: any,
-        event: MouseEvent<SVGPathElement>,
+        event: MouseEvent<SVGGraphicsElement>,
         formatToDollar: boolean = false
     ) => {
         if (nextState?.activePayload) {

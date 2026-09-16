@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react'
 import {useRef, useEffect, useCallback} from "react"
 import {useReducedMotion} from "@react-spring/web"
 
 interface Props {
     className?: string,
-    children?: React.ReactNode,
+    children?: ReactNode,
 }
 
 export default function InteractiveBackground({children, ...rest}: Props) {
