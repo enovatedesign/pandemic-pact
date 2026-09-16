@@ -167,17 +167,19 @@ const Announcement = ({ announcements }: Props) => {
                     {isSingle ? 'Announcement' : `Announcements (${visible.length})`}
                 </h2>
 
-                <div className="flex flex-col md:flex-row gap-2 md:gap-6 md:items-start">
+                {/* Two equal 1fr side tracks, so the notice sits on the container's centre line
+                    rather than the centre of whatever the prefix and pill leave over. */}
+                <div className="flex flex-col gap-2 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6 md:items-start">
 
                     {/* The region heading above carries this for assistive tech, so it is decorative here. */}
-                    <p className="flex items-center shrink-0 min-h-7" aria-hidden="true">
+                    <p className="flex items-center shrink-0 min-h-7 md:col-start-1 md:justify-self-start" aria-hidden="true">
                         <InformationCircleIcon className="size-5 mr-1" />
                         <strong className="uppercase">
                             {isSingle ? 'Announcement' : 'Announcements'}
                         </strong>
                     </p>
 
-                    <ul id={listId} className="min-w-0 grow space-y-2 text-center">
+                    <ul id={listId} className="min-w-0 md:col-start-2 space-y-2 text-center">
                         {shown.map(item => {
                             const key = dismissKey(item)
                             const target = item.target?.[0]
@@ -241,7 +243,7 @@ const Announcement = ({ announcements }: Props) => {
                                 ? 'Show fewer announcements'
                                 : `Show ${hiddenCount} more announcement${hiddenCount === 1 ? '' : 's'}`}
                             onClick={() => setShowAll(current => !current)}
-                            className="cursor-pointer self-start shrink-0 flex items-center gap-1.5 px-3 py-1 text-xs md:text-sm font-semibold rounded-full bg-primary-darker text-secondary hover:brightness-95 transition duration-200"
+                            className="cursor-pointer self-start shrink-0 md:col-start-3 md:justify-self-end flex items-center gap-1.5 px-3 py-1 text-xs md:text-sm font-semibold rounded-full bg-primary-darker text-secondary hover:brightness-95 transition duration-200"
                         >
                             {/* Both labels share one grid cell, so the pill reserves the wider
                                 of the two and keeps its width across the toggle. */}
