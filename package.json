@@ -88,6 +88,6 @@
     "mapshaper": "^0.6.98"
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   }
 }
