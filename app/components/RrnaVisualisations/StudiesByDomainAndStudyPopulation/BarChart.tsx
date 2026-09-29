@@ -68,7 +68,7 @@ const BarChart = ({
 
                                     <YAxis
                                         type="category"
-                                        dataKey="parentLabel"
+                                        dataKey="label"
                                         axisLine={false}
                                         tickLine={false}
                                         hide={true}
