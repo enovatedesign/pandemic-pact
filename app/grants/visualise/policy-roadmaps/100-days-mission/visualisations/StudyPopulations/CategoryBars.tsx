@@ -30,13 +30,14 @@ const CategoryBars = ({
                     ...subCategoryData.map((d) => d["Total Grants"])
                 )
                 
-                const stackedDatum = subCategoryData.reduce<Record<string, number>>((acc, { 
-                    "Category Label": label, 
-                    "Total Grants": count 
+                // Recharts 3 draws no bars when the category YAxis dataKey is missing from the datum.
+                const stackedDatum = subCategoryData.reduce<Record<string, string | number>>((acc, {
+                    "Category Label": label,
+                    "Total Grants": count
                 }) => {
                     acc[label] = count
                     return acc
-                }, {})
+                }, { "Category Label": categoryLabel })
 
                 return (
                     <Fragment key={categoryLabel}>
