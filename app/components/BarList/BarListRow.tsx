@@ -5,6 +5,8 @@ import {
     XAxis,
     YAxis,
     ResponsiveContainer,
+    Rectangle,
+    BarShapeProps,
 } from 'recharts'
 
 import { dollarValueFormatter } from '../../helpers/value-formatters'
@@ -15,6 +17,10 @@ import TooltipContent from '../TooltipContent'
 interface Props {
     dataIndex: number
 }
+
+// Recharts drops zero-width bars, and their `background` track with them, unless the
+// bar has a custom shape. Rectangle itself draws nothing at zero width.
+const barShapeKeepingBackground = (props: BarShapeProps) => <Rectangle {...props} />
 
 export default function BarListRow({ dataIndex }: Props) {
     const { tooltipRef } = useContext(TooltipContext)
@@ -90,6 +96,7 @@ export default function BarListRow({ dataIndex }: Props) {
                             fill={brightColours[datum['Category Value']]}
                             stackId="a"
                             background={{ fill: '#eee' }}
+                            shape={barShapeKeepingBackground}
                         />
                         
                         <Bar
@@ -142,6 +149,7 @@ export default function BarListRow({ dataIndex }: Props) {
                             dataKey="Known Financial Commitments (USD)"
                             fill={brightColours[datum['Category Value']]}
                             background={{ fill: '#eee' }}
+                            shape={barShapeKeepingBackground}
                         />
                     </RechartBarChart>
                 </ResponsiveContainer>

@@ -31,7 +31,7 @@ import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpM
 import ClinicalTrialsTherapeuticsAndVaccines from '../../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 import MarburgResearchAndPolicyRoadmaps from '../../components/MarburgResearchAndPolicyRoadmaps'
 import GrantsByWHOMpoxRoadmap from '../../components/GrantsByWHOMpoxRoadmap'
-import EbolaCorcPrioritiesCard from '../../components/EbolaCorcPrioritiesCard'
+import EbolaResearchPrioritiesCard from '../../components/EbolaResearchPrioritiesCard'
 
 interface VisualisationPageProps {
     title: string
@@ -42,7 +42,6 @@ interface VisualisationPageProps {
     diseaseLabel?: DiseaseLabel
     outbreakId?: string
     announcements: AnnouncementProps[]
-    slug?: string
     totalsInfoIconText?: string
 }
 
@@ -55,7 +54,6 @@ const VisualisePageClientComponent = ({
     diseaseLabel,
     outbreakId,
     announcements,
-    slug,
     totalsInfoIconText
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
@@ -247,10 +245,19 @@ const VisualisePageClientComponent = ({
                                             <GrantsByResearchCategoryCard />
                                         </div>
                                     </>
-                                ) : slug && slug === 'ebola-2' ? (
-                                    <div id="ebola-corc-priorities">
-                                        <EbolaCorcPrioritiesCard/>
-                                    </div>
+                                ) : outbreakId === 'OBK_EBL_202605_1' ? (
+                                    <>
+                                        <div id="ebola-corc-priorities" className={gridClasses}>
+                                            <EbolaResearchPrioritiesCard />
+                                        </div>
+
+                                        <div
+                                            id="research-categories"
+                                            className={gridClasses}
+                                        >
+                                            <GrantsByResearchCategoryCard />
+                                        </div>
+                                    </>
                                 ) : (
                                     <div
                                         id="research-categories"

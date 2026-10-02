@@ -4,6 +4,9 @@ export default {
     FIGSHARE_COLLECTION: 'https://figshare.com/s/9e712aa1f4255e37b0db',
     // Small static lookup committed into the repo (read locally at build time).
     RESEARCH_CATEGORIES_FILE: 'scripts/config/data/research-categories.csv',
+    // CORC sandbox export, merged in only when EBOLA_SANDBOX_OVERLAY=true (see ebola-sandbox-overlay.ts).
+    EBOLA_SANDBOX_GRANTS_FILE: 'scripts/config/data/ebola-sandbox/grants.csv',
+    EBOLA_SANDBOX_DICTIONARY_FILE: 'scripts/config/data/ebola-sandbox/dictionary.csv',
     FIGSHARE_ARTICLE_ID: 26937448,
     FIGSHARE_GRANTS_FILE_ID: 69426018,
     FIGSHARE_DATA_DICTIONARY_FILE_ID: 69425991,

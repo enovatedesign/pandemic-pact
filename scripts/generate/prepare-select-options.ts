@@ -6,6 +6,8 @@ import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
     marbugCorcPriorityDescriptions,
+    ebolaPriorityDescriptions,
+    ebolaPriorityScopes,
     prepareSpecificSelectOptions,
 } from '../helpers/key-mapping'
 
@@ -206,6 +208,30 @@ function prepareOutbreakResearchPriorityAndSubPriority(rawOptions: {
             parent: '26',
             description: marbugCorcPriorityDescriptions[value as keyof typeof marbugCorcPriorityDescriptions],
         })),
+
+        ...prepareEbolaPriorityOptions(rawOptions),
+    }
+}
+
+// Falls back to empty lists so the visualisation's select-options keys always
+// exist, even when the dictionary predates the Ebola priority fields.
+function prepareEbolaPriorityOptions(rawOptions: { [key: string]: any[] }) {
+    const priorityOptions: { value: string, label: string }[] = rawOptions.ebola_priorities ?? []
+
+    return {
+        ebola_priorities: priorityOptions.map(({ value, label }) => ({
+            value,
+            label,
+            description: ebolaPriorityDescriptions[value]?.join('\n\n'),
+        })),
+        ebola_priority_simplified: priorityOptions.flatMap(({ value: priority }) =>
+            (rawOptions[`ebola_priority_${priority}_simplified`] ?? []).map(({ value, label }) => ({
+                value: `${priority}.${value}`,
+                label,
+                parent: priority,
+                scope: ebolaPriorityScopes[priority],
+            })),
+        ),
     }
 }
 

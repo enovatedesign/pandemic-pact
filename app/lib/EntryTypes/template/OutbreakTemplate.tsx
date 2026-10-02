@@ -39,7 +39,6 @@ export default function OutbreakTemplate({data, announcements}: Props) {
                 summary={entry.summary}
                 showSummary={entry.showSummary}
                 announcements={announcements}
-                slug={entry.slug}
                 totalsInfoIconText={entry.totalsInfoIconText}
             >
                 {entry.bodyContent && entry.bodyContent.length > 0 && (

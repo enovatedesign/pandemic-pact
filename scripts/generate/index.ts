@@ -24,6 +24,7 @@ import verifyBuildArtefacts from '../verify-build-artefacts'
 import { uploadStaticFiles, writeLastUsedFileIds, verifyGrants } from '../helpers/storage'
 import dataSources from '../config/data-sources'
 import { info } from '../helpers/log'
+import { isEbolaSandboxOverlayEnabled } from '../helpers/ebola-sandbox-overlay'
 
 main()
 
@@ -33,7 +34,8 @@ async function main() {
     // Determine if we should upload to remote storage.
     const isVercelBuild = process.env.VERCEL === '1'
     const forceUpload = process.env.FORCE_UPLOAD === 'true'
-    const shouldUploadConditionsMet = isVercelBuild || forceUpload
+    const ebolaSandboxOverlay = isEbolaSandboxOverlayEnabled()
+    const shouldUploadConditionsMet = (isVercelBuild || forceUpload) && !ebolaSandboxOverlay
 
     // The full grants CSV is part of the cached artefact set (uploadStaticFiles),
     // so on the non-cached path it must be generated BEFORE the upload below —
@@ -141,7 +143,11 @@ async function main() {
         // weekly GitLab job, so prepareSearch runs without counts here and
         // preserves any existing PublicationCount values. changedIds (when set)
         // limits the upsert to changed grants; removed grants are pruned anyway.
-        await prepareSearch(undefined, changedIds)
+        if (ebolaSandboxOverlay) {
+            info('EBOLA_SANDBOX_OVERLAY set — skipping uploads and the search re-index')
+        } else {
+            await prepareSearch(undefined, changedIds)
+        }
 
         await prepareGrantIdsForSitemap()
 

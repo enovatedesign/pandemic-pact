@@ -4,6 +4,7 @@ import dataSources from '../config/data-sources'
 import { readLastUsedFileIds, downloadStaticFiles } from '../helpers/storage'
 import downloadCsvAndConvertToJson from '../helpers/download-and-convert-to-json'
 import fetchFigshareFileDownloadUrl from '../helpers/fetch-figshare-file-download-url'
+import { isEbolaSandboxOverlayEnabled, applyEbolaSandboxOverlay } from '../helpers/ebola-sandbox-overlay'
 
 export default async function downloadAndParseDataSheet (grantsOnly: boolean = false) {
     if (!process.env.FIGSHARE_PA_TOKEN) {
@@ -26,7 +27,9 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
     // generate path even when the source file IDs are unchanged. Escape hatch for
     // forcing a rebuild (e.g. after changing generate logic without bumping a
     // Figshare file ID). No CI job sets it by default.
-    const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true'
+    // The overlay rewrites the downloaded files, so cached artefacts can't be reused.
+    const ebolaSandboxOverlay = isEbolaSandboxOverlayEnabled()
+    const forceFullGenerate = process.env.FORCE_FULL_GENERATE === 'true' || ebolaSandboxOverlay
 
     const {
         grantsId: grantsPreviousFileId,
@@ -41,7 +44,7 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         DICTIONARY_FILE_ID !== dictionaryPreviousFileId ||
         RRNA_DICTIONARY_FILE_ID !== rrnaDictionaryPreviousFileId
 
-    if (forceFullGenerate) {
+    if (process.env.FORCE_FULL_GENERATE === 'true') {
         info('FORCE_FULL_GENERATE set — forcing the full generate path')
     }
 
@@ -109,6 +112,10 @@ export default async function downloadAndParseDataSheet (grantsOnly: boolean = f
         await downloadCsvAndConvertToJson(outbreaksFile.download_url, 'outbreaks')
     } catch (err: any) {
         error(`Error: ${err.message}`)
+    }
+
+    if (ebolaSandboxOverlay) {
+        await applyEbolaSandboxOverlay()
     }
 
     return { useCachedFiles: false }

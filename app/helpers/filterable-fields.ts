@@ -70,6 +70,10 @@ export const grantsNonFilterableSelectOptions = [
     // and offering them would add two dropdowns to the advanced search.
     'DiagnosticsThemeCategory',
     'DiagnosticsD1Sub',
+
+    // Only drive the Ebola research priorities visualisation on the outbreak page.
+    'EbolaResearchPriorities',
+    'EbolaResearchSubPriorities',
 ]
 
 /** Ordered to match data/dist/clinical-trials/select-options.json. */

@@ -14,7 +14,7 @@ import {
 import { registerCanonicalCodes, reportUnresolvedCodes } from '../helpers/redcap-codes'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
-import { prepareEbolaCorcPriorities } from '../helpers/ebola-corc-priorities'
+import { isEbolaSandboxOverlayEnabled, createEbolaSandboxGrantOverlay } from '../helpers/ebola-sandbox-overlay'
 import { resolveTrendStartYear } from '../helpers/trend-start-year'
 import { is100DaysMissionGrant } from './prepare-100-days-mission'
 import { isPandemicIntelligenceGrant } from './prepare-pandemic-inteligence'
@@ -82,6 +82,8 @@ export default async function prepareGrants() {
     const hundredDaysMissionGrants: RawGrant[] = []
     const pandemicIntelligenceGrants: RawGrant[] = []
 
+    const applyEbolaSandboxOverlay = isEbolaSandboxOverlayEnabled() ? createEbolaSandboxGrantOverlay() : null
+
     let processedCount = 0
 
     await streamLargeJson('./data/download/grants.json', (rawGrant: RawGrant) => {
@@ -90,6 +92,8 @@ export default async function prepareGrants() {
         if (processedCount % 1000 === 0) {
             info(`Processed ${processedCount} grants`)
         }
+
+        applyEbolaSandboxOverlay?.(rawGrant)
 
         if (is100DaysMissionGrant(rawGrant)) {
             hundredDaysMissionGrants.push({ ...rawGrant })
@@ -168,9 +172,6 @@ export default async function prepareGrants() {
                 rawGrant?.investigator_firstname, 
                 rawGrant?.investigator_lastname
             ),
-
-            // Prepare the Corc Priorities
-            CorcPriorities: prepareEbolaCorcPriorities(rawGrant),
 
             // Parse semicolon-separated outbreak IDs into an array
             OutbreakIds: (rawGrant.outbreak_id || '')
@@ -278,4 +279,14 @@ function prepareOutbreakPriorityAndSubPriority(checkBoxFieldValues: {
 
     checkBoxFieldValues.marburg_parent = checkBoxFieldValues.research_and_policy_roadmaps
         .filter(value => value === '26')
+
+    // Sub-priority codes restart at 1 under each broad priority, so they're stored
+    // as `priority.sub`. Only ticked parents are read, mirroring the REDCap branching logic.
+    checkBoxFieldValues.ebola_priorities = checkBoxFieldValues.research_and_policy_roadmaps.includes('27')
+        ? checkBoxFieldValues.ebola_priorities ?? []
+        : []
+
+    checkBoxFieldValues.ebola_priority_simplified = checkBoxFieldValues.ebola_priorities.flatMap(priority =>
+        (checkBoxFieldValues[`ebola_priority_${priority}_simplified`] ?? []).map(subPriority => `${priority}.${subPriority}`),
+    )
 }
