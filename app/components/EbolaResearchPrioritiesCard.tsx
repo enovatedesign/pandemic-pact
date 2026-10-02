@@ -1,28 +1,7 @@
 import VisualisationCard from './VisualisationCard'
-import AllSubCategoriesBarList from './CategoryAndSubcategoryBarList/AllSubCategories'
-import selectOptions from '../../data/dist/select-options.json'
+import PrioritiesAccordion from './EbolaResearchPriorities/PrioritiesAccordion'
+import { Scope, scopeLabels } from './EbolaResearchPriorities/ScopePill'
 import { ebolaScopeColours } from '../helpers/colours'
-
-type Scope = keyof typeof ebolaScopeColours
-
-const scopeLabels: { [scope in Scope]: string } = {
-    bvd: 'BVD research',
-    all: 'All Ebola Research',
-}
-
-const subPriorityScopes: { [value: string]: Scope } = Object.fromEntries(
-    (selectOptions.EbolaResearchSubPriorities as { value: string, scope: Scope }[])
-        .map(({ value, scope }) => [value, scope]),
-)
-
-const ScopePill = ({ scope }: { scope: Scope }) => (
-    <span
-        className="inline-block mr-2 px-2 rounded-full border text-xs text-gray-900 whitespace-nowrap"
-        style={{ borderColor: ebolaScopeColours[scope], backgroundColor: `${ebolaScopeColours[scope]}1A` }}
-    >
-        {scopeLabels[scope]}
-    </span>
-)
 
 const ScopeLegend = () => (
     <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
@@ -57,19 +36,10 @@ const EbolaResearchPrioritiesCard = () => {
             subtitle={subTitle}
             footnote={footnote}
         >
-            <div className="space-y-4">
+            <div className="w-full space-y-4">
                 <ScopeLegend />
 
-                <AllSubCategoriesBarList
-                    categoryField="EbolaResearchPriorities"
-                    subcategoryField="EbolaResearchSubPriorities"
-                    numberCategoryLabels
-                    renderLabelPrefix={datum => {
-                        const scope = subPriorityScopes[datum['Category Value']]
-
-                        return scope && <ScopePill scope={scope} />
-                    }}
-                />
+                <PrioritiesAccordion />
             </div>
         </VisualisationCard>
     )

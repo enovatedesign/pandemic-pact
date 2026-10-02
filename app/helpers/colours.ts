@@ -703,7 +703,11 @@ const colourEbolaSubPriorities = (priorityColours: Colours): Colours => Object.f
     ),
 )
 
-// Pill borders and 10% tints behind gray-900 text; as text colours on white they fail WCAG AA.
+// Scope pill borders/10% tints (behind gray-900 text) and accordion stripes; as text colours on white they fail WCAG AA.
+// The Marburg palette, but priority 4's orange read as the "BVD research" scope colour
+const ebolaResearchPriorityColours: Colours = { ...marburgResearchPriorityColours, '4': brandColours.grey['700'] }
+const ebolaResearchPriorityDimColours: Colours = { ...marburgResearchPriorityDimColours, '4': brandColours.grey['600'] }
+
 export const ebolaScopeColours = {
     bvd: brandColours.orange['500'],
     all: brandColours.green['500'],
@@ -738,9 +742,10 @@ export const coloursByField = {
         bright: marburgResearchPriorityColours,
         dim: marburgResearchPriorityDimColours,
     },
-    EbolaResearchSubPriorities: {
-        bright: colourEbolaSubPriorities(marburgResearchPriorityColours),
-        dim: colourEbolaSubPriorities(marburgResearchPriorityDimColours),
+    // Broad priority header rows and their sub-priority rows share one BarList
+    EbolaResearchPriorities: {
+        bright: { ...ebolaResearchPriorityColours, ...colourEbolaSubPriorities(ebolaResearchPriorityColours) },
+        dim: { ...ebolaResearchPriorityDimColours, ...colourEbolaSubPriorities(ebolaResearchPriorityDimColours) },
     },
     hundredDaysMissionClinicalTrial: {
         bright: hundredDaysMissionClinicalTrialColours,

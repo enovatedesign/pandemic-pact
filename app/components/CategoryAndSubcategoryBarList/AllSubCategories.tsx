@@ -178,7 +178,7 @@ export default function AllSubCategories({
     )
 }
 
-const FallbackData = () => {
+export const FallbackData = () => {
     const { categoriesAndSubCategoriesFallback } = grantsByResearchCategoriesFallbackData
     
     const { brightColours, dimColours } = getColoursByField('ResearchCat')

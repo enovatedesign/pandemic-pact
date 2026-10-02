@@ -31,6 +31,7 @@ export default function BarListRow({ dataIndex }: Props) {
         dimColours,
         maxTotalNumberOfGrants,
         maxAmountCommitted,
+        isAnimationActive,
     } = useContext(BarListContext)
 
     const datum = data[dataIndex]
@@ -92,6 +93,7 @@ export default function BarListRow({ dataIndex }: Props) {
                         />
 
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Grants With Known Financial Commitments"
                             fill={brightColours[datum['Category Value']]}
                             stackId="a"
@@ -100,6 +102,7 @@ export default function BarListRow({ dataIndex }: Props) {
                         />
                         
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Grants With Unspecified Financial Commitments"
                             fill={dimColours[datum['Category Value']]}
                             stackId="a"
@@ -146,6 +149,7 @@ export default function BarListRow({ dataIndex }: Props) {
                         />
 
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Known Financial Commitments (USD)"
                             fill={brightColours[datum['Category Value']]}
                             background={{ fill: '#eee' }}

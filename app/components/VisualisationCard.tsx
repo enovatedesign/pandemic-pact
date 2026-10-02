@@ -1,4 +1,4 @@
-import { ReactNode, useState, useContext } from 'react'
+import { ReactNode, useState, useContext, useMemo, useRef } from 'react'
 import type { IconComponent } from '../helpers/types'
 import { Tab, TabGroup, TabList } from '@headlessui/react'
 import {
@@ -11,6 +11,7 @@ import InfoModal from './InfoModal'
 import { useInView, animated } from '@react-spring/web'
 import LogoInverted from './LogoInverted'
 import NumberOfActiveFilters from './NumberOfActiveFilters'
+import { ImageExportContext, ImageExportPreparer } from '../helpers/image-export'
 
 interface Props {
     id: string
@@ -57,6 +58,23 @@ export default function VisualisationCard({
 
     const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
+    const imageExportPreparers = useRef(new Set<ImageExportPreparer>())
+
+    const imageExportContext = useMemo(() => ({
+        registerPreparer: (preparer: ImageExportPreparer) => {
+            imageExportPreparers.current.add(preparer)
+
+            return () => {
+                imageExportPreparers.current.delete(preparer)
+            }
+        },
+        prepareForImageExport: async () => {
+            const restores = await Promise.all([...imageExportPreparers.current].map(preparer => preparer()))
+
+            return () => restores.forEach(restore => restore())
+        },
+    }), [])
+
     const [ref, springs] = useInView(
         () => ({
             from: {
@@ -82,7 +100,7 @@ export default function VisualisationCard({
         .map(filter => filter.label)
 
     return (
-        <>
+        <ImageExportContext.Provider value={imageExportContext}>
             <animated.div id={id} ref={ref} style={springs} className="relative z-0 hover:z-50">
                 <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative">
                     <div className="flex flex-col items-start gap-y-6">
@@ -192,6 +210,6 @@ export default function VisualisationCard({
                     </div>
                 </div>
             </animated.div>
-        </>
+        </ImageExportContext.Provider>
     )
 }
