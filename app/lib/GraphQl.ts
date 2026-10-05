@@ -23,17 +23,12 @@ export default async function craft(query: string, variables: Record<string, unk
     if (previewToken) {
         // Previews must always render the latest unpublished content.
         request.cache = 'no-store';
-    } else if (typeof options.revalidate === 'number') {
-        // Caller explicitly opts into cached (ISR) data. Used by the
-        // statically-generated sitemap so the build's `CI` no-store default
-        // below doesn't opt the route out of static generation — which is what
-        // previously made /sitemap.xml a dynamic route that 500'd at runtime.
-        request.next = { tags: ['cms'], revalidate: options.revalidate };
-    } else if (
-        process.env.NODE_ENV !== 'production' ||
-        process.env.CI
-    ) {
+    } else if (process.env.NODE_ENV !== 'production') {
         request.cache = 'no-store';
+    } else {
+        // Never `no-store` in a production build: it makes the route dynamic, so every
+        // request renders from scratch. Freshness comes from the /api/revalidate webhook.
+        request.next = { tags: ['cms'], revalidate: options.revalidate ?? 3600 };
     }
 
     const response = await fetch(API_URL as string, request);

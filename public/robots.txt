@@ -1,8 +1,10 @@
 # robots.txt for https://www.pandemicpact.org/
 
-sitemap: https://www.pandemicpact.org/sitemap.xml
-
-Allow: /api/og/*
-
+User-agent: *
 Disallow: /preview/
 Disallow: /api/preview
+
+User-agent: meta-externalagent
+Disallow: /
+
+Sitemap: https://www.pandemicpact.org/sitemap.xml

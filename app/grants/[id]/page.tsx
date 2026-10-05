@@ -7,6 +7,7 @@ import { defaultMetaData } from '@/app/helpers/default-meta-data';
 import numDigits from '@/app/api/helpers/metadata-functions';
 import { normaliseBranchName } from '@/app/helpers/normalise-branch-name';
 import { pubmedFileName, splitGrantIds, idIsValidPubMedGrantId } from '@/app/helpers/pubmed-ids';
+import dataSources from '@/scripts/config/data-sources';
 
 import Layout from '@/app/components/Layout';
 import AbstractAndLaySummary from './AbstractAndLaySummary';
@@ -186,7 +187,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title: metaTitle,
             images: [
                 {
-                    url: `/api/og?grant=${id}`,
+                    // Versioned by dataset so /api/og can be cached at the CDN indefinitely.
+                    url: `/api/og?grant=${id}&v=${dataSources.FIGSHARE_GRANTS_FILE_ID}`,
                     alt: altText.replace('..', '.'),
                     width: 1200,
                     height: 630,

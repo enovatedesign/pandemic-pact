@@ -1,9 +1,29 @@
-import { notFound } from "next/navigation";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import numDigits from "../helpers/metadata-functions";
 
-export const runtime = "edge";
+// Read from disk once per instance rather than fetched from the deployment on every
+// render. Paths must stay literal: a variable path makes file tracing bundle all of
+// `public/` (~30K grant files) into this function.
+const assets = Promise.all([
+  readFile(join(process.cwd(), "public/fonts/regular-figtree.ttf")),
+  readFile(join(process.cwd(), "public/fonts/bold-figtree.ttf")),
+  readFile(join(process.cwd(), "public/fonts/medium-figtree.ttf")),
+  readFile(join(process.cwd(), "public/open-graph-background.jpg"))
+    .then((jpeg) => `data:image/jpeg;base64,${jpeg.toString("base64")}`),
+]);
+
+// Only URLs carrying the dataset version (`v`) are immutable. Unversioned ones are
+// still out there in old shares, so they must refresh after a dataset release.
+const VERSIONED_CACHE_CONTROL = "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400";
+const UNVERSIONED_CACHE_CONTROL = "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
+
+const notFoundResponse = () => new Response("Not found", {
+  status: 404,
+  headers: { "Cache-Control": "public, s-maxage=3600" },
+});
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -11,7 +31,7 @@ export async function GET(request: NextRequest) {
   const grantId = searchParams.get( "grant" ) ?? null;
 
   if ( !grantId ) {
-    notFound()
+    return notFoundResponse()
   }
 
   const url = process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
@@ -20,7 +40,17 @@ export async function GET(request: NextRequest) {
   const grantResponse = await fetch(path)
   if (!grantResponse.ok) {
     console.error(`Failed to fetch grant ${grantId}: ${grantResponse.status} ${grantResponse.statusText}`)
-    notFound()
+
+    // S3 answers 403, not 404, for a key that doesn't exist. Anything else may be
+    // transient, so it mustn't be cached as a missing grant.
+    if (grantResponse.status === 403 || grantResponse.status === 404) {
+      return notFoundResponse()
+    }
+
+    return new Response("Failed to load grant", {
+      status: 502,
+      headers: { "Cache-Control": "no-store" },
+    })
   }
   const grant = await grantResponse.json()
 
@@ -36,18 +66,7 @@ export async function GET(request: NextRequest) {
   const grantCommitted = grant.GrantAmountConverted ?? null
   const amountCommitted = grantCommitted > 0 ? "$" + grantCommitted.toLocaleString() : null
 
-  // Fonts are fetched over HTTP from the deployment itself, the same way the grant
-  // JSON above is. They were `new URL("/public/...", import.meta.url)`, which relied
-  // on webpack rewriting them into asset URLs; Turbopack — the default bundler from
-  // Next 16 — rejects server-relative imports outright. Note the paths lose the
-  // `public/` prefix, because that directory *is* the web root.
-  const asset = (path: string) => fetch(`${url}${path}`).then((res) => res.arrayBuffer());
-
-  const [regularFontData, boldFontData, mediumFontData] = await Promise.all([
-    asset("/fonts/regular-figtree.ttf"),
-    asset("/fonts/bold-figtree.ttf"),
-    asset("/fonts/medium-figtree.ttf"),
-  ]);
+  const [regularFontData, boldFontData, mediumFontData, background] = await assets;
 
   try {
     return new ImageResponse(
@@ -62,7 +81,7 @@ export async function GET(request: NextRequest) {
           style={{
             width: 1200,
             height: 630,
-            backgroundImage: `url(${url}/open-graph-background.jpg)`,
+            backgroundImage: `url(${background})`,
             backgroundSize: "1200px 630px",
           }}
         >
@@ -118,6 +137,9 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
+        headers: {
+          "Cache-Control": searchParams.has("v") ? VERSIONED_CACHE_CONTROL : UNVERSIONED_CACHE_CONTROL,
+        },
         fonts: [
           {
             name: "figtreeRegular",
