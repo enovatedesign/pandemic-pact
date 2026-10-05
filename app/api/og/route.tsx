@@ -1,9 +1,28 @@
-import { notFound } from "next/navigation";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import numDigits from "../helpers/metadata-functions";
 
-export const runtime = "edge";
+// Read from disk once per instance. Fetching them over HTTP from the deployment
+// itself cost four extra requests (one a 477 KB JPEG) on every render.
+const asset = (path: string) => readFile(join(process.cwd(), "public", path));
+
+const assets = Promise.all([
+  asset("fonts/regular-figtree.ttf"),
+  asset("fonts/bold-figtree.ttf"),
+  asset("fonts/medium-figtree.ttf"),
+  asset("open-graph-background.jpg").then((jpeg) => `data:image/jpeg;base64,${jpeg.toString("base64")}`),
+]);
+
+// The og:image URL carries a dataset version, so a response never goes stale under
+// its own URL and can be cached at the CDN indefinitely.
+const CACHE_CONTROL = "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400";
+
+const notFoundResponse = () => new Response("Not found", {
+  status: 404,
+  headers: { "Cache-Control": "public, s-maxage=3600" },
+});
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -11,7 +30,7 @@ export async function GET(request: NextRequest) {
   const grantId = searchParams.get( "grant" ) ?? null;
 
   if ( !grantId ) {
-    notFound()
+    return notFoundResponse()
   }
 
   const url = process.env.VERCEL_URL !== undefined ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
@@ -20,7 +39,7 @@ export async function GET(request: NextRequest) {
   const grantResponse = await fetch(path)
   if (!grantResponse.ok) {
     console.error(`Failed to fetch grant ${grantId}: ${grantResponse.status} ${grantResponse.statusText}`)
-    notFound()
+    return notFoundResponse()
   }
   const grant = await grantResponse.json()
 
@@ -36,18 +55,7 @@ export async function GET(request: NextRequest) {
   const grantCommitted = grant.GrantAmountConverted ?? null
   const amountCommitted = grantCommitted > 0 ? "$" + grantCommitted.toLocaleString() : null
 
-  // Fonts are fetched over HTTP from the deployment itself, the same way the grant
-  // JSON above is. They were `new URL("/public/...", import.meta.url)`, which relied
-  // on webpack rewriting them into asset URLs; Turbopack — the default bundler from
-  // Next 16 — rejects server-relative imports outright. Note the paths lose the
-  // `public/` prefix, because that directory *is* the web root.
-  const asset = (path: string) => fetch(`${url}${path}`).then((res) => res.arrayBuffer());
-
-  const [regularFontData, boldFontData, mediumFontData] = await Promise.all([
-    asset("/fonts/regular-figtree.ttf"),
-    asset("/fonts/bold-figtree.ttf"),
-    asset("/fonts/medium-figtree.ttf"),
-  ]);
+  const [regularFontData, boldFontData, mediumFontData, background] = await assets;
 
   try {
     return new ImageResponse(
@@ -62,7 +70,7 @@ export async function GET(request: NextRequest) {
           style={{
             width: 1200,
             height: 630,
-            backgroundImage: `url(${url}/open-graph-background.jpg)`,
+            backgroundImage: `url(${background})`,
             backgroundSize: "1200px 630px",
           }}
         >
@@ -118,6 +126,7 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
+        headers: { "Cache-Control": CACHE_CONTROL },
         fonts: [
           {
             name: "figtreeRegular",
