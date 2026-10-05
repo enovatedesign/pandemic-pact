@@ -4,20 +4,21 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import numDigits from "../helpers/metadata-functions";
 
-// Read from disk once per instance. Fetching them over HTTP from the deployment
-// itself cost four extra requests (one a 477 KB JPEG) on every render.
-const asset = (path: string) => readFile(join(process.cwd(), "public", path));
-
+// Read from disk once per instance rather than fetched from the deployment on every
+// render. Paths must stay literal: a variable path makes file tracing bundle all of
+// `public/` (~30K grant files) into this function.
 const assets = Promise.all([
-  asset("fonts/regular-figtree.ttf"),
-  asset("fonts/bold-figtree.ttf"),
-  asset("fonts/medium-figtree.ttf"),
-  asset("open-graph-background.jpg").then((jpeg) => `data:image/jpeg;base64,${jpeg.toString("base64")}`),
+  readFile(join(process.cwd(), "public/fonts/regular-figtree.ttf")),
+  readFile(join(process.cwd(), "public/fonts/bold-figtree.ttf")),
+  readFile(join(process.cwd(), "public/fonts/medium-figtree.ttf")),
+  readFile(join(process.cwd(), "public/open-graph-background.jpg"))
+    .then((jpeg) => `data:image/jpeg;base64,${jpeg.toString("base64")}`),
 ]);
 
-// The og:image URL carries a dataset version, so a response never goes stale under
-// its own URL and can be cached at the CDN indefinitely.
-const CACHE_CONTROL = "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400";
+// Only URLs carrying the dataset version (`v`) are immutable. Unversioned ones are
+// still out there in old shares, so they must refresh after a dataset release.
+const VERSIONED_CACHE_CONTROL = "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400";
+const UNVERSIONED_CACHE_CONTROL = "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
 
 const notFoundResponse = () => new Response("Not found", {
   status: 404,
@@ -39,7 +40,17 @@ export async function GET(request: NextRequest) {
   const grantResponse = await fetch(path)
   if (!grantResponse.ok) {
     console.error(`Failed to fetch grant ${grantId}: ${grantResponse.status} ${grantResponse.statusText}`)
-    return notFoundResponse()
+
+    // S3 answers 403, not 404, for a key that doesn't exist. Anything else may be
+    // transient, so it mustn't be cached as a missing grant.
+    if (grantResponse.status === 403 || grantResponse.status === 404) {
+      return notFoundResponse()
+    }
+
+    return new Response("Failed to load grant", {
+      status: 502,
+      headers: { "Cache-Control": "no-store" },
+    })
   }
   const grant = await grantResponse.json()
 
@@ -126,7 +137,9 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
-        headers: { "Cache-Control": CACHE_CONTROL },
+        headers: {
+          "Cache-Control": searchParams.has("v") ? VERSIONED_CACHE_CONTROL : UNVERSIONED_CACHE_CONTROL,
+        },
         fonts: [
           {
             name: "figtreeRegular",
