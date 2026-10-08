@@ -3,6 +3,7 @@ import { useContext, useState } from 'react'
 import { PhotographIcon } from '@heroicons/react/solid'
 import html2canvas from 'html2canvas'
 import { DeckGLRefContext } from '../../helpers/deck-gl'
+import { ImageExportContext } from '../../helpers/image-export'
 
 interface Props {
     chartSelector: string
@@ -17,7 +18,9 @@ export default function ExportImageMenuItem({
 
     const deckGlRef = useContext(DeckGLRefContext)
 
-    const exportImage = () => {
+    const { prepareForImageExport } = useContext(ImageExportContext)
+
+    const exportImage = async () => {
         if (exportingImage) {
             return
         }
@@ -91,6 +94,13 @@ export default function ExportImageMenuItem({
                 barChartCategoryLabelElements[i].classList.add('pb-2')
             }
 
+            // html2canvas drops small text below its line box; pull it back inside its border
+            const raisedTextElements = vizWrapper.getElementsByClassName('image-export-raise-text')
+
+            for (let i = 0; i < raisedTextElements.length; i++) {
+                raisedTextElements[i].classList.add('-translate-y-[6px]')
+            }
+
             // Reveal the hidden visualisation legend (if it exists)
             const imageExportLegend = vizWrapper.getElementsByClassName(
                 'image-export-legend',
@@ -123,6 +133,8 @@ export default function ExportImageMenuItem({
             }
         }
 
+        const restoreAfterImageExport = await prepareForImageExport()
+
         // We have to manually redraw the DeckGL canvas before taking the
         // screenshot, otherwise the map viz appears blank in the resulting
         // image. See https://github.com/visgl/deck.gl/issues/8896
@@ -145,7 +157,7 @@ export default function ExportImageMenuItem({
             link.click()
 
             setExportingImage(false)
-        })
+        }).finally(restoreAfterImageExport)
     }
 
     return (

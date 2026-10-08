@@ -8,6 +8,7 @@ interface Props {
     brightColours: Colours
     dimColours: Colours
     children: ReactNode
+    isAnimationActive?: boolean | 'auto'
 }
 
 export default function BarList({
@@ -15,6 +16,7 @@ export default function BarList({
     brightColours,
     dimColours,
     children,
+    isAnimationActive = 'auto',
 }: Props) {
     const maxTotalNumberOfGrants = useMemo(() => {
         return Math.max(...data.map((data: any) => data['Total Grants']))
@@ -34,6 +36,7 @@ export default function BarList({
         dimColours,
         maxTotalNumberOfGrants,
         maxAmountCommitted,
+        isAnimationActive,
     }
 
     return (

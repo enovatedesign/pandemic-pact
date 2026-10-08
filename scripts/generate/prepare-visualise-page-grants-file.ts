@@ -53,6 +53,9 @@ export default function prepareVisualisePageGrantsFile() {
             'WHOMpoxResearchSubPriorities',
             'MarburgCORCResearchPriorities',
             'MarburgCORCResearchSubPriorities',
+            'EbolaResearchPriorities',
+            'EbolaResearchSubPriorities',
+            'BvdResearchAward',
             'InfluenzaA',
             'InfluenzaH1',
             'InfluenzaH2',
@@ -65,8 +68,6 @@ export default function prepareVisualisePageGrantsFile() {
             'Pathogens',
             'Strains',
             'Diseases',
-            'EbolaCorcPriorityGrant',
-            'CorcPriorities',
             'OutbreakIds'
         ])
     })

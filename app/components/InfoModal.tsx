@@ -36,7 +36,8 @@ export default function InfoModal({
     ].filter(Boolean).join(' ')
 
     const dialogPanelClasses = [
-        'relative grid w-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 max-md:overflow-scroll',
+        // Capped at every breakpoint: the backdrop centres the panel, so overflowing content would be clipped above and below rather than scrollable
+        'relative grid w-full max-h-full max-md:max-h-[75vh] max-w-3xl rounded bg-white p-6 overflow-y-auto',
         !removeSpaceY && 'space-y-6'
     ].filter(Boolean).join(' ')
 
@@ -58,7 +59,7 @@ export default function InfoModal({
                 onClose={() => setIsOpen(false)}
                 className="relative z-[80]"
             >
-                <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6 overflow-scroll">
+                <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-6">
                     <DialogPanel className={dialogPanelClasses}>
                         
                         <div className={defaultProseClasses({ marginX: marginX })}>

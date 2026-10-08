@@ -1,9 +1,10 @@
-import { Fragment, useContext, useMemo } from 'react'
+import { Fragment, ReactNode, useContext, useMemo } from 'react'
 import { GlobalFilterContext } from '../../helpers/filters'
 import {
     getColoursByField,
     prepareBarListDataForCategory,
     BarListData,
+    BarListDatum,
     isChartDataUnavailable,
 } from '../../helpers/bar-list'
 import BarList from '../BarList/BarList'
@@ -14,19 +15,24 @@ import selectOptions from '../../../data/dist/select-options.json'
 import NoDataText from '../NoData/NoDataText'
 import { grantsByResearchCategoriesFallbackData } from '../NoData/visualisationFallbackData'
 import CategoryLabelTitle from './CategoryLabelTitle'
+import InfoModal from '../InfoModal'
 
 interface Props {
     categoryField: string
     subcategoryField: string
     setSelectedCategory?: (category: string | null) => void
     removeCategoryLabels?: boolean
+    numberCategoryLabels?: boolean
+    renderLabelPrefix?: (datum: BarListDatum) => ReactNode
 }
 
 export default function AllSubCategories({
     categoryField,
     subcategoryField,
     setSelectedCategory,
-    removeCategoryLabels = false
+    removeCategoryLabels = false,
+    numberCategoryLabels = false,
+    renderLabelPrefix,
 }: Props) {
     const { grants } = useContext(GlobalFilterContext)
     
@@ -36,9 +42,12 @@ export default function AllSubCategories({
 
             const subCategoriesGroupedByParent: {
             categoryLabel: string
+            categoryDescription?: string
             subCategoryData: BarListData
         }[] = categories.map(
-            ({ label: categoryLabel, value: categoryValue }) => {
+            ({ label, value: categoryValue, description: categoryDescription }: { label: string, value: string, description?: string }) => {
+                const categoryLabel = numberCategoryLabels ? `${categoryValue}. ${label}` : label
+
                 const subCategories: any =
                 selectOptions[
                     subcategoryField as keyof typeof selectOptions
@@ -60,6 +69,7 @@ export default function AllSubCategories({
 
                 return {
                     categoryLabel,
+                    categoryDescription,
                     subCategoryData,
                 }
             },
@@ -70,7 +80,7 @@ export default function AllSubCategories({
         )
 
         return [subCategoriesGroupedByParent, subCategories]
-    }, [categoryField, subcategoryField, grants])
+    }, [categoryField, subcategoryField, grants, numberCategoryLabels])
 
     const { brightColours, dimColours } = getColoursByField(subcategoryField)
     
@@ -116,20 +126,34 @@ export default function AllSubCategories({
                 dimColours={dimColours}
             >
 
-                {filteredSubCategoriesGroupedByParent.length > 0 ? filteredSubCategoriesGroupedByParent.map(({ categoryLabel, subCategoryData }) => (
+                {filteredSubCategoriesGroupedByParent.length > 0 ? filteredSubCategoriesGroupedByParent.map(({ categoryLabel, categoryDescription, subCategoryData }) => (
                     <Fragment key={categoryLabel}>
                         {!removeCategoryLabels && (
                             <h3 className="text-lg mb-2 mt-6 col-span-4">
                                 {categoryLabel}
+                                {categoryDescription && (
+                                    <InfoModal customButtonClasses="ml-1" iconSize="size-5">
+                                        {categoryDescription.split('\n\n').map(paragraph => (
+                                            <p key={paragraph}>{paragraph}</p>
+                                        ))}
+                                    </InfoModal>
+                                )}
                             </h3>
                         )}
 
                         {subCategoryData.map((datum: any) => (
-                            <Fragment key={datum['Category Value']}>
+                            // Subgrid keeps the row on BarList's columns; `display: contents` would drop the group role in some browsers
+                            <div
+                                key={datum['Category Value']}
+                                role="group"
+                                aria-label={datum['Category Label']}
+                                className="col-span-4 grid grid-cols-subgrid gap-y-1 mb-3 last:mb-0"
+                            >
                                 <BarListRowHeading>
                                     <CategoryLabelTitle 
                                         title={datum['Category Label']} 
                                         categoryDescription={datum['Category Description']} 
+                                        prefix={renderLabelPrefix?.(datum)}
                                     />
                                 </BarListRowHeading>
 
@@ -141,7 +165,7 @@ export default function AllSubCategories({
                                             ] === datum['Category Value'],
                                     )}
                                 />
-                            </Fragment>
+                            </div>
                         ))}
                     </Fragment>
                 )) : (
@@ -154,7 +178,7 @@ export default function AllSubCategories({
     )
 }
 
-const FallbackData = () => {
+export const FallbackData = () => {
     const { categoriesAndSubCategoriesFallback } = grantsByResearchCategoriesFallbackData
     
     const { brightColours, dimColours } = getColoursByField('ResearchCat')
