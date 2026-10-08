@@ -140,6 +140,13 @@ export function availableFilters(): FilterSchema[] {
             advanced: true,
             isPlural: true,
         },
+
+        // Driven by the "BVD research only" switch on the Ebola outbreak page
+        {
+            label: 'BVD Research',
+            field: 'BvdResearchAward',
+            isHidden: true,
+        },
     ]
 
     return filters

@@ -31,7 +31,10 @@ import VisualisationJumpMenu from '@/app/visualise/components/VisualisationJumpM
 import ClinicalTrialsTherapeuticsAndVaccines from '../../components/ClinicalTrialsTherapeuticsAndVaccines/Card'
 import MarburgResearchAndPolicyRoadmaps from '../../components/MarburgResearchAndPolicyRoadmaps'
 import GrantsByWHOMpoxRoadmap from '../../components/GrantsByWHOMpoxRoadmap'
-import EbolaCorcPrioritiesCard from '../../components/EbolaCorcPrioritiesCard'
+import EbolaResearchPrioritiesCard from '../../components/EbolaResearchPrioritiesCard'
+import BvdResearchOnlySwitch from '../../components/EbolaResearchPriorities/BvdResearchOnlySwitch'
+
+const EBOLA_BVD_OUTBREAK_ID = 'OBK_EBL_202605_1'
 
 interface VisualisationPageProps {
     title: string
@@ -42,7 +45,6 @@ interface VisualisationPageProps {
     diseaseLabel?: DiseaseLabel
     outbreakId?: string
     announcements: AnnouncementProps[]
-    slug?: string
     totalsInfoIconText?: string
 }
 
@@ -55,7 +57,6 @@ const VisualisePageClientComponent = ({
     diseaseLabel,
     outbreakId,
     announcements,
-    slug,
     totalsInfoIconText
 }: VisualisationPageProps) => {
     const tooltipRef = useRef<TooltipRefProps>(null)
@@ -130,6 +131,12 @@ const VisualisePageClientComponent = ({
                     sharedFiltersId={sharedFiltersId}
                     outbreak={outbreak}
                     totalsInfoIconText={totalsInfoIconText}
+                    afterHierarchicalFilters={outbreakId === EBOLA_BVD_OUTBREAK_ID && (
+                        <BvdResearchOnlySwitch
+                            selectedFilters={selectedFilters}
+                            setSelectedFilters={setSelectedFilters}
+                        />
+                    )}
                 />
             ),
             closedContent: (
@@ -175,6 +182,7 @@ const VisualisePageClientComponent = ({
         loadingDataset,
         sharedFiltersId,
         outbreak,
+        outbreakId,
         totalsInfoIconText
     ])
 
@@ -247,10 +255,19 @@ const VisualisePageClientComponent = ({
                                             <GrantsByResearchCategoryCard />
                                         </div>
                                     </>
-                                ) : slug && slug === 'ebola-2' ? (
-                                    <div id="ebola-corc-priorities">
-                                        <EbolaCorcPrioritiesCard/>
-                                    </div>
+                                ) : outbreakId === EBOLA_BVD_OUTBREAK_ID ? (
+                                    <>
+                                        <div id="ebola-corc-priorities" className={gridClasses}>
+                                            <EbolaResearchPrioritiesCard />
+                                        </div>
+
+                                        <div
+                                            id="research-categories"
+                                            className={gridClasses}
+                                        >
+                                            <GrantsByResearchCategoryCard />
+                                        </div>
+                                    </>
                                 ) : (
                                     <div
                                         id="research-categories"

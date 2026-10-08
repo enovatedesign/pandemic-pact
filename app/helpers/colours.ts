@@ -691,6 +691,28 @@ export const pandemicIntelligenceThemeDimColours: Colours = {
     '9': brandColours.teal['600'],
 }
 
+// Ebola sub-priority values are `priority.sub`, and each row takes its broad priority's
+// colour. The sub-priority counts mirror the ebola_priority_N_simplified dictionary fields.
+const ebolaSubPriorityCounts: { [priority: string]: number } = {
+    '1': 4, '2': 1, '3': 2, '4': 2, '5': 1, '6': 4, '7': 2, '8': 4, '9': 2, '10': 2,
+}
+
+const colourEbolaSubPriorities = (priorityColours: Colours): Colours => Object.fromEntries(
+    Object.entries(ebolaSubPriorityCounts).flatMap(([priority, count]) =>
+        Array.from({ length: count }, (_, index) => [`${priority}.${index + 1}`, priorityColours[priority]]),
+    ),
+)
+
+// Scope pill borders/10% tints (behind gray-900 text) and accordion stripes; as text colours on white they fail WCAG AA.
+// The Marburg palette, but priority 4's orange read as the "BVD research" scope colour
+const ebolaResearchPriorityColours: Colours = { ...marburgResearchPriorityColours, '4': brandColours.grey['700'] }
+const ebolaResearchPriorityDimColours: Colours = { ...marburgResearchPriorityDimColours, '4': brandColours.grey['600'] }
+
+export const ebolaScopeColours = {
+    bvd: brandColours.orange['500'],
+    all: brandColours.green['500'],
+}
+
 export const coloursByField = {
     ResearchCat: {
         bright: researchCategoryColours,
@@ -719,6 +741,11 @@ export const coloursByField = {
     MarburgCORCResearchSubPriorities: {
         bright: marburgResearchPriorityColours,
         dim: marburgResearchPriorityDimColours,
+    },
+    // Broad priority header rows and their sub-priority rows share one BarList
+    EbolaResearchPriorities: {
+        bright: { ...ebolaResearchPriorityColours, ...colourEbolaSubPriorities(ebolaResearchPriorityColours) },
+        dim: { ...ebolaResearchPriorityDimColours, ...colourEbolaSubPriorities(ebolaResearchPriorityDimColours) },
     },
     hundredDaysMissionClinicalTrial: {
         bright: hundredDaysMissionClinicalTrialColours,

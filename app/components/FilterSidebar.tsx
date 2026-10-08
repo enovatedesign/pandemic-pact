@@ -26,6 +26,7 @@ interface FilterSidebarProps {
     showHierarchicalFilters?: boolean
     policyRoadmapEntryType?: PolicyRoadmapEntryTypeHandle
     customFilters?: ReactNode
+    afterHierarchicalFilters?: ReactNode
     bottomContent?: ReactNode
     totalsInfoIconText?: string
 }
@@ -52,6 +53,7 @@ export default function FilterSidebar({
     showHierarchicalFilters = true,
     policyRoadmapEntryType,
     customFilters,
+    afterHierarchicalFilters,
     bottomContent,
     totalsInfoIconText
 }: FilterSidebarProps) {
@@ -165,6 +167,8 @@ export default function FilterSidebar({
                     outbreak={outbreak}
                 />
             )}
+
+            {afterHierarchicalFilters}
 
             <FilterBlock
                 filters={standardFilters}
