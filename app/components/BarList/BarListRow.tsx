@@ -5,6 +5,8 @@ import {
     XAxis,
     YAxis,
     ResponsiveContainer,
+    Rectangle,
+    BarShapeProps,
 } from 'recharts'
 
 import { dollarValueFormatter } from '../../helpers/value-formatters'
@@ -16,6 +18,10 @@ interface Props {
     dataIndex: number
 }
 
+// Recharts drops zero-width bars, and their `background` track with them, unless the
+// bar has a custom shape. Rectangle itself draws nothing at zero width.
+const barShapeKeepingBackground = (props: BarShapeProps) => <Rectangle {...props} />
+
 export default function BarListRow({ dataIndex }: Props) {
     const { tooltipRef } = useContext(TooltipContext)
 
@@ -25,6 +31,7 @@ export default function BarListRow({ dataIndex }: Props) {
         dimColours,
         maxTotalNumberOfGrants,
         maxAmountCommitted,
+        isAnimationActive,
     } = useContext(BarListContext)
 
     const datum = data[dataIndex]
@@ -86,13 +93,16 @@ export default function BarListRow({ dataIndex }: Props) {
                         />
 
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Grants With Known Financial Commitments"
                             fill={brightColours[datum['Category Value']]}
                             stackId="a"
                             background={{ fill: '#eee' }}
+                            shape={barShapeKeepingBackground}
                         />
                         
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Grants With Unspecified Financial Commitments"
                             fill={dimColours[datum['Category Value']]}
                             stackId="a"
@@ -139,9 +149,11 @@ export default function BarListRow({ dataIndex }: Props) {
                         />
 
                         <Bar
+                            isAnimationActive={isAnimationActive}
                             dataKey="Known Financial Commitments (USD)"
                             fill={brightColours[datum['Category Value']]}
                             background={{ fill: '#eee' }}
+                            shape={barShapeKeepingBackground}
                         />
                     </RechartBarChart>
                 </ResponsiveContainer>

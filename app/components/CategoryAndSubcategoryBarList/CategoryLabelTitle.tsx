@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from "react"
+import { ReactNode, useEffect, useRef, useState } from "react"
 import InfoModal from "../InfoModal"
 
 const CategoryLabelTitle = ({ 
     title, 
-    categoryDescription 
+    categoryDescription,
+    prefix,
 } : { 
     title: string, 
-    categoryDescription?: string 
+    categoryDescription?: string,
+    prefix?: ReactNode,
 }) => {
     const [canExpand, setCanExpand] = useState<boolean>(false)
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
@@ -25,6 +27,7 @@ const CategoryLabelTitle = ({
     return (
         <div className="w-full flex items-start justify-between gap-x-2">
             <p ref={titleRef} className={`bar-chart-category-label text-gray-600 text-sm line-clamp-1 ${isExpanded ? '!line-clamp-none' : ''}`}>
+                {prefix}
                 {title} 
                 {categoryDescription && (
                     <InfoModal customButtonClasses="ml-1" iconSize="size-4">

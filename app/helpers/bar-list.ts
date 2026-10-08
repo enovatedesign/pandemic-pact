@@ -33,6 +33,7 @@ export const BarListContext = createContext<{
     dimColours: Colours
     maxTotalNumberOfGrants: number
     maxAmountCommitted: number
+    isAnimationActive?: boolean | 'auto'
 }>({
     data: [],
     brightColours: {},
