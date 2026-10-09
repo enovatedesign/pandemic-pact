@@ -17,6 +17,8 @@ interface Props {
     id: string
     title: string
     subtitle?: string | ReactNode
+    /** Partner logos shown in the top-right corner, beside the title. */
+    logos?: ReactNode
     chartInstructions?: string
     footnote?: string | ReactNode
     infoModalContents?: ReactNode
@@ -42,6 +44,7 @@ export default function VisualisationCard({
     id,
     title,
     subtitle,
+    logos,
     chartInstructions,
     footnote,
     infoModalContents,
@@ -104,14 +107,23 @@ export default function VisualisationCard({
             <animated.div id={id} ref={ref} style={springs} className="relative z-0 hover:z-50">
                 <div className="visualisation-card-wrapper flex flex-col items-start gap-y-6 h-full w-full bg-white p-6 lg:p-10 border-y-2 border-gray-200 lg:rounded-xl lg:border-2 relative">
                     <div className="flex flex-col items-start gap-y-6">
-                        <div className="mr-16 z-10">
-                            <h2 className="text-lg capitalize inline">
-                                {title}
-                            </h2>{' '}
-                            {infoModalContents && (
-                                <InfoModal customButtonClasses="align-middle -translate-y-[2px]">
-                                    {infoModalContents}
-                                </InfoModal>
+                        <div className={logos ? 'w-full flex flex-col-reverse items-start gap-6 md:flex-row md:justify-between' : undefined}>
+                            <div className="mr-16 z-10">
+                                <h2 className="text-lg capitalize inline">
+                                    {title}
+                                </h2>{' '}
+                                {infoModalContents && (
+                                    <InfoModal customButtonClasses="align-middle -translate-y-[2px]">
+                                        {infoModalContents}
+                                    </InfoModal>
+                                )}
+                            </div>
+
+                            {/* Clear the active-filters badge, which overlays the top-right corner */}
+                            {logos && (
+                                <div className={`shrink-0 flex items-center gap-x-6 ${numberOfActiveFilters > 0 ? 'mr-16' : ''}`}>
+                                    {logos}
+                                </div>
                             )}
                         </div>
 

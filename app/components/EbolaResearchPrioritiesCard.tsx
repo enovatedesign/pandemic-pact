@@ -3,6 +3,7 @@ import PrioritiesAccordion from './EbolaResearchPriorities/PrioritiesAccordion'
 import { Scope, scopeLabels } from './EbolaResearchPriorities/ScopePill'
 import { ebolaScopeColours } from '../helpers/colours'
 import InfoModal from './InfoModal'
+import LogoInverted from './LogoInverted'
 
 const ScopeLegend = () => (
     <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
@@ -41,6 +42,12 @@ const EbolaResearchPrioritiesCard = () => {
             id="grants-by-ebola-research-priority"
             title="Global Ebola Bundibugyo Research Priorities"
             subtitle={subTitle}
+            logos={
+                <>
+                    <LogoInverted className="h-10 w-auto" aria-label="Pandemic PACT" role="img" />
+                    <img src="/images/anrs-logo.png" alt="ANRS Emerging Infectious Diseases" className="h-10 w-auto" />
+                </>
+            }
             footnote={
                 <>
                     {footnote}{' '}
