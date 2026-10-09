@@ -120,8 +120,11 @@ export default function PrioritiesAccordion() {
                             style={{ borderColor: ebolaScopeColours[scope] }}
                         >
                             <div className="col-span-4 grid grid-cols-subgrid gap-y-1 px-6 py-4">
-                                {/* The button stretches over the whole header line; the pill and info icon sit above it */}
-                                <div className="relative col-span-4 flex items-start justify-between gap-x-4">
+                                {/*
+                                    The button stretches over the whole header; the pill and info icon sit above it.
+                                    Below md the controls take their own row so the title gets the full width.
+                                */}
+                                <div className="relative col-span-4 flex flex-col-reverse gap-y-2 md:flex-row md:items-start md:justify-between md:gap-x-4">
                                     <h3 className="text-base lg:text-lg">
                                         <button
                                             type="button"
@@ -135,7 +138,7 @@ export default function PrioritiesAccordion() {
                                         </button>
                                     </h3>
 
-                                    <div className="flex items-center gap-x-2 shrink-0">
+                                    <div className="flex items-center justify-end gap-x-2 shrink-0">
                                         <div className="relative z-10 flex items-center gap-x-1">
                                             <ScopePill scope={scope} />
 
