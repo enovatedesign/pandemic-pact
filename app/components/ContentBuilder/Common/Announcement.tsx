@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useId } from "react"
-import { usePathname } from "next/navigation"
+import usePagePathname from "@/app/hooks/usePagePathname"
 import { InformationCircleIcon, XIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import { AnnouncementProps } from "@/app/helpers/types"
 
@@ -75,7 +75,7 @@ const primaryIndexFor = (path: string, count: number) => {
 
 const Announcement = ({ announcements }: Props) => {
 
-    const pathname = usePathname() ?? '/'
+    const pathname = usePagePathname()
 
     const headingId = useId()
     const listId = useId()
