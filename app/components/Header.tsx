@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import {usePathname} from 'next/navigation'
 import {getLinksArray} from '../helpers/nav'
+import usePagePathname from '../hooks/usePagePathname'
 import {ChevronDownIcon} from '@heroicons/react/solid'
 import {useState, useEffect, useRef} from 'react'
 import NavSubPages from './NavSubPages'
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export default function Header({ className, showMobileNav, closeMobileNav }: Props ) {
-    const pathname = usePathname()
+    const pathname = usePagePathname()
     const links = getLinksArray()
 
     const [activeIndex, setActiveIndex] = useState(-1)
