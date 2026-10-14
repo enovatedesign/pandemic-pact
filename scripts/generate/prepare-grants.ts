@@ -11,7 +11,7 @@ import {
     convertCommaSeparatedValueFieldToArray,
     grantPolicyRoadmaps,
 } from '../helpers/key-mapping'
-import { registerCanonicalCodes, reportUnresolvedCodes } from '../helpers/redcap-codes'
+import { registerCanonicalCodes, reportUnresolvedCodes, checkCodedValues } from '../helpers/redcap-codes'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 import { formatInvestigatorNames } from '../helpers/principle-investigators'
 import { resolveTrendStartYear } from '../helpers/trend-start-year'
@@ -104,6 +104,7 @@ export default async function prepareGrants() {
 
         // Get an object containing only the string fields and values
         const stringFieldValues = _.pick(rawGrant, stringFields)
+        checkCodedValues(stringFieldValues)
 
         // Get an object containing only the numeric fields and values,
         // converting the values to numbers

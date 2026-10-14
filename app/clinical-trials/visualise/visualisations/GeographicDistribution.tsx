@@ -42,6 +42,7 @@ import { useSelectOptions } from './useSelectOptions'
 import regionToCountryMapping from '../../../../data/source/region-to-country-mapping.json'
 import countriesGeojson from '../../../../public/data/geojson/countries.json'
 import whoRegionsGeojson from '../../../../public/data/geojson/who-regions.json'
+import { labelForCode } from '../../../helpers/sentinel-codes'
 
 /**
  * Visualisation 1 — Geographical distribution of clinical research locations /
@@ -163,7 +164,7 @@ function GeographyMap({ source }: { source: Source }) {
                 properties: {
                     ...feature.properties,
                     id,
-                    name: labels[id] ?? id,
+                    name: labelForCode(id, labels),
                     count,
                     coLocatedCount,
                     fillColour: toDeckGlRgb(fill),
@@ -369,7 +370,7 @@ function GeographyBars({ source }: { source: Source }) {
             })
         })
         return Array.from(counts.entries())
-            .map(([code, count]) => ({ code, name: regionLabels[code] ?? code, count }))
+            .map(([code, count]) => ({ code, name: labelForCode(code, regionLabels), count }))
             .sort((a, b) => b.count - a.count)
     }, [trials, fields.region, regionLabels])
 
@@ -387,7 +388,7 @@ function GeographyBars({ source }: { source: Source }) {
             })
         })
         return Array.from(counts.entries())
-            .map(([code, count]) => ({ code, name: countryLabels[code] ?? code, count }))
+            .map(([code, count]) => ({ code, name: labelForCode(code, countryLabels), count }))
             .sort((a, b) => b.count - a.count)
     }, [trials, drillRegion, fields.country, countryLabels])
 
@@ -452,7 +453,7 @@ function GeographyBars({ source }: { source: Source }) {
 
                 <p className="text-brand-grey-500">
                     {showingCountries
-                        ? `Viewing countries in ${regionLabels[drillRegion] ?? drillRegion}.`
+                        ? `Viewing countries in ${labelForCode(drillRegion, regionLabels)}.`
                         : 'Click a region bar to expand to countries'}
                 </p>
             </div>

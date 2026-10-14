@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { ExternalLinkIcon } from '@heroicons/react/solid'
 
 import InfoModal from '@/app/components/InfoModal'
+import { isSentinelCode } from '@/app/helpers/sentinel-codes'
 
 import '@/app/css/components/breakout.css'
 
@@ -26,17 +27,23 @@ const DEFAULT_HEADING_VALUE = 'text-lg md:text-2xl lg:text-3xl'
 const SUBHEADING_VALUE = 'text-lg lg:text-xl'
 
 /**
- * Normalises a raw value for display: drops empty strings, "N/A" sentinels and
- * empty arrays (returning null so the fact can be filtered out), and trims array
- * members down to the meaningful ones.
+ * Normalises a raw value for display: drops empty strings, "N/A" and REDCap
+ * missing-data codes like '-99' (free-text fields such as years carry these with
+ * no label to resolve them), returning null so the fact shows as N/A.
  */
 export function clean(value: any): any {
     if (Array.isArray(value)) {
-        const filtered = value.filter(v => v && v !== 'N/A')
+        const filtered = value.filter(v => v && v !== 'N/A' && !isSentinelCode(v))
         return filtered.length > 0 ? filtered : null
     }
 
-    if (value === undefined || value === null || value === '' || value === 'N/A') {
+    if (
+        value === undefined ||
+        value === null ||
+        value === '' ||
+        value === 'N/A' ||
+        isSentinelCode(value)
+    ) {
         return null
     }
 

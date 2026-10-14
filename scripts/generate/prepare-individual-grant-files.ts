@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 import { ProcessedGrant, SelectOptions } from '../types/generate'
 import { title, info } from '../helpers/log'
+import { labelForCode } from '../../app/helpers/sentinel-codes'
 import readGrantsDist from '../helpers/read-grants-dist'
 import { uploadGrants, uploadGrantsIncremental } from '../helpers/storage'
 import {
@@ -154,9 +155,5 @@ function getLabelFromSelectOptionValue(
 
     const option = options.find(option => option.value === value)
 
-    if (option === undefined) {
-        return value
-    }
-
-    return option.label
+    return labelForCode(value, option?.label)
 }

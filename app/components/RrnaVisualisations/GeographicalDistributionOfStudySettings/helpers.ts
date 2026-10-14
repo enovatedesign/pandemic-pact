@@ -1,5 +1,6 @@
 import regionToCountryMapping from '@/data/source/region-to-country-mapping.json'
 import selectOptions from '@/data/dist/select-options.json'
+import { labelForCode } from '@/app/helpers/sentinel-codes'
 
 function buildCountryToRegionMap(): Record<string, string> {
     const map: Record<string, string> = {}
@@ -21,8 +22,11 @@ const countryNameByCode: Record<string, string> = Object.fromEntries(
 )
 
 const regionLabel = (regionId: string) =>
-    (selectOptions['ResearchInstitutionRegion'] as { value: string; label: string }[])
-        .find((o) => o.value === regionId)?.label ?? regionId
+    labelForCode(
+        regionId,
+        (selectOptions['ResearchInstitutionRegion'] as { value: string; label: string }[])
+            .find((o) => o.value === regionId)?.label,
+    )
 
 export const prepareGeographicalDistributionOfStudySubjectBarChartData = (studies: any[]) => {
     const grouped: Record<string, any[]> = {}
@@ -119,10 +123,12 @@ export const prepareDomainSegmentTooltip = (
 
     return Object.entries(diseaseStudies)
         .map(([code, count]) => ({
-            label:
+            label: labelForCode(
+                code,
                 (selectOptions['Diseases'] as { value: string; label: string }[]).find(
                     (o) => o.value === code
-                )?.label ?? code,
+                )?.label,
+            ),
             count,
         }))
         .sort((a, b) => b.count - a.count)

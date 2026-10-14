@@ -12,7 +12,7 @@ import {
     convertCheckBoxFieldToArray,
     convertCommaSeparatedValueFieldToArray,
 } from '../helpers/key-mapping'
-import { registerCanonicalCodes, reportUnresolvedCodes } from '../helpers/redcap-codes'
+import { registerCanonicalCodes, reportUnresolvedCodes, checkCodedValues } from '../helpers/redcap-codes'
 import { title, info, printWrittenFileStats } from '../helpers/log'
 
 /**
@@ -89,6 +89,7 @@ export default async function prepareTrials(config: DatasetConfig) {
 
         // String fields, kept as-is.
         const stringFieldValues = _.pick(rawTrial, stringFields)
+        checkCodedValues(stringFieldValues)
 
         // Checkbox fields -> arrays of checked codes (per base name).
         const checkboxFieldValues = Object.fromEntries(
