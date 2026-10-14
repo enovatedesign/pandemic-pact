@@ -5,6 +5,7 @@ import { info, printWrittenFileStats } from './log'
 interface ParseOptions {
     headers: boolean
     ignoreEmpty: boolean
+    trim: boolean
     maxRows?: number
     delimiter?: string
 }
@@ -42,6 +43,9 @@ export default async function csvFileToJson(
         const options: ParseOptions = {
             headers,
             ignoreEmpty: true,
+            // Figshare exports pad some coded values (' -99', 'Germany '), which then
+            // match no dictionary label or filter option. Interior whitespace is kept.
+            trim: true,
         }
 
         if (!headers) {
