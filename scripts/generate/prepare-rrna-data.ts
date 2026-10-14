@@ -1,6 +1,12 @@
 import fs from 'fs-extra'
 import readLargeJson from '../helpers/read-large-json'
 import { title, info, printWrittenFileStats } from '../helpers/log'
+import {
+    registerCanonicalCodes,
+    resolveCanonicalCode,
+    checkCodedValue,
+    reportUnresolvedCodes,
+} from '../helpers/redcap-codes'
 import { map } from 'lodash'
 
 interface RrnaDictionaryEntry {
@@ -58,6 +64,8 @@ export default async function prepareRrna() {
  
     const dataDictionary = await fs.readJson('./data/download/rrna-data-dictionary.json') as RrnaDictionaryEntry[]
 
+    registerCanonicalCodes(dataDictionary as any[], 'RRNA')
+
     // Create a mapping of variable names to their types and options for easier processing
     const dictionaryMap: Record<string, any> = {}
     dataDictionary.forEach(entry => {
@@ -95,8 +103,8 @@ export default async function prepareRrna() {
         const convertedData: Record<string, any> = {}
 
         for (const [key, value] of Object.entries(rawRrnaData)) {
-            const variableName = key.split('___')[0] || key
-            let variableCode = key.split('___')[1] || null
+            const [variableName, segment] = key.split('___')
+            let variableCode = segment ? resolveCanonicalCode(segment) : null
 
             const mapEntry = dictionaryMap[variableName]
 
@@ -148,6 +156,7 @@ export default async function prepareRrna() {
                     }
                 }
             } else if (mapEntry.type === 'radio') {
+                checkCodedValue(variableName, value)
                 variableCode = variableCode || (typeof value === 'string' ? value : null);
 
                 if (value && value != '0' && variableCode) {
@@ -222,6 +231,8 @@ export default async function prepareRrna() {
     fs.writeJsonSync(publicPathname, rrnaData)
 
     printWrittenFileStats(pathname)
-    
+
+    reportUnresolvedCodes('RRNA')
+
     return Promise.resolve(rrnaData)
 }

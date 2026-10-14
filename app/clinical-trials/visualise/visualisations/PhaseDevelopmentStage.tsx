@@ -25,6 +25,7 @@ import { GlobalFilterContext } from '../../../helpers/filters'
 import { brandColours } from '../../../helpers/colours'
 import { rechartBaseTooltipProps } from '../../../helpers/tooltip'
 import { useSelectOptions } from './useSelectOptions'
+import { labelForCode } from '../../../helpers/sentinel-codes'
 
 /**
  * Visualisation 3 — Distribution of clinical research registrations by Clinical
@@ -234,7 +235,7 @@ function PathwayChart({ pathway }: { pathway: Pathway }) {
                                         key={code}
                                         dataKey={code}
                                         stackId="recruitment"
-                                        name={recruitmentLabels[code] ?? code}
+                                        name={labelForCode(code, recruitmentLabels)}
                                         fill={RECRUITMENT_COLOURS[code] ?? FALLBACK_COLOUR}
                                     />
                                 ))

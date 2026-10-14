@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import zlib from 'zlib'
 import { utils } from 'xlsx'
 import { title, info, printWrittenFileStats } from '../helpers/log'
+import { isSentinelCode, labelForCode } from '../../app/helpers/sentinel-codes'
 import { Grant } from '../types/generate'
 
 interface SelectOptions {
@@ -139,18 +140,23 @@ export default function prepareCsvExportFile({
                     // If it's an array of values, get the label for each value
                     // and combine them into a single string separated by |
                     row[field] = value
-                        .map((v: string) => selectOptionsMap.get(field).get(v))
+                        .map((v: string) =>
+                            selectOptionsMap.get(field).get(v) ??
+                            (isSentinelCode(v) ? labelForCode(v) : undefined),
+                        )
                         .filter((v: string) => v)
                         .join(' | ')
                 } else {
-                    // Otherwise just get the label for the single value. Fall
-                    // back to the raw value when the code isn't in the options
-                    // map, otherwise the missing label serialises as the literal
-                    // string "undefined" in the exported CSV.
+                    // Otherwise just get the label for the single value. A
+                    // missing label must not serialise as the literal string
+                    // "undefined" in the exported CSV.
                     row[field] =
-                        selectOptionsMap.get(field).get(grant[field]) ??
-                        grant[field] ??
-                        ''
+                        grant[field] == null
+                            ? ''
+                            : labelForCode(
+                                  grant[field],
+                                  selectOptionsMap.get(field).get(grant[field]),
+                              )
                 }
             } else if (Array.isArray(value)) {
                 // Free-text multi-value fields have no labels to look up, but

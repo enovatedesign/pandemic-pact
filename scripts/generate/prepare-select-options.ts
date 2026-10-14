@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import { title, printWrittenFileStats } from '../helpers/log'
 import readGrantsDist from '../helpers/read-grants-dist'
+import { labelForCode } from '../../app/helpers/sentinel-codes'
 import {
     mpoxResearchPriorityAndSubPriorityMapping,
     convertSourceKeysToOurKeys,
@@ -260,13 +261,17 @@ export function parseSelectOptionsFromChoices(choices: string) {
         // and then reconstruct the label by joining the rest of the values
         // after.
         const [id, ...rest] = choice.split(',')
+        const value = id.trim()
 
         return {
-            value: id.trim(),
-            label: rest
-                .join(',')
-                .replace(/<[^>]*>?/gm, '') // remove html tags (if any)
-                .trim(),
+            value,
+            label: labelForCode(
+                value,
+                rest
+                    .join(',')
+                    .replace(/<[^>]*>?/gm, '') // remove html tags (if any)
+                    .trim(),
+            ),
         }
     })
 }

@@ -28,6 +28,7 @@ import { GlobalFilterContext } from '../../../helpers/filters'
 import { diseaseColours, brandColours } from '../../../helpers/colours'
 import { rechartBaseTooltipProps } from '../../../helpers/tooltip'
 import { useSelectOptions } from './useSelectOptions'
+import { labelForCode } from '../../../helpers/sentinel-codes'
 
 /**
  * Visualisation 2 — Global annual number of clinical research registrations for
@@ -96,7 +97,7 @@ export default function AnnualRegistrationsByDisease() {
         return () => mql.removeEventListener('change', update)
     }, [])
 
-    const labelFor = (code: string) => diseaseLabels[code] ?? code
+    const labelFor = (code: string) => labelForCode(code, diseaseLabels)
 
     // Lock the whole visualisation (both tabs) to 2020 onwards, mirroring the
     // grants dataset, so switching between Temporal and Bars doesn't drift.

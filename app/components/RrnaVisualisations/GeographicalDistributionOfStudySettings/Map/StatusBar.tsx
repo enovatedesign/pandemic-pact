@@ -7,6 +7,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { formatDistributionOfStudySettingsStatusBarContent } from "./helpers"
 import { rrnaMapControlState } from "@/app/helpers/types"
 import selectOptions from '@/data/dist/rrna/select-options.json'
+import { labelForCode } from '@/app/helpers/sentinel-codes'
 
 interface StatusBarProps {
     articles: any[]
@@ -59,7 +60,7 @@ const StatusBar = ({ articles, selectedFeatureProperties, setSelectedFeatureId, 
                         const researchDomainsArePresent = filteredResearchDomains.some(researchDomain => researchDomain.count > 0)
 
                         // Find the label for the disease code from selectOptions
-                        const diseaseLabel = (selectOptions['Disease']?.find(option => option.value === disease)?.label) || disease
+                        const diseaseLabel = labelForCode(disease, selectOptions['Disease']?.find(option => option.value === disease)?.label)
 
                         return (
                             <li key={disease}>

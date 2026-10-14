@@ -6,6 +6,7 @@ import { brandColours } from '@/app/helpers/colours'
 import type { rrnaMapControlState } from '@/app/helpers/types'
 import selectOptions from '@/data/dist/select-options.json'
 import regionToCountryMapping from '@/data/source/region-to-country-mapping.json'
+import { labelForCode } from '@/app/helpers/sentinel-codes'
 
 export const prepareGeoJsonAndColourScale = (
     mapControlState: rrnaMapControlState,
@@ -26,8 +27,11 @@ export const prepareGeoJsonAndColourScale = (
                         .find(option =>
                             option.value === feature.properties.id
                     )?.label as string,
-            'countries': (selectOptions['ResearchLocationCountry'] as { value: string; label: string }[])
-                        .find(option => option.value === feature.properties.id)?.label ?? feature.properties.id,
+            'countries': labelForCode(
+                feature.properties.id,
+                (selectOptions['ResearchLocationCountry'] as { value: string; label: string }[])
+                    .find(option => option.value === feature.properties.id)?.label,
+            ),
         }
 
         const name = nameOptions[mapControlState.locationType]

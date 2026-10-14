@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import zlib from 'zlib'
 import { SelectOptions } from '../types/generate'
 import { title, info, error } from '../helpers/log'
+import { labelForCode } from '../../app/helpers/sentinel-codes'
 import { uploadTrials } from '../helpers/upload-trials'
 import datasets, { DatasetConfig } from '../config/datasets'
 
@@ -112,11 +113,7 @@ function getLabelFromSelectOptionValue(
 
     const option = options.find(option => option.value === value)
 
-    if (option === undefined) {
-        return value
-    }
-
-    return option.label
+    return labelForCode(value, option?.label)
 }
 
 // Allow running this file directly off the existing dist artefacts (no Figshare

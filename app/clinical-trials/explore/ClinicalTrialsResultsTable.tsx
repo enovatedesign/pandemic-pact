@@ -8,6 +8,7 @@ import Button from '../../components/Button'
 import { useSelectOptions } from '../visualise/visualisations/useSelectOptions'
 import { buildIctrpUrl } from '../ictrp'
 import { CtSearchParameters, CtSearchResponse, CtSearchResult } from './search'
+import { labelForCode, isSentinelCode } from '../../helpers/sentinel-codes'
 
 import '../../css/components/highlighted-search-results.css'
 
@@ -119,15 +120,17 @@ function ClinicalTrialResult({
     const { _source } = result
 
     const diseases = (_source.Diseases ?? [])
-        .map(code => diseaseLabels[code] ?? code)
+        .map(code => labelForCode(code, diseaseLabels))
         .join(', ')
 
-    const register = registerLabels[_source.Register] ?? _source.Register
+    const register = labelForCode(_source.Register, registerLabels)
 
     const hasSourceLink =
         Boolean(_source.SourceLink) && _source.SourceLink !== 'N/A'
 
-    const registrationYear = _source.RegistrationYear
+    const registrationYear = isSentinelCode(_source.RegistrationYear)
+        ? null
+        : _source.RegistrationYear
 
     const trialNumber = _source.TrialNumber
 
