@@ -35,7 +35,9 @@ the 45-min build-ceiling risk and cutting Vercel build cost/time.
 | `deploy_production` | master | `VERCEL_PRODUCTION_DEPLOY_HOOK` | automatic |
 
 `deploy_develop` + `deploy_production` share the `.deploy_decoupled` template. The
-weekly `fetch_pubmed_data` job is unchanged.
+weekly `fetch_pubmed_data` job (master) is followed by `deploy_pubmed`, which fires
+`VERCEL_PRODUCTION_DEPLOY_HOOK`, because grant pages cache their PubMed data per
+deployment (see `grant-page-isr-caching.md`).
 
 ### `.vercelignore` (required for feature-branch deploys)
 Because `deploy_review` runs `npm run generate` on the runner **before**

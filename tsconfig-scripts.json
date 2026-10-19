@@ -14,7 +14,8 @@
   "include": [
     "scripts/**/*.ts",
     "./app/api/helpers/search.ts",
-    "./app/helpers/csv-filter.ts"
+    "./app/helpers/csv-filter.ts",
+    "./app/helpers/remote-data.ts"
   ],
   "exclude": ["node_modules"]
 }

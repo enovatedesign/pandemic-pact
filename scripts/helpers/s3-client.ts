@@ -8,6 +8,7 @@ import {
 import {
     CloudFrontClient,
     CreateInvalidationCommand,
+    waitUntilInvalidationCompleted,
 } from '@aws-sdk/client-cloudfront'
 import { info, warn } from './log'
 
@@ -167,21 +168,55 @@ export async function invalidateCloudFront(paths: string[]): Promise<void> {
 
     if (paths.length === 0) return
 
-    const items = paths.map(p => (p.startsWith('/') ? p : `/${p}`))
-    const cf = new CloudFrontClient({ region: process.env.AWS_REGION })
-
     try {
-        await cf.send(
-            new CreateInvalidationCommand({
-                DistributionId: distributionId,
-                InvalidationBatch: {
-                    CallerReference: `pp-${Date.now()}-${items.length}`,
-                    Paths: { Quantity: items.length, Items: items },
-                },
-            }),
-        )
-        info(`Requested CloudFront invalidation for ${items.length} path(s)`)
+        await createInvalidation(new CloudFrontClient({ region: process.env.AWS_REGION }), distributionId, paths)
     } catch (e) {
         warn('CloudFront invalidation failed: ' + (e instanceof Error ? e.message : String(e)))
     }
+}
+
+/**
+ * Invalidate and wait until CloudFront reports the purge complete. Throws on any
+ * failure, for callers whose next step would otherwise cache the stale edge copy.
+ */
+export async function invalidateCloudFrontAndWait(paths: string[]): Promise<void> {
+    const distributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID
+
+    if (!distributionId) {
+        throw new Error('CLOUDFRONT_DISTRIBUTION_ID not set, cannot invalidate CloudFront')
+    }
+
+    if (paths.length === 0) return
+
+    const cf = new CloudFrontClient({ region: process.env.AWS_REGION })
+    const id = await createInvalidation(cf, distributionId, paths)
+
+    if (!id) throw new Error('CloudFront returned no invalidation ID')
+
+    await waitUntilInvalidationCompleted(
+        { client: cf, maxWaitTime: 900 },
+        { DistributionId: distributionId, Id: id },
+    )
+    info(`CloudFront invalidation ${id} completed`)
+}
+
+async function createInvalidation(
+    cf: CloudFrontClient,
+    distributionId: string,
+    paths: string[],
+): Promise<string | undefined> {
+    const items = paths.map(p => (p.startsWith('/') ? p : `/${p}`))
+
+    const result = await cf.send(
+        new CreateInvalidationCommand({
+            DistributionId: distributionId,
+            InvalidationBatch: {
+                CallerReference: `pp-${Date.now()}-${items.length}`,
+                Paths: { Quantity: items.length, Items: items },
+            },
+        }),
+    )
+    info(`Requested CloudFront invalidation for ${items.length} path(s)`)
+
+    return result.Invalidation?.Id
 }

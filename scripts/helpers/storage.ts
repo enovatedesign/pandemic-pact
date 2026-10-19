@@ -6,7 +6,7 @@
  * the PubMed objects (pubmed/* + the consolidated cache/metadata), which the
  * weekly job writes and the grant pages read.
  */
-import { s3PutObject, s3GetObjectString } from './s3-client'
+import { s3PutObject, s3GetObjectString, invalidateCloudFrontAndWait } from './s3-client'
 
 export { uploadGrants, uploadGrantsIncremental } from './upload-grants'
 export { uploadStaticFiles } from './upload-static-files'
@@ -25,8 +25,7 @@ export function assetReadBaseUrl(): string | undefined {
 /**
  * Write a PubMed object. Keys are root-level (NOT branch-scoped), matching the
  * runtime read paths. Pass cacheControl 'no-store' for the consolidated cache /
- * metadata (read fresh by the weekly job); leave it default for per-grant files
- * (served at runtime with their own revalidate window).
+ * metadata (read fresh by the weekly job); leave it default for per-grant files.
  */
 export async function putPubMedObject(
     key: string,
@@ -43,4 +42,9 @@ export async function putPubMedObject(
  */
 export async function readPubMedObjectString(key: string): Promise<string | null> {
     return s3GetObjectString(key)
+}
+
+/** Purge the per-grant PubMed files from CloudFront before the weekly deploy. */
+export async function invalidatePubMedObjects(): Promise<void> {
+    await invalidateCloudFrontAndWait(['/pubmed/*'])
 }

@@ -4,6 +4,7 @@ import prepareGrants from './prepare-grants'
 import prepareSelectOptions from './prepare-select-options'
 import fetchPubMedData from './fetch-pub-med-data'
 import prepareSearch from './prepare-search'
+import { invalidatePubMedObjects } from '../helpers/storage'
 
 (async () => {
     dotenv.config({ path: './.env.local' })
@@ -31,4 +32,8 @@ import prepareSearch from './prepare-search'
     // Deploy builds no longer fetch PubMed, so this weekly job is now the only
     // place the OpenSearch PublicationCount is refreshed.
     await prepareSearch(publicationCounts)
+
+    // Unconditional: a retried run may have nothing left to fetch while an earlier
+    // attempt's uploads are still stale at the edge.
+    await invalidatePubMedObjects()
 })()
