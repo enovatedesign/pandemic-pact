@@ -59,6 +59,24 @@ fetch_pubmed_data:
         - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"
     retry: 2
 
+# Grant pages cache their PubMed data per deployment, so publications only go
+# live with a fresh production deploy. A separate job so a failed hook retries
+# alone rather than re-running the whole PubMed fetch.
+deploy_pubmed:
+    extends: .deploy_hook
+    stage: deploy
+    needs:
+        - fetch_pubmed_data
+    variables:
+        ENV_LABEL: production
+        DEPLOY_HOOK_URL: $VERCEL_PRODUCTION_DEPLOY_HOOK
+    environment:
+        name: production
+        url: https://www.pandemicpact.org
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"
+    retry: 2
+
 deploy_review:
     stage: deploy
     except:
@@ -142,6 +160,17 @@ stop_review:
     variables:
         GIT_STRATEGY: none
 
+# Shared by the decoupled deploys and deploy_pubmed.
+.deploy_hook:
+    script:
+        - |
+            set -e
+            # Trigger the Vercel deploy. -f makes curl fail the job on an HTTP error so
+            # a broken/missing hook URL is surfaced rather than silently swallowed.
+            echo "Triggering Vercel deploy hook for $ENV_LABEL"
+            curl -fsS -X POST "$DEPLOY_HOOK_URL" > /dev/null
+            echo "Deploy hook fired"
+
 # --- Decoupled deploys for develop + master (docs/decoupled-build.md) ---
 # Vercel's automatic Git deploys for develop/master are disabled in vercel.json
 # (git.deploymentEnabled). Instead these jobs run the heavy generate on the GitLab
@@ -167,13 +196,7 @@ stop_review:
             else
                 echo "Grants data unchanged — skipping generate; Vercel will take the cached path"
             fi
-        - |
-            set -e
-            # Trigger the Vercel deploy. -f makes curl fail the job on an HTTP error so
-            # a broken/missing hook URL is surfaced rather than silently swallowed.
-            echo "Triggering Vercel deploy hook for $ENV_LABEL"
-            curl -fsS -X POST "$DEPLOY_HOOK_URL" > /dev/null
-            echo "Deploy hook fired"
+        - !reference [.deploy_hook, script]
 
 deploy_develop:
     extends: .deploy_decoupled

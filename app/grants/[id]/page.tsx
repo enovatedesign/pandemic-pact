@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { defaultMetaData } from '@/app/helpers/default-meta-data';
 import numDigits from '@/app/api/helpers/metadata-functions';
-import { normaliseBranchName } from '@/app/helpers/normalise-branch-name';
+import { fetchRemoteJson, getBranchNameForRuntime } from '@/app/helpers/remote-data';
 import { pubmedFileName, splitGrantIds, idIsValidPubMedGrantId } from '@/app/helpers/pubmed-ids';
 import dataSources from '@/scripts/config/data-sources';
 
@@ -22,30 +22,6 @@ import '../../css/components/highlighted-search-results.css';
 type Props = {
     params: Promise<{ id: string }>;
 };
-
-/**
- * Get branch name for runtime remote storage paths
- */
-const getBranchNameForRuntime = (): string => {
-    // Prefer the non-public system vars: these are available at runtime in this
-    // server component and mirror the build-time upload helper (getBranchName()).
-    // The NEXT_PUBLIC_* copies are only inlined when VERCEL_GIT_COMMIT_REF is set
-    // at build time, so they're unreliable for redeploys (which leave them empty
-    // and cause a fall back to "master" → 404).
-    const ciBranch =
-        process.env.CI_COMMIT_REF_NAME ||
-        process.env.VERCEL_GIT_COMMIT_REF ||
-        process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
-        process.env.NEXT_PUBLIC_CI_COMMIT_REF_NAME ||
-        null;
-
-    if (!ciBranch) {
-        console.warn('No branch environment variable found, defaulting to "master"')
-        return 'master'
-    }
-
-    return normaliseBranchName(ciBranch)
-}
 
 const loadPubMedData = async (pubMedGrantId: string): Promise<any[]> => {
     const parts = splitGrantIds(pubMedGrantId).filter(idIsValidPubMedGrantId)
@@ -74,19 +50,18 @@ const loadPubMedDataForSingleId = async (pubMedGrantId: string): Promise<any[]> 
             return []
         }
 
+        // Publications are optional on the page, so any failure degrades to an
+        // empty list rather than failing the render like loadGrant does.
         try {
             const url = `${baseUrl}/pubmed/${encoded}.json`
-            const response = await fetch(url, { next: { revalidate: 3600 } })
+            const publications = await fetchRemoteJson(url)
 
-            if (!response.ok) {
-                console.warn(
-                    `Failed to fetch PubMed data for "${pubMedGrantId}" ` +
-                    `from ${url}: ${response.status} ${response.statusText}`
-                )
+            if (publications === null) {
+                console.warn(`PubMed data not found for "${pubMedGrantId}" at ${url}`)
                 return []
             }
 
-            return await response.json()
+            return publications
         } catch (error) {
             console.error(`Error fetching PubMed data for "${pubMedGrantId}":`, error)
             return []
@@ -116,21 +91,7 @@ const loadGrant = async (id: string) => {
             return null
         }
         
-        try {
-            const branchName = getBranchNameForRuntime()
-            const url = `${baseUrl}/${branchName}/grants/${id}.json`
-            const response = await fetch(url, { next: { revalidate: 3600 } })
-
-            if (!response.ok) {
-                console.error(`Failed to fetch grant ${id} from remote storage (branch: ${branchName}): ${response.status} ${response.statusText}`)
-                return null
-            }
-
-            return await response.json()
-        } catch (error) {
-            console.error(`Error fetching grant ${id} from remote storage:`, error)
-            return null
-        }
+        return fetchRemoteJson(`${baseUrl}/${getBranchNameForRuntime()}/grants/${id}.json`)
     } else {
         // Load from local filesystem
         const filePath = path.join(process.cwd(), 'public/grants', `${id}.json`)
@@ -205,7 +166,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export const dynamicParams = true;
-export const revalidate = 3600; // Re-render pages at most once per hour
+// Grant data only changes with a deploy, which starts with an empty ISR cache.
+export const revalidate = false;
 
 export async function generateStaticParams() {
     // Return empty array to pre-render zero pages at build time
