@@ -61,7 +61,7 @@ export default function HomepageClient({ announcements }: Props) {
                         <article aria-labelledby="page-title" className="relative flex flex-col justify-center items-center gap-8 lg:gap-12 w-full z-20 container">
 
                             <h1 id="page-title" className="inline-block max-w-6xl text-center text-white text-3xl font-light !leading-snug md:text-4xl lg:text-5xl">
-                                Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> grants from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> funders{homepageTotals.totalClinicalTrials && (
+                                Delivering insights from over: <AnimatedCounter prefix="$" className={counterClasses} {...homepageTotals.totalCommittedUsd} /> in research funding across <AnimatedCounter className={counterClasses} {...homepageTotals.totalGrants} /> awards from <AnimatedCounter className={counterClasses} {...homepageTotals.totalFunders} /> funders{homepageTotals.totalClinicalTrials && (
                                     <> and <AnimatedCounter className={counterClasses} {...homepageTotals.totalClinicalTrials} /> clinical research registrations</>
                                 )}
                             </h1>
