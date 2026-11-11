@@ -10,7 +10,7 @@ const StandardFeatureProperties = ({
   return (
     <div className="p-4 space-y-2">
         <div className="flex items-center justify-between space-x-4">
-            <p className="min-w-0 text-left text-brand-grey-700">Grants</p>
+            <p className="min-w-0 text-left text-brand-grey-700">Awards</p>
 
             <div className="min-w-0 flex-1 h-[1px] border-b border-dashed border-brand-grey-300"></div>
 

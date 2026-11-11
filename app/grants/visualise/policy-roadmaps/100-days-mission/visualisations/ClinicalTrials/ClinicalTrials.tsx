@@ -27,8 +27,8 @@ const ClinicalTrials = () => {
     return (
         <VisualisationCard
             id="clinical-trials"
-            title="Distribution of Clinical Research Grants by Clinical Trial Phases / Development Stages"
-            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
+            title="Distribution of Clinical Research Awards by Clinical Trial Phases / Development Stages"
+            footnote="Please note: Awards may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
             filenameToFetch='100-days-mission/100-days-mission-grants.csv'
             filteredFileName='100-days-mission-filtered-grants.csv'
         >

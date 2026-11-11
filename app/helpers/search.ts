@@ -310,15 +310,15 @@ export function queryOrFiltersAreSet(searchRequestBody: SearchRequestBody) {
 
 export const jointFundingFilterOptions = [
     {
-        label: 'All Grants (including joint-funded grants)',
+        label: 'All Awards (including joint-funded awards)',
         value: 'all-grants',
     },
     {
-        label: 'Only Joint-funded Grants',
+        label: 'Only Joint-funded Awards',
         value: 'only-joint-funded-grants',
     },
     {
-        label: 'Exclude Joint-funded Grants',
+        label: 'Exclude Joint-funded Awards',
         value: 'exclude-joint-funded-grants',
     },
 ]

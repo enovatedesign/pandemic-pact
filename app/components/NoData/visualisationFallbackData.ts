@@ -115,41 +115,41 @@ export const grantsByDiseaseFallbackData = {
         {
             "Category Label": "Crimean-Congo haemorrhagic fever",
             "Category Value": "43489008",
-            "Grants With Known Financial Commitments": 51,
-            "Grants With Unspecified Financial Commitments": 4,
-            "Total Grants": 55,
+            "Awards With Known Financial Commitments": 51,
+            "Awards With Unspecified Financial Commitments": 4,
+            "Total Awards": 55,
             "Known Financial Commitments (USD)": 61402236.03000001
         },
         {
             "Category Label": "Severe Acute Respiratory Syndrome (SARS)",
             "Category Value": "398447004",
-            "Grants With Known Financial Commitments": 38,
-            "Grants With Unspecified Financial Commitments": 1,
-            "Total Grants": 39,
+            "Awards With Known Financial Commitments": 38,
+            "Awards With Unspecified Financial Commitments": 1,
+            "Total Awards": 39,
             "Known Financial Commitments (USD)": 111696800.52999999
         },
         {
             "Category Label": "Congenital Zika virus disease",
             "Category Value": "762725007",
-            "Grants With Known Financial Commitments": 34,
-            "Grants With Unspecified Financial Commitments": 1,
-            "Total Grants": 35,
+            "Awards With Known Financial Commitments": 34,
+            "Awards With Unspecified Financial Commitments": 1,
+            "Total Awards": 35,
             "Known Financial Commitments (USD)": 40133762.059999995
         },
         {
             "Category Label": "Not applicable",
             "Category Value": "-9999",
-            "Grants With Known Financial Commitments": 7,
-            "Grants With Unspecified Financial Commitments": 0,
-            "Total Grants": 7,
+            "Awards With Known Financial Commitments": 7,
+            "Awards With Unspecified Financial Commitments": 0,
+            "Total Awards": 7,
             "Known Financial Commitments (USD)": 5744907.59
         },
         {
             "Category Label": "Hendra virus infection",
             "Category Value": "773582002",
-            "Grants With Known Financial Commitments": 5,
-            "Grants With Unspecified Financial Commitments": 0,
-            "Total Grants": 5,
+            "Awards With Known Financial Commitments": 5,
+            "Awards With Unspecified Financial Commitments": 0,
+            "Total Awards": 5,
             "Known Financial Commitments (USD)": 6233278
         }
     ]
@@ -161,41 +161,41 @@ export const grantsByResearchCategoriesFallbackData = {
         {
             "Category Value": "1",
             "Category Label": "Pathogen: natural history, transmission and diagnostics",
-            "Grants With Known Financial Commitments": 3980,
-            "Grants With Unspecified Financial Commitments": 670,
-            "Total Grants": 4650,
+            "Awards With Known Financial Commitments": 3980,
+            "Awards With Unspecified Financial Commitments": 670,
+            "Total Awards": 4650,
             "Known Financial Commitments (USD)": 2712914929.2100034
         },
         {
             "Category Value": "2",
             "Category Label": "Animal and environmental research and research on diseases vectors",
-            "Grants With Known Financial Commitments": 406,
-            "Grants With Unspecified Financial Commitments": 40,
-            "Total Grants": 446,
+            "Awards With Known Financial Commitments": 406,
+            "Awards With Unspecified Financial Commitments": 40,
+            "Total Awards": 446,
             "Known Financial Commitments (USD)": 285015169.6099998
         },
         {
             "Category Value": "3",
             "Category Label": "Epidemiological studies",
-            "Grants With Known Financial Commitments": 1892,
-            "Grants With Unspecified Financial Commitments": 343,
-            "Total Grants": 2235,
+            "Awards With Known Financial Commitments": 1892,
+            "Awards With Unspecified Financial Commitments": 343,
+            "Total Awards": 2235,
             "Known Financial Commitments (USD)": 1335965862.31
         },
         {
             "Category Value": "4",
             "Category Label": "Clinical characterisation and management",
-            "Grants With Known Financial Commitments": 2638,
-            "Grants With Unspecified Financial Commitments": 782,
-            "Total Grants": 3420,
+            "Awards With Known Financial Commitments": 2638,
+            "Awards With Unspecified Financial Commitments": 782,
+            "Total Awards": 3420,
             "Known Financial Commitments (USD)": 2541697394.9600024
         },
         {
             "Category Value": "5",
             "Category Label": "Infection prevention and control",
-            "Grants With Known Financial Commitments": 1153,
-            "Grants With Unspecified Financial Commitments": 197,
-            "Total Grants": 1350,
+            "Awards With Known Financial Commitments": 1153,
+            "Awards With Unspecified Financial Commitments": 197,
+            "Total Awards": 1350,
             "Known Financial Commitments (USD)": 1020663785.3399998
         }
     ],
@@ -206,49 +206,49 @@ export const grantsByResearchCategoriesFallbackData = {
                 {
                     "Category Value": "1a",
                     "Category Label": "Diagnostics",
-                    "Grants With Known Financial Commitments": 1264,
-                    "Grants With Unspecified Financial Commitments": 210,
-                    "Total Grants": 1474,
+                    "Awards With Known Financial Commitments": 1264,
+                    "Awards With Unspecified Financial Commitments": 210,
+                    "Total Awards": 1474,
                     "Known Financial Commitments (USD)": 951522564.9399995
                 },
                 {
                     "Category Value": "1b",
                     "Category Label": "Pathogen morphology, shedding & natural history",
-                    "Grants With Known Financial Commitments": 1307,
-                    "Grants With Unspecified Financial Commitments": 197,
-                    "Total Grants": 1504,
+                    "Awards With Known Financial Commitments": 1307,
+                    "Awards With Unspecified Financial Commitments": 197,
+                    "Total Awards": 1504,
                     "Known Financial Commitments (USD)": 650938582.0900007
                 },
                 {
                     "Category Value": "1c",
                     "Category Label": "Pathogen genomics, mutations and adaptations",
-                    "Grants With Known Financial Commitments": 742,
-                    "Grants With Unspecified Financial Commitments": 87,
-                    "Total Grants": 829,
+                    "Awards With Known Financial Commitments": 742,
+                    "Awards With Unspecified Financial Commitments": 87,
+                    "Total Awards": 829,
                     "Known Financial Commitments (USD)": 649114971.6300002
                 },
                 {
                     "Category Value": "1d",
                     "Category Label": "Immunity",
-                    "Grants With Known Financial Commitments": 1379,
-                    "Grants With Unspecified Financial Commitments": 246,
-                    "Total Grants": 1625,
+                    "Awards With Known Financial Commitments": 1379,
+                    "Awards With Unspecified Financial Commitments": 246,
+                    "Total Awards": 1625,
                     "Known Financial Commitments (USD)": 1261925149.4999998
                 },
                 {
                     "Category Value": "1e",
                     "Category Label": "Disease models",
-                    "Grants With Known Financial Commitments": 242,
-                    "Grants With Unspecified Financial Commitments": 33,
-                    "Total Grants": 275,
+                    "Awards With Known Financial Commitments": 242,
+                    "Awards With Unspecified Financial Commitments": 33,
+                    "Total Awards": 275,
                     "Known Financial Commitments (USD)": 129100893.19
                 },
                 {
                     "Category Value": "1f",
                     "Category Label": "Environmental stability of pathogen",
-                    "Grants With Known Financial Commitments": 137,
-                    "Grants With Unspecified Financial Commitments": 21,
-                    "Total Grants": 158,
+                    "Awards With Known Financial Commitments": 137,
+                    "Awards With Unspecified Financial Commitments": 21,
+                    "Total Awards": 158,
                     "Known Financial Commitments (USD)": 47123899.92000002
                 }
             ]
@@ -258,97 +258,97 @@ export const grantsByResearchCategoriesFallbackData = {
         {
             "Category Value": "1",
             "Category Label": "Pathogen: natural history, transmission and diagnostics",
-            "Grants With Known Financial Commitments": 3980,
-            "Grants With Unspecified Financial Commitments": 670,
-            "Total Grants": 4650,
+            "Awards With Known Financial Commitments": 3980,
+            "Awards With Unspecified Financial Commitments": 670,
+            "Total Awards": 4650,
             "Known Financial Commitments (USD)": 2712914929.2100034
         },
         {
             "Category Value": "2",
             "Category Label": "Animal and environmental research and research on diseases vectors",
-            "Grants With Known Financial Commitments": 406,
-            "Grants With Unspecified Financial Commitments": 40,
-            "Total Grants": 446,
+            "Awards With Known Financial Commitments": 406,
+            "Awards With Unspecified Financial Commitments": 40,
+            "Total Awards": 446,
             "Known Financial Commitments (USD)": 285015169.6099998
         },
         {
             "Category Value": "3",
             "Category Label": "Epidemiological studies",
-            "Grants With Known Financial Commitments": 1892,
-            "Grants With Unspecified Financial Commitments": 343,
-            "Total Grants": 2235,
+            "Awards With Known Financial Commitments": 1892,
+            "Awards With Unspecified Financial Commitments": 343,
+            "Total Awards": 2235,
             "Known Financial Commitments (USD)": 1335965862.31
         },
         {
             "Category Value": "4",
             "Category Label": "Clinical characterisation and management",
-            "Grants With Known Financial Commitments": 2638,
-            "Grants With Unspecified Financial Commitments": 782,
-            "Total Grants": 3420,
+            "Awards With Known Financial Commitments": 2638,
+            "Awards With Unspecified Financial Commitments": 782,
+            "Total Awards": 3420,
             "Known Financial Commitments (USD)": 2541697394.9600024
         },
         {
             "Category Value": "5",
             "Category Label": "Infection prevention and control",
-            "Grants With Known Financial Commitments": 1153,
-            "Grants With Unspecified Financial Commitments": 197,
-            "Total Grants": 1350,
+            "Awards With Known Financial Commitments": 1153,
+            "Awards With Unspecified Financial Commitments": 197,
+            "Total Awards": 1350,
             "Known Financial Commitments (USD)": 1020663785.3399998
         },
         {
             "Category Value": "6",
             "Category Label": "Therapeutics research, development and implementation",
-            "Grants With Known Financial Commitments": 1311,
-            "Grants With Unspecified Financial Commitments": 636,
-            "Total Grants": 1947,
+            "Awards With Known Financial Commitments": 1311,
+            "Awards With Unspecified Financial Commitments": 636,
+            "Total Awards": 1947,
             "Known Financial Commitments (USD)": 1824550504.8099988
         },
         {
             "Category Value": "7",
             "Category Label": "Vaccines research, development and implementation",
-            "Grants With Known Financial Commitments": 862,
-            "Grants With Unspecified Financial Commitments": 209,
-            "Total Grants": 1071,
+            "Awards With Known Financial Commitments": 862,
+            "Awards With Unspecified Financial Commitments": 209,
+            "Total Awards": 1071,
             "Known Financial Commitments (USD)": 3416116091.2599993
         },
         {
             "Category Value": "8",
             "Category Label": "Research to inform ethical issues",
-            "Grants With Known Financial Commitments": 151,
-            "Grants With Unspecified Financial Commitments": 52,
-            "Total Grants": 203,
+            "Awards With Known Financial Commitments": 151,
+            "Awards With Unspecified Financial Commitments": 52,
+            "Total Awards": 203,
             "Known Financial Commitments (USD)": 68426487.55000001
         },
         {
             "Category Value": "9",
             "Category Label": "Policies for public health, disease control & community resilience",
-            "Grants With Known Financial Commitments": 1762,
-            "Grants With Unspecified Financial Commitments": 490,
-            "Total Grants": 2252,
+            "Awards With Known Financial Commitments": 1762,
+            "Awards With Unspecified Financial Commitments": 490,
+            "Total Awards": 2252,
             "Known Financial Commitments (USD)": 1783806458.0100005
         },
         {
             "Category Value": "10",
             "Category Label": "Secondary impacts of disease, response & control measures",
-            "Grants With Known Financial Commitments": 3720,
-            "Grants With Unspecified Financial Commitments": 1564,
-            "Total Grants": 5284,
+            "Awards With Known Financial Commitments": 3720,
+            "Awards With Unspecified Financial Commitments": 1564,
+            "Total Awards": 5284,
             "Known Financial Commitments (USD)": 3174597467.929999
         },
         {
             "Category Value": "11",
             "Category Label": "Health Systems Research",
-            "Grants With Known Financial Commitments": 734,
-            "Grants With Unspecified Financial Commitments": 188,
-            "Total Grants": 922,
+            "Awards With Known Financial Commitments": 734,
+            "Awards With Unspecified Financial Commitments": 188,
+            "Total Awards": 922,
             "Known Financial Commitments (USD)": 1178485310.9500005
         },
         {
             "Category Value": "12",
             "Category Label": "Research on Capacity Strengthening",
-            "Grants With Known Financial Commitments": 103,
-            "Grants With Unspecified Financial Commitments": 10,
-            "Total Grants": 113,
+            "Awards With Known Financial Commitments": 103,
+            "Awards With Unspecified Financial Commitments": 10,
+            "Total Awards": 113,
             "Known Financial Commitments (USD)": 254425129.73000005
         }
     ]
@@ -358,32 +358,32 @@ export const grantsPerResearchCategoryByRegionBarsFallback = [
     {
         "country": "99999",
         "Known Financial Commitments": 7171825730.720001,
-        "Number of Grants": 5259
+        "Number of Awards": 5259
     },
     {
         "country": "2",
         "Known Financial Commitments": 4494505151.270016,
-        "Number of Grants": 9144
+        "Number of Awards": 9144
     },
     {
         "country": "1",
         "Known Financial Commitments": 770697874.7800001,
-        "Number of Grants": 566
+        "Number of Awards": 566
     },
     {
         "country": "9999999",
         "Known Financial Commitments": 531109856.0900003,
-        "Number of Grants": 1070
+        "Number of Awards": 1070
     },
     {
         "country": "999999",
         "Known Financial Commitments": 95907038.57999998,
-        "Number of Grants": 318
+        "Number of Awards": 318
     },
     {
         "country": "5",
         "Known Financial Commitments": 18879796.49,
-        "Number of Grants": 108
+        "Number of Awards": 108
     }
 ]
 
@@ -1026,49 +1026,49 @@ export const clinicalTrialSubCategoriesFallbackData = [
             {
                 "Category Value": "6a",
                 "Category Label": "Pre-clinical studies",
-                "Grants With Known Financial Commitments": 760,
-                "Grants With Unspecified Financial Commitments": 301,
-                "Total Grants": 1061,
+                "Awards With Known Financial Commitments": 760,
+                "Awards With Unspecified Financial Commitments": 301,
+                "Total Awards": 1061,
                 "Known Financial Commitments (USD)": 830048519.8999994
             },
             {
                 "Category Value": "6c",
                 "Category Label": "Phase 1",
-                "Grants With Known Financial Commitments": 18,
-                "Grants With Unspecified Financial Commitments": 10,
-                "Total Grants": 28,
+                "Awards With Known Financial Commitments": 18,
+                "Awards With Unspecified Financial Commitments": 10,
+                "Total Awards": 28,
                 "Known Financial Commitments (USD)": 65638236.15
             },
             {
                 "Category Value": "6d",
                 "Category Label": "Phase 2",
-                "Grants With Known Financial Commitments": 48,
-                "Grants With Unspecified Financial Commitments": 20,
-                "Total Grants": 68,
+                "Awards With Known Financial Commitments": 48,
+                "Awards With Unspecified Financial Commitments": 20,
+                "Total Awards": 68,
                 "Known Financial Commitments (USD)": 179498871.4
             },
             {
                 "Category Value": "6e",
                 "Category Label": "Phase 3",
-                "Grants With Known Financial Commitments": 26,
-                "Grants With Unspecified Financial Commitments": 6,
-                "Total Grants": 32,
+                "Awards With Known Financial Commitments": 26,
+                "Awards With Unspecified Financial Commitments": 6,
+                "Total Awards": 32,
                 "Known Financial Commitments (USD)": 168177296.89000002
             },
             {
                 "Category Value": "6f",
                 "Category Label": "Phase 4",
-                "Grants With Known Financial Commitments": 2,
-                "Grants With Unspecified Financial Commitments": 1,
-                "Total Grants": 3,
+                "Awards With Known Financial Commitments": 2,
+                "Awards With Unspecified Financial Commitments": 1,
+                "Total Awards": 3,
                 "Known Financial Commitments (USD)": 1250554
             },
             {
                 "Category Value": "6h",
                 "Category Label": "Unspecified phase",
-                "Grants With Known Financial Commitments": 120,
-                "Grants With Unspecified Financial Commitments": 71,
-                "Total Grants": 191,
+                "Awards With Known Financial Commitments": 120,
+                "Awards With Unspecified Financial Commitments": 71,
+                "Total Awards": 191,
                 "Known Financial Commitments (USD)": 496279760.6899999
             }
         ]

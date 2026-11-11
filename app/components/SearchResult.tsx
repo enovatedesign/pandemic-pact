@@ -137,7 +137,7 @@ export default function SearchResult({ result, href }: SearchMatchesProps) {
                         customClasses="w-full uppercase flex justify-between space-x-2 border-2 border-secondary hover:border-primary transition duration-300"
                     >
                         <span className="inline-flex text-white text-sm lg:text-base whitespace-nowrap">
-                            See Full Grant Record
+                            See Full Award Record
                         </span>
                         <EyeIcon className={iconClasses} />
                     </Button>

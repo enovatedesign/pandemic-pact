@@ -4,11 +4,11 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
     {
         title: "Disease",
         summary: {
-            "mpox": `We bring together grant information on ${disease}.`,
-            "H5N1": `We bring together grant information on H5N1.`,
-            "Marburg virus disease": `We bring together grant information on ${disease}.`,
-            "Ebola": `We bring together grant information on ${disease}.`,
-            "default": 'We bring together grant information on diseases caused by all high PHEIC risk pathogens on the current WHO Priority Pathogens list.'
+            "mpox": `We bring together research funding information on ${disease}.`,
+            "H5N1": `We bring together research funding information on H5N1.`,
+            "Marburg virus disease": `We bring together research funding information on ${disease}.`,
+            "Ebola": `We bring together research funding information on ${disease}.`,
+            "default": 'We bring together research funding information on diseases caused by all high PHEIC risk pathogens on the current WHO Priority Pathogens list.'
         },
         url: {
             "mpox": '#disease',
@@ -41,11 +41,11 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
     {
         title: 'Research Categories',
         summary: {
-            "mpox": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
-            "H5N1": `Charts showing H5N1 grants assigned to twelve research categories with respective subcategories.`,
-            "Marburg virus disease": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
-            "Ebola": `Charts showing ${disease} grants assigned to twelve research categories with respective subcategories.`,
-            "default": 'Charts showing the grants assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of grants going into different areas of research.'
+            "mpox": `Charts showing ${disease} awards assigned to twelve research categories with respective subcategories.`,
+            "H5N1": `Charts showing H5N1 awards assigned to twelve research categories with respective subcategories.`,
+            "Marburg virus disease": `Charts showing ${disease} awards assigned to twelve research categories with respective subcategories.`,
+            "Ebola": `Charts showing ${disease} awards assigned to twelve research categories with respective subcategories.`,
+            "default": 'Charts showing the awards assigned to twelve research categories with respective subcategories to enable our users to compare and contrast the volume and value of awards going into different areas of research.'
         },
         url: {
             "mpox": '#research-categories-policy-roadmaps',
@@ -189,11 +189,11 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
     {
         title: 'Research & Policy Roadmaps',
         summary: {
-            "mpox": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
-            "H5N1": `Coming soon: Alignment of H5N1 research grant data to outbreak specific research priorities.`,
-            "Marburg virus disease": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
-            "Ebola": `Alignment of ${disease} research grant data to outbreak specific research priorities.`,
-            "default": 'Alignment of research grant data to research agendas and policy roadmaps e.g 100 Days Mission, WHO Pandemic & Epidemic Intelligence priorities'
+            "mpox": `Alignment of ${disease} research funding data to outbreak specific research priorities.`,
+            "H5N1": `Coming soon: Alignment of H5N1 research funding data to outbreak specific research priorities.`,
+            "Marburg virus disease": `Alignment of ${disease} research funding data to outbreak specific research priorities.`,
+            "Ebola": `Alignment of ${disease} research funding data to outbreak specific research priorities.`,
+            "default": 'Alignment of research funding data to research agendas and policy roadmaps e.g 100 Days Mission, WHO Pandemic & Epidemic Intelligence priorities'
         },
         url: {
             "mpox": '#grants-by-who-mpox-roadmap',
@@ -228,9 +228,9 @@ export const visualisationCardData = (outbreak: boolean = false, disease: string
 
 export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
     {
-        title: 'Research Grants',
+        title: 'Research Awards',
         summary: {
-            "default": 'Explore how funding is allocated across Clinical and Preclinical Research grants'
+            "default": 'Explore how funding is allocated across Clinical and Preclinical Research awards'
         },
         url: {
             "default": '#research-grants'
@@ -251,7 +251,7 @@ export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Pathogen',
         summary: {
-            "default": 'Charts showing distribution of research grants by pathogen families and pathogens'
+            "default": 'Charts showing distribution of research awards by pathogen families and pathogens'
         },
         url: {
             "default": '#pathogen'
@@ -293,7 +293,7 @@ export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Study Populations',
         summary: {
-            "default": 'Charts showing the distribution of Study Populations across Clinical Research Grants'
+            "default": 'Charts showing the distribution of Study Populations across Clinical Research Awards'
         },
         url: {
             "default": '#study-populations'
@@ -315,7 +315,7 @@ export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Geographical Distribution',
         summary: {
-            "default": 'Charts showing research locations and location of Capacity Strengthening Grants'
+            "default": 'Charts showing research locations and location of Capacity Strengthening Awards'
         },
         url: {
             "default": '#geographical-distribution'
@@ -357,7 +357,7 @@ export const hundredDaysMissionJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Coordination & Collaboration',
         summary: {
-            "default": 'Explore networks of funders and researchers of Clinical Research Grants'
+            "default": 'Explore networks of funders and researchers of Clinical Research Awards'
         },
         url: {
             "default": '#coordination-and-collaboration'
@@ -381,7 +381,7 @@ export const pandemicIntelligenceJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Research themes',
         summary: {
-            "default": 'Charts showing grants by WHO Pandemic and Epidemic Intelligence priority themes'
+            "default": 'Charts showing awards by WHO Pandemic and Epidemic Intelligence priority themes'
         },
         url: {
             "default": '#research-themes'
@@ -402,7 +402,7 @@ export const pandemicIntelligenceJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Pathogen',
         summary: {
-            "default": 'Explore grants by Pandemic and Epidemic Intelligence theme and pathogen family'
+            "default": 'Explore awards by Pandemic and Epidemic Intelligence theme and pathogen family'
         },
         url: {
             "default": '#research-priority-themes-by-pathogen'
@@ -444,7 +444,7 @@ export const pandemicIntelligenceJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Funders',
         summary: {
-            "default": 'Charts showing the funders of grants focusing on Pandemic and Epidemic Intelligence'
+            "default": 'Charts showing the funders of awards focusing on Pandemic and Epidemic Intelligence'
         },
         url: {
             "default": '#pandemic-epidemic-funders'
@@ -465,7 +465,7 @@ export const pandemicIntelligenceJumpCardData: VisualisationCardDataProps[] = [
     {
         title: 'Annual trends',
         summary: {
-            "default": 'Charts for trends in research funding for grants focusing on Pandemic and Epidemic Intelligence priorities'
+            "default": 'Charts for trends in research funding for awards focusing on Pandemic and Epidemic Intelligence priorities'
         },
         url: {
             "default": '#annual-trends-in-new-grants-by-theme'

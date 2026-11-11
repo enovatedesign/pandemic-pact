@@ -11,7 +11,7 @@ import BackToParentButton from "@/app/components/BackToParentButton"
 import { hundredDayMissionStudyPopulationColours } from "@/app/helpers/colours";
 import { data } from "autoprefixer";
 
-type SubCategoryData = Record<string, { "Category Label": string; "Total Grants": number }[]>
+type SubCategoryData = Record<string, { "Category Label": string; "Total Awards": number }[]>
 
 interface SubCategoryBarsProps {
     subCategoryData: SubCategoryData
@@ -48,7 +48,7 @@ const SubCategoryBars = ({
                         const { "Category Label": categoryLabel } = dataPoint
                         
                         const highestCountValue = Math.max(
-                            ...subCategoryChartData.map((d) => d["Total Grants"])
+                            ...subCategoryChartData.map((d) => d["Total Awards"])
                         )
                         
                         return (
@@ -110,7 +110,7 @@ const SubCategoryBars = ({
                                             />
 
                                             <Bar
-                                                dataKey="Total Grants"
+                                                dataKey="Total Awards"
                                                 fill={hundredDayMissionStudyPopulationColours[
                                                     activeSubCategory as keyof typeof hundredDayMissionStudyPopulationColours
                                                 ][categoryLabel]}
@@ -122,7 +122,7 @@ const SubCategoryBars = ({
                                     </ResponsiveContainer>
 
                                     <p className="total-grants-number pl-2 text-xs text-gray-600">
-                                        {dataPoint["Total Grants"]}
+                                        {dataPoint["Total Awards"]}
                                     </p>
                                 </div>
                             </Fragment>

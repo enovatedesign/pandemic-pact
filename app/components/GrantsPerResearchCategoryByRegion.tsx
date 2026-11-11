@@ -111,7 +111,7 @@ export default function GrantsPerResearchCategoryByRegion() {
             id="grant-per-research-category-by-region"
             title="Regional Distribution of Funding by Research Areas"
             subtitle="Each research category is shown in a different colour"
-            footnote="Please note: Grants may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
+            footnote="Please note: Awards may fall under more than one research category, and funding amounts are included only when they have been published by the funder."
         >
             <div className="flex flex-col w-full">
                 {chartData !== grantsPerResearchCategoryByRegionFallback && (
@@ -125,7 +125,7 @@ export default function GrantsPerResearchCategoryByRegion() {
                         />
 
                         {filteredDataset.length < globalGrants.length && (
-                            <p>Filtered Grants: {filteredDataset.length}</p>
+                            <p>Filtered Awards: {filteredDataset.length}</p>
                         )}
                     </div>
                 )}

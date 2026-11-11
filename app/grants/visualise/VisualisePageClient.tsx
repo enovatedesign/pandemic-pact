@@ -144,7 +144,7 @@ const VisualisePageClientComponent = ({
                     {globallyFilteredDataset.length < pageDataset.length ? (
                         <>
                             <dt className="text-white uppercase">
-                                Filtered Grants Total
+                                Filtered Awards Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()} /{' '}
@@ -154,7 +154,7 @@ const VisualisePageClientComponent = ({
                     ) : (
                         <>
                             <dt className="text-white uppercase">
-                                Total grants
+                                Total awards
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()}

@@ -77,8 +77,8 @@ const PandemicEpidemicIntelligenceFunders = () => {
     return (
         <VisualisationCard
             id='pandemic-epidemic-funders'
-            title="Distribution of grants on pandemic and epidemic intelligence by funders"
-            infoModalContents={`You're viewing funders sorted by ${orderByAmount ? 'their known financial contributions (USD)' : 'total number of grants'}. Toggle the light switch to switch the sorting metric to ${orderByAmount ? 'total number of grants' : 'known financial commitments (USD)'}.`}
+            title="Distribution of awards on pandemic and epidemic intelligence by funders"
+            infoModalContents={`You're viewing funders sorted by ${orderByAmount ? 'their known financial contributions (USD)' : 'total number of awards'}. Toggle the light switch to switch the sorting metric to ${orderByAmount ? 'total number of awards' : 'known financial commitments (USD)'}.`}
             filenameToFetch='pandemic-intelligence/pandemic-intelligence-grants.csv'
             filteredFileName='pandemic-intelligence-filtered-grants.csv'
         >
@@ -140,9 +140,9 @@ const PandemicEpidemicIntelligenceFunders = () => {
                                     <DoubleLabelSwitch
                                         checked={orderByAmount}
                                         onChange={setOrderByAmount}
-                                        leftLabel="Total Number of Grants"
+                                        leftLabel="Total Number of Awards"
                                         rightLabel="US Dollars Committed"
-                                        screenReaderLabel="Order by number of grants"
+                                        screenReaderLabel="Order by number of awards"
                                         className="ignore-in-image-export"
                                         unCheckedClasses='text-primary'
                                         checkedClasses='text-gray-200'
@@ -167,11 +167,11 @@ const PandemicEpidemicIntelligenceFunders = () => {
                                                 label: 'Known Financial Commitments (USD):',
                                                 value: totalFinancialCommitments,
                                             } : {
-                                                label: 'Total Grants:',
+                                                label: 'Total Awards:',
                                                 value: relatedGrants.length,
                                             },
                                             orderByAmount ? { 
-                                                label: 'Total Grants:', value: relatedGrants.length 
+                                                label: 'Total Awards:', value: relatedGrants.length 
                                             } : {
                                                 label: 'Known Financial Commitments (USD):',
                                                 value: totalFinancialCommitments,

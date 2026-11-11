@@ -129,7 +129,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                     {globallyFilteredDataset.length < completeDataset.length ? (
                         <>
                             <dt className="text-white uppercase">
-                                Filtered Grants Total
+                                Filtered Awards Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()} /{' '}
@@ -139,7 +139,7 @@ const HundredDaysMissionVisualisePageClientComponent = ({
                     ) : (
                         <>
                             <dt className="text-white uppercase">
-                                Total grants
+                                Total awards
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()}
@@ -208,8 +208,8 @@ const HundredDaysMissionVisualisePageClientComponent = ({
 
                             <TableVisualisation
                                 id="pathogen"
-                                title="Distribution of research grants by pathogen families and pathogen"
-                                subtitle="Grants may fall under more than one family or pathogen"
+                                title="Distribution of research awards by pathogen families and pathogen"
+                                subtitle="Awards may fall under more than one family or pathogen"
                                 columnHeadField="HundredDaysMissionResearchArea"
                                 filenameToFetch='100-days-mission/100-days-mission-grants.csv'
                                 filteredFileName='100-days-mission-filtered-grants.csv'

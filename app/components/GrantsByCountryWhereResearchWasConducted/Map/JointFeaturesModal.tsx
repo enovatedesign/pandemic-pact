@@ -28,7 +28,7 @@ export default function JointFeaturesModal({
                 <thead className="bg-secondary border-b-2 border-white">
                     <tr>
                         <th className="text-left pt-3 !pl-4 !font-bold !text-white border-r-2 border-white whitespace-nowrap">Name</th>
-                        <th className="text-left pt-3 !font-bold !text-white border-r-2 border-white whitespace-nowrap">Grants<br /><span className="text-sm">(Joint / Total per country)</span></th>
+                        <th className="text-left pt-3 !font-bold !text-white border-r-2 border-white whitespace-nowrap">Awards<br /><span className="text-sm">(Joint / Total per country)</span></th>
                         <th className="text-left pt-3 !pr-4 !font-bold !text-white whitespace-nowrap">Known Financial Commitments<br /><span className="text-sm">(Joint / Total per country)</span></th>
                     </tr>
                 </thead>

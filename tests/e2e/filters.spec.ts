@@ -21,9 +21,9 @@ test('applying a filter narrows the dataset', async ({ page }) => {
 
     await expect(page.getByText(LOADING_DATASET_TEXT)).toBeHidden({ timeout: 60_000 })
 
-    // `exact` matters: a chart subtitle on the same page reads "Total Number of Grants",
+    // `exact` matters: a chart subtitle on the same page reads "Total Number of Awards",
     // and getByText is case-insensitive substring matching without it.
-    const unfilteredTotal = page.getByText('Total Number Of Grants', { exact: true })
+    const unfilteredTotal = page.getByText('Total Number Of Awards', { exact: true })
     await expect(unfilteredTotal).toBeVisible({ timeout: 45_000 })
 
     const select = page.getByRole('combobox', { name: /^All / }).first()
@@ -41,7 +41,7 @@ test('applying a filter narrows the dataset', async ({ page }) => {
     await firstOption.click()
 
     await expect(
-        page.getByText('Filtered Grants Total', { exact: true }),
+        page.getByText('Filtered Awards Total', { exact: true }),
         'the filter was selected but the dataset was never narrowed',
     ).toBeVisible({ timeout: 45_000 })
 

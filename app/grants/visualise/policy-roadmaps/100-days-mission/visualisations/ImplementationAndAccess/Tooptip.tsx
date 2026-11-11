@@ -2,7 +2,7 @@ import { dollarValueFormatter } from "@/app/helpers/value-formatters"
 
 interface ImplementationAndAccessTooltipContentTooltipGroup {
   Colour: string
-  'Total Grants': number
+  'Total Awards': number
   'Known Financial Commitments (USD)': number
 }
 

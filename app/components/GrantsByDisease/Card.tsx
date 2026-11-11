@@ -38,7 +38,7 @@ export default function GrantsByDisease({outbreak}: GrantsByDiseaseProps) {
             </p>
 
             <p className="text-brand-grey-500">
-                The chart shows the total number of grants awarded and amount of
+                The chart shows the total number of awards and amount of
                 funding committed for each disease per calendar year.
             </p>
 
@@ -53,8 +53,8 @@ export default function GrantsByDisease({outbreak}: GrantsByDiseaseProps) {
         <VisualisationCard
             id="grants-by-disease"
             title="Global annual funding for research on diseases with a pandemic potential"
-            subtitle="Total number of grants and US dollars committed for each disease"
-            footnote="Please note: Grants may fall under more than one disease. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
+            subtitle="Total number of awards and US dollars committed for each disease"
+            footnote="Please note: Awards may fall under more than one disease. Funding amounts are included only when they have been published by the funder and are included within the year of the award start date."
             infoModalContents={infoModalContents}
             tabs={tabs}
         />

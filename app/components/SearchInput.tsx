@@ -137,7 +137,7 @@ export default function SearchInput({
                         <p>
                             By default, search queries are split by whitespace
                             and matched with OR. For example, if you search for{' '}
-                            <code>bats dogs</code>, this will match grants that
+                            <code>bats dogs</code>, this will match awards that
                             contain either the word <code>bats</code> or the
                             word <code>dogs</code> in their Title, Abstract or
                             Lay Summary fields.
@@ -255,7 +255,7 @@ export default function SearchInput({
                         <span className="whitespace-nowrap">
                             {searchParameters.q
                                 ? 'Total Hits:'
-                                : 'Total Grants:'}
+                                : 'Total Awards:'}
                         </span>
                         {isLoading ? (
                             <LoadingSpinner className="w-5 h-5 animate-spin shrink-0" />
