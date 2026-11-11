@@ -15,8 +15,8 @@ const JointFeatureProperties = ({
 }: JointFeaturePropertiesProps) => {
 
     const totalGrantsTitle = showCapacityStrengthening ? 
-        'Number of Capacity Strengthening Grants / Total Number of Grants' : 
-        'Number of Joint Grants / Total Number of Grants'
+        'Number of Capacity Strengthening Awards / Total Number of Awards' : 
+        'Number of Joint Awards / Total Number of Awards'
         
     return (
         <div className="p-4 space-y-2">

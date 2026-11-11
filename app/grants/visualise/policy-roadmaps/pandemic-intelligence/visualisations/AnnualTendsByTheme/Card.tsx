@@ -78,7 +78,7 @@ const AnnualTrendsByTheme = () => {
     const yAxisLabel: AxisLabel = {
         value: displayKnownFinancialCommitments
             ? 'Known Financial Commitments (USD)'
-            : 'Number of grants',
+            : 'Number of awards',
         position: 'left',
         angle: -90,
         style: { textAnchor: 'middle' },
@@ -117,9 +117,9 @@ const AnnualTrendsByTheme = () => {
     return (
         <VisualisationCard
             id="annual-trends-in-new-grants-by-theme"
-            title="Annual trends in new grants by theme"
+            title="Annual trends in new awards by theme"
             subtitle="The chart shows the total amount of funding allocated to the pandemic and epidemic research priority themes by calendar year of award start date."
-            footnote="Please note: Grants may fall under more than one pandemic or epidemic intelligence priority theme. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
+            footnote="Please note: Awards may fall under more than one pandemic or epidemic intelligence priority theme. Funding amounts are included only when they have been published by the funder and are included within the year of the award start date."
             tabs={tabs}
             filenameToFetch="pandemic-intelligence/pandemic-intelligence-grants.csv"
             filteredFileName='pandemic-intelligence-filtered-grants.csv'
@@ -127,7 +127,7 @@ const AnnualTrendsByTheme = () => {
             <div className="w-full flex justify-end ignore-in-image-export">
                 <RadioGroup<boolean>
                     options={[
-                        { label: 'Number of grants', value: false },
+                        { label: 'Number of awards', value: false },
                         {
                             label: 'Known financial commitments (USD)',
                             value: true,

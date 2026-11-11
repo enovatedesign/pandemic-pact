@@ -61,13 +61,13 @@ export default function GrantKeyFacts({ grant }: { grant: any }) {
             text: 'Age Group',
             metric: grant.AgeGroups,
             infoModalText:
-                'We curated data on the age groups using information from the grant summary when available. If no age criteria were specified, we coded the field as unspecified. If a grant summary described a research project conducted on viruses or other non-human subjects, we coded the field as not applicable.',
+                'We curated data on the age groups using information from the award summary when available. If no age criteria were specified, we coded the field as unspecified. If an award summary described a research project conducted on viruses or other non-human subjects, we coded the field as not applicable.',
         },
         {
             text: 'Vulnerable Population',
             metric: grant.VulnerablePopulations,
             infoModalText:
-                'We curated data on the vulnerable populations using information on special populations from the grant summary. If a grant was awarded to conduct research involving participants with recognised vulnerabilities, we used this information to populate the field. If no vulnerabilities were mentioned, we coded the field as unspecified. If the grant was awarded to conduct research on the non-human populations, including viruses or other, we coded the field as not applicable.',
+                'We curated data on the vulnerable populations using information on special populations from the award summary. If an award was made to conduct research involving participants with recognised vulnerabilities, we used this information to populate the field. If no vulnerabilities were mentioned, we coded the field as unspecified. If the award was made to conduct research on the non-human populations, including viruses or other, we coded the field as not applicable.',
         },
         { text: 'Occupations of Interest', metric: grant.OccupationalGroups },
     ]

@@ -17,7 +17,7 @@ export default function GrantsPerMpoxResearchPriority() {
     return (
         <VisualisationCard
             id="combined-regional-mpox-priorities"
-            title="Grants by Mpox Outbreak Specific Research Priorities"
+            title="Awards by Mpox Outbreak Specific Research Priorities"
             subtitle={subtitle}
         >
             <AllSubCategoriesBarList

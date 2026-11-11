@@ -60,7 +60,7 @@ export function availableFilters(): FilterSchema[] {
             label: 'Pathogen',
             field: 'Pathogens',
             excludeGrantsWithMultipleItems: { 
-                label: 'Exclude Grants with Multiple Pathogens' 
+                label: 'Exclude Awards with Multiple Pathogens' 
             },
             isHidden: true
         },
@@ -193,7 +193,7 @@ export function availablePandemicIntelligenceFilters(): FilterSchema[] {
             label: 'Pathogen',
             field: 'Pathogens',
             excludeGrantsWithMultipleItems: { 
-                label: 'Exclude Grants with Multiple Pathogens' 
+                label: 'Exclude Awards with Multiple Pathogens' 
             },
             isHidden: true
         },

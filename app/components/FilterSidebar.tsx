@@ -120,7 +120,7 @@ export default function FilterSidebar({
                             completeDataset.length ? (
                                 <>
                                     <span className="text-xs font-bold text-gray-300 uppercase">
-                                        Filtered Grants Total
+                                        Filtered Awards Total
                                     </span>
                                     <span className="flex flex-row items-end gap-1">
                                         <span className="text-4xl font-bold text-primary">
@@ -135,7 +135,7 @@ export default function FilterSidebar({
                             ) : (
                                 <>
                                     <span className="text-xs font-bold text-gray-300 uppercase">
-                                        Total Number Of Grants
+                                        Total Number Of Awards
                                     </span>
                                     <span className="text-4xl font-bold text-primary">
                                         {completeDataset.length.toLocaleString()}

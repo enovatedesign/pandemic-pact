@@ -94,7 +94,7 @@ export default function BarListRow({ dataIndex }: Props) {
 
                         <Bar
                             isAnimationActive={isAnimationActive}
-                            dataKey="Grants With Known Financial Commitments"
+                            dataKey="Awards With Known Financial Commitments"
                             fill={brightColours[datum['Category Value']]}
                             stackId="a"
                             background={{ fill: '#eee' }}
@@ -103,7 +103,7 @@ export default function BarListRow({ dataIndex }: Props) {
                         
                         <Bar
                             isAnimationActive={isAnimationActive}
-                            dataKey="Grants With Unspecified Financial Commitments"
+                            dataKey="Awards With Unspecified Financial Commitments"
                             fill={dimColours[datum['Category Value']]}
                             stackId="a"
                         />
@@ -112,7 +112,7 @@ export default function BarListRow({ dataIndex }: Props) {
             </div>
 
             <div className="self-center pl-2 md:pr-6 col-span-1 md:col-span-1 justify-self-end">
-                <p className="total-grants-number text-xs text-gray-600">{datum['Total Grants']}</p>
+                <p className="total-grants-number text-xs text-gray-600">{datum['Total Awards']}</p>
             </div>
 
             <div className="col-span-3 md:col-span-1">

@@ -50,13 +50,13 @@ const ClinicalTrialPhases = ({ chartData }: Props) => {
             <div className="w-full grid md:grid-cols-2 gap-6">
                 <div>
                     <p className="text-right text-brand-grey-500">
-                        Number of grants
+                        Number of awards
                     </p>
                     <ul className="w-full flex flex-col gap-y-2">
                         {chartData.map(({ phase, totalGrants, researchAreasByClinicalTrialPhase }) => {
-                            const chartDataArray = calculateChartDataArray(researchAreasByClinicalTrialPhase, 'Total Grants')
+                            const chartDataArray = calculateChartDataArray(researchAreasByClinicalTrialPhase, 'Total Awards')
                             const keyWithHighestValue = calculateKeyWithHighestValue(chartDataArray[0])
-                            const remainingBarsList = calculateRemainingBarsList(researchAreasByClinicalTrialPhase, 'Total Grants', keyWithHighestValue)
+                            const remainingBarsList = calculateRemainingBarsList(researchAreasByClinicalTrialPhase, 'Total Awards', keyWithHighestValue)
 
                             return (
                                 <li key={phase} className="space-y-2">
@@ -82,9 +82,9 @@ const ClinicalTrialPhases = ({ chartData }: Props) => {
                         <InfoModal>
                             <p>
                                 We used historical currency exchange rates from
-                                any currency in which the grant was awarded
+                                any currency in which the award was made
                                 converted to the US dollar. The term ‘known’ is
-                                used as not all grant records have funding
+                                used as not all award records have funding
                                 amount data.
                             </p>
                         </InfoModal>

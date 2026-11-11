@@ -92,7 +92,7 @@ export default function BarChart({
             })).reduce(
                 ...sumNumericGrantAmounts
             ),
-            'Number of Grants': grants.length
+            'Number of Awards': grants.length
         }
     })
 
@@ -137,8 +137,8 @@ export default function BarChart({
                 value: dollarValueFormatter(props.payload[0]?.value),
             },
             {
-                label: 'Number of Grants',
-                value: props.payload[0]?.payload['Number of Grants']
+                label: 'Number of Awards',
+                value: props.payload[0]?.payload['Number of Awards']
             }
         ];
 
@@ -151,7 +151,7 @@ export default function BarChart({
     
     const dataIsNotAvailable = data.every(dataPoint => (
         dataPoint['Known Financial Commitments'] === 0 &&
-        dataPoint['Number of Grants'] === 0
+        dataPoint['Number of Awards'] === 0
     ));
     
     if (dataIsNotAvailable || data.length === 0) {

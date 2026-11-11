@@ -17,11 +17,11 @@ const countGrantsRelatedToField = (grants: any[], field: string) => {
 
     return options.map(({ value, label }) => ({
         "Category Label": label,
-        "Total Grants": uniq(
+        "Total Awards": uniq(
             grants.filter((grant) => grant[field].includes(value))
         ).length,
     })).sort((a, b) =>
-        b["Total Grants"] - a["Total Grants"]
+        b["Total Awards"] - a["Total Awards"]
     )
 }
 
@@ -63,7 +63,7 @@ const StudyPopulations = () => {
                 categoryLabel,
                 {
                     subCategoryData: data,
-                    "Total Grants": sumBy(data, "Total Grants"),
+                    "Total Awards": sumBy(data, "Total Awards"),
                 },
             ])
         )
@@ -99,8 +99,8 @@ const StudyPopulations = () => {
     return (
         <VisualisationCard
             id="study-populations"
-            title="Distribution of Research Grants by Study Populations"
-            footnote="Please note: Grants may include more than one study population. Study populations involved in research are as mentioned in grant information."
+            title="Distribution of Research Awards by Study Populations"
+            footnote="Please note: Awards may include more than one study population. Study populations involved in research are as mentioned in award information."
             filenameToFetch='100-days-mission/100-days-mission-grants.csv'
             filteredFileName='100-days-mission-filtered-grants.csv'
         >

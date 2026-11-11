@@ -3,7 +3,7 @@ import { Fragment, MouseEvent } from "react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 interface CategoryBarsProps {
-    categoryData: Record<string, { subCategoryData: any[]; "Total Grants": number }>
+    categoryData: Record<string, { subCategoryData: any[]; "Total Awards": number }>
     activeSubCategory: string | null
     setActiveSubCategory: (category: string) => void
     onChartMouseEnterOrMove: (
@@ -24,16 +24,16 @@ const CategoryBars = ({
     return !activeSubCategory && (
         <div className="w-full space-y-2">
             {Object.entries(categoryData).map(([ categoryLabel, categoryData ]) => {
-                const { subCategoryData, "Total Grants": totalGrants } = categoryData
+                const { subCategoryData, "Total Awards": totalGrants } = categoryData
 
                 const highestCountValue = Math.max(
-                    ...subCategoryData.map((d) => d["Total Grants"])
+                    ...subCategoryData.map((d) => d["Total Awards"])
                 )
                 
                 // Recharts 3 draws no bars when the category YAxis dataKey is missing from the datum.
                 const stackedDatum = subCategoryData.reduce<Record<string, string | number>>((acc, {
                     "Category Label": label,
-                    "Total Grants": count
+                    "Total Awards": count
                 }) => {
                     acc[label] = count
                     return acc

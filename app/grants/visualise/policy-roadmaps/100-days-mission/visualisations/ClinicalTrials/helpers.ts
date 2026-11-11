@@ -11,9 +11,9 @@ import selectOptions from '@/data/dist/select-options.json'
 import { sumBy } from 'lodash'
 
 export interface ClinicalTrialsBarList { 
-    "Grants With Known Financial Commitments": number, 
-    "Grants With Unspecified Financial Commitments": number
-    "Total Grants": number
+    "Awards With Known Financial Commitments": number, 
+    "Awards With Unspecified Financial Commitments": number
+    "Total Awards": number
     "Known Financial Commitments (USD)": number
 }
 
@@ -64,9 +64,9 @@ const phaseRows: {
 ]
 
 const emptyMetrics = (): ClinicalTrialsBarList => ({
-    'Grants With Known Financial Commitments': 0,
-    'Grants With Unspecified Financial Commitments': 0,
-    'Total Grants': 0,
+    'Awards With Known Financial Commitments': 0,
+    'Awards With Unspecified Financial Commitments': 0,
+    'Total Awards': 0,
     'Known Financial Commitments (USD)': 0,
 })
 
@@ -78,17 +78,17 @@ const summarise = (grants: any[]): ClinicalTrialsBarList => {
     }))
 
     return {
-        'Grants With Known Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] > 0).length,
-        'Grants With Unspecified Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] <= 0).length,
-        'Total Grants': withAmounts.length,
+        'Awards With Known Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] > 0).length,
+        'Awards With Unspecified Financial Commitments': withAmounts.filter(grant => grant['GrantAmountConverted'] <= 0).length,
+        'Total Awards': withAmounts.length,
         'Known Financial Commitments (USD)': sumBy(withAmounts, 'GrantAmountConverted'),
     }
 }
 
 const addMetrics = (a: ClinicalTrialsBarList, b: ClinicalTrialsBarList): ClinicalTrialsBarList => ({
-    'Grants With Known Financial Commitments': a['Grants With Known Financial Commitments'] + b['Grants With Known Financial Commitments'],
-    'Grants With Unspecified Financial Commitments': a['Grants With Unspecified Financial Commitments'] + b['Grants With Unspecified Financial Commitments'],
-    'Total Grants': a['Total Grants'] + b['Total Grants'],
+    'Awards With Known Financial Commitments': a['Awards With Known Financial Commitments'] + b['Awards With Known Financial Commitments'],
+    'Awards With Unspecified Financial Commitments': a['Awards With Unspecified Financial Commitments'] + b['Awards With Unspecified Financial Commitments'],
+    'Total Awards': a['Total Awards'] + b['Total Awards'],
     'Known Financial Commitments (USD)': a['Known Financial Commitments (USD)'] + b['Known Financial Commitments (USD)'],
 })
 
@@ -158,7 +158,7 @@ const prepareHundredDaysClinicalTrialData = (grants: any[]) =>
         return {
             phase: clinicalTrialPhaseLabels[row.key],
             researchAreasByClinicalTrialPhase: researchAreaData,
-            totalGrants: sumBy(Object.values(researchAreaData), 'Total Grants'),
+            totalGrants: sumBy(Object.values(researchAreaData), 'Total Awards'),
             totalAmountCommitted: sumBy(Object.values(researchAreaData), 'Known Financial Commitments (USD)'),
         }
     })

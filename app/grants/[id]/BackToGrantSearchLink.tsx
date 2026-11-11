@@ -14,7 +14,7 @@ export default function BackToGrantSearchLink() {
             </div>
 
             <span className="uppercase tracking-wider font-medium">
-                Grant search
+                Award search
             </span>
         </Link>
     )

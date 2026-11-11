@@ -260,9 +260,9 @@ export default function ExplorePageClient({announcements}: Props) {
 
     return (
         <Layout
-            title="Grant Search"
+            title="Award Search"
             showSummary={true}
-            summary="Find, filter and explore grant abstracts, linked publications and other curated data on research grants for infectious disease with a pandemic potential."
+            summary="Find, filter and explore award abstracts, linked publications and other curated data on research awards for infectious disease with a pandemic potential."
             announcements={announcements}
         >
             <div className="container mx-auto my-6 lg:my-12">

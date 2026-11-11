@@ -33,11 +33,11 @@ const ImplementationAndAccess = () => {
         const tooltipGrantsData = props.payload[0]?.payload['Tooltip Grants']
 
         const summaryMapping = {
-            'Manufacturing and logistics': 'Clinical trial manufacturing and logistics including research on supply chains related to Vaccines and therapeutics development. Does not include grants related to diagnostics.',
-            'Health systems research': 'Grants on research on DTV implementation in health systems focussing on the delivery of DTV products by health workers, availability of products and delivery of health services. ',
-            'Costs of products': 'Grants involving economic evaluation or cost-effectiveness analysis of DTVs',
-            'Product acceptance': 'We identify grants on research assessing trust/ acceptance/uptake of DTVs and will visualise these on our dashboard.',
-            'Equitable allocation': 'Grants involving research to inform ethical allocation of resources, including public health measures and medical countermeasures.'
+            'Manufacturing and logistics': 'Clinical trial manufacturing and logistics including research on supply chains related to Vaccines and therapeutics development. Does not include awards related to diagnostics.',
+            'Health systems research': 'Awards on research on DTV implementation in health systems focussing on the delivery of DTV products by health workers, availability of products and delivery of health services. ',
+            'Costs of products': 'Awards involving economic evaluation or cost-effectiveness analysis of DTVs',
+            'Product acceptance': 'We identify awards on research assessing trust/ acceptance/uptake of DTVs and will visualise these on our dashboard.',
+            'Equitable allocation': 'Awards involving research to inform ethical allocation of resources, including public health measures and medical countermeasures.'
         }
         
         return (
@@ -52,7 +52,7 @@ const ImplementationAndAccess = () => {
     return (
         <VisualisationCard
             id="implementation-and-access"
-            title="Distribution Of Grants On Implementation of Clinical Research And Access Of Diagnostic, Therapeutic And Vaccines Products"
+            title="Distribution Of Awards On Implementation of Clinical Research And Access Of Diagnostic, Therapeutic And Vaccines Products"
             infoModalContents="Hover on each bar to see a break down and description of each area"
             filenameToFetch='100-days-mission/100-days-mission-grants.csv'
             filteredFileName='100-days-mission-filtered-grants.csv'
@@ -66,7 +66,7 @@ const ImplementationAndAccess = () => {
                     <XAxis
                         type="number"
                         label={{
-                            value: "Total Grants",
+                            value: "Total Awards",
                             position: "bottom",
                             offset: 0,
                         }}
@@ -85,7 +85,7 @@ const ImplementationAndAccess = () => {
                     />
 
                     <Bar
-                        dataKey="Total Grants"
+                        dataKey="Total Awards"
                     >
                         {chartData.map(({ "Category Label": label }) => (
                             <Cell

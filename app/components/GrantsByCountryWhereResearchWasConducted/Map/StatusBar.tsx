@@ -143,13 +143,13 @@ export default function StatusBar({
 
                         {(allowHighlightingJointFundedCountries && highlightJointFundedCountries && shouldShowJointGrantsLink) &&
                             <Button size="xxsmall" href={viewButtonHref}>
-                                Explore Joint-funded Grants
+                                Explore Joint-funded Awards
                             </Button>
                         }
 
                         {(shouldShowGrantsLink && !highlightJointFundedCountries) && (
                             <Button size="xxsmall" href={viewButtonHref}>
-                                Explore Grants
+                                Explore Awards
                             </Button>
                         )}
                     </div>

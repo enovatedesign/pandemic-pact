@@ -33,8 +33,8 @@ const EbolaResearchPrioritiesCard = () => {
 
     const methodology = [
         'Research funding awards were mapped to the Ebola Bundibugyo virus disease (BVD) research priorities in collaboration with the Filoviridae Collaborative Open Research Consortium (CORC). Each priority area was reviewed and disaggregated into discrete sub-areas to ensure comprehensive coverage of its defined scope. Each sub-area was subsequently mapped to one or more corresponding Pandemic PACT research categories, resulting in a data extraction framework which was validated by the Filoviridae CORC.',
-        'Eligible grants were identified through automated screening using Python-based methods, followed by manual verification to ensure accuracy of inclusion and classification.',
-        'Grants were first classified at the sub-area level and then aggregated to the corresponding main priority area. Because individual grants may be assigned to multiple sub-areas but are counted once within the main priority area, the sum of grants across sub-areas may exceed the main priority area total. Additionally, grants relevant to more than one main priority area are counted under each, so cumulative totals across priority areas may exceed the total number of unique grants.',
+        'Eligible awards were identified through automated screening using Python-based methods, followed by manual verification to ensure accuracy of inclusion and classification.',
+        'Awards were first classified at the sub-area level and then aggregated to the corresponding main priority area. Because individual awards may be assigned to multiple sub-areas but are counted once within the main priority area, the sum of awards across sub-areas may exceed the main priority area total. Additionally, awards relevant to more than one main priority area are counted under each, so cumulative totals across priority areas may exceed the total number of unique awards.',
     ]
 
     return (

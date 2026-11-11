@@ -16,7 +16,7 @@ const MarburgResearchAndPolicyRoadmaps = () => {
   return (
     <VisualisationCard
         id="grants-by-marburg-research-priority"
-        title="Grants By Marburg Outbreak Research Priorities" 
+        title="Awards By Marburg Outbreak Research Priorities" 
         subtitle={subTitle}  
     >
         <AllSubCategoriesBarList

@@ -71,11 +71,11 @@ export default function ScatterChart() {
                 return {
                     'Category Value': researchCategory.value,
                     'Category Label': researchCategory.label,
-                    'Grants With Known Financial Commitments':
+                    'Awards With Known Financial Commitments':
                         grantsWithKnownAmounts.length,
-                    'Grants With Unspecified Financial Commitments':
+                    'Awards With Unspecified Financial Commitments':
                         grantsWithUnspecifiedAmounts.length,
-                    'Total Grants':
+                    'Total Awards':
                         grantsWithKnownAmounts.length +
                         grantsWithUnspecifiedAmounts.length,
                     'Known Financial Commitments (USD)': moneyCommitted,
@@ -167,10 +167,10 @@ export default function ScatterChart() {
 
                         <XAxis
                             type="number"
-                            dataKey="Total Grants"
+                            dataKey="Total Awards"
                             allowDecimals={false}
                             label={{
-                                value: 'Grants',
+                                value: 'Awards',
                                 position: 'bottom',
                             }}
                             className="text-lg"

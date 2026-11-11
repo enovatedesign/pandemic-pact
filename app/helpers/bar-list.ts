@@ -19,10 +19,10 @@ export interface BarListDatum {
     'Category Label': string
     'Category Description'?: string
     'Category Value': string
-    'Grants With Known Financial Commitments': number
-    'Grants With Unspecified Financial Commitments': number
+    'Awards With Known Financial Commitments': number
+    'Awards With Unspecified Financial Commitments': number
     'Known Financial Commitments (USD)': number
-    'Total Grants': number
+    'Total Awards': number
 }
 
 export type BarListData = Array<BarListDatum>
@@ -75,11 +75,11 @@ export function prepareBarListDataForCategory(
         'Category Value': category.value,
         'Category Label': labelPrep ? formatClinicalTrialCategoryLabel(category.label) : category.label,
         ...(category.description ? { 'Category Description': category.description } : {}), // Only add the category description if it exists
-        'Grants With Known Financial Commitments':
+        'Awards With Known Financial Commitments':
             grantsWithKnownAmounts.length,
-        'Grants With Unspecified Financial Commitments':
+        'Awards With Unspecified Financial Commitments':
             grantsWithUnspecifiedAmounts.length,
-        'Total Grants':
+        'Total Awards':
             grantsWithKnownAmounts.length + grantsWithUnspecifiedAmounts.length,
         'Known Financial Commitments (USD)': moneyCommitted,
     }
@@ -98,9 +98,9 @@ const mergeBarListRowsByLabel = (rows: BarListDatum[]): BarListDatum[] => {
         if (!existing) {
             merged.set(key, { ...row })
         } else {
-            existing['Grants With Known Financial Commitments'] += row['Grants With Known Financial Commitments']
-            existing['Grants With Unspecified Financial Commitments'] += row['Grants With Unspecified Financial Commitments']
-            existing['Total Grants'] += row['Total Grants']
+            existing['Awards With Known Financial Commitments'] += row['Awards With Known Financial Commitments']
+            existing['Awards With Unspecified Financial Commitments'] += row['Awards With Unspecified Financial Commitments']
+            existing['Total Awards'] += row['Total Awards']
             existing['Known Financial Commitments (USD)'] += row['Known Financial Commitments (USD)']
             existing['Category Value'] = `${existing['Category Value']}, ${row['Category Value']}`
         }
@@ -136,10 +136,10 @@ export const formatPhasesToPrepareForSubCategories = (
 
 export const isChartDataUnavailable = (data: BarListDatum[]) => {
     return data.every((data) => 
-        data['Grants With Known Financial Commitments'] === 0 &&
-        data["Grants With Unspecified Financial Commitments"] === 0 &&
+        data['Awards With Known Financial Commitments'] === 0 &&
+        data["Awards With Unspecified Financial Commitments"] === 0 &&
         data["Known Financial Commitments (USD)"] === 0 && 
-        data["Total Grants"] === 0
+        data["Total Awards"] === 0
     )
 }
 
@@ -175,7 +175,7 @@ export const convertSubCategoryDataToCategoryData = (data: DataItem[]) => {
 
     // Process each data item
     data.forEach(({ label, data }) => {
-        data.forEach(({ "Category Label": rowLabel, "Total Grants": totalGrants, "Known Financial Commitments (USD)": financialCommitments }) => {
+        data.forEach(({ "Category Label": rowLabel, "Total Awards": totalGrants, "Known Financial Commitments (USD)": financialCommitments }) => {
             // Diagnostics words its rows as development stages and the other
             // sections as trial phases, so pivot on the shared axis label to keep
             // the two stacking into one row rather than doubling the rows.
@@ -258,9 +258,9 @@ const summarisePhaseRows = (
         return {
             'Category Label': phase,
             'Category Value': phase,
-            'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
-            'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
-            'Total Grants': phaseGrants.length,
+            'Awards With Known Financial Commitments': grantsWithKnownAmounts.length,
+            'Awards With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
+            'Total Awards': phaseGrants.length,
             'Known Financial Commitments (USD)': sumBy(phaseGrants, 'GrantAmountConverted'),
         }
     })
@@ -395,7 +395,7 @@ export const prepareBarChartData = (
                 
                 toolTipData[label] = {
                     'Colour': '#A6A8AB',
-                    'Total Grants': toolTipGrants.length,
+                    'Total Awards': toolTipGrants.length,
                     'Known Financial Commitments (USD)': sumBy(toolTipGrants, 'GrantAmountConverted'),
                 }
             })
@@ -404,13 +404,13 @@ export const prepareBarChartData = (
         return {
             'Category Label': label,
             'Category Value': value,
-            'Grants With Known Financial Commitments': grantsWithKnownAmounts.length,
-            'Grants With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
-            'Total Grants': relatedGrants.length,
+            'Awards With Known Financial Commitments': grantsWithKnownAmounts.length,
+            'Awards With Unspecified Financial Commitments': grantsWithUnspecifiedAmounts.length,
+            'Total Awards': relatedGrants.length,
             'Known Financial Commitments (USD)': moneyCommitted,
             ...(tooltipfield ? {
                 "Tooltip Grants": toolTipData
             } : {})
         }
-    }).sort((a: any, b: any) => b['Total Grants'] - a['Total Grants'])
+    }).sort((a: any, b: any) => b['Total Awards'] - a['Total Awards'])
 }

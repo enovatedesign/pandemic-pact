@@ -6,7 +6,7 @@ export type AnnualTrendsChartDatum = {
 export type AnnualTrendsChartData = AnnualTrendsChartDatum[]
 
 export type AxisLabel = {
-    value: 'Known Financial Commitments (USD)' | 'Number of grants'
+    value: 'Known Financial Commitments (USD)' | 'Number of awards'
     position: 'left',
     angle: number,
     style: { textAnchor: 'middle' },
