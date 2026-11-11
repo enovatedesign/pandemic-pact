@@ -63,11 +63,11 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
             <div className={`w-full grid md:grid-cols-2 gap-6 ${chartDataIsNotAvailable ? 'blur-md' : ''}`}>
                 <div>
                     <p className="text-right text-brand-grey-500">
-                        Number of grants
+                        Number of awards
                     </p>
 
                     {chartData.map(({ label, data }) => {
-                        const maxNumberOfGrants = Math.max(...data.map(datum => datum['Total Grants']))
+                        const maxNumberOfGrants = Math.max(...data.map(datum => datum['Total Awards']))
                         
                         return (
                             <div key={label}>
@@ -117,14 +117,14 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
                                                     />
                             
                                                     <Bar
-                                                        dataKey="Grants With Known Financial Commitments"
+                                                        dataKey="Awards With Known Financial Commitments"
                                                         fill={rowColour(brightColours, datum)}
                                                         stackId="a"
                                                         background={{ fill: '#eee' }}
                                                     />
                                                     
                                                     <Bar
-                                                        dataKey="Grants With Unspecified Financial Commitments"
+                                                        dataKey="Awards With Unspecified Financial Commitments"
                                                         fill={rowColour(dimColours, datum)}
                                                         stackId="a"
                                                     />
@@ -132,7 +132,7 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
                                             </ResponsiveContainer>
 
                                             <p className='text-xs text-gray-600'>
-                                                {datum['Total Grants']}
+                                                {datum['Total Awards']}
                                             </p>
                                         </div>
                                     </div>
@@ -150,9 +150,9 @@ const ClinicalTrialSubCategories = ({ subCategories }: ClinicalTrialSubCategorie
                         <InfoModal>
                             <p>
                                 We used historical currency exchange rates from
-                                any currency in which the grant was awarded
+                                any currency in which the award was made
                                 converted to the US dollars. The term ‘known’ is
-                                used as not all grant records have funding
+                                used as not all award records have funding
                                 amount data.
                             </p>
                         </InfoModal>

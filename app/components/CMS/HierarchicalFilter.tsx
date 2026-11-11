@@ -146,7 +146,7 @@ const HierarchicalFilter = ({
                                                 value,
                                             )
                                         }}
-                                        label="Exclude Grants with Multiple Pathogens"
+                                        label="Exclude Awards with Multiple Pathogens"
                                         textClassName="text-white"
                                     />
                                 )

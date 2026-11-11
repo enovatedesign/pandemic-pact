@@ -21,8 +21,8 @@ const PandemicIntelligenceThemes = () => {
     return (
         <VisualisationCard
             id="research-themes"
-            title="Distribution of grants by Pandemic and Epidemic Intelligence themes"
-            subtitle="Bar chart showing grants by theme and known funding amounts"
+            title="Distribution of awards by Pandemic and Epidemic Intelligence themes"
+            subtitle="Bar chart showing awards by theme and known funding amounts"
             filenameToFetch='pandemic-intelligence/pandemic-intelligence-grants.csv'
             filteredFileName='pandemic-intelligence-filtered-grants.csv'
         >

@@ -17,7 +17,7 @@ export const datasets: Dataset[] = [
     {
         key: 'grants',
         label: 'Funding Awards',
-        description: 'Research grants for diseases with pandemic potential.',
+        description: 'Research awards for diseases with pandemic potential.',
         iconSrc: '/images/interface/research-funding-tracker.svg',
         visualiseHref: '/grants/visualise',
         exploreHref: '/grants/explore',

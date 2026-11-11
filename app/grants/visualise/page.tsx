@@ -14,7 +14,7 @@ export default async function Visualise() {
     return (
         <VisualisePageClient 
             title="Interactive Charts"
-            summary="Visualise our data on research grants for infectious diseases with pandemic potential using filters and searches."
+            summary="Visualise our data on research awards for infectious diseases with pandemic potential using filters and searches."
             announcements={announcements}
         />
     ) 

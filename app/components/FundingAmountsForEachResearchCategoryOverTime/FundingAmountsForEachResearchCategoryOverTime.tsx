@@ -139,9 +139,9 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
     return (
         <VisualisationCard
             id="amount-committed-to-each-research-category-over-time-card"
-            title="Annual Trends in New Global Grants for Research Areas"
+            title="Annual Trends in New Global Funding Awards for Research Areas"
             subtitle="The chart shows the total amount of funding allocated to different research areas by calendar year of award start date."
-            footnote="Please note: Grants may fall under more than one research category. Funding amounts are included only when they have been published by the funder and are included within the year of the grant award start date."
+            footnote="Please note: Awards may fall under more than one research category. Funding amounts are included only when they have been published by the funder and are included within the year of the award start date."
             tabs={tabs}
         >
             <div className=" flex w-full justify-between items-start mb-6 ignore-in-image-export">
@@ -154,7 +154,7 @@ export default function FundingAmountsForEachResearchCategoryOverTimeCard() {
                 />
 
                 {filteredDataset.length < globalGrants.length && (
-                    <p>Filtered Grants: {filteredDataset.length}</p>
+                    <p>Filtered Awards: {filteredDataset.length}</p>
                 )}
             </div>
         </VisualisationCard>

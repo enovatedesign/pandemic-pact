@@ -120,7 +120,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                     {globallyFilteredDataset.length < completeDataset.length ? (
                         <>
                             <dt className="text-white uppercase">
-                                Filtered Grants Total
+                                Filtered Awards Total
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()} /{' '}
@@ -130,7 +130,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                     ) : (
                         <>
                             <dt className="text-white uppercase">
-                                Total grants
+                                Total awards
                             </dt>
                             <dd className="text-secondary bg-primary font-bold rounded-lg py-2 text-center">
                                 {globallyFilteredDataset.length.toLocaleString()}
@@ -198,7 +198,7 @@ const PandemicIntelligenceVisualisePageClientComponent = ({
                             <TableVisualisation 
                                 id="research-priority-themes-by-pathogen" 
                                 title="Charts Showing Distribution Of Research Priority themes By Pathogen Families And Pathogen"
-                                subtitle="Grants may fall under more than one family or pathogen or pandemic and epidemic intelligence priority theme"
+                                subtitle="Awards may fall under more than one family or pathogen or pandemic and epidemic intelligence priority theme"
                                 columnHeadField="PandemicIntelligenceThemes"
                                 filenameToFetch='pandemic-intelligence/pandemic-intelligence-grants.csv'
                                 filteredFileName='pandemic-intelligence-filtered-grants.csv'

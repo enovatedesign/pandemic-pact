@@ -104,8 +104,8 @@ const ClinicalTrialsTherapeuticsAndVaccines = () => {
     return (
         <VisualisationCard 
             id='distribution-of-clinical-research-grants-by-clinical-trial-phase'
-            title='Distribution of Clinical Research Grants by Clinical Trial Phase / Development Stage'
-            subtitle="The chart shows the number of grants awarded and the total funding allocated for clinical research across all diseases, categorized by trial intervention focus. Hover over each stacked bar to see a detailed breakdown by focus. Use the ‘view categories’ to explore clinical trial phases / development stages in more detail by intervention focus."
+            title='Distribution of Clinical Research Awards by Clinical Trial Phase / Development Stage'
+            subtitle="The chart shows the number of awards and the total funding allocated for clinical research across all diseases, categorized by trial intervention focus. Hover over each stacked bar to see a detailed breakdown by focus. Use the ‘view categories’ to explore clinical trial phases / development stages in more detail by intervention focus."
             infoModalContents={infoModalContents}
             footnote="Note that some clinical research may fall under multiple categories; although, these overlaps are not explicitly shown. For example, phases are displayed with “clinical characterisation” awards where they co-occurred with other interventions."
         >

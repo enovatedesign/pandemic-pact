@@ -153,8 +153,8 @@ export default function RegionalFlowOfGrantsCard() {
     return (
         <VisualisationCard
             id="regional-flow-of-grants"
-            title="Regional Flow of Research Grants"
-            subtitle="The chart illustrates the flow of research grants by region, tracing it from funder to research institution and ultimately to the location where the research is conducted."
+            title="Regional Flow of Research Awards"
+            subtitle="The chart illustrates the flow of research funding by region, tracing it from funder to research institution and ultimately to the location where the research is conducted."
             chartInstructions="If the full chart is not visible, please scroll horizontally to view."
             footnote="Please note: Funding amounts are included only when they have been published by the funder. Some research projects are undertaken in multiple locations (countries). Where research location is not explicitly specified the default used is the location of the research institution receiving the funds."
         >
@@ -243,7 +243,7 @@ export default function RegionalFlowOfGrantsCard() {
                         <DoubleLabelSwitch
                             checked={displayTotalMoneyCommitted}
                             onChange={setDisplayTotalMoneyCommitted}
-                            leftLabel="Total Number of Grants"
+                            leftLabel="Total Number of Awards"
                             rightLabel="US Dollars Committed"
                             screenReaderLabel="Display Total Money Committed"
                             className="justify-center mt-6 ignore-in-image-export"

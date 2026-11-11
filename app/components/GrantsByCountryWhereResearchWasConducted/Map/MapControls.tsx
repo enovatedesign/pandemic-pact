@@ -62,7 +62,7 @@ export default function MapControls({
                     
                     {showColourScaleOnly && (
                         <p className='text-brand-grey-600'>
-                            Number of Joint Grants
+                            Number of Joint Awards
                         </p>
                     )}
                 </div>
@@ -110,7 +110,7 @@ export default function MapControls({
 
                     <RadioGroup<boolean>
                         options={[
-                            { label: 'Number of grants', value: false },
+                            { label: 'Number of awards', value: false },
                             {
                                 label: 'Known financial commitments (USD)',
                                 value: true,

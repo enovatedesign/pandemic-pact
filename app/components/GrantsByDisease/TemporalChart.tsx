@@ -145,7 +145,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
 
                 <RadioGroup<boolean>
                     options={[
-                        { label: 'Number of grants', value: false },
+                        { label: 'Number of awards', value: false },
                         {
                             label: 'Known financial commitments (USD)',
                             value: true,
@@ -185,7 +185,7 @@ export default function TemporalChart({outbreak}: TemporalChartProps) {
                         label={{
                             value: displayKnownFinancialCommitments
                                 ? 'Known Financial Commitments (USD)'
-                                : 'Number of grants',
+                                : 'Number of awards',
                             position: 'left',
                             angle: -90,
                             style: { textAnchor: 'middle' },

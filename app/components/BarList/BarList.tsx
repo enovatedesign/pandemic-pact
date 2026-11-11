@@ -19,7 +19,7 @@ export default function BarList({
     isAnimationActive = 'auto',
 }: Props) {
     const maxTotalNumberOfGrants = useMemo(() => {
-        return Math.max(...data.map((data: any) => data['Total Grants']))
+        return Math.max(...data.map((data: any) => data['Total Awards']))
     }, [data])
 
     const maxAmountCommitted = useMemo(() => {
@@ -44,7 +44,7 @@ export default function BarList({
             <div className="w-full grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1fr)_auto] gap-y-1">
                 <div className="hidden pr-6 col-span-2 justify-self-end md:block">
                     <p className="text-brand-grey-500">
-                        Number of Grants
+                        Number of Awards
                     </p>
                 </div>
 
@@ -56,9 +56,9 @@ export default function BarList({
                         <InfoModal>
                             <p>
                                 We used historical currency exchange rates from
-                                any currency in which the grant was awarded
+                                any currency in which the award was made
                                 converted to the US dollars. The term ‘known’ is
-                                used as not all grant records have funding
+                                used as not all award records have funding
                                 amount data.
                             </p>
                         </InfoModal>

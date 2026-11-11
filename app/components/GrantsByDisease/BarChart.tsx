@@ -29,7 +29,7 @@ export default function BarChart({outbreak}: BarChartProps) {
 
     const orderSortingValue = sortByKnownFinancialCommitments
         ? 'Known Financial Commitments (USD)'
-        : 'Total Grants'
+        : 'Total Awards'
 
     const { grants } = useContext(GlobalFilterContext)
 
@@ -64,17 +64,17 @@ export default function BarChart({outbreak}: BarChartProps) {
                 return {
                     'Category Label': disease.label,
                     'Category Value': disease.value,
-                    'Grants With Known Financial Commitments':
+                    'Awards With Known Financial Commitments':
                         grantsWithKnownAmounts.length,
-                    'Grants With Unspecified Financial Commitments':
+                    'Awards With Unspecified Financial Commitments':
                         grantsWithUnspecifiedAmounts.length,
-                    'Total Grants':
+                    'Total Awards':
                         grantsWithKnownAmounts.length +
                         grantsWithUnspecifiedAmounts.length,
                     'Known Financial Commitments (USD)': moneyCommitted,
                 }
             })
-            .filter(disease => disease['Total Grants'] > 0)
+            .filter(disease => disease['Total Awards'] > 0)
             .filter(disease => 
                 disease['Category Label'] !== 'Unspecified' && 
                 disease['Category Label'] !== 'Other'
@@ -109,7 +109,7 @@ export default function BarChart({outbreak}: BarChartProps) {
                 <RadioGroup<boolean>
                     legend="Sort By:"
                     options={[
-                        { label: 'Number of grants', value: false },
+                        { label: 'Number of awards', value: false },
                         {
                             label: 'Known financial commitments (USD)',
                             value: true,
