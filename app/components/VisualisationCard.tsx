@@ -211,7 +211,7 @@ export default function VisualisationCard({
                                 License.
                             </p>
                             <p className="mt-3 italic text-sm text-gray-600">
-                                Pandemic PACT Research Programme, Grant and
+                                Pandemic PACT Research Programme, Award and
                                 Evidence Gap Tracker by the Pandemic PACT Team
                                 with GloPID-R and UKCDR (www.pandemicpact.org).
                             </p>
